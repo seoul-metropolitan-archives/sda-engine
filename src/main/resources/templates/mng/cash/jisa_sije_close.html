@@ -1,0 +1,69 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout/base}">
+
+<!-- ===== [ script ] ===== -->
+<script layout:fragment="script" type="text/javascript" th:src="@{/assets/js/mng/cash/jisa_sije_close.js}"></script>
+<!-- ===== [ script ] _END_ ===== -->
+
+<!-- ===== [ base-title ] ===== -->
+<div layout:fragment="base-title" class="ax-base-title" role="page-title">
+    <h1 class="title"><i class="cqc-browser"></i> <span th:text="${pageName}"/></h1>
+    <p class="desc" th:text="${pageRemark}"/>
+</div>
+<!-- ===== [ base-title ] _END_ ===== -->
+
+<!-- ===== [ base-content ] ===== -->
+<div layout:fragment="base-content" class="ax-base-content">
+    <th:block layout:insert="~{/fragments/page-buttons :: buttons}"/>
+    <th:block layout:insert="~{/fragments/page-header  :: search-bar(id='searchView0')}">
+        <div layout:fragment="table">
+            <th:block layout:insert="~{/fragments/table :: tr-td2(
+            text1='마감일자',        style1='width: 250px', lstyle1='width: 100px',
+            text2='검색',            style2='width: 300px', lstyle2='display:none',)}">
+                <div layout:fragment="wrap-1">
+                    <div class="input-group" data-ax5picker="date">
+                        <input type="text" class="form-control" id="closeDate" placeholder="yyyy-MM-dd"
+                               style="text-align: center">
+                        <span class="input-group-addon"><i class="cqc-calendar"></i></span>
+                    </div>
+                </div>
+                <div layout:fragment="wrap-2">
+                    <div class="form-inline">
+                        <button type="button" class="btn btn-default" data-page-btn="search">
+                            <i class="cqc-magnifier"></i> 조회
+                        </button>
+                        <button class="btn btn-primary" data-page-btn="search-view-clear" style="margin-left: 5px;">
+                            <i class="cqc-zoomout"></i> 초기화
+                        </button>
+                    </div>
+                </div>
+            </th:block>
+        </div>
+    </th:block>
+    <th:block layout:insert="~{/fragments/page-content :: content(orientation='horizontal', attr='{width: *}')}">
+
+        <!-- ===== [ page-content ] ===== -->
+        <div layout:fragment="content-detail">
+            <div class="ax-button-group" data-fit-height-aside="grid-view-01">
+                <div class="left" style=" width: 230px">
+                    <h2><i class="cqc-list"></i> 지사별 마감일지 목록</h2>
+                </div>
+                <div class="left">
+                    <h6> (*)항목은 수정가능 항목입니다.</h6>
+                </div>
+                <div class="right">
+                    <button type="button" class="btn btn-default" data-page-btn="excel">
+                        <i class="cqc-download"></i> 엑셀
+                    </button>
+                </div>
+            </div>
+            <div data-ax5grid="grid-view-01" data-fit-height-content="grid-view-01" style="height: 300px;"></div>
+            <div class="H10"></div>
+        </div>
+        <!-- ===== [ page-content ] _END_ ===== -->
+    </th:block>
+</div>
+<!-- ===== [ base-content ] _END_ ===== -->
+</html>

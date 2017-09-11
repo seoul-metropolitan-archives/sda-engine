@@ -1,0 +1,535 @@
+var fnObj = {};
+var gridDataList;
+
+var ACTIONS = axboot.actionExtend(fnObj, {
+    PAGE_SEARCH: function (caller, act, data) {
+        axboot.ajax({
+            type: "GET",
+            url: "/api/v1//mng/sla/sh_sla_g1",
+            data: $.extend({}, this.searchView.getData(), this.gridView01.getPageData()),
+            callback: function (res) {
+                caller.gridView01.setData(res);
+
+                gridDataList = res.list;
+                //caller.formView01.clear();
+            },
+            options: {
+                onError: viewError
+            }
+        });
+        return false;
+    },
+    EXCEL_DOWNLOAD: function (caller, act, data) {
+        var params = buildParams($.extend({}, this.searchView.getData()));
+        console.log(params);
+        window.location = CONTEXT_PATH + "/api/v1//mng/sla/sh_sla_g1/download?" + params;
+        return false;
+    },
+    PAGE_SAVE: function (caller, act, data) {
+        // 불인정유무처리된데이터는 불인정사유가 있는지 체크
+        if (caller.gridView01.validate()) {
+            var updateList;
+
+            var saveList = [].concat(fnObj.gridView01.getData("modified")); // 추가되어서 수정된건
+            saveList.forEach(function (n){
+                n.isDeleted = false;
+            });
+
+            var deleteList = [].concat(fnObj.gridView01.getData("deleted")); // 삭제된건
+
+            deleteList.forEach(function (n){
+                n.isDeleted = true;
+            });
+
+            if(saveList.length > 0){
+                updateList = saveList;
+            }else if(deleteList.length > 0){
+                updateList = deleteList;
+            }
+
+            var saveUrl = "";
+
+            if (data === "save") {
+                saveUrl = "/api/v1//mng/sla/sh_sla_g1";
+            } else {
+                updateList = gridDataList;
+                saveUrl = "/api/v1//mng/sla/sh_sla_g1/writeSla";
+            }
+
+            axboot
+                .call({
+                    type: "PUT",
+                    //url: ["samples", "parent"],
+                    url: saveUrl,
+                    data: JSON.stringify(updateList),
+                    callback: function (res) {
+                    }
+                })
+                .done(function () {
+                    fnObj.gridView01.setPageData({pageNumber: 0});
+                    ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+                    axToast.push("저장 작업이 완료되었습니다.");
+                });
+        } else {
+            var message = '\n' + '실물번호 및 기기번호(지점코드+단말번호)는 \n' + '반드시 입력하시기 바랍니다.';
+            formError(message);
+        }
+    },
+    FORM_CLEAR: function (caller, act, data) {
+        axDialog.confirm({
+            msg: "정말 양식을 초기화 하시겠습니까?"
+        }, function () {
+            if (this.key == "ok") {
+                caller.formView01.clear();
+                caller.gridView02.clear();
+            }
+        });
+    },
+    MODAL_OPEN: function (caller, act, data) {
+        axboot.modal.open({
+            modalType: "SEARCH_TERMINAL_MODAL",
+            param: "",
+            sendData: function () {
+                return {
+                    "jisa": $("#jisaCode").val()
+                };
+            },
+            callback: function (data) {
+                $("#jisaCode").val(data.jisaCode);
+                $("#branchName").val(data.branchName);
+                $("#branchCode").val(data.branchCode);
+                $("#cornerName").val(data.cornerName);
+                $("#terminalNo").val(data.terminalNo);
+
+                this.close();
+            }
+        });
+    },
+    ITEM_CLICK: function (caller, act, data) {
+        axboot.ajax({
+            type: "GET",
+            url: "/api/v1/mng/error/sh01001160",
+            data: {
+                details: true,
+                branchCode: data.branchCode,
+                cornerCode: data.cornerCode,
+                terminalNo: data.terminalNo,
+                errorDatetime: data.errorDatetime
+            },
+            callback: function (res) {
+                console.log('res:', res);
+                caller.formView01.setData(res);
+            },
+            options: {
+                onError: viewError
+            }
+        });
+    },
+
+    ROLE_GRID_DATA_INIT: function (caller, act, data) {
+    },
+    ROLE_GRID_DATA_GET: function (caller, act, data) {
+    },
+    ITEM_ADD: function (caller, act, data) {
+        caller.gridView01.addRow();
+    },
+    ITEM_DEL: function (caller, act, data) {
+        caller.gridView01.deleteRow();
+    },
+    dispatch: function (caller, act, data) {
+        var result = ACTIONS.exec(caller, act, data);
+        if (result != "error") {
+            return result;
+        } else {
+            // 직접코딩
+            return false;
+        }
+    }
+});
+
+var CODE = {};
+
+// fnObj 기본 함수 스타트와 리사이즈
+fnObj.pageStart = function () {
+    var _this = this;
+
+    CODE = this; // this는 call을 통해 수집된 데이터들.
+
+    _this.pageButtonView.initView();
+    _this.searchView.initView();
+    //_this.formView01.initView();
+    _this.gridView01.initView();
+
+    ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+};
+
+fnObj.pageResize = function () {
+};
+
+fnObj.pageButtonView = axboot.viewExtend({
+    initView: function () {
+        axboot.buttonClick(this, "data-page-btn", {
+            "save": function () {
+                axDialog.confirm({
+                    dialogTitle: "확인",
+                    msg: "저장하시겠습니까?"
+                }, function () {
+                    if (this.key == "ok") {
+                        ACTIONS.dispatch(ACTIONS.PAGE_SAVE, "save");
+                    }
+                });
+            },
+            "write": function () {
+                axDialog.confirm({
+                    dialogTitle: "확인",
+                    msg: "소명내역을 파일로 저장하시겠습니까?"
+                }, function () {
+                    if (this.key == "ok") {
+                        ACTIONS.dispatch(ACTIONS.PAGE_SAVE, "write");
+                    }
+                });
+            },
+            "search": function () {
+                fnObj.gridView01.setPageData({pageNumber: 0});
+                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+            },
+            "excel": function () {
+                fnObj.gridView01.excel("패널티내역-" + getFormattedDate(new Date()) + ".xls");
+                // ACTIONS.dispatch(ACTIONS.EXCEL_DOWNLOAD);
+            },
+            "search-view-clear": function () {
+                $("#filter").val("");
+                $("#startDate").val(getFormattedDate(new Date(), true));
+                $("#endDate").val(getFormattedDate(new Date()));
+                fnObj.gridView01.setPageData({pageNumber: 0});
+                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+            }
+        });
+    }
+});
+
+//== view 시작
+/**
+ * searchView
+ */
+fnObj.searchView = axboot.viewExtend(axboot.searchView, {
+    initView: function () {
+        this.target = $(document["searchView0"]);
+        this.target.attr("onsubmit", "return ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);");
+        this.filter = $("#filter");
+        this.jisaCode = $("#jisaCode");
+        this.branchCode = $("#branchCode");
+        this.terminalNo = $("#terminalNo");
+        this.target.find('[data-ax5picker="date"]').ax5picker({
+            direction: "auto",
+            content: {
+                type: 'date'
+            }
+        });
+
+        $("#startDate").val(getFormattedDate(new Date(), true));
+        $("#endDate").val(getFormattedDate(new Date()));
+
+        axboot.buttonClick(this, "data-searchview-btn", {
+            "modal": function () {
+                ACTIONS.dispatch(ACTIONS.MODAL_OPEN)
+            }
+        });
+    },
+    getData: function () {
+        return {
+            filter: this.filter.val(),
+            startDate: $("#startDate").val(),
+            endDate: $("#endDate").val()
+        }
+    }
+});
+
+/**
+ * gridView
+ */
+fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
+    page: {
+        pageNumber: 0,
+        pageSize: 160
+    },
+    initView: function () {
+        var _this = this;
+
+        this.target = axboot.gridBuilder({
+            showRowSelector: true,
+            multipleSelect: true,
+            frozenColumnIndex: 0,
+            target: $('[data-ax5grid="grid-view-01"]'),
+            columns: [
+                {key: 'withdrawDate', label: '회수일', width: 80, align: 'center', editor: 'text'},
+                {key: 'withdrawTime', label: '회수시간', width: 80, align: 'center', editor: 'text'},
+                {key: 'realClassify', label: '실물종류', width: 100, align: 'center', editor: 'text'},
+                {key: 'realNo', label: '실물번호', width: 100, align: 'center', editor: 'text'},
+                {key: 'issueOrg', label: '발행기관', width: 100, align: 'center', editor: 'text'},
+                {key: 'withdrawOrg', label: '회수기관', width: 100, align: 'center', editor: 'text'},
+                {key: 'txId', label: '기기번호', width: 100, align: 'center', editor: 'text'},
+                {
+                    key: "progressStatus", label: "진행현황", align: 'center', editor: {
+                    type: "select", config: {
+                        columnKeys: {
+                            optionValue: "CD", optionText: "NM"
+                        },
+                        options: [
+                            {CD: "0", NM: "0: 발생"},
+                            {CD: "1", NM: "1: 현장보관"},
+                            {CD: "3", NM: "3: 반환"},
+                            {CD: "4", NM: "4: 영업점인계"},
+                            {CD: "5", NM: "5: 폐기"}
+                        ]
+                    }
+                }
+                },
+                {key: 'withdrawEmpName', label: '회수자', width: 80, align: 'center', editor: 'text'},
+                {key: 'transferEmpName', label: '안계자', width: 80, align: 'center', editor: 'text'},
+                {key: 'takeoverEmpName', label: '인수자', width: 80, align: 'center', editor: 'text'},
+                {key: 'returnEmpName', label: '반환자', width: 80, align: 'center', editor: 'text'},
+                {key: 'receiveEmpName', label: '수령자', width: 80, align: 'center', editor: 'text'},
+                {key: 'transferDate', label: '인계일', width: 80, align: 'center', editor: 'text'},
+                {key: 'transferTime', label: '인계시간', width: 80, align: 'center', editor: 'text'},
+                {key: 'returnDate', label: '반환일', width: 80, align: 'center', editor: 'text'},
+                {key: 'returnTime', label: '반환시간', width: 80, align: 'center', editor: 'text'},
+                {key: 'storageUnusl', label: '보관사유/메모', width: 200, align: 'left', editor: 'text'}
+            ],
+            body: {
+                onClick: function () {
+                    this.self.select(this.dindex);
+                    //ACTIONS.dispatch(ACTIONS.ITEM_CLICK, this.item);
+                }
+            },
+            onPageChange: function (pageNumber) {
+                _this.setPageData({pageNumber: pageNumber});
+                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+            }
+        });
+
+        axboot.buttonClick(this, "data-grid-view-01-btn", {
+            "add": function () {
+                ACTIONS.dispatch(ACTIONS.ITEM_ADD);
+            },
+            "delete": function () {
+                ACTIONS.dispatch(ACTIONS.ITEM_DEL);
+            },
+            "accept": function () {
+                var orgDataList = gridDataList;
+                var gridSelectedDataList = fnObj.gridView01.getData("selected");
+
+                orgDataList.forEach(function (n) {
+                    gridSelectedDataList.forEach(function (m) {
+                        if (n.txId === m.txId && n.errorDatetime === m.errorDatetime && n.calleeChasu === m.calleeChasu) {
+                            n.accept = "0";
+                        }
+                    });
+                });
+
+                fnObj.gridView01.setData(orgDataList);
+            },
+            "deny": function () {
+                var orgDataList = gridDataList;
+                var gridSelectedDataList = fnObj.gridView01.getData("selected");
+
+                orgDataList.forEach(function (n) {
+                    gridSelectedDataList.forEach(function (m) {
+                        if (n.txId === m.txId && n.errorDatetime === m.errorDatetime && n.calleeChasu === m.calleeChasu) {
+                            n.accept = "1";
+                        }
+                    });
+                });
+
+                fnObj.gridView01.setData(orgDataList);
+            }
+        });
+    },
+    getData: function (_type) {
+        var list = [];
+        var _list = this.target.getList(_type);
+        list = _list;
+
+        return list;
+    },
+    addRow: function () {
+        //this.target.addRow({__created__: true}, "last");
+
+        var itemDefault = $.extend({}, this.target.list[this.target.list.length - 1]);
+        itemDefault.withdrawDate = getFormattedDate(new Date());
+        itemDefault.withdrawTime = "00:00:00";
+
+        itemDefault.transferDate = getFormattedDate(new Date());
+        itemDefault.transferTime = "00:00:00";
+
+        itemDefault.returnDate = getFormattedDate(new Date());
+        itemDefault.returnTime = "00:00:00";
+
+        this.target.addRow(itemDefault, "last");
+
+    },
+    deleteRow: function () {
+        this.target.deleteRow("selected");
+    },
+    excel: function (file) {
+        this.target.exportExcel(file);
+    },
+    validate: function () {
+        var modifiedList = fnObj.gridView01.getData("modified");
+
+        var falseCnt = 0;
+        gridDataList.forEach(function (n) {
+            if (checkUndefined(n.realNo) == "" || checkUndefined(n.txId) == "") {
+                falseCnt++;
+            }
+        });
+
+        if (falseCnt > 0) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+});
+
+/**
+ * formView01 - 출동요청 상세정보
+ */
+fnObj.formView01 = axboot.viewExtend(axboot.formView, {
+    getDefaultData: function () {
+        return $.extend({}, axboot.formView.defaultData, {});
+    },
+    initView: function () {
+        this.target = $("#formView01");
+        this.model = new ax5.ui.binder();
+        this.model.setModel(this.getDefaultData(), this.target);
+        this.modelFormatter = new axboot.modelFormatter(this.model); // 모델 포메터 시작
+        this.initEvent();
+    },
+    initEvent: function () {
+        var _this = this;
+    },
+    getData: function () {
+        var data = this.modelFormatter.getClearData(this.model.get()); // 모델의 값을 포멧팅 전 값으로 치환.
+        return $.extend({}, data);
+    },
+    setFormData: function (dataPath, value) {
+        this.model.set(dataPath, value);
+    },
+    setData: function (data) {
+
+        if (typeof data === "undefined") data = this.getDefaultData();
+        data = $.extend({}, data);
+
+        this.target.find('[data-ax-path="key"]').attr("readonly", "readonly");
+
+        this.model.setModel(data);
+        this.modelFormatter.formatting(); // 입력된 값을 포메팅 된 값으로 변경
+    },
+    validate: function () {
+        var rs = this.model.validate();
+        if (rs.error) {
+            alert(rs.error[0].jquery.attr("title") + '을(를) 입력해주세요.');
+            rs.error[0].jquery.focus();
+            return false;
+        }
+        return true;
+    },
+    clear: function () {
+        this.model.setModel(this.getDefaultData());
+        this.target.find('[data-ax-path="key"]').removeAttr("readonly");
+    }
+});
+
+var viewError = function (err) {
+    axToast.confirm({
+        theme: "danger",
+        width: 300,
+        lang: {
+            "ok": "닫기"
+        },
+        icon: '<i class="cqc-new"></i>',
+        msg: '[에러] ' + err.message
+    });
+}
+
+var formError = function (message) {
+    axToast.confirm({
+        theme: "danger",
+        width: 300,
+        lang: {
+            "ok": "닫기"
+        },
+        icon: '<i class="cqc-new"></i>',
+        msg: '[에러] ' + message
+    });
+}
+
+var buildParams = function (json) {
+
+    var params = JSON.stringify(json);
+
+    params = params.replace(/{/g, "");
+    params = params.replace(/}/g, "");
+    params = params.replace(/:/g, "=")
+    params = params.replace(/,/g, "&");
+    params = params.replace(/"/g, "");
+
+    return params;
+
+}
+
+
+function checkUndefined(value) {
+    if (typeof value === "undefined") {
+        return "";
+    } else {
+        return value;
+    }
+}
+
+function getFormattedDate(date, isStart) {
+    var day;
+    var tempDate;
+    if (isStart) {
+        date.setDate(date.getDate() - 7);
+        tempDate = date.getDate();
+    } else {
+        tempDate = date.getDate();
+    }
+    day = tempDate.toString();
+
+    var year = date.getFullYear();
+    var month = (1 + date.getMonth()).toString();
+    month = month.length > 1 ? month : '0' + month;
+    day = day.length > 1 ? day : '0' + day;
+
+    if (isStart) {
+        return year + '-' + month + '-' + '01';
+    } else {
+        return year + '-' + month + '-' + day;
+    }
+}
+
+function getFormattedDate1(date, isStart) {
+    var day;
+    var tempDate;
+    if (isStart) {
+        date.setDate(date.getDate() - 7);
+        tempDate = date.getDate();
+    } else {
+        tempDate = date.getDate();
+    }
+    day = tempDate.toString();
+
+    var year = date.getFullYear();
+    var month = (1 + date.getMonth()).toString();
+    month = month.length > 1 ? month : '0' + month;
+    day = day.length > 1 ? day : '0' + day;
+
+    if (isStart) {
+        return year + month + '01';
+    } else {
+        return year + month + day;
+    }
+}

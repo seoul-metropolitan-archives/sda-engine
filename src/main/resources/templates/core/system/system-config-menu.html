@@ -1,0 +1,90 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout/base}">
+
+<!-- ===== [ script ] ===== -->
+<script layout:fragment="script" type="text/javascript" th:src="@{/assets/js/core/system/system-config-menu.js}"></script>
+<!-- ===== [ script ] _END_ ===== -->
+
+<!-- ===== [ base-title ] ===== -->
+<div layout:fragment="base-title" class="ax-base-title" role="page-title">
+    <h1 class="title"><i class="cqc-browser"></i> <span th:text="${pageName}"/></h1>
+    <p class="desc" th:text="${pageRemark}"/>
+</div>
+<!-- ===== [ base-title ] _END_ ===== -->
+
+<!-- ===== [ base-content ] ===== -->
+<div layout:fragment="base-content" class="ax-base-content">
+    <th:block layout:insert="~{/fragments/page-buttons :: buttons}"/>
+    <th:block layout:insert="~{/fragments/page-header  :: select-menu(id='menuGrpCd', label='메뉴그룹')}"/>
+    <th:block layout:insert="~{/fragments/page-content :: content-panels}" th:with="orientation='vertical',
+        attr1='{width: \'300\'}', style1='padding-right: 10px',
+        attr2='{width: \'*\'}',   style2='padding: 0px 10px',   id2='split-panel-form'">
+
+        <!-- ===== [ left-panel ] ===== -->
+        <div layout:fragment="panel-1">
+
+            <div class="ax-button-group" data-fit-height-aside="tree-view-01">
+                <div class="left">
+                    <h2><i class="cqc-list"></i> 메뉴 카테고리</h2>
+                </div>
+                <div class="right">
+                    <button type="button" class="btn btn-default" data-tree-view-01-btn="add">
+                        <i class="cqc-circle-with-plus"></i> 추가
+                    </button>
+                </div>
+            </div>
+            <div data-z-tree="tree-view-01" data-fit-height-content="tree-view-01" style="height: 300px;" class="ztree"></div>
+
+        </div>
+        <!-- ===== [ left-panel _END_ ] ===== -->
+
+        <!-- ===== [ right-panel ] ===== -->
+        <div layout:fragment="panel-2">
+
+            <div data-fit-height-aside="form-view-01">
+
+                <div class="ax-button-group">
+                    <div class="left">
+                        <h2><i class="cqc-news"></i> 메뉴 정보</h2>
+                    </div>
+                    <div class="right"></div>
+                </div>
+
+                <form th:name="formView01" th:id="formView01" method="post" onsubmit="return false">
+                    <div data-ax-tbl="" class="ax-search-tbl" minWidth="500px">
+                        <th:block layout:insert="~{/fragments/table :: tr-td(text='프로그램코드', style='width: 100%')}">
+                            <div layout:fragment="wrap">
+                                <input type="text" data-ax-path="progCd" class="form-control" readonly="readonly"/>
+                            </div>
+                        </th:block>
+                        <th:block layout:insert="~{/fragments/table :: tr-td(text='프로그램명', style='width: 100%')}">
+                            <div layout:fragment="wrap">
+                                <input type="hidden" data-ax-path="menuId" class="form-control"/>
+                                <input type="hidden" data-ax-path="progNm" class="form-control"/>
+                                <div class="form-group">
+                                    <div data-ax5combobox="progCd" data-ax5combobox-config='{size: "", editable: false, multiple: false}'></div>
+                                </div>
+                            </div>
+                        </th:block>
+                    </div>
+                </form>
+
+                <div class="H20"></div>
+                <div class="ax-button-group">
+                    <div class="left">
+                        <h2><i class="cqc-list"></i> 권한그룹 설정</h2>
+                    </div>
+                    <div class="right"></div>
+                </div>
+
+            </div>
+            <div data-ax5grid="grid-view-01" data-fit-height-content="form-view-01" style="height: 300px;"></div>
+
+        </div>
+        <!-- ===== [ right-panel ] _END_ ===== -->
+    </th:block>
+</div>
+<!-- ===== [ base-content ] _END_ ===== -->
+</html>

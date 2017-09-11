@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bgf.shbank.domain.mng.cash.sh03001230.Sh03001230Mapper">
+
+    <select id="findAll" resultType="sh03001230" parameterType="sh03001230" statementType="PREPARED">
+        SELECT
+            TX_ID AS txId,
+            JISA_CODE AS jisaCode,
+            BRANCH_CODE AS branchCode,
+            TERMINAL_NO AS terminalNo,
+            RTN_DATE AS rtnDate,
+            CONFIRM_DATE AS confirmDate,
+            DEAL_DATE AS dealDate,
+            RTN_AMT AS rtnAmt,
+            CONTENT AS content,
+            CHARGE_CENTER AS chargeCenter,
+            NOTE AS note
+        FROM
+            ATMS_03001230
+    </select>
+
+    <select id="findOne" resultType="sh03001230" parameterType="sh03001230" statementType="PREPARED">
+        SELECT
+            TX_ID AS txId,
+            JISA_CODE AS jisaCode,
+            BRANCH_CODE AS branchCode,
+            TERMINAL_NO AS terminalNo,
+            RTN_DATE AS rtnDate,
+            CONFIRM_DATE AS confirmDate,
+            DEAL_DATE AS dealDate,
+            RTN_AMT AS rtnAmt,
+            CONTENT AS content,
+            CHARGE_CENTER AS chargeCenter,
+            NOTE AS note
+        FROM
+            ATMS_03001230
+        WHERE
+            TX_ID = #{txId}, BRANCH_CODE = #{branchCode}, TERMINAL_NO = #{terminalNo}, RTN_DATE = #{rtnDate}
+    </select>
+
+   <update id="delete" parameterType="sh03001230" statementType="PREPARED">
+        DELETE FROM
+            ATMS_03001230
+        WHERE
+            TX_ID = #{txId}, BRANCH_CODE = #{branchCode}, TERMINAL_NO = #{terminalNo}, RTN_DATE = #{rtnDate}
+    </update>
+
+   <update id="update" parameterType="sh03001230" statementType="PREPARED">
+        UPDATE ATMS_03001230
+        SET
+            JISA_CODE = #{jisaCode},
+            CONFIRM_DATE = #{confirmDate},
+            DEAL_DATE = #{dealDate},
+            RTN_AMT = #{rtnAmt},
+            CONTENT = #{content},
+            CHARGE_CENTER = #{chargeCenter},
+            NOTE = #{note}
+        WHERE
+            TX_ID = #{txId}, BRANCH_CODE = #{branchCode}, TERMINAL_NO = #{terminalNo}, RTN_DATE = #{rtnDate}
+    </update>
+
+   <update id="insert" parameterType="sh03001230" statementType="PREPARED">
+        INSERT INTO ATMS_03001230 (
+            TX_ID,
+            JISA_CODE,
+            BRANCH_CODE,
+            TERMINAL_NO,
+            RTN_DATE,
+            CONFIRM_DATE,
+            DEAL_DATE,
+            RTN_AMT,
+            CONTENT,
+            CHARGE_CENTER,
+            NOTE
+        ) VALUES (
+            #{txId},
+            #{jisaCode},
+            #{branchCode},
+            #{terminalNo},
+            #{rtnDate},
+            #{confirmDate},
+            #{dealDate},
+            #{rtnAmt},
+            #{content},
+            #{chargeCenter},
+            #{note}
+        )
+    </update>
+</mapper>

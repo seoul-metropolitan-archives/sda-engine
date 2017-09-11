@@ -1,0 +1,129 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<th:block layout:fragment="buttons">
+    <div data-page-buttons class="button-warp">
+        <th:block th:if="${authGroupMenu != null}">
+            <!--<th:block th:if="${authGroupMenu.schAh == 'Y'}">
+                <button type="button" class="btn btn-default" data-page-btn="search"><i class="cqc-magnifier"></i> 조회</button>
+            </th:block>-->
+            <th:block th:if="${authGroupMenu.savAh == 'Y'}">
+                <button type="button" class="btn btn-default" data-page-btn="save"><i class="cqc-save"></i> 저장</button>
+            </th:block>
+            <th:block th:if="${authGroupMenu.delAh == 'Y'}">
+                <button type="button" class="btn btn-default" data-page-btn="delete"><i class="cqc-minus"></i> 삭제</button>
+            </th:block>
+            <th:block th:if="${authGroupMenu.exlAh == 'Y'}">
+                <button type="button" class="btn btn-default" data-page-btn="excel"><i class="cqc-download"></i> 엑셀</button>
+            </th:block>
+            <th:block th:if="${authGroupMenu.fn1Ah == 'Y'}">
+                <select data-page-btn="fn1" class="btn btn-primary" id="page-refresh">
+                    <option value="10">10초마다 갱신</option>
+                    <option value="20">20초마다 갱신</option>
+                    <option value="30" selected="selected">30초마다 갱신</option>
+                    <option value="60"> 1분마다 갱신</option>
+                </select>
+            </th:block>
+            <th:block th:if="${authGroupMenu.fn2Ah == 'Y'}">
+                <button type="button" class="btn btn-primary" data-page-btn="fn2">
+                    <i class="axi axi-plus-circle"></i> <span th:text="${fn2Label}">페이지+모델 작성</span>
+                </button>
+            </th:block>
+            <th:block th:if="${authGroupMenu.fn3Ah == 'Y'}">
+                <button type="button" class="btn btn-default" data-page-btn="fn3">
+                    <i class="axi axi-minus-circle"></i> ${function1Label}
+                </button>
+            </th:block>
+            <th:block th:if="${authGroupMenu.fn4Ah == 'Y'}">
+                <button type="button" class="btn btn-default" data-page-btn="fn4">
+                    <i class="axi axi-plus-circle"></i> ${function2Label}
+                </button>
+            </th:block>
+            <th:block th:if="${authGroupMenu.fn5Ah == 'Y'}">
+                <button type="button" class="btn btn-default" data-page-btn="fn5">
+                    ${function3Label}
+                </button>
+            </th:block>
+        </th:block>
+    </div>
+</th:block>
+
+<th:block layout:fragment="error-status-buttons">
+    <div data-page-buttons class="button-warp">
+        <button type="button" class="btn btn-default" data-page-btn="search"><i class="cqc-magnifier"></i> 조회</button>
+        <button type="button" class="btn btn-default" data-page-btn="excel"><i class="cqc-download"></i> 엑셀</button>
+        <select data-page-btn="fn1" class="btn btn-primary" id="page-refresh">
+            <option value="0" selected="selected">타이머 OFF</option>
+            <option value="10">10초마다 갱신</option>
+            <option value="20">20초마다 갱신</option>
+            <option value="30">30초마다 갱신</option>
+            <option value="60"> 1분마다 갱신</option>
+        </select>
+    </div>
+</th:block>
+
+<th:block layout:fragment="sla-buttons">
+    <div data-page-buttons class="button-warp">
+        <button type="button" class="btn btn-default" data-page-btn="save"><i class="cqc-save"></i> 저장</button>
+        <button type="button" class="btn btn-default" data-page-btn="write"><i class="cqc-save"></i> SLA파일로 저장</button>
+    </div>
+</th:block>
+
+<th:block layout:fragment="modal-buttons">
+    <div data-page-buttons class="button-warp">
+        <th:block th:if="${authGroupMenu != null}">
+            <th:block th:if="${authGroupMenu.schAh == 'Y'}">
+                <button type="button" class="btn btn-default" data-page-btn="search"><i class="cqc-magnifier"></i> 조회</button>
+            </th:block>
+            <th:block th:if="${authGroupMenu.savAh == 'Y'}">
+                <button type="button" class="btn btn-default" data-page-btn="save"><i class="cqc-save"></i> 저장</button>
+            </th:block>
+            <th:block th:if="${authGroupMenu.delAh == 'Y'}">
+                <button type="button" class="btn btn-default" data-page-btn="delete"><i class="cqc-minus"></i> 삭제</button>
+            </th:block>
+            <th:block th:if="${authGroupMenu.exlAh == 'Y'}">
+                <button type="button" class="btn btn-default" data-page-btn="excel"><i class="cqc-download"></i> 엑셀</button>
+            </th:block>
+            <th:block th:if="${authGroupMenu.fn1Ah == 'Y'}">
+                <select data-page-btn="fn1" class="btn btn-primary" id="page-refresh">
+                    <option value="10">10초마다 갱신</option>
+                    <option value="20">20초마다 갱신</option>
+                    <option value="30" selected="selected">30초마다 갱신</option>
+                    <option value="60"> 1분마다 갱신</option>
+                </select>
+            </th:block>
+            <th:block th:if="${authGroupMenu.fn2Ah == 'Y'}">
+                <button type="button" class="btn btn-primary" data-page-btn="fn2">
+                    <i class="axi axi-plus-circle"></i> <span th:text="${fn2Label}">페이지+모델 작성</span>
+                </button>
+            </th:block>
+            <th:block th:if="${authGroupMenu.fn3Ah == 'Y'}">
+                <button type="button" class="btn btn-default" data-page-btn="fn3">
+                    <i class="axi axi-minus-circle"></i> ${function1Label}
+                </button>
+            </th:block>
+            <th:block th:if="${authGroupMenu.fn4Ah == 'Y'}">
+                <button type="button" class="btn btn-default" data-page-btn="fn4">
+                    <i class="axi axi-plus-circle"></i> ${function2Label}
+                </button>
+            </th:block>
+            <th:block th:if="${authGroupMenu.fn5Ah == 'Y'}">
+                <button type="button" class="btn btn-default" data-page-btn="fn5">
+                    ${function3Label}
+                </button>
+            </th:block>
+        </th:block>
+        <button type="button" class="btn btn-default" data-page-btn="close">창닫기</button>
+        <button type="button" class="btn btn-info" data-page-btn="search">조회</button>
+        <button type="button" class="btn btn-fn1" data-page-btn="choice">선택</button>
+    </div>
+</th:block>
+
+<th:block layout:fragment="modal-exec-buttons">
+    <div data-page-buttons class="button-warp">
+        <button type="button" class="btn btn-default" data-page-btn="exec">생성</button>
+    </div>
+</th:block>
+
+</html>

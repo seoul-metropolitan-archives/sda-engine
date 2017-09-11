@@ -1,0 +1,88 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout/base}">
+
+<!-- ===== [ script ] ===== -->
+<script layout:fragment="script" type="text/javascript" th:src="@{/assets/js/mng/error/sh01001150.js}"></script>
+<!-- ===== [ script ] _END_ ===== -->
+
+<!-- ===== [ base-title ] ===== -->
+<div layout:fragment="base-title" class="ax-base-title" role="page-title">
+    <h1 class="title"><i class="cqc-tv"></i> <span th:text="${pageName}"/></h1>
+    <p class="desc" th:text="${pageRemark}"/>
+</div>
+<!-- ===== [ base-title ] _END_ ===== -->
+
+<!-- ===== [ base-content ] ===== -->
+<div layout:fragment="base-content" class="ax-base-content">
+    <th:block layout:insert="~{/fragments/page-buttons :: buttons}"/>
+    <th:block layout:insert="~{/fragments/page-header  :: search-bar(id='searchView0')}">
+        <div layout:fragment="table">
+            <th:block layout:insert="~{/fragments/table :: tr-td5(
+            text1='지사명',          style1='width: 200px', lstyle1='width: 100px',
+            text2='지점명/코드',     style2='width: 330px', lstyle2='width: 100px',
+            text3='코너명/단말번호', style3='width: 340px', lstyle3='width: 110px',
+            text4='조회일자',        style4='width: 330px', lstyle4='width: 100px',
+            text5='검색',            style5='width: 300px', lstyle5='display:none',)}">
+                <div layout:fragment="wrap-1">
+                    <select th:class="form-control" th:classappend="${class}" name="jisaCode" id="jisaCode">
+                        <option value="">전체</option>
+                        <option th:each="item : ${jisaCode}" th:value="${item.code}" th:text="${item.name}"/>
+                    </select>
+                </div>
+                <div layout:fragment="wrap-2">
+                    <div class="form-inline" >
+                        <input type="text" id="branchName" class="form-control W150" value=""
+                               data-searchview-btn="modal" readonly="readonly" style="text-align: center" placeholder="클릭시 검색"/>
+                        <input type="text" id="branchCode" class="form-control W60" value="" maxlength="4" minlength="4"/>
+                    </div>
+                </div>
+                <div layout:fragment="wrap-3">
+                    <div class="form-inline" >
+                        <input type="text" id="cornerName" class="form-control W150" value=""
+                               data-searchview-btn="modal" readonly="readonly" style="text-align: center" placeholder="클릭시 검색"/>
+                        <input type="text" id="terminalNo" class="form-control W60" value="" maxlength="4" minlength="4"/>
+                    </div>
+                </div>
+                <div layout:fragment="wrap-4">
+                    <div class="input-group" data-ax5picker="date">
+                        <input type="text" class="form-control" id="startDate" placeholder="yyyy-MM-dd"
+                               style="text-align: center">
+                        <span class="input-group-addon">~</span>
+                        <input type="text" class="form-control" id="endDate" placeholder="yyyy-MM-dd"
+                               style="text-align: center">
+                        <span class="input-group-addon"><i class="cqc-calendar"></i></span>
+                    </div>
+                </div>
+                <div layout:fragment="wrap-5">
+                    <div class="form-inline">
+                        <button type="button" class="btn btn-default" data-page-btn="search">
+                            <i class="cqc-magnifier"></i> 조회
+                        </button>
+                        <button class="btn btn-primary" data-page-btn="search-view-clear" style="margin-left: 5px;">
+                            <i class="cqc-zoomout"></i> 초기화
+                        </button>
+                    </div>
+                </div>
+            </th:block>
+        </div>
+    </th:block>
+    <th:block layout:insert="~{/fragments/page-content :: content(orientation='horizontal', attr='{height: *}')}">
+        <!-- ===== [ page-content ] ===== -->
+        <div layout:fragment="content-detail">
+
+            <div class="ax-button-group" data-fit-height-aside="grid-view-01">
+                <div class="left">
+                    <h2><i class="cqc-list"></i> 조치결과 이력</h2>
+                </div>
+                <div class="right"></div>
+            </div>
+            <div data-ax5grid="grid-view-01" data-fit-height-content="grid-view-01" style="height: 300px;"></div>
+
+        </div>
+        <!-- ===== [ page-content ] ===== -->
+    </th:block>
+</div>
+<!-- ===== [ base-content ] _END_ ===== -->
+</html>

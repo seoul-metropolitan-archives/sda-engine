@@ -1,0 +1,235 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<th:block layout:fragment="tr-label(text, style)">
+    <div data-ax-tr>
+        <div data-ax-td th:style="${style}">
+            <div data-ax-td-label th:text="${text}"/>
+        </div>
+    </div>
+</th:block>
+
+<th:block layout:fragment="tr-label2(text1, text2, style1, style2)">
+    <div data-ax-tr>
+        <div data-ax-td>
+            <div data-ax-td-label th:text="${text1}" th:style="${style1}"/>
+            <div data-ax-td-label th:text="${text2}" th:style="${style2}"/>
+        </div>
+    </div>
+</th:block>
+
+<th:block layout:fragment="tr-label3(text1, text2, text3, style1, style2, style3)">
+    <div data-ax-tr>
+        <div data-ax-td>
+            <div data-ax-td-label th:text="${text1}" th:style="${style1}"/>
+            <div data-ax-td-label th:text="${text2}" th:style="${style2}"/>
+            <div data-ax-td-label th:text="${text3}" th:style="${style3}"/>
+        </div>
+    </div>
+</th:block>
+
+<th:block layout:fragment="tr-td(text, style, style1)">
+    <div data-ax-tr>
+        <div data-ax-td th:style="${style}">
+            <div data-ax-td-label th:text="${text}" th:style="${style1}"/>
+            <div layout:fragment="wrap" data-ax-td-wrap/>
+        </div>
+    </div>
+</th:block>
+
+<th:block layout:fragment="tr-td2(text1, style1, text2, style2)">
+    <div data-ax-tr>
+        <div data-ax-td th:style="${style1}">
+            <div data-ax-td-label th:text="${text1}"/>
+            <div layout:fragment="wrap-1" data-ax-td-wrap/>
+        </div>
+        <div data-ax-td th:style="${style2}">
+            <div data-ax-td-label th:text="${text2}"/>
+            <div layout:fragment="wrap-2" data-ax-td-wrap/>
+        </div>
+    </div>
+</th:block>
+
+<th:block layout:fragment="tr-td2-1(text1, style1,lstyle1, text2, style2, lstyle2)">
+    <div data-ax-tr>
+        <div data-ax-td th:style="${style1}">
+            <div data-ax-td-label th:text="${text1}" th:style="${lstyle1}"/>
+            <div layout:fragment="wrap-1" data-ax-td-wrap/>
+        </div>
+        <div data-ax-td th:style="${style2}">
+            <div data-ax-td-label th:text="${text2}" th:style="${lstyle2}"/>
+            <div layout:fragment="wrap-2" data-ax-td-wrap/>
+        </div>
+    </div>
+</th:block>
+
+<th:block layout:fragment="tr-td2-label(text1, text2, style1, style2, style)">
+    <div data-ax-tr>
+        <div data-ax-td th:style="${style}">
+            <div data-ax-td-label th:text="${text1}" th:style="${style1}"/>
+            <div layout:fragment="wrap-1" data-ax-td-wrap th:style="${style2}"/>
+        </div>
+        <div data-ax-td th:style="${style}">
+            <div data-ax-td-label th:text="${text2}" th:style="${style1}"/>
+            <div layout:fragment="wrap-2" data-ax-td-wrap th:style="${style2}"/>
+        </div>
+    </div>
+</th:block>
+
+<th:block layout:fragment="tr-td3(text1, style1, text2, style2, text3, style3)">
+    <div data-ax-tr>
+        <div data-ax-td th:style="${style1}">
+            <div data-ax-td-label th:text="${text1}"/>
+            <div layout:fragment="wrap-1" data-ax-td-wrap/>
+        </div>
+        <div data-ax-td th:style="${style2}">
+            <div data-ax-td-label th:text="${text2}"/>
+            <div layout:fragment="wrap-2" data-ax-td-wrap/>
+        </div>
+        <div data-ax-td th:style="${style3}">
+            <div data-ax-td-label th:text="${text3}"/>
+            <div layout:fragment="wrap-3" data-ax-td-wrap/>
+        </div>
+    </div>
+</th:block>
+
+<th:block layout:fragment="tr-td3-label(text1, style1, text2, style2, text3, style3,style)">
+    <div data-ax-tr>
+        <div data-ax-td th:style="${style1}">
+            <div data-ax-td-label th:text="${text1}" th:style="${style}"/>
+            <div layout:fragment="wrap-1" data-ax-td-wrap/>
+        </div>
+        <div data-ax-td th:style="${style2}">
+            <div data-ax-td-label th:text="${text2}" th:style="${style}"/>
+            <div layout:fragment="wrap-2" data-ax-td-wrap/>
+        </div>
+        <div data-ax-td th:style="${style3}">
+            <div data-ax-td-label th:text="${text3}" th:style="${style}"/>
+            <div layout:fragment="wrap-3" data-ax-td-wrap/>
+        </div>
+    </div>
+</th:block>
+
+<th:block layout:fragment="tr-td4(text1, style1, lstyle1, text2, style2, lstyle2, text3, style3, lstyle3, text4, style4, lstyle4)">
+    <div data-ax-tr>
+        <div data-ax-td th:style="${style1}">
+            <div data-ax-td-label th:text="${text1}" th:style="${lstyle1}"/>
+            <div layout:fragment="wrap-1" data-ax-td-wrap/>
+        </div>
+        <div data-ax-td th:style="${style2}">
+            <div data-ax-td-label th:text="${text2}" th:style="${lstyle2}"/>
+            <div layout:fragment="wrap-2" data-ax-td-wrap/>
+        </div>
+        <div data-ax-td th:style="${style3}">
+            <div data-ax-td-label th:text="${text3}" th:style="${lstyle3}"/>
+            <div layout:fragment="wrap-3" data-ax-td-wrap/>
+        </div>
+        <div data-ax-td th:style="${style4}">
+            <div data-ax-td-label th:text="${text4}" th:style="${lstyle4}"/>
+            <div layout:fragment="wrap-4" data-ax-td-wrap/>
+        </div>
+    </div>
+</th:block>
+
+<th:block layout:fragment="tr-td5(text1, style1, lstyle1, text2, style2, lstyle2, text3, style3, lstyle3, text4, style4, lstyle14, text5, style5, lstyle15,)">
+    <div data-ax-tr>
+        <div data-ax-td th:style="${style1}">
+            <div data-ax-td-label th:text="${text1}" th:style="${lstyle1}"/>
+            <div layout:fragment="wrap-1" data-ax-td-wrap/>
+        </div>
+        <div data-ax-td th:style="${style2}">
+            <div data-ax-td-label th:text="${text2}" th:style="${lstyle2}"/>
+            <div layout:fragment="wrap-2" data-ax-td-wrap/>
+        </div>
+        <div data-ax-td th:style="${style3}">
+            <div data-ax-td-label th:text="${text3}" th:style="${lstyle3}"/>
+            <div layout:fragment="wrap-3" data-ax-td-wrap/>
+        </div>
+        <div data-ax-td th:style="${style4}">
+            <div data-ax-td-label th:text="${text4}" th:style="${lstyle4}"/>
+            <div layout:fragment="wrap-4" data-ax-td-wrap/>
+        </div>
+        <div data-ax-td th:style="${style5}">
+            <div data-ax-td-label th:text="${text5}" th:style="${lstyle5}"/>
+            <div layout:fragment="wrap-5" data-ax-td-wrap/>
+        </div>
+    </div>
+</th:block>
+
+<th:block layout:fragment="tr-td6(text1, style1, lstyle1, text2, style2, lstyle2, text3, style3, lstyle3, text4, style4, lstyle4, text5, style5, lstyle5, text6, style6, lstyle6)">
+    <div data-ax-tr>
+        <div data-ax-td th:style="${style1}">
+            <div data-ax-td-label th:text="${text1}" th:style="${lstyle1}"/>
+            <div layout:fragment="wrap-1" data-ax-td-wrap/>
+        </div>
+        <div data-ax-td th:style="${style2}">
+            <div data-ax-td-label th:text="${text2}" th:style="${lstyle2}"/>
+            <div layout:fragment="wrap-2" data-ax-td-wrap/>
+        </div>
+        <div data-ax-td th:style="${style3}">
+            <div data-ax-td-label th:text="${text3}" th:style="${lstyle3}"/>
+            <div layout:fragment="wrap-3" data-ax-td-wrap/>
+        </div>
+        <div data-ax-td th:style="${style4}">
+            <div data-ax-td-label th:text="${text4}" th:style="${lstyle4}"/>
+            <div layout:fragment="wrap-4" data-ax-td-wrap/>
+        </div>
+        <div data-ax-td th:style="${style5}">
+            <div data-ax-td-label th:text="${text5}" th:style="${lstyle5}"/>
+            <div layout:fragment="wrap-5" data-ax-td-wrap/>
+        </div>
+        <div data-ax-td th:style="${style6}">
+            <div data-ax-td-label th:text="${text6}" th:style="${lstyle6}"/>
+            <div layout:fragment="wrap-6" data-ax-td-wrap/>
+        </div>
+    </div>
+</th:block>
+<th:block layout:fragment="tr-td7(text1, style1, lstyle1, text2, style2, lstyle2, text3, style3, lstyle3, text4, style4, lstyle4, text5, style5, lstyle5, text6, style6, lstyle6, text7, style7, lstyle7)">
+    <div data-ax-tr>
+        <div data-ax-td th:style="${style1}">
+            <div data-ax-td-label th:text="${text1}" th:style="${lstyle1}"/>
+            <div layout:fragment="wrap-1" data-ax-td-wrap/>
+        </div>
+        <div data-ax-td th:style="${style2}">
+            <div data-ax-td-label th:text="${text2}" th:style="${lstyle2}"/>
+            <div layout:fragment="wrap-2" data-ax-td-wrap/>
+        </div>
+        <div data-ax-td th:style="${style3}">
+            <div data-ax-td-label th:text="${text3}" th:style="${lstyle3}"/>
+            <div layout:fragment="wrap-3" data-ax-td-wrap/>
+        </div>
+        <div data-ax-td th:style="${style4}">
+            <div data-ax-td-label th:text="${text4}" th:style="${lstyle4}"/>
+            <div layout:fragment="wrap-4" data-ax-td-wrap/>
+        </div>
+        <div data-ax-td th:style="${style5}">
+            <div data-ax-td-label th:text="${text5}" th:style="${lstyle5}"/>
+            <div layout:fragment="wrap-5" data-ax-td-wrap/>
+        </div>
+        <div data-ax-td th:style="${style6}">
+            <div data-ax-td-label th:text="${text6}" th:style="${lstyle6}"/>
+            <div layout:fragment="wrap-6" data-ax-td-wrap/>
+        </div>
+        <div data-ax-td th:style="${style7}">
+            <div data-ax-td-label th:text="${text7}" th:style="${lstyle7}"/>
+            <div layout:fragment="wrap-7" data-ax-td-wrap/>
+        </div>
+    </div>
+</th:block>
+
+<th:block layout:fragment="tr-label-td2(text, style1, style2, style3)">
+    <div data-ax-tr>
+        <div data-ax-td th:style="${style1}">
+            <div data-ax-td-label th:text="${text}"/>
+        </div>
+        <div data-ax-td th:style="${style2}">
+            <div layout:fragment="wrap-1" data-ax-td-wrap style="border-right: 1px solid #b5b5b5;"/>
+        </div>
+        <div data-ax-td th:style="${style3}">
+            <div layout:fragment="wrap-2" data-ax-td-wrap/>
+        </div>
+    </div>
+</th:block>
+
+</html>

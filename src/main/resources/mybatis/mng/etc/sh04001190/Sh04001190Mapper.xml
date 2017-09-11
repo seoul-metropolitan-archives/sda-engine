@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bgf.shbank.domain.mng.etc.sh04001190.Sh04001190Mapper">
+
+    <select id="findAll" resultType="sh04001190" parameterType="sh04001190" statementType="PREPARED">
+        SELECT
+            TX_ID AS txId,
+            NOTICE_CODE AS noticeCode,
+            NOTICE_CONTENT AS noticeContent
+        FROM
+            ATMS_04001190
+    </select>
+
+    <select id="findOne" resultType="sh04001190" parameterType="sh04001190" statementType="PREPARED">
+        SELECT
+            TX_ID AS txId,
+            NOTICE_CODE AS noticeCode,
+            NOTICE_CONTENT AS noticeContent
+        FROM
+            ATMS_04001190
+        WHERE
+            TX_ID = #{txId}
+    </select>
+
+   <update id="delete" parameterType="sh04001190" statementType="PREPARED">
+        DELETE FROM
+            ATMS_04001190
+        WHERE
+            TX_ID = #{txId}
+    </update>
+
+   <update id="update" parameterType="sh04001190" statementType="PREPARED">
+        UPDATE ATMS_04001190
+        SET
+            NOTICE_CODE = #{noticeCode},
+            NOTICE_CONTENT = #{noticeContent}
+        WHERE
+            TX_ID = #{txId}
+    </update>
+
+   <update id="insert" parameterType="sh04001190" statementType="PREPARED">
+        INSERT INTO ATMS_04001190 (
+            TX_ID,
+            NOTICE_CODE,
+            NOTICE_CONTENT
+        ) VALUES (
+            #{txId},
+            #{noticeCode},
+            #{noticeContent}
+        )
+    </update>
+</mapper>

@@ -1,0 +1,158 @@
+#debug: true
+
+server:
+  url: localhost
+  port: 8888
+
+# Active Profiles :: [local|dev|test|stage|prod]
+spring:
+  profiles.active: local
+
+  # Thymeleaf
+  thymeleaf:
+    prefix: classpath:/templates
+    mode: HTML
+    #cache: false
+
+  http:
+    # Multipart
+    multipart:
+      enabled: true
+      file-size-threshold: 0
+      max-file-size: 8192Mb
+      max-request-size: 8192Mb
+
+    # HTTP Encoding
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+
+  # Spring MVC
+  mvc:
+    date-format: 'yyyy-MM-dd HH:mm:ss'
+    dispatch-trace-request: true
+    dispatch-options-request: true
+    favicon.enabled: false
+    ignore-default-model-on-redirect: true
+    locale: ko_KR
+    throw-exception-if-no-handler-found: false
+
+  # JMX
+  jmx.enabled: false
+
+  # H2
+  #h2.console.enabled: true
+  #h2.console.path: /h2-console
+
+# Security
+security.basic.enabled: false
+
+# 전문 관련 설정
+msg.exchange.gateway.online:
+  ip: localhost
+  port: 8989
+  security-corp:
+    ip: localhost
+    port: 33001
+  shbank:
+    ip: localhost
+    port: 33001
+
+msg.exchange.gateway.batch:
+  ip: localhost
+  port: 8989
+  security-corp:
+    ip: localhost
+    port: 33001
+  shbank:
+    ip: localhost
+    port: 33001
+
+# ONSEMIRO
+onsemiro:
+  # App Name
+  app-name: seoul-ams
+  # System Name
+  system-name: onsemiro
+  # DataSource
+  data-source:
+    driver-class-name: oracle.jdbc.driver.OracleDriver
+    initial-size: 3
+    max-idle: -1
+    max-total: 5
+    max-wait-millis: 3000
+    slow-query-threshold: 3000
+    hibernate:
+      hbm2ddlAuto: none
+      databaseType: oracle
+  # File Upload
+  upload.repository:
+    img: D:\ams_NAS\shinhan_file\img_upload
+    sla: D:\ams_NAS\shinhan_file\sla\send
+  # Log
+  log:
+    level: ERROR
+    slack:
+      enabled: false
+      web-hook-url:
+      channel: error_logs
+    database.enabled: true
+    admin-url:
+  #project base path
+  project-base-path:
+
+--- # Profile -------------------- :: local :: --------------------
+spring:
+  profiles: local
+  thymeleaf.cache: false
+  #devtools.livereload.enabled: true
+
+# ONSEMIRO
+onsemiro:
+  #개발
+  data-source:
+    url: jdbc:oracle:thin:@//10.200.2.16:1531/amsdb
+    username: ams
+    password: aamswc01
+  #운영
+  #data-source:
+    #url: jdbc:oracle:thin:@//10.200.2.53:1531/amsdb
+    #username: ams
+    #password: aamswc01
+  #드림앤트
+  #data-source:
+    #url: jdbc:oracle:thin:@shinhan.cwozeqnjffgl.ap-northeast-2.rds.amazonaws.com:1521:shinhan
+    #username: js_park
+    #password: ParkSt0re!
+  # DataSource
+
+
+# Logging
+logging.config: classpath:logback-local.xml
+
+
+--- # Profile -------------------- :: dev :: --------------------
+spring:
+  profiles: dev
+
+
+--- # Profile -------------------- :: test :: --------------------
+spring:
+  profiles: test
+
+--- # Profile -------------------- :: prod :: --------------------
+spring:
+  profiles: prod
+
+# Server Config
+server:
+  url: localhost
+  port: 80
+  tomcat:
+    max-threads: 400 # default: 200
+    min-spare-threads: 200 # default: 100
+
+# Logging
+logging.config: /var/log/logback.xml
+

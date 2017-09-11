@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bgf.shbank.domain.mng.etc.sh04001130.Sh04001130Mapper">
+
+    <select id="findAll" resultType="sh04001130" parameterType="sh04001130" statementType="PREPARED">
+        SELECT
+            SEVICE_FEE_CALC_YEAR_MONTH AS seviceFeeCalcYearMonth,
+            JISA_CODE AS jisaCode,
+            BRANCH_CODE AS branchCode,
+            CORNER_CODE AS cornerCode,
+            CORNER_NAME AS cornerName,
+            BRANCH_GUBUN_CODE AS branchGubunCode,
+            OPER_TIME_GUBUN_CODE AS operTimeGubunCode,
+            TERMINAL_COUNT AS terminalCount,
+            CHECK_OPER_ENABLE AS checkOperEnable,
+            BASIC_SEVICE_FEE AS basicSeviceFee,
+            TERMINAL_ADD_SEVICE_FEE AS terminalAddSeviceFee,
+            TIME_ADD_SEVICE_FEE AS timeAddSeviceFee,
+            CHECK_ADD_SEVICE_FEE AS checkAddSeviceFee,
+            OPER_DATE_COUNT AS operDateCount,
+            MONTH_SEVICE_FEE AS monthSeviceFee,
+            PENALTY AS penalty,
+            TOTAL_GIVE_SEVICE_FEE AS totalGiveSeviceFee,
+            NOTE AS note
+        FROM
+            ATMS_04001130
+    </select>
+
+    <select id="findOne" resultType="sh04001130" parameterType="sh04001130" statementType="PREPARED">
+        SELECT
+            SEVICE_FEE_CALC_YEAR_MONTH AS seviceFeeCalcYearMonth,
+            JISA_CODE AS jisaCode,
+            BRANCH_CODE AS branchCode,
+            CORNER_CODE AS cornerCode,
+            CORNER_NAME AS cornerName,
+            BRANCH_GUBUN_CODE AS branchGubunCode,
+            OPER_TIME_GUBUN_CODE AS operTimeGubunCode,
+            TERMINAL_COUNT AS terminalCount,
+            CHECK_OPER_ENABLE AS checkOperEnable,
+            BASIC_SEVICE_FEE AS basicSeviceFee,
+            TERMINAL_ADD_SEVICE_FEE AS terminalAddSeviceFee,
+            TIME_ADD_SEVICE_FEE AS timeAddSeviceFee,
+            CHECK_ADD_SEVICE_FEE AS checkAddSeviceFee,
+            OPER_DATE_COUNT AS operDateCount,
+            MONTH_SEVICE_FEE AS monthSeviceFee,
+            PENALTY AS penalty,
+            TOTAL_GIVE_SEVICE_FEE AS totalGiveSeviceFee,
+            NOTE AS note
+        FROM
+            ATMS_04001130
+        WHERE
+            SEVICE_FEE_CALC_YEAR_MONTH = #{seviceFeeCalcYearMonth}, BRANCH_CODE = #{branchCode}, CORNER_CODE = #{cornerCode}
+    </select>
+
+   <update id="delete" parameterType="sh04001130" statementType="PREPARED">
+        DELETE FROM
+            ATMS_04001130
+        WHERE
+            SEVICE_FEE_CALC_YEAR_MONTH = #{seviceFeeCalcYearMonth}, BRANCH_CODE = #{branchCode}, CORNER_CODE = #{cornerCode}
+    </update>
+
+   <update id="update" parameterType="sh04001130" statementType="PREPARED">
+        UPDATE ATMS_04001130
+        SET
+            JISA_CODE = #{jisaCode},
+            CORNER_NAME = #{cornerName},
+            BRANCH_GUBUN_CODE = #{branchGubunCode},
+            OPER_TIME_GUBUN_CODE = #{operTimeGubunCode},
+            TERMINAL_COUNT = #{terminalCount},
+            CHECK_OPER_ENABLE = #{checkOperEnable},
+            BASIC_SEVICE_FEE = #{basicSeviceFee},
+            TERMINAL_ADD_SEVICE_FEE = #{terminalAddSeviceFee},
+            TIME_ADD_SEVICE_FEE = #{timeAddSeviceFee},
+            CHECK_ADD_SEVICE_FEE = #{checkAddSeviceFee},
+            OPER_DATE_COUNT = #{operDateCount},
+            MONTH_SEVICE_FEE = #{monthSeviceFee},
+            PENALTY = #{penalty},
+            TOTAL_GIVE_SEVICE_FEE = #{totalGiveSeviceFee},
+            NOTE = #{note}
+        WHERE
+            SEVICE_FEE_CALC_YEAR_MONTH = #{seviceFeeCalcYearMonth}, BRANCH_CODE = #{branchCode}, CORNER_CODE = #{cornerCode}
+    </update>
+
+   <update id="insert" parameterType="sh04001130" statementType="PREPARED">
+        INSERT INTO ATMS_04001130 (
+            SEVICE_FEE_CALC_YEAR_MONTH,
+            JISA_CODE,
+            BRANCH_CODE,
+            CORNER_CODE,
+            CORNER_NAME,
+            BRANCH_GUBUN_CODE,
+            OPER_TIME_GUBUN_CODE,
+            TERMINAL_COUNT,
+            CHECK_OPER_ENABLE,
+            BASIC_SEVICE_FEE,
+            TERMINAL_ADD_SEVICE_FEE,
+            TIME_ADD_SEVICE_FEE,
+            CHECK_ADD_SEVICE_FEE,
+            OPER_DATE_COUNT,
+            MONTH_SEVICE_FEE,
+            PENALTY,
+            TOTAL_GIVE_SEVICE_FEE,
+            NOTE
+        ) VALUES (
+            #{seviceFeeCalcYearMonth},
+            #{jisaCode},
+            #{branchCode},
+            #{cornerCode},
+            #{cornerName},
+            #{branchGubunCode},
+            #{operTimeGubunCode},
+            #{terminalCount},
+            #{checkOperEnable},
+            #{basicSeviceFee},
+            #{terminalAddSeviceFee},
+            #{timeAddSeviceFee},
+            #{checkAddSeviceFee},
+            #{operDateCount},
+            #{monthSeviceFee},
+            #{penalty},
+            #{totalGiveSeviceFee},
+            #{note}
+        )
+    </update>
+</mapper>

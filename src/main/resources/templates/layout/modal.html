@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1"/>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+
+    <title th:text="${@environment.getProperty('config.title')}">title</title>
+
+    <link rel="shortcut icon" type="image/x-icon" th:href="@{/assets/favicon.ico/}"/>
+    <link rel="icon"          type="image/x-icon" th:href="@{/assets/favicon.ico/}"/>
+    <link rel="stylesheet"    type="text/css"     th:href="@{${@environment.getProperty('config.extendedCss')}}"/>
+</head>
+
+<body class="ax-body baseStyle" th:classappend="${axbody_class}" th:attr="data-page-auto-height=${auto_height == null ? 'true' : 'false'}">
+
+<div id="ax-modal-base-root" data-root-container="true">
+    <div layout:fragment="base-title"></div>
+    <div layout:fragment="base-content"></div>
+</div>
+
+</body>
+
+<script type="text/javascript" th:src="@{/assets/js/plugins.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/axboot.js}"></script>
+<script type="text/javascript">
+    var sessionJson    = convertJsonObj('[[${scriptSession}]]');
+
+    var CONTEXT_PATH   = 'http://[[${#httpServletRequest.serverName}]]:[[${#httpServletRequest.serverPort}]]';
+    /*var CONTEXT_PATH   = 'http://[[@{${@environment.getProperty("server.url")}}]]:[[@{${@environment.getProperty("server.port")}}]]';*/
+    var SCRIPT_SESSION = (function(json){return json;})(sessionJson);
+
+    function convertJsonObj(jsonStr) {
+        return jsonStr == null || jsonStr == '' ? null : JSON.parse(jsonStr.replace(/&quot;/gi, '"'));
+    }
+</script>
+<script type="text/javascript" th:src="@{/axboot.config.js}"></script>
+<script layout:fragment="js"></script>
+<script layout:fragment="script"></script>
+
+</html>

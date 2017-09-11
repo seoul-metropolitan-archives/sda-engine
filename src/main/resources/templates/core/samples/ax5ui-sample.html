@@ -1,0 +1,185 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout/base}">
+      <!--layout:decorate="~{/layout/base}" th:with="auto_height=false">-->
+
+<!-- ===== [ script ] ===== -->
+<script layout:fragment="script" type="text/javascript" th:src="@{/assets/js/core/samples/ax5ui-sample.js}"></script>
+<!-- ===== [ script ] _END_ ===== -->
+
+<!-- ===== [ base-title ] ===== -->
+<div layout:fragment="base-title" class="ax-base-title" role="page-title">
+    <h1 class="title"><i class="cqc-browser"></i> <span th:text="${pageName}"/></h1>
+    <p class="desc" th:text="${pageRemark}"/>
+</div>
+<!-- ===== [ base-title ] _END_ ===== -->
+
+<!-- ===== [ base-content ] ===== -->
+<div layout:fragment="base-content" class="ax-base-content">
+    <th:block layout:insert="~{/fragments/page-buttons :: buttons}"/>
+    <!-- ===== [ page-header ] ===== -->
+    <th:block layout:insert="~{/fragments/page-header  :: search-view(id='searchView0')}">
+        <div layout:fragment="table">
+            <th:block layout:insert="~{/fragments/table :: tr-td2(text1='기간선택', style1='width: 550px', text2='모달선택', style2='width: 450px')}">
+                <div layout:fragment="wrap-1">
+                    <div class="input-group" data-ax5picker="date">
+                        <input type="text" class="form-control" placeholder="yyyy-MM-dd">
+                        <span class="input-group-addon">~</span>
+                        <input type="text" class="form-control" placeholder="yyyy-MM-dd">
+                        <span class="input-group-addon"><i class="cqc-calendar"></i></span>
+                    </div>
+                </div>
+                <div layout:fragment="wrap-2">
+                    <div class="form-inline">
+                        <div class="form-group">
+                            <input type="text" class="form-control W60" value="" readonly="readonly"/>
+                            <input type="text" id="compStorLabel" class="form-control W100" value=""/>
+                            <button type="button" class="btn btn-primary" data-searchview-btn="modal">
+                                <i class="cqc-magnifier"></i> 찾기
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </th:block>
+            <th:block layout:insert="~{/fragments/table :: tr-td2(text1='날짜', style1='width: 350px', text2='검색어', style2='width: 450px')}">
+                <div layout:fragment="wrap-1">
+                    <div class="input-group" data-ax5picker="search-saleDt">
+                        <input type="text" class="form-control" placeholder="yyyy-MM-dd" data-ax5picker="date"/>
+                        <span class="input-group-addon"><i class="cqc-calendar"></i></span>
+                    </div>
+                </div>
+                <div layout:fragment="wrap-2">
+                    <div class="form-inline">
+                        <div class="form-inline">
+                            <div class="form-group">
+                                <label>영수번호</label>
+                                <input type="text" class="form-control W80" value=""/>
+                            </div>
+                            <div class="form-group">
+                                <label>계약번호</label>
+                                <input type="text" class="form-control W80" value=""/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </th:block>
+        </div>
+    </th:block>
+    <!-- ===== [ page-header ] _END_ ===== -->
+
+    <!-- ===== [ page-content ] ===== -->
+    <th:block layout:insert="~{/fragments/page-content :: content-panels}" th:with="orientation='vertical',
+        attr1='{width: \'600\'}', style1='padding-right: 10px;',
+        attr2='{width: \'*\'}',   style2='padding-left: 10px;',  scroll2='scroll'">
+
+        <!-- ===== [ left-panel ] ===== -->
+        <div layout:fragment="panel-1">
+
+            <div class="ax-button-group" data-fit-height-aside="grid-view-01">
+                <div class="left">
+                    <h2><i class="cqc-list"></i> Parent List</h2>
+                </div>
+                <div class="right"></div>
+            </div>
+            <div data-ax5grid="grid-view-01" data-fit-height-content="grid-view-01" style="height: 300px;"></div>
+
+        </div>
+        <!-- ===== [ left-panel _END_ ] ===== -->
+
+        <!-- ===== [ right-panel ] ===== -->
+        <div layout:fragment="panel-2">
+
+            <div class="ax-button-group" role="panel-header">
+                <div class="left">
+                    <h2><i class="cqc-news"></i> Parent Info</h2>
+                </div>
+                <div class="right">
+                    <button type="button" class="btn btn-default" data-form-view-01-btn="form-clear">
+                        <i class="cqc-erase"></i> 신규
+                    </button>
+                </div>
+            </div>
+
+            <form th:name="formView01" th:id="formView01" method="post" onsubmit="return false">
+                <div data-ax-tbl="" class="ax-search-tbl" minWidth="500px">
+                    <th:block layout:insert="~{/fragments/table :: tr-td2(text1='키(KEY)', style1='width: 300px', text2='값(VALUE)', style2='width: 300px')}">
+                        <div layout:fragment="wrap-1">
+                            <input type="text" data-ax-path="key" title="키(KEY)" class="form-control" data-ax-validate="required"/>
+                        </div>
+                        <div layout:fragment="wrap-2">
+                            <input type="text" data-ax-path="value" class="form-control"/>
+                        </div>
+                    </th:block>
+                    <th:block layout:insert="~{/fragments/table :: tr-td2(text1='ETC1', style1='width: 300px', text2='select', style2='width: 300px')}">
+                        <div layout:fragment="wrap-1">
+                            <input type="text" data-ax-path="etc1" class="form-control" data-ax5formatter="money"/>
+                        </div>
+                        <div layout:fragment="wrap-2">
+                            <div data-ax5select="select1"></div>
+                        </div>
+                    </th:block>
+                    <th:block layout:insert="~{/fragments/table :: tr-td(text='picker', style='width: 300px')}">
+                        <div layout:fragment="wrap">
+                            <div class="input-group" data-ax5picker="numpad">
+                                <input type="text" class="form-control" placeholder>
+                                <span class="input-group-addon"><i class="cqc-phone"></i></span>
+                            </div>
+                        </div>
+                    </th:block>
+                    <th:block layout:insert="~{/fragments/table :: tr-td(text='autocomplete', style='width: 100%')}">
+                        <div layout:fragment="wrap">
+                            <div class="form-group">
+                                <div data-ax5autocomplete="autocomplete1" data-ax5autocomplete-config="{}"></div>
+                            </div>
+                        </div>
+                    </th:block>
+                    <th:block layout:insert="~{/fragments/table :: tr-td(text='combobox', style='width: 100%')}">
+                        <div layout:fragment="wrap">
+                            <div class="form-group">
+                                <div data-ax5combobox="combobox1" data-ax5combobox-config="{}"></div>
+                            </div>
+                        </div>
+                    </th:block>
+                    <th:block layout:insert="~{/fragments/table :: tr-td(text='calendar', style='width: 100%')}">
+                        <div layout:fragment="wrap">
+                            <div class="form-group">
+                                <div id="calendar-target" style="
+                width:300px;
+                border:1px solid #ccc;
+                border-radius: 5px;
+                padding: 5px;
+                overflow: hidden;"></div>
+                            </div>
+                        </div>
+                    </th:block>
+                </div>
+            </form>
+
+            <div class="H10"></div>
+
+            <div class="ax-button-group" role="panel-header">
+                <div class="left">
+                    <h2><i class="cqc-news"></i>Toast & dialog test</h2>
+                </div>
+                <div class="right"></div>
+            </div>
+
+            <div style="margin: 10px 0;">
+                <button class="btn btn-default" data-ui-btn="toast">Toast</button>
+                <button class="btn btn-danger" data-ui-btn="toast-confirm">Confirm Toast</button>
+            </div>
+            <div style="margin: 10px 0;">
+                <button class="btn btn-default" data-ui-btn="dialog-alert">Alert</button>
+                <button class="btn btn-primary" data-ui-btn="dialog-confirm">Confirm</button>
+                <button class="btn btn-info" data-ui-btn="dialog-prompt">Prompt</button>
+            </div>
+
+        </div>
+        <!-- ===== [ right-panel ] _END_ ===== -->
+    </th:block>
+    <div class="H10"></div>
+    <!-- ===== [ page-content ] _END_ ===== -->
+</div>
+<!-- ===== [ base-content ] _END_ ===== -->
+</html>

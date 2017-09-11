@@ -1,0 +1,114 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout/base}">
+
+<!-- ===== [ head ] ===== -->
+<head>
+    <link rel="stylesheet" type="text/css" th:href="@{/assets/plugins/prettify/skins/github.css}"/>
+    <script type="text/javascript" th:src="@{/assets/plugins/prettify/prettify.js}"></script>
+    <script type="text/javascript" th:src="@{/assets/plugins/prettify/lang-css.js}"></script>
+</head>
+<!-- ===== [ head ] _END_ ===== -->
+
+<!-- ===== [ script ] ===== -->
+<script layout:fragment="script" type="text/javascript" th:src="@{/assets/js/core/devtools/model-extractor-detail.js}"></script>
+<!-- ===== [ script ] _END_ ===== -->
+
+<!-- ===== [ base-title ] ===== -->
+<div layout:fragment="base-title" class="ax-base-title" role="page-title">
+    <h1 class="title"><i class="cqc-tools"></i> Model Extractor</h1>
+    <p class="desc">detail</p>
+</div>
+<!-- ===== [ base-title ] _END_ ===== -->
+
+<!-- ===== [ base-content ] ===== -->
+<div layout:fragment="base-content" class="ax-base-content">
+    <th:block layout:insert="~{/fragments/page-buttons :: buttons}"/>
+    <th:block layout:insert="~{/fragments/page-header  :: underline}"/>
+    <th:block layout:insert="~{/fragments/page-content :: content-panels}" th:with="orientation='vertical',
+        attr1='{width: \'300\'}', style1='padding-right: 10px',
+        attr2='{width: \'*\'}',   style2='padding: 0px 10px', scroll2='scroll'">
+
+        <!-- ===== [ left-panel ] ===== -->
+        <div layout:fragment="panel-1">
+
+            <div class="ax-button-group" data-fit-height-aside="grid-view-01">
+                <div class="left">
+                    <h2><i class="cqc-list"></i> Code</h2>
+                </div>
+                <div class="right">
+                    <button type="button" class="btn btn-default" data-grid-view-01-btn="generate" th:value="${className}">
+                        <i class="cqc-circle-with-plus"></i> Generate
+                    </button>
+                </div>
+            </div>
+            <div data-ax5grid="grid-view-01" data-fit-height-content="grid-view-01" style="height: 300px;"></div>
+
+        </div>
+        <!-- ===== [ left-panel _END_ ] ===== -->
+
+        <!-- ===== [ right-panel ] ===== -->
+        <div layout:fragment="panel-2">
+
+            <div class="ax-button-group" data-fit-height-aside="right-view-01">
+                <div class="left" id="table_detail">
+                    <h2><i class="cqc-list"></i> 테이블명 :: <span id="tableName" th:text="${tableName}"></span></h2>
+                </div>
+                <div class="right"></div>
+            </div>
+
+            <div data-fit-height-content="right-view-01">
+
+                <div class="ax-button-group">
+                    <div class="left" id="Controller">
+                        <h3><i class="cqc-info-with-circle"></i> Controller</h3>
+                    </div>
+                </div>
+                <pre class="form-control for-prettify" style="height:auto;padding: 0;" th:text="${jpaMvcModel.getController().code()}"></pre>
+                <div class="ax-button-group">
+                    <div class="left">
+                        <h3><i class="cqc-info-with-circle"></i> Entity</h3>
+                    </div>
+                </div>
+                <pre class="form-control for-prettify" style="height:auto;padding: 0;" th:text="${jpaMvcModel.getEntity().code()}"></pre>
+                <div class="ax-button-group">
+                    <div class="left">
+                        <h3><i class="cqc-info-with-circle"></i> VO</h3>
+                    </div>
+                </div>
+                <pre class="form-control for-prettify" style="height:auto;padding: 0;" th:text="${jpaMvcModel.getVo().code()}"></pre>
+                <div class="ax-button-group">
+                    <div class="left">
+                        <h3><i class="cqc-info-with-circle"></i> Service</h3>
+                    </div>
+                </div>
+                <pre class="form-control for-prettify" style="height:auto;padding: 0;" th:text="${jpaMvcModel.getService().code()}"></pre>
+                <div class="ax-button-group">
+                    <div class="left">
+                        <h3><i class="cqc-info-with-circle"></i> Repository</h3>
+                    </div>
+                </div>
+                <pre class="form-control for-prettify" style="height:auto;padding: 0;" th:text="${jpaMvcModel.getRepository().code()}"></pre>
+                <div class="ax-button-group">
+                    <div class="left">
+                        <h3><i class="cqc-info-with-circle"></i> MyBatis-Interface</h3>
+                    </div>
+                </div>
+                <pre class="form-control for-prettify" style="height:auto;padding: 0;" th:text="${jpaMvcModel.getMyBatisInterface().code()}"></pre>
+                <div class="ax-button-group">
+                    <div class="left">
+                        <h3><i class="cqc-info-with-circle"></i> MyBatis-XML</h3>
+                    </div>
+                </div>
+                <pre class="form-control for-prettify" style="height:auto;padding: 0;" th:text="${jpaMvcModel.getMyBatisXML().code()}"></pre>
+
+
+
+            </div>
+        </div>
+        <!-- ===== [ right-panel ] _END_ ===== -->
+    </th:block>
+</div>
+<!-- ===== [ base-content ] _END_ ===== -->
+</html>

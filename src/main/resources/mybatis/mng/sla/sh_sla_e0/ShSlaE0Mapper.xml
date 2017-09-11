@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bgf.shbank.domain.mng.sla.sh_sla_e0.ShSlaE0Mapper">
+
+    <select id="findAll" resultType="shSlaE0" parameterType="shSlaE0" statementType="PREPARED">
+        SELECT
+            STND_DATE AS stndDate,
+            TX_ID AS txId,
+            CORP_CODE AS corpCode,
+            BRANCH_CODE AS branchCode,
+            BRANCH_NAME AS branchName,
+            CORNER_CODE AS cornerCode,
+            CORNER_NAME AS cornerName,
+            TERMINAL_NO AS terminalNo,
+            OPER_START_TIME AS operStartTime,
+            OPER_END_TIME AS operEndTime,
+            MODEL_NAME AS modelName,
+            TOTAL_OPER_TIME AS totalOperTime,
+            REAL_OPER_TIME AS realOperTime,
+            NONE_OPER_TIME AS noneOperTime
+        FROM
+            ATMS_SLA_E0
+    </select>
+
+    <select id="findOne" resultType="shSlaE0" parameterType="shSlaE0" statementType="PREPARED">
+        SELECT
+            STND_DATE AS stndDate,
+            TX_ID AS txId,
+            CORP_CODE AS corpCode,
+            BRANCH_CODE AS branchCode,
+            BRANCH_NAME AS branchName,
+            CORNER_CODE AS cornerCode,
+            CORNER_NAME AS cornerName,
+            TERMINAL_NO AS terminalNo,
+            OPER_START_TIME AS operStartTime,
+            OPER_END_TIME AS operEndTime,
+            MODEL_NAME AS modelName,
+            TOTAL_OPER_TIME AS totalOperTime,
+            REAL_OPER_TIME AS realOperTime,
+            NONE_OPER_TIME AS noneOperTime
+        FROM
+            ATMS_SLA_E0
+        WHERE
+            STND_DATE = #{stndDate}, TX_ID = #{txId}
+    </select>
+
+   <update id="delete" parameterType="shSlaE0" statementType="PREPARED">
+        DELETE FROM
+            ATMS_SLA_E0
+        WHERE
+            STND_DATE = #{stndDate}, TX_ID = #{txId}
+    </update>
+
+   <update id="update" parameterType="shSlaE0" statementType="PREPARED">
+        UPDATE ATMS_SLA_E0
+        SET
+            CORP_CODE = #{corpCode},
+            BRANCH_CODE = #{branchCode},
+            BRANCH_NAME = #{branchName},
+            CORNER_CODE = #{cornerCode},
+            CORNER_NAME = #{cornerName},
+            TERMINAL_NO = #{terminalNo},
+            OPER_START_TIME = #{operStartTime},
+            OPER_END_TIME = #{operEndTime},
+            MODEL_NAME = #{modelName},
+            TOTAL_OPER_TIME = #{totalOperTime},
+            REAL_OPER_TIME = #{realOperTime},
+            NONE_OPER_TIME = #{noneOperTime}
+        WHERE
+            STND_DATE = #{stndDate}, TX_ID = #{txId}
+    </update>
+
+   <update id="insert" parameterType="shSlaE0" statementType="PREPARED">
+        INSERT INTO ATMS_SLA_E0 (
+            STND_DATE,
+            TX_ID,
+            CORP_CODE,
+            BRANCH_CODE,
+            BRANCH_NAME,
+            CORNER_CODE,
+            CORNER_NAME,
+            TERMINAL_NO,
+            OPER_START_TIME,
+            OPER_END_TIME,
+            MODEL_NAME,
+            TOTAL_OPER_TIME,
+            REAL_OPER_TIME,
+            NONE_OPER_TIME
+        ) VALUES (
+            #{stndDate},
+            #{txId},
+            #{corpCode},
+            #{branchCode},
+            #{branchName},
+            #{cornerCode},
+            #{cornerName},
+            #{terminalNo},
+            #{operStartTime},
+            #{operEndTime},
+            #{modelName},
+            #{totalOperTime},
+            #{realOperTime},
+            #{noneOperTime}
+        )
+    </update>
+</mapper>

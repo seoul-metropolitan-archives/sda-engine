@@ -1,0 +1,216 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout/base}">
+
+<!-- ===== [ script ] ===== -->
+<script layout:fragment="script" type="text/javascript" th:src="@{/assets/js/mng/cash/sh03001140.js}"></script>
+<!-- ===== [ script ] _END_ ===== -->
+
+<!-- ===== [ base-title ] ===== -->
+<div layout:fragment="base-title" class="ax-base-title" role="page-title">
+    <h1 class="title"><i class="cqc-browser"></i> <span th:text="${pageName}"/></h1>
+    <p class="desc" th:text="${pageRemark}"/>
+</div>
+<!-- ===== [ base-title ] _END_ ===== -->
+
+<!-- ===== [ base-content ] ===== -->
+<div layout:fragment="base-content" class="ax-base-content">
+    <th:block layout:insert="~{/fragments/page-buttons :: buttons}"/>
+    <th:block layout:insert="~{/fragments/page-header  :: search-bar(id='searchView0')}">
+        <div layout:fragment="table">
+            <th:block layout:insert="~{/fragments/table :: tr-td5(
+            text1='지사명',          style1='width: 210px', lstyle1='width: 100px',
+            text2='지점명/코드',     style2='width: 330px', lstyle2='width: 100px',
+            text3='코너명/단말번호', style3='width: 340px', lstyle3='width: 110px',
+            text4='마감일자',        style4='width: 330px', lstyle4='width: 100px',
+            text5='검색',            style5='width: 300px', lstyle5='display:none',)}">
+                <div layout:fragment="wrap-1">
+                    <select th:class="form-control" th:classappend="${class}" name="jisaCode" id="jisaCode">
+                        <option value="">전체</option>
+                        <option th:each="item : ${jisaCode}" th:value="${item.code}" th:text="${item.name}"/>
+                    </select>
+                </div>
+                <div layout:fragment="wrap-2">
+                    <div class="form-inline" >
+                        <input type="text" id="branchName" class="form-control W150" value=""
+                               data-searchview-btn="modal" readonly="readonly" style="text-align: center" placeholder="클릭시 검색"/>
+                        <input type="text" id="branchCode" class="form-control W60" value="" maxlength="4" minlength="4"/>
+                    </div>
+                </div>
+                <div layout:fragment="wrap-3">
+                    <div class="form-inline" >
+                        <input type="text" id="cornerName" class="form-control W150" value=""
+                               data-searchview-btn="modal" readonly="readonly" style="text-align: center" placeholder="클릭시 검색"/>
+                        <input type="text" id="terminalNo" class="form-control W60" value="" maxlength="4" minlength="4"/>
+                    </div>
+                </div>
+                <div layout:fragment="wrap-4">
+                    <div class="input-group" data-ax5picker="date">
+                        <input type="text" class="form-control" id="startDate" placeholder="yyyy-MM-dd"
+                               style="text-align: center">
+                        <span class="input-group-addon">~</span>
+                        <input type="text" class="form-control" id="endDate" placeholder="yyyy-MM-dd"
+                               style="text-align: center">
+                        <span class="input-group-addon"><i class="cqc-calendar"></i></span>
+                    </div>
+                </div>
+                <div layout:fragment="wrap-5">
+                    <div class="form-inline">
+                        <button type="button" class="btn btn-default" data-page-btn="search">
+                            <i class="cqc-magnifier"></i> 조회
+                        </button>
+                        <button class="btn btn-primary" data-page-btn="search-view-clear" style="margin-left: 5px;">
+                            <i class="cqc-zoomout"></i> 초기화
+                        </button>
+                    </div>
+                </div>
+            </th:block>
+        </div>
+    </th:block>
+    <th:block layout:insert="~{/fragments/page-content :: content-panels}" th:with="orientation='vertical', attr1='{width: \'1091\'}', style1='padding-right: 10px', attr2='{width: \'*\'}',   style2='padding: 0px 10px', scroll2='scroll'">
+
+        <!-- ===== [ left-panel ] ===== -->
+        <div layout:fragment="panel-1">
+
+            <div class="ax-button-group" data-fit-height-aside="grid-view-01">
+                <div class="left">
+                    <h2><i class="cqc-list"></i> 회수자금결과 목록</h2>
+                </div>
+                <div class="right">
+                    <button type="button" class="btn btn-default" data-page-btn="excel">
+                        <i class="cqc-download"></i> 엑셀
+                    </button>
+                </div>
+            </div>
+            <div data-ax5grid="grid-view-01" data-fit-height-content="grid-view-01" style="height: 300px;"></div>
+
+        </div>
+        <!-- ===== [ left-panel _END_ ] ===== -->
+
+        <!-- ===== [ right-panel ] ===== -->
+        <div layout:fragment="panel-2">
+
+            <div class="ax-button-group" role="panel-header">
+                <div class="left" style="width: 150px">
+                    <h2><i class="cqc-news"></i> 회수자금결과</h2>
+                </div>
+                <div class="left">
+                    <h6> (*)항목 변경시 마감정보가 조회됩니다.</h6>
+                </div>
+                <div class="right">
+                    <button type="button" class="btn btn-default" data-form-view-01-btn="form-clear">
+                        <i class="cqc-erase"></i> 신규보고서
+                    </button>
+                    <button type="button" class="btn btn-default" data-form-view-01-btn="save">
+                        <i class="cqc-circle-with-plus"></i> 보고서 저장
+                    </button>
+                    <button type="button" class="btn btn-default" data-form-view-01-btn="add">
+                        <i class="cqc-circle-with-plus"></i> 보고서 통보
+                    </button>
+                </div>
+            </div>
+
+            <form name="formView01" id="formView01" method="post" onsubmit="return false">
+                <div data-ax-tbl class="ax-search-tbl" minWidth="700px">
+                    <th:block layout:insert="~{/fragments/table :: tr-td2-label(text1='지사명', text2='지점명/코드(*)', style1='width: 150px', style2='width: 230px', style='width: 380px')}">
+                        <div layout:fragment="wrap-1">
+                            <select th:class="form-control" th:classappend="${class}" data-ax-path="jisaCode"
+                                    name="jisaCodeForm" id="jisaCodeForm" style="width: 150px">
+                                <option value="">선택</option>
+                                <option th:each="item : ${jisaCode}" th:value="${item.code}" th:text="${item.name}"/>
+                            </select>
+                        </div>
+                        <div layout:fragment="wrap-2">
+                            <div class="form-inline">
+                                <input type="text" id="branchNameForm" class="form-control W150" value="" data-ax-path="branchName"
+                                       data-searchview-btn="form_modal" readonly="readonly" style="text-align: center" placeholder="클릭시 검색"/>
+                                <input type="text" id="branchCodeForm" class="form-control W60" value="" data-ax-path="branchCode"
+                                       data-searchview-btn="form_modal" readonly="readonly" style="text-align: center" maxlength="4" minlength="4"/>
+                            </div>
+                        </div>
+                    </th:block>
+                    <th:block layout:insert="~{/fragments/table :: tr-td2-label(text1='코너명/단말번호(*)', text2='마감일(*)', style1='width: 150px', style2='width: 230px', style='width: 380px')}">
+                        <div layout:fragment="wrap-1">
+                            <div class="form-inline">
+                                <input type="text" id="cornerNameForm" class="form-control W150" value="" data-ax-path="cornerName"
+                                       data-searchview-btn="form_modal" readonly="readonly" style="text-align: center" placeholder="클릭시 검색"/>
+                                <input type="text" id="terminalNoForm" data-ax-path="terminalNo" class="form-control W60" value=""
+                                       data-searchview-btn="form_modal" readonly="readonly" style="text-align: center" maxlength="4" minlength="4"/>
+                            </div>
+                        </div>
+                        <div layout:fragment="wrap-2">
+                            <div class="input-group" data-ax5picker="date" style="width: 150px">
+                                <input type="text"  data-ax-validate="required" data-ax-path="closeDate" id="closeDate" class="form-control" placeholder="yyyy-MM-dd" style="text-align: center">
+                                <span class="input-group-addon"><i class="cqc-calendar"></i></span>
+                            </div>
+                        </div>
+                    </th:block>
+                    <th:block layout:insert="~{/fragments/table :: tr-td2-label(text1='전일현송액', text2='입금금액', style1='width: 150px', style2='width: 230px', style='width: 380px')}">
+                        <div layout:fragment="wrap-1">
+                            <input id="prevDayCashSendingAmt" name="prevDayCashSendingAmt" data-ax-path="prevDayCashSendingAmt" title="전일현송액"
+                                   type="text" class="form-control W150" placeholder data-ax5formatter="money(int)">
+                        </div>
+                        <div layout:fragment="wrap-2">
+                            <input id="depositAmt" name="depositAmt" data-ax-path="depositAmt" title="입금금액" readonly="readonly"
+                                   type="text" class="form-control W150" placeholder data-ax5formatter="money(int)">
+                        </div>
+                    </th:block>
+                    <th:block layout:insert="~{/fragments/table :: tr-td2-label(text1='지급금액', text2='마감금액', style1='width: 150px', style2='width: 230px', style='width: 380px')}">
+                        <div layout:fragment="wrap-1">
+                            <input id="giveAmt" name="giveAmt" data-ax-path="giveAmt" title="지급금액" readonly="readonly"
+                                   type="text" class="form-control W150" placeholder data-ax5formatter="money(int)">
+                        </div>
+                        <div layout:fragment="wrap-2">
+                            <input id="closeAmt" name="closeAmt" data-ax-path="closeAmt" title="마감금액" readonly="readonly"
+                                   type="text" class="form-control W150" placeholder data-ax5formatter="money(int)">
+                        </div>
+                    </th:block>
+                    <th:block layout:insert="~{/fragments/table :: tr-td2-label(text1='미처리금액',text2='회수자금',  style1='width: 150px', style2='width: 230px', style='width: 380px')}">
+                        <div layout:fragment="wrap-1">
+                            <input id="noneProcessAmt" name="noneProcessAmt" data-ax-path="noneProcessAmt" title="미처리금액" readonly="readonly"
+                                   type="text" class="form-control W150" placeholder data-ax5formatter="money(int)">
+                        </div>
+                        <div layout:fragment="wrap-2">
+                            <input id="rtrvlFund" name="rtrvlFund" data-ax-path="rtrvlFund" title="회수자금"
+                                   type="text" class="form-control W150" placeholder data-ax5formatter="money(int)">
+                        </div>
+                    </th:block>
+                    <th:block layout:insert="~{/fragments/table :: tr-td2-label(text1='과여금조정건수',text2='과여금조정금액', style1='width: 150px', style2='width: 230px', style='width: 380px')}">
+                        <div layout:fragment="wrap-1">
+                            <input id="adjustLackAmtCount" name="adjustLackAmtCount" data-ax-path="adjustLackAmtCount" title="과여금조정건수"
+                                   type="text" class="form-control W150" placeholder data-ax5formatter="money(int)">
+                        </div>
+                        <div layout:fragment="wrap-2">
+                            <input id="adjustLackAmt" name="adjustLackAmt" data-ax-path="adjustLackAmt" type="text" title="과여금조정금액"
+                                   class="form-control W150" placeholder data-ax5formatter="money(int)">
+                        </div>
+                    </th:block>
+                    <th:block layout:insert="~{/fragments/table :: tr-td2-label(text1='미처리건 유무',text2='관리사무소',  style1='width: 150px', style2='width: 230px', style='width: 380px')}">
+                        <div layout:fragment="wrap-1">
+                            <select th:class="form-control" th:classappend="${class}" data-ax-path="noneProcessAt" data-ax-validate="required" title="미처리건 유무"
+                                    name="noneProcessAt" id="noneProcessAt" style="width: 150px">
+                                <option value="">선택</option>
+                                <option th:each="item : ${noneProcessAt}" th:value="${item.code}" th:text="${item.name}"/>
+                            </select>
+                        </div>
+                        <div layout:fragment="wrap-2">
+                            <input id="mngOffice" name="mngOffice" data-ax-path="mngOffice" title="관리사무소"
+                                   type="text" class="form-control W150" >
+                        </div>
+                    </th:block>
+                    <th:block layout:insert="~{/fragments/table :: tr-td(text='메모사항', style='width: 100%', style1='width: 150px')}">
+                        <div layout:fragment="wrap">
+                            <textarea id="memoContent" name="memoContent" data-ax-path="memoContent" class="form-control" maxlength="50" style="height: 150px"></textarea>
+                        </div>
+                    </th:block>
+                </div>
+            </form>
+
+            <div class="H5"></div>
+        </div>
+        <!-- ===== [ right-panel ] _END_ ===== -->
+    </th:block>
+</div>
+<!-- ===== [ base-content ] _END_ ===== -->
+</html>

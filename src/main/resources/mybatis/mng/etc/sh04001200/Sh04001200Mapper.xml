@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bgf.shbank.domain.mng.etc.sh04001200.Sh04001200Mapper">
+
+    <select id="findAll" resultType="sh04001200" parameterType="sh04001200" statementType="PREPARED">
+        SELECT
+            TX_ID AS txId,
+            JISA_CODE AS jisaCode,
+            BRANCH_CODE AS branchCode,
+            CORNER_CODE AS cornerCode,
+            CORP_CODE AS corpCode,
+            INOUT_DATETIME AS inoutDatetime,
+            INOUT_GUBUN AS inoutGubun,
+            TASK_GUBUN AS taskGubun,
+            AUTH_EMP_NO AS authEmpNo
+        FROM
+            ATMS_04001200
+    </select>
+
+    <select id="findOne" resultType="sh04001200" parameterType="sh04001200" statementType="PREPARED">
+        SELECT
+            TX_ID AS txId,
+            JISA_CODE AS jisaCode,
+            BRANCH_CODE AS branchCode,
+            CORNER_CODE AS cornerCode,
+            CORP_CODE AS corpCode,
+            INOUT_DATETIME AS inoutDatetime,
+            INOUT_GUBUN AS inoutGubun,
+            TASK_GUBUN AS taskGubun,
+            AUTH_EMP_NO AS authEmpNo
+        FROM
+            ATMS_04001200
+        WHERE
+            BRANCH_CODE = #{branchCode}, CORNER_CODE = #{cornerCode}, INOUT_DATETIME = #{inoutDatetime}
+    </select>
+
+   <update id="delete" parameterType="sh04001200" statementType="PREPARED">
+        DELETE FROM
+            ATMS_04001200
+        WHERE
+            BRANCH_CODE = #{branchCode}, CORNER_CODE = #{cornerCode}, INOUT_DATETIME = #{inoutDatetime}
+    </update>
+
+   <update id="update" parameterType="sh04001200" statementType="PREPARED">
+        UPDATE ATMS_04001200
+        SET
+            TX_ID = #{txId},
+            JISA_CODE = #{jisaCode},
+            CORP_CODE = #{corpCode},
+            INOUT_GUBUN = #{inoutGubun},
+            TASK_GUBUN = #{taskGubun},
+            AUTH_EMP_NO = #{authEmpNo}
+        WHERE
+            BRANCH_CODE = #{branchCode}, CORNER_CODE = #{cornerCode}, INOUT_DATETIME = #{inoutDatetime}
+    </update>
+
+   <update id="insert" parameterType="sh04001200" statementType="PREPARED">
+        INSERT INTO ATMS_04001200 (
+            TX_ID,
+            JISA_CODE,
+            BRANCH_CODE,
+            CORNER_CODE,
+            CORP_CODE,
+            INOUT_DATETIME,
+            INOUT_GUBUN,
+            TASK_GUBUN,
+            AUTH_EMP_NO
+        ) VALUES (
+            #{txId},
+            #{jisaCode},
+            #{branchCode},
+            #{cornerCode},
+            #{corpCode},
+            #{inoutDatetime},
+            #{inoutGubun},
+            #{taskGubun},
+            #{authEmpNo}
+        )
+    </update>
+</mapper>

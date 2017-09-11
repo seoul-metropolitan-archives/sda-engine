@@ -1,0 +1,84 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout/modal}">
+
+<!-- ===== [ script ] ===== -->
+<script layout:fragment="script" type="text/javascript" th:src="@{/assets/js/mng/cash/sh03001110_m01.js}"></script>
+<!-- ===== [ script ] _END_ ===== -->
+
+<!-- ===== [ base-title ] ===== -->
+<div layout:fragment="base-title" class="ax-base-title" role="page-title">
+    <h4 class="title">
+        <i class="cqc-browser"></i>
+        <span>일자</span>
+        <span th:text="${referDate}" th:attr="data-refer-date=${referDate}" style="font-size: 16px; font-style: italic"></span>
+
+        <i class="cqc-browser" style="margin-left: 20px;"></i>
+        <span>지사</span>
+        <span th:text="${jisa}" style="font-size: 16px; font-style: italic"></span>
+
+        <i class="cqc-browser" style="margin-left: 20px;"></i>
+        <span>지점</span>
+        <span th:text="${branch}" th:attr="data-branch=${branch}" style="font-size: 16px; font-style: italic"></span>
+
+        <i class="cqc-browser" style="margin-left: 20px;"></i>
+        <span>단말번호</span>
+        <span th:text="${terminalNo}" th:attr="data-terminal-no=${terminalNo}" style="font-size: 16px; font-style: italic"></span>
+    </h4>
+</div>
+<!-- ===== [ base-title ] _END_ ===== -->
+
+<!-- ===== [ base-content ] ===== -->
+<div layout:fragment="base-content" class="ax-base-content">
+    <!--<th:block layout:insert="~{/fragments/page-buttons :: modal-exec-buttons}"/>-->
+    <!-- ===== [ page-content ] ===== -->
+    <th:block layout:insert="~{/fragments/page-content :: content(orientation='horizontal', attr='{height: \'\'}')}">
+        <!-- ===== [ page-content ] ===== -->
+        <div layout:fragment="content-detail">
+
+            <form th:name="formView01" th:id="formView01" method="post" onsubmit="return false">
+                <div data-ax-tbl="" class="ax-search-tbl" minWidth="500px">
+                    <th:block layout:insert="~{/fragments/table :: tr-label2(text1='현금', style1='width:280px;', text2='수표', style2='width:280px;')}">
+                    </th:block>
+                    <th:block layout:insert="~{/fragments/table :: tr-td2-label(style='width:279px;', text1='입금액', text2='입금액', style1='width: 90px', style2='width: 129px')}">
+                        <div layout:fragment="wrap-1">
+                            <input type="text" data-ax-path="cashDepositAmt" class="form-control" readonly="readonly"/>
+                        </div>
+                        <div layout:fragment="wrap-2">
+                            <input type="text" data-ax-path="checkDepositAmt" class="form-control" readonly="readonly"/>
+                        </div>
+                    </th:block>
+                    <th:block layout:insert="~{/fragments/table :: tr-td2-label(style='width:279px;', text1='출금액', text2='출금액', style1='width: 90px', style2='width: 129px')}">
+                        <div layout:fragment="wrap-1">
+                            <input type="text" data-ax-path="cashWithdrawAmt" class="form-control" readonly="readonly"/>
+                        </div>
+                        <div layout:fragment="wrap-2">
+                            <input type="text" data-ax-path="checkWithdrawAmt" class="form-control" readonly="readonly"/>
+                        </div>
+                    </th:block>
+                    <th:block layout:insert="~{/fragments/table :: tr-td2-label(style='width:279px;', text1='잔액', text2='지급가능매수', style1='width: 90px', style2='width: 129px')}">
+                        <div layout:fragment="wrap-1">
+                            <input type="text" data-ax-path="cashAmt" class="form-control" readonly="readonly"/>
+                        </div>
+                        <div layout:fragment="wrap-2">
+                            <input type="text" data-ax-path="checkGiveEnableCount" class="form-control" readonly="readonly"/>
+                        </div>
+                    </th:block>
+                    <th:block layout:insert="~{/fragments/table :: tr-td(text='5만원권 지급가능매수', style='width: 559px', style1='width:279px;')}">
+                        <div layout:fragment="wrap">
+                            <input type="text" data-ax-path="cash50kGiveEnableCount" class="form-control" readonly="readonly"/>
+                        </div>
+                    </th:block>
+
+                </div>
+            </form>
+
+            <div class="H10"></div>
+        </div>
+        <!-- ===== [ page-content ] _END_ ===== -->
+    </th:block>
+    <!-- ===== [ page-content ] _END_ ===== -->
+</div>
+<!-- ===== [ base-content ] _END_ ===== -->
+</html>

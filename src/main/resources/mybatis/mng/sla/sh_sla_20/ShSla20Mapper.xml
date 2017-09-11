@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bgf.shbank.domain.mng.sla.sh_sla_20.ShSla20Mapper">
+
+    <select id="findAll" resultType="shSla20" parameterType="shSla20" statementType="PREPARED">
+        SELECT
+            TX_ID AS txId,
+            ERROR_DATETIME AS errorDatetime,
+            CORP_CODE AS corpCode,
+            BRANCH_CODE AS branchCode,
+            BRANCH_NAME AS branchName,
+            CORNER_CODE AS cornerCode,
+            CORNER_NAME AS cornerName,
+            TERMINAL_NO AS terminalNo,
+            RECOVERY_DATETIME AS recoveryDatetime,
+            ELAPSED_TIME AS elapsedTime,
+            ELAPSED_SECONDS AS elapsedSeconds,
+            ERROR_CONTENT AS errorContent,
+            MODEL_NAME AS modelName,
+            ACCEPT AS accept,
+            REFUSE_REASON AS refuseReason
+        FROM
+            ATMS_SLA_20
+    </select>
+
+    <select id="findOne" resultType="shSla20" parameterType="shSla20" statementType="PREPARED">
+        SELECT
+            TX_ID AS txId,
+            ERROR_DATETIME AS errorDatetime,
+            CORP_CODE AS corpCode,
+            BRANCH_CODE AS branchCode,
+            BRANCH_NAME AS branchName,
+            CORNER_CODE AS cornerCode,
+            CORNER_NAME AS cornerName,
+            TERMINAL_NO AS terminalNo,
+            RECOVERY_DATETIME AS recoveryDatetime,
+            ELAPSED_TIME AS elapsedTime,
+            ELAPSED_SECONDS AS elapsedSeconds,
+            ERROR_CONTENT AS errorContent,
+            MODEL_NAME AS modelName,
+            ACCEPT AS accept,
+            REFUSE_REASON AS refuseReason
+        FROM
+            ATMS_SLA_20
+        WHERE
+            TX_ID = #{txId}, ERROR_DATETIME = #{errorDatetime}
+    </select>
+
+   <update id="delete" parameterType="shSla20" statementType="PREPARED">
+        DELETE FROM
+            ATMS_SLA_20
+        WHERE
+            TX_ID = #{txId}, ERROR_DATETIME = #{errorDatetime}
+    </update>
+
+   <update id="update" parameterType="shSla20" statementType="PREPARED">
+        UPDATE ATMS_SLA_20
+        SET
+            CORP_CODE = #{corpCode},
+            BRANCH_CODE = #{branchCode},
+            BRANCH_NAME = #{branchName},
+            CORNER_CODE = #{cornerCode},
+            CORNER_NAME = #{cornerName},
+            TERMINAL_NO = #{terminalNo},
+            RECOVERY_DATETIME = #{recoveryDatetime},
+            ELAPSED_TIME = #{elapsedTime},
+            ELAPSED_SECONDS = #{elapsedSeconds},
+            ERROR_CONTENT = #{errorContent},
+            MODEL_NAME = #{modelName},
+            ACCEPT = #{accept},
+            REFUSE_REASON = #{refuseReason}
+        WHERE
+            TX_ID = #{txId}, ERROR_DATETIME = #{errorDatetime}
+    </update>
+
+   <update id="insert" parameterType="shSla20" statementType="PREPARED">
+        INSERT INTO ATMS_SLA_20 (
+            TX_ID,
+            ERROR_DATETIME,
+            CORP_CODE,
+            BRANCH_CODE,
+            BRANCH_NAME,
+            CORNER_CODE,
+            CORNER_NAME,
+            TERMINAL_NO,
+            RECOVERY_DATETIME,
+            ELAPSED_TIME,
+            ELAPSED_SECONDS,
+            ERROR_CONTENT,
+            MODEL_NAME,
+            ACCEPT,
+            REFUSE_REASON
+        ) VALUES (
+            #{txId},
+            #{errorDatetime},
+            #{corpCode},
+            #{branchCode},
+            #{branchName},
+            #{cornerCode},
+            #{cornerName},
+            #{terminalNo},
+            #{recoveryDatetime},
+            #{elapsedTime},
+            #{elapsedSeconds},
+            #{errorContent},
+            #{modelName},
+            #{accept},
+            #{refuseReason}
+        )
+    </update>
+</mapper>

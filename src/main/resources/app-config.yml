@@ -1,0 +1,18 @@
+config:
+  title: "BGF-신한은행 위탁업무"
+  copyrights: "ONSEMIRO 1.0.0 - Web Application Framework © 2016-2017"
+  logo:
+    header: /assets/images/header-logo.png
+    login:  /assets/images/login-logo1.png
+    logo:   logo.png
+  background:
+    login: /assets/images/login-bg.jpg
+  layout:
+    leftSideMenu: visible
+  sessionCookie: e155070d-d078-43d1-81d7-7363712ce20b
+  extendedCss:
+    /assets/css/axboot.css
+  extendedCssforIE9:
+    - /assets/css/axboot-01.css
+    - /assets/css/axboot-02.css
+    - /assets/css/axboot-03.css

@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bgf.shbank.domain.mng.equip.sh02001110.Sh02001110Mapper">
+
+    <select id="findAll" resultType="sh02001110" parameterType="sh02001110" statementType="PREPARED">
+        SELECT
+            WORK_SEQ_NO AS workSeqNo,
+            CHANGE_CHASU AS changeChasu,
+            STEXT_GUBUN AS stextGubun,
+            JISA_CODE AS jisaCode,
+            BRANCH_CODE AS branchCode,
+            BRANCH_NAME AS branchName,
+            CORNER_CODE AS cornerCode,
+            CORNER_NAME AS cornerName,
+            PLACE_GUBUN AS placeGubun,
+            BRANCH_GUBUN AS branchGubun,
+            SPECIAL_STYLE_GUBUN AS specialStyleGubun,
+            OPER_TIME_GUBUN AS operTimeGubun,
+            OPER_START_TIME AS operStartTime,
+            OPER_END_TIME AS operEndTime,
+            CHECK_OPER_ENABLE AS checkOperEnable,
+            SERVICE_FEE AS serviceFee,
+            SECURITY_CORP_CODE AS securityCorpCode,
+            FAC_HIRE_ENABLE AS facHireEnable,
+            ADDR AS addr,
+            UNUSL AS unusl,
+            OPER_DAY AS operDay
+        FROM
+            ATMS_02001110
+    </select>
+
+    <select id="findOne" resultType="sh02001110" parameterType="sh02001110" statementType="PREPARED">
+        SELECT
+            WORK_SEQ_NO AS workSeqNo,
+            CHANGE_CHASU AS changeChasu,
+            STEXT_GUBUN AS stextGubun,
+            JISA_CODE AS jisaCode,
+            BRANCH_CODE AS branchCode,
+            BRANCH_NAME AS branchName,
+            CORNER_CODE AS cornerCode,
+            CORNER_NAME AS cornerName,
+            PLACE_GUBUN AS placeGubun,
+            BRANCH_GUBUN AS branchGubun,
+            SPECIAL_STYLE_GUBUN AS specialStyleGubun,
+            OPER_TIME_GUBUN AS operTimeGubun,
+            OPER_START_TIME AS operStartTime,
+            OPER_END_TIME AS operEndTime,
+            CHECK_OPER_ENABLE AS checkOperEnable,
+            SERVICE_FEE AS serviceFee,
+            SECURITY_CORP_CODE AS securityCorpCode,
+            FAC_HIRE_ENABLE AS facHireEnable,
+            ADDR AS addr,
+            UNUSL AS unusl,
+            OPER_DAY AS operDay
+        FROM
+            ATMS_02001110
+        WHERE
+            WORK_SEQ_NO = #{workSeqNo}
+    </select>
+
+   <update id="delete" parameterType="sh02001110" statementType="PREPARED">
+        DELETE FROM
+            ATMS_02001110
+        WHERE
+            WORK_SEQ_NO = #{workSeqNo}
+    </update>
+
+   <update id="update" parameterType="sh02001110" statementType="PREPARED">
+        UPDATE ATMS_02001110
+        SET
+            CHANGE_CHASU = #{changeChasu},
+            STEXT_GUBUN = #{stextGubun},
+            JISA_CODE = #{jisaCode},
+            BRANCH_CODE = #{branchCode},
+            BRANCH_NAME = #{branchName},
+            CORNER_CODE = #{cornerCode},
+            CORNER_NAME = #{cornerName},
+            PLACE_GUBUN = #{placeGubun},
+            BRANCH_GUBUN = #{branchGubun},
+            SPECIAL_STYLE_GUBUN = #{specialStyleGubun},
+            OPER_TIME_GUBUN = #{operTimeGubun},
+            OPER_START_TIME = #{operStartTime},
+            OPER_END_TIME = #{operEndTime},
+            CHECK_OPER_ENABLE = #{checkOperEnable},
+            SERVICE_FEE = #{serviceFee},
+            SECURITY_CORP_CODE = #{securityCorpCode},
+            FAC_HIRE_ENABLE = #{facHireEnable},
+            ADDR = #{addr},
+            UNUSL = #{unusl},
+            OPER_DAY = #{operDay}
+        WHERE
+            WORK_SEQ_NO = #{workSeqNo}
+    </update>
+
+   <update id="insert" parameterType="sh02001110" statementType="PREPARED">
+        INSERT INTO ATMS_02001110 (
+            WORK_SEQ_NO,
+            CHANGE_CHASU,
+            STEXT_GUBUN,
+            JISA_CODE,
+            BRANCH_CODE,
+            BRANCH_NAME,
+            CORNER_CODE,
+            CORNER_NAME,
+            PLACE_GUBUN,
+            BRANCH_GUBUN,
+            SPECIAL_STYLE_GUBUN,
+            OPER_TIME_GUBUN,
+            OPER_START_TIME,
+            OPER_END_TIME,
+            CHECK_OPER_ENABLE,
+            SERVICE_FEE,
+            SECURITY_CORP_CODE,
+            FAC_HIRE_ENABLE,
+            ADDR,
+            UNUSL,
+            OPER_DAY
+        ) VALUES (
+            #{workSeqNo},
+            #{changeChasu},
+            #{stextGubun},
+            #{jisaCode},
+            #{branchCode},
+            #{branchName},
+            #{cornerCode},
+            #{cornerName},
+            #{placeGubun},
+            #{branchGubun},
+            #{specialStyleGubun},
+            #{operTimeGubun},
+            #{operStartTime},
+            #{operEndTime},
+            #{checkOperEnable},
+            #{serviceFee},
+            #{securityCorpCode},
+            #{facHireEnable},
+            #{addr},
+            #{unusl},
+            #{operDay}
+        )
+    </update>
+</mapper>

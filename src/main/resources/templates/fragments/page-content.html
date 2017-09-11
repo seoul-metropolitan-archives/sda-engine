@@ -1,0 +1,73 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<th:block layout:fragment="content(orientation, attr, style )">
+    <div data-ax5layout="ax1" role="page-content" style="margin-top: 5px;"
+        th:attr="data-config='{layout: \'split-panel\', splitter: {size: 7}, orientation: ' + ${orientation} + '}'">
+        <div th:attr="data-split-panel=${attr != null ?: attr}" th:style="${style != null ?: style}" th:class="${class != null ?: class}">
+            <div data-split-panel-wrap>
+                <th:block layout:fragment="content-detail"/>
+            </div>
+        </div>
+    </div>
+</th:block>
+
+<th:block layout:fragment="content-panels(orientation, id1, attr1, style1, scroll1, id2, attr2, style2, scroll2)">
+    <div data-ax5layout="ax1" role="page-content" style="margin-top: 5px;"
+         th:attr="data-config='{layout:\'split-panel\', orientation: \'' + ${orientation} + '\', splitter: {size: \'7\'}}'">
+        <div th:attr="data-split-panel=${attr1}" th:id="${id1}" th:style="${style1}">
+            <div th:attr="data-split-panel-wrap=${scroll1}">
+                <th:block layout:fragment="panel-1"/>
+            </div>
+        </div>
+        <div data-splitter="{}"></div>
+        <div th:attr="data-split-panel=${attr2}" th:id="${id2}" th:style="${style2}">
+            <div th:attr="data-split-panel-wrap=${scroll2}">
+                <th:block layout:fragment="panel-2"/>
+            </div>
+        </div>
+    </div>
+</th:block>
+
+<th:block layout:fragment="content-panels3(orientation, id1, attr1, style1, scroll1, id2, attr2, style2, scroll2)">
+    <div data-ax5layout="ax1" role="page-content" style="margin-top: 5px;"
+         th:attr="data-config='{layout:\'split-panel\', orientation: \'' + ${orientation} + '\', splitter: {size: \'7\'}}'">
+        <div th:attr="data-split-panel=${attr1}" th:id="${id1}" th:style="${style1}">
+            <div th:attr="data-split-panel-wrap=${scroll1}">
+                <th:block layout:fragment="panel-1"/>
+            </div>
+        </div>
+        <div data-splitter="{}"></div>
+        <div th:attr="data-split-panel=${attr2}" th:id="${id2}" th:style="${style2}">
+            <div th:attr="data-split-panel-wrap=${scroll2}">
+                <th:block layout:fragment="panel-2"/>
+            </div>
+        </div>
+        <div data-splitter="{}"></div>
+        <div th:attr="data-split-panel=${attr3}" th:id="${id3}" th:style="${style3}">
+            <div th:attr="data-split-panel-wrap=${scroll3}">
+                <th:block layout:fragment="panel-3"/>
+            </div>
+        </div>
+    </div>
+</th:block>
+
+<th:block layout:fragment="content-inner-panels(orientation, id1, attr1, style1, scroll1, id2, attr2, style2, scroll2, panel1, panel2)">
+    <div data-ax5layout="ax1" role="page-content" style="margin-top: 5px;"
+         th:attr="data-config='{layout:\'split-panel\', orientation: \'' + ${orientation} + '\', splitter: {size: \'7\'}}'">
+        <div th:attr="data-split-panel=${attr1}" th:id="${id1}" th:style="${style1}">
+            <div th:attr="data-split-panel-wrap=${scroll1}">
+                <th:block layout:fragment="${panel1}"/>
+            </div>
+        </div>
+        <div data-splitter="{}"></div>
+        <div th:attr="data-split-panel=${attr2}" th:id="${id2}" th:style="${style2}">
+            <div th:attr="data-split-panel-wrap=${scroll2}">
+                <th:block layout:fragment="${panel2}"/>
+            </div>
+        </div>
+    </div>
+</th:block>
+
+</html>

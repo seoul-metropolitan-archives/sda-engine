@@ -1,0 +1,13 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<th:block layout:fragment="panel(label, active, style, scroll)" th:remove="tag">
+    <div th:attr="data-tab-panel='{label :\'' + ${label} + '\', active: ' + ${active == null ? 'false' : 'true'} + '}'">
+        <div th:style="${style == null ? 'padding:10px 0 0 0;' : style}" th:attr="data-split-panel-wrap=${scroll}">
+            <th:block layout:fragment="wrap"/>
+        </div>
+    </div>
+</th:block>
+
+</html>

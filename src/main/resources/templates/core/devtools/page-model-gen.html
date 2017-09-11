@@ -1,0 +1,53 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout/modal}">
+
+<!-- ===== [ script ] ===== -->
+<script layout:fragment="script" type="text/javascript" th:src="@{/assets/js/core/devtools/page-model-gen.js}"></script>
+<!-- ===== [ script ] _END_ ===== -->
+
+<!-- ===== [ base-title ] ===== -->
+<div layout:fragment="base-title" class="ax-base-title" role="page-title">
+    <h1 class="title"><i class="cqc-browser"></i> AllSet Generator</h1>
+    <p class="desc"></p>
+</div>
+<!-- ===== [ base-title ] _END_ ===== -->
+
+<!-- ===== [ base-content ] ===== -->
+<div layout:fragment="base-content" class="ax-base-content">
+    <th:block layout:insert="~{/fragments/page-buttons :: modal-exec-buttons}"/>
+    <!-- ===== [ page-content ] ===== -->
+    <th:block layout:insert="~{/fragments/page-content :: content(orientation='horizontal', attr='{height: \'\'}')}">
+        <!-- ===== [ page-content ] ===== -->
+        <div layout:fragment="content-detail">
+
+            <form th:name="formView01" th:id="formView01" method="post" onsubmit="return false">
+                <div data-ax-tbl="" class="ax-search-tbl" minWidth="500px">
+                    <th:block layout:insert="~{/fragments/table :: tr-td(text='프로그램명', style='width: 400px')}">
+                        <div layout:fragment="wrap">
+                            <input type="text" id="name" data-ax-path="value" class="form-control"/>
+                        </div>
+                    </th:block>
+                    <th:block layout:insert="~{/fragments/table :: tr-td(text='경로', style='width: 400px')}">
+                        <div layout:fragment="wrap">
+                            <input type="text" id="path" data-ax-path="value" class="form-control"/>
+                        </div>
+                    </th:block>
+                    <th:block layout:insert="~{/fragments/table :: tr-td(text='DB 테이블', style='width: 400px')}">
+                        <div layout:fragment="wrap">
+                            <div data-ax5select="select1" id="tableName" th:attrappend="template-code=${templateCode}"
+                                th:attr="data-ax5select-config='{options:' + ${tableNameList} + '}'"></div>
+                        </div>
+                    </th:block>
+                </div>
+            </form>
+
+            <div class="H10"></div>
+        </div>
+        <!-- ===== [ page-content ] _END_ ===== -->
+    </th:block>
+    <!-- ===== [ page-content ] _END_ ===== -->
+</div>
+<!-- ===== [ base-content ] _END_ ===== -->
+</html>

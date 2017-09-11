@@ -1,0 +1,35 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout/modal}">
+
+<head>
+    <script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
+</head>
+
+<!-- ===== [ script ] ===== -->
+<script layout:fragment="script" type="text/javascript" th:src="@{/assets/js/core/common/zipcode.js}"></script>
+<!-- ===== [ script ] _END_ ===== -->
+
+<!-- ===== [ base-title ] ===== -->
+<div layout:fragment="base-title" class="ax-base-title" role="page-title">
+    <h1 class="title"><i class="cqc-browser"></i> 우편번호 검색</h1>
+    <p class="desc" th:text="${pageRemark}"/>
+</div>
+<!-- ===== [ base-title ] _END_ ===== -->
+
+<!-- ===== [ base-content ] ===== -->
+<div layout:fragment="base-content" class="ax-base-content">
+    <th:block layout:insert="~{/fragments/page-content :: content}" th:with="orientation='vertical',
+        attr='{width: \'*\'}', style='padding-right: 0px;'">
+        <!-- ===== [ page-content ] ===== -->
+        <div layout:fragment="content-detail">
+            <!-- 우편번호 API [S] -->
+            <div id="duam-zip-search-box" style="height:480px;margin:0;position:relative;-webkit-overflow-scrolling:touch;"></div>
+            <!-- 우편번호 API [E] -->
+        </div>
+        <!-- ===== [ page-content ] _END_ ===== -->
+    </th:block>
+</div>
+<!-- ===== [ base-content ] _END_ ===== -->
+</html>

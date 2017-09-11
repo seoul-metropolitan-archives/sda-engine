@@ -1,0 +1,35 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout/modal}">
+
+<!-- ===== [ script ] ===== -->
+<script layout:fragment="script" type="text/javascript" th:src="@{/assets/js/mng/common/search_agent.js}"></script>
+<!-- ===== [ script ] _END_ ===== -->
+
+<!-- ===== [ base-title ] ===== -->
+<div layout:fragment="base-title" class="ax-base-title" role="page-title">
+    <h1 class="title"><i class="cqc-browser"></i> 요원정보 조회</h1>
+    <p class="desc" th:text="${pageRemark}"/>
+</div>
+<!-- ===== [ base-title ] _END_ ===== -->
+
+<!-- ===== [ base-content ] ===== -->
+<div layout:fragment="base-content" class="ax-base-content">
+    <th:block layout:insert="~{/fragments/page-buttons :: modal-buttons}"/>
+    <th:block layout:insert="~{/fragments/page-header  :: search-t2(id='searchView0',label='검색', label1='요원명')}">
+        <div layout:fragment="wrap-1">
+            <input type="text" id= "empName" data-ax-path="empName" class="form-control"/>
+        </div>
+    </th:block>
+    <th:block layout:insert="~{/fragments/page-content :: content}" th:with="orientation='vertical',
+        attr='{width: \'*\'}', style='padding-right: 0px;'">
+        <!-- ===== [ page-content ] ===== -->
+        <div layout:fragment="content-detail">
+            <div data-ax5grid="grid-view-01" data-fit-height-content="grid-view-01" style="height: 300px;"></div>
+        </div>
+        <!-- ===== [ page-content ] _END_ ===== -->
+    </th:block>
+</div>
+<!-- ===== [ base-content ] _END_ ===== -->
+</html>

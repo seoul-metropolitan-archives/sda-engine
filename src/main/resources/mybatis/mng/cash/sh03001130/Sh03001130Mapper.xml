@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bgf.shbank.domain.mng.cash.sh03001130.Sh03001130Mapper">
+
+    <select id="findAll" resultType="sh03001130" parameterType="sh03001130" statementType="PREPARED">
+        SELECT
+            Z1.JISA_CODE AS jisaCode,
+            Z1.BRANCH_CODE AS branchCode,
+            Z1.TERMINAL_NO AS terminalNo,
+            Z1.SAFE_NO AS safeNo,
+            Z1.REQ_DATE AS reqDate,
+            Z1.CLOSE_GUBUN AS closeGubun,
+            Z1.CASH_GIVE_AMT AS cashGiveAmt,
+            Z1.CASH_DEPOSIT_AMT AS cashDepositAmt,
+            Z1.CASH_SENDING_AMT AS cashSendingAmt,
+            Z1.RTRVL_AMT AS rtrvlAmt,
+            Z1.CHECK_WITHDRAW_AMT AS checkWithdrawAmt,
+            Z1.CHECK_DEPOSIT_AMT AS checkDepositAmt,
+            Z1.NOW_DAY_PUT_AMT AS nowDayPutAmt,
+            Z1.PREV_DAY_PUT_AMT AS prevDayPutAmt,
+            Z1.PREV_DAY_ADD_PUT_AMT AS prevDayAddPutAmt,
+            Z1.HOLIDAY_ADD_PUT_AMT AS holidayAddPutAmt,
+            Z1.THIS_DAY_ADD_PUT_AMT AS thisDayAddPutAmt,
+            Z1.ATMC_TERMINAL_NOW_SIJAE AS atmcTerminalNowSijae,
+            Z1.SIJAE_CASH_50K AS sijaeCash50k,
+            Z1.CLOSE_DATETIME AS closeDatetime,
+            Z1.TX_ID AS txId,
+            Z1.STEXT_SEND_GUBUN as stextSendGubun
+        FROM
+        (
+            SELECT
+                A.JISA_CODE,
+                A.BRANCH_CODE,
+                A.TERMINAL_NO,
+                B.SAFE_NO,
+                B.REQ_DATE,
+                B.CLOSE_GUBUN,
+                B.CASH_GIVE_AMT,
+                B.CASH_DEPOSIT_AMT,
+                B.CASH_SENDING_AMT,
+                B.RTRVL_AMT,
+                B.CHECK_WITHDRAW_AMT,
+                B.CHECK_DEPOSIT_AMT,
+                B.NOW_DAY_PUT_AMT,
+                B.PREV_DAY_PUT_AMT,
+                B.PREV_DAY_ADD_PUT_AMT,
+                B.HOLIDAY_ADD_PUT_AMT,
+                B.THIS_DAY_ADD_PUT_AMT,
+                B.ATMC_TERMINAL_NOW_SIJAE,
+                B.SIJAE_CASH_50K,
+                B.CLOSE_DATETIME,
+                B.TX_ID,
+                B.STEXT_SEND_GUBUN,
+                ROW_NUMBER() OVER(PARTITION BY A.JISA_CODE,A.BRANCH_CODE,A.TERMINAL_NO ORDER BY B.TX_ID DESC) AS rnum
+            FROM
+                (SELECT * FROM ATMS_TERMINAL_STATUS
+                    <where>
+                        <if test="jisaCode != null"> JISA_CODE = #{jisaCode} </if>
+                        <if test="branchCode != null"> AND BRANCH_CODE = #{branchCode} </if>
+                        <if test="terminalNo != null"> AND TERMINAL_NO = #{terminalNo} </if>
+                    </where>
+                ) A
+                LEFT OUTER JOIN ATMS_03001130 B
+                ON B.JISA_CODE = A.JISA_CODE
+                AND B.BRANCH_CODE = A.BRANCH_CODE
+                AND B.TERMINAL_NO = A.TERMINAL_NO
+                AND B.REQ_DATE  = #{reqDate}
+                AND B.CLOSE_GUBUN = 1
+            ) Z1
+        WHERE Z1.rnum = 1
+        UNION
+        SELECT
+        Z1.JISA_CODE AS jisaCode,
+        Z1.BRANCH_CODE AS branchCode,
+        Z1.TERMINAL_NO AS terminalNo,
+        Z1.SAFE_NO AS safeNo,
+        Z1.REQ_DATE AS reqDate,
+        Z1.CLOSE_GUBUN AS closeGubun,
+        Z1.CASH_GIVE_AMT AS cashGiveAmt,
+        Z1.CASH_DEPOSIT_AMT AS cashDepositAmt,
+        Z1.CASH_SENDING_AMT AS cashSendingAmt,
+        Z1.RTRVL_AMT AS rtrvlAmt,
+        Z1.CHECK_WITHDRAW_AMT AS checkWithdrawAmt,
+        Z1.CHECK_DEPOSIT_AMT AS checkDepositAmt,
+        Z1.NOW_DAY_PUT_AMT AS nowDayPutAmt,
+        Z1.PREV_DAY_PUT_AMT AS prevDayPutAmt,
+        Z1.PREV_DAY_ADD_PUT_AMT AS prevDayAddPutAmt,
+        Z1.HOLIDAY_ADD_PUT_AMT AS holidayAddPutAmt,
+        Z1.THIS_DAY_ADD_PUT_AMT AS thisDayAddPutAmt,
+        Z1.ATMC_TERMINAL_NOW_SIJAE AS atmcTerminalNowSijae,
+        Z1.SIJAE_CASH_50K AS sijaeCash50k,
+        Z1.CLOSE_DATETIME AS closeDatetime,
+        Z1.TX_ID AS txId,
+        Z1.STEXT_SEND_GUBUN as stextSendGubun
+        FROM
+        (
+        SELECT
+        A.JISA_CODE,
+        A.BRANCH_CODE,
+        A.TERMINAL_NO,
+        B.SAFE_NO,
+        B.REQ_DATE,
+        B.CLOSE_GUBUN,
+        B.CASH_GIVE_AMT,
+        B.CASH_DEPOSIT_AMT,
+        B.CASH_SENDING_AMT,
+        B.RTRVL_AMT,
+        B.CHECK_WITHDRAW_AMT,
+        B.CHECK_DEPOSIT_AMT,
+        B.NOW_DAY_PUT_AMT,
+        B.PREV_DAY_PUT_AMT,
+        B.PREV_DAY_ADD_PUT_AMT,
+        B.HOLIDAY_ADD_PUT_AMT,
+        B.THIS_DAY_ADD_PUT_AMT,
+        B.ATMC_TERMINAL_NOW_SIJAE,
+        B.SIJAE_CASH_50K,
+        B.CLOSE_DATETIME,
+        B.TX_ID,
+        B.STEXT_SEND_GUBUN,
+        ROW_NUMBER() OVER(PARTITION BY A.JISA_CODE,A.BRANCH_CODE,A.TERMINAL_NO ORDER BY B.TX_ID DESC) AS rnum
+        FROM
+        (SELECT * FROM ATMS_TERMINAL_STATUS
+        <where>
+            <if test="jisaCode != null"> JISA_CODE = #{jisaCode} </if>
+            <if test="branchCode != null"> AND BRANCH_CODE = #{branchCode} </if>
+            <if test="terminalNo != null"> AND TERMINAL_NO = #{terminalNo} </if>
+        </where>
+        ) A
+        LEFT OUTER JOIN ATMS_03001130 B
+        ON B.JISA_CODE = A.JISA_CODE
+        AND B.BRANCH_CODE = A.BRANCH_CODE
+        AND B.TERMINAL_NO = A.TERMINAL_NO
+        AND B.REQ_DATE  = #{reqDate}
+        AND B.CLOSE_GUBUN = 2
+        ) Z1
+        WHERE Z1.rnum = 1
+    </select>
+
+    <select id="findOne" resultType="sh03001130" parameterType="sh03001130" statementType="PREPARED">
+        SELECT
+        B.JISA_CODE AS jisaCode,
+        B.BRANCH_CODE AS branchCode,
+        B.TERMINAL_NO AS terminalNo,
+        A.SAFE_NO AS safeNo,
+        A.REQ_DATE AS reqDate,
+        A.CLOSE_GUBUN AS closeGubun,
+        A.CASH_GIVE_AMT AS cashGiveAmt,
+        A.CASH_DEPOSIT_AMT AS cashDepositAmt,
+        A.CASH_SENDING_AMT AS cashSendingAmt,
+        A.RTRVL_AMT AS rtrvlAmt,
+        A.CHECK_WITHDRAW_AMT AS checkWithdrawAmt,
+        A.CHECK_DEPOSIT_AMT AS checkDepositAmt,
+        A.NOW_DAY_PUT_AMT AS nowDayPutAmt,
+        A.PREV_DAY_PUT_AMT AS prevDayPutAmt,
+        A.PREV_DAY_ADD_PUT_AMT AS prevDayAddPutAmt,
+        A.HOLIDAY_ADD_PUT_AMT AS holidayAddPutAmt,
+        A.THIS_DAY_ADD_PUT_AMT AS thisDayAddPutAmt,
+        A.ATMC_TERMINAL_NOW_SIJAE AS atmcTerminalNowSijae,
+        A.SIJAE_CASH_50K AS sijaeCash50k,
+        DECODE(A.CLOSE_DATETIME,NULL ,#{reqDate},A.CLOSE_DATETIME) AS closeDatetime
+        FROM ATMS_03001130  A,
+        ATMS_TERMINAL_STATUS  B
+        WHERE A.JISA_CODE (+) = b.JISA_CODE
+        AND A.BRANCH_CODE (+) = B.BRANCH_CODE
+        AND A.TERMINAL_NO (+) = B.TERMINAL_NO
+        AND A.REQ_DATE (+) = #{reqDate}
+        <if test="safeNo != null"> AND A.SAFE_NO = #{safeNo} </if>
+        <if test="closeGubun != null"> AND A.CLOSE_GUBUN = #{closeGubun} </if>
+        <if test="jisaCode != null"> AND B.JISA_CODE = #{jisaCode} </if>
+        <if test="branchCode != null"> AND B.BRANCH_CODE = #{branchCode} </if>
+        <if test="terminalNo != null"> AND B.TERMINAL_NO = #{terminalNo} </if>
+    </select>
+
+   <update id="delete" parameterType="sh03001130" statementType="PREPARED">
+        DELETE FROM
+            ATMS_03001130
+        WHERE
+            BRANCH_CODE = #{branchCode}, TERMINAL_NO = #{terminalNo}, CLOSE_DATETIME = #{closeDatetime}
+    </update>
+
+   <update id="update" parameterType="sh03001130" statementType="PREPARED">
+        UPDATE ATMS_03001130
+        SET
+            JISA_CODE = #{jisaCode},
+            SAFE_NO = #{safeNo},
+            REQ_DATE = #{reqDate},
+            CLOSE_GUBUN = #{closeGubun},
+            CASH_GIVE_AMT = #{cashGiveAmt},
+            CASH_DEPOSIT_AMT = #{cashDepositAmt},
+            CASH_SENDING_AMT = #{cashSendingAmt},
+            RTRVL_AMT = #{rtrvlAmt},
+            CHECK_WITHDRAW_AMT = #{checkWithdrawAmt},
+            CHECK_DEPOSIT_AMT = #{checkDepositAmt},
+            NOW_DAY_PUT_AMT = #{nowDayPutAmt},
+            PREV_DAY_PUT_AMT = #{prevDayPutAmt},
+            PREV_DAY_ADD_PUT_AMT = #{prevDayAddPutAmt},
+            HOLIDAY_ADD_PUT_AMT = #{holidayAddPutAmt},
+            THIS_DAY_ADD_PUT_AMT = #{thisDayAddPutAmt},
+            ATMC_TERMINAL_NOW_SIJAE = #{atmcTerminalNowSijae},
+            SIJAE_CASH_50K = #{sijaeCash50k}
+        WHERE
+            BRANCH_CODE = #{branchCode}, TERMINAL_NO = #{terminalNo}, CLOSE_DATETIME = #{closeDatetime}
+    </update>
+
+   <update id="insert" parameterType="sh03001130" statementType="PREPARED">
+        INSERT INTO ATMS_03001130 (
+            JISA_CODE,
+            BRANCH_CODE,
+            TERMINAL_NO,
+            SAFE_NO,
+            REQ_DATE,
+            CLOSE_GUBUN,
+            CASH_GIVE_AMT,
+            CASH_DEPOSIT_AMT,
+            CASH_SENDING_AMT,
+            RTRVL_AMT,
+            CHECK_WITHDRAW_AMT,
+            CHECK_DEPOSIT_AMT,
+            NOW_DAY_PUT_AMT,
+            PREV_DAY_PUT_AMT,
+            PREV_DAY_ADD_PUT_AMT,
+            HOLIDAY_ADD_PUT_AMT,
+            THIS_DAY_ADD_PUT_AMT,
+            ATMC_TERMINAL_NOW_SIJAE,
+            SIJAE_CASH_50K,
+            CLOSE_DATETIME
+        ) VALUES (
+            #{jisaCode},
+            #{branchCode},
+            #{terminalNo},
+            #{safeNo},
+            #{reqDate},
+            #{closeGubun},
+            #{cashGiveAmt},
+            #{cashDepositAmt},
+            #{cashSendingAmt},
+            #{rtrvlAmt},
+            #{checkWithdrawAmt},
+            #{checkDepositAmt},
+            #{nowDayPutAmt},
+            #{prevDayPutAmt},
+            #{prevDayAddPutAmt},
+            #{holidayAddPutAmt},
+            #{thisDayAddPutAmt},
+            #{atmcTerminalNowSijae},
+            #{sijaeCash50k},
+            #{closeDatetime}
+        )
+    </update>
+</mapper>

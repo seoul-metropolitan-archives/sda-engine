@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bgf.shbank.domain.mng.equip.sh02001170.Sh02001170Mapper">
+
+    <select id="findAll" resultType="sh02001170" parameterType="sh02001170" statementType="PREPARED">
+        SELECT
+            WORK_SEQ_NO AS workSeqNo,
+            FAC_SEQ_NO AS facSeqNo,
+            CHANGE_CHASU AS changeChasu,
+            STEXT_GUBUN AS stextGubun,
+            JISA_CODE AS jisaCode,
+            BRANCH_CODE AS branchCode,
+            CORNER_CODE AS cornerCode,
+            FAC_GUBUN_CODE AS facGubunCode,
+            FAC_CODE AS facCode,
+            HIRE_FAC_ENABLE AS hireFacEnable,
+            NOUSE_GUBUN AS nouseGubun,
+            ASSET_SEQ_NO AS assetSeqNo
+        FROM
+            ATMS_02001170
+    </select>
+
+    <select id="findOne" resultType="sh02001170" parameterType="sh02001170" statementType="PREPARED">
+        SELECT
+            WORK_SEQ_NO AS workSeqNo,
+            FAC_SEQ_NO AS facSeqNo,
+            CHANGE_CHASU AS changeChasu,
+            STEXT_GUBUN AS stextGubun,
+            JISA_CODE AS jisaCode,
+            BRANCH_CODE AS branchCode,
+            CORNER_CODE AS cornerCode,
+            FAC_GUBUN_CODE AS facGubunCode,
+            FAC_CODE AS facCode,
+            HIRE_FAC_ENABLE AS hireFacEnable,
+            NOUSE_GUBUN AS nouseGubun,
+            ASSET_SEQ_NO AS assetSeqNo
+        FROM
+            ATMS_02001170
+        WHERE
+            WORK_SEQ_NO = #{workSeqNo}
+    </select>
+
+   <update id="delete" parameterType="sh02001170" statementType="PREPARED">
+        DELETE FROM
+            ATMS_02001170
+        WHERE
+            WORK_SEQ_NO = #{workSeqNo}
+    </update>
+
+   <update id="update" parameterType="sh02001170" statementType="PREPARED">
+        UPDATE ATMS_02001170
+        SET
+            FAC_SEQ_NO = #{facSeqNo},
+            CHANGE_CHASU = #{changeChasu},
+            STEXT_GUBUN = #{stextGubun},
+            JISA_CODE = #{jisaCode},
+            BRANCH_CODE = #{branchCode},
+            CORNER_CODE = #{cornerCode},
+            FAC_GUBUN_CODE = #{facGubunCode},
+            FAC_CODE = #{facCode},
+            HIRE_FAC_ENABLE = #{hireFacEnable},
+            NOUSE_GUBUN = #{nouseGubun},
+            ASSET_SEQ_NO = #{assetSeqNo}
+        WHERE
+            WORK_SEQ_NO = #{workSeqNo}
+    </update>
+
+   <update id="insert" parameterType="sh02001170" statementType="PREPARED">
+        INSERT INTO ATMS_02001170 (
+            WORK_SEQ_NO,
+            FAC_SEQ_NO,
+            CHANGE_CHASU,
+            STEXT_GUBUN,
+            JISA_CODE,
+            BRANCH_CODE,
+            CORNER_CODE,
+            FAC_GUBUN_CODE,
+            FAC_CODE,
+            HIRE_FAC_ENABLE,
+            NOUSE_GUBUN,
+            ASSET_SEQ_NO
+        ) VALUES (
+            #{workSeqNo},
+            #{facSeqNo},
+            #{changeChasu},
+            #{stextGubun},
+            #{jisaCode},
+            #{branchCode},
+            #{cornerCode},
+            #{facGubunCode},
+            #{facCode},
+            #{hireFacEnable},
+            #{nouseGubun},
+            #{assetSeqNo}
+        )
+    </update>
+</mapper>

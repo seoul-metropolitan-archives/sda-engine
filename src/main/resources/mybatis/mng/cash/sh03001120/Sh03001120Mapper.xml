@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bgf.shbank.domain.mng.cash.sh03001120.Sh03001120Mapper">
+
+    <select id="findAll" resultType="sh03001120" parameterType="sh03001120" statementType="PREPARED">
+        SELECT
+            JISA_CODE AS jisaCode,
+            BRANCH_CODE AS branchCode,
+            TERMINAL_NO AS terminalNo,
+            REFER_DATE AS referDate,
+            REFER_STATEMENT_NO AS referStatementNo,
+            REFER_START_TIME AS referStartTime,
+            REFER_END_TIME AS referEndTime,
+            DEAL_SEQ_NO AS dealSeqNo,
+            DEAL_TIME AS dealTime,
+            PROCESS_STATUS AS processStatus,
+            LOCATE_GUBUN AS locateGubun,
+            DEAL_METHOD AS dealMethod,
+            DEPOSIT_BANK_CODE AS depositBankCode,
+            DEPOSIT_ACCOUNT_NO AS depositAccountNo,
+            WITHDRAW_BANK_CODE AS withdrawBankCode,
+            WITHDRAW_ACCOUNT_NO AS withdrawAccountNo,
+            DEAL_AMT AS dealAmt
+        FROM
+            ATMS_03001120
+    </select>
+
+    <select id="findOne" resultType="sh03001120" parameterType="sh03001120" statementType="PREPARED">
+        SELECT
+            JISA_CODE AS jisaCode,
+            BRANCH_CODE AS branchCode,
+            TERMINAL_NO AS terminalNo,
+            REFER_DATE AS referDate,
+            REFER_STATEMENT_NO AS referStatementNo,
+            REFER_START_TIME AS referStartTime,
+            REFER_END_TIME AS referEndTime,
+            DEAL_SEQ_NO AS dealSeqNo,
+            DEAL_TIME AS dealTime,
+            PROCESS_STATUS AS processStatus,
+            LOCATE_GUBUN AS locateGubun,
+            DEAL_METHOD AS dealMethod,
+            DEPOSIT_BANK_CODE AS depositBankCode,
+            DEPOSIT_ACCOUNT_NO AS depositAccountNo,
+            WITHDRAW_BANK_CODE AS withdrawBankCode,
+            WITHDRAW_ACCOUNT_NO AS withdrawAccountNo,
+            DEAL_AMT AS dealAmt
+        FROM
+            ATMS_03001120
+        WHERE
+            BRANCH_CODE = #{branchCode}, TERMINAL_NO = #{terminalNo}, REFER_DATE = #{referDate}, REFER_STATEMENT_NO = #{referStatementNo}
+    </select>
+
+   <update id="delete" parameterType="sh03001120" statementType="PREPARED">
+        DELETE FROM
+            ATMS_03001120
+        WHERE
+            BRANCH_CODE = #{branchCode}, TERMINAL_NO = #{terminalNo}, REFER_DATE = #{referDate}, REFER_STATEMENT_NO = #{referStatementNo}
+    </update>
+
+   <update id="update" parameterType="sh03001120" statementType="PREPARED">
+        UPDATE ATMS_03001120
+        SET
+            JISA_CODE = #{jisaCode},
+            REFER_START_TIME = #{referStartTime},
+            REFER_END_TIME = #{referEndTime},
+            DEAL_SEQ_NO = #{dealSeqNo},
+            DEAL_TIME = #{dealTime},
+            PROCESS_STATUS = #{processStatus},
+            LOCATE_GUBUN = #{locateGubun},
+            DEAL_METHOD = #{dealMethod},
+            DEPOSIT_BANK_CODE = #{depositBankCode},
+            DEPOSIT_ACCOUNT_NO = #{depositAccountNo},
+            WITHDRAW_BANK_CODE = #{withdrawBankCode},
+            WITHDRAW_ACCOUNT_NO = #{withdrawAccountNo},
+            DEAL_AMT = #{dealAmt}
+        WHERE
+            BRANCH_CODE = #{branchCode}, TERMINAL_NO = #{terminalNo}, REFER_DATE = #{referDate}, REFER_STATEMENT_NO = #{referStatementNo}
+    </update>
+
+   <update id="insert" parameterType="sh03001120" statementType="PREPARED">
+        INSERT INTO ATMS_03001120 (
+            JISA_CODE,
+            BRANCH_CODE,
+            TERMINAL_NO,
+            REFER_DATE,
+            REFER_STATEMENT_NO,
+            REFER_START_TIME,
+            REFER_END_TIME,
+            DEAL_SEQ_NO,
+            DEAL_TIME,
+            PROCESS_STATUS,
+            LOCATE_GUBUN,
+            DEAL_METHOD,
+            DEPOSIT_BANK_CODE,
+            DEPOSIT_ACCOUNT_NO,
+            WITHDRAW_BANK_CODE,
+            WITHDRAW_ACCOUNT_NO,
+            DEAL_AMT
+        ) VALUES (
+            #{jisaCode},
+            #{branchCode},
+            #{terminalNo},
+            #{referDate},
+            #{referStatementNo},
+            #{referStartTime},
+            #{referEndTime},
+            #{dealSeqNo},
+            #{dealTime},
+            #{processStatus},
+            #{locateGubun},
+            #{dealMethod},
+            #{depositBankCode},
+            #{depositAccountNo},
+            #{withdrawBankCode},
+            #{withdrawAccountNo},
+            #{dealAmt}
+        )
+    </update>
+</mapper>

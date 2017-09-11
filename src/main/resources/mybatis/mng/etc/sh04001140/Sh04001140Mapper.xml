@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bgf.shbank.domain.mng.etc.sh04001140.Sh04001140Mapper">
+
+    <select id="findAll" resultType="sh04001140" parameterType="sh04001140" statementType="PREPARED">
+        SELECT
+            SEQ_NO AS seqNo,
+            JISA_CODE AS jisaCode,
+            BRANCH_CODE AS branchCode,
+            MNG_BRANCH_CODE AS mngBranchCode,
+            CORNER_CODE AS cornerCode,
+            TERMINAL_NO AS terminalNo,
+            TERMINAL_TYPE AS terminalType,
+            OVERHAUL_CORP AS overhaulCorp,
+            OVERHAUL_EMP_NAME AS overhaulEmpName,
+            INSPECTION_EMP_NAME AS inspectionEmpName,
+            INSPECTION_CORP AS inspectionCorp,
+            OVERHAUL_GUBUN AS overhaulGubun,
+            OVERHAUL_DATE AS overhaulDate,
+            OVERHAUL_START_TIME AS overhaulStartTime,
+            OVERHAUL_END_TIME AS overhaulEndTime,
+            OVERHAUL_HANDLE_CONTENT AS overhaulHandleContent,
+            INSPECTION_OPINION AS inspectionOpinion
+        FROM
+            ATMS_04001140
+    </select>
+
+    <select id="findOne" resultType="sh04001140" parameterType="sh04001140" statementType="PREPARED">
+        SELECT
+            SEQ_NO AS seqNo,
+            JISA_CODE AS jisaCode,
+            BRANCH_CODE AS branchCode,
+            MNG_BRANCH_CODE AS mngBranchCode,
+            CORNER_CODE AS cornerCode,
+            TERMINAL_NO AS terminalNo,
+            TERMINAL_TYPE AS terminalType,
+            OVERHAUL_CORP AS overhaulCorp,
+            OVERHAUL_EMP_NAME AS overhaulEmpName,
+            INSPECTION_EMP_NAME AS inspectionEmpName,
+            INSPECTION_CORP AS inspectionCorp,
+            OVERHAUL_GUBUN AS overhaulGubun,
+            OVERHAUL_DATE AS overhaulDate,
+            OVERHAUL_START_TIME AS overhaulStartTime,
+            OVERHAUL_END_TIME AS overhaulEndTime,
+            OVERHAUL_HANDLE_CONTENT AS overhaulHandleContent,
+            INSPECTION_OPINION AS inspectionOpinion
+        FROM
+            ATMS_04001140
+        WHERE
+            BRANCH_CODE = #{branchCode}, CORNER_CODE = #{cornerCode}, TERMINAL_NO = #{terminalNo}, OVERHAUL_DATE = #{overhaulDate}
+    </select>
+
+   <update id="delete" parameterType="sh04001140" statementType="PREPARED">
+        DELETE FROM
+            ATMS_04001140
+        WHERE
+            BRANCH_CODE = #{branchCode}, CORNER_CODE = #{cornerCode}, TERMINAL_NO = #{terminalNo}, OVERHAUL_DATE = #{overhaulDate}
+    </update>
+
+   <update id="update" parameterType="sh04001140" statementType="PREPARED">
+        UPDATE ATMS_04001140
+        SET
+            SEQ_NO = #{seqNo},
+            JISA_CODE = #{jisaCode},
+            MNG_BRANCH_CODE = #{mngBranchCode},
+            TERMINAL_TYPE = #{terminalType},
+            OVERHAUL_CORP = #{overhaulCorp},
+            OVERHAUL_EMP_NAME = #{overhaulEmpName},
+            INSPECTION_EMP_NAME = #{inspectionEmpName},
+            INSPECTION_CORP = #{inspectionCorp},
+            OVERHAUL_GUBUN = #{overhaulGubun},
+            OVERHAUL_START_TIME = #{overhaulStartTime},
+            OVERHAUL_END_TIME = #{overhaulEndTime},
+            OVERHAUL_HANDLE_CONTENT = #{overhaulHandleContent},
+            INSPECTION_OPINION = #{inspectionOpinion}
+        WHERE
+            BRANCH_CODE = #{branchCode}, CORNER_CODE = #{cornerCode}, TERMINAL_NO = #{terminalNo}, OVERHAUL_DATE = #{overhaulDate}
+    </update>
+
+   <update id="insert" parameterType="sh04001140" statementType="PREPARED">
+        INSERT INTO ATMS_04001140 (
+            SEQ_NO,
+            JISA_CODE,
+            BRANCH_CODE,
+            MNG_BRANCH_CODE,
+            CORNER_CODE,
+            TERMINAL_NO,
+            TERMINAL_TYPE,
+            OVERHAUL_CORP,
+            OVERHAUL_EMP_NAME,
+            INSPECTION_EMP_NAME,
+            INSPECTION_CORP,
+            OVERHAUL_GUBUN,
+            OVERHAUL_DATE,
+            OVERHAUL_START_TIME,
+            OVERHAUL_END_TIME,
+            OVERHAUL_HANDLE_CONTENT,
+            INSPECTION_OPINION
+        ) VALUES (
+            #{seqNo},
+            #{jisaCode},
+            #{branchCode},
+            #{mngBranchCode},
+            #{cornerCode},
+            #{terminalNo},
+            #{terminalType},
+            #{overhaulCorp},
+            #{overhaulEmpName},
+            #{inspectionEmpName},
+            #{inspectionCorp},
+            #{overhaulGubun},
+            #{overhaulDate},
+            #{overhaulStartTime},
+            #{overhaulEndTime},
+            #{overhaulHandleContent},
+            #{inspectionOpinion}
+        )
+    </update>
+</mapper>

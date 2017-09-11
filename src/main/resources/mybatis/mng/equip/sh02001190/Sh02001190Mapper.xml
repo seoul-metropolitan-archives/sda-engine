@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bgf.shbank.domain.mng.equip.sh02001190.Sh02001190Mapper">
+
+    <select id="findAll" resultType="sh02001190" parameterType="sh02001190" statementType="PREPARED">
+        SELECT
+            TX_ID AS txId,
+            STEXT_GUBUN AS stextGubun,
+            CHANGE_BEFORE_FAC_GUBUN_CODE AS changeBeforeFacGubunCode,
+            CHANGE_BEFORE_FAC_CODE AS changeBeforeFacCode,
+            CHANGE_AFTER_FAC_GUBUN_CODE AS changeAfterFacGubunCode,
+            CHANGE_AFTER_FAC_CODE AS changeAfterFacCode,
+            CHANGE_AFTER_FAC_NAME AS changeAfterFacName,
+            CHANGE_AFTER_CORP_NAME AS changeAfterCorpName,
+            CHANGE_AFTER_HIRE_FEE AS changeAfterHireFee
+        FROM
+            ATMS_02001190
+    </select>
+
+    <select id="findOne" resultType="sh02001190" parameterType="sh02001190" statementType="PREPARED">
+        SELECT
+            TX_ID AS txId,
+            STEXT_GUBUN AS stextGubun,
+            CHANGE_BEFORE_FAC_GUBUN_CODE AS changeBeforeFacGubunCode,
+            CHANGE_BEFORE_FAC_CODE AS changeBeforeFacCode,
+            CHANGE_AFTER_FAC_GUBUN_CODE AS changeAfterFacGubunCode,
+            CHANGE_AFTER_FAC_CODE AS changeAfterFacCode,
+            CHANGE_AFTER_FAC_NAME AS changeAfterFacName,
+            CHANGE_AFTER_CORP_NAME AS changeAfterCorpName,
+            CHANGE_AFTER_HIRE_FEE AS changeAfterHireFee
+        FROM
+            ATMS_02001190
+        WHERE
+            TX_ID = #{txId}
+    </select>
+
+   <update id="delete" parameterType="sh02001190" statementType="PREPARED">
+        DELETE FROM
+            ATMS_02001190
+        WHERE
+            TX_ID = #{txId}
+    </update>
+
+   <update id="update" parameterType="sh02001190" statementType="PREPARED">
+        UPDATE ATMS_02001190
+        SET
+            STEXT_GUBUN = #{stextGubun},
+            CHANGE_BEFORE_FAC_GUBUN_CODE = #{changeBeforeFacGubunCode},
+            CHANGE_BEFORE_FAC_CODE = #{changeBeforeFacCode},
+            CHANGE_AFTER_FAC_GUBUN_CODE = #{changeAfterFacGubunCode},
+            CHANGE_AFTER_FAC_CODE = #{changeAfterFacCode},
+            CHANGE_AFTER_FAC_NAME = #{changeAfterFacName},
+            CHANGE_AFTER_CORP_NAME = #{changeAfterCorpName},
+            CHANGE_AFTER_HIRE_FEE = #{changeAfterHireFee}
+        WHERE
+            TX_ID = #{txId}
+    </update>
+
+   <update id="insert" parameterType="sh02001190" statementType="PREPARED">
+        INSERT INTO ATMS_02001190 (
+            TX_ID,
+            STEXT_GUBUN,
+            CHANGE_BEFORE_FAC_GUBUN_CODE,
+            CHANGE_BEFORE_FAC_CODE,
+            CHANGE_AFTER_FAC_GUBUN_CODE,
+            CHANGE_AFTER_FAC_CODE,
+            CHANGE_AFTER_FAC_NAME,
+            CHANGE_AFTER_CORP_NAME,
+            CHANGE_AFTER_HIRE_FEE
+        ) VALUES (
+            #{txId},
+            #{stextGubun},
+            #{changeBeforeFacGubunCode},
+            #{changeBeforeFacCode},
+            #{changeAfterFacGubunCode},
+            #{changeAfterFacCode},
+            #{changeAfterFacName},
+            #{changeAfterCorpName},
+            #{changeAfterHireFee}
+        )
+    </update>
+</mapper>

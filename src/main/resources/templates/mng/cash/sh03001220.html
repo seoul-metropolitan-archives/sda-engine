@@ -1,0 +1,310 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout/uploader}">
+
+<!-- ===== [ script ] ===== -->
+<script layout:fragment="script" type="text/javascript" th:src="@{/assets/js/mng/cash/sh03001220.js}"></script>
+<!-- ===== [ script ] _END_ ===== -->
+
+<!-- ===== [ base-title ] ===== -->
+<div layout:fragment="base-title" class="ax-base-title" role="page-title">
+    <h1 class="title"><i class="cqc-browser"></i> <span th:text="${pageName}"/></h1>
+    <p class="desc" th:text="${pageRemark}"/>
+</div>
+<!-- ===== [ base-title ] _END_ ===== -->
+
+<!-- ===== [ base-content ] ===== -->
+<div layout:fragment="base-content" class="ax-base-content">
+    <th:block layout:insert="~{/fragments/page-buttons :: buttons}"/>
+    <th:block layout:insert="~{/fragments/page-header  :: search-bar(id='searchView0')}">
+        <div layout:fragment="table">
+            <th:block layout:insert="~{/fragments/table :: tr-td4(
+            text1='지사명', style1='width: 200px', lstyle1='width: 100px',
+            text2='신청구분', style2='width: 250px', lstyle2='width: 100px',
+            text3='인수일자', style3='width: 250px', lstyle3='width: 100px',
+            text4='검색', style4='width: 300px', lstyle4='display:none',)}">
+                <div layout:fragment="wrap-1">
+                    <select th:class="form-control" th:classappend="${class}" name="jisaCode" id="jisaCode">
+                        <option value="">전체</option>
+                        <option th:each="item : ${jisaCode}" th:value="${item.code}" th:text="${item.name}"/>
+                    </select>
+                </div>
+                <div layout:fragment="wrap-2">
+                    <select th:class="form-control" th:classappend="${class}" name="reqGubun" id="reqGubun">
+                        <option value="">전체</option>
+                        <option th:each="item : ${reqGubun}" th:value="${item.code}" th:text="${item.name}"/>
+                    </select>
+                </div>
+                <div layout:fragment="wrap-3">
+                    <div class="input-group" data-ax5picker="date">
+                        <input type="text" class="form-control" id="reqDate" placeholder="yyyy-MM-dd"
+                               style="text-align: center">
+                        <span class="input-group-addon"><i class="cqc-calendar"></i></span>
+                    </div>
+                </div>
+                <div layout:fragment="wrap-4">
+                    <div class="form-inline">
+                        <button type="button" class="btn btn-default" data-page-btn="search">
+                            <i class="cqc-magnifier"></i> 조회
+                        </button>
+                        <button class="btn btn-primary" data-page-btn="search-view-clear" style="margin-left: 5px;">
+                            <i class="cqc-zoomout"></i> 초기화
+                        </button>
+                    </div>
+                </div>
+            </th:block>
+        </div>
+    </th:block>
+    <th:block layout:insert="~{/fragments/page-content :: content-panels}" th:with="orientation='vertical', attr1='{width: \'1091\'}', style1='padding-right: 10px', attr2='{width: \'*\'}',   style2='padding: 0px 10px', scroll2='scroll'">
+
+        <!-- ===== [ left-panel ] ===== -->
+        <div layout:fragment="panel-1">
+
+            <div class="ax-button-group" data-fit-height-aside="grid-view-01">
+                <div class="left">
+                    <h2><i class="cqc-list"></i> 운영자인수정보통보 목록조회</h2>
+                </div>
+                <div class="right">
+                    <button type="button" class="btn btn-default" data-page-btn="excel">
+                        <i class="cqc-download"></i> 엑셀
+                    </button>
+                </div>
+            </div>
+            <div data-ax5grid="grid-view-01" data-fit-height-content="grid-view-01" style="height: 300px;"></div>
+
+        </div>
+        <!-- ===== [ left-panel _END_ ] ===== -->
+
+        <!-- ===== [ right-panel ] ===== -->
+        <div layout:fragment="panel-2">
+
+            <div class="ax-button-group" role="panel-header">
+                <div class="left">
+                    <h2><i class="cqc-news"></i> 운영자금인수정보</h2>
+                </div>
+                <div class="right">
+                    <button type="button" class="btn btn-default" data-form-view-01-btn="form-clear">
+                        <i class="cqc-erase"></i> 신규보고서
+                    </button>
+                    <button type="button" class="btn btn-default" data-form-view-01-btn="form-save">
+                        <i class="cqc-circle-with-plus"></i> 보고서 저장
+                    </button>
+                    <button type="button" class="btn btn-default" data-form-view-01-btn="form-add">
+                        <i class="cqc-circle-with-plus"></i> 보고서 통보
+                    </button>
+                </div>
+            </div>
+            <form name="formView01" id="formView01" method="post" onsubmit="return false">
+                <div data-ax-tbl class="ax-search-tbl" minWidth="700px">
+                    <th:block layout:insert="~{/fragments/table :: tr-td2-label(text1='신청구분',text2='인수일자', style1='width: 130px', style2='width: 250px', style='width: 380px')}">
+                        <div layout:fragment="wrap-1">
+                            <select th:class="form-control" th:classappend="${class}" data-ax-path="reqGubun" data-ax-validate="required" title="신청구분"
+                                    name="reqGubun" id="reqGubunForm" style="width: 150px">
+                                <option value="">선택</option>
+                                <option th:each="item : ${reqGubun}" th:value="${item.code}" th:text="${item.name}"/>
+                            </select>
+                        </div>
+                        <div layout:fragment="wrap-2">
+                            <div class="input-group" data-ax5picker="date" style="width: 150px">
+                                <input type="text"  data-ax-validate="required" data-ax-path="reqDate" id="reqDateForm" class="form-control" placeholder="yyyy-MM-dd" style="text-align: center">
+                                <span class="input-group-addon"><i class="cqc-calendar"></i></span>
+                            </div>
+                        </div>
+                    </th:block>
+                </div>
+                <div class="H10"></div>
+                <div data-ax-tbl class="ax-search-tbl" minWidth="700px">
+                    <th:block layout:insert="~{/fragments/table :: tr-td3-label( text1='지사코드', style1='width: 253px', text2='상대점코드', style2='width: 253px', text3='무인점코드', style3='width: 254px', style='width: 100px')}">
+                        <div layout:fragment="wrap-1">
+                            <select th:class="form-control" th:classappend="${class}" data-ax-path="jisaCode" name="jisaCodeForm" id="jisaCodeForm"
+                                    style="width: 130px">
+                                <option value="">선택</option>
+                                <option th:each="item : ${jisaCode}" th:value="${item.code}" th:text="${item.name}"/>
+                            </select>
+                        </div>
+                        <div layout:fragment="wrap-2">
+                            <select th:class="form-control" th:classappend="${class}" data-ax-path="branchCode" data-ax-validate="required" title="상대점코드"
+                                    name="branchCode" id="branchCodeForm" style="width: 130px">
+                                <option value="">선택</option>
+                                <option th:each="item : ${receiveBranchCode}" th:value="${item.code}" th:text="${item.name}"/>
+                            </select>
+                        </div>
+                        <div layout:fragment="wrap-3">
+                            <select th:class="form-control" th:classappend="${class}" data-ax-path="manlessBranchCode" data-ax-validate="required" title="무인점코드"
+                                    name="manlessBranchCode" id="manlessBranchCode" style="width: 130px">
+                                <option value="">선택</option>
+                                <option th:each="item : ${manlessBranchCode}" th:value="${item.code}" th:text="${item.name}"/>
+                            </select>
+                        </div>
+                    </th:block>
+                </div>
+                <div class="H10"></div>
+                <div data-ax-tbl class="ax-search-tbl" minWidth="700px">
+                    <th:block layout:insert="~{/fragments/table :: tr-td2-label(text1='권종유형',text2='권종/수령금액-1', style1='width: 130px', style2='width: 250px', style='width: 380px')}">
+                        <div layout:fragment="wrap-1">
+                            <div class="form-inline">
+                                <select th:class="form-control" th:classappend="${class}" data-ax-validate="required" title="권종유형"
+                                        data-ax-path="cashType" name="cashType" id="cashType" style="width: 100px">
+                                    <option value="0">선택</option>
+                                    <option value="1">수표</option>
+                                    <option value="2">원화</option>
+                                    <option value="3">달러</option>
+                                    <option value="4">엔화</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div layout:fragment="wrap-2">
+                            <div class="form-inline">
+                                <select th:class="form-control" th:classappend="${class}" title="권종유형-1"
+                                        data-ax-path="cashTypeCode1" name="cashTypeCode1" id="cashTypeCode1" style="width: 100px">
+                                    <option value="">선택</option>
+                                    <!--<option th:each="item : ${atmCode}" th:value="${item.code}" th:text="${item.name}"/>-->
+                                </select>
+                                <input id="cashTypeCode1RecvAmt" name="cashTypeCode1RecvAmt" data-ax-path="cashTypeCode1RecvAmt" type="text" title="수령금액-1" style="text-align: right"
+                                       class="form-control W130" placeholder data-ax5formatter="money(int)">
+                            </div>
+                        </div>
+                    </th:block>
+                    <th:block layout:insert="~{/fragments/table :: tr-td2-label(text1='권종/수령금액-2',text2='권종/수령금액-3', style1='width: 130px', style2='width: 250px', style='width: 380px')}">
+                        <div layout:fragment="wrap-1">
+                            <div class="form-inline">
+                                <select th:class="form-control" th:classappend="${class}" title="권종유형-2"
+                                        data-ax-path="cashTypeCode2" name="cashTypeCode2" id="cashTypeCode2" style="width: 100px">
+                                    <option value="">선택</option>
+                                    <!--<option th:each="item : ${atmCode}" th:value="${item.code}" th:text="${item.name}"/>-->
+                                </select>
+                                <input id="cashTypeCode2RecvAmt" name="cashTypeCode2RecvAmt" data-ax-path="cashTypeCode2RecvAmt" type="text" title="수령금액-2" style="text-align: right"
+                                       class="form-control W130" placeholder data-ax5formatter="money(int)">
+                            </div>
+                        </div>
+                        <div layout:fragment="wrap-2">
+                            <div class="form-inline">
+                                <select th:class="form-control" th:classappend="${class}" title="권종유형-3"
+                                        data-ax-path="cashTypeCode3" name="cashTypeCode3" id="cashTypeCode3" style="width: 100px">
+                                    <option value="">선택</option>
+                                    <!--<option th:each="item : ${atmCode}" th:value="${item.code}" th:text="${item.name}"/>-->
+                                </select>
+                                <input id="cashTypeCode3RecvAmt" name="cashTypeCode3RecvAmt" data-ax-path="cashTypeCode3RecvAmt" type="text" title="수령금액-3" style="text-align: right"
+                                       class="form-control W130" placeholder data-ax5formatter="money(int)">
+                            </div>
+                        </div>
+                    </th:block>
+                    <th:block layout:insert="~{/fragments/table :: tr-td2-label(text1='권종/수령금액-4',text2='권종/수령금액-5', style1='width: 130px', style2='width: 250px', style='width: 380px')}">
+                        <div layout:fragment="wrap-1">
+                            <div class="form-inline">
+                                <select th:class="form-control" th:classappend="${class}" title="권종유형-4"
+                                        data-ax-path="cashTypeCode4" name="cashTypeCode4" id="cashTypeCode4" style="width: 100px">
+                                    <option value="">선택</option>
+                                    <!--<option th:each="item : ${atmCode}" th:value="${item.code}" th:text="${item.name}"/>-->
+                                </select>
+                                <input id="cashTypeCode4RecvAmt" name="cashTypeCode4RecvAmt" data-ax-path="cashTypeCode4RecvAmt" type="text" title="수령금액-4" style="text-align: right"
+                                       class="form-control W130" placeholder data-ax5formatter="money(int)">
+                            </div>
+                        </div>
+                        <div layout:fragment="wrap-2">
+                            <div class="form-inline">
+                                <select th:class="form-control" th:classappend="${class}" title="권종유형-5"
+                                        data-ax-path="cashTypeCode5" name="cashTypeCode5" id="cashTypeCode5" style="width: 100px">
+                                    <option value="">선택</option>
+                                    <!--<option th:each="item : ${atmCode}" th:value="${item.code}" th:text="${item.name}"/>-->
+                                </select>
+                                <input id="cashTypeCode5RecvAmt" name="cashTypeCode5RecvAmt" data-ax-path="cashTypeCode5RecvAmt" type="text" title="수령금액-4" style="text-align: right"
+                                       class="form-control W130" placeholder data-ax5formatter="money(int)">
+                            </div>
+                        </div>
+                    </th:block>
+
+                    <th:block layout:insert="~{/fragments/table :: tr-td2-label(text1='합계금액',text2='일치여부', style1='width: 130px', style2='width: 250px', style='width: 380px')}">
+                        <div layout:fragment="wrap-1">
+                            <input id="cashTypeCodeRecvAmtSumValue" name="cashTypeCodeRecvAmtSumValue" data-ax-path="cashTypeCodeRecvAmtSumValue"  type="text" title="합계금액" style="text-align: right"
+                                   class="form-control W130" placeholder data-ax5formatter="money(int)" readonly="readonly">
+                        </div>
+                        <div layout:fragment="wrap-2">
+                            <input id="cashTypeCodeRecvAmtSumValueIsEqual" name="cashTypeCodeRecvAmtSumValueIsEqual"  type="text" title="일치여부" style="text-align: right"
+                                   class="form-control W130" placeholder readonly="readonly">
+                        </div>
+                    </th:block>
+                </div>
+                <div class="H10"></div>
+                <div data-ax-tbl class="ax-search-tbl" minWidth="700px">
+                    <th:block layout:insert="~{/fragments/table :: tr-td4( text1='S20(일반)', style1='width: 190px', lstyle1='width: 100px', text2='S20(교통)', style2='width: 190px', lstyle2='width: 100px', text3='S20핑크(일반)', style3='width: 190px', lstyle3='width: 100px', text4='S20핑크(교통)', style4='width: 190px', lstyle4='width: 100px')}">
+                        <div layout:fragment="wrap-1">
+                            <input id="s20GCardRecvCount" name="s20GCardRecvCount" data-ax-path="s20GCardRecvCount" type="text" title="S20(일반)" style="text-align: right"
+                                   class="form-control W75" placeholder data-ax5formatter="money(int)">
+                        </div>
+                        <div layout:fragment="wrap-2">
+                            <input id="s20TCardRecvCount" name="s20TCardRecvCount" data-ax-path="s20TCardRecvCount" type="text" title="S20(후불교통)" style="text-align: right"
+                                   class="form-control W75" placeholder data-ax5formatter="money(int)">
+                        </div>
+                        <div layout:fragment="wrap-3">
+                            <input id="s20pinkGCardRecvCount" name="s20pinkGCardRecvCount" data-ax-path="s20pinkGCardRecvCount" type="text" title="S20핑크(일반)" style="text-align: right"
+                                   class="form-control W75" placeholder data-ax5formatter="money(int)">
+                        </div>
+                        <div layout:fragment="wrap-4">
+                            <input id="s20pinkTCardRecvCount" name="s20pinkTCardRecvCount" data-ax-path="s20pinkTCardRecvCount" type="text" title="S20핑크(후불교통)" style="text-align: right"
+                                   class="form-control W75" placeholder data-ax5formatter="money(int)">
+                        </div>
+                    </th:block>
+                    <th:block layout:insert="~{/fragments/table :: tr-td4( text1='LOVE카드', style1='width: 190px', lstyle1='width: 100px', text2='HIPOINT카드', style2='width: 190px', lstyle2='width: 100px', text3='보안카드', style3='width: 190px', lstyle3='width: 100px', text4='', style4='width: 190px', lstyle4='width: 100px')}">
+                        <div layout:fragment="wrap-1">
+                            <input id="loveCardRecvCount" name="loveCardRecvCount" data-ax-path="loveCardRecvCount" type="text" title="LOVE카드" style="text-align: right"
+                                   class="form-control W75" placeholder data-ax5formatter="money(int)">
+                        </div>
+                        <div layout:fragment="wrap-2">
+                            <input id="hipointCardRecvCount" name="hipointCardRecvCount" data-ax-path="hipointCardRecvCount" type="text" title="HIPOINT카드" style="text-align: right"
+                                   class="form-control W75" placeholder data-ax5formatter="money(int)">
+                        </div>
+                        <div layout:fragment="wrap-3">
+                            <input id="scrtyCardRecvCount" name="scrtyCardRecvCount" data-ax-path="scrtyCardRecvCount" type="text" title="HIPOINT카드" style="text-align: right"
+                                   class="form-control W75" placeholder data-ax5formatter="money(int)">
+                        </div>
+                        <div layout:fragment="wrap-4">
+
+                        </div>
+                    </th:block>
+                </div>
+                <div class="H10"></div>
+                <div data-ax-tbl class="ax-search-tbl" minWidth="700px">
+                    <th:block layout:insert="~{/fragments/table :: tr-td3-label( text1='차량번호', style1='width: 253px', text2='성명', style2='width: 253px', text3='생년월일', style3='width: 254px', style='width: 100px')}">
+                        <div layout:fragment="wrap-1">
+                            <input id="cashSendingCarNo" name="cashSendingCarNo" data-ax-path="cashSendingCarNo" type="text" data-ax-validate="required" title="차량번호" style="text-align: center"
+                                   class="form-control W140" >
+                        </div>
+                        <div layout:fragment="wrap-2">
+                            <input id="chargeEmpName" name="chargeEmpName" data-ax-path="chargeEmpName" type="text" data-ax-validate="required" title="성명" style="text-align: center"
+                                   class="form-control W140" >
+                        </div>
+                        <div layout:fragment="wrap-3">
+                            <input id="chargeEmpRegno" name="chargeEmpRegno" data-ax-path="chargeEmpRegno" type="text" data-ax-validate="required" title="생년월일" style="text-align: center" maxlength="6"
+                                   class="form-control W140" placeholder >
+                        </div>
+                    </th:block>
+                    <th:block layout:insert="~{/fragments/table :: tr-td2(text1='사진파일', style1='width: 380px', text2='전자인감', style2='width: 380px')}">
+                        <div layout:fragment="wrap-1" style="height: 220px">
+                            <div data-ax5uploader="upload1">
+                                <div data-uploaded-box="upload1" data-ax5uploader-uploaded-box="thumbnail" style="height: 185px"></div>
+                            </div>
+                        </div>
+                        <div layout:fragment="wrap-2" style="height: 220px">
+                            <div data-ax5uploader="upload2">
+                                <div data-uploaded-box="upload2" data-ax5uploader-uploaded-box="thumbnail" style="height: 185px"></div>
+                            </div>
+                        </div>
+                    </th:block>
+                </div>
+
+                <div data-ax5uploader="upload1" style="display: none">
+                    <button data-ax5uploader-button="selector" class="btn btn-primary">Select File (*/*)</button>
+                </div>
+                <div data-ax5uploader="upload2" style="display: none">
+                    <button data-ax5uploader-button="selector" class="btn btn-primary">Select File (*/*)</button>
+                </div>
+            </form>
+        </div>
+        <!-- ===== [ right-panel ] _END_ ===== -->
+
+    </th:block>
+</div>
+<!-- ===== [ base-content ] _END_ ===== -->
+</html>

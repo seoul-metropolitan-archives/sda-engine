@@ -1,0 +1,410 @@
+{
+	"ATMS_MNG_ERROR_01001110": [
+		{
+			"no": 1,
+			"localMember": "error_date",
+			"name": "장애발생일",
+			"attr": "N",
+			"size": 8
+		},
+		{
+			"no": 2,
+			"localMember": "error_time",
+			"name": "장애발생시간",
+			"attr": "N",
+			"size": 6
+		},
+		{
+			"no": 3,
+			"localMember": "branch_code",
+			"name": "지점코드",
+			"attr": "N",
+			"size": 4
+		},
+		{
+			"no": 4,
+			"localMember": "branch_name",
+			"name": "지점명",
+			"attr": "AN",
+			"size": 40
+		},
+		{
+			"no": 5,
+			"localMember": "branch_tel",
+			"name": "지점전화번호",
+			"attr": "AN",
+			"size": 15
+		},
+		{
+			"no": 6,
+			"localMember": "corner_code",
+			"name": "코너코드",
+			"attr": "N",
+			"size": 2
+		},
+		{
+			"no": 7,
+			"localMember": "corner_name",
+			"name": "코너명",
+			"attr": "AN",
+			"size": 40
+		},
+		{
+			"no": 8,
+			"localMember": "terminal_no",
+			"name": "단말번호",
+			"attr": "N",
+			"size": 4
+		},
+		{
+			"no": 9,
+			"localMember": "place_gubun",
+			"name": "장소구분코드",
+			"attr": "N",
+			"size": 1
+		},
+		{
+			"no": 10,
+			"localMember": "oper_time_gubun",
+			"name": "운영시간구분코드",
+			"attr": "N",
+			"size": 1
+		},
+		{
+			"no": 11,
+			"localMember": "runtime",
+			"name": "가동시간",
+			"attr": "AN",
+			"size": 11
+		},
+		{
+			"no": 12,
+			"localMember": "prod_serial_no",
+			"name": "제조일련번호",
+			"attr": "AN",
+			"size": 15
+		},
+		{
+			"no": 13,
+			"localMember": "device_corp_code",
+			"name": "기기사코드",
+			"attr": "N",
+			"size": 1
+		},
+		{
+			"no": 14,
+			"localMember": "model_code",
+			"name": "기종코드",
+			"attr": "AN",
+			"size": 3
+		},
+		{
+			"no": 15,
+			"localMember": "progress_status",
+			"name": "진행상태",
+			"attr": "N",
+			"size": 1
+		},
+		{
+			"no": 16,
+			"localMember": "stext_gubun",
+			"name": "전문구분코드",
+			"attr": "AN",
+			"size": 1
+		},
+		{
+			"no": 17,
+			"localMember": "device_error1",
+			"name": "기기장애코드1",
+			"attr": "AN",
+			"size": 5
+		},
+		{
+			"no": 18,
+			"localMember": "device_error2",
+			"name": "기기장애코드2",
+			"attr": "AN",
+			"size": 10
+		},
+		{
+			"no": 19,
+			"localMember": "total_classify_code",
+			"name": "집계분류코드",
+			"attr": "AN",
+			"size": 2
+		},
+		{
+			"no": 20,
+			"localMember": "error_type",
+			"name": "장애구분",
+			"attr": "A",
+			"size": 1
+		},
+		{
+			"no": 21,
+			"localMember": "cash_part_status",
+			"name": "현금부상태",
+			"attr": "N",
+			"size": 1
+		},
+		{
+			"no": 22,
+			"localMember": "check_part_status",
+			"name": "수표부상태",
+			"attr": "N",
+			"size": 1
+		},
+		{
+			"no": 23,
+			"localMember": "portfolio_part_status",
+			"name": "명세표부상태",
+			"attr": "N",
+			"size": 1
+		},
+		{
+			"no": 24,
+			"localMember": "jrnl_part_status",
+			"name": "저널부상태",
+			"attr": "N",
+			"size": 1
+		},
+		{
+			"no": 25,
+			"localMember": "rtrvl_box_status",
+			"name": "회수함상태",
+			"attr": "N",
+			"size": 1
+		},
+		{
+			"no": 26,
+			"localMember": "card_part_status",
+			"name": "카드부상태",
+			"attr": "N",
+			"size": 1
+		},
+		{
+			"no": 27,
+			"localMember": "bnkb_part_status",
+			"name": "통장부상태",
+			"attr": "N",
+			"size": 1
+		},
+		{
+			"no": 28,
+			"localMember": "giro_part_status",
+			"name": "지로부상태",
+			"attr": "N",
+			"size": 1
+		},
+		{
+			"no": 29,
+			"localMember": "suspend_status",
+			"name": "중단여부",
+			"attr": "N",
+			"size": 1
+		},
+		{
+			"no": 30,
+			"localMember": "hw_error_status",
+			"name": "H/W장애여부",
+			"attr": "N",
+			"size": 1
+		},
+		{
+			"no": 31,
+			"localMember": "maintenance_status",
+			"name": "보수모드여부",
+			"attr": "N",
+			"size": 1
+		},
+		{
+			"no": 32,
+			"localMember": "version",
+			"name": "버전",
+			"attr": "N",
+			"size": 8
+		},
+		{
+			"no": 33,
+			"localMember": "enable_des_board",
+			"name": "DES보드가능구분",
+			"attr": "N",
+			"size": 1
+		},
+		{
+			"no": 34,
+			"localMember": "enable_ic_card",
+			"name": "IC카드가능구분",
+			"attr": "N",
+			"size": 1
+		},
+		{
+			"no": 35,
+			"localMember": "enable_emv",
+			"name": "EMV가능구분",
+			"attr": "N",
+			"size": 1
+		},
+		{
+			"no": 36,
+			"localMember": "enable_ir",
+			"name": "IR가능구분",
+			"attr": "N",
+			"size": 1
+		},
+		{
+			"no": 37,
+			"localMember": "enable_rf",
+			"name": "RF가능구분",
+			"attr": "N",
+			"size": 1
+		},
+		{
+			"no": 38,
+			"localMember": "enable_fingerprint",
+			"name": "지문인식가능구분",
+			"attr": "N",
+			"size": 1
+		},
+		{
+			"no": 39,
+			"localMember": "encryption_status",
+			"name": "암호화 상태",
+			"attr": "N",
+			"size": 1
+		},
+		{
+			"no": 40,
+			"localMember": "device_info",
+			"name": "기기정보",
+			"attr": "AN",
+			"size": 100
+		},
+		{
+			"no": 41,
+			"localMember": "atms_device_no",
+			"name": "ATMS 기기번호",
+			"attr": "AN",
+			"size": 10
+		},
+		{
+			"no": 42,
+			"localMember": "cash_part_status_50k_won",
+			"name": "현금부상태(5만원)",
+			"attr": "N",
+			"size": 1
+		},
+		{
+			"no": 43,
+			"localMember": "atmc_excclc_device_error",
+			"name": "자동정산 기기장애",
+			"attr": "N",
+			"size": 1
+		},
+		{
+			"no": 44,
+			"localMember": "atmc_excclc_exec_result",
+			"name": "자동정산 수행결과",
+			"attr": "N",
+			"size": 1
+		},
+		{
+			"no": 45,
+			"localMember": "device_ver_info",
+			"name": "기기버전정보",
+			"attr": "AN",
+			"size": 10
+		},
+		{
+			"no": 46,
+			"localMember": "card_issued_device_status",
+			"name": "카드발급기상태",
+			"attr": "N",
+			"size": 1
+		},
+		{
+			"no": 47,
+			"localMember": "id_scanner_status",
+			"name": "신분증스캐너상태",
+			"attr": "N",
+			"size": 1
+		},
+		{
+			"no": 48,
+			"localMember": "bio_scanner_status",
+			"name": "바이오스캐너상태",
+			"attr": "N",
+			"size": 1
+		},
+		{
+			"no": 49,
+			"localMember": "scrty_card_highend_atm_only",
+			"name": "보안카드(하이엔드ATM전용)",
+			"attr": "N",
+			"size": 1
+		},
+		{
+			"no": 50,
+			"localMember": "card_style_otp",
+			"name": "카드형 OTP",
+			"attr": "N",
+			"size": 1
+		},
+		{
+			"no": 51,
+			"localMember": "s20_general",
+			"name": "S20(일반)",
+			"attr": "N",
+			"size": 1
+		},
+		{
+			"no": 52,
+			"localMember": "s20_frpy",
+			"name": "S20(후불교통)",
+			"attr": "N",
+			"size": 1
+		},
+		{
+			"no": 53,
+			"localMember": "sline_general",
+			"name": "S-Line(일반)",
+			"attr": "N",
+			"size": 1
+		},
+		{
+			"no": 54,
+			"localMember": "sline_frpy",
+			"name": "S-Line(후불교통)",
+			"attr": "N",
+			"size": 1
+		},
+		{
+			"no": 55,
+			"localMember": "fourtune_general",
+			"name": "4Tune(일반)",
+			"attr": "N",
+			"size": 1
+		},
+		{
+			"no": 56,
+			"localMember": "fourtune_frpy",
+			"name": "4Tune(후불교통)",
+			"attr": "N",
+			"size": 1
+		},
+		{
+			"no": 57,
+			"localMember": "rcppay_bnkb",
+			"name": "입출금통장",
+			"attr": "N",
+			"size": 1
+		},
+		{
+			"no": 58,
+			"localMember": "filler",
+			"name": "FILLER",
+			"attr": "AN",
+			"size": 68
+		}
+	]
+}

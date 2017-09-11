@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bgf.shbank.domain.mng.equip.sh02001280.Sh02001280Mapper">
+
+    <select id="findAll" resultType="sh02001280" parameterType="sh02001280" statementType="PREPARED">
+        SELECT
+            WORK_SEQ_NO AS workSeqNo,
+            CHASU AS chasu,
+            JISA_CODE AS jisaCode,
+            BRANCH_CODE AS branchCode,
+            CORNER_CODE AS cornerCode,
+            CORNER_NAME AS cornerName,
+            WORK_DATE AS workDate,
+            WORK_CONTENT AS workContent
+        FROM
+            ATMS_02001280
+    </select>
+
+    <select id="findOne" resultType="sh02001280" parameterType="sh02001280" statementType="PREPARED">
+        SELECT
+            WORK_SEQ_NO AS workSeqNo,
+            CHASU AS chasu,
+            JISA_CODE AS jisaCode,
+            BRANCH_CODE AS branchCode,
+            CORNER_CODE AS cornerCode,
+            CORNER_NAME AS cornerName,
+            WORK_DATE AS workDate,
+            WORK_CONTENT AS workContent
+        FROM
+            ATMS_02001280
+        WHERE
+            WORK_SEQ_NO = #{workSeqNo}
+    </select>
+
+   <update id="delete" parameterType="sh02001280" statementType="PREPARED">
+        DELETE FROM
+            ATMS_02001280
+        WHERE
+            WORK_SEQ_NO = #{workSeqNo}
+    </update>
+
+   <update id="update" parameterType="sh02001280" statementType="PREPARED">
+        UPDATE ATMS_02001280
+        SET
+            CHASU = #{chasu},
+            JISA_CODE = #{jisaCode},
+            BRANCH_CODE = #{branchCode},
+            CORNER_CODE = #{cornerCode},
+            CORNER_NAME = #{cornerName},
+            WORK_DATE = #{workDate},
+            WORK_CONTENT = #{workContent}
+        WHERE
+            WORK_SEQ_NO = #{workSeqNo}
+    </update>
+
+   <update id="insert" parameterType="sh02001280" statementType="PREPARED">
+        INSERT INTO ATMS_02001280 (
+            WORK_SEQ_NO,
+            CHASU,
+            JISA_CODE,
+            BRANCH_CODE,
+            CORNER_CODE,
+            CORNER_NAME,
+            WORK_DATE,
+            WORK_CONTENT
+        ) VALUES (
+            #{workSeqNo},
+            #{chasu},
+            #{jisaCode},
+            #{branchCode},
+            #{cornerCode},
+            #{cornerName},
+            #{workDate},
+            #{workContent}
+        )
+    </update>
+</mapper>

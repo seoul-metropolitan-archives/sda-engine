@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bgf.shbank.domain.mng.cash.sh03001200.Sh03001200Mapper">
+
+    <select id="findAll" resultType="sh03001200" parameterType="sh03001200" statementType="PREPARED">
+        SELECT
+            TX_ID AS txId,
+            JISA_CODE AS jisaCode,
+            BRANCH_CODE AS branchCode,
+            TERMINAL_NO AS terminalNo,
+            MON_CASH_SENDING_ENABLE AS monCashSendingEnable,
+            TUE_CASH_SENDING_ENABLE AS tueCashSendingEnable,
+            WED_CASH_SENDING_ENABLE AS wedCashSendingEnable,
+            THU_CASH_SENDING_ENABLE AS thuCashSendingEnable,
+            FRI_CASH_SENDING_ENABLE AS friCashSendingEnable
+        FROM
+            ATMS_03001200
+    </select>
+
+    <select id="findOne" resultType="sh03001200" parameterType="sh03001200" statementType="PREPARED">
+        SELECT
+            TX_ID AS txId,
+            JISA_CODE AS jisaCode,
+            BRANCH_CODE AS branchCode,
+            TERMINAL_NO AS terminalNo,
+            MON_CASH_SENDING_ENABLE AS monCashSendingEnable,
+            TUE_CASH_SENDING_ENABLE AS tueCashSendingEnable,
+            WED_CASH_SENDING_ENABLE AS wedCashSendingEnable,
+            THU_CASH_SENDING_ENABLE AS thuCashSendingEnable,
+            FRI_CASH_SENDING_ENABLE AS friCashSendingEnable
+        FROM
+            ATMS_03001200
+        WHERE
+            TX_ID = #{txId}, BRANCH_CODE = #{branchCode}, TERMINAL_NO = #{terminalNo}
+    </select>
+
+   <update id="delete" parameterType="sh03001200" statementType="PREPARED">
+        DELETE FROM
+            ATMS_03001200
+        WHERE
+            TX_ID = #{txId}, BRANCH_CODE = #{branchCode}, TERMINAL_NO = #{terminalNo}
+    </update>
+
+   <update id="update" parameterType="sh03001200" statementType="PREPARED">
+        UPDATE ATMS_03001200
+        SET
+            JISA_CODE = #{jisaCode},
+            MON_CASH_SENDING_ENABLE = #{monCashSendingEnable},
+            TUE_CASH_SENDING_ENABLE = #{tueCashSendingEnable},
+            WED_CASH_SENDING_ENABLE = #{wedCashSendingEnable},
+            THU_CASH_SENDING_ENABLE = #{thuCashSendingEnable},
+            FRI_CASH_SENDING_ENABLE = #{friCashSendingEnable}
+        WHERE
+            TX_ID = #{txId}, BRANCH_CODE = #{branchCode}, TERMINAL_NO = #{terminalNo}
+    </update>
+
+   <update id="insert" parameterType="sh03001200" statementType="PREPARED">
+        INSERT INTO ATMS_03001200 (
+            TX_ID,
+            JISA_CODE,
+            BRANCH_CODE,
+            TERMINAL_NO,
+            MON_CASH_SENDING_ENABLE,
+            TUE_CASH_SENDING_ENABLE,
+            WED_CASH_SENDING_ENABLE,
+            THU_CASH_SENDING_ENABLE,
+            FRI_CASH_SENDING_ENABLE
+        ) VALUES (
+            #{txId},
+            #{jisaCode},
+            #{branchCode},
+            #{terminalNo},
+            #{monCashSendingEnable},
+            #{tueCashSendingEnable},
+            #{wedCashSendingEnable},
+            #{thuCashSendingEnable},
+            #{friCashSendingEnable}
+        )
+    </update>
+</mapper>

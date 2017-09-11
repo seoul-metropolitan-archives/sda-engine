@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bgf.shbank.domain.mng.sla.sh_sla_a0.ShSlaA0Mapper">
+
+    <select id="findAll" resultType="shSlaA0" parameterType="shSlaA0" statementType="PREPARED">
+        SELECT
+            REG_DATETIME AS regDatetime,
+            BRANCH_CODE AS branchCode,
+            CORNER_CODE AS cornerCode,
+            OVERHAUL_DATE AS overhaulDate,
+            BRANCH_NAME AS branchName,
+            CORNER_NAME AS cornerName,
+            OPER_DATE AS operDate,
+            BRANCH_GUBUN AS branchGubun,
+            CORP_CODE AS corpCode,
+            TAKE_PHOTO_ENABLE AS takePhotoEnable,
+            SUCCESS_COUNT AS successCount,
+            OVERHAUL_COUNT AS overhaulCount,
+            OVERHAUL_RESULT AS overhaulResult,
+            OVERHAUL_UNUSL AS overhaulUnusl,
+            SUBMIT_TARGET_COUNT AS submitTargetCount,
+            SUBMIT_COUNT AS submitCount,
+            PRODUCT_CONDT AS productCondt,
+            TERMINAL_CONDT AS terminalCondt,
+            GROUND_CONDT AS groundCondt,
+            GARBAGE_CONDT AS garbageCondt,
+            CASH_ENVELOPE_CONDT AS cashEnvelopeCondt,
+            POSTER_CONDT AS posterCondt
+        FROM
+            ATMS_SLA_A0
+    </select>
+
+    <select id="findOne" resultType="shSlaA0" parameterType="shSlaA0" statementType="PREPARED">
+        SELECT
+            REG_DATETIME AS regDatetime,
+            BRANCH_CODE AS branchCode,
+            CORNER_CODE AS cornerCode,
+            OVERHAUL_DATE AS overhaulDate,
+            BRANCH_NAME AS branchName,
+            CORNER_NAME AS cornerName,
+            OPER_DATE AS operDate,
+            BRANCH_GUBUN AS branchGubun,
+            CORP_CODE AS corpCode,
+            TAKE_PHOTO_ENABLE AS takePhotoEnable,
+            SUCCESS_COUNT AS successCount,
+            OVERHAUL_COUNT AS overhaulCount,
+            OVERHAUL_RESULT AS overhaulResult,
+            OVERHAUL_UNUSL AS overhaulUnusl,
+            SUBMIT_TARGET_COUNT AS submitTargetCount,
+            SUBMIT_COUNT AS submitCount,
+            PRODUCT_CONDT AS productCondt,
+            TERMINAL_CONDT AS terminalCondt,
+            GROUND_CONDT AS groundCondt,
+            GARBAGE_CONDT AS garbageCondt,
+            CASH_ENVELOPE_CONDT AS cashEnvelopeCondt,
+            POSTER_CONDT AS posterCondt
+        FROM
+            ATMS_SLA_A0
+        WHERE
+            REG_DATETIME = #{regDatetime}, BRANCH_CODE = #{branchCode}, CORNER_CODE = #{cornerCode}
+    </select>
+
+   <update id="delete" parameterType="shSlaA0" statementType="PREPARED">
+        DELETE FROM
+            ATMS_SLA_A0
+        WHERE
+            REG_DATETIME = #{regDatetime}, BRANCH_CODE = #{branchCode}, CORNER_CODE = #{cornerCode}
+    </update>
+
+   <update id="update" parameterType="shSlaA0" statementType="PREPARED">
+        UPDATE ATMS_SLA_A0
+        SET
+            OVERHAUL_DATE = #{overhaulDate},
+            BRANCH_NAME = #{branchName},
+            CORNER_NAME = #{cornerName},
+            OPER_DATE = #{operDate},
+            BRANCH_GUBUN = #{branchGubun},
+            CORP_CODE = #{corpCode},
+            TAKE_PHOTO_ENABLE = #{takePhotoEnable},
+            SUCCESS_COUNT = #{successCount},
+            OVERHAUL_COUNT = #{overhaulCount},
+            OVERHAUL_RESULT = #{overhaulResult},
+            OVERHAUL_UNUSL = #{overhaulUnusl},
+            SUBMIT_TARGET_COUNT = #{submitTargetCount},
+            SUBMIT_COUNT = #{submitCount},
+            PRODUCT_CONDT = #{productCondt},
+            TERMINAL_CONDT = #{terminalCondt},
+            GROUND_CONDT = #{groundCondt},
+            GARBAGE_CONDT = #{garbageCondt},
+            CASH_ENVELOPE_CONDT = #{cashEnvelopeCondt},
+            POSTER_CONDT = #{posterCondt}
+        WHERE
+            REG_DATETIME = #{regDatetime}, BRANCH_CODE = #{branchCode}, CORNER_CODE = #{cornerCode}
+    </update>
+
+   <update id="insert" parameterType="shSlaA0" statementType="PREPARED">
+        INSERT INTO ATMS_SLA_A0 (
+            REG_DATETIME,
+            BRANCH_CODE,
+            CORNER_CODE,
+            OVERHAUL_DATE,
+            BRANCH_NAME,
+            CORNER_NAME,
+            OPER_DATE,
+            BRANCH_GUBUN,
+            CORP_CODE,
+            TAKE_PHOTO_ENABLE,
+            SUCCESS_COUNT,
+            OVERHAUL_COUNT,
+            OVERHAUL_RESULT,
+            OVERHAUL_UNUSL,
+            SUBMIT_TARGET_COUNT,
+            SUBMIT_COUNT,
+            PRODUCT_CONDT,
+            TERMINAL_CONDT,
+            GROUND_CONDT,
+            GARBAGE_CONDT,
+            CASH_ENVELOPE_CONDT,
+            POSTER_CONDT
+        ) VALUES (
+            #{regDatetime},
+            #{branchCode},
+            #{cornerCode},
+            #{overhaulDate},
+            #{branchName},
+            #{cornerName},
+            #{operDate},
+            #{branchGubun},
+            #{corpCode},
+            #{takePhotoEnable},
+            #{successCount},
+            #{overhaulCount},
+            #{overhaulResult},
+            #{overhaulUnusl},
+            #{submitTargetCount},
+            #{submitCount},
+            #{productCondt},
+            #{terminalCondt},
+            #{groundCondt},
+            #{garbageCondt},
+            #{cashEnvelopeCondt},
+            #{posterCondt}
+        )
+    </update>
+</mapper>

@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bgf.shbank.domain.mng.error.sh01001120.Sh01001120Mapper">
+
+    <select id="findAll" resultType="sh01001120" parameterType="sh01001120" statementType="PREPARED">
+        SELECT
+            CALLEE_REQ_DATETIME AS calleeReqDatetime,
+            ERROR_DATETIME AS errorDatetime,
+            CALLEE_REQ_SEQ_NO AS calleeReqSeqNo,
+            CALLEE_REQ_CHASU AS calleeReqChasu,
+            CALLEE_CHASU_GUBUN AS calleeChasuGubun,
+            CALLEE_GUBUN AS calleeGubun,
+            JISA_CODE AS jisaCode,
+            BRANCH_CODE AS branchCode,
+            BRANCH_NAME AS branchName,
+            CORNER_CODE AS cornerCode,
+            CORNER_NAME AS cornerName,
+            TERMINAL_NO AS terminalNo,
+            TERMINAL_CORP_CODE AS terminalCorpCode,
+            MODEL_CODE AS modelCode,
+            CALLEE_REQ_GUBUN_CODE AS calleeReqGubunCode,
+            CALLEE_REQ_REASON_CODE AS calleeReqReasonCode,
+            CALLEE_EMP_NAME AS calleeEmpName,
+            CALLEE_EMP_TELNO AS calleeEmpTelno,
+            TERMINAL_ERROR_CODE_1 AS terminalErrorCode1,
+            TERMINAL_ERROR_CODE_2 AS terminalErrorCode2,
+            TOTAL_CLASSIFY_CODE AS totalClassifyCode,
+            CALLEE_REQ_UNUSL AS calleeReqUnusl,
+            CRT_NO AS crtNo,
+            CUSTOMER_WAIT_ENABLE AS customerWaitEnable,
+            PART_MNG_CALLEE_ENABLE AS partMngCalleeEnable
+        FROM
+            ATMS_01001120
+    </select>
+
+    <select id="findOne" resultType="sh01001120" parameterType="sh01001120" statementType="PREPARED">
+        SELECT
+            CALLEE_REQ_DATETIME AS calleeReqDatetime,
+            ERROR_DATETIME AS errorDatetime,
+            CALLEE_REQ_SEQ_NO AS calleeReqSeqNo,
+            CALLEE_REQ_CHASU AS calleeReqChasu,
+            CALLEE_CHASU_GUBUN AS calleeChasuGubun,
+            CALLEE_GUBUN AS calleeGubun,
+            JISA_CODE AS jisaCode,
+            BRANCH_CODE AS branchCode,
+            BRANCH_NAME AS branchName,
+            CORNER_CODE AS cornerCode,
+            CORNER_NAME AS cornerName,
+            TERMINAL_NO AS terminalNo,
+            TERMINAL_CORP_CODE AS terminalCorpCode,
+            MODEL_CODE AS modelCode,
+            CALLEE_REQ_GUBUN_CODE AS calleeReqGubunCode,
+            CALLEE_REQ_REASON_CODE AS calleeReqReasonCode,
+            CALLEE_EMP_NAME AS calleeEmpName,
+            CALLEE_EMP_TELNO AS calleeEmpTelno,
+            TERMINAL_ERROR_CODE_1 AS terminalErrorCode1,
+            TERMINAL_ERROR_CODE_2 AS terminalErrorCode2,
+            TOTAL_CLASSIFY_CODE AS totalClassifyCode,
+            CALLEE_REQ_UNUSL AS calleeReqUnusl,
+            CRT_NO AS crtNo,
+            CUSTOMER_WAIT_ENABLE AS customerWaitEnable,
+            PART_MNG_CALLEE_ENABLE AS partMngCalleeEnable
+        FROM
+            ATMS_01001120
+        WHERE
+            ERROR_DATETIME = #{errorDatetime}, BRANCH_CODE = #{branchCode}, CORNER_CODE = #{cornerCode}, TERMINAL_NO = #{terminalNo}
+    </select>
+
+   <update id="delete" parameterType="sh01001120" statementType="PREPARED">
+        DELETE FROM
+            ATMS_01001120
+        WHERE
+            ERROR_DATETIME = #{errorDatetime}, BRANCH_CODE = #{branchCode}, CORNER_CODE = #{cornerCode}, TERMINAL_NO = #{terminalNo}
+    </update>
+
+   <update id="update" parameterType="sh01001120" statementType="PREPARED">
+        UPDATE ATMS_01001120
+        SET
+            CALLEE_REQ_DATETIME = #{calleeReqDatetime},
+            CALLEE_REQ_SEQ_NO = #{calleeReqSeqNo},
+            CALLEE_REQ_CHASU = #{calleeReqChasu},
+            CALLEE_CHASU_GUBUN = #{calleeChasuGubun},
+            CALLEE_GUBUN = #{calleeGubun},
+            JISA_CODE = #{jisaCode},
+            BRANCH_NAME = #{branchName},
+            CORNER_NAME = #{cornerName},
+            TERMINAL_CORP_CODE = #{terminalCorpCode},
+            MODEL_CODE = #{modelCode},
+            CALLEE_REQ_GUBUN_CODE = #{calleeReqGubunCode},
+            CALLEE_REQ_REASON_CODE = #{calleeReqReasonCode},
+            CALLEE_EMP_NAME = #{calleeEmpName},
+            CALLEE_EMP_TELNO = #{calleeEmpTelno},
+            TERMINAL_ERROR_CODE_1 = #{terminalErrorCode1},
+            TERMINAL_ERROR_CODE_2 = #{terminalErrorCode2},
+            TOTAL_CLASSIFY_CODE = #{totalClassifyCode},
+            CALLEE_REQ_UNUSL = #{calleeReqUnusl},
+            CRT_NO = #{crtNo},
+            CUSTOMER_WAIT_ENABLE = #{customerWaitEnable},
+            PART_MNG_CALLEE_ENABLE = #{partMngCalleeEnable}
+        WHERE
+            ERROR_DATETIME = #{errorDatetime}, BRANCH_CODE = #{branchCode}, CORNER_CODE = #{cornerCode}, TERMINAL_NO = #{terminalNo}
+    </update>
+
+   <update id="insert" parameterType="sh01001120" statementType="PREPARED">
+        INSERT INTO ATMS_01001120 (
+            CALLEE_REQ_DATETIME,
+            ERROR_DATETIME,
+            CALLEE_REQ_SEQ_NO,
+            CALLEE_REQ_CHASU,
+            CALLEE_CHASU_GUBUN,
+            CALLEE_GUBUN,
+            JISA_CODE,
+            BRANCH_CODE,
+            BRANCH_NAME,
+            CORNER_CODE,
+            CORNER_NAME,
+            TERMINAL_NO,
+            TERMINAL_CORP_CODE,
+            MODEL_CODE,
+            CALLEE_REQ_GUBUN_CODE,
+            CALLEE_REQ_REASON_CODE,
+            CALLEE_EMP_NAME,
+            CALLEE_EMP_TELNO,
+            TERMINAL_ERROR_CODE_1,
+            TERMINAL_ERROR_CODE_2,
+            TOTAL_CLASSIFY_CODE,
+            CALLEE_REQ_UNUSL,
+            CRT_NO,
+            CUSTOMER_WAIT_ENABLE,
+            PART_MNG_CALLEE_ENABLE
+        ) VALUES (
+            #{calleeReqDatetime},
+            #{errorDatetime},
+            #{calleeReqSeqNo},
+            #{calleeReqChasu},
+            #{calleeChasuGubun},
+            #{calleeGubun},
+            #{jisaCode},
+            #{branchCode},
+            #{branchName},
+            #{cornerCode},
+            #{cornerName},
+            #{terminalNo},
+            #{terminalCorpCode},
+            #{modelCode},
+            #{calleeReqGubunCode},
+            #{calleeReqReasonCode},
+            #{calleeEmpName},
+            #{calleeEmpTelno},
+            #{terminalErrorCode1},
+            #{terminalErrorCode2},
+            #{totalClassifyCode},
+            #{calleeReqUnusl},
+            #{crtNo},
+            #{customerWaitEnable},
+            #{partMngCalleeEnable}
+        )
+    </update>
+</mapper>

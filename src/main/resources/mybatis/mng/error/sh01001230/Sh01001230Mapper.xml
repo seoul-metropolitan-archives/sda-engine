@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bgf.shbank.domain.mng.error.sh01001230.Sh01001230Mapper">
+
+    <select id="findAll" resultType="sh01001230" parameterType="sh01001230" statementType="PREPARED">
+        SELECT
+            JISA_CODE AS jisaCode,
+            BRANCH_CODE AS branchCode,
+            CORNER_CODE AS cornerCode,
+            TERMINAL_NO AS terminalNo,
+            STEXT_CHASU AS stextChasu,
+            HANDLE_OCCUR_DATETIME AS handleOccurDatetime,
+            HANDLE_SEQ_NO AS handleSeqNo,
+            HANDLE_NOTICE_DATETIME AS handleNoticeDatetime,
+            HANDLE_NOTICE_EMP_NAME AS handleNoticeEmpName,
+            HANDLE_NOTICE_EMP_TELNO AS handleNoticeEmpTelno,
+            HANDLE_REQ_DESC AS handleReqDesc,
+            HANDLE_STATUS AS handleStatus,
+            SMS_ENABLE AS smsEnable,
+            CUSTOMER_NAME AS customerName,
+            CUSTOMER_TELNO AS customerTelno,
+            ERROR_TYPE AS errorType,
+            ACCOUNT_NO AS accountNo,
+            DEAL_SEQ_NO AS dealSeqNo,
+            DEAL_AMOUNT AS dealAmount
+        FROM
+            ATMS_01001230
+    </select>
+
+    <select id="findOne" resultType="sh01001230" parameterType="sh01001230" statementType="PREPARED">
+        SELECT
+            JISA_CODE AS jisaCode,
+            BRANCH_CODE AS branchCode,
+            CORNER_CODE AS cornerCode,
+            TERMINAL_NO AS terminalNo,
+            STEXT_CHASU AS stextChasu,
+            HANDLE_OCCUR_DATETIME AS handleOccurDatetime,
+            HANDLE_SEQ_NO AS handleSeqNo,
+            HANDLE_NOTICE_DATETIME AS handleNoticeDatetime,
+            HANDLE_NOTICE_EMP_NAME AS handleNoticeEmpName,
+            HANDLE_NOTICE_EMP_TELNO AS handleNoticeEmpTelno,
+            HANDLE_REQ_DESC AS handleReqDesc,
+            HANDLE_STATUS AS handleStatus,
+            SMS_ENABLE AS smsEnable,
+            CUSTOMER_NAME AS customerName,
+            CUSTOMER_TELNO AS customerTelno,
+            ERROR_TYPE AS errorType,
+            ACCOUNT_NO AS accountNo,
+            DEAL_SEQ_NO AS dealSeqNo,
+            DEAL_AMOUNT AS dealAmount
+        FROM
+            ATMS_01001230
+        WHERE
+            BRANCH_CODE = #{branchCode}, CORNER_CODE = #{cornerCode}, TERMINAL_NO = #{terminalNo}, HANDLE_OCCUR_DATETIME = #{handleOccurDatetime}, HANDLE_SEQ_NO = #{handleSeqNo}
+    </select>
+
+   <update id="delete" parameterType="sh01001230" statementType="PREPARED">
+        DELETE FROM
+            ATMS_01001230
+        WHERE
+            BRANCH_CODE = #{branchCode}, CORNER_CODE = #{cornerCode}, TERMINAL_NO = #{terminalNo}, HANDLE_OCCUR_DATETIME = #{handleOccurDatetime}, HANDLE_SEQ_NO = #{handleSeqNo}
+    </update>
+
+   <update id="update" parameterType="sh01001230" statementType="PREPARED">
+        UPDATE ATMS_01001230
+        SET
+            JISA_CODE = #{jisaCode},
+            STEXT_CHASU = #{stextChasu},
+            HANDLE_NOTICE_DATETIME = #{handleNoticeDatetime},
+            HANDLE_NOTICE_EMP_NAME = #{handleNoticeEmpName},
+            HANDLE_NOTICE_EMP_TELNO = #{handleNoticeEmpTelno},
+            HANDLE_REQ_DESC = #{handleReqDesc},
+            HANDLE_STATUS = #{handleStatus},
+            SMS_ENABLE = #{smsEnable},
+            CUSTOMER_NAME = #{customerName},
+            CUSTOMER_TELNO = #{customerTelno},
+            ERROR_TYPE = #{errorType},
+            ACCOUNT_NO = #{accountNo},
+            DEAL_SEQ_NO = #{dealSeqNo},
+            DEAL_AMOUNT = #{dealAmount}
+        WHERE
+            BRANCH_CODE = #{branchCode}, CORNER_CODE = #{cornerCode}, TERMINAL_NO = #{terminalNo}, HANDLE_OCCUR_DATETIME = #{handleOccurDatetime}, HANDLE_SEQ_NO = #{handleSeqNo}
+    </update>
+
+   <update id="insert" parameterType="sh01001230" statementType="PREPARED">
+        INSERT INTO ATMS_01001230 (
+            JISA_CODE,
+            BRANCH_CODE,
+            CORNER_CODE,
+            TERMINAL_NO,
+            STEXT_CHASU,
+            HANDLE_OCCUR_DATETIME,
+            HANDLE_SEQ_NO,
+            HANDLE_NOTICE_DATETIME,
+            HANDLE_NOTICE_EMP_NAME,
+            HANDLE_NOTICE_EMP_TELNO,
+            HANDLE_REQ_DESC,
+            HANDLE_STATUS,
+            SMS_ENABLE,
+            CUSTOMER_NAME,
+            CUSTOMER_TELNO,
+            ERROR_TYPE,
+            ACCOUNT_NO,
+            DEAL_SEQ_NO,
+            DEAL_AMOUNT
+        ) VALUES (
+            #{jisaCode},
+            #{branchCode},
+            #{cornerCode},
+            #{terminalNo},
+            #{stextChasu},
+            #{handleOccurDatetime},
+            #{handleSeqNo},
+            #{handleNoticeDatetime},
+            #{handleNoticeEmpName},
+            #{handleNoticeEmpTelno},
+            #{handleReqDesc},
+            #{handleStatus},
+            #{smsEnable},
+            #{customerName},
+            #{customerTelno},
+            #{errorType},
+            #{accountNo},
+            #{dealSeqNo},
+            #{dealAmount}
+        )
+    </update>
+</mapper>

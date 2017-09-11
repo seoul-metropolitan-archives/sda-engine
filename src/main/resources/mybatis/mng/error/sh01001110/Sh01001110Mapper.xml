@@ -1,0 +1,517 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bgf.shbank.domain.mng.error.sh01001110.Sh01001110Mapper">
+
+    <select id="findAll" resultType="sh01001110" parameterType="sh01001110" statementType="PREPARED">
+        SELECT * FROM (
+            SELECT
+            Z1.ERROR_DATETIME AS errorDatetime,
+            Z1.JISA_CODE AS jisaCode,
+            Z1.BRANCH_CODE AS branchCode,
+            Z1.BRANCH_NAME AS branchName,
+            Z1.BRANCH_TEL AS branchTel,
+            Z1.CORNER_CODE AS cornerCode,
+            Z1.CORNER_NAME AS cornerName,
+            Z1.TERMINAL_NO AS terminalNo,
+            Z1.PLACE_GUBUN AS placeGubun,
+            Z1.OPER_TIME_GUBUN AS operTimeGubun,
+            Z1.RUNTIME AS runtime,
+            Z1.PROD_SERIAL_NO AS prodSerialNo,
+            Z1.TERMINAL_CORP_CODE AS terminalCorpCode,
+            Z1.MODEL_CODE AS modelCode,
+            Z1.PROGRESS_STATUS AS progressStatus,
+            Z1.STEXT_GUBUN AS stextGubun,
+            Z1.TERMINAL_ERROR1 AS terminalError1,
+            Z1.TERMINAL_ERROR1 AS terminalError2,
+            Z1.TOTAL_CLASSIFY_CODE AS totalClassifyCode,
+            Z1.ERROR_TYPE AS errorType,
+            Z1.CASH_PART_STATUS AS cashPartStatus,
+            Z1.CHECK_PART_STATUS AS checkPartStatus,
+            Z1.PORTFOLIO_PART_STATUS AS portfolioPartStatus,
+            Z1.JRNL_PART_STATUS AS jrnlPartStatus,
+            Z1.RTRVL_BOX_STATUS AS rtrvlBoxStatus,
+            Z1.CARD_PART_STATUS AS cardPartStatus,
+            Z1.BNKB_PART_STATUS AS bnkbPartStatus,
+            Z1.GIRO_PART_STATUS AS giroPartStatus,
+            Z1.SUSPEND_STATUS AS suspendStatus,
+            Z1.HW_ERROR_STATUS AS hwErrorStatus,
+            Z1.MAINTENANCE_STATUS AS maintenanceStatus,
+            Z1.VERSION AS version,
+            Z1.ENABLE_DES_BOARD AS enableDesBoard,
+            Z1.ENABLE_IC_CARD AS enableIcCard,
+            Z1.ENABLE_EMV AS enableEmv,
+            Z1.ENABLE_IR AS enableIr,
+            Z1.ENABLE_RF AS enableRf,
+            Z1.ENABLE_FINGERPRINT AS enableFingerprint,
+            Z1.ENCRYPTION_STATUS AS encryptionStatus,
+            Z1.TERMINAL_INFO AS terminalInfo,
+            Z1.ATMS_TERMINAL_NO AS atmsTerminalNo,
+            Z1.CASH_PART_STATUS_50K_WON AS cashPartStatus50kWon,
+            Z1.ATMC_EXCCLC_TERMINAL_ERROR AS atmcExcclcTerminalError,
+            Z1.ATMC_EXCCLC_EXEC_RESULT AS atmcExcclcExecResult,
+            Z1.TERMINAL_VER_INFO AS terminalVerInfo,
+            Z1.CARD_ISSUED_TERMINAL_STATUS AS cardIssuedTerminalStatus,
+            Z1.ID_SCANNER_STATUS AS idScannerStatus,
+            Z1.BIO_SCANNER_STATUS AS bioScannerStatus,
+            Z1.SCRTY_CARD_HIGHEND_ATM_ONLY AS scrtyCardHighendAtmOnly,
+            Z1.CARD_STYLE_OTP AS cardStyleOtp,
+            Z1.S20_GENERAL AS s20General,
+            Z1.S20_FRPY AS s20Frpy,
+            Z1.SLINE_GENERAL AS slineGeneral,
+            Z1.SLINE_FRPY AS slineFrpy,
+            Z1.FOURTUNE_GENERAL AS fourtuneGeneral,
+            Z1.FOURTUNE_FRPY AS fourtuneFrpy,
+            Z1.RCPPAY_BNKB AS rcppayBnkb,
+            Z2.SECURITY_CORP AS securityCorp,
+            Z2.SECURITY_CORP_CONTRACT_NO AS securityCorpContractNo,
+            Z2.BOOTH_CORP AS boothCorp,
+            Z2.BOOTH_TYPE AS boothType,
+            Z2.INTERCOM_NO AS intercomNo,
+            Z2.TERMINAL_LOCATION AS terminalLocation,
+            Z2.COMM_OFFICE AS commOffice,
+            Z2.INTERNET_CLASSIFY AS internetClassify,
+            Z2.MNG_CHANNEL AS mngChannel,
+            Z3.NOTICE_CONTENT AS noticeContent,
+            Z3.CUSTOMER_INFO AS customerInfo,
+            Z3.HANDLE_CONTENT AS handleContent,
+            NVL((SELECT SUBSTR(TX_ID,3,1)
+            FROM ATMS_ERROR_STATUS
+            WHERE JISA_CODE = Z1.JISA_CODE
+            AND BRANCH_CODE = Z1.BRANCH_CODE
+            AND CORNER_CODE = Z1.CORNER_CODE
+            AND TERMINAL_NO = Z1.TERMINAL_NO
+            AND ERROR_DATETIME = Z1.ERROR_DATETIME
+            ),'9') AS txId
+            FROM
+            ATMS_01001110 Z1 , ATMS_TERMINAL_STATUS Z2, ATMS_ERROR_HANDLE_MNG Z3
+            WHERE Z1.JISA_CODE = Z2.JISA_CODE
+            AND Z1.BRANCH_CODE = Z2.BRANCH_CODE
+            AND Z1.CORNER_CODE = Z2.CORNER_CODE
+            AND Z1.TERMINAL_NO = Z2.TERMINAL_NO
+            AND Z1.JISA_CODE = Z3.JISA_CODE(+)
+            AND Z1.BRANCH_CODE = Z3.BRANCH_CODE(+)
+            AND Z1.CORNER_CODE = Z3.CORNER_CODE(+)
+            AND Z1.TERMINAL_NO = Z3.TERMINAL_NO(+)
+            AND Z1.ERROR_DATETIME = Z3.ERROR_DATETIME(+)
+            <if test="jisaCode != null">
+                AND Z1.JISA_CODE = #{jisaCode}
+            </if>
+              <if test="branchCode != null">
+                  AND Z1.BRANCH_CODE = #{branchCode}
+              </if>
+              <if test="cornerCode != null">
+                  AND Z1.CORNER_CODE = #{cornerCode}
+              </if>
+              <if test="terminalNo != null">
+                  AND Z1.TERMINAL_NO = #{terminalNo}
+              </if>
+            <if test="errorType != null">
+                AND Z1.ERROR_TYPE = #{errorType}
+            </if>
+              <if test="startDate != null and endDate != null">
+                 AND Z1.ERROR_DATETIME BETWEEN #{startDate} AND #{endDate}
+              </if>
+            ORDER BY  Z1.ERROR_DATETIME DESC
+        )
+        <where>
+            <if test="txId != null">
+                txId = #{txId}
+            </if>
+        </where>
+    </select>
+
+    <select id="findOne" resultType="sh01001110" parameterType="sh01001110" statementType="PREPARED">
+        SELECT
+                Z1.ERROR_DATETIME AS errorDatetime,
+                Z2.ERROR_DATETIME AS errorDatetime1,
+                Z1.JISA_CODE AS jisaCode,
+                Z1.BRANCH_CODE AS branchCode,
+                Z1.BRANCH_NAME AS branchName,
+                Z1.BRANCH_TEL AS branchTel,
+                Z1.CORNER_CODE AS cornerCode,
+                Z1.CORNER_NAME AS cornerName,
+                Z1.TERMINAL_NO AS terminalNo,
+                Z1.PLACE_GUBUN AS placeGubun,
+                Z1.OPER_TIME_GUBUN AS operTimeGubun,
+                Z1.RUNTIME AS runtime,
+                Z1.PROD_SERIAL_NO AS prodSerialNo,
+                Z1.TERMINAL_CORP_CODE AS terminalCorpCode,
+                Z1.MODEL_CODE AS modelCode,
+                Z1.PROGRESS_STATUS AS progressStatus,
+                Z1.STEXT_GUBUN AS stextGubun,
+                Z1.TERMINAL_ERROR1 AS terminalError1,
+                Z1.TERMINAL_ERROR1 AS terminalError2,
+                Z1.TOTAL_CLASSIFY_CODE AS totalClassifyCode,
+                Z1.ERROR_TYPE AS errorType,
+                Z2.CASH_PART_STATUS AS cashPartStatus,
+                Z2.CHECK_PART_STATUS AS checkPartStatus,
+                Z2.PORTFOLIO_PART_STATUS AS portfolioPartStatus,
+                Z2.JRNL_PART_STATUS AS jrnlPartStatus,
+                Z2.RTRVL_BOX_STATUS AS rtrvlBoxStatus,
+                Z2.CARD_PART_STATUS AS cardPartStatus,
+                Z2.BNKB_PART_STATUS AS bnkbPartStatus,
+                Z2.GIRO_PART_STATUS AS giroPartStatus,
+                Z2.SUSPEND_STATUS AS suspendStatus,
+                Z2.HW_ERROR_STATUS AS hwErrorStatus,
+                Z2.MAINTENANCE_STATUS AS maintenanceStatus,
+                Z2.VERSION AS version,
+                Z2.ENABLE_DES_BOARD AS enableDesBoard,
+                Z2.ENABLE_IC_CARD AS enableIcCard,
+                Z2.ENABLE_EMV AS enableEmv,
+                Z2.ENABLE_IR AS enableIr,
+                Z2.ENABLE_RF AS enableRf,
+                Z2.ENABLE_FINGERPRINT AS enableFingerprint,
+                Z2.ENCRYPTION_STATUS AS encryptionStatus,
+                Z2.TERMINAL_INFO AS terminalInfo,
+                Z2.ATMS_TERMINAL_NO AS atmsTerminalNo,
+                Z2.CASH_PART_STATUS_50K_WON AS cashPartStatus50kWon,
+                Z2.ATMC_EXCCLC_TERMINAL_ERROR AS atmcExcclcTerminalError,
+                Z2.ATMC_EXCCLC_EXEC_RESULT AS atmcExcclcExecResult,
+                Z2.TERMINAL_VER_INFO AS terminalVerInfo,
+                Z2.CARD_ISSUED_TERMINAL_STATUS AS cardIssuedTerminalStatus,
+                Z2.ID_SCANNER_STATUS AS idScannerStatus,
+                Z2.BIO_SCANNER_STATUS AS bioScannerStatus,
+                Z2.SCRTY_CARD_HIGHEND_ATM_ONLY AS scrtyCardHighendAtmOnly,
+                Z2.CARD_STYLE_OTP AS cardStyleOtp,
+                Z2.S20_GENERAL AS s20General,
+                Z2.S20_FRPY AS s20Frpy,
+                Z2.SLINE_GENERAL AS slineGeneral,
+                Z2.SLINE_FRPY AS slineFrpy,
+                Z2.FOURTUNE_GENERAL AS fourtuneGeneral,
+                Z2.FOURTUNE_FRPY AS fourtuneFrpy,
+                Z2.RCPPAY_BNKB AS rcppayBnkb,
+                Z3.SECURITY_CORP AS securityCorp,
+                Z3.SECURITY_CORP_CONTRACT_NO AS securityCorpContractNo,
+                Z3.BOOTH_CORP AS boothCorp,
+                Z3.BOOTH_TYPE AS boothType,
+                Z3.INTERCOM_NO AS intercomNo,
+                Z3.TERMINAL_LOCATION AS terminalLocation,
+                Z3.COMM_OFFICE AS commOffice,
+                Z3.INTERNET_CLASSIFY AS internetClassify,
+                Z3.MNG_CHANNEL AS mngChannel
+            FROM
+                ATMS_01001110 Z1 , (
+                                    SELECT  ZZ1.ERROR_DATETIME,
+                                            ZZ1.JISA_CODE,
+                                            ZZ1.BRANCH_CODE,
+                                            ZZ1.BRANCH_NAME,
+                                            ZZ1.BRANCH_TEL,
+                                            ZZ1.CORNER_CODE,
+                                            ZZ1.CORNER_NAME,
+                                            ZZ1.TERMINAL_NO,
+                                            ZZ1.PLACE_GUBUN,
+                                            ZZ1.OPER_TIME_GUBUN,
+                                            ZZ1.RUNTIME,
+                                            ZZ1.PROD_SERIAL_NO,
+                                            ZZ1.TERMINAL_CORP_CODE,
+                                            ZZ1.MODEL_CODE,
+                                            ZZ1.PROGRESS_STATUS,
+                                            ZZ1.STEXT_GUBUN,
+                                            ZZ1.TERMINAL_ERROR1,
+                                            ZZ1.TERMINAL_ERROR2,
+                                            ZZ1.TOTAL_CLASSIFY_CODE,
+                                            ZZ1.ERROR_TYPE,
+                                            ZZ1.CASH_PART_STATUS,
+                                            ZZ1.CHECK_PART_STATUS,
+                                            ZZ1.PORTFOLIO_PART_STATUS,
+                                            ZZ1.JRNL_PART_STATUS,
+                                            ZZ1.RTRVL_BOX_STATUS,
+                                            ZZ1.CARD_PART_STATUS,
+                                            ZZ1.BNKB_PART_STATUS,
+                                            ZZ1.GIRO_PART_STATUS,
+                                            ZZ1.SUSPEND_STATUS,
+                                            ZZ1.HW_ERROR_STATUS,
+                                            ZZ1.MAINTENANCE_STATUS,
+                                            ZZ1.VERSION,
+                                            ZZ1.ENABLE_DES_BOARD,
+                                            ZZ1.ENABLE_IC_CARD,
+                                            ZZ1.ENABLE_EMV,
+                                            ZZ1.ENABLE_IR,
+                                            ZZ1.ENABLE_RF,
+                                            ZZ1.ENABLE_FINGERPRINT,
+                                            ZZ1.ENCRYPTION_STATUS,
+                                            ZZ1.TERMINAL_INFO,
+                                            ZZ1.ATMS_TERMINAL_NO,
+                                            ZZ1.CASH_PART_STATUS_50K_WON,
+                                            ZZ1.ATMC_EXCCLC_TERMINAL_ERROR,
+                                            ZZ1.ATMC_EXCCLC_EXEC_RESULT,
+                                            ZZ1.TERMINAL_VER_INFO,
+                                            ZZ1.CARD_ISSUED_TERMINAL_STATUS,
+                                            ZZ1.ID_SCANNER_STATUS,
+                                            ZZ1.BIO_SCANNER_STATUS,
+                                            ZZ1.SCRTY_CARD_HIGHEND_ATM_ONLY,
+                                            ZZ1.CARD_STYLE_OTP,
+                                            ZZ1.S20_GENERAL,
+                                            ZZ1.S20_FRPY,
+                                            ZZ1.SLINE_GENERAL,
+                                            ZZ1.SLINE_FRPY,
+                                            ZZ1.FOURTUNE_GENERAL,
+                                            ZZ1.FOURTUNE_FRPY,
+                                            ZZ1.RCPPAY_BNKB
+                                    FROM (
+                                            SELECT ERROR_DATETIME,
+                                                JISA_CODE,
+                                                BRANCH_CODE,
+                                                BRANCH_NAME,
+                                                BRANCH_TEL,
+                                                CORNER_CODE,
+                                                CORNER_NAME,
+                                                TERMINAL_NO,
+                                                PLACE_GUBUN,
+                                                OPER_TIME_GUBUN,
+                                                RUNTIME,
+                                                PROD_SERIAL_NO,
+                                                TERMINAL_CORP_CODE,
+                                                MODEL_CODE,
+                                                PROGRESS_STATUS,
+                                                STEXT_GUBUN,
+                                                TERMINAL_ERROR1,
+                                                TERMINAL_ERROR2,
+                                                TOTAL_CLASSIFY_CODE,
+                                                ERROR_TYPE,
+                                                CASH_PART_STATUS,
+                                                CHECK_PART_STATUS,
+                                                PORTFOLIO_PART_STATUS,
+                                                JRNL_PART_STATUS,
+                                                RTRVL_BOX_STATUS,
+                                                CARD_PART_STATUS,
+                                                BNKB_PART_STATUS,
+                                                GIRO_PART_STATUS,
+                                                SUSPEND_STATUS,
+                                                HW_ERROR_STATUS,
+                                                MAINTENANCE_STATUS,
+                                                VERSION,
+                                                ENABLE_DES_BOARD,
+                                                ENABLE_IC_CARD,
+                                                ENABLE_EMV,
+                                                ENABLE_IR,
+                                                ENABLE_RF,
+                                                ENABLE_FINGERPRINT,
+                                                ENCRYPTION_STATUS,
+                                                TERMINAL_INFO,
+                                                ATMS_TERMINAL_NO,
+                                                CASH_PART_STATUS_50K_WON,
+                                                ATMC_EXCCLC_TERMINAL_ERROR,
+                                                ATMC_EXCCLC_EXEC_RESULT,
+                                                TERMINAL_VER_INFO,
+                                                CARD_ISSUED_TERMINAL_STATUS,
+                                                ID_SCANNER_STATUS,
+                                                BIO_SCANNER_STATUS,
+                                                SCRTY_CARD_HIGHEND_ATM_ONLY,
+                                                CARD_STYLE_OTP,
+                                                S20_GENERAL,
+                                                S20_FRPY,
+                                                SLINE_GENERAL,
+                                                SLINE_FRPY,
+                                                FOURTUNE_GENERAL,
+                                                FOURTUNE_FRPY,
+                                                RCPPAY_BNKB,
+                                                ROW_NUMBER() OVER(PARTITION BY JISA_CODE,BRANCH_CODE,CORNER_CODE,TERMINAL_NO ORDER BY ERROR_DATETIME DESC) AS rnum
+                                            FROM
+                                                ATMS_01001110
+                                            WHERE  BRANCH_CODE = #{branchCode}
+                                              AND   CORNER_CODE = #{cornerCode}
+                                              AND   TERMINAL_NO = #{terminalNo}
+                                              AND  STEXT_GUBUN = '1'
+                                        ) ZZ1
+                                    WHERE rnum  = 1
+                                ) Z2, ATMS_TERMINAL_STATUS Z3
+            WHERE Z1.BRANCH_CODE = Z2.BRANCH_CODE(+)
+              AND Z1.CORNER_CODE = Z2.CORNER_CODE(+)
+              AND Z1.TERMINAL_NO = Z2.TERMINAL_NO(+)
+              AND Z1.BRANCH_CODE = Z3.BRANCH_CODE
+              AND Z1.CORNER_CODE = Z3.CORNER_CODE
+              AND Z1.TERMINAL_NO = Z3.TERMINAL_NO
+              AND Z1.ERROR_DATETIME = #{errorDatetime}
+              AND Z1.BRANCH_CODE = #{branchCode}
+              AND Z1.CORNER_CODE = #{cornerCode}
+              AND Z1.TERMINAL_NO = #{terminalNo}
+    </select>
+
+   <update id="delete" parameterType="sh01001110" statementType="PREPARED">
+        DELETE FROM
+            ATMS_01001110
+        WHERE
+            ERROR_DATETIME = #{errorDatetime}, BRANCH_CODE = #{branchCode}, CORNER_CODE = #{cornerCode}, TERMINAL_NO = #{terminalNo}
+    </update>
+
+   <update id="update" parameterType="sh01001110" statementType="PREPARED">
+        UPDATE ATMS_01001110
+        SET
+            BRANCH_NAME = #{branchName},
+            BRANCH_TEL = #{branchTel},
+            CORNER_NAME = #{cornerName},
+            PLACE_GUBUN = #{placeGubun},
+            OPER_TIME_GUBUN = #{operTimeGubun},
+            RUNTIME = #{runtime},
+            PROD_SERIAL_NO = #{prodSerialNo},
+            DEVICE_CORP_CODE = #{deviceCorpCode},
+            MODEL_CODE = #{modelCode},
+            PROGRESS_STATUS = #{progressStatus},
+            STEXT_GUBUN = #{stextGubun},
+            DEVICE_ERROR1 = #{deviceError1},
+            DEVICE_ERROR2 = #{deviceError2},
+            TOTAL_CLASSIFY_CODE = #{totalClassifyCode},
+            ERROR_TYPE = #{errorType},
+            CASH_PART_STATUS = #{cashPartStatus},
+            CHECK_PART_STATUS = #{checkPartStatus},
+            PORTFOLIO_PART_STATUS = #{portfolioPartStatus},
+            JRNL_PART_STATUS = #{jrnlPartStatus},
+            RTRVL_BOX_STATUS = #{rtrvlBoxStatus},
+            CARD_PART_STATUS = #{cardPartStatus},
+            BNKB_PART_STATUS = #{bnkbPartStatus},
+            GIRO_PART_STATUS = #{giroPartStatus},
+            SUSPEND_STATUS = #{suspendStatus},
+            HW_ERROR_STATUS = #{hwErrorStatus},
+            MAINTENANCE_STATUS = #{maintenanceStatus},
+            VERSION = #{version},
+            ENABLE_DES_BOARD = #{enableDesBoard},
+            ENABLE_IC_CARD = #{enableIcCard},
+            ENABLE_EMV = #{enableEmv},
+            ENABLE_IR = #{enableIr},
+            ENABLE_RF = #{enableRf},
+            ENABLE_FINGERPRINT = #{enableFingerprint},
+            ENCRYPTION_STATUS = #{encryptionStatus},
+            DEVICE_INFO = #{deviceInfo},
+            ATMS_DEVICE_NO = #{atmsDeviceNo},
+            CASH_PART_STATUS_50K_WON = #{cashPartStatus50kWon},
+            ATMC_EXCCLC_DEVICE_ERROR = #{atmcExcclcDeviceError},
+            ATMC_EXCCLC_EXEC_RESULT = #{atmcExcclcExecResult},
+            DEVICE_VER_INFO = #{deviceVerInfo},
+            CARD_ISSUED_DEVICE_STATUS = #{cardIssuedDeviceStatus},
+            ID_SCANNER_STATUS = #{idScannerStatus},
+            BIO_SCANNER_STATUS = #{bioScannerStatus},
+            SCRTY_CARD_HIGHEND_ATM_ONLY = #{scrtyCardHighendAtmOnly},
+            CARD_STYLE_OTP = #{cardStyleOtp},
+            S20_GENERAL = #{s20General},
+            S20_FRPY = #{s20Frpy},
+            SLINE_GENERAL = #{slineGeneral},
+            SLINE_FRPY = #{slineFrpy},
+            FOURTUNE_GENERAL = #{fourtuneGeneral},
+            FOURTUNE_FRPY = #{fourtuneFrpy},
+            RCPPAY_BNKB = #{rcppayBnkb}
+        WHERE
+            ERROR_DATETIME = #{errorDatetime}, BRANCH_CODE = #{branchCode}, CORNER_CODE = #{cornerCode}, TERMINAL_NO = #{terminalNo}
+    </update>
+
+   <update id="insert" parameterType="sh01001110" statementType="PREPARED">
+        INSERT INTO ATMS_01001110 (
+            ERROR_DATETIME,
+            BRANCH_CODE,
+            BRANCH_NAME,
+            BRANCH_TEL,
+            CORNER_CODE,
+            CORNER_NAME,
+            TERMINAL_NO,
+            PLACE_GUBUN,
+            OPER_TIME_GUBUN,
+            RUNTIME,
+            PROD_SERIAL_NO,
+            DEVICE_CORP_CODE,
+            MODEL_CODE,
+            PROGRESS_STATUS,
+            STEXT_GUBUN,
+            DEVICE_ERROR1,
+            DEVICE_ERROR2,
+            TOTAL_CLASSIFY_CODE,
+            ERROR_TYPE,
+            CASH_PART_STATUS,
+            CHECK_PART_STATUS,
+            PORTFOLIO_PART_STATUS,
+            JRNL_PART_STATUS,
+            RTRVL_BOX_STATUS,
+            CARD_PART_STATUS,
+            BNKB_PART_STATUS,
+            GIRO_PART_STATUS,
+            SUSPEND_STATUS,
+            HW_ERROR_STATUS,
+            MAINTENANCE_STATUS,
+            VERSION,
+            ENABLE_DES_BOARD,
+            ENABLE_IC_CARD,
+            ENABLE_EMV,
+            ENABLE_IR,
+            ENABLE_RF,
+            ENABLE_FINGERPRINT,
+            ENCRYPTION_STATUS,
+            DEVICE_INFO,
+            ATMS_DEVICE_NO,
+            CASH_PART_STATUS_50K_WON,
+            ATMC_EXCCLC_DEVICE_ERROR,
+            ATMC_EXCCLC_EXEC_RESULT,
+            DEVICE_VER_INFO,
+            CARD_ISSUED_DEVICE_STATUS,
+            ID_SCANNER_STATUS,
+            BIO_SCANNER_STATUS,
+            SCRTY_CARD_HIGHEND_ATM_ONLY,
+            CARD_STYLE_OTP,
+            S20_GENERAL,
+            S20_FRPY,
+            SLINE_GENERAL,
+            SLINE_FRPY,
+            FOURTUNE_GENERAL,
+            FOURTUNE_FRPY,
+            RCPPAY_BNKB
+        ) VALUES (
+            #{errorDatetime},
+            #{branchCode},
+            #{branchName},
+            #{branchTel},
+            #{cornerCode},
+            #{cornerName},
+            #{terminalNo},
+            #{placeGubun},
+            #{operTimeGubun},
+            #{runtime},
+            #{prodSerialNo},
+            #{deviceCorpCode},
+            #{modelCode},
+            #{progressStatus},
+            #{stextGubun},
+            #{deviceError1},
+            #{deviceError2},
+            #{totalClassifyCode},
+            #{errorType},
+            #{cashPartStatus},
+            #{checkPartStatus},
+            #{portfolioPartStatus},
+            #{jrnlPartStatus},
+            #{rtrvlBoxStatus},
+            #{cardPartStatus},
+            #{bnkbPartStatus},
+            #{giroPartStatus},
+            #{suspendStatus},
+            #{hwErrorStatus},
+            #{maintenanceStatus},
+            #{version},
+            #{enableDesBoard},
+            #{enableIcCard},
+            #{enableEmv},
+            #{enableIr},
+            #{enableRf},
+            #{enableFingerprint},
+            #{encryptionStatus},
+            #{deviceInfo},
+            #{atmsDeviceNo},
+            #{cashPartStatus50kWon},
+            #{atmcExcclcDeviceError},
+            #{atmcExcclcExecResult},
+            #{deviceVerInfo},
+            #{cardIssuedDeviceStatus},
+            #{idScannerStatus},
+            #{bioScannerStatus},
+            #{scrtyCardHighendAtmOnly},
+            #{cardStyleOtp},
+            #{s20General},
+            #{s20Frpy},
+            #{slineGeneral},
+            #{slineFrpy},
+            #{fourtuneGeneral},
+            #{fourtuneFrpy},
+            #{rcppayBnkb}
+        )
+    </update>
+</mapper>

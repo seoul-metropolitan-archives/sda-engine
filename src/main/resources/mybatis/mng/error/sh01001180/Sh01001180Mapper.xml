@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bgf.shbank.domain.mng.error.sh01001180.Sh01001180Mapper">
+
+    <select id="findAll" resultType="sh01001180" parameterType="sh01001180" statementType="PREPARED">
+        SELECT
+            ERROR_DATETIME AS errorDatetime,
+            MNG_STND_DATE AS mngStndDate,
+            MNG_STND_CRITIC AS mngStndCritic,
+            ERROR_COUNT AS errorCount,
+            JISA_CODE AS jisaCode,
+            BRANCH_CODE AS branchCode,
+            TERMINAL_NO AS terminalNo,
+            CORNER_CODE AS cornerCode,
+            MODEL_CODE AS modelCode,
+            CORNER_NAME AS cornerName,
+            UNUSL AS unusl,
+            CALLEE_SEQ_NO AS calleeSeqNo,
+            ERROR_METHOD AS errorMethod,
+            ERROR_TYPE AS errorType,
+            TOTAL_CLASSIFY_CODE AS totalClassifyCode,
+            TERMINAL_ERROR1 AS terminalError1,
+            TERMINAL_ERROR2 AS terminalError2
+        FROM
+            ATMS_01001180
+    </select>
+
+    <select id="findOne" resultType="sh01001180" parameterType="sh01001180" statementType="PREPARED">
+        SELECT
+            ERROR_DATETIME AS errorDatetime,
+            MNG_STND_DATE AS mngStndDate,
+            MNG_STND_CRITIC AS mngStndCritic,
+            ERROR_COUNT AS errorCount,
+            JISA_CODE AS jisaCode,
+            BRANCH_CODE AS branchCode,
+            TERMINAL_NO AS terminalNo,
+            CORNER_CODE AS cornerCode,
+            MODEL_CODE AS modelCode,
+            CORNER_NAME AS cornerName,
+            UNUSL AS unusl,
+            CALLEE_SEQ_NO AS calleeSeqNo,
+            ERROR_METHOD AS errorMethod,
+            ERROR_TYPE AS errorType,
+            TOTAL_CLASSIFY_CODE AS totalClassifyCode,
+            TERMINAL_ERROR1 AS terminalError1,
+            TERMINAL_ERROR2 AS terminalError2
+        FROM
+            ATMS_01001180
+        WHERE
+            ERROR_DATETIME = #{errorDatetime}, BRANCH_CODE = #{branchCode}, TERMINAL_NO = #{terminalNo}, CORNER_CODE = #{cornerCode}
+    </select>
+
+   <update id="delete" parameterType="sh01001180" statementType="PREPARED">
+        DELETE FROM
+            ATMS_01001180
+        WHERE
+            ERROR_DATETIME = #{errorDatetime}, BRANCH_CODE = #{branchCode}, TERMINAL_NO = #{terminalNo}, CORNER_CODE = #{cornerCode}
+    </update>
+
+   <update id="update" parameterType="sh01001180" statementType="PREPARED">
+        UPDATE ATMS_01001180
+        SET
+            MNG_STND_DATE = #{mngStndDate},
+            MNG_STND_CRITIC = #{mngStndCritic},
+            ERROR_COUNT = #{errorCount},
+            JISA_CODE = #{jisaCode},
+            MODEL_CODE = #{modelCode},
+            CORNER_NAME = #{cornerName},
+            UNUSL = #{unusl},
+            CALLEE_SEQ_NO = #{calleeSeqNo},
+            ERROR_METHOD = #{errorMethod},
+            ERROR_TYPE = #{errorType},
+            TOTAL_CLASSIFY_CODE = #{totalClassifyCode},
+            TERMINAL_ERROR1 = #{terminalError1},
+            TERMINAL_ERROR2 = #{terminalError2}
+        WHERE
+            ERROR_DATETIME = #{errorDatetime}, BRANCH_CODE = #{branchCode}, TERMINAL_NO = #{terminalNo}, CORNER_CODE = #{cornerCode}
+    </update>
+
+   <update id="insert" parameterType="sh01001180" statementType="PREPARED">
+        INSERT INTO ATMS_01001180 (
+            ERROR_DATETIME,
+            MNG_STND_DATE,
+            MNG_STND_CRITIC,
+            ERROR_COUNT,
+            JISA_CODE,
+            BRANCH_CODE,
+            TERMINAL_NO,
+            CORNER_CODE,
+            MODEL_CODE,
+            CORNER_NAME,
+            UNUSL,
+            CALLEE_SEQ_NO,
+            ERROR_METHOD,
+            ERROR_TYPE,
+            TOTAL_CLASSIFY_CODE,
+            TERMINAL_ERROR1,
+            TERMINAL_ERROR2
+        ) VALUES (
+            #{errorDatetime},
+            #{mngStndDate},
+            #{mngStndCritic},
+            #{errorCount},
+            #{jisaCode},
+            #{branchCode},
+            #{terminalNo},
+            #{cornerCode},
+            #{modelCode},
+            #{cornerName},
+            #{unusl},
+            #{calleeSeqNo},
+            #{errorMethod},
+            #{errorType},
+            #{totalClassifyCode},
+            #{terminalError1},
+            #{terminalError2}
+        )
+    </update>
+</mapper>

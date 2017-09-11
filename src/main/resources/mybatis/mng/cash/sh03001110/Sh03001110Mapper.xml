@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bgf.shbank.domain.mng.cash.sh03001110.Sh03001110Mapper">
+
+    <select id="findAll" resultType="sh03001110" parameterType="sh03001110" statementType="PREPARED">
+        SELECT
+            A.JISA_CODE AS jisaCode,
+            A.BRANCH_CODE AS branchCode,
+            A.TERMINAL_NO AS terminalNo,
+            B.REFER_DATE AS referDate,
+            B.CASH_WITHDRAW_AMT AS cashWithdrawAmt,
+            B.CASH_DEPOSIT_AMT AS cashDepositAmt,
+            B.CASH_AMT AS cashAmt,
+            B.CHECK_WITHDRAW_AMT AS checkWithdrawAmt,
+            B.CHECK_DEPOSIT_AMT AS checkDepositAmt,
+            B.CHECK_GIVE_ENABLE_COUNT AS checkGiveEnableCount,
+            B.CASH_50K_GIVE_ENABLE_COUNT AS cash50kGiveEnableCount,
+            NVL2(B.REFER_DATE,NVL2(C.TX_ID,'미확정','확정'),'') AS sijeConfirm,
+            B.TX_ID AS txId,
+            B.STEXT_SEND_GUBUN as stextSendGubun,
+            D.STEXT_GUBUN AS stextGubun,
+            D.TOTAL_CLASSIFY_CODE AS totalClassifyCode,
+            D.ERROR_TYPE AS errorType ,
+            D.OPEN_DATETIME AS openDatetime
+        FROM
+            (SELECT * FROM ATMS_TERMINAL_STATUS
+                <where>
+                    <if test="jisaCode != null"> JISA_CODE = #{jisaCode} </if>
+                    <if test="branchCode != null"> AND BRANCH_CODE = #{branchCode} </if>
+                    <if test="terminalNo != null"> AND TERMINAL_NO = #{terminalNo} </if>
+                </where>
+            ) A
+            LEFT OUTER JOIN ATMS_03001110 B
+                ON B.JISA_CODE = A.JISA_CODE
+                AND B.BRANCH_CODE = A.BRANCH_CODE
+                AND B.TERMINAL_NO = A.TERMINAL_NO
+                AND B.REFER_DATE BETWEEN #{startDate} AND #{endDate}
+            LEFT OUTER JOIN ATMS_03001210 C
+                ON C.JISA_CODE = A.JISA_CODE
+                AND C.BRANCH_CODE = A.BRANCH_CODE
+                AND C.TERMINAL_NO = A.TERMINAL_NO
+            LEFT OUTER JOIN (
+                SELECT Z2.ERROR_DATETIME,
+                Z2.JISA_CODE,
+                Z2.BRANCH_CODE,
+                Z2.TERMINAL_NO,
+                Z2.STEXT_GUBUN,
+                Z2.TOTAL_CLASSIFY_CODE,
+                Z2.ERROR_TYPE,
+                (SELECT Z1.ERROR_DATETIME
+                FROM (
+                SELECT ERROR_DATETIME,
+                JISA_CODE,
+                BRANCH_CODE,
+                TERMINAL_NO,
+                STEXT_GUBUN,
+                TOTAL_CLASSIFY_CODE,
+                ERROR_TYPE,
+                ROW_NUMBER() OVER(PARTITION BY JISA_CODE,BRANCH_CODE,CORNER_CODE,TERMINAL_NO ORDER BY ERROR_DATETIME DESC) AS rnum
+                FROM ATMS_01001110
+                WHERE STEXT_GUBUN = '1'
+                ) Z1 WHERE rnum = 1
+                AND Z1.JISA_CODE = Z2.JISA_CODE
+                AND Z1.BRANCH_CODE = Z2.BRANCH_CODE
+                AND Z1.TERMINAL_NO = Z2.TERMINAL_NO
+                ) OPEN_DATETIME
+                FROM (
+                SELECT ERROR_DATETIME,
+                JISA_CODE,
+                BRANCH_CODE,
+                TERMINAL_NO,
+                STEXT_GUBUN,
+                TOTAL_CLASSIFY_CODE,
+                ERROR_TYPE,
+                ROW_NUMBER() OVER(PARTITION BY JISA_CODE,BRANCH_CODE,CORNER_CODE,TERMINAL_NO ORDER BY ERROR_DATETIME DESC) AS rnum
+                FROM ATMS_01001110
+                ) Z2
+                WHERE Z2.rnum =1
+                ) D
+                ON D.JISA_CODE = A.JISA_CODE
+                AND D.BRANCH_CODE = A.BRANCH_CODE
+                AND D.TERMINAL_NO = A.TERMINAL_NO
+                ORDER BY  B.REFER_DATE DESC
+    </select>
+
+    <select id="findOne" resultType="sh03001110" parameterType="sh03001110" statementType="PREPARED">
+        SELECT
+        A.TX_ID AS txId,
+        NVL2((SELECT TX_ID FROM ATMS_03001210 WHERE TX_ID = A.REFER_DATE),'미확정','확정') AS sijeConfirm,
+        A.REFER_DATE AS referDate,
+        A.JISA_CODE AS jisaCode,
+        A.BRANCH_CODE AS branchCode,
+        A.TERMINAL_NO AS terminalNo,
+        A.CASH_WITHDRAW_AMT AS cashWithdrawAmt,
+        A.CASH_DEPOSIT_AMT AS cashDepositAmt,
+        A.CASH_AMT AS cashAmt,
+        A.CHECK_WITHDRAW_AMT AS checkWithdrawAmt,
+        A.CHECK_DEPOSIT_AMT AS checkDepositAmt,
+        A.CHECK_GIVE_ENABLE_COUNT AS checkGiveEnableCount,
+        A.CASH_50K_GIVE_ENABLE_COUNT AS cash50kGiveEnableCount
+        FROM ATMS_03001110 A, ATMS_03001210 B
+        WHERE A.JISA_CODE = B.JISA_CODE(+)
+        AND A.BRANCH_CODE = B.BRANCH_CODE(+)
+        AND A.TERMINAL_NO = B.TERMINAL_NO(+)
+        <if test="referDate != null"> AND A.REFER_DATE = #{referDate} </if>
+        <if test="jisaCode != null"> AND A.JISA_CODE = #{jisaCode} </if>
+        <if test="branchCode != null"> AND A.BRANCH_CODE = #{branchCode} </if>
+        <if test="terminalNo != null"> AND A.TERMINAL_NO = #{terminalNo} </if>
+    </select>
+
+   <update id="delete" parameterType="sh03001110" statementType="PREPARED">
+        DELETE FROM
+            ATMS_03001110
+        WHERE
+            BRANCH_CODE = #{branchCode}, TERMINAL_NO = #{terminalNo}
+    </update>
+
+   <update id="update" parameterType="sh03001110" statementType="PREPARED">
+        UPDATE ATMS_03001110
+        SET
+            TX_ID = #{txId},
+            JISA_CODE = #{jisaCode},
+            CASH_WITHDRAW_AMT = #{cashWithdrawAmt},
+            CASH_DEPOSIT_AMT = #{cashDepositAmt},
+            CASH_AMT = #{cashAmt},
+            CHECK_WITHDRAW_AMT = #{checkWithdrawAmt},
+            CHECK_DEPOSIT_AMT = #{checkDepositAmt},
+            CHECK_GIVE_ENABLE_COUNT = #{checkGiveEnableCount},
+            CASH_50K_GIVE_ENABLE_COUNT = #{cash50kGiveEnableCount}
+        WHERE
+            BRANCH_CODE = #{branchCode}, TERMINAL_NO = #{terminalNo}
+    </update>
+
+   <update id="insert" parameterType="sh03001110" statementType="PREPARED">
+        INSERT INTO ATMS_03001110 (
+            TX_ID,
+            JISA_CODE,
+            BRANCH_CODE,
+            TERMINAL_NO,
+            CASH_WITHDRAW_AMT,
+            CASH_DEPOSIT_AMT,
+            CASH_AMT,
+            CHECK_WITHDRAW_AMT,
+            CHECK_DEPOSIT_AMT,
+            CHECK_GIVE_ENABLE_COUNT,
+            CASH_50K_GIVE_ENABLE_COUNT
+        ) VALUES (
+            #{txId},
+            #{jisaCode},
+            #{branchCode},
+            #{terminalNo},
+            #{cashWithdrawAmt},
+            #{cashDepositAmt},
+            #{cashAmt},
+            #{checkWithdrawAmt},
+            #{checkDepositAmt},
+            #{checkGiveEnableCount},
+            #{cash50kGiveEnableCount}
+        )
+    </update>
+</mapper>

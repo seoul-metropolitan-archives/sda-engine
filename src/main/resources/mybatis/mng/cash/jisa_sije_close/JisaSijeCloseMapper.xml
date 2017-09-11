@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bgf.shbank.domain.mng.cash.jisa_sije_close.JisaSijeCloseMapper">
+
+    <select id="findAll" resultType="jisaSijeClose" parameterType="jisaSijeClose" statementType="PREPARED">
+            SELECT
+                B.TX_ID AS txId ,
+                DECODE(B.CLOSE_DATE,NULL ,TO_TIMESTAMP(#{closeDate}),B.CLOSE_DATE) AS closeDate,
+                A.JISA_CODE AS jisaCode,
+                (SELECT JISA_SAFE_AMT FROM ATMS_JISA_SIJE_CLOSE
+                  WHERE CLOSE_DATE = (SELECT * FROM (SELECT CLOSE_DATE FROM ATMS_JISA_SIJE_CLOSE WHERE JISA_CODE = ATMS_JISA_SIJE_CLOSE.JISA_CODE AND CLOSE_DATE <![CDATA[< ]]> #{closeDate} ORDER BY CLOSE_DATE DESC) WHERE ROWNUM = 1  )
+                    AND JISA_CODE = A.JISA_CODE) AS prevDayReserveSije, --전일예비시재
+                B.THIS_DAY_CASH_DEPOSIT_AMT AS thisDayCashDepositAmt, -- 금일입금액
+                B.JISA_TO_SHINHAN_SEND_AMT AS jisaToShinhanSendAmt, -- 지사 > 신한
+                (SELECT SUM(ATMS_03001140_RANK_TX_ID.RTRVL_FUND)
+                   FROM (SELECT
+                           CLOSE_DATE,
+                           RTRVL_FUND,
+                           JISA_CODE
+                         FROM ATMS_03001140
+                         WHERE CLOSE_DATE = #{closeDate}) ATMS_03001140_RANK_TX_ID
+                   WHERE JISA_CODE = A.JISA_CODE) AS closeAmt, -- 금일마감금액 (단말기별 최종업데이트 항목의 합계)
+                B.UN_CHECK_AMT AS unCheckAmt, -- 미확인금액
+                B.SIJE_MISTAKE_AMT AS sijeMistakeAmt, -- 시재착오금
+                (SELECT SUM(CASH_SENDING_AMT + CASH_50K_SENDING_AMT) FROM ATMS_03001180 WHERE CASH_SENDING_DATE = #{closeDate} AND JISA_CODE = A.JISA_CODE) AS cashSendingAmt, -- 현송금액 (당일 현송금액 잔액)
+                (SELECT SUM(ADD_CASH_SENDING_AMT + ADD_CASH_50K_SENDING_AMT) FROM ATMS_03001160 WHERE CASH_SENDING_DATE = #{closeDate} AND JISA_CODE = A.JISA_CODE) AS addCashSendingAmt, -- 추가현송금액 (추가현송 합계)
+                B.JISA_SAFE_AMT AS jisaSafeAmt, -- 금고보관액
+                B.MEMO_CONTENT AS memoContent, -- 메모
+                B.USER_NM AS userNm -- 변경사용자
+            FROM
+                (SELECT DISTINCT JISA_CODE FROM ATMS_TERMINAL_STATUS ORDER BY JISA_CODE ASC) A
+                LEFT OUTER JOIN ATMS_JISA_SIJE_CLOSE B
+                  ON B.CLOSE_DATE = #{closeDate}
+                 AND B.JISA_CODE = A.JISA_CODE
+               ORDER BY A.JISA_CODE ASC
+    </select>
+
+    <select id="findOne" resultType="jisaSijeClose" parameterType="jisaSijeClose" statementType="PREPARED">
+        SELECT
+            TX_ID AS txId,
+            JISA_CODE AS jisaCode,
+            CLOSE_DATE AS closeDate,
+            PREV_DAY_RESERVE_SIJE AS prevDayReserveSije,
+            THIS_DAY_CASH_DEPOSIT_AMT AS thisDayCashDepositAmt,
+            CLOSE_AMT AS closeAmt,
+            SIJE_MISTAKE_AMT AS sijeMistakeAmt,
+            CASH_SENDING_AMT AS cashSendingAmt,
+            ADD_CASH_SENDING_AMT AS addCashSendingAmt,
+            JISA_SAFE_AMT AS jisaSafeAmt,
+            MEMO_CONTENT AS memoContent,
+            USER_NM AS userNm
+        FROM
+            ATMS_JISA_SIJE_CLOSE
+        WHERE
+            JISA_CODE = #{jisaCode}, CLOSE_DATE = #{closeDate}
+    </select>
+
+   <update id="delete" parameterType="jisaSijeClose" statementType="PREPARED">
+        DELETE FROM
+            ATMS_JISA_SIJE_CLOSE
+        WHERE
+            JISA_CODE = #{jisaCode}, CLOSE_DATE = #{closeDate}
+    </update>
+
+   <update id="update" parameterType="jisaSijeClose" statementType="PREPARED">
+        UPDATE ATMS_JISA_SIJE_CLOSE
+        SET
+            TX_ID = #{txId},
+            PREV_DAY_RESERVE_SIJE = #{prevDayReserveSije},
+            THIS_DAY_CASH_DEPOSIT_AMT = #{thisDayCashDepositAmt},
+            CLOSE_AMT = #{closeAmt},
+            SIJE_MISTAKE_AMT = #{sijeMistakeAmt},
+            CASH_SENDING_AMT = #{cashSendingAmt},
+            ADD_CASH_SENDING_AMT = #{addCashSendingAmt},
+            JISA_SAFE_AMT = #{jisaSafeAmt},
+            MEMO_CONTENT = #{memoContent},
+            USER_NM = #{userNm}
+        WHERE
+            JISA_CODE = #{jisaCode}, CLOSE_DATE = #{closeDate}
+    </update>
+
+   <update id="insert" parameterType="jisaSijeClose" statementType="PREPARED">
+        INSERT INTO ATMS_JISA_SIJE_CLOSE (
+            TX_ID,
+            JISA_CODE,
+            CLOSE_DATE,
+            PREV_DAY_RESERVE_SIJE,
+            THIS_DAY_CASH_DEPOSIT_AMT,
+            CLOSE_AMT,
+            SIJE_MISTAKE_AMT,
+            CASH_SENDING_AMT,
+            ADD_CASH_SENDING_AMT,
+            JISA_SAFE_AMT,
+            MEMO_CONTENT,
+            USER_NM
+        ) VALUES (
+            #{txId},
+            #{jisaCode},
+            #{closeDate},
+            #{prevDayReserveSije},
+            #{thisDayCashDepositAmt},
+            #{closeAmt},
+            #{sijeMistakeAmt},
+            #{cashSendingAmt},
+            #{addCashSendingAmt},
+            #{jisaSafeAmt},
+            #{memoContent},
+            #{userNm}
+        )
+    </update>
+</mapper>

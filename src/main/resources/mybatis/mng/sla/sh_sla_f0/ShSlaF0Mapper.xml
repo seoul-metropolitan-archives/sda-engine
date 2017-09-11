@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bgf.shbank.domain.mng.sla.sh_sla_f0.ShSlaF0Mapper">
+
+    <select id="findAll" resultType="shSlaF0" parameterType="shSlaF0" statementType="PREPARED">
+        SELECT
+            TX_ID AS txId,
+            ERROR_DATETIME AS errorDatetime,
+            CALLEE_CHASU AS calleeChasu,
+            CORP_CODE AS corpCode,
+            BRANCH_CODE AS branchCode,
+            BRANCH_NAME AS branchName,
+            CORNER_CODE AS cornerCode,
+            CORNER_NAME AS cornerName,
+            PLACE_GUBUN AS placeGubun,
+            REGION_GUBUN AS regionGubun,
+            TERMINAL_NO AS terminalNo,
+            CALLEE_GUBUN AS calleeGubun,
+            CALLEE_RESULT AS calleeResult,
+            CALLEE_REQ_DATETIME AS calleeReqDatetime,
+            ARRIVAL_DATETIME AS arrivalDatetime,
+            HANDLE_DATETIME AS handleDatetime,
+            RECOVER_DATETIME AS recoverDatetime,
+            ELAPSED_TIME AS elapsedTime,
+            ELAPSED_SECONDS AS elapsedSeconds,
+            ERROR_CONTENT AS errorContent,
+            MODEL_NAME AS modelName,
+            ACCEPT AS accept,
+            REFUSE_REASON AS refuseReason
+        FROM
+            ATMS_SLA_F0
+    </select>
+
+    <select id="findOne" resultType="shSlaF0" parameterType="shSlaF0" statementType="PREPARED">
+        SELECT
+            TX_ID AS txId,
+            ERROR_DATETIME AS errorDatetime,
+            CALLEE_CHASU AS calleeChasu,
+            CORP_CODE AS corpCode,
+            BRANCH_CODE AS branchCode,
+            BRANCH_NAME AS branchName,
+            CORNER_CODE AS cornerCode,
+            CORNER_NAME AS cornerName,
+            PLACE_GUBUN AS placeGubun,
+            REGION_GUBUN AS regionGubun,
+            TERMINAL_NO AS terminalNo,
+            CALLEE_GUBUN AS calleeGubun,
+            CALLEE_RESULT AS calleeResult,
+            CALLEE_REQ_DATETIME AS calleeReqDatetime,
+            ARRIVAL_DATETIME AS arrivalDatetime,
+            HANDLE_DATETIME AS handleDatetime,
+            RECOVER_DATETIME AS recoverDatetime,
+            ELAPSED_TIME AS elapsedTime,
+            ELAPSED_SECONDS AS elapsedSeconds,
+            ERROR_CONTENT AS errorContent,
+            MODEL_NAME AS modelName,
+            ACCEPT AS accept,
+            REFUSE_REASON AS refuseReason
+        FROM
+            ATMS_SLA_F0
+        WHERE
+            TX_ID = #{txId}, ERROR_DATETIME = #{errorDatetime}, CALLEE_CHASU = #{calleeChasu}
+    </select>
+
+   <update id="delete" parameterType="shSlaF0" statementType="PREPARED">
+        DELETE FROM
+            ATMS_SLA_F0
+        WHERE
+            TX_ID = #{txId}, ERROR_DATETIME = #{errorDatetime}, CALLEE_CHASU = #{calleeChasu}
+    </update>
+
+   <update id="update" parameterType="shSlaF0" statementType="PREPARED">
+        UPDATE ATMS_SLA_F0
+        SET
+            CORP_CODE = #{corpCode},
+            BRANCH_CODE = #{branchCode},
+            BRANCH_NAME = #{branchName},
+            CORNER_CODE = #{cornerCode},
+            CORNER_NAME = #{cornerName},
+            PLACE_GUBUN = #{placeGubun},
+            REGION_GUBUN = #{regionGubun},
+            TERMINAL_NO = #{terminalNo},
+            CALLEE_GUBUN = #{calleeGubun},
+            CALLEE_RESULT = #{calleeResult},
+            CALLEE_REQ_DATETIME = #{calleeReqDatetime},
+            ARRIVAL_DATETIME = #{arrivalDatetime},
+            HANDLE_DATETIME = #{handleDatetime},
+            RECOVER_DATETIME = #{recoverDatetime},
+            ELAPSED_TIME = #{elapsedTime},
+            ELAPSED_SECONDS = #{elapsedSeconds},
+            ERROR_CONTENT = #{errorContent},
+            MODEL_NAME = #{modelName},
+            ACCEPT = #{accept},
+            REFUSE_REASON = #{refuseReason}
+        WHERE
+            TX_ID = #{txId}, ERROR_DATETIME = #{errorDatetime}, CALLEE_CHASU = #{calleeChasu}
+    </update>
+
+   <update id="insert" parameterType="shSlaF0" statementType="PREPARED">
+        INSERT INTO ATMS_SLA_F0 (
+            TX_ID,
+            ERROR_DATETIME,
+            CALLEE_CHASU,
+            CORP_CODE,
+            BRANCH_CODE,
+            BRANCH_NAME,
+            CORNER_CODE,
+            CORNER_NAME,
+            PLACE_GUBUN,
+            REGION_GUBUN,
+            TERMINAL_NO,
+            CALLEE_GUBUN,
+            CALLEE_RESULT,
+            CALLEE_REQ_DATETIME,
+            ARRIVAL_DATETIME,
+            HANDLE_DATETIME,
+            RECOVER_DATETIME,
+            ELAPSED_TIME,
+            ELAPSED_SECONDS,
+            ERROR_CONTENT,
+            MODEL_NAME,
+            ACCEPT,
+            REFUSE_REASON
+        ) VALUES (
+            #{txId},
+            #{errorDatetime},
+            #{calleeChasu},
+            #{corpCode},
+            #{branchCode},
+            #{branchName},
+            #{cornerCode},
+            #{cornerName},
+            #{placeGubun},
+            #{regionGubun},
+            #{terminalNo},
+            #{calleeGubun},
+            #{calleeResult},
+            #{calleeReqDatetime},
+            #{arrivalDatetime},
+            #{handleDatetime},
+            #{recoverDatetime},
+            #{elapsedTime},
+            #{elapsedSeconds},
+            #{errorContent},
+            #{modelName},
+            #{accept},
+            #{refuseReason}
+        )
+    </update>
+</mapper>

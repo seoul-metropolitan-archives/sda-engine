@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout/empty}">
+<head>
+    <style>
+        .ax-body.login {
+            background: url([[@{${@environment.getProperty('config.background.login')}}]]) center center;
+        background-size: cover;
+        color: #ccc;
+        }
+        .ax5-ui-dialog .ax-dialog-body .ax-dialog-msg {
+            color: black;
+        }
+    </style>
+    <script type="text/javascript">
+        axboot.requireSession('[[@{${@environment.getProperty("config.sessionCookie")}}]]');
+
+        var fnObj = {
+            login: function () {
+
+                var userCd = $("#userCd").val();
+
+                var userPs = $("#userPs").val();
+                var userPs2 = $("#userPs2").val();
+
+                console.log('userPs :: ', userPs);
+                console.log('userPs2 :: ', userPs2);
+
+                if (userPs == '' || userPs2 == '') {
+                    axDialog.alert({
+                        title: '패스워드 공백',
+                        theme: "default",
+                        msg: '패스워드를 입력하세요.'
+                    });
+                }
+
+                if (userPs != userPs2) {
+                    axDialog.alert({
+                        title: '패스워드 불일치',
+                        theme: "default",
+                        msg: '패스워드가 동일하지 않습니다.'
+                    });
+                }
+
+                axboot.ajax({
+                    type: "GET",
+                    url: ["users"],
+                    data: {userCode: userCd, userPs: userPs, updatePassword: true},
+                    callback: function (res) {
+                        axboot.ajax({
+                            method: "POST",
+                            url: "/api/login",
+                            data: JSON.stringify({
+                                "userCd": userCd,
+                                "userPs": userPs
+                            }),
+                            callback: function (res) {
+                                location.href = "/login";
+                            },
+                            options: {
+                                nomask: false, apiType: "login",
+                                onError: function(err){
+                                    axDialog.alert({
+                                        title: '로그인 실패',
+                                        theme: "default",
+                                        msg: err.message
+                                    });
+                                }
+                            }
+                        });
+                    },
+                    options: {
+                        nomask: false, apiType: "login",
+                        onError: function(err){
+                            axDialog.alert({
+                                title: '비밀번호 설정 실패',
+                                theme: "default",
+                                msg: err.message
+                            });
+                        }
+                    }
+                });
+                return false;
+            }
+        };
+    </script>
+</head>
+
+<body layout:fragment="body" class="ax-body login">
+<table style="width:100%;height:100%;">
+    <tr>
+        <td align="center" valign="middle">
+            <div>
+                <img th:src="@{${@environment.getProperty('config.logo.login')}}" class="img-logo">
+            </div>
+
+            <div class="panel">
+                <div class="panel-heading" th:text="#{axboot.admin.change.password.guide.message(${userCd})}"/>
+                <div class="panel-body">
+                    <form onsubmit="return fnObj.login();" autocomplete="off">
+
+                        <div class="form-group">
+                            <label for="userPs" th:text="#{axboot.admin.password}"><i class="cqc-new-message"></i></label>
+                            <input type="password" name="userPs" id="userPs" class="form-control ime-false" placeholder="패스워드를 입력하세요"/>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="userPs2" th:text="#{axboot.admin.password.confirm}"><i class="cqc-key"></i></label>
+                            <input type="password" name="userPs2" id="userPs2" class="form-control ime-false" placeholder="패스워드를 입력하세요"/>
+                        </div>
+
+                        <input type="hidden" id="userCd" th:value="${userCd}"/>
+
+                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+
+                        <div class="ax-padding-box" style="text-align: right;">
+                            <button type="submit" class="btn">&nbsp;&nbsp;<span th:text="#{axboot.admin.change.password}" />&nbsp;&nbsp;</button>
+                        </div>
+
+                    </form>
+                </div>
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        <!-- <a href="#" th:text="#{axboot.admin.find.id}"></a>
+                         &nbsp;
+                         &nbsp;
+                         <a href="#" th:text="#{axboot.admin.find.password}"></a>-->
+                    </li>
+                </ul>
+            </div>
+
+            <div class="txt-copyrights" th:text="${@environment.getProperty('config.copyrights')}" />
+        </td>
+    </tr>
+</table>
+</body>
+
+</html>

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bgf.shbank.domain.mng.common.SearchTerminalMapper">
+    <select id="findAllTerminal" resultType="searchTerminalVO" parameterType="searchTerminalVO" statementType="PREPARED">
+        SELECT
+            JISA_CODE AS jisaCode,
+            (
+               SELECT NAME FROM ATMS_COMMON_CODE
+               WHERE GROUP_CD = 'JISA_CODE'
+                 AND CODE = JISA_CODE
+            ) AS jisaName,
+            BRANCH_CODE AS branchCode,
+            BRANCH_NAME AS branchName,
+            CORNER_CODE AS cornerCode,
+            CORNER_NAME AS cornerName,
+            TERMINAL_NO AS terminalNo
+        FROM
+            ATMS_TERMINAL_STATUS
+        <where>
+            <if test="jisaCode != null">
+                AND JISA_CODE = #{jisaCode}
+            </if>
+        </where>
+        ORDER BY JISA_CODE
+    </select>
+    <select id="findAllBranch" resultType="searchTerminalVO" parameterType="searchTerminalVO" statementType="PREPARED">
+        SELECT JISA_CODE AS jisaCode,
+                JISA_NAME AS jisaName,
+                BRANCH_CODE AS branchCode,
+                BRANCH_NAME AS branchName,
+                CORNER_CODE AS cornerCode,
+                CORNER_NAME AS cornerName,
+                TERMINAL_NO AS terminalNo
+          FROM (
+                SELECT
+                    JISA_CODE,
+                    (
+                    SELECT NAME
+                      FROM ATMS_COMMON_CODE
+                     WHERE GROUP_CD = 'JISA_CODE'
+                       AND CODE = JISA_CODE
+                    ) AS JISA_NAME,
+                    BRANCH_CODE,
+                    BRANCH_NAME,
+                    CORNER_CODE,
+                    CORNER_NAME,
+                    TERMINAL_NO,
+                    ROW_NUMBER() OVER(PARTITION BY JISA_CODE,BRANCH_CODE ORDER BY TERMINAL_NO) AS rnum
+                FROM
+                    ATMS_TERMINAL_STATUS
+        )WHERE rnum = 1
+        <if test="jisaCode != null">
+            AND JISA_CODE = #{jisaCode}
+        </if>
+    </select>
+    <select id="findAllCorner" resultType="searchTerminalVO" parameterType="searchTerminalVO" statementType="PREPARED">
+        SELECT JISA_CODE AS jisaCode,
+                JISA_NAME AS jisaName,
+                BRANCH_CODE AS branchCode,
+                BRANCH_NAME AS branchName,
+                CORNER_CODE AS cornerCode,
+                CORNER_NAME AS cornerName,
+                TERMINAL_NO AS terminalNo
+        FROM (
+                SELECT JISA_CODE,
+                      ( SELECT NAME
+                          FROM ATMS_COMMON_CODE
+                         WHERE GROUP_CD = 'JISA_CODE'
+                           AND CODE = JISA_CODE
+                       ) AS JISA_NAME,
+                        BRANCH_CODE,
+                        BRANCH_NAME,
+                        CORNER_CODE,
+                        CORNER_NAME,
+                        TERMINAL_NO,
+                        ROW_NUMBER() OVER(PARTITION BY JISA_CODE,BRANCH_CODE, CORNER_CODE ORDER BY TERMINAL_NO) AS rnum
+                FROM
+                ATMS_TERMINAL_STATUS
+        )WHERE rnum = 1
+        <if test="jisaCode != null">
+           AND JISA_CODE = #{jisaCode}
+        </if>
+    </select>
+</mapper>

@@ -1,0 +1,233 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout/base}">
+
+<!-- ===== [ script ] ===== -->
+<script layout:fragment="script" type="text/javascript" th:src="@{/assets/js/mng/cash/sh03001190.js}"></script>
+<!-- ===== [ script ] _END_ ===== -->
+
+<!-- ===== [ base-title ] ===== -->
+<div layout:fragment="base-title" class="ax-base-title" role="page-title">
+    <h1 class="title"><i class="cqc-browser"></i> <span th:text="${pageName}"/></h1>
+    <p class="desc" th:text="${pageRemark}"/>
+</div>
+<!-- ===== [ base-title ] _END_ ===== -->
+
+<!-- ===== [ base-content ] ===== -->
+<div layout:fragment="base-content" class="ax-base-content">
+    <th:block layout:insert="~{/fragments/page-buttons :: buttons}"/>
+    <th:block layout:insert="~{/fragments/page-header  :: search-bar(id='searchView0')}">
+        <div layout:fragment="table">
+            <th:block layout:insert="~{/fragments/table :: tr-td3(
+            text1='지사명',      style1='width: 210px', lstyle1='width: 100px',
+            text2='요청일자',    style2='width: 330px', lstyle2='width: 100px',
+            text3='검색',        style3='width: 300px', lstyle3='display:none',)}">
+                <div layout:fragment="wrap-1">
+                    <select th:class="form-control" th:classappend="${class}" name="jisaCode" id="jisaCode">
+                        <option value="">전체</option>
+                        <option th:each="item : ${jisaCode}" th:value="${item.code}" th:text="${item.name}"/>
+                    </select>
+                </div>
+                <div layout:fragment="wrap-2">
+                    <div class="input-group" data-ax5picker="date">
+                        <input type="text" class="form-control" id="startDate" placeholder="yyyy-MM-dd"
+                               style="text-align: center">
+                        <span class="input-group-addon">~</span>
+                        <input type="text" class="form-control" id="endDate" placeholder="yyyy-MM-dd"
+                               style="text-align: center">
+                        <span class="input-group-addon"><i class="cqc-calendar"></i></span>
+                    </div>
+                </div>
+                <div layout:fragment="wrap-3">
+                    <div class="form-inline">
+                        <button type="button" class="btn btn-default" data-page-btn="search">
+                            <i class="cqc-magnifier"></i> 조회
+                        </button>
+                        <button class="btn btn-primary" data-page-btn="search-view-clear" style="margin-left: 5px;">
+                            <i class="cqc-zoomout"></i> 초기화
+                        </button>
+                    </div>
+                </div>
+            </th:block>
+        </div>
+    </th:block>
+    <th:block layout:insert="~{/fragments/page-content :: content-panels}" th:with="orientation='vertical', attr1='{width: \'1091\'}', style1='padding-right: 10px', attr2='{width: \'*\'}',   style2='padding: 0px 10px', scroll2='scroll'">
+
+        <!-- ===== [ left-panel ] ===== -->
+        <div layout:fragment="panel-1">
+
+            <div class="ax-button-group" data-fit-height-aside="grid-view-01">
+                <div class="left">
+                    <h2><i class="cqc-list"></i> 운영자금청구서 목록조회</h2>
+                </div>
+                <div class="right">
+                    <button type="button" class="btn btn-default" data-page-btn="excel">
+                        <i class="cqc-download"></i> 엑셀
+                    </button>
+                </div>
+            </div>
+            <div data-ax5grid="grid-view-01" data-fit-height-content="grid-view-01" style="height: 300px;"></div>
+
+        </div>
+        <!-- ===== [ left-panel _END_ ] ===== -->
+
+        <!-- ===== [ right-panel ] ===== -->
+        <div layout:fragment="panel-2">
+
+            <div class="ax-button-group" role="panel-header">
+                <div class="left">
+                    <h2><i class="cqc-news"></i> 운영자금청구서</h2>
+                </div>
+                <div class="right">
+                    <button type="button" class="btn btn-default" data-form-view-01-btn="form-clear">
+                        <i class="cqc-erase"></i> 신규청구서
+                    </button>
+                    <button type="button" class="btn btn-default" data-form-view-01-btn="save">
+                        <i class="cqc-circle-with-plus"></i> 청구서 저장
+                    </button>
+                    <button type="button" class="btn btn-default" data-form-view-01-btn="add">
+                        <i class="cqc-circle-with-plus"></i> 청구서 통보
+                    </button>
+                </div>
+            </div>
+
+            <form name="formView01" id="formView01" method="post" onsubmit="return false">
+                <div data-ax-tbl class="ax-search-tbl" minWidth="700px">
+                    <th:block layout:insert="~{/fragments/table :: tr-td2-label(text1='지사명', text2='무인점명', style1='width: 160px', style2='width: 220px', style='width: 380px')}">
+                        <div layout:fragment="wrap-1">
+                            <select th:class="form-control" th:classappend="${class}" data-ax-path="jisaCode" name="jisaCodeForm" id="jisaCodeForm" style="width: 150px">
+                                <option value="">선택</option>
+                                <option th:each="item : ${jisaCode}" th:value="${item.code}" th:text="${item.name}"/>
+                            </select>
+                        </div>
+                        <div layout:fragment="wrap-2">
+                            <select th:class="form-control" th:classappend="${class}" data-ax-path="branchCode" data-ax-validate="required" title="무인점명"
+                                    name="branchCode" id="branchCode" style="width: 150px">
+                                <option th:each="item : ${manlessBranchCode}" th:value="${item.code}" th:text="${item.name}"/>
+                            </select>
+                        </div>
+                    </th:block>
+                    <th:block layout:insert="~{/fragments/table :: tr-td2-label(text1='자금소요 시작일', text2='자금소요 종료일', style1='width: 160px', style2='width: 220px', style='width: 380px')}">
+                        <div layout:fragment="wrap-1">
+                            <div class="input-group" data-ax5picker="date" style="width: 150px">
+                                <input type="text"  data-ax-validate="required" data-ax-path="fundExpenseStartDate" id="fundExpenseStartDate" class="form-control" placeholder="yyyy-MM-dd" style="text-align: center">
+                                <span class="input-group-addon"><i class="cqc-calendar"></i></span>
+                            </div>
+                        </div>
+                        <div layout:fragment="wrap-2">
+                            <div class="input-group" data-ax5picker="date" style="width: 150px">
+                                <input type="text"  data-ax-validate="required" data-ax-path="fundExpenseEndDate" id="fundExpenseEndDate" class="form-control" placeholder="yyyy-MM-dd" style="text-align: center">
+                                <span class="input-group-addon"><i class="cqc-calendar"></i></span>
+                            </div>
+                        </div>
+                    </th:block>
+                    <th:block layout:insert="~{/fragments/table :: tr-td2-label(text1='자금소요 기간', text2='요청일자', style1='width: 160px', style2='width: 220px', style='width: 380px')}">
+                        <div layout:fragment="wrap-1">
+                            <div class="form-inline">
+                                <input id="fundExpenseTerm" name="fundExpenseTerm" data-ax-path="fundExpenseTerm" data-ax-validate="required" title="${text}" type="text" style="text-align: left"
+                                       class="form-control W150" readonly="readonly" >
+                            </div>
+                        </div>
+                        <div layout:fragment="wrap-2">
+                            <div class="input-group" data-ax5picker="date" style="width: 150px">
+                                <input type="text"  data-ax-validate="required" data-ax-path="reqDate" id="reqDate" class="form-control" placeholder="yyyy-MM-dd" style="text-align: center">
+                                <span class="input-group-addon"><i class="cqc-calendar"></i></span>
+                            </div>
+                        </div>
+                    </th:block>
+                    <th:block layout:insert="~{/fragments/table :: tr-td2-label(text1='익익 영업일 정규현송금액', text2='휴일 추가현송금액', style1='width: 160px', style2='width: 220px', style='width: 380px')}">
+                        <div layout:fragment="wrap-1">
+                            <input id="nextDayCashSendingAmt" name="nextDayCashSendingAmt" data-ax-path="nextDayCashSendingAmt" data-ax-validate="required" title="${text1}" style="text-align: left"
+                                   type="text" class="form-control W150" placeholder data-ax5formatter="money(int)">
+                        </div>
+                        <div layout:fragment="wrap-2">
+                            <input id="nowDayAddCashSendingAmt" name="nowDayAddCashSendingAmt" data-ax-path="nowDayAddCashSendingAmt" data-ax-validate="required" title="${text2}" style="text-align: left"
+                                   type="text" class="form-control W150" placeholder data-ax5formatter="money(int)">
+                        </div>
+                    </th:block>
+                    <th:block layout:insert="~{/fragments/table :: tr-td2-label(text1='금일 회수금액', text2='금일 과여금액', style1='width: 160px', style2='width: 220px', style='width: 380px')}">
+                        <div layout:fragment="wrap-1">
+                            <input id="nowDayRtrvlAmt" name="nowDayRtrvlAmt" data-ax-path="nowDayRtrvlAmt" data-ax-validate="required" title="${text1}" style="text-align: left"
+                                   type="text" class="form-control W150" placeholder data-ax5formatter="money(int)">
+                        </div>
+                        <div layout:fragment="wrap-2">
+                            <input id="nowDayLackAmt" name="nowDayLackAmt" data-ax-path="nowDayLackAmt" data-ax-validate="required" title="${text2}" style="text-align: left"
+                                   type="text" class="form-control W150" placeholder data-ax5formatter="money(int)">
+                        </div>
+                    </th:block>
+                    <th:block layout:insert="~{/fragments/table :: tr-td2-label(text1='금일 회수예상금액', text2='익일 회수예상금액', style1='width: 160px', style2='width: 220px', style='width: 380px')}">
+                        <div layout:fragment="wrap-1">
+                            <input id="thisDayRtrvlExcpectAmt" name="thisDayRtrvlExcpectAmt" data-ax-path="thisDayRtrvlExcpectAmt" data-ax-validate="required" title="${text1}" style="text-align: left"
+                                   type="text" class="form-control W150" placeholder data-ax5formatter="money(int)">
+                        </div>
+                        <div layout:fragment="wrap-2">
+                            <input id="nextDayRtrvlExcpectAmt" name="nextDayRtrvlExcpectAmt" data-ax-path="nextDayRtrvlExcpectAmt" data-ax-validate="required" title="${text2}" style="text-align: left"
+                                   type="text" class="form-control W150" placeholder data-ax5formatter="money(int)">
+                        </div>
+                    </th:block>
+                    <th:block layout:insert="~{/fragments/table :: tr-td2-label(text1='익일 청구금액', text2='금일 재고금액', style1='width: 160px', style2='width: 220px', style='width: 380px')}">
+                        <div layout:fragment="wrap-1">
+                            <input id="nextDayBillingAmt" name="nextDayBillingAmt" data-ax-path="nextDayBillingAmt" data-ax-validate="required" title="${text1}" style="text-align: left"
+                                   type="text" class="form-control W150" placeholder data-ax5formatter="money(int)" >
+                        </div>
+                        <div layout:fragment="wrap-2">
+                            <input id="totalStockAmt" name="totalStockAmt" data-ax-path="totalStockAmt" data-ax-validate="required" title="${text2}" style="text-align: left"
+                                   type="text" class="form-control W150" placeholder data-ax5formatter="money(int)" readonly="readonly">
+                        </div>
+                    </th:block>
+                    <th:block layout:insert="~{/fragments/table :: tr-td2-label(text1='전일 재고금액', text2='금일 현수금액', style1='width: 160px', style2='width: 220px', style='width: 380px')}">
+                        <div layout:fragment="wrap-1">
+                            <input id="beforeBdateStockAmt" name="beforeBdateStockAmt" data-ax-path="beforeBdateStockAmt" data-ax-validate="required" title="${text1}" style="text-align: left"
+                                   type="text" class="form-control W150" placeholder data-ax5formatter="money(int)">
+                        </div>
+                        <div layout:fragment="wrap-2">
+                            <input id="beforeBdateRecvAmt" name="beforeBdateRecvAmt" data-ax-path="beforeBdateRecvAmt" data-ax-validate="required" title="${text2}" style="text-align: left"
+                                   type="text" class="form-control W150" placeholder data-ax5formatter="money(int)">
+                        </div>
+                    </th:block>
+                    <th:block layout:insert="~{/fragments/table :: tr-td2-label(text1='금일 정규현송금액', text2='전영업일 지급금액', style1='width: 160px', style2='width: 220px', style='width: 380px')}">
+                        <div layout:fragment="wrap-1">
+                            <input id="beforeBdateCashSendingAmt" name="beforeBdateCashSendingAmt" data-ax-path="beforeBdateCashSendingAmt" data-ax-validate="required" title="${text1}" style="text-align: left"
+                                   type="text" class="form-control W150" placeholder data-ax5formatter="money(int)">
+                        </div>
+                        <div layout:fragment="wrap-2">
+                            <input id="beforeBdateGiveAmt" name="beforeBdateGiveAmt" data-ax-path="beforeBdateGiveAmt" data-ax-validate="required" title="${text2}" style="text-align: left"
+                                   type="text" class="form-control W150" placeholder data-ax5formatter="money(int)">
+                        </div>
+                    </th:block>
+                    <th:block layout:insert="~{/fragments/table :: tr-td2-label(text1='전영업일 입금금액', text2='금일 추가현송금액', style1='width: 160px', style2='width: 220px', style='width: 380px')}">
+                        <div layout:fragment="wrap-1">
+                            <input id="beforeBdateDepositAmt" name="beforeBdateDepositAmt" data-ax-path="beforeBdateDepositAmt" data-ax-validate="required" title="${text1}" style="text-align: left"
+                                   type="text" class="form-control W150" placeholder data-ax5formatter="money(int)">
+                        </div>
+                        <div layout:fragment="wrap-2">
+                            <input id="thisDayAddCashSendingAmt" name="thisDayAddCashSendingAmt" data-ax-path="thisDayAddCashSendingAmt" data-ax-validate="required" title="${text2}" style="text-align: left"
+                                   type="text" class="form-control W150" placeholder data-ax5formatter="money(int)">
+                        </div>
+                    </th:block>
+                    <th:block layout:insert="~{/fragments/table :: tr-td2-label(text1='금일 미장전금액', text2='출납과잉금', style1='width: 160px', style2='width: 220px', style='width: 380px')}">
+                        <div layout:fragment="wrap-1">
+                            <input id="thisDayNoneLoadAmt" name="thisDayNoneLoadAmt" data-ax-path="thisDayNoneLoadAmt" data-ax-validate="required" title="${text1}" style="text-align: left"
+                                   type="text" class="form-control W150" placeholder data-ax5formatter="money(int)">
+                        </div>
+                        <div layout:fragment="wrap-2">
+                            <input id="paymentOverAmt" name="paymentOverAmt" data-ax-path="paymentOverAmt" data-ax-validate="required" title="${text2}" style="text-align: left"
+                                   type="text" class="form-control W150" placeholder data-ax5formatter="money(int)">
+                        </div>
+                    </th:block>
+                    <th:block layout:insert="~{/fragments/table :: tr-td(text='관리사무소', style='width: 100%', style1='width: 160px')}">
+                        <div layout:fragment="wrap">
+                            <input id="mngOffice" name="mngOffice" data-ax-path="mngOffice" data-ax-validate="required" title="${text}" type="text" class="form-control W150" style="text-align: left"/>
+                        </div>
+                    </th:block>
+                </div>
+            </form>
+
+            <div class="H5"></div>
+        </div>
+        <!-- ===== [ right-panel ] _END_ ===== -->
+    </th:block>
+</div>
+<!-- ===== [ base-content ] _END_ ===== -->
+</html>

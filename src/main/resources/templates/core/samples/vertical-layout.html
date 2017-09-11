@@ -1,0 +1,141 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout/calendar}">
+
+<!-- ===== [ head ] ===== -->
+<head>
+    <link rel="stylesheet" type="text/css" th:href="@{/assets/plugins/prettify/skins/github.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/assets/css/fullcalendar.css/}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/assets/css/fullcalendar.print.css/}"  media='print'/>
+    <script type="text/javascript" th:src="@{/assets/plugins/prettify/prettify.js}"></script>
+    <script type="text/javascript" th:src="@{/assets/plugins/prettify/lang-css.js}"></script>
+    <style>
+        #calendar {
+            height: 300px;
+            border: 1px solid #D8D8D8;
+            background: #FBFBFB;
+            padding: 10px;
+        }
+
+        .fc-day-header {
+            height: 30px;
+            /*background-image: linear-gradient(to bottom, #fff, #F0F0F0);*/
+            background-image: linear-gradient(to bottom, #FFF, #F0F0F0);
+        }
+
+        td .fc-day-header {
+            padding-top: 10px;
+        }
+
+        .fc-sun, .fc-sun .fc-day-number {
+            color: #C78B81;
+        }
+
+        .fc-sat, .fc-sat .fc-day-number {
+            color: #32B4DC;
+        }
+    </style>
+</head>
+<!-- ===== [ head ] _END_ ===== -->
+
+<!-- ===== [ script ] ===== -->
+<script layout:fragment="script" type="text/javascript" th:src="@{/assets/js/core/samples/vertical-layout.js}"></script>
+<!-- ===== [ script ] _END_ ===== -->
+
+<!-- ===== [ base-title ] ===== -->
+<div layout:fragment="base-title" class="ax-base-title" role="page-title">
+    <h1 class="title"><i class="cqc-browser"></i> <span th:text="${pageName}"/></h1>
+    <p class="desc" th:text="${pageRemark}"/>
+</div>
+<!-- ===== [ base-title ] _END_ ===== -->
+
+<!-- ===== [ base-content ] ===== -->
+<div layout:fragment="base-content">
+    <th:block layout:insert="~{/fragments/page-buttons :: buttons}"/>
+    <th:block layout:insert="~{/fragments/page-header  :: search-t3(id='searchView0', label1='검색 1', label2='검색 2', label3='검색 3')}"/>
+    <th:block layout:insert="~{/fragments/page-content :: content-panels3}" th:with="orientation='vertical',
+        attr1='{width: \'360\'}', style1='padding-right: 10px;',
+        attr2='{width: \'860\'}', style2='padding-right: 10px; padding-left: 10px;',
+        attr3='{width: \'*\'}', style3='padding-left: 10px;'">
+
+        <!-- ===== [ left-panel ] ===== -->
+        <div layout:fragment="panel-1">
+
+            <div class="ax-button-group" data-fit-height-aside="left-view-01">
+                <div class="left">
+                    <h2><i class="cqc-list"></i> 왼쪽 패널2</h2></div>
+                <div class="right">
+                    <button type="button" class="btn btn-default" data-left-view-01-btn="add">
+                        <i class="cqc-circle-with-plus"></i> 추가
+                    </button>
+                </div>
+            </div>
+
+            <a href="#" id='sample'>스케쥴 보기</a>
+
+
+        </div>
+        <!-- ===== [ left-panel _END_ ] ===== -->
+
+        <!-- ===== [ center-panel ] ===== -->
+        <div layout:fragment="panel-2">
+
+            <div class="ax-button-group" data-fit-height-aside="left-view-01">
+                <div class="left">
+                    <h2><i class="cqc-list"></i> 왼쪽 패널2</h2></div>
+                <div class="right">
+                    <button type="button" class="btn btn-default" data-left-view-01-btn="add">
+                        <i class="cqc-circle-with-plus"></i> 추가
+                    </button>
+                </div>
+            </div>
+
+            <div id='calendar' data-fit-height-content="left-view-01"></div>
+            <!--<div id='calendar' data-fit-height-content="left-view-01" style="height: auto;border: 1px solid #D8D8D8;background: #fff;max-width: 600px;margin: 40px auto;padding: 0 10px;"></div>-->
+
+        </div>
+        <!-- ===== [ center-panel _END_ ] ===== -->
+
+        <!-- ===== [ right-panel ] ===== -->
+        <div layout:fragment="panel-3">
+
+            <div class="ax-button-group" data-fit-height-aside="right-view-01">
+                <div class="left">
+                    <h2><i class="cqc-list"></i> 오른쪽 패널 ::</h2></div>
+                <div class="right">
+                    <button type="button" class="btn btn-default" data-right-view-01-btn="add">
+                        <i class="cqc-circle-with-plus"></i> 추가
+                    </button>
+                </div>
+            </div>
+
+            <div data-fit-height-content="right-view-01" style="height: 300px;border: 1px solid #D8D8D8;background: #fff;">
+                <form name="formView01" id="formView01" method="post" onsubmit="return false">
+                    <div data-ax-tbl class="ax-search-tbl" minWidth="500px">
+                        <th:block layout:insert="~{/fragments/table :: tr-td(text='타이틀(KEY) *', style='width: 300px')}">
+                            <div layout:fragment="wrap">
+                                <input type="text" class="form-control" id="title"/>
+                            </div>
+                        </th:block>
+                        <th:block layout:insert="~{/fragments/table :: tr-td(text='일자', style='width: 300px')}">
+                            <div layout:fragment="wrap">
+                                <input type="text" class="form-control" id="datetime"/>
+                            </div>
+                        </th:block>
+                    </div>
+                </form>
+            </div>
+
+            <div class="ax-button-group ax-button-group-bottom" data-fit-height-aside="right-view-01">
+                <div class="right">
+                    <button type="button" class="btn btn-default" id="add">스케쥴 추가</button>
+                </div>
+            </div>
+
+        </div>
+        <!-- ===== [ right-panel ] _END_ ===== -->
+    </th:block>
+</div>
+<!-- ===== [ base-content ] _END_ ===== -->
+</html>

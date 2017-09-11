@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration scan="true" scanPeriod="30 seconds">
+
+    <include resource="org/springframework/boot/logging/logback/base.xml" />
+
+    <!-- Properties Config -->
+    <property name="LOG_HOME" value="/var/log" />
+
+    <!-- Logstash Appender -->
+    <appender name="LOGSTASH" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+        <destination>52.78.125.49:4560</destination>
+        <keepAliveDuration>5 minutes</keepAliveDuration>
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+            <customFields>{"app_name":"app-server [prod]"}</customFields>
+        </encoder>
+    </appender>
+
+    <!-- File Appender -->
+    <appender name="ROLLING_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_HOME}/parkstore-app-server.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_HOME}/parkstore-app-server.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>10MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <maxHistory>7</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${FILE_LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Logstash Appender -->
+    <appender name="SLACK" class="com.dat.parkstore.support.slack.SlackLogbackAppender"/>
+
+    <!-- ALL > TRACE > DEBUG > INFO > WARN > ERROR > OFF -->
+    <root level="WARN">
+        <appender-ref ref="LOGSTASH" />
+        <appender-ref ref="ROLLING_FILE" />
+    </root>
+
+    <logger name="com.dat.parkstore" level="DEBUG"/>
+
+    <!-- Framework Category -->
+    <logger name="org.apache" level="WARN" />
+    <logger name="org.springframework" level="INFO" />
+
+    <logger name="org.hibernate.SQL" level="WARN" />
+    <logger name="org.hibernate.type" level="WARN" />
+    <logger name="org.hibernate.engine.query" level="WARN" />
+    <logger name="org.hibernate.jdbc" level="OFF" />
+
+</configuration>
