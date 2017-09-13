@@ -36,6 +36,48 @@
     <script type="text/javascript" th:src="@{/axboot.config.js}"></script>
     <script layout:fragment="js"></script>
     <script layout:fragment="script"></script>
+
+    <style>
+        @media screen and (max-width:1279px){
+            .header{
+                height: 30px;
+                width:1280px;
+            }
+            .cssBody {
+                padding-left: 220px;
+                width:1280px;
+            }
+            .left{
+                width: 220px;
+            }
+            .left_close_open_btn a{
+                left: 220px;
+            }
+
+
+        }
+
+        @media screen and (max-height:681px){
+            .header{
+                height: 30px;
+                /*width:1280px;*/
+            }
+            .cssBody {
+                /*left: 190px;*/
+                /*width:1090px;*/
+                height:984px;
+            }
+            .left{
+                /*width: 190px;*/
+                height: 984px;
+            }
+            .left_close_open_btn a{
+                /*left: 190px;*/
+            }
+            /*.bottom_close{ margin-bottom: -3px}*/
+
+        }
+    </style>
 </head>
 
 <body class="ax-body" th:classappend="${axbody_class}" onselectstart="return false;">
@@ -45,29 +87,27 @@
     <!-- header-tool -->
     <div class="ax-frame-header-tool">
         <div class="ax-split-col" style="height: 100%;">
-            <div class="ax-split-panel text-align-left"></div>
+            <div class="ax-split-panel text-align-left">
+                <div class="ax-split-col ax-frame-logo-info">
+                    <div class="ax-split-panel">서울 기록원</div>
+                </div>
+            </div>
             <div class="ax-split-panel text-align-right">
                 <div class="ax-split-col ax-frame-user-info">
                     <div class="ax-split-panel">
-                        <a href="#ax" onclick="fcObj.open_user_info();">
+                        <a href="#ax" onclick="viewDiv(1);">
                             <i class="ion-android-person"></i>
                             <span th:text="#{axboot.admin.login.status.message(${loginUser.userNm})}"></span>
                         </a>
                     </div>
                     <div class="panel-split"></div>
                     <div class="ax-split-panel">
-                        <i class="ion-compose"></i>
-                        마지막 접속일자 <span th:text="${loginUser.lastLoginDate}"></span>
-                    </div>
-                    <div class="panel-split"></div>
-                    <div class="ax-split-panel">
-                        <a th:href="@{/api/logout}" class="ax-frame-logout">
+                        <a th:href="@{/api/logout}" >
                             <i class="cqc-log-out"></i>
                             <span th:text="#{axboot.admin.logout}"></span>
                         </a>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
@@ -78,7 +118,7 @@
             <div class="ax-split-panel" style="width: 30px;">&nbsp;</div>
             <div class="ax-split-panel cell-logo">
                 <a th:href="@{/main}">
-                    <img th:src="@{${@environment.getProperty('config.logo.header')}}" width="100%"/>
+                    <img th:src="@{${@environment.getProperty('config.logo.amsheader')}}" />
                 </a>
             </div>
             <div id="ax-top-menu" class="ax-split-panel ax-split-flex" style="padding-left: 38px;">
@@ -89,9 +129,9 @@
     </div>
 
     <!-- header-tab -->
-    <div class="ax-frame-header-tab">
+    <!--<div class="ax-frame-header-tab">
         <div id="ax-frame-header-tab-container"></div>
-    </div>
+    </div>-->
 
     <!-- aside -->
     <!--<div class="ax-frame-aside" id="ax-frame-aside" style="display: none"></div>
@@ -112,7 +152,40 @@
     </script>-->
 
     <!-- contents -->
-    <div layout:fragment="contents"/>
+    <div class="left bdr" style="top:80px">
+        <div class="left_top1 bdb"><!--height: 3.7%;-->
+            <ul>
+                <li class="left-all-menu bdr">
+                    <a href="#" onclick="allmenuView()">전체메뉴</a></li>
+                <li class="left-my-menu">
+                    <a href="#" onclick="mymenuView()">나의메뉴</a></li>
+            </ul>
+        </div><!--전체메뉴 나의 메뉴 탭부분-->
+        <div class="left_top2"><!--height: 3.7%;-->
+            <ul>
+                <li style="padding:0 1%;width:76%">
+                    <input type="text" style="width:100%;vertical-align:middle"></li>
+                <li style="width:24%">
+                    <button class="btn_small">검색</button></li>
+            </ul>
+        </div><!--메인 좌측 검색부분-->
+        <div class="left_top3 bdt bdb">
+            <ul>
+                <li class="bdr">
+                    <a href="#" class="open_close" id="rg_tree_allopen_m1">전체열기</a></li>
+                <li>
+                    <a href="#" class="open_close" id="rg_tree_allclose_m1">전체닫기</a></li>
+            </ul>
+        </div>
+    </div><!--메인좌측-->
+    <div class="left_close_open_btn">
+        <a href="#" onclick="leftcloseView()" class="leftmenu_close">◀</a>
+        <a href="#" onclick="leftopenView()" class="leftmenu_open">▶</a>
+
+        <a href="#" onclick="left7closeView()" class="leftmenu7_close">◀</a>
+        <a href="#" onclick="left7openView()" class="leftmenu7_open"> ▶</a>
+    </div>
+    <div layout:fragment="contents" ></div>
 
     <!-- footer -->
     <div class="ax-frame-foot">
@@ -125,6 +198,7 @@
     </div>
 
 </div>
-
+<!-- 사용자 설정 팝업창 시작 popup.css-->
+<!-- 사용자 설정 팝업창 끝-->
 </body>
 </html>

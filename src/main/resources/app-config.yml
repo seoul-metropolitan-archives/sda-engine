@@ -1,16 +1,22 @@
 config:
   title: "BGF-신한은행 위탁업무"
+  amstitle: "서울기록원"
   copyrights: "ONSEMIRO 1.0.0 - Web Application Framework © 2016-2017"
   logo:
     header: /assets/images/header-logo.png
+    amsheader: /assets/images/sma_logo2.jpg
     login:  /assets/images/login-logo1.png
+    amslogin:  /assets/images/seoul_logo.png
     logo:   logo.png
   background:
     login: /assets/images/login-bg.jpg
+    amslogin: /assets/images/bg_login01.jpg
   layout:
     leftSideMenu: visible
   sessionCookie: e155070d-d078-43d1-81d7-7363712ce20b
   extendedCss:
+    /assets/css/axboot_backup.css
+  amsextendedCss:
     /assets/css/axboot.css
   extendedCssforIE9:
     - /assets/css/axboot-01.css

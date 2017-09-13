@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1"/>
     <meta name="apple-mobile-web-app-capable" content="yes">
 
-    <title th:text="${@environment.getProperty('config.title')}">title</title>
+    <title th:text="${@environment.getProperty('config.amstitle')}">title</title>
 
     <link rel="shortcut icon" type="image/x-icon" th:href="@{/assets/favicon.ico/}"/>
     <link rel="icon"          type="image/x-icon" th:href="@{/assets/favicon.ico/}"/>
@@ -15,7 +15,6 @@
 </head>
 
 <body class="ax-body" th:classappend="${axbody_class}" th:attr="data-page-auto-height=${auto_height == null ? 'true' : 'false'}">
-
 <div id="ax-base-root" data-root-container="true">
     <div layout:fragment="base-title"></div>
     <div layout:fragment="base-content"></div>
