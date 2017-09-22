@@ -554,6 +554,81 @@ fnObj.searchView = axboot.viewExtend(axboot.searchView, {
  */
 
 var rowIndex = -1;
+fnObj.gridView01 = axboot.viewExtend(axboot.gridView
+, {
+        initView:function()
+        {
+
+            var data = {
+                columnInfo : [{
+                    "sortNo" : 2,
+                    "name" : "deptCd",
+                    "text" : "부서코드",
+                    "width" : 80,
+                    "textAlignment" : "center",
+                    "dataType" : "number"
+                },
+                {
+                    "sortNo" : 1,
+                    "name" : "deptNm",
+                    "text" : "부서명",
+                    "width" : 80,
+                    "textAlignment" : "center",
+                    "dataType" : "text"
+                },
+                {
+                    "sortNo" : 3,
+                    "name" : "upDeptCd",
+                    "text" : "상위부서코드",
+                    "width" : 80,
+                    "textAlignment" : "center",
+                    "dataType" : "text"
+                },
+                {
+                    "sortNo" : 0,
+                    "name" : "ordSq",
+                    "text" : "순번",
+                    "width" : 80,
+                    "textAlignment" : "center",
+                    "dataType" : "number"
+                }]
+                , list : [
+                        {
+                            ordSq : "1"
+                            , deptCd : "1234"
+                            , upDeptCd : "1"
+                            , deptNm : "테스트"
+                            
+                        }
+                        ,{
+                        ordSq : "2"
+                        , deptCd : "1235"
+                        , upDeptCd : "1"
+                        , deptNm : "테스트2"
+
+                    }
+                 ]
+            };
+            var gridInstance = new GridWrapper();
+            gridInstance.setGridId("realgrid","100%","100%");
+            gridInstance.setColumnInfo(data.columnInfo).makeGrid();
+            gridInstance.setData("set", data.list);
+        }
+        ,setData :function(_data)
+        {
+
+        }
+        ,getData: function (_type)
+        {
+
+        }
+        ,addRow: function () {
+        }
+        ,excel: function (file) {
+        }
+});
+
+    /** 주석 ( 그리드
 fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     page: {
         pageNumber: 0,
@@ -609,18 +684,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
                 {key: 'handleContent', label: '조치내용', width: 200, align: 'left'}
 
 
-                /*{key: 'noticeContent', label: '통보내용', editor: 'text', width: 200, align: 'left',
-                 formatter: function () {
-                 return "<div class='editable-cell'>" + checkUndefined(this.value) + "</div>";
-                 }},
-                 {key: 'customerInfo', label: '고객정보', editor: 'text', width: 200, align: 'left',
-                 formatter: function () {
-                 return "<div class='editable-cell'>" + checkUndefined(this.value) + "</div>";
-                 }},
-                 {key: 'handleContent', label: '조치내용', editor: 'text', width: 200, align: 'left',
-                 formatter: function () {
-                 return "<div class='editable-cell'>" + checkUndefined(this.value) + "</div>";
-                 }}*/
+
             ],
             body: {
                 onClick: function () {
@@ -629,11 +693,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
 
                     ACTIONS.dispatch(ACTIONS.ITEM_CLICK, this.item);
 
-                    // 아이템클릭시 동일 row인 경우에는 editing 가능하게 처리
-                    /*if (rowIndex != this.dindex) {
-                     ACTIONS.dispatch(ACTIONS.ITEM_CLICK, this.item);
-                     rowIndex = this.dindex;
-                     }*/
+
                 }
             },
             onPageChange: function (pageNumber) {
@@ -671,6 +731,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
         this.target.exportExcel(file);
     }
 });
+*/
 
 /**
  * formView01 - 장애정보

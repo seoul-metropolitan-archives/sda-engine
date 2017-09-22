@@ -16,13 +16,12 @@
 
 <body class="ax-body" th:classappend="${axbody_class}" th:attr="data-page-auto-height=${auto_height == null ? 'true' : 'false'}">
 <div id="ax-base-root" data-root-container="true">
-    <!--<div layout:fragment="base-favorites"></div>-->
+    <div layout:fragment="base-title"></div>
     <div layout:fragment="base-content"></div>
 </div>
 
 </body>
 
-<script type="text/javascript" th:src="@{/assets/js/Test.js}"></script>
 <script type="text/javascript" th:src="@{/assets/js/plugins.js}"></script>
 <script type="text/javascript" th:src="@{/assets/js/axboot.js}"></script>
 <script type="text/javascript">
