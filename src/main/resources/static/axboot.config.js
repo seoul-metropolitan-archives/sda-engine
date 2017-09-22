@@ -22,8 +22,8 @@
                     id: "error-monitoring",
                     progNm: '장애 모니터링',
                     menuNm: '홈',
-                    progPh: '/mng/error/error_status',
-                    url: '/mng/error/error_status',
+                    progPh: '/mng/error/sh01001110',
+                    url: '/mng/error/sh01001110',
                     status: "on",
                     fixed: true
                 }

@@ -560,6 +560,9 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
         pageSize: 20
     },
     initView: function () {
+
+        var test = new Test();
+
         var _this = this;
 
         this.target = axboot.gridBuilder({

@@ -680,7 +680,7 @@ body {
     font-size: 13px;
     line-height: 1.42857;
     color: #333;
-    background-color: #ECF0F5
+    /*background-color: #ECF0F5*/
 }
 
 input,
@@ -11892,13 +11892,16 @@ button.close {
 }
 
 .ax5-ui-menubar.axboot .ax-menu-body .ax-menu-item {
-    color: #2c2c2c
+    color: #555555;
+    text-decoration: none;
+    font-weight: bold;
+    font-family: '나눔고딕';
 }
 
 .ax5-ui-menubar.axboot .ax-menu-body .ax-menu-item:hover,
 .ax5-ui-menubar.axboot .ax-menu-body .ax-menu-item.hover {
     background: transparent;
-    color: #3DACFC
+    color: #1fa678
 }
 
 .ax5-ui-menubar.axboot .ax-menu-body .ax-menu-item {
@@ -17028,7 +17031,12 @@ button.close {
     -o-transition: all 10s cubic-bezier(0.39, 0.575, 0.565, 1);
     transition: all 10s cubic-bezier(0.39, 0.575, 0.565, 1)
 }
-
+@font-face {
+    font-family: 'cheqcon';
+    src: url("../plugins/cheqcon/fonts/cheqcon.woff2?qw7648") format("woff2"), url("../plugins/cheqcon/fonts/cheqcon.ttf?qw7648") format("truetype"), url("../plugins/cheqcon/fonts/cheqcon.woff?qw7648") format("woff"), url("../plugins/cheqcon/fonts/cheqcon.svg?qw7648#cheqcon") format("svg");
+    font-weight: normal;
+    font-style: normal
+}
 i {
     font-family: 'cheqcon' !important;
     speak: none;
@@ -23134,13 +23142,15 @@ ul.zTreeDragUL[data-z-tree] {
 
 .ax-body.frame-set #ax-frame-root .ax-frame-header {
     z-index: 3;
-    position: absolute;
-    top: 30px;
-    left: 0;
-    width: 100%;
-    height: 50px;
-    background-color: #fff;
-    border-bottom: 1px solid #636363
+    position:absolute;
+    top:0px;
+    height:50px;
+    width:100%;
+    border-bottom: 1px solid #17a578;
+    border-right: 1px solid  #393939;
+    box-sizing: border-box;
+    background-color: #ffffff;
+    color: #000000;
 }
 
 .ax-body.frame-set #ax-frame-root .ax-frame-header .cell-aside-handle {
@@ -23159,14 +23169,25 @@ ul.zTreeDragUL[data-z-tree] {
     width: 30px;
     font-size: 20px
 }
-
+/*사용함*/
 .ax-body.frame-set #ax-frame-root .ax-frame-header .cell-logo {
     height: 48px;
-    width: 139px;
+    width: 213px;
+    float: left;
+}
+/* 사용함 */
+.bigsmall_btn a{
+    float:right;
+    height:39px;
+    padding:11px 6.5px 0 0
+}
+/* 사용함 */
+a.big_close{
+    float:right; height:39px; padding:11px 6.5px 0 0
 }
 
 .ax-body.frame-set #ax-frame-root .ax-frame-header #ax-top-menu {
-    padding-left: 10px
+    padding-left: 0px
 }
 
 .ax-body.frame-set #ax-frame-root .ax-frame-header #ax-fullscreen-handel .icon-closed {
@@ -23188,14 +23209,11 @@ ul.zTreeDragUL[data-z-tree] {
     animation: SLIDE-DOWN 0.3s ease-in-out forwards;
     z-index: 1;
     position: absolute;
-    top: 80px;
-    left: 0;
+    top: 50px;    left: 220px;
     width: 100%;
     height: 30px;
-    background-color: #B5B6B6;
-    background-image: -webkit-linear-gradient(top, #B5B6B6, #B5B6B6);
-    background-image: linear-gradient(to bottom, #B5B6B6, #B5B6B6);
-    border-bottom: 1px solid #636363
+    background-color: #fff;
+    border-bottom: 1px solid #dddddd;
 }
 
 .ax-body.frame-set #ax-frame-root .ax-frame-header-tab #ax-frame-header-tab-container {
@@ -23203,16 +23221,16 @@ ul.zTreeDragUL[data-z-tree] {
 }
 
 .ax-body.frame-set #ax-frame-root .ax-frame-header-tab #ax-frame-header-tab-container:before {
-    display: block;
+    /*display: block;
     content: ' ';
     position: absolute;
     left: 0;
     bottom: 0px;
     height: 4px;
     width: 100%;
-    background: #3DACFC;
-    border-top: 1px solid #636363;
-    box-sizing: border-box
+    background: #f7f7f7;
+    border-top: 1px solid #c6c6c6;
+    box-sizing: border-box*/
 }
 
 .ax-body.frame-set #ax-frame-root .ax-frame-header-tab #ax-frame-header-tab-container .tab-item-holder {
@@ -23223,22 +23241,20 @@ ul.zTreeDragUL[data-z-tree] {
 .ax-body.frame-set #ax-frame-root .ax-frame-header-tab #ax-frame-header-tab-container .tab-item {
     cursor: pointer;
     position: relative;
-    box-sizing: border-box;
     display: table-cell;
     box-sizing: border-box;
-    height: 26px;
-    line-height: 23px;
+    height: 30px;
+    line-height: 29px;
     min-width: 120px;
     padding: 0 10px;
     padding-right: 22px;
-    border-right: 1px solid #636363;
-    border-bottom: 1px solid #636363;
+    border-right: 1px solid #dddddd;
     color: #000;
     font-size: 0.9em;
-    margin: 0 1px;
-    background-color: #ddd;
-    background-image: -webkit-linear-gradient(top, #ddd, #ddd);
-    background-image: linear-gradient(to bottom, #ddd, #ddd)
+    margin: 0 0px;
+    background-color: #ffffff;
+    border-bottom: 1px solid #dddddd;
+    float: left;
 }
 
 .ax-body.frame-set #ax-frame-root .ax-frame-header-tab #ax-frame-header-tab-container .tab-item span[data-toggle="tooltip"] {
@@ -23252,22 +23268,24 @@ ul.zTreeDragUL[data-z-tree] {
     position: absolute;
     right: 0px;
     top: 0px;
-    height: 25px;
-    line-height: 25px;
+    height: 30px;
+    line-height: 30px;
     width: 25px;
     text-align: center
 }
 
 .ax-body.frame-set #ax-frame-root .ax-frame-header-tab #ax-frame-header-tab-container .tab-item.on {
-    background-color: #3DACFC;
-    background-image: -webkit-linear-gradient(top, #3DACFC, #3DACFC);
+    background-color: #f7f7f7;
+    border-bottom:#f7f7f7;
+    /*background-image: -webkit-linear-gradient(top, #3DACFC, #3DACFC);
     background-image: linear-gradient(to bottom, #3DACFC, #3DACFC);
     border-bottom: 1px solid #3DACFC;
-    color: #fff
+    color: #fff*/
+
 }
 
 .ax-body.frame-set #ax-frame-root .ax-frame-header-tab #ax-frame-header-tab-container .tab-item-menu {
-    display: table-cell;
+    /*display: table-cell;*/
     width: 10px;
     min-width: 10px;
     padding: 0px;
@@ -23346,13 +23364,14 @@ ul.zTreeDragUL[data-z-tree] {
 
 .ax-body.frame-set #ax-frame-root .ax-frame-contents {
     position: absolute;
-    left: 0;
-    top: 0;
+    left: 220px;
+    top: 80px;
     width: 100%;
     height: 100%;
     padding-top: 0px;
     padding-bottom: 0px;
-    padding-left: 220px;
+    padding-left: 0px;
+
     padding-right: 0px;
 }
 
@@ -23382,15 +23401,15 @@ ul.zTreeDragUL[data-z-tree] {
 }
 
 .ax-body.frame-set #ax-frame-root .ax-frame-foot .ax-split-panel {
-    padding: 0 10px;
+    /*padding: 0 10px;
     padding-left: 5px;
     font-size: 0.8em;
-    color: #fff
+    color: #fff*/
 
 }
 
 .ax-body.frame-set #ax-frame-root.show-aside .ax-frame-header-tool {
-    padding-left: 220px
+    /*padding-left: 220px*/
 }
 
 .ax-body.frame-set #ax-frame-root.show-aside .ax-frame-header .cell-aside-handle i {
@@ -23487,10 +23506,11 @@ ul.zTreeDragUL[data-z-tree] {
     width: 30px;
     font-size: 20px
 }
-
+/* 사용함 */
 .ax-body.dev-tools #ax-frame-root .ax-frame-header .cell-logo {
-    height: 50px;
-    width: 170px
+    height: 48px;
+    width: 213px;
+    float: left;
 }
 
 .ax-body.dev-tools #ax-frame-root .ax-frame-header #ax-top-menu {
@@ -25468,7 +25488,7 @@ ul.zTreeDragUL[data-z-tree] {
 
 .ax-body.frame-set #ax-frame-root .cssBody {
     position: absolute;
-    top: 0px;
+    top: 3px;
     bottom: 0px;
     width: 100%;
     /*left:11.5%;*/
@@ -25495,7 +25515,7 @@ ul.zTreeDragUL[data-z-tree] {
 
 }
 
-.left ul, .header ul, .cssBody ul, .left_bottom2 ol, .cssBody ol {
+.left ul, .header ul, .cssBody ul, .left_bottom2 ol, .cssBody ol, .div_tablerow ul {
     width: 100%;
     height: 100%;
     display: table;
@@ -26756,13 +26776,13 @@ div a.go_left:hover {
 }
 
 .on {
-    padding: 17px 0px;
-    float: left;
+    /*padding: 17px 0px;*/
+    /*float: left;
     width: 25%;
     outline: none;
     display: block;
     background-color: #fff;
-    margin: 0;
+    margin: 0;*/
 }
 
 .w3-block {
@@ -27283,19 +27303,18 @@ div a.go_left:hover {
     margin: 0;
     box-sizing: border-box;
 }
-
-.bigsmall_btn a {
-    float: right;
-    height: 39px;
-    padding: 11px 6.5px 0 0
+/*사용함*/
+.bigsmall_btn {
+    height: 100%;
+    vertical-align: middle;
 }
-
+/*사용함*/
 a.big_close {
     float: right;
     height: 39px;
     padding: 11px 6.5px 0 0
 }
-
+/*사용함*/
 a.small_open {
     float: right;
     height: 39px;
@@ -27325,4 +27344,11 @@ a.small_open {
 .div_table {
     display: table;
 }
-
+/*
+body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, code, form, fieldset, legend, textarea, p, blockquote, th, td, input, select, textarea, button, table td {
+    margin: 0;
+    padding: 0;
+    font-size: 12px;
+    font-family: nanum,"나눔고딕",NanumGothic,"맑은 고딕", Dotum,Helvetica,sans-serif;
+}
+*/

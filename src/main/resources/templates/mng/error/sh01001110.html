@@ -8,53 +8,31 @@
 <!-- ===== [ script ] _END_ ===== -->
 
 <!-- ===== [ base-title ] ===== -->
-<div layout:fragment="base-title" class="ax-base-title" role="page-title">
-    <h1 class="title"><i class="cqc-tv"></i> <span th:text="${pageName}"/></h1>
-    <p class="desc" th:text="${pageRemark}"/>
+<div layout:fragment="base-favorites" role="page-title">
 </div>
 <!-- ===== [ base-title ] _END_ ===== -->
 
 <!-- ===== [ base-content ] ===== -->
 <div layout:fragment="base-content" class="ax-base-content">
     <div class="cssBody" style="top:80px">
-        <div style="display:table; height:100%; width:100%">
-            <div class="tab1_wrap">
-                <div class="tab1">
-                    <ul>
-                        <li><span class="on">사용자</span></li>
-                        <li><span>프로그램</span></li>
-                        <li><span>사용자권한</span></li>
-                        <li><span>접근권한</span></li>
-                        <li><span>폴더</span></li>
-                        <li><span>코드</span></li>
-                        <li><span>팝업</span></li>
-
-                    </ul>
-                </div>
-            </div>
-
-            <div class="contents_wrap">
-                <div style=" height:30px; width:100%" class="bgf7 div_tablerow">
-                    <ul class="bdb">
-                        <li style="width:30px">
-                            <div class="bookmark_star"><img src="/assets/images/content/bookmark.png" alt="즐겨찾기"></div>
-                        </li>
-                        <li style="width:50%; text-align:left;">사용자</li>
-                        <li style="text-align:right; width:48%;">
-                            <button class="btn_s">
-                                <span class="btn_icon">&nbsp;</span>
-                                <span class="btn_main_txt">저장(S)</span>
-                            </button>
-                            <button class="btn_i">
-                                <span class="btn_icon">&nbsp;</span>
-                                <span class="btn_main_txt">조회(I)</span>
-                            </button>
-                        </li>
-                    </ul>
-                </div>
-
-
-
+          <div class="contents_wrap"><div style=" height:30px; width:100%" class="bgf7 div_tablerow">
+              <ul class="bdb">
+                  <li style="width:30px">
+                      <div class="bookmark_star"><img src="/assets/images/content/bookmark.png" alt="즐겨찾기"></div>
+                  </li>
+                  <li style="width:50%; text-align:left;">사용자</li>
+                  <li style="text-align:right; width:48%;">
+                      <button class="btn_s">
+                          <span class="btn_icon">&nbsp;</span>
+                          <span class="btn_main_txt">저장(S)</span>
+                      </button>
+                      <button class="btn_i">
+                          <span class="btn_icon">&nbsp;</span>
+                          <span class="btn_main_txt">조회(I)</span>
+                      </button>
+                  </li>
+              </ul>
+          </div>
                 <div class="bdb div_tablerow">
                     <dl>
                         <dt class="pdl_5">내부키</dt>

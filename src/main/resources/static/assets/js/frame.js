@@ -7,6 +7,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     TOGGLE_ASIDE: function (caller, act, data) {
         caller.frameView.toggleAside();
     },
+
     MENU_OPEN: function (caller, act, data) {
         caller.tabView.open(data);
     },
@@ -217,7 +218,9 @@ fnObj.frameView = axboot.viewExtend({
                 fnObj.frameView.aside.find('[data-label-index="' + this.openedIndex + '"]').removeClass("opend");
                 fnObj.frameView.aside.find('[data-tree-body-index="' + this.openedIndex + '"]').removeClass("opend");
 
-                fnObj.frameView.aside.find('[data-label-index="' + _index + '"]').addClass("opend");
+                fnObj.frameView.
+
+                aside.find('[data-label-index="' + _index + '"]').addClass("opend");
                 fnObj.frameView.aside.find('[data-tree-body-index="' + _index + '"]').addClass("opend");
 
                 this.openedIndex = _index;
@@ -234,9 +237,9 @@ fnObj.topMenuView = axboot.viewExtend({
         this.target = $("#ax-top-menu");
 
         var menuItems = ax5.util.deepCopy(TOP_MENU_DATA);
-        menuItems.forEach(function (n) {
-            n.name += ' <i class="cqc-chevron-down"></i>';
-        });
+        // menuItems.forEach(function (n) {
+        //     n.name += ' <i class="cqc-chevron-down"></i>';
+        // });
 
         this.menu = new ax5.ui.menu({
             theme: 'axboot',
@@ -346,7 +349,7 @@ fnObj.tabView = axboot.viewExtend({
         var po = [];
         po.push('<div class="tab-item ' + item.status + '" data-tab-id="' + item.menuId + '">');
         po.push('<span data-toggle="tooltip" data-placement="bottom" title=\'' + item.progNm + '\'>', item.progNm, '</span>');
-        if (!item.fixed) po.push('<i class="cqc-cancel3" data-tab-close="true" data-tab-id="' + item.menuId + '"></i>');
+        po.push('<i class="cqc-cancel3" data-tab-close="true" data-tab-id="' + item.menuId + '"></i>');
         po.push('</div>');
         return po.join('');
     },
@@ -585,3 +588,104 @@ fnObj.activityTimerView = axboot.viewExtend({
         this.$target.html(displayTime.join(""));
     }
 });
+
+/**
+ * 우측 상단 버튼 전체화면
+ */
+
+function leftcloseView() {
+    $(".left").hide();
+    $(".ax-frame-header-tab").css("left", "0%");
+    $(".ax-frame-header-tab").css("padding-left", "0");
+    $(".ax-frame-contents").css("left", "0%");
+    $(".ax-frame-contents").css("padding-left", "0");
+    $("a.leftmenu_open").show();
+    $("a.leftmenu_close").hide();
+    $(".left_close_open_btn a").css("left", "0%");
+    $(".left_close_open_btn a").css("margin-left", "0");
+    $(".ax-frame-header-tool").css("width", "100%");
+}
+
+function leftopenView() {
+    $(".left").show();
+    $(".left").css("top", "50px");
+    $("a.leftmenu_open").hide();
+    $("a.leftmenu_close").show();
+    $(".ax-frame-header-tab").css("left", "");
+    $(".ax-frame-header-tab").css("padding-left", "");
+    $(".ax-frame-contents").css("left", ""); //오른쪽 부분 원상복귀
+    $(".ax-frame-contents").css("padding-left", ""); //오른쪽 부분 복귀
+    $(".left_close_open_btn a").css("left", "");
+    $(".left_close_open_btn a").css("margin-left", "");
+    $(".ax-frame-header-tool").css("width", "");
+
+}
+
+function left7openView() {
+    $(".left").show();
+    $(".left").css("top", "50px");
+    $("a.leftmenu7_open").hide();
+    $("a.leftmenu_open").hide();
+    $("a.leftmenu_close").hide();
+    $("a.leftmenu7_close").show();
+    $(".ax-frame-contents").css("left", ""); //오른쪽 부분 원상복귀
+    $(".ax-frame-contents").css("padding-left", ""); //오른쪽 부분 복귀
+    $(".left_close_open_btn a").css("left", "");
+    $(".left_close_open_btn a").css("margin-left", "");
+    $(".ax-frame-header-tool").css("width", "");
+}
+
+function left7closeView() {
+    $(".left").hide();
+    $(".ax-frame-contents").css("left", "0%");
+    $(".ax-frame-contents").css("padding-left", "0");
+    $("a.leftmenu_open").hide();
+    $("a.leftmenu7_open").show();
+    $("a.leftmenu_close").hide();
+    $("a.leftmenu7_close").hide();
+    $(".left_close_open_btn a").css("left", "0%");
+    $(".left_close_open_btn a").css("margin-left", "0");
+    $(".ax-frame-header-tool").css("width", "100%");
+}
+
+function bigView() {
+    $(".ax-frame-header-tool").hide();
+    $(".left").hide();
+    $(".ax-frame-header-tab").hide();
+    $(".ax-frame-contents").css("left", "0%");
+    $(".ax-frame-contents").css("top", "50px");
+    $("#cssBody").css("top", "0");
+    $(".ax-frame-contents").css("padding-left", "0");
+    $("a.small_open").show();
+    $("a.big_close").hide();
+    /*$(".zeta-menu-bar").show();*/
+    $("a.leftmenu7_open").show();
+    $("a.leftmenu_close").hide();
+    $("a.leftmenu_open").hide();
+    $(".left_close_open_btn a").css("left", "0%");
+    $(".left_close_open_btn a").css("margin-left", "0");
+    $("a.leftmenu_open").show();
+    $("a.leftmenu_close").hide();
+}
+
+function smallView() {
+    $("#cssBody").css("top", "30px");
+    $(".ax-frame-header-tool").show();
+    $(".left").show();
+    $(".ax-frame-header-tab").show();
+    $(".left").css("top", "50px");
+
+    $(".ax-frame-contents").css("left", "");
+    $(".ax-frame-contents").css("top", "80px");
+
+    $(".ax-frame-contents").css("padding-left", "");
+    $("a.small_open").hide();
+    $("a.big_close").show();
+    /*$(".zeta-menu-bar").show();*/
+    $("a.leftmenu7_open").hide();
+    $("a.leftmenu_close").show();
+    $("a.leftmenu7_close").hide();
+    $("a.leftmenu_open").hide();
+    $(".left_close_open_btn a").css("left", "");
+    $(".left_close_open_btn a").css("margin-left", "");
+}
