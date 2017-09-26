@@ -146,7 +146,7 @@ fnObj.pageButtonView = axboot.viewExtend({
             },
             "search-view-clear": function () {
                 $("#filter").val("");
-                if(sessionJson.userCd == "system" || sessionJson.jisaCode == "00") {
+                if(sessionJson.userId == "system" || sessionJson.jisaCode == "00") {
                     $("#jisaCode").val("");
                 }
                 $("#branchName").val("");
@@ -190,7 +190,7 @@ fnObj.searchView = axboot.viewExtend(axboot.searchView, {
             }
         });
 
-        if(sessionJson.userCd != "system" && sessionJson.jisaCode != "00") {
+        if(sessionJson.userId != "system" && sessionJson.jisaCode != "00") {
             $("#jisaCode").attr('readonly', true);
             $("#jisaCode").attr('disabled', true);
             $("#jisaCode").val(sessionJson.jisaCode);

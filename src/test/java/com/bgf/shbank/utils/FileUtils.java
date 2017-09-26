@@ -39,7 +39,7 @@ import java.util.zip.ZipOutputStream;
 /**
  * 파일 및 디렉토리 복사, 삭제, 초기화 등에 관련한 편의 기능들을 제공한다.<br>
  * 
- * @author tw.jang
+ * @author james
  * @since 1.0.0
  */
 @Slf4j

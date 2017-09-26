@@ -8,7 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 /**
- * Created by tw.jang on 17. 1. 24.
+ * Created by james on 17. 1. 24.
  */
 @Getter
 @NoArgsConstructor

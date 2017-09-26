@@ -4,7 +4,7 @@ import com.google.common.base.CaseFormat;
 import lombok.Data;
 
 /**
- * Created by tw.jang on 2017-01-23.
+ * Created by james on 2017-01-23.
  */
 
 @Data

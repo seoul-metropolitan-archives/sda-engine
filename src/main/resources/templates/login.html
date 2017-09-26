@@ -27,8 +27,8 @@
                     method: "POST",
                     url: "/api/login",
                     data: JSON.stringify({
-                        "userCd": $("#userCd").val(),
-                        "userPs": $("#userPs").val()
+                        "userId": $("#userId").val(),
+                        "userPassword": $("#userPassword").val()
                     }),
                     callback: function (res) {
                         location.href = "/login";
@@ -70,13 +70,13 @@
                 <div class="input_row">
                         <span class="input_box">
                             <label class="lbl">아이디</label>
-                            <input type="text" id="userCd" name="userCd" placeholder="아이디" class="int" maxlength="41" tabindex="1" required="required" autofocus="autofocus" >
+                            <input type="text" id="userId" name="userId" placeholder="아이디" class="int" maxlength="41" tabindex="1" required="required" autofocus="autofocus" >
                         </span>
                 </div>
                 <div class="input_row">
                         <span class="input_box">
                             <label class="lbl">비밀번호</label>
-                            <input type="password" name="userPs" id="userPs" placeholder="비밀번호" class="int" maxlength="16" tabindex="2">
+                            <input type="password" name="userPassword" id="userPassword" placeholder="비밀번호" class="int" maxlength="16" tabindex="2">
                         </span>
                 </div>
                 <input type="submit" title="로그인"  value="로그인" class="btn_login" >

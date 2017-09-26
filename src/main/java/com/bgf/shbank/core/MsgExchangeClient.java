@@ -24,7 +24,7 @@ import org.springframework.stereotype.Component;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Created by tw.jang on 2017-02-16.
+ * Created by james on 2017-02-16.
  */
 @Slf4j
 @Component

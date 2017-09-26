@@ -12,7 +12,7 @@ import java.util.List;
 import static java.util.stream.Collectors.toList;
 
 /**
- * Created by tw.jang on 17. 1. 24.
+ * Created by james on 17. 1. 24.
  */
 @Getter
 @Setter

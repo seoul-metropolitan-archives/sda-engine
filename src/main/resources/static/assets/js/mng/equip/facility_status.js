@@ -446,7 +446,7 @@ fnObj.pageButtonView = axboot.viewExtend({
             },
             "search-view-clear": function () {
                 $("#filter").val("");
-                if(sessionJson.userCd == "system" || sessionJson.jisaCode == "00") {
+                if(sessionJson.userId == "system" || sessionJson.jisaCode == "00") {
                     $("#jisaCode").val("");
                 }
                 $("#branchName").val("");
@@ -478,7 +478,7 @@ fnObj.searchView = axboot.viewExtend(axboot.searchView, {
                 ACTIONS.dispatch(ACTIONS.MODAL_OPEN)
             }
         });
-        if(sessionJson.userCd != "system" && sessionJson.jisaCode != "00") {
+        if(sessionJson.userId != "system" && sessionJson.jisaCode != "00") {
             $("#jisaCode").attr('readonly', true);
             $("#jisaCode").attr('disabled', true);
             $("#jisaCode").val(sessionJson.jisaCode);
@@ -607,7 +607,7 @@ fnObj.formView01 = axboot.viewExtend(axboot.formView, {
         this.modelFormatter = new axboot.modelFormatter(this.model); // 모델 포메터 시작
         this.initEvent();
 
-        if(sessionJson.userCd != "system" && sessionJson.jisaCode != "00") {
+        if(sessionJson.userId != "system" && sessionJson.jisaCode != "00") {
             $("#jisaCodeForm").attr('readonly', true);
             $("#jisaCodeForm").attr('disabled', true);
             $("#jisaCodeForm").val(sessionJson.jisaCode);
@@ -666,7 +666,7 @@ fnObj.formView01 = axboot.viewExtend(axboot.formView, {
     clear: function () {
         this.model.setModel(this.getDefaultData());
         this.target.find('[data-ax-path="key"]').removeAttr("readonly");
-        if(sessionJson.userCd != "system" && sessionJson.jisaCode != "00") {
+        if(sessionJson.userId != "system" && sessionJson.jisaCode != "00") {
             $("#jisaCodeForm").attr('readonly', true);
             $("#jisaCodeForm").attr('disabled', true);
             $("#jisaCodeForm").val(sessionJson.jisaCode);
@@ -1050,7 +1050,7 @@ fnObj.formView02 = axboot.viewExtend(axboot.formView, {
         this.modelFormatter = new axboot.modelFormatter(this.model); // 모델 포메터 시작
         this.initEvent();
 
-        if(sessionJson.userCd != "system" && sessionJson.jisaCode != "00") {
+        if(sessionJson.userId != "system" && sessionJson.jisaCode != "00") {
             $("#jisaCodeForm2").attr('readonly', true);
             $("#jisaCodeForm2").attr('disabled', true);
             $("#jisaCodeForm2").val(sessionJson.jisaCode);
@@ -1127,7 +1127,7 @@ fnObj.formView02 = axboot.viewExtend(axboot.formView, {
     clear: function () {
         this.model.setModel(this.getDefaultData());
         this.target.find('[data-ax-path="key"]').removeAttr("readonly");
-        if(sessionJson.userCd != "system" && sessionJson.jisaCode != "00") {
+        if(sessionJson.userId != "system" && sessionJson.jisaCode != "00") {
             $("#jisaCodeForm2").attr('readonly', true);
             $("#jisaCodeForm2").attr('disabled', true);
             $("#jisaCodeForm2").val(sessionJson.jisaCode);
@@ -1149,7 +1149,7 @@ fnObj.formView03 = axboot.viewExtend(axboot.formView, {
         this.modelFormatter = new axboot.modelFormatter(this.model); // 모델 포메터 시작
         this.initEvent();
 
-        if(sessionJson.userCd != "system" && sessionJson.jisaCode != "00") {
+        if(sessionJson.userId != "system" && sessionJson.jisaCode != "00") {
             $("#jisaCodeForm3").attr('readonly', true);
             $("#jisaCodeForm3").attr('disabled', true);
             $("#jisaCodeForm3").val(sessionJson.jisaCode);
@@ -1216,7 +1216,7 @@ fnObj.formView03 = axboot.viewExtend(axboot.formView, {
     clear: function () {
         this.model.setModel(this.getDefaultData());
         this.target.find('[data-ax-path="key"]').removeAttr("readonly");
-        if(sessionJson.userCd != "system" && sessionJson.jisaCode != "00") {
+        if(sessionJson.userId != "system" && sessionJson.jisaCode != "00") {
             $("#jisaCodeForm3").attr('readonly', true);
             $("#jisaCodeForm3").attr('disabled', true);
             $("#jisaCodeForm3").val(sessionJson.jisaCode);

@@ -5,7 +5,7 @@ import org.apache.commons.io.IOUtils;
 import org.springframework.core.io.ClassPathResource;
 
 /**
- * Created by tw.jang on 2017-01-23.
+ * Created by james on 2017-01-23.
  */
 @Slf4j
 public class SocketMsgTemplateManager {

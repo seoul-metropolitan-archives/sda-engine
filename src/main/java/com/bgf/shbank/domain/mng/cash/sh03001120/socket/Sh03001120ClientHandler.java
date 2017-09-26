@@ -9,7 +9,7 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * Created by tw.jang on 16. 3. 28.
+ * Created by james on 16. 3. 28.
  */
 @Slf4j
 public class Sh03001120ClientHandler extends SimpleChannelInboundHandler<RecvSocketMsg> {

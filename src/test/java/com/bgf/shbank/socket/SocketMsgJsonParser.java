@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by tw.jang on 2017-01-23.
+ * Created by james on 2017-01-23.
  */
 @Slf4j
 public class SocketMsgJsonParser {

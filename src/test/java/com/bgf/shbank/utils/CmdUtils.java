@@ -23,7 +23,7 @@ import java.io.ByteArrayOutputStream;
 /**
  * 「Apache Commons Exec」이용하여 Java 프로그램으로부터 외부 프로세스를 기동하는 유틸리티 클래스
  * 
- * @author tw.jang
+ * @author james
  * @since 1.0.0
  */
 

@@ -6,7 +6,7 @@ import io.netty.handler.codec.MessageToByteEncoder;
 import io.netty.util.CharsetUtil;
 
 /**
- * Created by tw.jang on 2017-01-31.
+ * Created by james on 2017-01-31.
  */
 public class SendMsgEncoder extends MessageToByteEncoder<SendSocketMsg> {
 

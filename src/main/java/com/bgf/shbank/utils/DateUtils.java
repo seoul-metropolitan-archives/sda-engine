@@ -25,7 +25,7 @@ import java.util.Date;
 
 
 /**
- * Created by tw.jang on 16. 2. 1.
+ * Created by james on 16. 2. 1.
  */
 public final class DateUtils {
 	

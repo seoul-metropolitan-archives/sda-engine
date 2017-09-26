@@ -2,35 +2,39 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 
-<head >
+<head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1"/>
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1"/>
     <meta name="apple-mobile-web-app-capable" content="yes">
 
     <title th:text="${@environment.getProperty('config.title')}">title</title>
 
     <link rel="shortcut icon" type="image/x-icon" th:href="@{/assets/favicon.ico/}"/>
-    <link rel="icon"          type="image/x-icon" th:href="@{/assets/favicon.ico/}"/>
-    <link rel="stylesheet"    type="text/css"     th:href="@{${@environment.getProperty('config.extendedCss')}}"/>
+    <link rel="icon" type="image/x-icon" th:href="@{/assets/favicon.ico/}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{${@environment.getProperty('config.extendedCss')}}"/>
     <link layout:fragment="css"/>
 
     <script type="text/javascript" th:src="@{/assets/js/plugins.js}"></script>
     <script type="text/javascript" th:src="@{/assets/js/axboot.js}"></script>
 
     <script type="text/javascript">
-//        var scriptSession = '{&quot;userCd&quot;:&quot;system&quot;,&quot;userNm&quot;:&quot;시스템 관리자&quot;,&quot;locale&quot;:&quot;ko_KR&quot;,&quot;timeZone&quot;:&quot;Asia/Seoul&quot;,&quot;dateFormat&quot;:&quot;YYYY-MM-DD&quot;,&quot;login&quot;:true,&quot;menuGrpCd&quot;:&quot;SYSTEM_MANAGER&quot;,&quot;details&quot;:{},&quot;dateTimeFormat&quot;:&quot;YYYY-MM-DD HH:mm:ss&quot;,&quot;timeFormat&quot;:&quot;HH:mm:ss&quot;,&quot;jisaCode&quot;:null,&quot;deptCd&quot;:null}';
-        var sessionJson    = convertJsonObj('[[${scriptSession}]]');
-//        var menuJson = convertJsonObj('[[${menuJson}]]');
-//        var menuJson = [{"createdAt":1485157983,"createdBy":"system","updatedAt":1504602129.972,"updatedBy":"system","createdUser":null,"modifiedUser":null,"menuId":1,"menuGrpCd":"SYSTEM_MANAGER","menuNm":"1번메뉴","parentId":null,"level":0,"sort":0,"progCd":null,"program":null,"dataStatus":"ORIGIN","__deleted__":false,"__created__":false,"__modified__":false,"open":false,"id":1,"name":"1번메뉴"},{"createdAt":1485157983,"createdBy":"system","updatedAt":1504602129.972,"updatedBy":"system","createdUser":null,"modifiedUser":null,"menuId":7,"menuGrpCd":"SYSTEM_MANAGER","menuNm":"2번메뉴","parentId":null,"level":0,"sort":1,"progCd":null,"program":null,"dataStatus":"ORIGIN","__deleted__":false,"__created__":false,"__modified__":false,"open":false,"id":7,"name":"2번메뉴"},{"createdAt":1485157983,"createdBy":"system","updatedAt":1504602129.972,"updatedBy":"system","createdUser":null,"modifiedUser":null,"menuId":28,"menuGrpCd":"SYSTEM_MANAGER","menuNm":"3번메뉴","parentId":null,"level":0,"sort":2,"progCd":null,"program":null,"dataStatus":"ORIGIN","__deleted__":false,"__created__":false,"__modified__":false,"open":false,"id":28,"name":"3번메뉴"},{"createdAt":1486453004.381,"createdBy":"system","updatedAt":1504602129.972,"updatedBy":"system","createdUser":null,"modifiedUser":null,"menuId":35,"menuGrpCd":"SYSTEM_MANAGER","menuNm":"4번메뉴","parentId":null,"level":0,"sort":3,"progCd":null,"program":null,"dataStatus":"ORIGIN","__deleted__":false,"__created__":false,"__modified__":false,"open":false,"id":35,"name":"4번메뉴"}];
-        var menuJson = [{"menuUuid":"518c452c-f82b-41f4-8b61-8fdba9ef7e4f","description":null,"notes":null,"insertUuid":"ee3cdde2-3fac-462e-8b8d-a9f293777bac","insertDate":1505127540,"updateUuid":"ee3cdde2-3fac-462e-8b8d-a9f293777bac","updateDate":1505127540,"parentMenuCode":null,"menuCode":"000001","menuName":"관리자","programUuid":null,"useYn":"Y","program":null,"menuNm":"관리자","progCd":null,"name":"관리자","children":[{"menuUuid":"dcb11f1b-dbea-478a-83fd-526871601efc","description":null,"notes":null,"insertUuid":"ee3cdde2-3fac-462e-8b8d-a9f293777bac","insertDate":1505127540,"updateUuid":"ee3cdde2-3fac-462e-8b8d-a9f293777bac","updateDate":1505127540,"parentMenuCode":"000001","menuCode":"000001-001","menuName":"사용자 설정","programUuid":"d3c20139-f187-417c-9695-7fc9fb25411c","useYn":"Y","program":{"programUuid":"d3c20139-f187-417c-9695-7fc9fb25411c","description":null,"notes":null,"insertUuid":"ee3cdde2-3fac-462e-8b8d-a9f293777bac","insertDate":1505127540,"updateUuid":"ee3cdde2-3fac-462e-8b8d-a9f293777bac","updateDate":1505127540,"programId":"AC003","programName":"사용자 설정","serviceUuid":"AC","url":"URL/AC003","useYn":"Y","progNm":"사용자 설정","progPh":"URL/AC003","target":"_self","id":"d3c20139-f187-417c-9695-7fc9fb25411c","dataStatus":"ORIGIN","__deleted__":false,"__created__":false,"__modified__":false},"menuNm":"사용자 설정","progCd":"AC003","name":"사용자 설정","children":[],"id":"dcb11f1b-dbea-478a-83fd-526871601efc","dataStatus":"ORIGIN","__deleted__":false,"__created__":false,"__modified__":false},{"menuUuid":"f529cda4-04ac-4b26-82ab-6b441a3d48a7","description":null,"notes":null,"insertUuid":"ee3cdde2-3fac-462e-8b8d-a9f293777bac","insertDate":1505127540,"updateUuid":"ee3cdde2-3fac-462e-8b8d-a9f293777bac","updateDate":1505127540,"parentMenuCode":"000001","menuCode":"000001-002","menuName":"사용자 그룹 설정","programUuid":"8931b2cc-32f4-485b-979f-bea2173c155f","useYn":"Y","program":{"programUuid":"8931b2cc-32f4-485b-979f-bea2173c155f","description":null,"notes":null,"insertUuid":"ee3cdde2-3fac-462e-8b8d-a9f293777bac","insertDate":1505127540,"updateUuid":"ee3cdde2-3fac-462e-8b8d-a9f293777bac","updateDate":1505127540,"programId":"AC004","programName":"사용자 그룹 설정","serviceUuid":"AC","url":"URL/AC004","useYn":"Y","progNm":"사용자 그룹 설정","progPh":"URL/AC004","target":"_self","id":"8931b2cc-32f4-485b-979f-bea2173c155f","dataStatus":"ORIGIN","__deleted__":false,"__created__":false,"__modified__":false},"menuNm":"사용자 그룹 설정","progCd":"AC004","name":"사용자 그룹 설정","children":[],"id":"f529cda4-04ac-4b26-82ab-6b441a3d48a7","dataStatus":"ORIGIN","__deleted__":false,"__created__":false,"__modified__":false}],"id":"518c452c-f82b-41f4-8b61-8fdba9ef7e4f","dataStatus":"ORIGIN","__deleted__":false,"__created__":false,"__modified__":false}];
+        var sessionJson = convertJsonObj('[[${scriptSession}]]');
+        var menuJson = convertJsonObj('[[${menuJson}]]');
         var commonCodeJson = convertJsonObj('[[${commonCodeJson}]]');
 
-        var CONTEXT_PATH   = 'http://[[${#httpServletRequest.serverName}]]:[[${#httpServletRequest.serverPort}]]';
+        var CONTEXT_PATH = 'http://[[${#httpServletRequest.serverName}]]:[[${#httpServletRequest.serverPort}]]';
         /*var CONTEXT_PATH   = 'http://[[@{${@environment.getProperty("server.url")}}]]:[[@{${@environment.getProperty("server.port")}}]]';*/
-        var SCRIPT_SESSION = (function(json){return json;})(sessionJson);
-        var TOP_MENU_DATA  = (function(json){return json;})(menuJson);
-        var COMMON_CODE    = (function(json){return json;})(commonCodeJson);
+        var SCRIPT_SESSION = (function (json) {
+            return json;
+        })(sessionJson);
+        var TOP_MENU_DATA = (function (json) {
+            return json;
+        })(menuJson);
+        var COMMON_CODE = (function (json) {
+            return json;
+        })(commonCodeJson);
 
         function convertJsonObj(jsonStr) {
             return jsonStr == null || jsonStr == '' ? null : JSON.parse(jsonStr.replace(/&quot;/gi, '"'));
@@ -41,42 +45,48 @@
     <script layout:fragment="script"></script>
 
     <style>
-        @media screen and (max-width:1279px){
-            .header{
+        @media screen and (max-width: 1279px) {
+            .header {
                 height: 30px;
-                width:1280px;
+                width: 1280px;
             }
+
             .cssBody {
                 padding-left: 220px;
-                width:1280px;
+                width: 1280px;
             }
-            .left{
+
+            .left {
                 width: 220px;
             }
-            .left_close_open_btn a{
+
+            .left_close_open_btn a {
                 left: 220px;
             }
 
-
         }
 
-        @media screen and (max-height:681px){
-            .header{
+        @media screen and (max-height: 681px) {
+            .header {
                 height: 30px;
                 /*width:1280px;*/
             }
+
             .cssBody {
                 /*left: 190px;*/
                 /*width:1090px;*/
-                height:984px;
+                height: 984px;
             }
-            .left{
+
+            .left {
                 /*width: 190px;*/
                 height: 984px;
             }
-            .left_close_open_btn a{
+
+            .left_close_open_btn a {
                 /*left: 190px;*/
             }
+
             /*.bottom_close{ margin-bottom: -3px}*/
 
         }
@@ -105,7 +115,7 @@
                     </div>
                     <div class="panel-split"></div>
                     <div class="ax-split-panel">
-                        <a th:href="@{/api/logout}" >
+                        <a th:href="@{/api/logout}">
                             <span th:text="#{axboot.admin.logout}"></span>
                         </a>
                     </div>
@@ -120,7 +130,7 @@
             <div class="ax-split-col" style="height: 100%;">
                 <div class="ax-split-panel cell-logo">
                     <a th:href="@{/main}">
-                        <img th:src="@{${@environment.getProperty('config.logo.amsheader')}}" />
+                        <img th:src="@{${@environment.getProperty('config.logo.amsheader')}}"/>
                     </a>
                 </div>
                 <div id="ax-top-menu" class="ax-split-panel ax-split-flex" style="padding-left:10px;width:100% ">
@@ -176,7 +186,8 @@
                     <li style="padding:0 1%;width:76%">
                         <input type="text" style="width:100%;vertical-align:middle"></li>
                     <li style="width:24%">
-                        <button class="btn_small">검색</button></li>
+                        <button class="btn_small">검색</button>
+                    </li>
                 </ul>
             </div><!--메인 좌측 검색부분-->
             <div class="left_top3 bdt bdb">
@@ -200,7 +211,8 @@
         <!-- footer -->
         <div class="ax-frame-foot">
             <div class="ax-split-col" style="height: 100%;">
-                <div class="ax-split-panel text-align-left" th:text="${@environment.getProperty('config.copyrights')}"></div>
+                <div class="ax-split-panel text-align-left"
+                     th:text="${@environment.getProperty('config.copyrights')}"></div>
                 <div class="ax-split-panel text-align-right">
                     Last account activity <b id="account-activity-timer">00</b> ago.
                 </div>

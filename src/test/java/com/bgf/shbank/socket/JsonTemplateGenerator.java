@@ -6,7 +6,7 @@ import com.bgf.shbank.utils.FileUtils;
 import java.io.File;
 
 /**
- * Created by tw.jang on 2017-02-02.
+ * Created by james on 2017-02-02.
  */
 public class JsonTemplateGenerator {
 

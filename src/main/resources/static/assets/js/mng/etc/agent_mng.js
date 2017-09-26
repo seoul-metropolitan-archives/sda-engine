@@ -323,7 +323,7 @@ fnObj.pageButtonView = axboot.viewExtend({
             },
             "search-view-clear": function () {
                 $("#filter").val("");
-                if(sessionJson.userCd == "system" || sessionJson.jisaCode == "00") {
+                if(sessionJson.userId == "system" || sessionJson.jisaCode == "00") {
                     $("#jisaCode").val("");
                 }
                 ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
@@ -342,7 +342,7 @@ fnObj.searchView = axboot.viewExtend(axboot.searchView, {
         this.target.attr("onsubmit", "return ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);");
         this.filter = $("#filter");
 
-        if(sessionJson.userCd != "system" && sessionJson.jisaCode != "00") {
+        if(sessionJson.userId != "system" && sessionJson.jisaCode != "00") {
             $("#jisaCode").attr('readonly', true);
             $("#jisaCode").attr('disabled', true);
             $("#jisaCode").val(sessionJson.jisaCode);
@@ -452,7 +452,7 @@ fnObj.formView01 = axboot.viewExtend(axboot.formView, {
         this.modelFormatter = new axboot.modelFormatter(this.model); // 모델 포메터 시작
         this.initEvent();
 
-        if(sessionJson.userCd != "system" && sessionJson.jisaCode != "00") {
+        if(sessionJson.userId != "system" && sessionJson.jisaCode != "00") {
             $("#jisaCodeForm").attr('readonly', true);
             $("#jisaCodeForm").attr('disabled', true);
             $("#jisaCodeForm").val(sessionJson.jisaCode);
@@ -539,7 +539,7 @@ fnObj.formView01 = axboot.viewExtend(axboot.formView, {
     clear: function () {
         this.model.setModel(this.getDefaultData());
         this.target.find('[data-ax-path="key"]').removeAttr("readonly");
-        if(sessionJson.userCd != "system" && sessionJson.jisaCode != "00") {
+        if(sessionJson.userId != "system" && sessionJson.jisaCode != "00") {
             $("#jisaCodeForm").attr('readonly', true);
             $("#jisaCodeForm").attr('disabled', true);
             $("#jisaCodeForm").val(sessionJson.jisaCode);

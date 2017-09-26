@@ -3,7 +3,7 @@ package @{PACKAGE_NAME};
 import io.netty.buffer.ByteBuf;
 
 /**
- * Created by tw.jang on 17. 1. 24.
+ * Created by james on 17. 1. 24.
  */
 public class @{CLASS_NAME} {
 

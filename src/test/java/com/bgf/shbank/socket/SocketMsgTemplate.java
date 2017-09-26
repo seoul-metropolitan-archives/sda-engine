@@ -5,7 +5,7 @@ import lombok.Data;
 import java.util.List;
 
 /**
- * Created by tw.jang on 2017-01-23.
+ * Created by james on 2017-01-23.
  */
 @Data
 public class SocketMsgTemplate {

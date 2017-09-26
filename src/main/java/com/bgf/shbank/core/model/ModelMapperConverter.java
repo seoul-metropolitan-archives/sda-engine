@@ -12,7 +12,7 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 /**
- * Created by tw.jang on 2017-02-14.
+ * Created by james on 2017-02-14.
  */
 public class ModelMapperConverter {
 

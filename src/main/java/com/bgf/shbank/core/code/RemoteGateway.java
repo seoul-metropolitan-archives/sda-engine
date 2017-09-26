@@ -1,7 +1,7 @@
 package com.bgf.shbank.core.code;
 
 /**
- * Created by tw.jang on 2017-02-17.
+ * Created by james on 2017-02-17.
  */
 public enum RemoteGateway {
 

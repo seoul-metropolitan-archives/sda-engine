@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.text.MessageFormat;
 
 /**
- * Created by tw.jang on 2017-01-23.
+ * Created by james on 2017-01-23.
  */
 @Slf4j
 public class RecvMsgWriter {

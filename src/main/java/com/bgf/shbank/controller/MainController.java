@@ -2,7 +2,6 @@ package com.bgf.shbank.controller;
 
 import io.onsemiro.core.code.Types;
 import io.onsemiro.core.domain.user.SessionUser;
-import io.onsemiro.utils.CommonCodeUtils;
 import io.onsemiro.utils.PhaseUtils;
 import io.onsemiro.utils.SessionUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +12,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 
 /**
- * Created by tw.jang on 2016-12-28.
+ * Created by james on 2016-12-28.
  */
 @Slf4j
 @Controller
@@ -34,12 +33,12 @@ public class MainController {
 
         SessionUser sessionUser = SessionUtils.getCurrentUser();
 
-        if (sessionUser != null) {
+       /* if (sessionUser != null) {
             if (sessionUser.getUserStatus() == Types.UserStatus.ACCOUNT_LOCK) {
-                model.addAttribute("userCd", sessionUser.getUserCd());
+                model.addAttribute("userId", sessionUser.getUserCd());
                 return "/change-pwd";
             }
-        }
+        }*/
 
         return SessionUtils.isLoggedIn() ? "redirect:/" + appName : "/login";
     }
@@ -54,14 +53,14 @@ public class MainController {
 
         SessionUser sessionUser = SessionUtils.getCurrentUser();
 
-        if (sessionUser.getUserStatus() == Types.UserStatus.ACCOUNT_LOCK) {
-            model.addAttribute("userCd", sessionUser.getUserCd());
+       /* if (sessionUser.getUserStatus() == Types.UserStatus.ACCOUNT_LOCK) {
+            model.addAttribute("userId", sessionUser.getUserCd());
             return "/change-pwd";
-        }
+        }*/
 
         // 무조건 공통코드를 재조회 한다.
         //if (StringUtils.isEmpty(commonCodeJson)) {
-            commonCodeJson = CommonCodeUtils.getAllByJson();
+        //    commonCodeJson = CommonCodeUtils.getAllByJson();
         //}
 
         model.addAttribute("commonCodeJson", commonCodeJson);

@@ -48,7 +48,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         axboot.ajax({
             type: "GET",
             url: ["users"],
-            data: {userCd: data.userCd},
+            data: {userId: data.userId},
             callback: function (res) {
                 caller.formView01.setData(res);
             }
@@ -57,7 +57,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     ROLE_GRID_DATA_INIT: function (caller, act, data) {
         var list = [];
         CODE.userRole.forEach(function (n) {
-            var item = {roleCd: n.roleCd, roleNm: n.roleNm, hasYn: "N", userCd: data.userCd};
+            var item = {roleCd: n.roleCd, roleNm: n.roleNm, hasYn: "N", userId: data.userId};
 
             if (data && data.roleList) {
                 data.roleList.forEach(function (r) {
@@ -176,7 +176,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
         this.target = axboot.gridBuilder({
             target: $('[data-ax5grid="grid-view-01"]'),
             columns: [
-                {key: 'userCd',   label: '아이디', width: 120, align: 'center'},
+                {key: 'userId',   label: '아이디', width: 120, align: 'center'},
                 {key: 'userNm',   label: '이름',   width: 120, align: 'center'},
                 {key: 'deptName',   label: '부서', width: 150, align: 'center'},
                 {key: 'jisaName', label: '지사', width: 120, align: 'center'},
@@ -231,9 +231,9 @@ fnObj.formView01 = axboot.viewExtend(axboot.formView, {
                 }, function () {
                     if (this.key == "ok") {
 
-                        var userCd = $('#userCd').val();
-                        console.log('userCd :: ', userCd);
-                        ACTIONS.dispatch(ACTIONS.RESET_PASSWORD, userCd);
+                        var userId = $('#userId').val();
+                        console.log('userId :: ', userId);
+                        ACTIONS.dispatch(ACTIONS.RESET_PASSWORD, userId);
                     }
                 });
             }
@@ -245,11 +245,11 @@ fnObj.formView01 = axboot.viewExtend(axboot.formView, {
         var _this = this;
         this.model.onChange("password_change", function () {
             if (this.value == "Y") {
-                _this.target.find('[data-ax-path="userPs"]').removeAttr("readonly");
-                _this.target.find('[data-ax-path="userPs_chk"]').removeAttr("readonly");
+                _this.target.find('[data-ax-path="userPassword"]').removeAttr("readonly");
+                _this.target.find('[data-ax-path="userPassword_chk"]').removeAttr("readonly");
             } else {
-                _this.target.find('[data-ax-path="userPs"]').attr("readonly", "readonly");
-                _this.target.find('[data-ax-path="userPs_chk"]').attr("readonly", "readonly");
+                _this.target.find('[data-ax-path="userPassword"]').attr("readonly", "readonly");
+                _this.target.find('[data-ax-path="userPassword_chk"]').attr("readonly", "readonly");
             }
         });
     },
@@ -259,7 +259,7 @@ fnObj.formView01 = axboot.viewExtend(axboot.formView, {
         if (data.grpAuthCd) {
             data.grpAuthCd.forEach(function (n) {
                 data.authList.push({
-                    userCd: data.userCd,
+                    userId: data.userId,
                     grpAuthCd: n
                 });
             });
@@ -279,12 +279,12 @@ fnObj.formView01 = axboot.viewExtend(axboot.formView, {
                 data.grpAuthCd.push(n.grpAuthCd);
             });
         }
-        ACTIONS.dispatch(ACTIONS.ROLE_GRID_DATA_INIT, {userCd: data.userCd, roleList: data.roleList});
+        ACTIONS.dispatch(ACTIONS.ROLE_GRID_DATA_INIT, {userId: data.userId, roleList: data.roleList});
 
-        data.userPs = "";
+        data.userPassword = "";
         data.password_change = "";
-        this.target.find('[data-ax-path="userPs"]').attr("readonly", "readonly");
-        this.target.find('[data-ax-path="userPs_chk"]').attr("readonly", "readonly");
+        this.target.find('[data-ax-path="userPassword"]').attr("readonly", "readonly");
+        this.target.find('[data-ax-path="userPassword_chk"]').attr("readonly", "readonly");
         this.model.setModel(data);
         this.modelFormatter.formatting(); // 입력된 값을 포메팅 된 값으로 변경
 

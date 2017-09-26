@@ -211,7 +211,7 @@ fnObj.pageButtonView = axboot.viewExtend({
                 // ACTIONS.dispatch(ACTIONS.EXCEL_DOWNLOAD);
             },
             "search-view-clear": function () {
-                if(sessionJson.userCd == "system" || sessionJson.jisaCode == "00") {
+                if(sessionJson.userId == "system" || sessionJson.jisaCode == "00") {
                     $("#jisaCode").val("");
                 }
                 $("#branchName").val("");
@@ -248,7 +248,7 @@ fnObj.searchView = axboot.viewExtend(axboot.searchView, {
             }
         });
 
-        if(sessionJson.userCd != "system" && sessionJson.jisaCode != "00") {
+        if(sessionJson.userId != "system" && sessionJson.jisaCode != "00") {
             $("#jisaCode").attr('readonly', true);
             $("#jisaCode").attr('disabled', true);
             $("#jisaCode").val(sessionJson.jisaCode);
@@ -417,7 +417,7 @@ fnObj.formView01 = axboot.viewExtend(axboot.formView, {
             }
         });
 
-        if(sessionJson.userCd != "system" && sessionJson.jisaCode != "00") {
+        if(sessionJson.userId != "system" && sessionJson.jisaCode != "00") {
             $("#jisaCodeForm").attr('readonly', true);
             $("#jisaCodeForm").attr('disabled', true);
             $("#jisaCodeForm").val(sessionJson.jisaCode);
@@ -520,7 +520,7 @@ fnObj.formView01 = axboot.viewExtend(axboot.formView, {
     clear: function () {
         this.model.setModel(this.getDefaultData());
         this.target.find('[data-ax-path="key"]').removeAttr("readonly");
-        if(sessionJson.userCd != "system" && sessionJson.jisaCode != "00") {
+        if(sessionJson.userId != "system" && sessionJson.jisaCode != "00") {
             $("#jisaCodeForm").attr('readonly', true);
             $("#jisaCodeForm").attr('disabled', true);
             $("#jisaCodeForm").val(sessionJson.jisaCode);

@@ -414,7 +414,7 @@ fnObj.pageButtonView = axboot.viewExtend({
                 $("#branchCode").val("");
                 $("#cornerName").val("");
                 $("#terminalNo").val("");
-                if(sessionJson.userCd == "system" || sessionJson.jisaCode == "00") {
+                if(sessionJson.userId == "system" || sessionJson.jisaCode == "00") {
                     $("#jisaCode").val("");
                 }
                 fnObj.gridView01.setPageData({pageNumber: 0});
@@ -449,7 +449,7 @@ fnObj.searchView = axboot.viewExtend(axboot.searchView, {
             }
         });
 
-        if(sessionJson.userCd != "system" && sessionJson.jisaCode != "00") {
+        if(sessionJson.userId != "system" && sessionJson.jisaCode != "00") {
             $("#jisaCode").attr('readonly', true);
             $("#jisaCode").attr('disabled', true);
             $("#jisaCode").val(sessionJson.jisaCode);
@@ -632,7 +632,7 @@ fnObj.formView01 = axboot.viewExtend(axboot.formView, {
             }
         });
 
-        if(sessionJson.userCd != "system" && sessionJson.jisaCode != "00") {
+        if(sessionJson.userId != "system" && sessionJson.jisaCode != "00") {
             $("#jisaCodeForm1").attr('readonly', true);
             $("#jisaCodeForm1").attr('disabled', true);
             $("#jisaCodeForm1").val(sessionJson.jisaCode);
@@ -677,7 +677,7 @@ fnObj.formView01 = axboot.viewExtend(axboot.formView, {
         this.model.setModel(this.getDefaultData());
         this.target.find('[data-ax-path="key"]').removeAttr("readonly");
 
-        if(sessionJson.userCd != "system" && sessionJson.jisaCode != "00") {
+        if(sessionJson.userId != "system" && sessionJson.jisaCode != "00") {
             $("#jisaCodeForm1").attr('readonly', true);
             $("#jisaCodeForm1").attr('disabled', true);
             $("#jisaCodeForm1").val(sessionJson.jisaCode);
@@ -1105,7 +1105,7 @@ fnObj.formView04 = axboot.viewExtend(axboot.formView, {
         this.initEvent();
 
 
-        if(sessionJson.userCd != "system" && sessionJson.jisaCode != "00") {
+        if(sessionJson.userId != "system" && sessionJson.jisaCode != "00") {
             $("#jisaCodeForm4").attr('readonly', true);
             $("#jisaCodeForm4").attr('disabled', true);
             $("#jisaCodeForm4").val(sessionJson.jisaCode);
@@ -1183,7 +1183,7 @@ fnObj.formView04 = axboot.viewExtend(axboot.formView, {
     clear: function () {
         this.model.setModel(this.getDefaultData());
         this.target.find('[data-ax-path="key"]').removeAttr("readonly");
-        if(sessionJson.userCd != "system" && sessionJson.jisaCode != "00") {
+        if(sessionJson.userId != "system" && sessionJson.jisaCode != "00") {
             $("#jisaCodeForm4").attr('readonly', true);
             $("#jisaCodeForm4").attr('disabled', true);
             $("#jisaCodeForm4").val(sessionJson.jisaCode);

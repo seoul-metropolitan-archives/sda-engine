@@ -3,7 +3,7 @@ package com.bgf.shbank.socket;
 import java.io.File;
 
 /**
- * Created by tw.jang on 2017-01-23.
+ * Created by james on 2017-01-23.
  */
 public class SocketMsgUtils {
 

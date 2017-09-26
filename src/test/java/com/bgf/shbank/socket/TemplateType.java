@@ -1,7 +1,7 @@
 package com.bgf.shbank.socket;
 
 /**
- * Created by tw.jang on 2017-01-23.
+ * Created by james on 2017-01-23.
  */
 public interface TemplateType {
 

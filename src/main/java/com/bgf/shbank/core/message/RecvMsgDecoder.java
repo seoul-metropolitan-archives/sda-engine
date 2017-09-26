@@ -8,7 +8,7 @@ import io.netty.handler.codec.ByteToMessageDecoder;
 import java.util.List;
 
 /**
- * Created by tw.jang on 17. 1. 24.
+ * Created by james on 17. 1. 24.
  */
 public class RecvMsgDecoder extends ByteToMessageDecoder {
 

@@ -4,7 +4,7 @@ import org.apache.commons.lang3.SystemUtils;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 /**
- * Created by tw.jang on 2017-02-16.
+ * Created by james on 2017-02-16.
  */
 public class SocketMsgToStringStyle extends ToStringStyle {
 

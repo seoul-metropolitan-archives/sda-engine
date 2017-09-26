@@ -4,7 +4,7 @@ import io.netty.buffer.ByteBuf;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * Created by tw.jang on 17. 1. 24.
+ * Created by james on 17. 1. 24.
  */
 @Slf4j
 public class Sh03001120RecvMsgDecoder {

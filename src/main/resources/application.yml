@@ -10,7 +10,7 @@ spring:
 
   # Thymeleaf
   thymeleaf:
-    prefix: classpath:/templates
+    prefix: classpath:/templates/
     mode: HTML
     #cache: false
 
@@ -112,9 +112,13 @@ spring:
 onsemiro:
   #개발
   data-source:
-    url: jdbc:oracle:thin:@//10.200.2.16:1531/amsdb
-    username: ams
-    password: aamswc01
+      url: jdbc:oracle:thin:@//rmhost.iptime.org:1521/amsdb
+      username: ams
+      password: ams
+  #data-source:
+    #url: jdbc:oracle:thin:@//10.200.2.16:1531/amsdb
+    #username: ams
+    #password: aamswc01
   #운영
   #data-source:
     #url: jdbc:oracle:thin:@//10.200.2.53:1531/amsdb

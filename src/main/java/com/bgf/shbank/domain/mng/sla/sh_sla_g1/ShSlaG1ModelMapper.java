@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDateTime;
 
 /**
- * Created by tw.jang on G117-02-09.
+ * Created by james on G117-02-09.
  */
 @Component
 public class ShSlaG1ModelMapper extends CustomMapper<ShSlaG1, ShSlaG1VO> {

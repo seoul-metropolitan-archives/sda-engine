@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDateTime;
 
 /**
- * Created by tw.jang on 2017-02-09.
+ * Created by james on 2017-02-09.
  */
 @Component
 public class Sh01001110ModelMapper extends CustomMapper<Sh01001110, Sh01001110VO> {

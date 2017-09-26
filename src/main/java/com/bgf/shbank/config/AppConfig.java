@@ -384,7 +384,7 @@ public class AppConfig implements ApplicationContextAware {
         return new LocalValidatorFactoryBean();
     }
 
-    @Bean
+    /*@Bean
     public AXBootLogbackAppender axBootLogbackAppender(AXBootErrorLogService axBootErrorLogService, AXBootContextConfig axBootContextConfig) throws Exception {
         LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
         AXBootLogbackAppender axBootLogbackAppender = new AXBootLogbackAppender(axBootErrorLogService, axBootContextConfig);
@@ -394,7 +394,7 @@ public class AppConfig implements ApplicationContextAware {
         loggerContext.getLogger("ROOT").addAppender(axBootLogbackAppender);
 
         return axBootLogbackAppender;
-    }
+    }*/
 
 
 }

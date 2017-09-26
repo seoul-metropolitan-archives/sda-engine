@@ -470,7 +470,7 @@ fnObj.pageButtonView = axboot.viewExtend({
                 $("#startDate").val(getFormattedDate(new Date(), true));
                 $("#endDate").val(getFormattedDate(new Date()));
                 $("#errorClassifyCode").val("");
-                if(sessionJson.userCd == "system" || sessionJson.jisaCode == "00") {
+                if(sessionJson.userId == "system" || sessionJson.jisaCode == "00") {
                     $("#jisaCode").val("");
                 }
                 fnObj.gridView01.setPageData({pageNumber: 0});
@@ -508,7 +508,7 @@ fnObj.searchView = axboot.viewExtend(axboot.searchView, {
             }
         });
 
-        if(sessionJson.userCd != "system" && sessionJson.jisaCode != "00") {
+        if(sessionJson.userId != "system" && sessionJson.jisaCode != "00") {
             $("#jisaCode").attr('readonly', true);
             $("#jisaCode").attr('disabled', true);
             $("#jisaCode").val(sessionJson.jisaCode);
@@ -959,7 +959,7 @@ fnObj.formView05 = axboot.viewExtend(axboot.formView, {
         this.model.setModel(this.getDefaultData(), this.target);
         this.modelFormatter = new axboot.modelFormatter(this.model); // 모델 포메터 시작
         this.initEvent();
-        if(sessionJson.userCd != "system" && sessionJson.jisaCode != "00") {
+        if(sessionJson.userId != "system" && sessionJson.jisaCode != "00") {
             $("#jisaCodeForm").attr('readonly', true);
             $("#jisaCodeForm").attr('disabled', true);
             $("#jisaCodeForm").val(sessionJson.jisaCode);
@@ -1039,7 +1039,7 @@ fnObj.formView05 = axboot.viewExtend(axboot.formView, {
     clear: function () {
         this.model.setModel(this.getDefaultData());
         this.target.find('[data-ax-path="key"]').removeAttr("readonly");
-        if(sessionJson.userCd != "system" && sessionJson.jisaCode != "00") {
+        if(sessionJson.userId != "system" && sessionJson.jisaCode != "00") {
             $("#jisaCodeForm").attr('readonly', true);
             $("#jisaCodeForm").attr('disabled', true);
             $("#jisaCodeForm").val(sessionJson.jisaCode);

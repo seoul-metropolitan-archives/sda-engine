@@ -3,7 +3,7 @@ package com.bgf.shbank.domain.mng.error.error_status;
 import lombok.Getter;
 
 /**
- * Created by tw.jang on 2017-02-16.
+ * Created by james on 2017-02-16.
  */
 @Getter
 public enum StextSendGubun {

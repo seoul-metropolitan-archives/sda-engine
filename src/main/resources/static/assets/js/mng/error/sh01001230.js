@@ -217,7 +217,7 @@ fnObj.pageButtonView = axboot.viewExtend({
                 $("#terminalNo").val("");
                 $("#startDate").val(getFormattedDate(new Date(),true));
                 $("#endDate").val(getFormattedDate(new Date()));
-                if(sessionJson.userCd == "system" || sessionJson.jisaCode == "00") {
+                if(sessionJson.userId == "system" || sessionJson.jisaCode == "00") {
                     $("#jisaCode").val("");
                 }
 
@@ -255,7 +255,7 @@ fnObj.searchView = axboot.viewExtend(axboot.searchView, {
                 ACTIONS.dispatch(ACTIONS.MODAL_OPEN)
             }
         });
-        if(sessionJson.userCd != "system" && sessionJson.jisaCode != "00") {
+        if(sessionJson.userId != "system" && sessionJson.jisaCode != "00") {
             $("#jisaCode").attr('readonly', true);
             $("#jisaCode").attr('disabled', true);
             $("#jisaCode").val(sessionJson.jisaCode);
