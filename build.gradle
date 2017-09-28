@@ -18,7 +18,7 @@ apply plugin: 'war'
 war {
     baseName = 'seoul-ams'
     manifest {
-        attributes 'Main-Class': 'com.bgf.shbank.AppRunner'
+        attributes 'Main-Class': 'rmsoft.ams.seoul.AppRunner'
     }
 }
 
@@ -74,7 +74,7 @@ task wrapper(type: Wrapper) {
 }
 
 task importExcelData(type: JavaExec) {
-    main = "com.bgf.shbank.db.ExcelDataImporter"
+    main = "rmsoft.ams.seoul.db.ExcelDataImporter"
     classpath = sourceSets.test.runtimeClasspath
     args localUser, "ATMS_ERROR_STATUS.xls", "ATMS_FACILITY_STATUS.xls", "ATMS_JISA_SIJE_CLOSE.xls", "ATMS_TERMINAL_STATUS.xls"
 }

@@ -1,7 +1,7 @@
 package @{PACKAGE_NAME};
 
-import com.bgf.shbank.core.TaskHandler;
-import com.bgf.shbank.core.message.RecvSocketMsg;
+import rmsoft.ams.seoul.core.TaskHandler;
+import rmsoft.ams.seoul.core.message.RecvSocketMsg;
 import io.netty.channel.ChannelHandlerContext;
 
 /**

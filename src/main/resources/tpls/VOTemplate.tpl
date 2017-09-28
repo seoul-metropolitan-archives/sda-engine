@@ -1,7 +1,7 @@
 package ${domainPackageName}.${targetPackageName};
 
 import io.onsemiro.core.vo.BaseVO;
-import com.bgf.shbank.utils.ModelMapperUtils;
+import io.onsemiro.utils.ModelMapperUtils;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Page;

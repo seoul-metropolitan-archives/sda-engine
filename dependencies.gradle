@@ -11,7 +11,7 @@ dependencies {
     //___ compile ___
 
     // onsemiro
-    compile 'io.dat:onsemiro-core-rm:0.0.2'
+    compile 'io.dat:onsemiro-core-rm:0.0.4'
 
     // spring boot
     compile 'org.springframework.boot:spring-boot-starter-web'
@@ -67,8 +67,6 @@ dependencies {
     // jxls
     compile 'org.jxls:jxls:2.3.0'
     compile 'net.sf.jxls:jxls-core:1.0.6'
-
-    compile 'net.coobird:thumbnailator:0.4.8'
 
     //___ compileOnly ___
     compileOnly 'org.projectlombok:lombok'

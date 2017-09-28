@@ -2,33 +2,18 @@
 
     if (axboot && axboot.def) {
 
-        if (sessionJson.menuGrpCd == 'SHINHAN_USER') {
-            axboot.def["DEFAULT_TAB_LIST"] = [
-                {
-                    menuId: "corner_manage",
-                    id: "error-monitoring",
-                    progNm: '환경/시설물 관리',
-                    menuNm: '홈',
-                    progPh: '/mng/equip/corner_manage',
-                    url: '/mng/equip/corner_manage',
-                    status: "on",
-                    fixed: true
-                }
-            ];
-        } else {
-            axboot.def["DEFAULT_TAB_LIST"] = [
-                {
-                    menuId: "error-monitoring",
-                    id: "error-monitoring",
-                    progNm: '장애 모니터링',
-                    menuNm: '홈',
-                    progPh: '/mng/error/sh01001110',
-                    url: '/mng/error/sh01001110',
-                    status: "on",
-                    fixed: true
-                }
-            ];
-        }
+        axboot.def["DEFAULT_TAB_LIST"] = [
+            {
+                menuId: "error-monitoring",
+                id: "error-monitoring",
+                progNm: '장애 모니터링',
+                menuNm: '홈',
+                progPh: '/ac/ac003/ac003',
+                url: '/ac/ac003/ac003',
+                status: "on",
+                fixed: true
+            }
+        ];
 
         axboot.def["API"] = {
             "users": "/api/v1/user",

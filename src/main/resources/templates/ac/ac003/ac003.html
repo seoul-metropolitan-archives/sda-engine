@@ -1,0 +1,753 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout/base}">
+
+<!-- ===== [ script ] ===== -->
+<script layout:fragment="script" type="text/javascript" th:src="@{/assets/js/ac/ac003/ac003.js}"></script>
+<!-- ===== [ script ] _END_ ===== -->
+
+<!-- ===== [ base-title ] ===== -->
+<div layout:fragment="base-title" class="ax-base-title" role="page-title">
+    <h1 class="title"><i class="cqc-tv"></i> <span>장애 모니터링</span></h1>
+    <p class="desc" th:text="${pageRemark}"/>
+</div>
+<!-- ===== [ base-title ] _END_ ===== -->
+
+<!-- ===== [ base-content ] ===== -->
+<div layout:fragment="base-content" class="ax-base-content">
+    <th:block layout:insert="~{/fragments/page-buttons :: error-status-buttons}"/>
+    <!--<th:block layout:insert="~{/fragments/page-header  :: search-t(id='searchView0', label='검색')}"/>-->
+    <th:block layout:insert="~{/fragments/page-content :: content-panels}" th:with="orientation='vertical', attr1='{width: \'960\'}', style1='padding-right: 10px', attr2='{width: \'*\'}',   style2='padding: 0px 10px', scroll2='scroll'">
+
+        <!-- ===== [ left-panel ] ===== -->
+        <div layout:fragment="panel-1">
+            <div class="ax-button-group" data-fit-height-aside="grid-view-02">
+                <div class="left">
+                    <h2><i class="cqc-list"></i> 장애목록</h2>
+                </div>
+                <div class="right">
+                    <h5>장애종류 : <text>1: 장애(1차) , 2: 장애(2차), 3: 현금부족예보, 4: 현금부족, 5: 자체출동, 6: 민원(점검)</text></h5>
+                </div>
+            </div>
+            <div data-ax5layout="ax1" data-config="{layout:'dock-panel'}" style="height: 650px;border:1px solid #ccc;">
+                <div data-dock-panel="{dock:'top', height: 50, minHeight: 10, maxHeight: 50}"
+                     style="text-align: center;padding-top: 5px;padding-left: 5px;padding-right: 5px">
+                    <div data-ax5layout="ax2" data-config="{layout:'split-panel', orientation: 'vertical'}"
+                         style="height: 100%;">
+                        <div data-split-panel="{width: '*', minWidth:50}"
+                             style="text-align: center;border-right:1px solid #ccc;background-color: #E3E3E3">
+                            <div style='display:table-cell;height: 45px;width: 190px;vertical-align:middle'>
+                                <h2>장애통보</h2>
+                            </div>
+                        </div>
+                        <div data-split-panel="{width: '*', minWidth:50}"
+                             style="text-align: center;border-right:1px solid #ccc;background-color: #E3E3E3">
+                            <div style='display:table-cell;height: 45px;width: 190px;vertical-align:middle'>
+                                <h2>출동요청</h2>
+                            </div>
+                        </div>
+                        <div data-split-panel="{width: '*', minWidth:50}"
+                             style="text-align: center;border-right:1px solid #ccc;background-color: #E3E3E3">
+                            <div style='display:table-cell;height: 45px;width: 190px;vertical-align:middle'>
+                                <h2>도착예정</h2>
+                            </div>
+                        </div>
+                        <div data-split-panel="{width: '*', minWidth:50}"
+                             style="text-align: center;border-right:1px solid #ccc;background-color: #E3E3E3">
+                            <div style='display:table-cell;height: 45px;width: 190px;vertical-align:middle'>
+                                <h2>도착</h2>
+                            </div>
+                        </div>
+                        <div data-split-panel="{width: '*', minWidth:50}"
+                             style="text-align: center;border-right:0px solid #ccc;background-color: #E3E3E3">
+                            <div style='display:table-cell;height: 45px;width: 190px;vertical-align:middle'>
+                                <h2>조치완료</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div data-dock-panel="{dock:'bottom', height: 50, minHeight: 10, maxHeight: 50}"
+                     style="text-align: center;"><h4></h4></div>
+                <div data-dock-panel="{dock:'center'}" style="padding: 5px;text-align: center;">
+                    <div data-ax5layout="ax2" data-config="{layout:'split-panel', orientation: 'vertical'}"
+                         style="height: 100%;border:1px solid #ccc;">
+                        <div id="errorStatus1" data-split-panel="{width: '*', minWidth:50}"
+                             style="text-align: left;border-right:1px solid #ccc;padding: 5px;OVERFLOW-Y:auto">
+                        </div>
+                        <div id="errorStatus2" data-split-panel="{width: '*', minWidth:50}"
+                             style="text-align: left;border-right:1px solid #ccc;padding: 5px;OVERFLOW-Y:auto">
+                        </div>
+                        <div id="errorStatus3" data-split-panel="{width: '*', minWidth:50}"
+                             style="text-align: left;border-right:1px solid #ccc;padding: 5px;OVERFLOW-Y:auto">
+                        </div>
+                        <div id="errorStatus4" data-split-panel="{width: '*', minWidth:50}"
+                             style="text-align: left;border-right:1px solid #ccc;padding: 5px;OVERFLOW-Y:auto">
+                        </div>
+                        <div id="errorStatus5" data-split-panel="{width: '*', minWidth:50}"
+                             style="text-align: left;padding: 5px;OVERFLOW-Y:auto">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- ===== [ left-panel _END_ ] ===== -->
+
+        <!-- ===== [ right-panel ] ===== -->
+        <div layout:fragment="panel-2">
+            <div data-ax5layout="ax3" data-config='{layout:"tab-panel"}' data-fit-height-content="layout-view-01"
+                 style="height:100%;">
+                <th:block layout:insert="~{/fragments/tab :: panel(label='장애정보 / 기기정보 / 장애조치사항', scroll='scroll', active='true')}">
+                    <div layout:fragment="wrap">
+                        <form name="formView01" id="formView01" method="post" onsubmit="return false">
+                            <input type="hidden" data-ax-path="jisaCode"/>
+                            <input type="hidden" data-ax-path="branchCode"/>
+                            <input type="hidden" data-ax-path="cornerCode"/>
+                            <input type="hidden" data-ax-path="cornerCode"/>
+                            <input type="hidden" data-ax-path="errorDatetime"/>
+                            <div class="ax-button-group" role="panel-header">
+                                <div class="left">
+                                    <h2><i class="cqc-news"></i> 장애정보</h2>
+                                </div>
+                            </div>
+                            <div data-ax-tbl class="ax-search-tbl" minWidth="700px">
+                                <th:block layout:insert="~{/fragments/table :: tr-td4(
+                                    text1='장애발생일', style1='width: 220px', lstyle1='width: 120px', text2='장애발생시간', style2='width: 220px', lstyle2='width: 120px',
+                                    text3='전문구분', style3='width: 220px', lstyle3='width: 120px', text4='장애구분', style4='width: 220px', lstyle4='width: 120px')}">
+                                    <div layout:fragment="wrap-1">
+                                        <input type="text" data-ax-path="errorDate" class="form-control" readonly="readonly"/>
+                                    </div>
+                                    <div layout:fragment="wrap-2">
+                                        <input type="text" data-ax-path="errorTime" class="form-control" readonly="readonly"/>
+                                    </div>
+                                    <div layout:fragment="wrap-3">
+                                        <input type="text" data-ax-path="stextGubun" class="form-control" readonly="readonly"/>
+                                    </div>
+                                    <div layout:fragment="wrap-4">
+                                        <input type="text" data-ax-path="errorType" class="form-control" readonly="readonly"/>
+                                    </div>
+                                </th:block>
+
+                                <th:block layout:insert="~{/fragments/table :: tr-td4(
+                                    text1='경과시간', style1='width: 220px', lstyle1='width: 120px', text2='장애매세지', style2='width: 220px', lstyle2='width: 120px',
+                                    text3='장애관리', style3='width: 220px', lstyle3='width: 120px', text4='계약번호', style4='width: 220px', lstyle4='width: 120px')}">
+                                    <div layout:fragment="wrap-1">
+                                        <input type="text" data-ax-path="elapsedTime" class="form-control" readonly="readonly"/>
+                                    </div>
+                                    <div layout:fragment="wrap-2">
+                                        <input type="text" data-ax-path="totalClassifyCodeName" class="form-control" readonly="readonly"/>
+                                    </div>
+                                    <div layout:fragment="wrap-3">
+                                        <input type="text" data-ax-path="securityCorpName" class="form-control" readonly="readonly"/>
+                                    </div>
+                                    <div layout:fragment="wrap-4">
+                                        <input type="text" data-ax-path="securityCorpContractNo" class="form-control" readonly="readonly"/>
+                                    </div>
+                                </th:block>
+
+                                <th:block layout:insert="~{/fragments/table :: tr-td4(
+                                    text1='출동구분', style1='width: 220px', lstyle1='width: 120px', text2='출동요청일련번호', style2='width: 220px', lstyle2='width: 120px',
+                                    text3='출동요청일', style3='width: 220px', lstyle3='width: 120px', text4='출동요청시간', style4='width: 220px', lstyle4='width: 120px')}">
+                                    <div layout:fragment="wrap-1">
+                                        <input type="text" data-ax-path="calleeGubun" class="form-control" readonly="readonly"/>
+                                    </div>
+                                    <div layout:fragment="wrap-2">
+                                        <input type="text" data-ax-path="calleeReqSeqNo" class="form-control" readonly="readonly"/>
+                                    </div>
+                                    <div layout:fragment="wrap-3">
+                                        <input type="text" data-ax-path="calleeReqDate" class="form-control" readonly="readonly"/>
+                                    </div>
+                                    <div layout:fragment="wrap-4">
+                                        <input type="text" data-ax-path="calleeReqTime" class="form-control" readonly="readonly"/>
+                                    </div>
+                                </th:block>
+
+                                <th:block layout:insert="~{/fragments/table :: tr-td4(
+                                    text1='도착예정일', style1='width: 220px', lstyle1='width: 120px', text2='도착예정시간', style2='width: 220px', lstyle2='width: 120px',
+                                    text3='도착일', style3='width: 220px', lstyle3='width: 120px', text4='도착시간', style4='width: 220px', lstyle4='width: 120px')}">
+                                    <div layout:fragment="wrap-1">
+                                        <input type="text" data-ax-path="arrivalPlanDate" class="form-control" readonly="readonly"/>
+                                    </div>
+                                    <div layout:fragment="wrap-2">
+                                        <input type="text" data-ax-path="arrivalPlanTime" class="form-control" readonly="readonly"/>
+                                    </div>
+                                    <div layout:fragment="wrap-3">
+                                        <input type="text" data-ax-path="cornerArrivalDate" class="form-control" readonly="readonly"/>
+                                    </div>
+                                    <div layout:fragment="wrap-4">
+                                        <input type="text" data-ax-path="cornerArrivalTime" class="form-control" readonly="readonly"/>
+                                    </div>
+                                </th:block>
+
+                                <th:block layout:insert="~{/fragments/table :: tr-td4(
+                                    text1='조치일', style1='width: 220px', lstyle1='width: 120px', text2='조치시간', style2='width: 220px', lstyle2='width: 120px',
+                                    text3='조치결과', style3='width: 220px', lstyle3='width: 120px', text4='조치불가사유', style4='width: 220px', lstyle4='width: 120px')}">
+                                    <div layout:fragment="wrap-1">
+                                        <input type="text" data-ax-path="handleDate" class="form-control" readonly="readonly"/>
+                                    </div>
+                                    <div layout:fragment="wrap-2">
+                                        <input type="text" data-ax-path="handleTime" class="form-control" readonly="readonly"/>
+                                    </div>
+                                    <div layout:fragment="wrap-3">
+                                        <input type="text" data-ax-path="handleResult" class="form-control" readonly="readonly"/>
+                                    </div>
+                                    <div layout:fragment="wrap-4">
+                                        <input type="text" data-ax-path="handleFailReason" class="form-control" readonly="readonly"/>
+                                    </div>
+                                </th:block>
+
+                                <th:block layout:insert="~{/fragments/table :: tr-td4(
+                                    text1='출동취소요청일', style1='width: 220px', lstyle1='width: 120px', text2='출동취소요청시간', style2='width: 220px', lstyle2='width: 120px',
+                                    text3='시재내역(만원권)', style3='width: 220px', lstyle3='width: 120px', text4='시재내역(5만원권)', style4='width: 220px', lstyle4='width: 120px')}">
+                                    <div layout:fragment="wrap-1">
+                                        <input type="text" data-ax-path="cancleReqDate" class="form-control" readonly="readonly"/>
+                                    </div>
+                                    <div layout:fragment="wrap-2">
+                                        <input type="text" data-ax-path="cancleReqTime" class="form-control" readonly="readonly"/>
+                                    </div>
+                                    <div layout:fragment="wrap-3">
+                                        <input type="text" data-ax-path="cash10kEmptyStatus" class="form-control" readonly="readonly"/>
+                                    </div>
+                                    <div layout:fragment="wrap-4">
+                                        <input type="text" data-ax-path="cash50kEmptyStatus" class="form-control" readonly="readonly"/>
+                                    </div>
+                                </th:block>
+                            </div>
+                        </form>
+                        <div class="H5"></div>
+                        <form name="formView04" id="formView04" method="post" onsubmit="return false">
+                            <div class="ax-button-group" role="panel-header">
+                                <div class="left">
+                                    <h2><i class="cqc-news"></i> 장애조치사항</h2>
+                                </div>
+                                <div class="right">
+                                    <button type="button" class="btn btn-default" data-form-view-01-btn="form-save">
+                                        <i class="cqc-erase"></i> 저장
+                                    </button>
+                                </div>
+                            </div>
+                            <div data-ax-tbl class="ax-search-tbl" minWidth="500px">
+                                <th:block layout:insert="~{/fragments/table :: tr-td(text='통보내용', style='width: 100%', style1='width: 110px')}">
+                                    <div layout:fragment="wrap">
+                                        <textarea name="noticeContent" data-ax-path="noticeContent" class="form-control" maxlength="50"></textarea>
+                                    </div>
+                                </th:block>
+                                <th:block layout:insert="~{/fragments/table :: tr-td(text='고객정보', style='width: 100%', style1='width: 110px')}">
+                                    <div layout:fragment="wrap">
+                                        <textarea name="customerInfo" data-ax-path="customerInfo" class="form-control" maxlength="50"></textarea>
+                                    </div>
+                                </th:block>
+                                <th:block layout:insert="~{/fragments/table :: tr-td(text='조치내용', style='width: 100%', style1='width: 110px')}">
+                                    <div layout:fragment="wrap">
+                                        <textarea name="handleContent" data-ax-path="handleContent" class="form-control" maxlength="50"></textarea>
+                                    </div>
+                                </th:block>
+                            </div>
+                        </form>
+                        <div class="H5"></div>
+                        <form name="formView02" id="formView02" method="post" onsubmit="return false">
+                            <div class="ax-button-group" role="panel-header">
+                                <div class="left">
+                                    <h2><i class="cqc-news"></i> 기기정보</h2>
+                                </div>
+                            </div>
+                            <div data-ax-tbl class="ax-search-tbl" minWidth="700px">
+                                <th:block layout:insert="~{/fragments/table :: tr-td4(
+                                    text1='기관', style1='width: 220px', lstyle1='width: 120px', text2='지사명', style2='width: 220px', lstyle2='width: 120px',
+                                    text3='지점명', style3='width: 220px', lstyle3='width: 120px', text4='코너명', style4='width: 220px', lstyle4='width: 120px')}">
+                                    <div layout:fragment="wrap-1">
+                                        <input type="text" data-ax-path="orgName" class="form-control inline-block W80" readonly="readonly"/>
+                                    </div>
+                                    <div layout:fragment="wrap-2">
+                                        <input type="text" data-ax-path="jisaName" class="form-control" readonly="readonly"/>
+                                    </div>
+                                    <div layout:fragment="wrap-3">
+                                        <input type="text" data-ax-path="branchName" class="form-control inline-block W80" readonly="readonly"/>
+                                    </div>
+                                    <div layout:fragment="wrap-4">
+                                        <input type="text" data-ax-path="cornerName" class="form-control" readonly="readonly"/>
+                                    </div>
+                                </th:block>
+                                <th:block layout:insert="~{/fragments/table :: tr-td4(
+                                    text1='단말번호', style1='width: 220px', lstyle1='width: 120px', text2='관리채널', style2='width: 220px', lstyle2='width: 120px',
+                                    text3='장소구분', style3='width: 220px', lstyle3='width: 120px', text4='기종', style4='width: 220px', lstyle4='width: 120px')}">
+                                    <div layout:fragment="wrap-1">
+                                        <input type="text" data-ax-path="terminalNo" class="form-control inline-block W80" readonly="readonly"/>
+                                    </div>
+                                    <div layout:fragment="wrap-2">
+                                        <input type="text" data-ax-path="mngChannel" class="form-control" readonly="readonly"/>
+                                    </div>
+                                    <div layout:fragment="wrap-3">
+                                        <input type="text" data-ax-path="placeGubun" class="form-control inline-block W80" readonly="readonly"/>
+                                    </div>
+                                    <div layout:fragment="wrap-4">
+                                        <input type="text" data-ax-path="modelName" class="form-control" readonly="readonly"/>
+                                    </div>
+                                </th:block>
+
+                                <th:block layout:insert="~{/fragments/table :: tr-td4(
+                                    text1='부스업체', style1='width: 220px', lstyle1='width: 120px', text2='부스종류', style2='width: 220px', lstyle2='width: 120px',
+                                    text3='가동시간', style3='width: 220px', lstyle3='width: 120px', text4='인터넷종류', style4='width: 220px', lstyle4='width: 120px')}">
+                                    <div layout:fragment="wrap-1">
+                                        <input type="text" data-ax-path="boothCorp" class="form-control" readonly="readonly"/>
+                                    </div>
+                                    <div layout:fragment="wrap-2">
+                                        <input type="text" data-ax-path="boothType" class="form-control" readonly="readonly"/>
+                                    </div>
+                                    <div layout:fragment="wrap-3">
+                                        <input type="text" data-ax-path="runtime" class="form-control inline-block W80" readonly="readonly"/>
+                                    </div>
+                                    <div layout:fragment="wrap-4">
+                                        <input type="text" data-ax-path="internetClassify" class="form-control" readonly="readonly"/>
+                                    </div>
+                                </th:block>
+
+                                <th:block layout:insert="~{/fragments/table :: tr-td4(
+                                    text1='기기사', style1='width: 220px', lstyle1='width: 120px', text2='인터폰번호', style2='width: 220px', lstyle2='width: 120px',
+                                    text3='현송주기', style3='width: 220px', lstyle3='width: 120px', text4='', style4='width: 220px', lstyle4='width: 120px')}">
+                                    <div layout:fragment="wrap-1">
+                                        <input type="text" data-ax-path="terminalCorpName" class="form-control" readonly="readonly"/>
+                                    </div>
+                                    <div layout:fragment="wrap-2">
+                                        <input type="text" data-ax-path="intercomNo" class="form-control" readonly="readonly"/>
+                                    </div>
+                                    <div layout:fragment="wrap-3">
+                                        <input type="text" class="form-control" readonly="readonly" value=" - "/>
+                                    </div>
+                                    <div layout:fragment="wrap-4">
+
+                                    </div>
+                                </th:block>
+                            </div>
+                        </form>
+                    </div>
+                </th:block>
+                <th:block layout:insert="~{/fragments/tab :: panel(label='장애이력 / 기기상태', scroll='scroll')}">
+                    <div layout:fragment="wrap">
+                        <div class="ax-button-group" role="panel-header">
+                            <div class="left">
+                                <h2><i class="cqc-news"></i> 장애이력</h2>
+                            </div>
+
+                            <div class="right" style="width: 100px">
+                                <input type="text" id="terminalNo" class="form-control W100" value="" data-searchview-btn="modal" readonly="readonly"
+                                       style="text-align: center" placeholder="단말기기 선택"/>
+                            </div>
+
+                            <div class="right" style="width: 230px">
+                                <div class="input-group" data-ax5picker="date" name="formViewDate" id="formViewDate">
+                                    <input type="text" class="form-control" id="startDate" placeholder="yyyy-MM-dd"
+                                           style="text-align: center">
+                                    <span class="input-group-addon">~</span>
+                                    <input type="text" class="form-control" id="endDate" placeholder="yyyy-MM-dd" style="text-align: center">
+                                    <span class="input-group-addon"><i class="cqc-calendar"></i></span>
+                                </div>
+                            </div>
+
+                            <div class="right" style="width: 150px">
+                                <div class="form-inline">
+                                    <button type="button" class="btn btn-default" data-page-btn="error-search">
+                                        <i class="cqc-magnifier"></i> 조회
+                                    </button>
+                                    <button class="btn btn-primary" data-page-btn="search-view-clear" style="margin-left: 5px;">
+                                        <i class="cqc-zoomout"></i> 초기화
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div data-ax5grid="grid-view-01" style="height: 300px;"></div>
+                        <div class="H5"></div>
+                        <form name="formView03" id="formView03" method="post" onsubmit="return false">
+                            <div class="ax-button-group" role="panel-header">
+                                <div class="left">
+                                    <h2><i class="cqc-news"></i> 기기상태</h2>
+                                </div>
+                                <div class="right">
+                                    <h5>개국일시 : <text data-ax-path="errorDatetime1" ></text></h5>
+                                </div>
+                            </div>
+                            <div data-ax-tbl class="ax-search-tbl" minWidth="500px">
+                                <th:block
+                                        layout:insert="~{/fragments/table :: tr-td3-label(text1='현금부', style1='width: 190px', text2='IC카드 가능', style='width: 120px' ,style2='width: 280px', text3='신분증 스캐너', style3='width: 190px')}">
+                                    <div layout:fragment="wrap-1">
+                                        <input type="text" data-ax-path="cashPartStatus"  class="form-control" readonly="readonly"/>
+                                    </div>
+                                    <div layout:fragment="wrap-2">
+                                        <input type="text" data-ax-path="enableIcCard"  class="form-control" readonly="readonly"/>
+                                    </div>
+                                    <div layout:fragment="wrap-3">
+                                        <input type="text" data-ax-path="idScannerStatus"  class="form-control" readonly="readonly"/>
+                                    </div>
+                                </th:block>
+                                <th:block
+                                        layout:insert="~{/fragments/table :: tr-td3-label(text1='수표부', style1='width: 190px', text2='EMV 가능', style='width: 120px' ,style2='width: 280px', text3='바이오 스캐너', style3='width: 190px')}">
+                                    <div layout:fragment="wrap-1">
+                                        <input type="text" data-ax-path="checkPartStatus"  class="form-control" readonly="readonly"/>
+                                    </div>
+                                    <div layout:fragment="wrap-2">
+                                        <input type="text" data-ax-path="enableEmv"  class="form-control" readonly="readonly"/>
+                                    </div>
+                                    <div layout:fragment="wrap-3">
+                                        <input type="text" data-ax-path="bioScannerStatus"  class="form-control" readonly="readonly"/>
+                                    </div>
+                                </th:block>
+                                <th:block
+                                        layout:insert="~{/fragments/table :: tr-td3-label(text1='명세부', style1='width: 190px', text2='IR 가능', style='width: 120px' ,style2='width:280px', text3='보안카드', style3='width: 190px')}">
+                                    <div layout:fragment="wrap-1">
+                                        <input type="text" data-ax-path="portfolioPartStatus"  class="form-control" readonly="readonly"/>
+                                    </div>
+                                    <div layout:fragment="wrap-2">
+                                        <input type="text" data-ax-path="enableIr"  class="form-control inline-block W120" readonly="readonly"/>
+                                    </div>
+                                    <div layout:fragment="wrap-3">
+                                        <input type="text" data-ax-path="scrtyCardHighendAtmOnly"  class="form-control" readonly="readonly"/>
+                                    </div>
+                                </th:block>
+                                <th:block
+                                        layout:insert="~{/fragments/table :: tr-td3-label(text1='저널부', style1='width: 190px', text2='RF 가능', style='width: 120px' ,style2='width: 280px', text3='카드형 OTP', style3='width: 190px')}">
+                                    <div layout:fragment="wrap-1">
+                                        <input type="text" data-ax-path="jrnlPartStatus"  class="form-control" readonly="readonly"/>
+                                    </div>
+                                    <div layout:fragment="wrap-2">
+                                        <input type="text" data-ax-path="enableRf"  class="form-control" readonly="readonly"/>
+                                    </div>
+                                    <div layout:fragment="wrap-3">
+                                        <input type="text" data-ax-path="cardStyleOtp"  class="form-control" readonly="readonly"/>
+                                    </div>
+                                </th:block>
+                                <th:block
+                                        layout:insert="~{/fragments/table :: tr-td3-label(text1='회수함', style1='width: 190px', text2='지문인식 가능', style='width: 120px' ,style2='width: 280px', text3='S20 (일반)', style3='width: 190px')}">
+                                    <div layout:fragment="wrap-1">
+                                        <input type="text" data-ax-path="rtrvlBoxStatus"  class="form-control" readonly="readonly"/>
+                                    </div>
+                                    <div layout:fragment="wrap-2">
+                                        <input type="text" data-ax-path="enableFingerprint"  class="form-control" readonly="readonly"/>
+                                    </div>
+                                    <div layout:fragment="wrap-3">
+                                        <input type="text" data-ax-path="s20General"  class="form-control" readonly="readonly"/>
+                                    </div>
+                                </th:block>
+                                <th:block
+                                        layout:insert="~{/fragments/table :: tr-td3-label(text1='카드부', style1='width: 190px', text2='암호화', style='width: 120px' ,style2='width: 280px', text3='S20 (후불교통)', style3='width: 190px')}">
+
+                                    <div layout:fragment="wrap-1">
+                                        <input type="text" data-ax-path="cardPartStatus"  class="form-control" readonly="readonly"/>
+                                    </div>
+                                    <div layout:fragment="wrap-2">
+                                        <input type="text" data-ax-path="encryptionStatus"  class="form-control" readonly="readonly"/>
+                                    </div>
+                                    <div layout:fragment="wrap-3">
+                                        <input type="text" data-ax-path="s20Frpy"  class="form-control" readonly="readonly"/>
+                                    </div>
+                                </th:block>
+                                <th:block
+                                        layout:insert="~{/fragments/table :: tr-td3-label(text1='통장부', style1='width: 190px', text2='기기정보', style='width: 120px' ,style2='width: 280px', text3='S-Line (일반)', style3='width: 190px')}">
+                                    <div layout:fragment="wrap-1">
+                                        <input type="text" data-ax-path="bnkbPartStatus"  class="form-control" readonly="readonly"/>
+                                    </div>
+                                    <div layout:fragment="wrap-2">
+                                        <input type="text" id="terminalInfo" data-ax-path="terminalInfo" class="form-control inline-block W70" readonly="readonly"/>
+                                    </div>
+                                    <div layout:fragment="wrap-3">
+                                        <input type="text" data-ax-path="slineGeneral"  class="form-control" readonly="readonly"/>
+                                    </div>
+                                </th:block>
+                                <th:block
+                                        layout:insert="~{/fragments/table :: tr-td3-label(text1='지로부', style1='width: 190px', text2='ATMS기기번호', style='width: 120px' ,style2='width: 280px', text3='S-Line (후불)', style3='width: 190px')}">
+                                    <div layout:fragment="wrap-1">
+                                        <input type="text" data-ax-path="giroPartStatus"  class="form-control" readonly="readonly"/>
+                                    </div>
+                                    <div layout:fragment="wrap-2">
+                                        <input type="text" id="atmsTerminalNo" data-ax-path="atmsTerminalNo" class="form-control inline-block W70" readonly="readonly"/>
+                                    </div>
+                                    <div layout:fragment="wrap-3">
+                                        <input type="text" data-ax-path="slineFrpy"  class="form-control" readonly="readonly"/>
+                                    </div>
+                                </th:block>
+                                <th:block
+                                        layout:insert="~{/fragments/table :: tr-td3-label(text1='중단여부', style1='width: 190px', text2='현금부(5만원)', style='width: 120px' ,style2='width: 280px', text3='4Tune (일반)', style3='width: 190px')}">
+                                    <div layout:fragment="wrap-1">
+                                        <input type="text" data-ax-path="suspendStatus"  class="form-control" readonly="readonly"/>
+                                    </div>
+                                    <div layout:fragment="wrap-2">
+                                        <input type="text" id="cashPartStatus50kWon" data-ax-path="cashPartStatus50kWon" class="form-control inline-block W70" readonly="readonly"/>
+                                    </div>
+                                    <div layout:fragment="wrap-3">
+                                        <input type="text" data-ax-path="fourtuneGeneral"  class="form-control" readonly="readonly"/>
+                                    </div>
+                                </th:block>
+                                <th:block
+                                        layout:insert="~{/fragments/table :: tr-td3-label(text1='H/W 장애', style1='width: 190px', text2='자동정산 기기장애', style='width: 120px' ,style2='width: 280px', text3='4Tune (후불)', style3='width: 190px')}">
+                                    <div layout:fragment="wrap-1">
+                                        <input type="text" data-ax-path="hwErrorStatus"  class="form-control" readonly="readonly"/>
+                                    </div>
+                                    <div layout:fragment="wrap-2">
+                                        <input type="text" data-ax-path="atmcExcclcTerminalError"  class="form-control" readonly="readonly"/>
+                                    </div>
+                                    <div layout:fragment="wrap-3">
+                                        <input type="text" data-ax-path="fourtuneFrpy"  class="form-control" readonly="readonly"/>
+                                    </div>
+                                </th:block>
+                                <th:block
+                                        layout:insert="~{/fragments/table :: tr-td3-label(text1='보수모드', style1='width: 190px', text2='자동정산 수행결과', style='width: 120px' ,style2='width: 280px', text3='입출금 통장', style3='width: 190px')}">
+                                    <div layout:fragment="wrap-1">
+                                        <input type="text" data-ax-path="maintenanceStatus"  class="form-control" readonly="readonly"/>
+                                    </div>
+                                    <div layout:fragment="wrap-2">
+                                        <input type="text" data-ax-path="atmcExcclcExecResult"  class="form-control" readonly="readonly"/>
+                                    </div>
+                                    <div layout:fragment="wrap-3">
+                                        <input type="text" data-ax-path="rcppayBnkb"  class="form-control" readonly="readonly"/>
+                                    </div>
+                                </th:block>
+                                <th:block
+                                        layout:insert="~{/fragments/table :: tr-td2-label(text1='버전', style='width: 250px', style1='width: 120px', text2='기기 버전', style2='width: 130px')}">
+                                    <div layout:fragment="wrap-1" style="width: 165px">
+                                        <input type="text" id="version" data-ax-path="version"
+                                               class="form-control inline-block W120" readonly="readonly" value="정상"/>
+                                    </div>
+                                    <div layout:fragment="wrap-2" style="width: 165px">
+                                        <input type="text" id="terminalVerInfo" data-ax-path="terminalVerInfo"
+                                               class="form-control inline-block W110" readonly="readonly"/>
+                                    </div>
+                                </th:block>
+                                <th:block
+                                        layout:insert="~{/fragments/table :: tr-td2-label(text1='DES보드 가능', style='width: 250px', style1='width: 120px', text2='카드 발급기', style2='width: 130px')}">
+                                    <div layout:fragment="wrap-1">
+                                        <input type="text" data-ax-path="enableDesBoard"  class="form-control" readonly="readonly"/>
+                                    </div>
+                                    <div layout:fragment="wrap-2">
+                                        <input type="text" data-ax-path="cardIssuedTerminalStatus"  class="form-control" readonly="readonly"/>
+                                    </div>
+                                </th:block>
+                            </div>
+                        </form>
+                    </div>
+                </th:block>
+                <th:block layout:insert="~{/fragments/tab :: panel(label='자체출동(키지원)', scroll='scroll', active='true')}">
+                    <div layout:fragment="wrap">
+                        <form name="formView05" id="formView05" method="post" onsubmit="return false">
+                            <input type="hidden" data-ax-path="terminalCorpCode" class="form-control" readonly="readonly"/>
+                            <input type="hidden" data-ax-path="modelCode" class="form-control" readonly="readonly"/>
+                            <input type="hidden" data-ax-path="securityCorp" class="form-control" readonly="readonly"/>
+                            <input type="hidden" data-ax-path="totalClassifyCode"/>
+                            <div class="ax-button-group" role="panel-header">
+                                <div class="left">
+                                    <h2><i class="cqc-news"></i> 자체출동</h2>
+                                </div>
+                                <div class="right">
+                                    <button type="button" class="btn btn-default" data-form-view-01-btn="send-stext">
+                                        <i class="cqc-erase"></i> 자체출동 전송
+                                    </button>
+                                </div>
+                            </div>
+                            <div data-ax-tbl class="ax-search-tbl" minWidth="500px">
+                                <th:block
+                                        layout:insert="~{/fragments/table :: tr-td2-label(text1='장애발생일',style='width: 250px', style1='width: 110px', text2='장애발생시간', style2='width: 130px')}">
+                                    <div layout:fragment="wrap-1">
+                                        <input type="text" data-ax-path="errorDate"
+                                               class="form-control" readonly="readonly"/>
+                                    </div>
+                                    <div layout:fragment="wrap-2">
+                                        <input type="text" data-ax-path="errorTime" class="form-control"
+                                               readonly="readonly"/>
+                                    </div>
+                                </th:block>
+                                <th:block
+                                        layout:insert="~{/fragments/table :: tr-td2-label(text1='전문구분',style='width: 250px', style1='width: 110px', text2='장애구분', style2='width: 130px')}">
+                                    <div layout:fragment="wrap-1">
+                                        <input type="text" data-ax-path="stextGubun"
+                                               class="form-control" readonly="readonly"/>
+                                    </div>
+                                    <div layout:fragment="wrap-2">
+                                        <input type="text" data-ax-path="errorType" class="form-control"
+                                               readonly="readonly"/>
+                                    </div>
+                                </th:block>
+                                <th:block
+                                        layout:insert="~{/fragments/table :: tr-td2-label(text1='경과시간',style='width: 250px', style1='width: 110px', text2='장애매세지', style2='width: 130px')}">
+                                    <div layout:fragment="wrap-1">
+                                        <input type="text" data-ax-path="elapsedTime"
+                                               class="form-control" readonly="readonly"/>
+                                    </div>
+                                    <div layout:fragment="wrap-2">
+                                        <input type="text" data-ax-path="totalClassifyCodeName" class="form-control"
+                                               readonly="readonly"/>
+                                    </div>
+                                </th:block>
+                                <th:block
+                                        layout:insert="~{/fragments/table :: tr-td2-label(text1='장애관리',style='width: 250px', style1='width: 110px', text2='계약번호', style2='width: 130px')}">
+                                    <div layout:fragment="wrap-1">
+                                        <input type="text" data-ax-path="securityCorpName"
+                                               class="form-control" readonly="readonly"/>
+                                    </div>
+                                    <div layout:fragment="wrap-2">
+                                        <input type="text" data-ax-path="securityCorpContractNo" class="form-control"
+                                               readonly="readonly"/>
+                                    </div>
+                                </th:block>
+                                <th:block
+                                        layout:insert="~{/fragments/table :: tr-td2-label(text1='출동구분',style='width: 250px', style1='width: 110px', text2='출동요청일련번호', style2='width: 130px')}">
+                                    <div layout:fragment="wrap-1">
+                                        <input type="text" data-ax-path="calleeGubun"
+                                               class="form-control" readonly="readonly"/>
+                                    </div>
+                                    <div layout:fragment="wrap-2">
+                                        <input type="text" data-ax-path="calleeReqSeqNo" class="form-control"
+                                               readonly="readonly"/>
+                                    </div>
+                                </th:block>
+                                <!--<th:block
+                                        layout:insert="~{/fragments/table :: tr-td2-label(text1='출동요청일',style='width: 250px', style1='width: 110px', text2='출동요청시간', style2='width: 130px')}">
+                                    <div layout:fragment="wrap-1">
+                                        <div class="input-group" data-ax5picker="date">
+                                            <input type="text"  data-ax-validate="required" data-ax-path="calleeReqDate" id="calleeReqDate" class="form-control" placeholder="yyyy-MM-dd" style="text-align: center">
+                                            <span class="input-group-addon"><i class="cqc-calendar"></i></span>
+                                        </div>
+                                    </div>
+                                    <div layout:fragment="wrap-2">
+                                        <input type="time" value="00:00"  name="calleeReqTime" id="calleeReqTime" data-ax-path="calleeReqTime"
+                                               class="form-control">
+                                    </div>
+                                </th:block>-->
+                                <th:block
+                                        layout:insert="~{/fragments/table :: tr-td2-label(text1='출동사유',style='width: 250px', style1='width: 110px', text2='CRT-NO', style2='width: 130px')}">
+                                    <div layout:fragment="wrap-1">
+                                        <select th:class="form-control" th:classappend="${class}" name="calleeReqReasonCode" id="calleeReqReasonCode" data-ax-path="calleeReqReasonCode">
+                                            <option th:each="item : ${calleeReqReasonCode}" th:value="${item.code}" th:text="${item.name}"/>
+                                        </select>
+                                    </div>
+                                    <div layout:fragment="wrap-2">
+                                        <input type="text" data-ax-path="crtNo" class="form-control"/>
+                                    </div>
+                                </th:block>
+                                <!--<th:block
+                                        layout:insert="~{/fragments/table :: tr-td2-label(text1='출동요원',style='width: 250px', style1='width: 110px', text2='요원전화번호', style2='width: 130px')}">
+                                    <div layout:fragment="wrap-1">
+                                        <input type="text" id="calleeEmpName" class="form-control" name="calleeEmpName" data-ax-path="calleeEmpName" data-searchview-btn="search_agent_modal"  data-ax-validate="required" readonly="readonly" style="text-align: center;background-color: #8BC99A" placeholder="클릭시 검색"/>
+                                    </div>
+                                    <div layout:fragment="wrap-2">
+                                        <input type="text" id="calleeEmpTelno" class="form-control" name="calleeEmpTelno" data-ax-path="calleeEmpTelno" data-searchview-btn="search_agent_modal" readonly="readonly" style="text-align: center;background-color: #8BC99A" placeholder="클릭시 검색"/>
+                                    </div>
+                                </th:block>
+                                -->
+                                <div data-ax-tbl class="ax-search-tbl" minWidth="500px" style="border-top:0px;border-right:0px">
+                                    <th:block layout:insert="~{/fragments/table :: tr-td(text='특이사항', style='width: 100%', style1='width: 115px')}">
+                                        <div layout:fragment="wrap">
+                                            <textarea name="calleeReqUnusl" data-ax-path="calleeReqUnusl" class="form-control" maxlength="50"></textarea>
+                                        </div>
+                                    </th:block>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </th:block>
+                <th:block layout:insert="~{/fragments/tab :: panel(label='자체처리', scroll='scroll', active='true')}">
+                    <div layout:fragment="wrap">
+                        <form name="formView06" id="formView06" method="post" onsubmit="return false">
+                            <input type="hidden" data-ax-path="terminalCorpCode" class="form-control" readonly="readonly"/>
+                            <input type="hidden" data-ax-path="modelCode" class="form-control" readonly="readonly"/>
+                            <input type="hidden" data-ax-path="securityCorp" class="form-control" readonly="readonly"/>
+                            <input type="hidden" data-ax-path="totalClassifyCode"/>
+                            <input type="hidden" data-ax-path="calleeReqReasonCode"/>
+                            <div class="ax-button-group" role="panel-header">
+                                <div class="left">
+                                    <h2><i class="cqc-news"></i> 자체처리</h2>
+                                </div>
+                                <div class="right">
+                                    <button type="button" class="btn btn-default" data-form-view-02-btn="send-ok">
+                                        <i class="cqc-erase"></i> 조치완료
+                                    </button>
+                                    <button type="button" class="btn btn-default" data-form-view-02-btn="send-cancel">
+                                        <i class="cqc-erase"></i> 장애모니터링 취소
+                                    </button>
+                                    <button type="button" class="btn btn-default" data-form-view-02-btn="send-stext">
+                                        <i class="cqc-erase"></i> 자체출동취소 전송
+                                    </button>
+                                </div>
+                            </div>
+                            <div data-ax-tbl class="ax-search-tbl" minWidth="500px">
+                                <th:block
+                                        layout:insert="~{/fragments/table :: tr-td2-label(text1='장애발생일',style='width: 250px', style1='width: 110px', text2='장애발생시간', style2='width: 130px')}">
+                                    <div layout:fragment="wrap-1">
+                                        <input type="text" data-ax-path="errorDate"
+                                               class="form-control" readonly="readonly"/>
+                                    </div>
+                                    <div layout:fragment="wrap-2">
+                                        <input type="text" data-ax-path="errorTime" class="form-control"
+                                               readonly="readonly"/>
+                                    </div>
+                                </th:block>
+                                <th:block
+                                        layout:insert="~{/fragments/table :: tr-td2-label(text1='전문구분',style='width: 250px', style1='width: 110px', text2='장애구분', style2='width: 130px')}">
+                                    <div layout:fragment="wrap-1">
+                                        <input type="text" data-ax-path="stextGubun"
+                                               class="form-control" readonly="readonly"/>
+                                    </div>
+                                    <div layout:fragment="wrap-2">
+                                        <input type="text" data-ax-path="errorType" class="form-control"
+                                               readonly="readonly"/>
+                                    </div>
+                                </th:block>
+                                <th:block
+                                        layout:insert="~{/fragments/table :: tr-td2-label(text1='경과시간',style='width: 250px', style1='width: 110px', text2='장애매세지', style2='width: 130px')}">
+                                    <div layout:fragment="wrap-1">
+                                        <input type="text" data-ax-path="elapsedTime"
+                                               class="form-control" readonly="readonly"/>
+                                    </div>
+                                    <div layout:fragment="wrap-2">
+                                        <input type="text" data-ax-path="totalClassifyCodeName" class="form-control"
+                                               readonly="readonly"/>
+                                    </div>
+                                </th:block>
+                                <th:block
+                                        layout:insert="~{/fragments/table :: tr-td2-label(text1='장애관리',style='width: 250px', style1='width: 110px', text2='계약번호', style2='width: 130px')}">
+                                    <div layout:fragment="wrap-1">
+                                        <input type="text" data-ax-path="securityCorpName"
+                                               class="form-control" readonly="readonly"/>
+                                    </div>
+                                    <div layout:fragment="wrap-2">
+                                        <input type="text" data-ax-path="securityCorpContractNo" class="form-control"
+                                               readonly="readonly"/>
+                                    </div>
+                                </th:block>
+                                <th:block
+                                        layout:insert="~{/fragments/table :: tr-td2-label(text1='출동구분',style='width: 250px', style1='width: 110px', text2='출동요청일련번호', style2='width: 130px')}">
+                                    <div layout:fragment="wrap-1">
+                                        <input type="text" data-ax-path="calleeGubun" id="calleeGubun"
+                                               class="form-control" readonly="readonly"/>
+                                    </div>
+                                    <div layout:fragment="wrap-2">
+                                        <input type="text" data-ax-path="calleeReqSeqNo" class="form-control" id="calleeReqSeqNo"
+                                               readonly="readonly"/>
+                                    </div>
+                                </th:block>
+                                <th:block
+                                        layout:insert="~{/fragments/table :: tr-td2-label(text1='취소사유',style='width: 250px', style1='width: 110px', text2='CRT-NO', style2='width: 130px')}">
+                                    <div layout:fragment="wrap-1">
+                                        <select th:class="form-control" th:classappend="${class}" name="calleeCancleReasonCode" id="calleeCancleReasonCode" data-ax-path="calleeCancleReasonCode">
+                                            <option th:each="item : ${calleeCancleReasonCode}" th:value="${item.code}" th:text="${item.name}"/>
+                                        </select>
+                                    </div>
+                                    <div layout:fragment="wrap-2">
+                                        <input type="text" data-ax-path="crtNo" class="form-control"/>
+                                    </div>
+                                </th:block>
+                                <div data-ax-tbl class="ax-search-tbl" minWidth="500px" style="border-top:0px;border-right:0px">
+                                    <th:block layout:insert="~{/fragments/table :: tr-td(text='특이사항', style='width: 100%', style1='width: 115px')}">
+                                        <div layout:fragment="wrap">
+                                            <textarea name="unusl" data-ax-path="unusl" class="form-control" maxlength="50"></textarea>
+                                        </div>
+                                    </th:block>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </th:block>
+            </div>
+        </div>
+        <!-- ===== [ right-panel ] _END_ ===== -->
+    </th:block>
+</div>
+<!-- ===== [ base-content ] _END_ ===== -->
+</html>

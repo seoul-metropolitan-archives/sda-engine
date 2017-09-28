@@ -12,7 +12,7 @@
         <appender-ref ref="CONSOLE" />
     </root>
 
-    <logger name="com.bgf.shbank" level="INFO"/>
+    <logger name="rmsoft.ams.seoul" level="INFO"/>
 
     <!-- Framework Category -->
     <logger name="org.apache" level="WARN" />
