@@ -6,7 +6,7 @@
             {
                 menuId: "error-monitoring",
                 id: "error-monitoring",
-                progNm: '장애 모니터링',
+                progNm: '사용자 설정',
                 menuNm: '홈',
                 progPh: '/ac/ac003/ac003',
                 url: '/ac/ac003/ac003',
