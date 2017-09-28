@@ -1,0 +1,146 @@
+html, body{width: 100%; height: 100%}
+#wrap{
+    position:relative;
+    width: 100%;
+    height: 100%;
+    
+}
+
+#container{
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    /*left: 50%;
+    margin-left: -384px;*/
+}
+#header{
+    box-sizing:border-box;
+    /*height: 250px;*/
+    padding 0px 0 0;
+    text-align: center;
+    
+}
+#header .h_logo {
+    line-height: 150px;
+    display: block;
+    overflow: hidden;
+   /* width: 240px;
+    height: 130px;
+    margin: 0 auto;*/
+    background-position: -1px -1px;
+    background: url(../images/seoul_logo.png) no-repeat;
+    background-position:center top;
+}
+
+h1 {
+    display: block;
+    font-size: 2em;
+    font-weight: bold;
+}
+
+#content{
+    margin: 0 auto;
+    width: 460px;
+}
+
+.blind {
+    font-size: 0!important;
+    line-height: 0!important;
+    position: absolute!important;
+    top: 0!important;
+    left: 0!important;
+    visibility: hidden!important;
+    overflow: hidden!important;
+    width: 1px!important;
+    height: 1px!important;
+}
+
+.input_row {
+    position: relative;
+    height: 29px;
+    margin: 0 0 14px;
+    padding: 10px 35px 10px 15px;
+    border: solid 1px #dadada;
+    background: #fff;
+}
+.input_row:hover {border: solid 1px #009dde}
+
+.lbl {
+    font-size: 15px;
+    line-height: 16px;
+    position: absolute;
+    top: 16px;
+    left: 15px;
+    color: #999;
+}
+
+label {
+    cursor: pointer;
+}
+.int {
+    font-size: 15px;
+    line-height: 16px;
+    position: relative;
+    width: 100%;
+    height: 16px;
+    padding: 7px 0 6px;
+    color: #000;
+    border: none;
+    background: #fff;
+    -webkit-appearance: none;
+}
+.input_box {
+    display: block;
+    overflow: hidden;
+}
+
+.btn_login {
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 61px;
+    display: block;
+    width: 100%;
+    height: 61px;
+    margin: 30px 0 13px;
+    padding-top: 2px;
+    cursor: pointer;
+    text-align: center;
+    color: #fff;
+    border: none;
+    border-radius: 0;
+    background-color: #1fa678;
+    -webkit-appearance: none;
+}
+
+
+/*로그인 체크박스*/
+.login_chk {
+    position:relative; 
+    width:auto; 
+    margin:0 auto
+}
+.login_chk label {
+    display:inline-block; 
+    height:15px; 
+    padding:3px 0 2px 25px; 
+    background:url("../images/chk_off.gif") no-repeat 0 center; 
+    vertical-align:middle; 
+    line-height:13px; 
+    cursor:pointer
+}
+.login_chk input[type="checkbox"] {
+    position:absolute; 
+    top:0; 
+    left:0; 
+    width:20px; 
+    height:20px; 
+    opacity:0; 
+    cursor:pointer
+}
+.login_chk input:checked + label {
+    background:url("../images/chk_on.gif") no-repeat 0 center
+}
+
+.hc { left:0; right:0; margin-left:auto; margin-right:auto; } /* 가로 중앙 정렬 */
+.vc { top: 0; bottom:0; margin-top:auto; margin-bottom:auto; } /* 세로 중앙 정렬 */ 
+

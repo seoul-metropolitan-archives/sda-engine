@@ -15,8 +15,6 @@ config:
     leftSideMenu: visible
   sessionCookie: e155070d-d078-43d1-81d7-7363712ce20b
   extendedCss:
-    /assets/css/axboot_backup.css
-  amsextendedCss:
     /assets/css/axboot.css
   extendedCssforIE9:
     - /assets/css/axboot-01.css

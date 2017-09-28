@@ -1,0 +1,254 @@
+button{
+    font-size: 12px;
+    margin-right: 8px;
+    text-align: center;
+}
+
+button.btn_small {
+    border: 1px solid #c3c3c3;
+    background-color: #ffffff;
+    font: 13px;
+    width: 50px;
+    height: 22px;
+    box-sizing: border-box;
+    font-weight: bold;
+    text-indent: -2px;
+    margin:0px;
+    line-height: 12px;
+}
+
+.btn_small:hover {
+    background-color: #eeeeee;
+}
+
+/*btn_basic,*btn_basic2은 글자수가 많거나, 버튼사이즈를 줄여야 할경우 패딩조정후 사용*/
+.btn_basic {
+    border: 1px solid #d7d7d7;
+    background-color: #ffffff;
+    width: auto;
+    padding:0 15px;
+    height: 23px;
+    box-sizing: border-box;
+    font-weight: bold;
+    line-height: 0px;
+}
+
+.btn_basic2 {
+    border: 1px solid #d7d7d7;
+    background-color: #ffffff;
+    font: 9px;
+    width: auto;
+    padding:0 5px;
+    height: 100%;
+    box-sizing: border-box;
+}
+
+.btn_basic:hover {
+    border: 1px solid #b5dfc8;
+    background-color: #d3f0e0;
+    box-sizing: border-box;
+}
+
+/* btn_3txt 버튼안에 글자가 3-4자까지 사용하면 좋을듯*/
+.btn_3txt {
+    border: 1px solid #d7d7d7;
+    background-color: #ffffff;
+    font: 13px;
+    width:65px;
+    height: 25px;
+    box-sizing: border-box;
+    margin-right: 2px;
+}
+
+.btn_3txt:hover {
+    border: 1px solid #b5dfc8;
+    background-color: #d3f0e0;
+    box-sizing: border-box;
+}
+
+.btn_small2{width:85px; height:90%; margin:0.1%; border:1px solid #ddd}
+.btn_small2:hover {
+    background-color: #eeeeee;
+}
+
+.btn_gray {
+    border: 1px solid #d7d7d7;
+    background-color: #ffffff;
+    font: 13px;
+    width: auto;
+    padding:0 20px;
+    height: 25px;
+    box-sizing: border-box;
+    margin: 3px;
+}
+
+.btn_gray:hover {
+    border: 1px solid #cccccc;
+    background-color: #dddddd;
+    box-sizing: border-box;
+}
+
+/*비활성 버튼*/
+.button-inactive {
+    border: 1px solid #d6d6d6;
+    background-color: #d6d6d6;
+    width: auto;
+    padding:0 20px;
+    height: 25px;
+    color:#999999;
+    box-sizing: border-box;
+}
+
+button.btn_a, button.btn_d, button.btn_s, button.btn_i{
+    background-image: url(/assets/images/ams/icon_main.png);
+    border: 1px solid #ddd;
+    width: 100px;
+    box-sizing: border-box;
+    height: 23px;
+}
+
+
+
+/*오른쪽 상단버튼 - 추가*/
+button.btn_a{
+    background-position: 0px -6px;
+}
+
+button.btn_a:hover{
+    background-position: -97px -6px;    
+}
+
+/*오른쪽 상단버튼 - 삭제*/
+button.btn_d{ 
+    background-position: 0px -40px;
+}
+
+button.btn_d:hover{
+    background-position: -97px -40px;    
+}
+
+/*오른쪽 상단버튼 - 저장*/
+button.btn_s{ 
+    background-position: -1px -74px;
+}
+
+button.btn_s:hover{
+    background-position: -98px -74px;    
+}
+
+/*오른쪽 상단버튼 - 검색*/
+button.btn_i{ 
+    background-position: -1px -108px;
+}
+button.btn_i:hover{
+    background-position: -98px -108px;    
+}
+
+.btn_icon{
+    float: left;
+    border-right: 1px solid #dddddd;
+    width: 30px;
+    height: 100%;
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+.btn_main_txt{
+    width: 54px;
+    margin-left: 0px;
+    border: 0px solid #dddddd;
+    background-color:#fff;
+    font: 23px;
+    height: 90%;
+    line-height: 20px;
+    box-sizing: border-box;
+    text-align: center;
+    font-weight: bold;
+    
+}
+/*2017-02-19 추가 배영란*/
+
+/*button.btn_aa, button.btn_dd, button.btn_ss, button.btn_ii{
+    background-image: url(..//assets/images/ams/icon_main.png);
+    border: 1px solid #ddd;
+    width: 87px;
+    height: 23px;
+    box-sizing: border-box;
+    padding: 0;
+   
+}
+
+button.btn_aa{
+    background-position: -5px -6px;
+}
+
+button.btn_aa:hover{
+    background-position: -92px -6px;    
+}*/
+
+/*오른쪽 상단버튼 - 삭제*/
+/*button.btn_dd{ 
+    background-position: -5px -40px;
+}
+
+button.btn_dd:hover{
+    background-position: -92px -40px;    
+}*/
+
+/*오른쪽 상단버튼 - 저장*/
+/*button.btn_ss{ 
+    background-position: -5px -74px;
+}
+
+button.btn_ss:hover{
+    background-position: -92px -74px;    
+}*/
+
+/*오른쪽 상단버튼 - 검색*/
+/*button.btn_ii{ 
+    background-position: -5px -108px;
+}
+button.btn_ii:hover{
+    background-position: -92px -108px;    
+}*/
+
+/*.btn_icon2{
+    float: left;
+    border-right: 0px solid #dddddd;
+    width: 21px;
+    box-sizing: border-box;
+
+}
+.btn_main2{
+    float: left;
+    width: 54px;
+    border: 0px solid #dddddd;
+    background-color:#ffffff;
+    font: 12px;
+    height: 21px;
+    height: 21px;
+    line-height: 20px;
+    box-sizing: border-box;
+    text-align: center;
+    font-weight: bold;
+    padding: 0;
+
+}*/
+.btn_4txt {
+    border: 1px solid #d7d7d7;
+    background-color: #ffffff;
+    width:57px;
+    height: 23px;
+    box-sizing: border-box;
+    font-weight: bold;
+}
+
+
+.btn_4txt:hover {
+    border: 1px solid #b5dfc8;
+    background-color: #d3f0e0;
+    box-sizing: border-box;
+}
+
+
