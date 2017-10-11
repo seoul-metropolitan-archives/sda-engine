@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="rmsoft.ams.seoul.ad.ad001.dao.Ad001Mapper">
+
+    <select id="select" resultType="ad001" parameterType="ad001" statementType="PREPARED">
+    <![CDATA[
+        SELECT  
+                 A.CONFIGURATION_UUID configurationUUID 
+               , A.CONFIGURATION_CODE configurationCode 
+               , A.CONFIGURATION_VALUE configurationValue 
+               , A.SERVICE_UUID serviceUUID 
+               , B.SERVICE_NAME serviceName 
+               , A.INSERT_UUID insertUUID 
+               , A.DESCRIPTION description 
+               , A.NOTES notes  
+               , DECODE(A.USE_YN,'Y''true','N','false') useYN 
+               , (SELECT USER_NAME FROM AC_USER "USER" WHERE A.INSERT_UUID = "USER".USER_UUID ) insertUserName 
+               , TO_CHAR(A.INSERT_DATE,'yyyy-MM-dd hh:mm:ss') insertDate 
+               , A.UPDATE_UUID updateUUID 
+               , (SELECT USER_NAME FROM AC_USER "USER" WHERE A.UPDATE_UUID = "USER".USER_UUID ) updateUserName   
+               , TO_CHAR(A.UPDATE_DATE,'yyyy-MM-dd hh:mm:ss') updateDate 
+             FROM  
+               AD_CONFIGURATION A 
+               , AD_SERVICE B  
+            WHERE  
+               A.SERVICE_UUID = B.SERVICE_UUID 
+        ]]>
+    </select>
+
+</mapper>
