@@ -1,0 +1,67 @@
+package rmsoft.ams.seoul.ad.ad004.domain;
+
+import io.onsemiro.core.annotations.Comment;
+import io.onsemiro.core.domain.BaseJpaModel;
+import lombok.*;
+import org.apache.ibatis.type.Alias;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
+import rmsoft.ams.seoul.ad.ad000.domain.Ad000;
+
+import javax.persistence.*;
+import java.io.Serializable;
+
+@Setter
+@Getter
+@DynamicInsert
+@DynamicUpdate
+@Entity
+@EqualsAndHashCode(callSuper = true)
+@IdClass(Ad004_H.Ad004_HId.class)
+@Alias("Ad004_H")
+@Table(name = "AD_POPUP_HEADER")
+public class Ad004_H extends BaseJpaModel<Ad004_H.Ad004_HId>
+{
+    @Id
+    @Column(name="POPUP_HEADER_UUID")
+    @Comment(value="팝업 UUID")
+    private String popupHeaderUUID;
+
+    @Column(name="POPUP_CODE")
+    @Comment(value="팝업 코드")
+    private String popupCode;
+
+    @Column(name="POPUP_NAME")
+    @Comment(value="팝업 명")
+    private String popupName;
+
+    @Column(name="SERVICE_UUID")
+    @Comment(value="서비스 UUID")
+    private String serviceUUID;
+
+    @Column(name="MULTISELECT_YN")
+    @Comment(value="멀티 셀렉트 YN")
+    private String multiselectYN;
+
+    @Column(name="POPUP_SQL")
+    @Comment(value="팝업 SQL")
+    private String popupSQL;
+
+
+    @Override
+    public Ad004_HId getId() {
+        return Ad004_HId.of(popupHeaderUUID);
+    }
+
+
+    @Embeddable
+    @Data
+    @NoArgsConstructor
+    @RequiredArgsConstructor(staticName = "of")
+    public static class Ad004_HId implements Serializable
+    {
+        @NonNull
+        private String popupHeaderUUID;
+    }
+
+}

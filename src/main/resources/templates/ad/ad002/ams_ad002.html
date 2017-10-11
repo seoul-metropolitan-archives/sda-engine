@@ -1,0 +1,524 @@
+<!DOCTYPE HTML>
+<html lang="ko">
+
+<head>
+    <title>Message</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="stylesheet" type="text/css" href="css/common.css" />
+    <link rel="stylesheet" type="text/css" href="css/ams_layout.css" />
+    <link rel="stylesheet" type="text/css" href="css/button.css">
+    <link rel="stylesheet" type="text/css" href="css/popup.css">
+    <link rel="stylesheet" type="text/css" href="css/rg_style.css">
+    <link rel="icon" href="images/favicon00.png" type="image/x-icon">
+
+    <!--Jquery UI-->
+    <link rel="stylesheet" type="text/css" href="css/jquery-ui.min.css">
+
+    <!--Jquery-->
+    <script type="text/javascript" src="js/jquery/jquery-1.12.4.min.js"></script>
+
+    <!--Jquery UI-->
+    <script type="text/javascript" src="js/jquery/jquery-ui.min.js"></script>
+
+
+    <!--RealGrid는 Jquery없이도 사용할 수 있습니다.-->
+    <!--realgrid-->
+    <script type="text/javascript" src="js/realgrid/realgridjs-lic.js"></script>
+    <script type="text/javascript" src="js/realgrid/realgridjs_eval.1.1.22.min.js"></script>
+    <script type="text/javascript" src="js/realgrid/realgridjs-api.1.1.22.js"></script>
+    <script type="text/javascript" src="js/realgrid/jszip.min.js"></script>
+
+    <!--realgrid menu-->
+    <script type="text/javascript" src="js/layout.js"></script>
+
+    <script type="text/javascript" src="js/rg_main_tree.js"></script>
+    <script type="text/javascript" src="js/rg_main_m2.js"></script>
+    <script type="text/javascript" src="js/rg_main_m3.js"></script>
+
+    <script type="text/javascript" src="js/rg_ad002.js"></script>
+
+    <style>
+        @media screen and (max-width:1279px) {
+            .header {
+                height: 30px;
+                width: 1280px;
+            }
+            .cssBody {
+                padding-left: 220px;
+                width: 1280px;
+            }
+            .left {
+                width: 220px;
+            }
+            .left_close_open_btn a {
+                left: 220px;
+            }
+        }
+        
+        @media screen and (max-height:681px) {
+            .header {
+                height: 30px;
+            }
+            .cssBody {
+                height: 984px;
+            }
+            .left {
+                height: 984px;
+            }
+        }
+    </style>
+
+    <script type="text/javascript">
+        function leftcloseView() {
+            $(".left").hide();
+            $(".cssBody").css("left", "0%");
+            $(".cssBody").css("padding-left", "0");
+            $("a.leftmenu_open").show();
+            $("a.leftmenu_close").hide();
+            $(".left_close_open_btn a").css("left", "0%");
+            $(".left_close_open_btn a").css("margin-left", "0");
+            $(".header").css("width", "100%");
+            setTimeout("gridView.resetSize();", 100);
+            setTimeout("M2GridView.resetSize();", 100);
+            setTimeout("M3GridView.resetSize();", 100);
+            setTimeout("MtreeView.resetSize();", 100);
+
+        }
+
+        function leftopenView() {
+            $(".left").show();
+            $("a.leftmenu_open").hide();
+            $("a.leftmenu_close").show();
+            $(".cssBody").css("left", ""); //오른쪽 부분 원상복귀
+            $(".cssBody").css("padding-left", ""); //오른쪽 부분 복귀
+            $(".left_close_open_btn a").css("left", "");
+            $(".left_close_open_btn a").css("margin-left", "");
+            $(".header").css("width", "");
+            $(".left").css("top", "80px");
+            setTimeout("gridView.resetSize();", 100);
+            setTimeout("M2GridView.resetSize();", 100);
+            setTimeout("M3GridView.resetSize();", 100);
+            setTimeout("MtreeView.resetSize();", 100);
+
+        }
+
+        function left7openView() {
+            $(".left").show();
+            $(".left").css("top", "50px");
+            $("a.leftmenu7_open").hide();
+            $("a.leftmenu_open").hide();
+            $("a.leftmenu_close").hide();
+            $("a.leftmenu7_close").show();
+            $(".cssBody").css("left", ""); //오른쪽 부분 원상복귀
+            $(".cssBody").css("padding-left", ""); //오른쪽 부분 복귀
+            $(".left_close_open_btn a").css("left", "");
+            $(".left_close_open_btn a").css("margin-left", "");
+            $(".header").css("width", "");
+            setTimeout("gridView.resetSize();", 100);
+            setTimeout("M2GridView.resetSize();", 100);
+            setTimeout("M3GridView.resetSize();", 100);
+            setTimeout("MtreeView.resetSize();", 100);
+        }
+
+        function left7closeView() {
+            $(".left").hide();
+            $(".cssBody").css("left", "0%");
+            $(".cssBody").css("padding-left", "0");
+            $("a.leftmenu_open").hide();
+            $("a.leftmenu7_open").show();
+            $("a.leftmenu_close").hide();
+            $("a.leftmenu7_close").hide();
+            $(".left_close_open_btn a").css("left", "0%");
+            $(".left_close_open_btn a").css("margin-left", "0");
+            $(".header").css("width", "100%");
+            setTimeout("gridView.resetSize();", 100);
+            setTimeout("M2GridView.resetSize();", 100);
+            setTimeout("M3GridView.resetSize();", 100);
+            setTimeout("MtreeView.resetSize();", 100);
+
+        }
+
+        function bigView() {
+            $(".header").hide();
+            $(".left").hide();
+            $(".tab1_wrap").hide();
+            $(".cssBody").css("left", "0%");
+            $(".cssBody").css("top", "50px");
+            $(".nav").css("top", "0");
+            $(".cssBody").css("padding-left", "0");
+            $("a.small_open").show();
+            $("a.big_close").hide();
+            /*$(".zeta-menu-bar").show();*/
+            $("a.leftmenu7_open").show();
+            $("a.leftmenu_close").hide();
+            $("a.leftmenu_open").hide();
+            $(".left_close_open_btn a").css("left", "0%");
+            $(".left_close_open_btn a").css("margin-left", "0");
+            $("a.leftmenu_open").show();
+            $("a.leftmenu_close").hide();
+            /*$(".header").css("width","100%");*/
+            setTimeout("gridView.resetSize();", 100);
+            setTimeout("M2GridView.resetSize();", 100);
+            setTimeout("M3GridView.resetSize();", 100);
+            setTimeout("MtreeView.resetSize();", 100);
+
+        }
+
+        function smallView() {
+            $(".header").show();
+            $(".left").show();
+            $(".tab1_wrap").show();
+            $(".left").css("top", "80px");
+            $(".cssBody").css("left", "");
+            $(".cssBody").css("top", "80px");
+            $(".nav").css("top", "");
+            $(".cssBody").css("padding-left", "");
+            $("a.small_open").hide();
+            $("a.big_close").show();
+            /*$(".zeta-menu-bar").show();*/
+            $("a.leftmenu7_open").hide();
+            $("a.leftmenu_close").show();
+            $("a.leftmenu7_close").hide();
+            $("a.leftmenu_open").hide();
+            $(".left_close_open_btn a").css("left", "");
+            $(".left_close_open_btn a").css("margin-left", "");
+            /*$(".header").css("width","");*/
+            setTimeout("gridView.resetSize();", 100);
+            setTimeout("M2GridView.resetSize();", 100);
+            setTimeout("M3GridView.resetSize();", 100);
+            setTimeout("MtreeView.resetSize();", 100);
+
+        }
+
+        $(function () {
+            $(".zeta-menu li").hover(function () {
+                $('ul:first', this).show();
+            }, function () {
+                $('ul:first', this).hide();
+            });
+            $(".zeta-menu>li:has(ul)>a").each(function () {
+                $(this).html($(this).html() + ' &or;');
+            });
+            $(".zeta-menu ul li:has(ul)")
+                .find("a:first")
+                .append("<p style='float:right;margin:-3px'>&#9656;</p>");
+        });
+
+
+        $(function () {
+            $(".tab1 span").click(function () {
+                $(".tab1 span").removeClass();
+                $(this).addClass("on");
+            });
+        });
+    </script>
+</head>
+
+<body>
+   <div class="header" style="border-bottom:0">
+       <ul>
+          <li class="pdl_5" style="text-align:left">Seoul Metropolitan Archives</li>
+          <li class="pdr_5" style="text-align:right"><a href="#" onclick="viewDiv(1)">User Name</a> | <a href="#">Sign Out</a></li>
+      </ul>
+    </div>
+    <div class="nav">
+        <div style="float:left;">
+            <img src="images/sma_logo2.jpg" alt="로고">
+        </div>
+      <div class="zeta-menu-bar">
+         <ul class="zeta-menu">
+            <!--<li><a href="#">홈</a></li>-->
+            <li><a href="#">Menu1</a>
+              <ul>
+                <li><a href="#">1-A</a></li>
+                <li><a href="#">1-B</a></li>
+              </ul>
+            </li>
+            <li><a href="#">Menu2</a>
+              <ul>
+                <li><a href="#">2-A</a></li>
+                <li><a href="#">2-B</a>
+                  <ul>
+                    <li><a href="#">2-B-1</a></li>
+                    <li><a href="#">2-B-2</a></li>
+                  </ul>
+                </li>
+                <li><a href="#">2-C</a></li>
+                <li><a href="#">2-D</a>
+                  <ul>
+                    <li><a href="#">2-D-1</a></li>
+                    <li><a href="#">2-D-2</a></li>
+                    <li><a href="#">2-D-3</a></li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+            <li><a href="#">Menu3</a>
+              <ul>
+                <li><a href="#">3-A</a></li>
+                <li><a href="#">3-B</a></li>
+              </ul>
+            </li> 
+            <li><a href="#">Menu4</a></li> 
+          </ul>
+      </div>
+        <div style="" class="bigsmall_btn">
+            <a href="#" onclick="bigView()" class="big_close">
+            <img src="images/btn_big.jpg" alt="grid big show"></a>
+            <a href="#" onclick="smallView()" class="small_open">
+            <img src="images/btn_small.jpg" alt="grid normal show"></a>
+        </div>
+    </div>
+
+     <div class="left bdr" style="top:80px">
+        <div class="left_top1 bdb">
+            <!--height: 3.7%;-->
+            <ul>
+                <li class="left-all-menu bdr">
+                    <a href="#" onclick="allmenuView()">Full Menu</a></li>
+                <li class="left-my-menu">
+                    <a href="#" onclick="mymenuView()">My Menu</a></li>
+            </ul>
+        </div>
+        <!--전체메뉴 나의 메뉴 탭부분-->
+
+        <div class="left_top2">
+            <!--height: 3.7%;-->
+            <ul>
+                <li style="padding:0 1%;width:76%">
+                    <input type="text" style="width:100%;vertical-align:middle">
+                </li>
+                <li style="width:24%">
+                    <button class="btn_small">Search</button>
+                </li>
+            </ul>
+        </div>
+        <!--메인 좌측 검색부분-->
+        <div class="left_top3 bdt bdb">
+            <ul>
+                <li class="bdr">
+                    <a href="#" class="open_close" id="rg_tree_allopen_m1">Expand All</a></li>
+                <li>
+                    <a href="#" class="open_close" id="rg_tree_allclose_m1">Collapse All</a></li>
+            </ul>
+        </div>
+        <div class="left_bottom1">
+            <div style="width:100%; height:100%" class="bdb">
+                <div id="realgridM1" style="width: 100%; height: 100%;"></div>
+            </div>
+        </div>
+        <!--전체메뉴-->
+
+        <div class="left_bottom2">
+            <div style="width:100%; height:50%;">
+                <div id="realgridM2" style="width: 100%; height: 100%;"></div>
+            </div>
+            <div style="width:100%; height:50%" class="bdb bdt">
+                <div id="realgridM3" style="width: 100%; height: 100%;"></div>
+            </div>
+
+        </div>
+        <!--나의 메뉴인 즐겨찾기와 최근메뉴-->
+
+    </div>
+    <!--메인좌측-->
+    
+    <div class="left_close_open_btn">
+        <a href="#" onclick="leftcloseView()" class="leftmenu_close">◀</a>
+        <a href="#" onclick="leftopenView()" class="leftmenu_open">▶</a>
+
+        <a href="#" onclick="left7closeView()" class="leftmenu7_close">◀</a>
+        <a href="#" onclick="left7openView()" class="leftmenu7_open"> ▶</a>
+    </div>
+
+
+    <div class="cssBody" style="top:80px">
+        <div style="display:table; height:100%; width:100%">
+            <div class="tab1_wrap">
+                <div class="tab1">
+                    <ul>
+                        <li><span class="on">User</span></li>
+                        <li><span>Program</span></li>
+                        <li><span>User Role</span></li>
+                        <li><span>Role</span></li>
+                        <li><span>Folder</span></li>
+                        <li><span>Code</span></li>
+                        <li><span>Popup</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="contents_wrap">
+                <div style=" height:30px; width:100%" class="bgf7 div_tablerow">
+                    <ul class="bdb">
+                        <li style="width:30px">
+                            <div class="bookmark_star"><img src="images/bookmark.png" alt="즐겨찾기"></div>
+                        </li>
+                        <li style="width:50%; text-align:left;">Message</li>
+                        <li style="text-align:right; width:48%;">
+                            <button class="btn_s">
+                                <span class="btn_icon">&nbsp;</span>
+                                <span class="btn_main_txt">Save(S)</span>
+                            </button>
+                            <button class="btn_i">
+                                <span class="btn_icon">&nbsp;</span>
+                                <span class="btn_main_txt">Inquiry(I)</span>
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+                <div class="bdb div_tablerow">
+                    <dl>
+                        <dt class="pdl_5">Message Code</dt>
+                        <dd>
+                            <input type=text style="width:135px">
+                        </dd>
+                        <dt>Message Name</dt>
+                        <dd>
+                            <input type=text style="width:135px">
+                        </dd>
+                        <dt>Service</dt>
+                        <dd>
+                            <select style="width:135px;">
+                                <option>&nbsp;</option>
+                                <option>Service1</option>
+                                <option>Service2</option>
+                                <option>Service3</option>
+                            </select>
+                        </dd>
+                        <dd class="w_auto">
+                            <div class="rdo_box">
+                                <span class="rdo_box_title">Use</span>
+                                <label>
+                                    <input type="radio" name="radio" class="no_border">Yes</label>
+                                <label>
+                                    <input type="radio" name="radio" class="no_border">No</label>
+                                <label>
+                                    <input type="radio" name="radio" class="no_border" checked>All</label>
+                            </div>
+                        </dd>
+                    </dl>
+                </div>
+
+                <div style="height:100%; width:100%" class="bgf7 div_tablerow">
+
+                    <div style="height:100%; width:100%" class="div_table">
+                        <ul class="bdb bdt div_tablerow" style="height:30px;">
+                            <li style="width:50%; text-align:left;">
+                                <img src="images/img_dot2.png" alt="dot">Message</li>
+                            <li style="text-align:right; width:48%;">
+                                <button class="btn_a">
+                                    <span class="btn_icon">&nbsp;</span>
+                                    <span class="btn_main_txt">Add</span>
+                                </button>
+                                <button class="btn_d">
+                                    <span class="btn_icon">&nbsp;</span>
+                                    <span class="btn_main_txt">Delete</span>
+                                </button>
+                            </li>
+                        </ul>
+                        <div style="height:100%; width:100%" class="div_tablerow bdb">
+                            <div id="realgrid" style="width:100%; height:100%"></div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+    <!--오른쪽 내용영역 전체 e -->
+
+
+    <!-- 사용자 설정 팝업창 시작 popup.css-->
+<div class="user_edit">
+    <table style="width:100%; height:100%">
+       <caption>User edit popup </caption>
+       <colgroup><col style="width:40%"><col style="width:60%"></colgroup>
+        <thead>
+        <tr>
+            <th class="right_title2 bdb" colspan="2" style="text-align:left">
+                <img src="images/img_dot1.png" style="vertical-align: middle; margin-right:5px" alt="">User
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td class="pdl_10">User ID</td>
+            <td><input type="text" class="onlyread" placeholder="User ID" readonly></td>
+        </tr>
+        <tr>
+            <td class="pdl_10">User Name</td>
+            <td><input type="text" class="onlyread" placeholder="User Name" readonly></td>
+        </tr>
+        <tr>
+            <td class="pdl_10">Current Password</td><td>
+            <input type="password"></td>
+        </tr>
+        <tr>
+            <td class="pdl_10">New Password</td>
+            <td><input type="password"></td>
+        </tr>
+        <tr>
+            <td class="pdl_10">Re-enter New Password</td>
+            <td><input type="password"></td>
+        </tr>
+        </tbody>
+        <tfoot>
+        <tr>
+            <td colspan="2" class="userfoot">
+                <button class="btn_3txt">Ok</button><button class="btn_3txt" onclick="viewDiv(2)">Cancel</button>
+            </td>
+        </tr>
+        </tfoot>
+    </table>
+</div>
+<!-- 사용자 설정 팝업창 끝-->     
+
+<!--공통팝업창-->
+		<div id="Popup" class="allpop" style="padding:0; overflow:hidden">
+			<div style="width:100%; height:10%; padding-top:1%">
+                <input type="text" class="input_sz">
+                <button class="btn_4txt" style="margin:0">Inquiry</button>
+            </div>
+            <div style="height:79%; width:100%;top:11%; border:1px solid #ddd; margin-bottom:1%">
+                <div style="width: 100%; height: 100%;">grid or Contents</div>		
+            </div>
+			<div class="foot" style="height:10%; width:100%; top:90%">
+                <div class="footradius">
+					<button class="btn_3txt">Ok</button><button class="btn_3txt">Cancel</button>
+                </div>
+			</div>	
+		</div>
+<!--공통팝업창 끝-->
+
+    <!-- 안내 팝업창 (3가지 경우) popup.css-->    
+<div class="info_pop" style="display:none">
+    <div class="info_poptitle">
+        <img src="images/img_dot1.png" style="" alt="">Notice Popup
+    </div>
+    <div class="info_poptxt">
+        Notice mention.
+    </div>
+    <!--<div class="info_popfoot">
+        <button class="btn_3txt">Ok</button><button class="btn_3txt">Cancel</button>
+    </div>	-->
+</div>
+<!-- 안내 팝업창 끝--> 
+
+    <script>
+        // Link to open the dialog
+        $("#dialog-link").click(function (event) {
+            $("#Popup").dialog("open");
+            $(".allpop").css("display", "block");
+            /*setTimeout("SeTreeView.resetSize();", 100);*/
+            event.preventDefault();
+        });
+
+    </script>
+</body>
+
+</html>
