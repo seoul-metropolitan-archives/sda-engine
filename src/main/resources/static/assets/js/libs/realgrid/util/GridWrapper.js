@@ -43,13 +43,13 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 	//Grid 높이
 	var i_height = "";
 	//컬럼 리스트
-	var i_columnList = new Array();
+	var i_columnList = [];
 	//필드 리스트
-	var i_fieldList = new Array();
+	var i_fieldList = [];
 	
 	var callback = {
 			context : undefined
-	}
+	};
 	
 	var gridView;
 	
@@ -69,7 +69,7 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 	
 	var list = undefined;
 	//이미지 관련 URL 
-	var imageUrl = "/images/"
+	var imageUrl = "/images/";
 
 	var isTree = undefined == _isTree ? false: true;
 
@@ -77,7 +77,7 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 		return true;
 	};
 	
-	var contextMenu = [{label : "ExcelExport"}]
+	var contextMenu = [{label : "ExcelExport"}];
 
 	//================================================
 	//lazy load시 사용 파라메터
@@ -164,7 +164,7 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 			toast: {
 				visible: true
 			}
-		}
+		};
 	var editorDefaultOption = {
 		useCssStyleDropDownList : true,
 		useCssStyleDatePicker : true,
@@ -176,13 +176,13 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 	var displayDefaultOption = {
 			rowFocusVisible: false,
 	        rowFocusBackground: "#32f2fbff"
-	}
+	};
 	//필터링 시 사용되는 옵션
 	var filteringDefaultOptions = {
 			selector: {
 	            useCssStyle: true
 	        }
-	}
+	};
 	
 	var providerDefaultOption = {
 		commitBeforeDataEdit : true, // 그리드가 편집중일때 grid.setValue,
@@ -347,7 +347,7 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
                 alert("done excel export")
             }
         });
-	}
+	};
 
 	var bindEvent = function() {
 		gridView.onKeyDown = keyDown;
@@ -365,7 +365,7 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 		  };
 		  gridView.onDataCellClicked = function(grid, index)
 		  {
-		  }
+		  };
 		  gridView.onCellEdited  = function(grid, itemIndex, dataRow, field)
 		  {
 		  }
@@ -375,21 +375,21 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 	{
         isTree = _isTree;
         return this;
-	}
+	};
 
 	this.setContextCallback = function(i_callback)
 	{
 		callback = i_callback;
-	}
+	};
 	this.getContextCallback = function()
 	{
 		return callback;
-	}
+	};
 	this.setEntityName = function(entityName)
 	{
 		i_entity_name = entityName;
 		return this;
-	}
+	};
 	this.setGridStyle = function(width, height) {
 		i_width = width;
 		i_height = height;
@@ -405,14 +405,14 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 		{
 			
 		}
-	}
+	};
 	this.setStyle = function(style)
 	{
 		if(style instanceof Object)
 			defaultStyle.header = $.extend({},defaultStyle,style);
 		else
 			throw new Exception("Header Style은 Object로 정의해야됩니다.");
-	}
+	};
 	
 	this.getHeaderStyle = function() {
 		return defaultStyle.parsing.header;
@@ -428,7 +428,7 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 	};
 	this.addContextMenu = function(menu)
 	{
-		var menus = new Array();
+		var menus = [];
 		menus.push({"label" : menu});
 		for(var i = 0; i < contextMenu.length; i++)
 		{
@@ -439,7 +439,7 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 			gridView.setContextMenu(contextMenu);
 		
 		return this;
-	}
+	};
 	
 
 	var _initOption = function(gridView, provider) {
@@ -506,8 +506,8 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 	 *              boolean }
 	 */
 	this.setColumnInfo = function(list) {
-		var columnList = new Array();
-		var fieldList = new Array();
+		var columnList = [];
+		var fieldList = [];
 		var data = undefined;
 		// 정렬순서로 데이터 정렬
 		list.sort(function(a, b) {
@@ -571,13 +571,13 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 					obj.editor = {
 						type: "multiline",
 						textCase: "upper"
-					}
+					};
                     defaultData.push("");
 					break;
 				case "number":
 					obj.displayRegExp = /\B(?=(\d{3})+(?!\d))/g;
 					obj.displayReplace = ",";
-					obj.style = {textAlignment: "far"}
+					obj.style = {textAlignment: "far"};
                     defaultData.push("");
 					break;
 				case "date":
@@ -608,14 +608,14 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 					defaultData.push("");
 					break;
 				case "combo":
-					obj.editor = $.extend({},defaultStyle.data.combo,data.editor)
+					obj.editor = $.extend({},defaultStyle.data.combo,data.editor);
 					obj.values = data.values;
 					obj.labels = data.labels;
 					obj.sortable = data.sortable === undefined ? false
 							: data.sortable;
 					obj.lookupDisplay = data.lookupDisplay === undefined ? true
 							: data.lookupDisplay;
-					defaultData.push(data.values[0]);
+					defaultData.push((undefined === data.values || data.values.length < 1) ? "" : data.values[0]);
 					break;
 				case "check":
 					obj.renderer = defaultStyle.data.check;
@@ -624,7 +624,7 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 					break;
 				case "button":
 					obj.button = "image";
-					obj.imageButtons = $.extend({},defaultStyle.data.imageButtons,data.imageButtons)
+					obj.imageButtons = $.extend({},defaultStyle.data.imageButtons,data.imageButtons);
                     defaultData.push("");
 					break;
 				default:
@@ -693,9 +693,9 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 		var updateRow = rowState.updated;
 		var deletedRow = rowState.deleted;
 
-		var createdList = new Array();
-		var updatedList = new Array();
-		var deletedList = new Array();
+		var createdList = [];
+		var updatedList = [];
+		var deletedList = [];
 
 		var row = undefined;
 		for (var i = 0; i < createRow.length; i++) {
@@ -739,7 +739,7 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 	this.setFixedOptions = function(p_fixedOptions)
 	{
 		gridView.setFixedOptions(p_fixedOptions);
-	}
+	};
 	
 	
 	// ==============================
@@ -848,12 +848,12 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 		gridView.getDataProvider().fillJsonData(list, {
 			fillMode : mode
 		});
-	}
+	};
 	this.setJSONData = function(_list)
 	{
 		dataType = "JSON";
 		list = _list;
-	}
+	};
 	this.setData = function(mode, list) {
 		dataProvider.fillJsonData(list, {
 			fillMode : mode
@@ -863,15 +863,15 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 	this.expandAll = function()
 	{
         gridView.expandAll()
-	}
+	};
 	this.setTreeData = function(list, rowsProp, childrenProp, iconProp)
 	{
         dataProvider.setJsonRows(list, rowsProp, childrenProp, iconProp);
-	}
+	};
 	this.setListCount = function(_listCount)
 	{
 		maxCount = _listCount;
-	}
+	};
 	this.load = function(url,data,parsingCallback)
 	{
 
@@ -882,35 +882,32 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 			, data : JSON.stringify(data)
 			, contentType : "application/json"
 			, dataType : "JSON"
-			, success: function(response) {
-				if(response.header.result)
-				{
-					var fillMode = "set";
-					if(0 != newStart)
-					{
-                        fillMode = "insert";
-					}
+			, success: function(list) {
 
-					if(undefined === response.body.list || response.body.list.length < 1)
-					{
-                        _addRow();
-					}
-					else {
-						if(parsingCallback)
-                            response.body.list = parsingCallback(response.body.list);
 
-                        dataProvider.fillJsonData(response.body.list,
-                            {fillMode: fillMode, start: newStart, count: maxCount});
-                    }
-
+                var fillMode = "set";
+                if (0 != newStart) {
+                    fillMode = "insert";
                 }
-			}
+
+                if (undefined === list || list.length < 1) {
+                    _addRow();
+                }
+                else {
+                    if (parsingCallback)
+                        list = parsingCallback(list);
+
+                    dataProvider.fillJsonData(list,
+                        {fillMode: fillMode, start: newStart, count: maxCount});
+                }
+
+            }
 		});
-	}
+	};
 	this.onDataCellClicked  = function(_event)
 	{
         gridView.onDataCellClicked  = _event;
-    }
+    };
 	this.setAppendValiate = function(func) {
 		if (typeof func == "function") {
 			appendValidate = func;
@@ -922,7 +919,7 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 
 	init();
 
-}
+};
 
 var gridEvent = 
 {

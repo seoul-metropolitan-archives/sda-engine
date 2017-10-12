@@ -2,7 +2,7 @@ var fnObj = {};
 var pageSize = 1000;
 var errorStatusList = {};
 var gridView = undefined;
-var serviceList = new Array();
+var serviceList = [];
 var handleResult = "";
 var handleFailReason = "";
 var cash10kEmptyStatus = "";
@@ -478,33 +478,49 @@ var fnObj = {
             success: function(){}
         });
         /**/
+        axboot.ajax({
+            type: "POST",
+            url: "/ad/ad003/getCode",
+            data : JSON.stringify({categoryCode : "CD006"}),
+            async : false,
+            callback: function (list) {
+                console.log(JSON.stringify(list));
 
-        _this.gridView_h.initView();
-        _this.gridView_d.initView();
+                if(undefined === list)
+                    return ;
 
+                var data = undefined;
+                for(var i = 0;i < list.length; i++)
+                {
+                    data = list[i];
+                    /*column info 정보 갱신*/
+                    ad004_h.column_info[3].values.push(data.codeDetailUUID);
+                    ad004_h.column_info[3].labels.push(data.codeName);
 
-        rmsoft.controller.ad.ad000.request("getService",{},false,function(response){
-            console.log(JSON.stringify(response));
-            var data = undefined;
-            for(var i = 0;i < response.list.length; i++)
-            {
-                data = response.list[i];
-                /*column info 정보 갱신*/
-                ad004_h.column_info[3].values.push(data.service_uuid);
-                ad004_h.column_info[3].labels.push(data.service_name);
+                    /*콤보박스 생성*/
+                    $("#serviceList").append($("<option>").val(data.codeDetailUUID).text(data.codeName));
 
-                /*콤보박스 생성*/
-                $("#serviceList").append($("<option>").val(data.service_uuid).text(data.service_name));
+                    serviceList[data.service_uuid] =
+                        {
+                            "label" : data.codeName,
+                            "value": data.codeDetailUUID
+                        }
+                }
+            },
+            options: {
+                onError: function(a,b,c)
+                {
+                    console.log(a);
+                    console.log(b);
+                    console.log(c);
 
-                serviceList[data.service_uuid] =
-                    {
-                        "label" : data.service_name,
-                        "value": data.service_uuid
-                    }
+                }
             }
         });
+        _this.gridView_h.initView();
+        _this.gridView_d.initView();
     }
-}
+};
 fnObj.gridView_h = axboot.viewExtend(axboot.gridView, {
     page: {
         pageNumber: 0,
@@ -521,9 +537,19 @@ fnObj.gridView_h = axboot.viewExtend(axboot.gridView, {
     getData: function (_type)
     {
         var _this = this;
-        rmsoft.controller.ad.ad004.request("search_h",{},false,function(response){
-            _this.gridObj.setData("set",response.list);
-        });
+
+        axboot.ajax({
+            type: "POST",
+            url: "/ad/ad004/ad004/searchPopupHeader",
+            data : JSON.stringify({}),
+            async : false,
+            callback: function (list) {
+                if(undefined === list || list.length < 1)
+                    _this.gridObj.addRow();
+                else
+                    _this.gridObj.setData("set",list);
+            }
+        })
     },
     addRow: function () {
         this.gridObj.addRow();

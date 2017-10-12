@@ -10,4 +10,10 @@ import java.io.Serializable;
 @EqualsAndHashCode(callSuper = false)
 public class Ad00101VO extends BaseVO
 {
+    private String configurationUUID;
+    private String configurationCode;
+    private String configurationValue;
+    private String serviceUUID;
+    private String insertUUID;
+    private String useYN;
 }

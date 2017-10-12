@@ -23,21 +23,6 @@ public class Ad001Controller
     @ResponseBody
     public Object getEnviromentList(Ad00101VO param)
     {
-        HashMap<String,Object> response = new HashMap<String,Object>();
-        HashMap<String,Object> header = new HashMap<String,Object>();
-        HashMap<String,Object> body = new HashMap<String,Object>();
-        response.put("header",header);
-        response.put("body",body);
-
-        try
-        {
-            header.put("result",true);
-            body.put("list",service.getEnviromentList(param));
-        }catch(Exception ex)
-        {
-            header.put("result",false);
-        }
-
-        return response;
+        return service.getEnviromentList(param);
     }
 }

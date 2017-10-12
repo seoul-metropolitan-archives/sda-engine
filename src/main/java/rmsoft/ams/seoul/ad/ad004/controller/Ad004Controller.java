@@ -23,25 +23,10 @@ public class Ad004Controller
     private Ad004_DService service_d;
 
 
-    @RequestMapping("/searchPopupHeader.do")
+    @RequestMapping("/searchPopupHeader")
     @ResponseBody
     public Object searchPopupHeader(@RequestBody Ad00401VO param)
     {
-        HashMap<String,Object> response = new HashMap<String,Object>();
-        HashMap<String,Object> header = new HashMap<String,Object>();
-        HashMap<String,Object> body = new HashMap<String,Object>();
-        response.put("header",header);
-        response.put("body",body);
-
-        try
-        {
-            header.put("result",true);
-            body.put("list",service_h.searchPopupHeader(param));
-        }catch(Exception ex)
-        {
-            header.put("result",false);
-        }
-
-        return response;
+        return service_h.searchPopupHeader(param);
     }
 }

@@ -471,9 +471,6 @@ var fnObj = {
             success: function(){}
         });
         /**/
-
-
-
         axboot.ajax({
             type: "POST",
             url: "/ad/ad003/getCode",
