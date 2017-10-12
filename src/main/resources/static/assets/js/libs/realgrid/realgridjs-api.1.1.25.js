@@ -9,6 +9,7 @@ var RealGridJS = (function () {
     var setRootContext = Grids.setRootContext;
     var setAssetRoot = Grids.setAssetRoot;
     var getVersion = Grids.getVersion;
+    var getActiveGrid = Grids.getActiveGrid;
     var setTrace = Grids.setLogging;
     var getTimer = Grids.getTimer;
     var $_isMobile = Grids.realgrid.$_isMobile;
@@ -521,6 +522,7 @@ var RealGridJS = (function () {
         this.dropDownPosition = undefined;  // "button"
         this.dropDownWhenClick = undefined; // false
         this.partialMatch = undefined;      // false
+        this.trimLabelText = undefined;     // true
     };
     DropDownCellEditor.prototype.type = CellEditor.DROPDOWN;
 
@@ -546,6 +548,8 @@ var RealGridJS = (function () {
         this.acceptText = undefined;        // "accept"
         this.cancelText = undefined;        // "cancel"
         this.showButtons = undefined;       // true
+        this.showAllCheck = undefined;      // false
+        this.allCheckText = undefined;      // "all"
     };
     MultiCheckCellEditor.prototype.type = CellEditor.MULTICHECK;
 
@@ -725,6 +729,7 @@ var RealGridJS = (function () {
         this.imeMode = undefined;                   // ImeMode.DontCare
         this.textInputCase = undefined;             // TextInputCase.NORMAL
         this.nanText = undefined;                   // null
+        this.zeroText = undefined;                  // null
         this.imageList = undefined;
 
         this.header = undefined;                     // ColumnHeader
@@ -812,7 +817,8 @@ var RealGridJS = (function () {
     var RowFocusMask = _enum({
         ROW: "row",
         DATA: "data",
-        FILL: "fill"
+        FILL: "fill",
+        CELL: "cell"
     });
     /**
      * Menu item type
@@ -1258,6 +1264,7 @@ var RealGridJS = (function () {
         this.caseSensitive = undefined;  // false
         this.partialMatch = undefined;   // false
         this.allFields = undefined;      // true
+        this.parentId = undefined;      // tree 노드 하위 검색.
     };
 
     /**
@@ -1282,6 +1289,11 @@ var RealGridJS = (function () {
     /**
      * Display options.
      */
+    var RowFocusOption = function() {
+        this.visible = undefined;               // false
+        this.rowFocusMask = undefined;          // RowFocusMask.ROW
+        this.styles = undefined;                // VisualStyles
+    }
     var DisplayOptions = function () {
         this.columnResizable = undefined;       // true
         this.columnMovable = undefined;         // true
@@ -1311,6 +1323,7 @@ var RealGridJS = (function () {
         this.rowFocusVisible = undefined;       // false
         this.rowFocusMask = undefined;          // row
         this.rowFocusBackground = undefined;    // 
+        this.rowFocusOption = undefined;        // RowFocusOption // rowFocus관련 Option
         this.rightClickable = undefined;        // true
         this.editItemMerging = undefined;       // false 
         this.showInnerFocus = undefined;        // true, mergedCell에서 개별 cell의 영역 표시 여부
@@ -1442,6 +1455,15 @@ var RealGridJS = (function () {
     };
 
     /**
+     * MobileOptions
+    **/
+    var MobileOptions = function() {
+        this.longTapDuration = undefined;       // 500
+        this.doubleTapInterval = undefined;     // 300
+        this.tapThreshold = undefined;          // 4
+    }
+
+    /**
      * DocumentTitle
      */
     var DocumentTitle = function () {
@@ -1464,6 +1486,7 @@ var RealGridJS = (function () {
         this.linear = undefined;            // false
         this.allItems = undefined;          // 감춰진 모든 행을 출력할것인지의 여부
         this.pagingAllItems = undefined;    // paging일때 모든행을 출력할것인지?
+        this.onlyCheckedItems = undefined;  // false 체크된 Items만 export.
         this.indicator = undefined;         // "default"    // "default" | "visible" | "hidden"
         this.header = undefined;            // "default"    // "default" | "visible" | "hidden"
         this.footer = undefined;            // "default"    // "default" | "visible" | "hidden"
@@ -1780,6 +1803,27 @@ var RealGridJS = (function () {
                 field = this._dp.getFieldIndex(field);
             }
             return this._dp.getColumn(field, startRow, endRow);
+        },
+        searchDataRow: function (options) {
+            if (options) {
+                var fields = options.fields;
+                var values = options.values;
+                var startRowId = options.startIndex !== undefined ? options.startIndex : 0;
+                var wrap = options.wrap !== undefined ? options.wrap : true;
+                return this._dp.searchDataRow(fields, values, options, startRowId, wrap);
+            }
+            return -1;
+        },
+        searchData:function(options) {
+            if (options) {
+                var fields = options.fields;
+                var value = options.value;
+                var startRowId = options.startIndex !== undefined ? options.startIndex : 0;
+                var startFieldIndex = options.startFieldIndex !== undefined ? options.startFieldIndex : 0;
+                var wrap = options.wrap !== undefined ? options.wrap : true;
+                return this._dp.searchData(fields, value, options, startRowId, startFieldIndex, wrap);
+            }
+            return null;
         },
         // event handlers -- 불필요한 handler른 설정하지 않는다.
         onRowUpdating: $_debug ? function (provider, row) {
@@ -2103,12 +2147,18 @@ var RealGridJS = (function () {
         setPasteOptions: function (options) {
             this._gv.setPasteOptions(options);
         },
+        getMobileOptions: function() {
+            return this._gv.mobileOptions().proxy();
+        },
+        setMobileOptions: function(options) {
+            this._gv.setMobileOptions(options);
+        },
         // components
         getPanel: function () {
             return this._gv.panel().proxy();
         },
         setPanel: function (value) {
-            this._gv.panel().assign(value);
+            this._gv.setPanel(value);
         },
         getIndicator: function () {
             return this._gv.indicator().proxy();
@@ -2257,6 +2307,9 @@ var RealGridJS = (function () {
         getInvalidCellList: function() {
             return this._gv.getInvalidCellList();
         },
+        clearInvalidCellList: function() {
+            return this._gv.clearInvalidCellList();
+        },
         showEditor: function (dropdown) {
             dropdown = arguments.length > 0 ? dropdown : false;
             this._gv.showEditor(null, null, dropdown);
@@ -2381,6 +2434,9 @@ var RealGridJS = (function () {
         getChildModels: function (model, extended) {
             return _realgrid.getChildModels(this._gv, model, extended);
         },
+        getDescendantModels: function(model, extended) {
+            return _realgrid.getDescendantModels(this._gv, model, extended);
+        },
         getChildModel: function (model, index, extended) {
             return _realgrid.getChildModel(this._gv, model, index, extended);
         },
@@ -2480,6 +2536,12 @@ var RealGridJS = (function () {
         resetSize: function (callback) {
             _realgrid.resetSize(this._gv, callback);
         },
+        resetShadowDom: function () {
+            _realgrid.resetShadowDom(this._gv); 
+        },
+        setShadowDomOptions: function (options) {
+            _realgrid.setShadowDomOptions(this._gv, options);
+        },
         closeList: function () {
             this._gv.closePopups();
         },
@@ -2526,6 +2588,9 @@ var RealGridJS = (function () {
         } : null,
         onColumnHeaderClicked: $_debug ? function (grid, column) {
             _log("onColumnHeaderClicked: " + "(" + column.name + ")");
+        } : null,
+        onColumnHeaderImageClicked: $_debug ? function (grid, column) {
+            _log("onColumnHeaderImageClicked:" + "(" + column.name + ")");
         } : null,
         onColumnHeaderDblClicked: $_debug ? function (grid, column) {
             _log("onColumnHeaderDblClicked: " + "(" + column.name + ")");
@@ -2601,6 +2666,12 @@ var RealGridJS = (function () {
         } : null,
         onRowGroupPanelDblClicked : $_debug ? function (grid, column) {
             _log("onRowGroupPanelDblClicked : " + "(" + column.name + ")");
+        } : null,
+        onBodyEmptyClicked : $_debug ? function(grid) {
+            _log("onBodyEmptyClicked");
+        } : null,
+        onBodyEmptyDblClicked : $_debug ? function(grid) {
+            _log("onBodyEmptyDblClicked");
         } : null,
         onValidateColumn: $_debug ? function (grid, column, inserting, value) {
             return null;
@@ -2747,6 +2818,22 @@ var RealGridJS = (function () {
         onColumnPropertyChanged : $_debug ? function (grid, column, property, value) {
             _log("onColumnPropertyChanged : column =" + column);
         } : null,
+        onShowInnerDragCursor: $_debug ? function(grid, dragCells) {
+            _log("ShowInnerDragCursor");
+            return null;
+        } : null,
+        onInnerDragStart : $_debug ? function (grid, dragCells) {
+            _log("onInnerDragStart");
+        } : null,
+        onInnerDragOver: $_debug ? function(grid, index, dragCells) {
+            _log("onInnerDrogOver");
+        } : null, 
+        onInnerDrop : $_debug ? function (grid, dropIndex, dragCells) {
+            _log("onInnerDrop");
+        } : null,
+        onGridActivated : $_debug ? function (grid) {
+            _log("onGridActivated ")
+        } : null,
     };
     
     var GridView = function (container, accessbility, shadowOptions) {
@@ -2824,6 +2911,12 @@ var RealGridJS = (function () {
         },
         collapseParent: function (itemIndex, recursive) {
             _realgrid.collapseParent(this._gv, itemIndex, recursive);
+        },
+        expandAll: function(level) {
+            _realgrid.expandAll(this._gv, level);
+        },
+        collapseAll: function(recursive) {
+            _realgrid.collapseAll(this._gv, recursive);
         },
         // grouping
         getGroupingOptions: function () {
@@ -3009,6 +3102,29 @@ var RealGridJS = (function () {
         },
         changeRowParent: function(rowId, parentId, childIndex) {
             return _realgrid.changeRowParent(this._dp, rowId, parentId, childIndex);
+        },
+        searchDataRow: function (options) {
+            if (options) {
+                var fields = options.fields;
+                var values = options.values;
+                var startRowId = options.startIndex !== undefined ? options.startIndex : 0;
+                var wrap = options.wrap !== undefined ? options.wrap : true;
+                var parentId = options.parentId;
+                return this._dp.searchDataRow(fields, values, options, startRowId, wrap, parentId);
+            }
+            return -1;
+        },
+        searchData:function(options) {
+            if (options) {
+                var fields = options.fields;
+                var value = options.value;
+                var startRowId = options.startIndex !== undefined ? options.startIndex : 0;
+                var startFieldIndex = options.startFieldIndex !== undefined ? options.startFieldIndex : 0;
+                var wrap = options.wrap !== undefined ? options.wrap : true;
+                var parentId = options.parentId;
+                return this._dp.searchData(fields, value, options, startRowId, startFieldIndex, wrap, parentId);
+            }
+            return null;
         },
         // event handlers -- 불필요한 handler른 설정하지 않는다.
         checkParentProc: $_debug ? function (parent, child) {
@@ -3249,6 +3365,7 @@ var RealGridJS = (function () {
         GridExportOptions: GridExportOptions,
         ImageList: ImageList,
         GridView: GridView,
-        TreeView: TreeView
+        TreeView: TreeView,
+        getActiveGrid: getActiveGrid
     };
 })();
