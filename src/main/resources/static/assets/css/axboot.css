@@ -23818,7 +23818,7 @@ a.big_close{
 .ax-body #ax-base-root {
     width: 100%;
     height: 31px;
-    border-bottom: 1px solid #ddd
+    border-bottom: 1px solid #ddd;
     -webkit-animation: BODY_FADE_IN 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
     -o-animation: BODY_FADE_IN 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
     animation: BODY_FADE_IN 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards
@@ -25526,7 +25526,6 @@ a.big_close{
     display: table-cell;
     vertical-align: middle;
     width: 50%;
-    text-align:;
 }
 
 .cssBody dl {
@@ -25642,7 +25641,7 @@ a.big_close{
 }
 
 .left_bottom1 ul li:hover {
-    background-color: #f1f1f1
+    background-color: #f1f1f1;
 }
 
 .left_bottom1 ul li a {
