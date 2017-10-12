@@ -1,4 +1,4 @@
-package rmsoft.ams.seoul.ad.ad001.domain;
+package rmsoft.ams.seoul.common.domain;
 
 import io.onsemiro.core.annotations.Comment;
 import io.onsemiro.core.domain.BaseJpaModel;
@@ -16,10 +16,10 @@ import java.io.Serializable;
 @DynamicUpdate
 @Entity
 @EqualsAndHashCode(callSuper = true)
-@IdClass(Ad001.Ad001Id.class)
+@IdClass(AdConfiguration.AdConfigurationId.class)
 @Alias("Ad001")
 @Table(name = "AD_CONFIGURATION")
-public class Ad001  extends BaseJpaModel<Ad001.Ad001Id>
+public class AdConfiguration  extends BaseJpaModel<AdConfiguration.AdConfigurationId>
 {
     @Id
     @Column(name="CONFIGURATION UUID")
@@ -39,16 +39,15 @@ public class Ad001  extends BaseJpaModel<Ad001.Ad001Id>
     private String serviceUUID;
 
     @Override
-    public Ad001Id getId() {
-        return Ad001Id.of(configurationUUID);
+    public AdConfigurationId getId() {
+        return AdConfigurationId.of(configurationUUID);
     }
 
     @Embeddable
     @Data
     @NoArgsConstructor
     @RequiredArgsConstructor(staticName = "of")
-    public static class Ad001Id implements Serializable {
-
+    public static class AdConfigurationId implements Serializable {
         @NonNull
         private String configurationUUID;
     }
