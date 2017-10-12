@@ -1137,7 +1137,7 @@ a.small_open{
         display:none;
 }
 
-.contents_wrap {width:100%;height:100%; display:table}
+.contents_wrap {width:100%;height:100%; display:table; position: absolute}
 .contents_wrap dl{
     width:1000px; display: flex; justify-content: left; align-items: center; margin-bottom: 3px; margin-top: 3px 
 }

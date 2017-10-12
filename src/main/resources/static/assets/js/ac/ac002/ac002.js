@@ -534,10 +534,10 @@ fnObj.tabView = axboot.viewExtend({
             if (_item.menuId != menuId) newList.push(_item);
             else removeItem = _item;
         });
-        if (newList.length == 0) {
+        /*if (newList.length == 0) {
             alert("마지막 탭을 닫을 수 없습니다");
             return false;
-        }
+        }*/
         this.list = newList;
         this.target.find('[data-tab-id="' + menuId + '"]').remove();
 

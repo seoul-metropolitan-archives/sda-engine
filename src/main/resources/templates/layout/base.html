@@ -8,7 +8,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
 
     <title th:text="${@environment.getProperty('config.amstitle')}">title</title>
-   <link rel="stylesheet" type="text/css" href="/assets/css/common.css">
+    <link rel="stylesheet" type="text/css" href="/assets/css/common.css">
     <link rel="stylesheet" type="text/css" href="/assets/css/button.css">
     <!--<link rel="stylesheet" type="text/css" href="/assets/css/ams_layout.css">-->
     <link rel="shortcut icon" type="image/x-icon" th:href="@{/assets/favicon.ico/}"/>
@@ -38,7 +38,6 @@
     var CONTEXT_PATH   = 'http://[[${#httpServletRequest.serverName}]]:[[${#httpServletRequest.serverPort}]]';
     /*var CONTEXT_PATH   = 'http://[[@{${@environment.getProperty("server.url")}}]]:[[@{${@environment.getProperty("server.port")}}]]';*/
     var SCRIPT_SESSION = (function(json){return json;})(sessionJson);
-
     function convertJsonObj(jsonStr) {
         return jsonStr == null || jsonStr == '' ? null : JSON.parse(jsonStr.replace(/&quot;/gi, '"'));
     }
@@ -46,5 +45,4 @@
 <script type="text/javascript" th:src="@{/axboot.config.js}"></script>
 <script layout:fragment="js"></script>
 <script layout:fragment="script"></script>
-
 </html>

@@ -5,14 +5,6 @@
 
 <!-- ===== [ script ] ===== -->
 <!--realgrid -->
-
-<script layout:fragment="script" type="text/javascript" th:src="@{/assets/js/libs/realgrid/realgridjs-lic.js}"></script>
-<script layout:fragment="script" type="text/javascript"
-        th:src="@{/assets/js/libs/realgrid/realgridjs_eval.1.1.22.min.js}"></script>
-<script layout:fragment="script" type="text/javascript"
-        th:src="@{/assets/js/libs/realgrid/realgridjs-api.1.1.22.js}"></script>
-<script layout:fragment="script" type="text/javascript" th:src="@{/assets/js/libs/realgrid/jszip.min.js}"></script>
-<script layout:fragment="script" type="text/javascript" th:src="@{/assets/js/libs/realgrid/util/GridWrapper.js}"></script>
 <script layout:fragment="script" type="text/javascript" th:src="@{/assets/js/ac/ac003/rg_ac003.js}"></script>
 
 <!-- ===== [ script ] _END_ ===== -->
@@ -22,23 +14,11 @@
 <!-- ===== [ base-content ] ===== -->
 <div layout:fragment="base-content" class="ax-base-content">
     <div class="cssBody" style="top:80px">
-        <div class="contents_wrap" style="position:absolute">
+        <div class="contents_wrap">
             <div style=" height:31px; width:100%" class="bgf7 div_tablerow">
                 <ul class="bdb">
-                    <li style="width:30px">
-                        <div class="bookmark_star"><img src="/assets/images/ams/bookmark.png" alt="즐겨찾기"></div>
-                    </li>
-                    <li style="width:50%; text-align:left;">User</li>
-                    <li style="text-align:right; width:48%;">
-                        <button class="btn_s">
-                            <span class="btn_icon">&nbsp;</span>
-                            <span class="btn_main_txt">Save(S)</span>
-                        </button>
-                        <button class="btn_i">
-                            <span class="btn_icon">&nbsp;</span>
-                            <span class="btn_main_txt">Inquiry(I)</span>
-                        </button>
-                    </li>
+                    <th:block layout:insert="~{/fragments/page-buttons :: bookmark('User')}"/>
+                    <th:block layout:insert="~{/fragments/page-buttons :: save-and-inquiry}"/>
                 </ul>
             </div>
             <div class="bdb div_tablerow">
@@ -81,19 +61,8 @@
             <div style="height:100%; width:100%" class="div_tablerow">
                 <div style="display:table; height:50%; width:100%">
                     <ul class="bdb bdt div_tablerow bgf7" style="height:30px;">
-                        <li style="width:50%; text-align:left;">
-                            <img src="/assets/images/ams/img_dot2.png" alt="dot"> User
-                        </li>
-                        <li style="text-align:right; width:48%;">
-                            <button class="btn_a">
-                                <span class="btn_icon">&nbsp;</span>
-                                <span class="btn_main_txt">Add</span>
-                            </button>
-                            <button class="btn_d">
-                                <span class="btn_icon">&nbsp;</span>
-                                <span class="btn_main_txt">Delete</span>
-                            </button>
-                        </li>
+                        <th:block layout:insert="~{/fragments/page-buttons :: dot('User')}"/>
+                        <th:block layout:insert="~{/fragments/page-buttons :: add-and-delete}"/>
                     </ul>
                     <div style="height:100%; width:100%" class="div_tablerow bdb">
                         <div id="realgrid" style="width:100%; height:100%"></div>
@@ -103,19 +72,8 @@
                 <div style="display:table; height:50%; width:50%; float:left" class="bdr">
 
                     <ul class="bdb bdt bgf7 div_tablerow" style="height:30px;">
-                        <li style="width:30%; text-align:left;">
-                            <img src="/assets/images/ams/img_dot2.png" alt="dot"> User Group
-                        </li>
-                        <li style="text-align:right; width:68%;">
-                            <button class="btn_a">
-                                <span class="btn_icon">&nbsp;</span>
-                                <span class="btn_main_txt">Add</span>
-                            </button>
-                            <button class="btn_d">
-                                <span class="btn_icon">&nbsp;</span>
-                                <span class="btn_main_txt">Delete</span>
-                            </button>
-                        </li>
+                        <th:block layout:insert="~{/fragments/page-buttons :: dot ('User Group')}"/>
+                        <th:block layout:insert="~{/fragments/page-buttons :: add-and-delete}"/>
                     </ul>
                     <ul class="bdb div_tablerow" style="height:25px;">
                         <li style="width:100%; text-align:left;">
@@ -130,19 +88,8 @@
 
                 <div style="display:table; height:50%; width:50%; float:left">
                     <ul class="bdb bdt bgf7 div_tablerow" style="height:30px;">
-                        <li style="width:50%; text-align:left;">
-                            <img src="/assets/images/ams/img_dot2.png" alt="dot">Role
-                        </li>
-                        <li style="text-align:right; width:48%;">
-                            <button class="btn_a">
-                                <span class="btn_icon">&nbsp;</span>
-                                <span class="btn_main_txt">Add</span>
-                            </button>
-                            <button class="btn_d">
-                                <span class="btn_icon">&nbsp;</span>
-                                <span class="btn_main_txt">Delete</span>
-                            </button>
-                        </li>
+                        <th:block layout:insert="~{/fragments/page-buttons :: dot ('Role')}"/>
+                        <th:block layout:insert="~{/fragments/page-buttons :: add-and-delete}"/>
                     </ul>
                     <ul class="bdb div_tablerow" style="height:25px;">
                         <li style="width:100%; text-align:left;">
