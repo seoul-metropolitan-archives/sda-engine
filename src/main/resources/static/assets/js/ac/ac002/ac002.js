@@ -29,6 +29,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
 // fnObj 기본 함수 스타트와 리사이즈
 fnObj.pageStart = function () {
     this.topMenuView.initView();
+    this.leftMenuView.initView();
     this.frameView.initView();
     this.tabView.initView();
     this.activityTimerView.initView();
@@ -267,6 +268,85 @@ fnObj.topMenuView = axboot.viewExtend({
                 //console.log(this.self.getCheckValue());
             }
         };
+    }
+});
+
+
+fnObj.leftMenuView = axboot.viewExtend({
+    initView: function () {
+        var _this  = this;
+        var menuItems = ax5.util.deepCopy(TOP_MENU_DATA);
+        console.log(menuItems);
+        var column_info = [
+            {
+                "name": "menuUuid",
+                "fieldName": "",
+                "width": "150",
+                "visible" : false,
+                "styles": {
+                    "textAlignment": "near"
+                },
+                "header": {
+                    "text": ""
+                }
+            },
+            {
+                "name": "menuName",
+                "fieldName": "",
+                "width": "150",
+                "styles": {
+                    "textAlignment": "near"
+                },
+                editable : false,
+                "header": {
+                    "text": " "
+                }
+            }
+        ]
+        this.menus = {};
+        var leftMenuItems =
+            {
+                menus : new Array()
+            };
+        var menu_2_list = new Array();
+        var secondList = undefined;
+        for(var i = 0; i < menuItems.length; i++)
+        {
+            this.menus[menuItems[i]["menuUuid"]] = menuItems[i];
+            menu_2_list = menuItems[i]["children"];
+
+            secondList = new Array();
+            for(var j = 0; j < menu_2_list.length; j++)
+            {
+                this.menus[menu_2_list[j]["menuUuid"]] = menu_2_list[j];
+                secondList.push({
+                   icon : 0
+                    , menuUuid : menu_2_list[j]["menuUuid"]
+                   ,  menuName :  menu_2_list[j]["menuName"]
+                    , program : menu_2_list[j]["program"]
+                });
+            }
+            leftMenuItems.menus.push({
+                icon : 0
+                , menuUuid : menuItems[i]["menuUuid"]
+                , menuName : menuItems[i]["menuName"]
+                , menus : secondList
+            });
+            secondList = undefined;
+        }
+        this.gridObj = new GridWrapper("realgridM1","/assets/js/libs/realgrid",true);
+        this.gridObj.setIsTree(true).setGridStyle("100%","100%")
+            .setColumnInfo(column_info).setEntityName("Menu")
+            .makeGrid();
+        this.gridObj.setTreeData(leftMenuItems,"menus","","icon");
+        this.gridObj.expandAll();
+        this.gridObj.onDataCellClicked(function (grid, index) {
+            var menu = _this.menus[grid.getDataProvider().getJsonRow(index.dataRow)["menuUuid"]];
+            if (menu["program"]) {
+                ACTIONS.dispatch(ACTIONS.MENU_OPEN, $.extend({}, menu["program"], {menuId: menu["menuId"], menuNm: menu["menuNm"]}));
+            }
+        });
+        //console.log(leftMenuItems);
     }
 });
 

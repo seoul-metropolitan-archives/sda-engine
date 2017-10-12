@@ -33,7 +33,7 @@ Number.prototype.zf = function(len){return this.toString().zf(len);};
 
 
 
-var GridWrapper = function(p_id,p_rootContext) {
+var GridWrapper = function(p_id,p_rootContext,_isTree) {
 	//Grid id
 	var i_id = p_id;
 	//Excel Export시 사용되는 Entity 이름
@@ -69,8 +69,10 @@ var GridWrapper = function(p_id,p_rootContext) {
 	
 	var list = undefined;
 	//이미지 관련 URL 
-	var imageUrl = "http://localhost:9090/images/"
-	
+	var imageUrl = "/images/"
+
+	var isTree = undefined == _isTree ? false: true;
+
 	var appendValidate = function() {
 		return true;
 	};
@@ -315,9 +317,17 @@ var GridWrapper = function(p_id,p_rootContext) {
 		defaultStyle = $.extend({}, defaultStyle, _defaultStyle);
 		RealGridJS.setTrace(false);
 		RealGridJS.setRootContext(rootContext);
-		gridView = new RealGridJS.GridView(i_id);
-		dataProvider = new RealGridJS.LocalDataProvider();
-	};
+        if(isTree){
+            gridView = new RealGridJS.TreeView(i_id);
+            dataProvider = new RealGridJS.LocalTreeDataProvider();
+		}
+        else
+		{
+            gridView = new RealGridJS.GridView(i_id);
+            dataProvider = new RealGridJS.LocalDataProvider();
+		}
+
+    };
 	//엑셀 추출
 	var exportExcel = function(grid,label)
 	{
@@ -360,6 +370,13 @@ var GridWrapper = function(p_id,p_rootContext) {
 		  {
 		  }
 	};
+
+	this.setIsTree = function(_isTree)
+	{
+        isTree = _isTree;
+        return this;
+	}
+
 	this.setContextCallback = function(i_callback)
 	{
 		callback = i_callback;
@@ -427,14 +444,39 @@ var GridWrapper = function(p_id,p_rootContext) {
 
 	var _initOption = function(gridView, provider) {
 		var option = gridOption === undefined ? _gridDefaultOption : gridOption;
-		gridView.setOptions(option);
-		gridView.setGroupingOptions(groupingDefaultOptions);
-		gridView.setEditOptions(editorDefaultOption);
-		gridView.setStyles(defaultStyle.parsing);
-		gridView.setFilteringOptions(filteringDefaultOptions);
-		gridView.setDisplayOptions(displayDefaultOption);
-		dataProvider.setOptions(providerDefaultOption);
-		// gridView.setStyles(defaultStyle.event.selection);
+		if(isTree)
+		{
+            gridView.setTreeOptions({
+                "summaryMode": "aggregate",
+                "stateBar": {
+                    "visible": false
+                }
+            });
+            //visible: 인디케이터 영역의 화면 표시여부를 지정합니다.
+            gridView.setIndicator({
+                visible: false
+            });
+
+            gridView.setStateBar({
+                visible: false
+            });
+
+            gridView.setCheckBar({
+                visible: false
+            });
+		}
+		else
+		{
+            gridView.setOptions(option);
+            gridView.setGroupingOptions(groupingDefaultOptions);
+            gridView.setEditOptions(editorDefaultOption);
+            gridView.setStyles(defaultStyle.parsing);
+            gridView.setFilteringOptions(filteringDefaultOptions);
+            gridView.setDisplayOptions(displayDefaultOption);
+            dataProvider.setOptions(providerDefaultOption);
+            // gridView.setStyles(defaultStyle.event.selection);
+		}
+
 	};
 
 	/**
@@ -818,6 +860,14 @@ var GridWrapper = function(p_id,p_rootContext) {
 		});
 		return this;
 	};
+	this.expandAll = function()
+	{
+        gridView.expandAll()
+	}
+	this.setTreeData = function(list, rowsProp, childrenProp, iconProp)
+	{
+        dataProvider.setJsonRows(list, rowsProp, childrenProp, iconProp);
+	}
 	this.setListCount = function(_listCount)
 	{
 		maxCount = _listCount;
@@ -857,7 +907,10 @@ var GridWrapper = function(p_id,p_rootContext) {
 			}
 		});
 	}
-	
+	this.onDataCellClicked  = function(_event)
+	{
+        gridView.onDataCellClicked  = _event;
+    }
 	this.setAppendValiate = function(func) {
 		if (typeof func == "function") {
 			appendValidate = func;

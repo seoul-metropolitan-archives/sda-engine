@@ -13,17 +13,18 @@ var ad004_d =
             },
             {
                 sortNo: 1,
-                name: "popupCode",
-                text: "Popup Code",
+                name: "sqlColumn",
+                text: "SQL Column",
                 editable: true,
+                width: 150,
                 dataType: "code",
                 required: true,
                 visible: true
             },
             {
                 sortNo: 2,
-                name: "popupName",
-                text: "Popup Name",
+                name: "Title",
+                text: "title",
                 width: 150,
                 editable: true,
                 dataType: "text",
@@ -31,86 +32,84 @@ var ad004_d =
             },
             {
                 sortNo: 3,
-                name: "serviceUUID",
-                text: "Service UUID",
+                name: "width",
+                text: "Width",
                 width: 130,
                 editable: true,
-                dataType: "combo",
-                required: false,
-                visible: false,
-                values: ["Service1", "Service2", "Service3", "Service4"],
-                labels: ["Service1", "Service2", "Service3", "Service4"],
+                dataType: "number",
+                required: true,
+                sortable : true,
                 editor: {
-                    type: "dropDown",
-                    dropDownCount: 10,
-                    domainOnly: true, //domainOnly가 true이면 목록에 있는 값들만 선택할 수 있습니다.
-                    textReadOnly: false, // true이면 키 입력이 안되며 선택만 할 수 있습니다.
+                    editFormat: "#,##0.##",
+                    multipleChar: "+"
                 }
             },
             {
                 sortNo: 4,
-                name: "serviceName",
-                text: "Service",
-                width: 120,
+                name: "inputMethod",
+                text: "Input Method",
+                width: 100,
                 editable: true,
-                dataType: "text",
+                dataType: "combo",
                 required: false,
-                visible: true
-                /*,
-                values: ["Service1", "Service2", "Service3", "Service4"],
-                labels: ["Service1", "Service2", "Service3", "Service4"],
+                visible: true,
+                values: new Array(),
+                labels: new Array(),
                 editor: {
-                    type: "dropDown",
-                    dropDownCount: 10,
-                    domainOnly: true, //domainOnly가 true이면 목록에 있는 값들만 선택할 수 있습니다.
-                    textReadOnly: false, // true이면 키 입력이 안되며 선택만 할 수 있습니다.
+                    domainOnly: true
                 }
-                */
             },
             {
                 sortNo: 5,
-                name: "Multiselect",
-                text: "Multiselect",
+                name: "align",
+                text: "Align",
                 width: 70,
-                editable: false,
-                dataType: "check",
-                required: true
+                editable: true,
+                dataType: "combo",
+                required: true,
+                lookupDisplay: true, //라벨로 표시
+                values : new Array(),
+                label : new Array()
+
             },
             {
                 sortNo: 6,
-                name: "description",
-                text: "DESCRIPTION",
+                name: "Tree",
+                text: "tree",
                 width: 250,
+                dataType : "check",
                 editable: true,
-                dataType: "richtext",
-                required: true,
+                sortable: true,
+                renderer: {
+                    falseValues: "false",
+                    trueValues: "true",
+                    editable: "false",
+                    startEditOnClick: true
+                },
             },
             {
                 sortNo: 7,
-                name: "notes",
-                text: "NOTES",
-                width: 250,
+                name: "Tree Relation",
+                text: "treeRelation",
+                width: 100,
                 editable: true,
-                dataType: "richtext",
+                dataType: "combo",
                 required: true
             },
             {
                 sortNo: 8,
-                name: "use_YN",
-                text: "USE",
-                width: 50,
-                editable: false,
-                dataType: "check",
-                textAlignment: "center",
-                renderer: {
-                    type: "check",
-                    shape: "",
-                    falseValues: "false",
-                    trueValues: "true",
-                    editable: "false",
-                    startEditOnClick: true,
-                },
-                required: true
+                name: "orderNo",
+                text: "Order No",
+                width: 100,
+                editable: true,
+                sortable: true,
+                dataType: "number",
+                editor: {
+                type: "number",
+                textAlignment: "far",
+                editFormat: "#,##0.##",
+                multipleChar: "+",
+            }
             },
             {
                 sortNo: 9,

@@ -19,6 +19,12 @@
     <script type="text/javascript" th:src="@{/assets/js/plugins.js}"></script>
     <script type="text/javascript" th:src="@{/assets/js/axboot.js}"></script>
 
+    <script type="text/javascript" th:src="@{/assets/js/libs/realgrid/realgridjs-lic.js}"></script>
+    <script type="text/javascript" th:src="@{/assets/js/libs/realgrid/realgridjs_eval.1.1.22.min.js}"></script>
+    <script type="text/javascript" th:src="@{/assets/js/libs/realgrid/realgridjs-api.1.1.22.js}"></script>
+    <script type="text/javascript" th:src="@{/assets/js/libs/realgrid/jszip.min.js}"></script>
+    <script type="text/javascript" th:src="@{/assets/js/libs/realgrid/util/GridWrapper.js}"></script>
+
     <script type="text/javascript">
         var sessionJson = convertJsonObj('[[${scriptSession}]]');
         var menuJson = convertJsonObj('[[${menuJson}]]');
@@ -198,6 +204,23 @@
                         <a href="#" class="open_close" id="rg_tree_allclose_m1">전체닫기</a></li>
                 </ul>
             </div>
+            <div class="left_bottom1">
+                <div style="width:100%; height:100%" class="bdb">
+                    <div id="realgridM1" style="width: 100%; height: 100%;"></div>
+                </div>
+            </div>
+            <!--전체메뉴-->
+            <!--
+            <div class="left_bottom2">
+                <div style="width:100%; height:50%;">
+                    <div id="realgridM2" style="width: 100%; height: 100%;"></div>
+                </div>
+                <div style="width:100%; height:50%" class="bdb bdt">
+                    <div id="realgridM3" style="width: 100%; height: 100%;"></div>
+                </div>
+
+            </div>
+            -->
         </div><!--메인좌측-->
         <div class="left_close_open_btn">
             <a href="#" onclick="leftcloseView()" class="leftmenu_close">◀</a>
@@ -206,6 +229,7 @@
             <a href="#" onclick="left7closeView()" class="leftmenu7_close">◀</a>
             <a href="#" onclick="left7openView()" class="leftmenu7_open"> ▶</a>
         </div>
+        <!--나의 메뉴인 즐겨찾기와 최근메뉴-->
         <div layout:fragment="contents"></div>
 
         <!-- footer -->
