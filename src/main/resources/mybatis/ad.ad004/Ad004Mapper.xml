@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="rmsoft.ams.seoul.ad.ad003.dao.Ad003Mapper">
+
+    <select id="selectDetail" resultType="Ad003VO_2" parameterType="Ad003_D" statementType="PREPARED">
+    <![CDATA[
+
+        ]]>
+    </select>
+    <select id="getCode" resultType="Ad003VO_3" parameterType="Ad003VO_3" statementType="PREPARED">
+        <![CDATA[
+        SELECT
+          B.CODE_DETAIL_UUID  codeDetailUUID
+          , B.CODE            code
+          , B.CODE_NAME       codeName
+        FROM
+          AD_CODE_HEADER A
+          , AD_CODE_DETAIL B
+        WHERE
+          A.CODE_HEADER_UUID = B.CODE_HEADER_UUID
+         ]]>
+        <if test="null != categoryCode">
+          AND
+          A.CATEGORY_CODE = #{categoryCode}
+        </if>
+
+    </select>
+</mapper>

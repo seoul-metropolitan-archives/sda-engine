@@ -1,4 +1,4 @@
-package rmsoft.ams.seoul.ad.ad004.domain;
+package rmsoft.ams.seoul.common.domain;
 
 import io.onsemiro.core.annotations.Comment;
 import io.onsemiro.core.domain.BaseJpaModel;
@@ -6,7 +6,6 @@ import lombok.*;
 import org.apache.ibatis.type.Alias;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
-import rmsoft.ams.seoul.ad.ad000.domain.Ad000;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -17,10 +16,10 @@ import java.io.Serializable;
 @DynamicUpdate
 @Entity
 @EqualsAndHashCode(callSuper = true)
-@IdClass(Ad004_D.Ad004_DId.class)
+@IdClass(AdPopupDetail.AdPopupDetailId.class)
 @Alias("Ad004_D")
 @Table(name = "AD_POPUP_DETAIL")
-public class Ad004_D extends BaseJpaModel<Ad004_D.Ad004_DId>
+public class AdPopupDetail extends BaseJpaModel<AdPopupDetail.AdPopupDetailId>
 {
     @Id
     @Column(name="POPUP_DETAIL_UUID")
@@ -65,15 +64,15 @@ public class Ad004_D extends BaseJpaModel<Ad004_D.Ad004_DId>
 
 
     @Override
-    public Ad004_DId getId() {
-        return Ad004_DId.of(popupDetailUUID);
+    public AdPopupDetailId getId() {
+        return AdPopupDetailId.of(popupDetailUUID);
     }
 
     @Embeddable
     @Data
     @NoArgsConstructor
     @RequiredArgsConstructor(staticName = "of")
-    public static class Ad004_DId implements Serializable
+    public static class AdPopupDetailId implements Serializable
     {
         @NonNull
         private String popupDetailUUID;

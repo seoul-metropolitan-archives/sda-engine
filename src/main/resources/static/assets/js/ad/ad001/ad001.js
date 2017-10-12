@@ -2,7 +2,7 @@ var fnObj = {};
 var pageSize = 1000;
 var errorStatusList = {};
 var gridView = undefined;
-var serviceList = new Array();
+var serviceList = [];
 var handleResult = "";
 var handleFailReason = "";
 var cash10kEmptyStatus = "";
@@ -472,31 +472,50 @@ var fnObj = {
         });
         /**/
 
-        _this.gridView.initView();
 
 
-        rmsoft.controller.ad.ad000.request("getService",{},false,function(response){
-            console.log(JSON.stringify(response));
-            var data = undefined;
-            for(var i = 0;i < response.list.length; i++)
-            {
-                data = response.list[i];
-                /*column info 정보 갱신*/
-                ad001.column_info[3].values.push(data.service_uuid);
-                ad001.column_info[3].labels.push(data.service_name);
+        axboot.ajax({
+            type: "POST",
+            url: "/ad/ad003/getCode",
+            data : JSON.stringify({categoryCode : "CD006"}),
+            async : false,
+            callback: function (list) {
+                console.log(JSON.stringify(list));
 
-                /*콤보박스 생성*/
-                $("#serviceList").append($("<option>").val(data.service_uuid).text(data.service_name));
+                if(undefined === list)
+                    return ;
 
-                serviceList[data.service_uuid] =
-                    {
-                        "label" : data.service_name,
-                        "value": data.service_uuid
-                    }
+                var data = undefined;
+                for(var i = 0;i < list.length; i++)
+                {
+                    data = list[i];
+                    /*column info 정보 갱신*/
+                    ad001.column_info[3].values.push(data.codeDetailUUID);
+                    ad001.column_info[3].labels.push(data.codeName);
+
+                    /*콤보박스 생성*/
+                    $("#serviceList").append($("<option>").val(data.codeDetailUUID).text(data.codeName));
+
+                    serviceList[data.service_uuid] =
+                        {
+                            "label" : data.codeName,
+                            "value": data.codeDetailUUID
+                        }
+                }
+            },
+            options: {
+                onError: function(a,b,c)
+                {
+                    console.log(a);
+                    console.log(b);
+                    console.log(c);
+
+                }
             }
         });
+        _this.gridView.initView();
     }
-}
+};
 
 
 
@@ -509,7 +528,7 @@ fnObj.gridView = axboot.viewExtend(axboot.gridView, {
     {
         this.gridObj = new GridWrapper("realgrid","/assets/js/libs/realgrid");
         this.gridObj.setGridStyle("100%","100%");
-        this.gridObj.setColumnInfo(ad001.column_info).setEntityName("CONFIGURATION");
+        this.gridObj.setColumnInfo(ad001.column_info).setEntityName($("#realgridName").text());
         this.gridObj.makeGrid();
         this.getData();
     },

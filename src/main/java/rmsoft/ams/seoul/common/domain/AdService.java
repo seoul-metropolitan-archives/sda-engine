@@ -1,4 +1,4 @@
-package rmsoft.ams.seoul.ad.ad000.domain;
+package rmsoft.ams.seoul.common.domain;
 
 import io.onsemiro.core.annotations.Comment;
 import io.onsemiro.core.domain.BaseJpaModel;
@@ -17,9 +17,9 @@ import java.io.Serializable;
 @Entity
 @EqualsAndHashCode(callSuper = true)
 @Table(name = "AD_SERVICE")
-@IdClass(Ad000.Ad000Id.class)
+@IdClass(AdService.AdServiceId.class)
 @Alias("Ad000")
-public class Ad000 extends BaseJpaModel<Ad000.Ad000Id> {
+public class AdService extends BaseJpaModel<AdService.AdServiceId> {
 
     @Id
     @Column(name = "SERVICE_UUID")
@@ -38,18 +38,17 @@ public class Ad000 extends BaseJpaModel<Ad000.Ad000Id> {
     @Column(name="INSTALL_YN")
     private String install_yn;
 
-
-
     @Override
-    public Ad000Id getId() {
-        return Ad000Id.of(service_uuid);
+    public AdServiceId getId() {
+        return AdServiceId.of(service_uuid);
     }
+
 
     @Embeddable
     @Data
     @NoArgsConstructor
     @RequiredArgsConstructor(staticName = "of")
-    public static class Ad000Id implements Serializable {
+    public static class AdServiceId implements Serializable {
 
         @NonNull
         private String service_uuid;
