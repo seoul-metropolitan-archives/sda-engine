@@ -5,29 +5,52 @@
 
 <mapper namespace="rmsoft.ams.seoul.ad.ad001.dao.Ad001Mapper">
 
-    <select id="select" resultType="ad001" parameterType="ad001" statementType="PREPARED">
+    <select id="select" resultType="Ad001VO_01" parameterType="Ad001VO_01" statementType="PREPARED">
     <![CDATA[
         SELECT  
                  A.CONFIGURATION_UUID configurationUUID 
                , A.CONFIGURATION_CODE configurationCode 
                , A.CONFIGURATION_VALUE configurationValue 
                , A.SERVICE_UUID serviceUUID 
-               , B.SERVICE_NAME serviceName 
-               , A.INSERT_UUID insertUUID 
+               , A.INSERT_UUID insertUUID
                , A.DESCRIPTION description 
                , A.NOTES notes  
                , DECODE(A.USE_YN,'Y''true','N','false') useYN 
                , (SELECT USER_NAME FROM AC_USER "USER" WHERE A.INSERT_UUID = "USER".USER_UUID ) insertUserName 
-               , TO_CHAR(A.INSERT_DATE,'yyyy-MM-dd hh:mm:ss') insertDate 
+               , A.INSERT_DATE insertDate
                , A.UPDATE_UUID updateUUID 
                , (SELECT USER_NAME FROM AC_USER "USER" WHERE A.UPDATE_UUID = "USER".USER_UUID ) updateUserName   
-               , TO_CHAR(A.UPDATE_DATE,'yyyy-MM-dd hh:mm:ss') updateDate 
+               , A.UPDATE_DATE updateDate
              FROM  
-               AD_CONFIGURATION A 
-               , AD_SERVICE B  
-            WHERE  
-               A.SERVICE_UUID = B.SERVICE_UUID 
+               AD_CONFIGURATION A
+              WHERE
+              1=1
+
         ]]>
+        <if test="null != configurationCode">
+            <![CDATA[
+            AND
+            A.CONFIGURATION_CODE = #{configurationCode}
+            ]]>
+        </if>
+        <if test="null != configurationValue">
+            <![CDATA[
+            AND
+            A.CONFIGURATION_VALUE = #{configurationValue}
+            ]]>
+        </if>
+        <if test="null != serviceUUID">
+            <![CDATA[
+            AND
+            A.SERVICE_UUID = #{serviceUUID}
+            ]]>
+        </if>
+        <if test="null != useYN">
+            <![CDATA[
+            AND
+            A.USE_YN = #{useYN}
+            ]]>
+        </if>
     </select>
 
 </mapper>
