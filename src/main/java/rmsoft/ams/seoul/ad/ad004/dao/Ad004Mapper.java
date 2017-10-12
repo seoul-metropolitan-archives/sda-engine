@@ -3,13 +3,13 @@ package rmsoft.ams.seoul.ad.ad004.dao;
 import io.onsemiro.core.mybatis.MyBatisMapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
-import rmsoft.ams.seoul.ad.ad004.domain.Ad004_D;
-import rmsoft.ams.seoul.ad.ad004.domain.Ad004_H;
+import rmsoft.ams.seoul.ad.ad004.vo.Ad00401VO;
+import rmsoft.ams.seoul.ad.ad004.vo.Ad00402VO;
 
 import java.util.List;
 
 @Mapper
-public interface AD004Mapper extends MyBatisMapper
+public interface Ad004Mapper extends MyBatisMapper
 {
     @Select(" SELECT " +
             "   A.POPUP_HEADER_UUID popupHeaderUUID" +
@@ -28,8 +28,8 @@ public interface AD004Mapper extends MyBatisMapper
             " FROM " +
             "   AD_POPUP_HEADER A" +
             "   ")
-    public List<Ad004_H> searchPopupHeader(Ad004_H header);
+    List<Ad00401VO> searchPopupHeader(Ad00401VO header);
 
-    public List<Ad004_D> searchPopupDetail(Ad004_D header);
+    List<Ad00402VO> searchPopupDetail(Ad00402VO header);
 
 }

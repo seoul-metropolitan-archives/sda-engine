@@ -1,8 +1,8 @@
 package rmsoft.ams.seoul.common.repository;
 
 import org.springframework.data.repository.CrudRepository;
-import rmsoft.ams.seoul.common.domain.AdConfiguration;
+import rmsoft.ams.seoul.common.domain.AdCodeDetail;
 
-public interface AdCodeHeaderRepository extends CrudRepository<AdConfiguration, AdConfiguration.AdConfigurationId>
+public interface AdCodeDetailRepository extends CrudRepository<AdCodeDetail, AdCodeDetail.AdCodeDetailId>
 {
 }

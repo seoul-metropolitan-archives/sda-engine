@@ -1,4 +1,4 @@
 package rmsoft.ams.seoul.ad.ad004.vo;
 
-public class Ad004VO_01 {
+public class Ad00401VO {
 }

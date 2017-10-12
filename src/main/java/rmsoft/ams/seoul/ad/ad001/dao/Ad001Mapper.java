@@ -1,7 +1,7 @@
 package rmsoft.ams.seoul.ad.ad001.dao;
 
 import io.onsemiro.core.mybatis.MyBatisMapper;
-import rmsoft.ams.seoul.ad.ad001.domain.Ad001;
+import rmsoft.ams.seoul.ad.ad001.vo.Ad00101VO;
 
 import java.util.List;
 
@@ -17,6 +17,6 @@ public interface Ad001Mapper extends MyBatisMapper {
             +"   OR"
             +"   A.USE_YN = #{useYN})"
     */
-    List<Ad001> select(Ad001 param);
+    List<Ad00101VO> select(Ad00101VO param);
 
 }

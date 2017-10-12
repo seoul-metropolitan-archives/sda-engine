@@ -3,20 +3,18 @@ package rmsoft.ams.seoul.ad.ad004.service;
 import io.onsemiro.core.domain.BaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import rmsoft.ams.seoul.ad.ad000.domain.Ad000;
-import rmsoft.ams.seoul.ad.ad004.dao.AD004DAO;
-import rmsoft.ams.seoul.ad.ad004.domain.Ad004_D;
-import rmsoft.ams.seoul.ad.ad004.domain.Ad004_H;
+import rmsoft.ams.seoul.ad.ad004.dao.Ad004Mapper;
+import rmsoft.ams.seoul.ad.ad004.vo.Ad00401VO;
 
 import java.util.List;
 
 @Service
-public class AD004_HService extends BaseService<Ad004_H, Ad004_H.Ad004_HId> {
+public class Ad004_HService extends BaseService{
 
     @Autowired
-    private AD004DAO dao;
+    private Ad004Mapper mapper;
 
-    public List<Ad004_H> searchPopupHeader(Ad004_H param) {
-        return dao.searchPopupHeader(param);
+    public List<Ad00401VO> searchPopupHeader(Ad00401VO param) {
+        return mapper.searchPopupHeader(param);
     }
 }

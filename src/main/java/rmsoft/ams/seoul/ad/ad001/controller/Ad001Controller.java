@@ -5,8 +5,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import rmsoft.ams.seoul.ad.ad001.domain.Ad001;
 import rmsoft.ams.seoul.ad.ad001.service.Ad001Service;
+import rmsoft.ams.seoul.ad.ad001.vo.Ad00101VO;
 
 import java.util.HashMap;
 
@@ -21,10 +21,8 @@ public class Ad001Controller
 
     @RequestMapping("/getEnviromentList.do")
     @ResponseBody
-    public Object getEnviromentList()
+    public Object getEnviromentList(Ad00101VO param)
     {
-        Ad001 param = new Ad001();
-
         HashMap<String,Object> response = new HashMap<String,Object>();
         HashMap<String,Object> header = new HashMap<String,Object>();
         HashMap<String,Object> body = new HashMap<String,Object>();

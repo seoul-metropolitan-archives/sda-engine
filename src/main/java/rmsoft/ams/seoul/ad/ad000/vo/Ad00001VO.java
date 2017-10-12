@@ -1,4 +1,4 @@
-package rmsoft.ams.seoul.ad.ad000.domain;
+package rmsoft.ams.seoul.ad.ad000.vo;
 
 import io.onsemiro.core.vo.BaseVO;
 import lombok.*;
@@ -7,7 +7,7 @@ import lombok.*;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class Ad000VO extends BaseVO
+public class Ad00001VO extends BaseVO
 {
     private String service_uuid;
     private String service_code;

@@ -5,12 +5,12 @@
 
 <mapper namespace="rmsoft.ams.seoul.ad.ad003.dao.Ad003Mapper">
 
-    <select id="selectDetail" resultType="Ad003VO_2" parameterType="Ad003_D" statementType="PREPARED">
+    <select id="selectDetail" resultType="Ad00302VO" parameterType="Ad00302VO" statementType="PREPARED">
     <![CDATA[
 
         ]]>
     </select>
-    <select id="getCode" resultType="Ad003VO_3" parameterType="Ad003VO_3" statementType="PREPARED">
+    <select id="getCode" resultType="Ad00303VO" parameterType="Ad00303VO" statementType="PREPARED">
         <![CDATA[
         SELECT
           B.CODE_DETAIL_UUID  codeDetailUUID

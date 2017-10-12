@@ -8,9 +8,8 @@ import lombok.*;
 @EqualsAndHashCode(callSuper = false)
 @Setter
 @Getter
-public class Ad003VO_3 extends BaseVO
+public class Ad00302VO extends BaseVO
 {
-    private String categoryCode;
     private String codeDetailUUID;
     private String codeHeaderUUID;
     private String code;

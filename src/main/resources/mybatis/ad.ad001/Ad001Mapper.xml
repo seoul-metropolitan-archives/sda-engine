@@ -5,7 +5,7 @@
 
 <mapper namespace="rmsoft.ams.seoul.ad.ad001.dao.Ad001Mapper">
 
-    <select id="select" resultType="Ad001VO_01" parameterType="Ad001VO_01" statementType="PREPARED">
+    <select id="select" resultType="Ad00101VO" parameterType="Ad00101VO" statementType="PREPARED">
     <![CDATA[
         SELECT  
                  A.CONFIGURATION_UUID configurationUUID 

@@ -5,30 +5,28 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import rmsoft.ams.seoul.ad.ad004.domain.Ad004_H;
-import rmsoft.ams.seoul.ad.ad004.service.AD004_DService;
-import rmsoft.ams.seoul.ad.ad004.service.AD004_HService;
+import rmsoft.ams.seoul.ad.ad004.service.Ad004_DService;
+import rmsoft.ams.seoul.ad.ad004.service.Ad004_HService;
+import rmsoft.ams.seoul.ad.ad004.vo.Ad00401VO;
 
 import java.util.HashMap;
 
 @RestController
 @RequestMapping("/ad/ad004/ad004")
-public class AD004Controller
+public class Ad004Controller
 {
 
     @Autowired
-    private AD004_HService service_h;
+    private Ad004_HService service_h;
 
     @Autowired
-    private AD004_DService service_d;
+    private Ad004_DService service_d;
 
 
     @RequestMapping("/searchPopupHeader.do")
     @ResponseBody
-    public Object searchPopupHeader(@RequestBody Ad004_H param)
+    public Object searchPopupHeader(@RequestBody Ad00401VO param)
     {
-        param = new Ad004_H();
-
         HashMap<String,Object> response = new HashMap<String,Object>();
         HashMap<String,Object> header = new HashMap<String,Object>();
         HashMap<String,Object> body = new HashMap<String,Object>();

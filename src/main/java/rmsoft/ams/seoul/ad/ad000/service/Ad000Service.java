@@ -4,17 +4,17 @@ import io.onsemiro.core.domain.BaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import rmsoft.ams.seoul.ad.ad000.dao.Ad000Mapper;
-import rmsoft.ams.seoul.ad.ad000.domain.Ad000;
+import rmsoft.ams.seoul.ad.ad000.vo.Ad00001VO;
 
 import java.util.List;
 
+
 @Service
-public class Ad000Service extends BaseService<Ad000, Ad000.Ad000Id>
-{
+public class Ad000Service extends BaseService {
     @Autowired
     private Ad000Mapper mapper;
 
-    public List<Ad000> getServiceList() {
+    public List<Ad00001VO> getServiceList() {
         return mapper.getServiceList();
     }
 }
