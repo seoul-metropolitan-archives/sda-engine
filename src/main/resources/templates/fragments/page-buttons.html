@@ -164,10 +164,10 @@
         <span th:text="${str}"></span>
     </li>
 </th:block>
-<th:block layout:fragment="bookmark(str)">
+<th:block layout:fragment="bookmark">
     <li style="width:30px">
         <div class="bookmark_star"><img src="/assets/images/ams/bookmark.png" alt="즐겨찾기"></div>
     </li>
-    <li style="width:50%; text-align:left;" th:text="${str}"></li>
+    <li style="width:50%; text-align:left;" th:text="${pageName}"></li>
 </th:block>
 </html>
