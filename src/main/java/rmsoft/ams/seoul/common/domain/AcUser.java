@@ -1,4 +1,4 @@
-package rmsoft.ams.seoul.ac.ac003.domain;
+package rmsoft.ams.seoul.common.domain;
 
 import io.onsemiro.core.annotations.Comment;
 import io.onsemiro.core.code.AXBootTypes;
@@ -11,7 +11,7 @@ import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.time.Instant;
+import java.sql.Timestamp;
 
 @Setter
 @Getter
@@ -20,9 +20,9 @@ import java.time.Instant;
 @Entity
 @EqualsAndHashCode(callSuper = true)
 @Table(name = "AC_USER")
-@IdClass(Ac003.Ac003Id.class)
-@Alias("Ac003")
-public class Ac003 extends BaseJpaModel<Ac003.Ac003Id> {
+@IdClass(AcUser.AcUserId.class)
+@Alias("AcUser")
+public class AcUser extends BaseJpaModel<AcUser.AcUserId> {
 
     @Id
     @Column(name = "USER_UUID", length = 36, nullable = false)
@@ -43,7 +43,7 @@ public class Ac003 extends BaseJpaModel<Ac003.Ac003Id> {
 
     @Column(name = "PASSWORD_UPDATE_DATE", nullable = false)
     @Comment(value = "비밀번호변경일시")
-    private Instant passwordUpdateDate;
+    private Timestamp passwordUpdateDate;
 
     @Column(name = "USER_TYPE_UUID", length = 36)
     @Comment(value = "사용자유형UUID")
@@ -63,15 +63,15 @@ public class Ac003 extends BaseJpaModel<Ac003.Ac003Id> {
     private AXBootTypes.Used useYn = AXBootTypes.Used.YES;
 
     @Override
-    public Ac003Id getId() {
-        return Ac003Id.of(userUuid);
+    public AcUserId getId() {
+        return AcUserId.of(userUuid);
     }
 
     @Embeddable
     @Data
     @NoArgsConstructor
     @RequiredArgsConstructor(staticName = "of")
-    public static class Ac003Id implements Serializable {
+    public static class AcUserId implements Serializable {
 
         @NonNull
         private String userUuid;

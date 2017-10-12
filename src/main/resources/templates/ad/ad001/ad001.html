@@ -4,17 +4,19 @@
       layout:decorate="~{/layout/base}">
 
 <!-- ===== [ script ] ===== -->
-<!--realgrid -->
 <script layout:fragment="script" type="text/javascript" th:src="@{/assets/js/ad/ad001/ad001.js}"></script>
+<!--realgrid -->
+
+<!-- ===== [ base-content ] ===== -->
 <div layout:fragment="base-content" class="ax-base-content">
     <div class="cssBody" style="top:80px">
-        <div class="contents_wrap">
+        <div class="contents_wrap" style="position:absolute">
             <div style=" height:31px; width:100%" class="bgf7 div_tablerow">
                 <ul class="bdb">
                     <li style="width:30px">
-                        <div class="bookmark_star"><img src="/assets/images/ams/bookmark.png" alt="bookmark"></div>
+                        <div class="bookmark_star"><img src="/assets/images/ams/bookmark.png" alt="즐겨찾기"></div>
                     </li>
-                    <li style="width:50%; text-align:left;">System Environment</li>
+                    <li style="width:50%; text-align:left;" th:text="${menuName}">System Environments</li>
                     <li style="text-align:right; width:48%;">
                         <button class="btn_s">
                             <span class="btn_icon">&nbsp;</span>
@@ -64,7 +66,7 @@
                 <div style="height:100%; width:100%" class="div_table">
                     <ul class="bdb bdt div_tablerow" style="height:30px;">
                         <li style="width:50%; text-align:left;">
-                            <img src="/assets/images/ams/img_dot2.png" alt="dot">System Environment
+                            <img src="/static/images/img_dot2.png" alt="dot">System Environment
                         </li>
                         <li style="text-align:right; width:48%;">
                             <button class="btn_a">

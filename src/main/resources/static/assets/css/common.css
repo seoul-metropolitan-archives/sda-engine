@@ -47,7 +47,7 @@ input,select,textarea,button {vertical-align:middle}
 
 button {border:0 none;background-color:transparent;cursor:pointer}
 body {background:#fff}
-body,th,td,input,select,textarea,{
+body,th,td,input,select,textarea{
     font-size:16px;line-height:16px;
     font-family:nanum,"나눔고딕",NanumGothic,"맑은 고딕", Dotum,Arial,Helvetica,sans-serif;
     color:#333333} /* color값은 디자인가이드에 맞게사용 */

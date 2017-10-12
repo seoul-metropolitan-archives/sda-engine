@@ -1,7 +1,7 @@
 package rmsoft.ams.seoul.ac.ac003.dao;
 
 import io.onsemiro.core.mybatis.MyBatisMapper;
-import rmsoft.ams.seoul.ac.ac003.domain.Ac003;
+import rmsoft.ams.seoul.common.domain.AcUser;
 
 import java.util.List;
 
@@ -14,15 +14,15 @@ import java.util.List;
  **/
 public interface Ac003Mapper extends MyBatisMapper {
 
-    List<Ac003> findAll();
+    List<AcUser> findAll();
 
-    List<Ac003> findHistory(Ac003 ac003);
+    List<AcUser> findHistory(AcUser acUser);
 
-    Ac003 findOne(Ac003 ac003);
+    AcUser findOne(AcUser acUser);
 
-    int update(Ac003 ac003);
+    int update(AcUser acUser);
 
-    int delete(Ac003 ac003);
+    int delete(AcUser acUser);
 
-    int insert(Ac003 ac003);
+    int insert(AcUser acUser);
 }
