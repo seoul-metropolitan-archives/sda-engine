@@ -447,9 +447,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
 
 
 var fnObj = {
-    name : "CONFIGURATION"
-    ,configurationGridView : undefined
-    ,pageStart : function () {
+    pageStart : function () {
         var _this = this;
         /*JS 초기화*/
         $.ajax({
@@ -514,7 +512,7 @@ var fnObj = {
     }
 };
 
-
+fnObj.formView01
 
 fnObj.gridView = axboot.viewExtend(axboot.gridView, {
     page: {

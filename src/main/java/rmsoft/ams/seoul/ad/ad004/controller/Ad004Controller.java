@@ -14,12 +14,21 @@ public class Ad004Controller
 {
 
     @Autowired
-    private Ad004Service service_h;
+    private Ad004Service service;
 
     @RequestMapping("/searchPopupHeader")
     @ResponseBody
     public Object searchPopupHeader(@RequestBody AdPopupHeader param)
     {
-        return service_h.searchPopupHeader(param);
+        return service.searchPopupHeader(param);
     }
+
+
+    @RequestMapping("/insertPopupHeader")
+    @ResponseBody
+    public Object insertPopupHeader(@RequestBody AdPopupHeader data)
+    {
+        return service.insertPopupHeader(data);
+    }
+
 }

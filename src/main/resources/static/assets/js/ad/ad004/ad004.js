@@ -13,20 +13,7 @@ var selectedErrorItem = {};
 
 var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH: function (caller, act, data) {
-        axboot.ajax({
-            type: "POST",
-            url: "/ad/ad001/getEnviromentList.do",
-            data: $.extend({pageSize: 1000}, this.searchView.getData()),
-            callback: function (res) {
-                errorStatusList = res.list;
-                caller.errorStatus.initView();
-                caller.errorStatus.setData(errorStatusList);
-            },
-            options: {
-                onError: viewError
-            }
-        });
-        return false;
+        alert("test");
     },
     ERROR_SEARCH: function (caller, act, data) {
         /*
@@ -54,7 +41,14 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         */
         return false;
     },
-    PAGE_SAVE: function (caller, act, data) {
+    POPUP_HEADER_PAGE_SAVE: function (caller, act, data) {
+        axDialog.confirm({
+            msg: "저장하시겠습니까?"
+        },function() {
+            if (this.key == "ok") {
+                alert("저장하자");
+            }
+        });
         /*
         axDialog.confirm({
             msg: "장애조치사항을 저장하시겠습니까?"
@@ -442,11 +436,9 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         }
     }
 });
-
-var fnObj = {
+fnObj = {
     pageStart : function () {
         var _this = this;
-        /*JS 초기화*/
         $.ajax({
             url: "/assets/js/controller/simple_controller.js",
             dataType: "script",
@@ -478,6 +470,14 @@ var fnObj = {
             success: function(){}
         });
         /**/
+        _this.formView.initView();
+        _this.gridView_h.initView();
+        _this.gridView_d.initView();
+    }
+};
+/*검색 창*/
+fnObj.formView = axboot.viewExtend(axboot.baseView,{
+    initView : function(){
         axboot.ajax({
             type: "POST",
             url: "/ad/ad003/getCode",
@@ -517,10 +517,9 @@ var fnObj = {
                 }
             }
         });
-        _this.gridView_h.initView();
-        _this.gridView_d.initView();
     }
-};
+});
+/*팝업 헤더*/
 fnObj.gridView_h = axboot.viewExtend(axboot.gridView, {
     page: {
         pageNumber: 0,
@@ -555,6 +554,7 @@ fnObj.gridView_h = axboot.viewExtend(axboot.gridView, {
         this.gridObj.addRow();
     }
 });
+/*팝업 디테일 ( Column )*/
 fnObj.gridView_d = axboot.viewExtend(axboot.gridView, {
     page: {
         pageNumber: 0,

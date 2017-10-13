@@ -82,10 +82,10 @@ var ad004_h =
                 editable: true,
                 dataType: "check",
                 textAlignment: "center",
+                defaultValue : "Y",
                 renderer: {
                     type: "check",
                     shape: "",
-                    defaultValue : "Y",
                     falseValues: "N",
                     trueValues: "Y",
                     startEditOnClick: true,

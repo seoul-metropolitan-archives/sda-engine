@@ -261,8 +261,8 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 				type : "check",
 				editable : true,
 				startEditOnClick : true,
-				trueValues : "true",
-				falseValues : "false",
+				trueValues : "Y",
+				falseValues : "N",
 				labelPosition : "center"
 			},
 			imageButtons : {
@@ -365,10 +365,32 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 		  };
 		  gridView.onDataCellClicked = function(grid, index)
 		  {
+
 		  };
 		  gridView.onCellEdited  = function(grid, itemIndex, dataRow, field)
 		  {
 		  }
+
+
+		 $("#"+i_id).parents().eq(1).delegate(".btn_a","click",function(){
+             _addRow(function() {
+                 checkRow(gridView);
+                 console.log(_getRowCnt());
+                 if (_getRowCnt() === 0) {
+                     return true;
+                 } else {
+                     checkRow(gridView);
+                     if (checkData(gridView)) {
+                         return true;
+                     } else {
+                         return false;
+                     }
+                 }
+             });
+		 });
+		 $("#"+i_id).parents().eq(1).delegate(".btn_d","click",function(){
+		 	gridView.getDataProvider().removeRow(gridView.getCurrent().dataRow);
+		 });
 	};
 
 	this.setIsTree = function(_isTree)
@@ -625,6 +647,7 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 				case "check":
 					obj.renderer = defaultStyle.data.check;
 					obj.editable = false;
+                    fieldObj.defaultValue = data.defaultValue;
                     defaultData.push("");
 					break;
 				case "button":

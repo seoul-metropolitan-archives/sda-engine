@@ -2360,6 +2360,44 @@ axboot.util = function () {
  * @Object {Object} axboot.commonView
  */
 axboot.commonView = {};
+/**
+ * SubFrame 에서 공통으로 사용되는 부분을 모아놓은 View ( 검색 및 저장 기능 )
+ * @type {{name: string, init: axboot.baseView.init}}
+ */
+axboot.baseView =
+{
+    name : "baseView",
+    init : function()
+    {
+        var _this = this;
+        $(".bdb").delegate("#inquiry","click",function(){
+            _this.inquiry();
+        });
+        $(".bdb").delegate("#save","click",function(){
+            _this.save();
+        });
+        $(document).delegate(".ax-body","keydown",function (e) {
+
+            if (e.ctrlKey && e.altKey && e.keyCode == 73) {
+                _this.inquiry();
+            }else if(e.ctrlKey && e.altKey && e.keyCode == 83)
+            {
+                _this.save();
+            }
+        });
+    }
+    ,save : function()
+    {
+        if(ACTIONS && ACTIONS.PAGE_SAVE)
+            ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
+    }
+    ,inquiry : function()
+    {
+        if(ACTIONS && ACTIONS.PAGE_SEARCH)
+            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+    }
+
+};
 
 /**
  * searchView
@@ -2485,7 +2523,14 @@ axboot.extend = function (_obj1, _obj2) {
 axboot.viewExtend = function (_obj1, _obj2) {
     if (typeof _obj2 === "undefined") {
         return $.extend({}, axboot.commonView, _obj1);
-    } else {
+    }
+    else if(_obj1.name && _obj1.name == "baseView")
+    {
+        var retView = $.extend({}, axboot.commonView, _obj1, _obj2)
+        retView.init();
+        return retView;
+    }
+    else {
         return $.extend({}, _obj1, _obj2);
     }
 };

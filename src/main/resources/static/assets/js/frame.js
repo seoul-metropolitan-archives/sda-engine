@@ -1,6 +1,14 @@
 var fnObj = {};
+/**
+ * 공통으로 사용되는 이벤트를 정의
+ */
+
 var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH: function (caller, act, data) {
+
+        return false;
+    },
+    PAGE_SAVE : function (caller, act, data) {
 
         return false;
     },

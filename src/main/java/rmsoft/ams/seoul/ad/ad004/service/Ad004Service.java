@@ -27,7 +27,11 @@ public class Ad004Service extends BaseService{
     {
         return popupHeaderRepository.findAll();
     }
-
+    public boolean insertPopupHeader(AdPopupHeader data)
+    {
+        popupHeaderRepository.save(data);
+        return true;
+    }
     public List<Ad00402VO> searchPopupDetail(Ad00402VO param) {
         return mapper.searchPopupDetail(param);
     }
