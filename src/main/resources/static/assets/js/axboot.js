@@ -2037,7 +2037,7 @@ axboot.preparePlugin = function () {
          * @var {ax5ui} axAJAXMask
          */
         window.axAJAXMask = new ax5.ui.mask({
-            content: '<i class="cqc-chequer cqc-50x cqc-zoom-in-out" style="color: #ccc;"></i>'
+            content: '<i class="cqc-spinner4 cqc-50x cqc-spin" style="color:#60C4A3;"></i>'
         });
         /**
          * 프로그래스바 형태의 마스크

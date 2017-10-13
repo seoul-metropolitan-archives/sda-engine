@@ -3,111 +3,46 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="rmsoft.ams.seoul.ac.acUser.dao.acUserMapper">
+<mapper namespace="rmsoft.ams.seoul.ac.ac003.dao.Ac003Mapper">
 
-    <select id="findAll" resultType="acUser" parameterType="acUser" statementType="PREPARED">
+    <select id="findUserGroupUserByUserUuid" resultType="Ac00302VO" parameterType="String" statementType="PREPARED">
         SELECT
-            USER_UUID as userUuid,
-            USER_ID as userId,
-            USER_NAME as userNm,
-            PASSWORD as userPassword,
-            PASSWORD_UPDATE_DATE as passwordUpdateDate,
-            USER_TYPE_UUID as userTypeUuid,
-            START_PROGRAM_UUID as startProgramUuid,
-            ORGANIZATION_UUID as organizationUuid,
-            DESCRIPTION as description,
-            NOTES as notes,
-            USE_YN as useYn,
-            INSERT_UUID as insertUuid,
-            INSERT_DATE as insertDate,
-            UPDATE_UUID as updateUuid,
-            UPDATE_DATE as updateDate
+            Z1.USER_GROUP_USER_UUID as userGroupUserUuid,
+            Z1.USER_GROUP_UUID as userGroupUuid,
+            Z2.USER_GROUP_NAME as userGroupName,
+            Z1.USER_UUID as userUuid,
+            Z2.DESCRIPTION as description,
+            Z2.NOTES as notes,
+            Z2.USE_YN as useYn,
+            Z1.INSERT_UUID insertUuid,
+            Z1.INSERT_DATE insertDate,
+            Z1.UPDATE_UUID updateUuid,
+            Z1.UPDATE_DATE updateDate
         FROM
-            AC_USER
+            AC_USER_GROUP_USER Z1,
+            AC_USER_GROUP Z2
+        WHERE Z1.USER_GROUP_UUID = Z2.USER_GROUP_UUID
+          AND Z1.USER_UUID = #{userUuid}
     </select>
 
-    <select id="findOne" resultType="acUser" parameterType="acUser" statementType="PREPARED">
+    <select id="findUserGroupUserByUserGroupUuid" resultType="Ac00302VO" parameterType="String"
+            statementType="PREPARED">
         SELECT
-            USER_UUID as userUuid,
-            USER_ID as userId,
-            USER_NAME as userNm,
-            PASSWORD as userPassword,
-            PASSWORD_UPDATE_DATE as passwordUpdateDate,
-            USER_TYPE_UUID as userTypeUuid,
-            START_PROGRAM_UUID as startProgramUuid,
-            ORGANIZATION_UUID as organizationUuid,
-            DESCRIPTION as description,
-            NOTES as notes,
-            USE_YN as useYn,
-            INSERT_UUID as insertUuid,
-            INSERT_DATE as insertDate,
-            UPDATE_UUID as updateUuid,
-            UPDATE_DATE as updateDate
+            Z1.USER_GROUP_USER_UUID as userGroupUserUuid,
+            Z1.USER_GROUP_UUID as userGroupUuid,
+            Z2.USER_GROUP_NAME as userGroupName,
+            Z1.USER_UUID as userUuid,
+            Z2.DESCRIPTION as description,
+            Z2.NOTES as notes,
+            Z2.USE_YN as useYn,
+            Z1.INSERT_UUID insertUuid,
+            Z1.INSERT_DATE insertDate,
+            Z1.UPDATE_UUID updateUuid,
+            Z1.UPDATE_DATE updateDate
         FROM
-            AC_USER
-        WHERE
-            USER_ID = #{userId}
+            AC_USER_GROUP_USER Z1,
+            AC_USER_GROUP Z2
+        WHERE Z1.USER_GROUP_UUID = Z2.USER_GROUP_UUID
+          AND Z1.USER_GROUP_UUID = #{userGroupUuid}
     </select>
-
-    <update id="delete" parameterType="acUser" statementType="PREPARED">
-        DELETE FROM
-            AC_USER
-        WHERE
-            USER_UUID = #{userUuid}
-    </update>
-
-    <update id="update" parameterType="acUser" statementType="PREPARED">
-        UPDATE AC_USER
-        SET
-            USER_ID = #{userId},
-            USER_NAME = #{userNm},
-            PASSWORD = #{userPassword},
-            PASSWORD_UPDATE_DATE = #{passwordUpdateDate},
-            USER_TYPE_UUID = #{userTypeUuid},
-            START_PROGRAM_UUID = #{startProgramUuid},
-            ORGANIZATION_UUID = #{organizationUuid},
-            DESCRIPTION = #{description},
-            NOTES = #{notes},
-            USE_YN = #{useYn},
-            UPDATE_UUID = #{updateUuid},
-            UPDATE_DATE = sysdate
-        WHERE
-            USER_UUID = #{userUuid}
-    </update>
-
-    <update id="insert" parameterType="acUser" statementType="PREPARED">
-        INSERT INTO AC_USER (
-            USER_UUID,
-            USER_ID,
-            USER_NAME,
-            PASSWORD,
-            PASSWORD_UPDATE_DATE,
-            USER_TYPE_UUID,
-            START_PROGRAM_UUID,
-            ORGANIZATION_UUID,
-            DESCRIPTION,
-            NOTES,
-            USE_YN,
-            INSERT_UUID,
-            INSERT_DATE,
-            UPDATE_UUID,
-            UPDATE_DATE
-        ) VALUES (
-            #{userUuid},
-            #{userId},
-            #{userNm},
-            #{userPassword},
-            sysdate,
-            #{userTypeUuid},
-            #{startProgramUuid},
-            #{organizationUuid},
-            #{description},
-            #{notes},
-            #{useYn},
-            sysdate,
-            sysdate,
-            sysdate,
-            sysdate
-        )
-    </update>
 </mapper>

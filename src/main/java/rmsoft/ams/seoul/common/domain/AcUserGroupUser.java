@@ -22,19 +22,23 @@ import java.io.Serializable;
 @DynamicUpdate
 @Entity
 @EqualsAndHashCode(callSuper = true)
-@Table(name = "AC_USER_GROUP")
-@IdClass(AcUserGroup.AcUserGroupId.class)
-@Alias("AcUserGroup")
-public class AcUserGroup extends BaseJpaModel<AcUserGroup.AcUserGroupId> {
+@Table(name = "AC_USER_GROUP_USER")
+@IdClass(AcUserGroupUser.AcUserGroupUserId.class)
+@Alias("AcUserGroupUser")
+public class AcUserGroupUser extends BaseJpaModel<AcUserGroupUser.AcUserGroupUserId> {
 
     @Id
+    @Column(name = "USER_GROUP_USER_UUID", length = 36, nullable = false)
+    @Comment(value = "유저그룹유저UUID")
+    private String userGroupUserUuid;
+
     @Column(name = "USER_GROUP_UUID", length = 36, nullable = false)
-    @Comment(value = "사용자그룹UUID")
+    @Comment(value = "유저그룹UUID")
     private String userGroupUuid;
 
-    @Column(name = "USER_GROUP_NAME", length = 50, nullable = false)
-    @Comment(value = "유저그룹명")
-    private String userGroupName;
+    @Column(name = "USER_UUID", length = 36, nullable = false)
+    @Comment(value = "그룹UUID")
+    private String groupUuid;
 
     @Column(name = "USE_YN", length = 1, nullable = false)
     @Comment(value = "사용여부")
@@ -42,17 +46,17 @@ public class AcUserGroup extends BaseJpaModel<AcUserGroup.AcUserGroupId> {
     private AXBootTypes.Used useYn = AXBootTypes.Used.YES;
 
     @Override
-    public AcUserGroupId getId() {
-        return AcUserGroupId.of(userGroupUuid);
+    public AcUserGroupUserId getId() {
+        return AcUserGroupUserId.of(userGroupUserUuid);
     }
 
     @Embeddable
     @Data
     @NoArgsConstructor
     @RequiredArgsConstructor(staticName = "of")
-    public static class AcUserGroupId implements Serializable {
+    public static class AcUserGroupUserId implements Serializable {
 
         @NonNull
-        private String userGroupUuid;
+        private String userGroupUserUuid;
     }
 }

@@ -1,6 +1,5 @@
 package rmsoft.ams.seoul.ac.ac003.vo;
 
-import io.onsemiro.core.code.AXBootTypes;
 import io.onsemiro.core.vo.BaseVO;
 import io.onsemiro.utils.ModelMapperUtils;
 import lombok.Data;
@@ -36,7 +35,7 @@ public class Ac00301VO extends BaseVO {
 
     private String regDate;
 
-    private AXBootTypes.Used useYn = AXBootTypes.Used.YES;
+    private String useYn;
 
     public static Ac00301VO of(AcUser acUser) {
         // Custom Mapper

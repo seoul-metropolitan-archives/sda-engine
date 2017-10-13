@@ -9,10 +9,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import rmsoft.ams.seoul.ac.ac003.dao.Ac003Mapper;
 import rmsoft.ams.seoul.ac.ac003.vo.Ac00301VO;
+import rmsoft.ams.seoul.ac.ac003.vo.Ac00302VO;
 import rmsoft.ams.seoul.common.domain.AcUser;
 import rmsoft.ams.seoul.common.domain.QAcUser;
+import rmsoft.ams.seoul.common.repository.AcUserGroupUserRepository;
 import rmsoft.ams.seoul.common.repository.AcUserRepository;
+
+import javax.inject.Inject;
 
 @Service
 public class Ac003Service extends BaseService {
@@ -20,8 +25,14 @@ public class Ac003Service extends BaseService {
     @Autowired
     private AcUserRepository acUserRepository;
 
+    @Autowired
+    private AcUserGroupUserRepository acUserGroupUserRepository;
+
+    @Inject
+    private Ac003Mapper ac003Mapper;
+
     // USER 관련 호출부
-    public Page<AcUser> find(Pageable pageable, String filter) {
+    public Page<AcUser> findUser(Pageable pageable, String filter) {
         return filter(acUserRepository.findAll(), pageable, filter, AcUser.class);
     }
 
@@ -45,6 +56,11 @@ public class Ac003Service extends BaseService {
     }
 
     // USER GROUP 관련 호출부
+    public Page<Ac00302VO> findUserGroupUser(Pageable pageable, RequestParams<Ac00302VO> requestParams) {
+        String filter = requestParams.getString("filter", "");
+
+        return filter(ac003Mapper.findUserGroupUserByUserUuid(requestParams.getString("userUuid")), pageable, filter, Ac00302VO.class);
+    }
 
     // USER ROLE 관련 호출부
 }

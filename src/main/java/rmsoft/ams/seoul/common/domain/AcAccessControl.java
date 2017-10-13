@@ -22,19 +22,27 @@ import java.io.Serializable;
 @DynamicUpdate
 @Entity
 @EqualsAndHashCode(callSuper = true)
-@Table(name = "AC_USER_GROUP")
-@IdClass(AcUserGroup.AcUserGroupId.class)
-@Alias("AcUserGroup")
-public class AcUserGroup extends BaseJpaModel<AcUserGroup.AcUserGroupId> {
+@Table(name = "AC_ACCESS_CONTROL")
+@IdClass(AcAccessControl.AcAccessControlId.class)
+@Alias("AcAccessControl")
+public class AcAccessControl extends BaseJpaModel<AcAccessControl.AcAccessControlId> {
 
     @Id
-    @Column(name = "USER_GROUP_UUID", length = 36, nullable = false)
-    @Comment(value = "사용자그룹UUID")
+    @Column(name = "ACCESS_CONTROL_UUID", length = 36, nullable = false)
+    @Comment(value = "Access Control UUID")
+    private String accessControlUuid;
+
+    @Column(name = "USER_UUID", length = 36)
+    @Comment(value = "User UUID")
+    private String userUuid;
+
+    @Column(name = "USER_GROUP_UUID", length = 36)
+    @Comment(value = "User Group UUID")
     private String userGroupUuid;
 
-    @Column(name = "USER_GROUP_NAME", length = 50, nullable = false)
-    @Comment(value = "유저그룹명")
-    private String userGroupName;
+    @Column(name = "USER_ROLE_UUID", length = 36, nullable = false)
+    @Comment(value = "Role UUID")
+    private String userRoleUuid;
 
     @Column(name = "USE_YN", length = 1, nullable = false)
     @Comment(value = "사용여부")
@@ -42,17 +50,17 @@ public class AcUserGroup extends BaseJpaModel<AcUserGroup.AcUserGroupId> {
     private AXBootTypes.Used useYn = AXBootTypes.Used.YES;
 
     @Override
-    public AcUserGroupId getId() {
-        return AcUserGroupId.of(userGroupUuid);
+    public AcAccessControlId getId() {
+        return AcAccessControlId.of(accessControlUuid);
     }
 
     @Embeddable
     @Data
     @NoArgsConstructor
     @RequiredArgsConstructor(staticName = "of")
-    public static class AcUserGroupId implements Serializable {
+    public static class AcAccessControlId implements Serializable {
 
         @NonNull
-        private String userGroupUuid;
+        private String accessControlUuid;
     }
 }
