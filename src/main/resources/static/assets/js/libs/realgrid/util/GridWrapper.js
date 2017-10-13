@@ -909,10 +909,17 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
             }
 		});
 	};
-	this.onDataCellClicked  = function(_event)
+	this.onDataCellClicked = function(_event)
 	{
-        gridView.onDataCellClicked  = _event;
+        gridView.onDataCellClicked = _event;
+	}
+	this.itemClick  = function(_event)
+	{
+        gridView.onDataCellClicked  = function(grid,index){
+            _event(grid.getDataProvider().getJsonRow(index.dataRow));
+		};
     };
+
 	this.setAppendValiate = function(func) {
 		if (typeof func == "function") {
 			appendValidate = func;
@@ -921,6 +928,8 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 		}
 
 	};
+
+
 
 	init();
 

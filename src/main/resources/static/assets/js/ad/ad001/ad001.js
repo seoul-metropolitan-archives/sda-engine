@@ -477,7 +477,7 @@ var fnObj = {
             data : JSON.stringify({categoryCode : "CD006"}),
             async : false,
             callback: function (list) {
-                console.log(JSON.stringify(list));
+                //console.log(JSON.stringify(list));
 
                 if(undefined === list)
                     return ;
@@ -527,6 +527,9 @@ fnObj.gridView = axboot.viewExtend(axboot.gridView, {
         this.gridObj.setGridStyle("100%","100%");
         this.gridObj.setColumnInfo(ad001.column_info).setEntityName($("#realgridName").text());
         this.gridObj.makeGrid();
+        this.gridObj.itemClick(function(data){
+            console.log(data);
+        });
         this.getData();
     },
     getData: function (_type)
