@@ -7,12 +7,12 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         axboot.ajax({
             type: "GET",
             url: "/api/v1/ac003/01/list",
-            data: $.extend({},{pageSize: 1000}),
+            data: $.extend({}, {pageSize: 1000}),
             callback: function (res) {
                 fnObj.gridView.setData(res.list);
             },
             options: {
-                onError: viewError
+                onError: axboot.viewError
             }
         });
         return false;
@@ -105,8 +105,9 @@ fnObj.pageStart = function () {
     $.ajax({
         url: "/assets/js/column_info/ac003.js",
         dataType: "script",
-        async : false,
-        success: function(){}
+        async: false,
+        success: function () {
+        }
     });
 
     _this.gridView.initView();
@@ -144,14 +145,3 @@ fnObj.gridView = axboot.viewExtend(axboot.gridView, {
     }
 });
 
-var viewError = function (err) {
-    axToast.confirm({
-        theme: "danger",
-        width: 300,
-        lang: {
-            "ok": "닫기"
-        },
-        icon: '<i class="cqc-new"></i>',
-        msg: '[에러] ' + err.message
-    });
-}

@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2017. RMSoft Co.,Ltd. All rights reserved
+ */
+
 package rmsoft.ams.seoul.common.domain;
 
 import io.onsemiro.core.annotations.Comment;

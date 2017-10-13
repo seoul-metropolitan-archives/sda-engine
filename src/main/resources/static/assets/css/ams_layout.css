@@ -1,6 +1,6 @@
 html, body {
-overflow: auto; width: 100%; height: 100%;padding: 0; margin: :0;
-    background-color: #eee; background-image:url(../images/copyright.png);
+overflow: auto; width: 100%; height: 100%;padding: 0; margin: 0;
+    background-color: #eee; background-image:url(/assets/images/ams/copyright.png);
     background-position: bottom left; background-repeat: no-repeat;min-width: 1000px;
     
 }
@@ -500,7 +500,7 @@ a.leftmenu7_close{
 #sub_style ul li{
     margin-left:15px;
     padding: 5px 0 5px 10px ;
-    background-image: url(../images/line_tree_hr.gif);
+    background-image: url(/assets/images/ams/line_tree_hr.gif);
     background-repeat: no-repeat;
     background-position: -10px 2px;
 }
@@ -787,7 +787,7 @@ label {padding:0 10px 0 5px; cursor: pointer; }
     box-sizing: border-box;
 }
 
-.yeongye{width:190px;background:#f2f2f2; border:1; text-indent:5px; margin-left: 1px}
+.yeongye{width:190px;background:#f2f2f2; border:1px; text-indent:5px; margin-left: 1px}
 
 .submit_arr {
     border:1px solid #777;

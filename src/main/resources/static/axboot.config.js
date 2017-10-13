@@ -4,10 +4,10 @@
 
         axboot.def["DEFAULT_TAB_LIST"] = [
             {
-                menuId: "error-monitoring",
+                menuId: "f529cda4-04ac-4b26-82ab-6b441a3d0015",
                 id: "error-monitoring",
                 progNm: '사용자 설정',
-                menuNm: '홈',
+                menuNm: 'User',
                 progPh: '/ac/ac003/ac003',
                 url: '/ac/ac003/ac003',
                 status: "on",

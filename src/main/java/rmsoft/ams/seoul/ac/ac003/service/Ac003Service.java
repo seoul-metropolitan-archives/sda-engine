@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import rmsoft.ams.seoul.ac.ac003.vo.Ac003VO_01;
+import rmsoft.ams.seoul.ac.ac003.vo.Ac00301VO;
 import rmsoft.ams.seoul.common.domain.AcUser;
 import rmsoft.ams.seoul.common.domain.QAcUser;
 import rmsoft.ams.seoul.common.repository.AcUserRepository;
@@ -25,7 +25,7 @@ public class Ac003Service extends BaseService {
         return filter(acUserRepository.findAll(), pageable, filter, AcUser.class);
     }
 
-    public Ac003VO_01 findOne(RequestParams<Ac003VO_01> requestParams) {
+    public Ac00301VO findOne(RequestParams<Ac00301VO> requestParams) {
         QAcUser qAcUser = QAcUser.acUser;
 
         Predicate predicate = qAcUser.userId.eq(requestParams.getString("userId"));
@@ -33,12 +33,12 @@ public class Ac003Service extends BaseService {
         return buildVO(acUserRepository.findOne(predicate));
     }
 
-    private Ac003VO_01 buildVO(AcUser acUser) {
+    private Ac00301VO buildVO(AcUser acUser) {
 
         if (acUser == null) {
-            return new Ac003VO_01();
+            return new Ac00301VO();
         } else {
-            BoundMapperFacade<AcUser, Ac003VO_01> mapper =
+            BoundMapperFacade<AcUser, Ac00301VO> mapper =
                     ModelMapperUtils.getMapper("AcUser", this.getClass().getPackage().getName());
             return mapper.map(acUser);
         }

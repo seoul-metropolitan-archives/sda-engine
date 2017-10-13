@@ -9,11 +9,18 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 import rmsoft.ams.seoul.ac.ac003.service.Ac003Service;
-import rmsoft.ams.seoul.ac.ac003.vo.Ac003VO_01;
+import rmsoft.ams.seoul.ac.ac003.vo.Ac00301VO;
 import rmsoft.ams.seoul.common.domain.AcUser;
 
 import java.util.List;
 
+/**
+ * Ac003Controller
+ *
+ * @author james
+ * @version 1.0.0
+ * @since 2017-10-12 오후 5:48
+ **/
 @RestController
 @RequestMapping(value = "/api/v1/ac003/")
 public class Ac003Controller extends BaseController {
@@ -24,11 +31,12 @@ public class Ac003Controller extends BaseController {
     @GetMapping("/01/list")
     public Responses.PageResponse list(Pageable pageable, RequestParams<AcUser> requestParams) {
         Page<AcUser> pages = ac003Service.find(pageable, requestParams.getString("filter", ""));
-        return Responses.PageResponse.of(Ac003VO_01.of(pages.getContent()), pages);
+
+        return Responses.PageResponse.of(Ac00301VO.of(pages.getContent()), pages);
     }
 
     @GetMapping("/01/details")
-    public Ac003VO_01 details(RequestParams<Ac003VO_01> requestParams) {
+    public Ac00301VO details(RequestParams<Ac00301VO> requestParams) {
         return ac003Service.findOne(requestParams);
     }
 

@@ -2576,3 +2576,15 @@ axboot.actionExtend = function () {
         return myAction;
     };
 }();
+
+axboot.viewError = function (err) {
+    axToast.confirm({
+        theme: "danger",
+        width: 300,
+        lang: {
+            "ok": "닫기"
+        },
+        icon: '<i class="cqc-new"></i>',
+        msg: '[에러] ' + err.message
+    });
+}

@@ -130,7 +130,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return userDetailsService;
     }
 
-    class LogoutSuccessHandler extends SimpleUrlLogoutSuccessHandler {
+    static class LogoutSuccessHandler extends SimpleUrlLogoutSuccessHandler {
 
         public LogoutSuccessHandler(String defaultTargetURL) {
             this.setDefaultTargetUrl(defaultTargetURL);

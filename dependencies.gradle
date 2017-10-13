@@ -11,7 +11,7 @@ dependencies {
     //___ compile ___
 
     // onsemiro
-    compile 'io.dat:onsemiro-core-rm:0.1.1'
+    compile 'io.dat:onsemiro-core-rm:0.1.3'
 
     // spring boot
     compile 'org.springframework.boot:spring-boot-starter-web'
