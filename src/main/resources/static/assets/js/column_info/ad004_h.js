@@ -37,42 +37,22 @@ var ad004_h =
                 editable: true,
                 dataType: "combo",
                 required: false,
-                visible: false,
-                values: ["Service1", "Service2", "Service3", "Service4"],
-                labels: ["Service1", "Service2", "Service3", "Service4"],
+                visible: true,
+                values: new Array(),
+                labels: new Array(),
                 editor: {
                     type: "dropDown",
                     dropDownCount: 10,
                     domainOnly: true, //domainOnly가 true이면 목록에 있는 값들만 선택할 수 있습니다.
                     textReadOnly: false, // true이면 키 입력이 안되며 선택만 할 수 있습니다.
                 }
-            },
-            {
-                sortNo: 4,
-                name: "serviceName",
-                text: "Service",
-                width: 120,
-                editable: true,
-                dataType: "text",
-                required: false,
-                visible: true
-                /*,
-                values: ["Service1", "Service2", "Service3", "Service4"],
-                labels: ["Service1", "Service2", "Service3", "Service4"],
-                editor: {
-                    type: "dropDown",
-                    dropDownCount: 10,
-                    domainOnly: true, //domainOnly가 true이면 목록에 있는 값들만 선택할 수 있습니다.
-                    textReadOnly: false, // true이면 키 입력이 안되며 선택만 할 수 있습니다.
-                }
-                */
             },
             {
                 sortNo: 5,
                 name: "Multiselect",
                 text: "Multiselect",
                 width: 70,
-                editable: false,
+                editable: true,
                 dataType: "check",
                 required: true
             },
@@ -99,15 +79,15 @@ var ad004_h =
                 name: "use_YN",
                 text: "USE",
                 width: 50,
-                editable: false,
+                editable: true,
                 dataType: "check",
                 textAlignment: "center",
                 renderer: {
                     type: "check",
                     shape: "",
-                    falseValues: "false",
-                    trueValues: "true",
-                    editable: "false",
+                    defaultValue : "Y",
+                    falseValues: "N",
+                    trueValues: "Y",
                     startEditOnClick: true,
                 },
                 required: true

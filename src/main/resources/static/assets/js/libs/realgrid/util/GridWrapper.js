@@ -194,10 +194,10 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 	// 날짜 기본 스타일
 	var timestampEditorStyle = {
 		type : "datetime",
-		datetimeFormat : "yyyy-MM-dd hh:mm:ss",
+		datetimeFormat : "yyyy-MM-dd HH:mm:ss.SSS",
 		mask : {
 				editMask:"9999-99-99 99:99:99"
-				,placeHolder:"yyyy-MM-dd hh:mm:ss" //편집기에 표시될 형식
+				,placeHolder:"yyyy-MM-dd HH:mm:ss" //편집기에 표시될 형식
 		        ,includedFormat:true //편집기에 표시된 내용이 그대로 셀값으로 전달
 			},
 		fontFamily : "nanum",
@@ -519,14 +519,17 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 		});
 
 		var styles = {};
-		for (var i = 0; i < list.length; i++) {
+        var obj = undefined;
+        var fieldObj = undefined;
+        for (var i = 0; i < list.length; i++) {
 			data = list[i];
 
 			// 필수여부 없으면 일반 모양에 수정 x
 			// 필수여부 Y 노란색 수정 가능
 			// 필수여부 N 일반 모양
 			// 활성여부 Y N 회색
-			var obj = {
+            fieldObj = {};
+			obj = {
 				name : data.name,
 				fieldName : data.name,
 				width : data.width,
@@ -599,10 +602,12 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 					obj.type = "datetime";
 					obj.renderer = {type : "datetime"};
 					obj.editor = defaultStyle.data.timestamp;
-					obj.styles = $.extend({}, defaultStyle.data.timestamp, obj.styles);
-					obj.displayRegExp = /\B(?=(\d{3})+(?!\d))/g;
-					obj.displayReplace = ",";
-					defaultData.push("");
+                    obj.styles = $.extend({}, defaultStyle.data.timestamp, obj.styles);
+                    obj.displayRegExp = /\B(?=(\d{3})+(?!\d))/g;
+                    obj.displayReplace = ",";
+
+                    fieldObj.datetimeFormat = "iso"
+                    defaultData.push("");
 					break;
 				case "text":
 					defaultData.push("");
@@ -632,10 +637,10 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 					break;
 			}
 			columnList.push(obj);
-			fieldList.push({
+			fieldList.push($.extend(fieldObj,{
 				fieldName : data.name,
 				dataType : data.dataType
-			});
+			}));
 			data = undefined;
 			styles = {};
 		}

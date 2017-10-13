@@ -9,6 +9,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             url: "/api/v1/ac003/01/list",
             data: $.extend({}, {pageSize: 1000}),
             callback: function (res) {
+                console.log(res.list);
                 fnObj.gridView.setData(res.list);
             },
             options: {

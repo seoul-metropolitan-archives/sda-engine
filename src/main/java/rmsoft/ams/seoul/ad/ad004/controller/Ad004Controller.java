@@ -5,11 +5,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import rmsoft.ams.seoul.ad.ad004.service.Ad004_DService;
-import rmsoft.ams.seoul.ad.ad004.service.Ad004_HService;
-import rmsoft.ams.seoul.ad.ad004.vo.Ad00401VO;
-
-import java.util.HashMap;
+import rmsoft.ams.seoul.ad.ad004.service.Ad004Service;
+import rmsoft.ams.seoul.common.domain.AdPopupHeader;
 
 @RestController
 @RequestMapping("/ad/ad004/ad004")
@@ -17,15 +14,11 @@ public class Ad004Controller
 {
 
     @Autowired
-    private Ad004_HService service_h;
-
-    @Autowired
-    private Ad004_DService service_d;
-
+    private Ad004Service service_h;
 
     @RequestMapping("/searchPopupHeader")
     @ResponseBody
-    public Object searchPopupHeader(@RequestBody Ad00401VO param)
+    public Object searchPopupHeader(@RequestBody AdPopupHeader param)
     {
         return service_h.searchPopupHeader(param);
     }
