@@ -3,29 +3,64 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="rmsoft.ams.seoul.ad.ad003.dao.Ad003Mapper">
+<mapper namespace="rmsoft.ams.seoul.ad.ad004.dao.Ad004Mapper">
 
     <select id="searchPopupHeader" resultType="Ad00401VO" parameterType="Ad00401VO" statementType="PREPARED">
     <![CDATA[
-
-        ]]>
-    </select>
-    <select id="searchPopupDetail" resultType="Ad00402VO" parameterType="Ad00402VO" statementType="PREPARED">
-        <![CDATA[
         SELECT
-          B.CODE_DETAIL_UUID  codeDetailUUID
-          , B.CODE            code
-          , B.CODE_NAME       codeName
+          POPUP_HEADER_UUID  popupHeaderUUID
+          , POPUP_CODE      popupCode
+          , POPUP_NAME      popupName
+          , SERVICE_UUID    serviceUUID
+          , MULTISELECT_YN  multiselectYN
+          , TREE_YN         treeYN
+          , DESCRIPTION     descrtiption
+          , NOTES           notes
+          , USE_YN          useYN
+          , POPUP_SQL       popupSQL
+        ]]>
+        , <include refid="Common.UserName"><property name="userUuid" value="INSERT_UUID"/></include> as insertUuid
+        , INSERT_DATE as insertDate
+        , <include refid="Common.UserName"><property name="userUuid" value="UPDATE_UUID"/></include> as updateUuid
+        ,  UPDATE_DATE as updateDate
         FROM
-          AD_CODE_HEADER A
-          , AD_CODE_DETAIL B
+          AD_POPUP_HEADER
         WHERE
-          A.CODE_HEADER_UUID = B.CODE_HEADER_UUID
-         ]]>
-        <if test="null != categoryCode">
-          AND
-          A.CATEGORY_CODE = #{categoryCode}
+          1=1
+        <if test="null != popupCode">
+            AND
+            POPUP_CODE = #{}
         </if>
-
+        <if test="null != popupName">
+            AND
+            POPUP_NAME LIKE '%' || #{popupName} || '%'
+        </if>
+        <if test="null != serviceUUID">
+            AND
+            SERVICE_UUID = #{serviceUUID}
+        </if>
+    </select>
+    <select id="getPopupDetail" resultType="Ad00402VO" parameterType="Ad00402VO" statementType="PREPARED">
+        <![CDATA[
+          SELECT
+            POPUP_DETAIL_UUID     popupDetailUUID
+            , POPUP_HEADER_UUID   popupHeaderUUID
+            , SQL_COLUMN          sqlColumn
+            , TITLE               title
+            , WIDTH               width
+            , INPUT_METHOD_UUID   inputMethodUUID
+            , ALIGN_UUID          alignUUID
+            , TREE_COLUMN_YN      treeColumnYN
+            , TREE_RELATION_UUID  treeRelationUUID
+            , ORDER_NO            orderNO
+        ]]>
+            , <include refid="Common.UserName"><property name="userUuid" value="INSERT_UUID"/></include> as insertUuid
+            , INSERT_DATE as insertDate
+            , <include refid="Common.UserName"><property name="userUuid" value="UPDATE_UUID"/></include> as updateUuid
+            ,  UPDATE_DATE as updateDate
+          FROM
+            AD_POPUP_DETAIL
+          WHERE
+            POPUP_HEAER_UUID = #{popupHeaderUUID}
     </select>
 </mapper>

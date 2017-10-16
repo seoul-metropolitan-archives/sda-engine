@@ -20,5 +20,13 @@ public class Ad00401VO extends BaseVO
 
     private String multiselectYN;
 
+    private String treeYN;
+
+    private String description;
+
+    private String note;
+
+    private String useYN;
+
     private String popupSQL;
 }

@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import rmsoft.ams.seoul.ad.ad004.service.Ad004Service;
+import rmsoft.ams.seoul.ad.ad004.vo.Ad00401VO;
 import rmsoft.ams.seoul.common.domain.AdPopupHeader;
 
 @RestController
@@ -18,7 +19,7 @@ public class Ad004Controller
 
     @RequestMapping("/searchPopupHeader")
     @ResponseBody
-    public Object searchPopupHeader(@RequestBody AdPopupHeader param)
+    public Object searchPopupHeader(@RequestBody Ad00401VO param)
     {
         return service.searchPopupHeader(param);
     }

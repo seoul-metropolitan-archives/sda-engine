@@ -23,16 +23,13 @@ public class Ad004Service extends BaseService{
     public List<Ad00401VO> searchPopupHeader(Ad00401VO param) {
         return mapper.searchPopupHeader(param);
     }
-    public List<AdPopupHeader> searchPopupHeader(AdPopupHeader header)
-    {
-        return popupHeaderRepository.findAll();
-    }
+
     public boolean insertPopupHeader(AdPopupHeader data)
     {
         popupHeaderRepository.save(data);
         return true;
     }
     public List<Ad00402VO> searchPopupDetail(Ad00402VO param) {
-        return mapper.searchPopupDetail(param);
+        return mapper.getPopupDetail(param);
     }
 }

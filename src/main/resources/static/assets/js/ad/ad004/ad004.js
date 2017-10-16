@@ -18,7 +18,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         axboot.ajax({
             type: "POST",
             url: "/ad/ad004/ad004/searchPopupHeader",
-            data : JSON.stringify({}),
+            data : JSON.stringify(data),
             async : false,
             callback: function (list) {
                 if(undefined === list || list.length < 1)
@@ -109,6 +109,22 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             }
         });
         */
+    },
+    GET_POPUP_DETAIL : function(data)
+    {
+
+        return ;
+
+        axboot.ajax({
+            url : ""
+            ,type : "POST"
+            ,dataType : "JSON"
+            ,data : JSON.stringify(data)
+            ,callback : function(res)
+            {
+
+            }
+        });
     },
     FORM_CLEAR: function (caller, act, data) {
         /*
@@ -499,13 +515,14 @@ fnObj = {
         _this.gridView_h.initView();
         _this.gridView_d.initView();
 
-        ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+        ACTIONS.dispatch(ACTIONS.PAGE_SEARCH,{});
 
     }
 };
 /*검색 창*/
 fnObj.formView = axboot.viewExtend(axboot.baseView,{
     initView : function(){
+        /*공통 코드 가져오기*/
         axboot.ajax({
             type: "POST",
             url: "/ad/ad003/getCode",
@@ -546,12 +563,22 @@ fnObj.formView = axboot.viewExtend(axboot.baseView,{
             }
         });
     }
+    ,getData : function()
+    {
+        return {
+            popupCode       : $("#popupCode").val()
+            , popupName     : $("#popupName").val()
+            , serviceUUID   : $("#serviceList:selected").val()
+            , useYN         : $("input[name='useYN']:checked").val()
+        }
+    }
 });
 
 /*팝업 헤더*/
 fnObj.gridView_h = axboot.viewExtend(axboot.gridView, {
     tagId : "realgrid",
     entityName : "POPUP_HEADER",
+    itemClick : ACTIONS.GET_POPUP_DETAIL,
     initView  : function()
     {
         this.setColumnInfo(ad004_h.column_info);
