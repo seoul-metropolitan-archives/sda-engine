@@ -392,7 +392,10 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 		 	gridView.getDataProvider().removeRow(gridView.getCurrent().dataRow);
 		 });
 	};
-
+	this.removeRow = function()
+	{
+        gridView.getDataProvider().removeRow(gridView.getCurrent().dataRow);
+	}
 	this.setIsTree = function(_isTree)
 	{
         isTree = _isTree;
@@ -935,7 +938,6 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
             _event(grid.getDataProvider().getJsonRow(index.dataRow));
 		};
     };
-
 	this.setAppendValiate = function(func) {
 		if (typeof func == "function") {
 			appendValidate = func;
@@ -944,8 +946,6 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 		}
 
 	};
-
-
 
 	init();
 

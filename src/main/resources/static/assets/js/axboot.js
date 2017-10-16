@@ -2437,35 +2437,52 @@ axboot.treeView = {};
  * @Object {Object} axboot.gridView
  */
 axboot.gridView = {
+    name : "gridView",
+    tagId : "",
     page: {
         pageNumber: 0,
         pageSize: 99999
     },
-    setData: function setData(_data) {
-        this.target.setData(_data);
+    column_info : undefined,
+    entityName : "",
+    gridObj : undefined,
+    init : function()
+    {
+
+        if("" == this.tagId) alert("그리드 tagID를 설정해주세요.");
+        if("" == this.entityName) throw Exception("엑셀 다운로드 명을 설정해주세요.");
+
+        this.gridObj = new GridWrapper(this.tagId,"/assets/js/libs/realgrid");
+        this.gridObj.setGridStyle("100%","100%");
+        this.gridObj.setEntityName(this.entityName);
     },
-    getData: function getData(_type) {
-        var list = [];
-        var _list = this.target.getList(_type);
-        if (_type == "modified" || _type == "deleted") {
-            list = ax5.util.filter(_list, function () {
-                return true;
-            });
-        } else {
-            list = _list;
-        }
-        return list;
+    setData: function setData(_data,_type) {
+        _type === undefined ? "set" : _type;
+        this.gridObj.setData(_type,_data);
+    },
+    getData: function getData() {
+        return this.gridObj.getData();
     },
     addRow: function addRow() {
-        this.target.addRow({ __created__: true }, "last");
+        return this.gridObj.addRow();
     },
     delRow: function delRow(_type) {
-        this.target.deleteRow(_type);
+        if("" == this.column_info) throw Exception("컬럼 정보를 넘겨어주세요");
+        return this.gridObj.removeRow();
+    },
+    setColumnInfo : function(_columnInfo)
+    {
+      this.gridObj.setColumnInfo(_columnInfo);
+    },
+    makeGrid : function()
+    {
+        this.gridObj.makeGrid();
     },
     align: function align() {
-        this.target.align();
+        //this.target.align();
     },
     clear: function clear() {
+        /*
         this.target.setData({
             list: [],
             page: {
@@ -2475,6 +2492,7 @@ axboot.gridView = {
                 totalPages: 0
             }
         });
+        */
     },
     setPageData: function setPageData(_page) {
         this.page = $.extend(this.page, _page);
@@ -2527,6 +2545,12 @@ axboot.viewExtend = function (_obj1, _obj2) {
     else if(_obj1.name && _obj1.name == "baseView")
     {
         var retView = $.extend({}, axboot.commonView, _obj1, _obj2)
+        retView.init();
+        return retView;
+    }
+    else if(_obj1.name && _obj1.name == "gridView")
+    {
+        var retView = $.extend({}, _obj1, _obj2)
         retView.init();
         return retView;
     }

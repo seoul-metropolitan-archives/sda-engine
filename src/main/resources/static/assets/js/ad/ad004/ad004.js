@@ -547,51 +547,28 @@ fnObj.formView = axboot.viewExtend(axboot.baseView,{
         });
     }
 });
+
 /*팝업 헤더*/
 fnObj.gridView_h = axboot.viewExtend(axboot.gridView, {
-    page: {
-        pageNumber: 0,
-        pageSize: 20
-    },
-    initView: function ()
+    tagId : "realgrid",
+    entityName : "POPUP_HEADER",
+    initView  : function()
     {
-        this.gridObj = new GridWrapper("realgrid","/assets/js/libs/realgrid");
-        this.gridObj.setGridStyle("100%","100%");
-        this.gridObj.setColumnInfo(ad004_h.column_info).setEntityName("POPUP_HEADER");
-        this.gridObj.makeGrid();
-        this.getData();
-    },
-    getData: function ()
-    {
-        return this.gridObj.getData();
-    },
-    setData : function(list)
-    {
-        this.gridObj.setData("set",list);
-    },
-    addRow: function () {
-        this.gridObj.addRow();
+        this.setColumnInfo(ad004_h.column_info);
+        this.makeGrid();
     }
-});
+ });
 /*팝업 디테일 ( Column )*/
 fnObj.gridView_d = axboot.viewExtend(axboot.gridView, {
     page: {
         pageNumber: 0,
         pageSize: 20
     },
+    tagId : "realgrid2",
+    entityName : "POPUP_DETAIL",
     initView: function ()
     {
-        this.gridObj = new GridWrapper("realgrid2","/assets/js/libs/realgrid");
-        this.gridObj.setGridStyle("100%","100%");
-        this.gridObj.setColumnInfo(ad004_d.column_info).setEntityName("POPUP_DETAIL");
-        this.gridObj.makeGrid();
-        this.getData();
-    },
-    getData: function (_type)
-    {
-        return this.gridObj.getData();
-    },
-    addRow: function () {
-        this.gridObj.addRow();
+        this.setColumnInfo(ad004_d.column_info);
+        this.makeGrid();
     }
 });
