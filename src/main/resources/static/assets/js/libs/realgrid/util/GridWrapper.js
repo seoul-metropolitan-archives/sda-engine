@@ -716,6 +716,7 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 	
 	//데이터  반환 함수
 	this.getData = function() {
+        gridView.commit();
 		var dataProvider = gridView.getDataProvider();
 		var rows = dataProvider.getRows();
 		var rowState = dataProvider.getAllStateRows();

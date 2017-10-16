@@ -27,17 +27,21 @@
           AD_POPUP_HEADER
         WHERE
           1=1
-        <if test="null != popupCode">
+        <if test="null != popupCode and '' != popupCode">
             AND
-            POPUP_CODE = #{}
+            POPUP_CODE = #{popupCode}
         </if>
-        <if test="null != popupName">
+        <if test="null != popupName and '' != popupName">
             AND
             POPUP_NAME LIKE '%' || #{popupName} || '%'
         </if>
-        <if test="null != serviceUUID">
+        <if test="null != serviceUUID and '' != serviceUUID">
             AND
             SERVICE_UUID = #{serviceUUID}
+        </if>
+        <if test="null != useYN and '' != useYN">
+            AND
+            USE_YN = #{useYN}
         </if>
     </select>
     <select id="getPopupDetail" resultType="Ad00402VO" parameterType="Ad00402VO" statementType="PREPARED">

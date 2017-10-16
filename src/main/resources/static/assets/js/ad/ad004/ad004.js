@@ -15,6 +15,9 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH: function (caller, act, data) {
         var _this = this;
 
+        if(!data)
+            data = this.formView.getData();
+
         axboot.ajax({
             type: "POST",
             url: "/ad/ad004/ad004/searchPopupHeader",
@@ -515,7 +518,7 @@ fnObj = {
         _this.gridView_h.initView();
         _this.gridView_d.initView();
 
-        ACTIONS.dispatch(ACTIONS.PAGE_SEARCH,{});
+        ACTIONS.dispatch(ACTIONS.PAGE_SEARCH,this.formView.getData());
 
     }
 };
@@ -568,7 +571,7 @@ fnObj.formView = axboot.viewExtend(axboot.baseView,{
         return {
             popupCode       : $("#popupCode").val()
             , popupName     : $("#popupName").val()
-            , serviceUUID   : $("#serviceList:selected").val()
+            , serviceUUID   : $("#serviceList option:selected").val()
             , useYN         : $("input[name='useYN']:checked").val()
         }
     }
