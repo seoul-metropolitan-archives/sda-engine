@@ -2446,11 +2446,12 @@ axboot.gridView = {
     column_info : undefined,
     entityName : "",
     gridObj : undefined,
+    itemClick : undefined,
     init : function()
     {
 
         if("" == this.tagId) alert("그리드 tagID를 설정해주세요.");
-        if("" == this.entityName) throw Exception("엑셀 다운로드 명을 설정해주세요.");
+        if("" == this.entityName) alert("엑셀 다운로드 명을 설정해주세요.");
 
         this.gridObj = new GridWrapper(this.tagId,"/assets/js/libs/realgrid");
         this.gridObj.setGridStyle("100%","100%");
@@ -2467,16 +2468,26 @@ axboot.gridView = {
         return this.gridObj.addRow();
     },
     delRow: function delRow(_type) {
-        if("" == this.column_info) throw Exception("컬럼 정보를 넘겨어주세요");
         return this.gridObj.removeRow();
     },
     setColumnInfo : function(_columnInfo)
     {
       this.gridObj.setColumnInfo(_columnInfo);
     },
+    bindEvent : function()
+    {
+        var _this = this;
+        /*셀 클릭 시 이벤트*/
+        this.gridObj.itemClick(function(data){
+            if(undefined === _this.itemClick) return ;
+
+            ACTIONS.dispatch(_this.itemClick,data);
+        });
+    },
     makeGrid : function()
     {
         this.gridObj.makeGrid();
+        this.bindEvent();
     },
     align: function align() {
         //this.target.align();
