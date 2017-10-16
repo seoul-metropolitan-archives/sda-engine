@@ -30,10 +30,10 @@ public class Ac003Controller extends BaseController {
     private Ac003Service ac003Service;
 
     @GetMapping("/01/list")
-    public Responses.PageResponse listUser(Pageable pageable, RequestParams<AcUser> requestParams) {
-        Page<AcUser> pages = ac003Service.findUser(pageable, requestParams.getString("filter", ""));
+    public Responses.PageResponse listUser(Pageable pageable, RequestParams<Ac00301VO> requestParams) {
+        Page<Ac00301VO> pages = ac003Service.findAllUser(pageable, requestParams);
 
-        return Responses.PageResponse.of(Ac00301VO.of(pages.getContent()), pages);
+        return Responses.PageResponse.of(pages.getContent(), pages);
     }
 
     @GetMapping("/02/list")

@@ -7,6 +7,7 @@ import io.onsemiro.core.domain.code.CommonCodeService;
 import io.onsemiro.core.parameter.RequestParams;
 import io.onsemiro.utils.JsonUtils;
 import org.apache.commons.lang3.StringUtils;
+import rmsoft.ams.seoul.common.domain.AcUser;
 
 import java.util.List;
 import java.util.Map;
@@ -17,6 +18,7 @@ public class CommonCodeUtils {
 
     private static Map<String, List<CommonCode>> commonCodeMap;
     private static List<CommonCode> commonCodes;
+    private static List<AcUser> acUserList;
 
     public static List<CommonCode> get(String groupCd) {
         if(commonCodeMap == null){

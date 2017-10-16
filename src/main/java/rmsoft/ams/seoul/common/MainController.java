@@ -24,7 +24,7 @@ public class MainController {
 
     @GetMapping("/")
     public String index() {
-        return "redirect:/ac/ac001/ac001";
+        return "redirect:/login";
     }
 
     @GetMapping("/login")

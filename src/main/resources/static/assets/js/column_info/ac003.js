@@ -88,7 +88,7 @@ var ac003 =
                 {
                     sortNo: 9,
                     name: "description",
-                    text: "DESCRIPTION",
+                    text: "description",
                     width: 120,
                     editable: true,
                     dataType: "richtext",

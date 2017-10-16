@@ -13,6 +13,8 @@ import java.util.List;
  * @since 2017-09-26 오후 3:44
  **/
 public interface Ac003Mapper extends MyBatisMapper {
+    List<Ac00301VO> findAllUser(String userId);
+
     List<Ac00301VO> findUserGroupUserByUserUuid(String userUuid);
 
     List<Ac00301VO> findUserGroupUserByUserGroupUuid(String userGroupUuid);

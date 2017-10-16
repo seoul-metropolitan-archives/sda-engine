@@ -32,8 +32,8 @@ public class Ac003Service extends BaseService {
     private Ac003Mapper ac003Mapper;
 
     // USER 관련 호출부
-    public Page<AcUser> findUser(Pageable pageable, String filter) {
-        return filter(acUserRepository.findAll(), pageable, filter, AcUser.class);
+    public Page<Ac00301VO> findAllUser(Pageable pageable, RequestParams<Ac00301VO> requestParams) {
+        return filter(ac003Mapper.findAllUser(requestParams.getString("userId")), pageable, "", Ac00301VO.class);
     }
 
     public Ac00301VO findOne(RequestParams<Ac00301VO> requestParams) {
@@ -43,6 +43,16 @@ public class Ac003Service extends BaseService {
 
         return buildVO(acUserRepository.findOne(predicate));
     }
+
+    // USER GROUP 관련 호출부
+    public Page<Ac00302VO> findUserGroupUser(Pageable pageable, RequestParams<Ac00302VO> requestParams) {
+        String filter = requestParams.getString("filter", "");
+
+        return filter(ac003Mapper.findUserGroupUserByUserUuid(requestParams.getString("userUuid")), pageable, filter, Ac00302VO.class);
+    }
+
+    // USER ROLE 관련 호출부
+
 
     private Ac00301VO buildVO(AcUser acUser) {
 
@@ -54,13 +64,4 @@ public class Ac003Service extends BaseService {
             return mapper.map(acUser);
         }
     }
-
-    // USER GROUP 관련 호출부
-    public Page<Ac00302VO> findUserGroupUser(Pageable pageable, RequestParams<Ac00302VO> requestParams) {
-        String filter = requestParams.getString("filter", "");
-
-        return filter(ac003Mapper.findUserGroupUserByUserUuid(requestParams.getString("userUuid")), pageable, filter, Ac00302VO.class);
-    }
-
-    // USER ROLE 관련 호출부
 }

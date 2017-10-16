@@ -4,6 +4,29 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="rmsoft.ams.seoul.ac.ac003.dao.Ac003Mapper">
+    <select id="findAllUser" resultType="Ac00301VO" parameterType="String" statementType="PREPARED">
+        SELECT
+            USER_UUID as userUuid,
+            USER_ID as userId,
+            USER_NAME as userNm,
+            PASSWORD as userPassword,
+            PASSWORD_UPDATE_DATE as passwordUpdateDate,
+            USER_TYPE_UUID as userTypeUuid,
+            START_PROGRAM_UUID startProgramUuid,
+            ORGANIZATION_UUID organizationUuid,
+            DESCRIPTION description,
+            NOTES notes,
+            USE_YN useYn,
+            <include refid="Common.UserName"><property name="userUuid" value="INSERT_UUID"/></include> as insertUuid,
+            INSERT_DATE as insertDate,
+            <include refid="Common.UserName"><property name="userUuid" value="UPDATE_UUID"/></include> as updateUuid,
+            UPDATE_DATE as updateDate
+        FROM
+            AC_USER
+        <if test="parkingType != null">
+        WHERE USER_ID LIKE #{userId}
+        </if>
+    </select>
 
     <select id="findUserGroupUserByUserUuid" resultType="Ac00302VO" parameterType="String" statementType="PREPARED">
         SELECT
@@ -14,9 +37,9 @@
             Z2.DESCRIPTION as description,
             Z2.NOTES as notes,
             Z2.USE_YN as useYn,
-            Z1.INSERT_UUID insertUuid,
+            <include refid="Common.UserName"><property name="userUuid" value="Z1.INSERT_UUID"/></include> as insertUuid,
             Z1.INSERT_DATE insertDate,
-            Z1.UPDATE_UUID updateUuid,
+            <include refid="Common.UserName"><property name="userUuid" value="Z1.UPDATE_UUID"/></include> as updateUuid,
             Z1.UPDATE_DATE updateDate
         FROM
             AC_USER_GROUP_USER Z1,
