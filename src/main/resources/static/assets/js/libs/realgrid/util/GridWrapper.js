@@ -727,20 +727,13 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 
 		var row = undefined;
 		for (var i = 0; i < createRow.length; i++) {
-			row = rows[createRow[i]];
-			try {
-				createdList.push(gridView.getDataProvider().getJsonRow(row));
-			} catch (ex) {
-				console.log(ex);
-			}
+			createdList.push(dataProvider.getJsonRow(createRow[i]));
 		}
 		for (var i = 0; i < updateRow.length; i++) {
-			row = rows[updateRow[i]];
-			updatedList.push(gridView.getDataProvider().getJsonRow(row));
+			updatedList.push(dataProvider.getJsonRow(updateRow[i]));
 		}
 		for (var i = 0; i < deletedRow.length; i++) {
-			row = rows[deletedRow[i]];
-			deletedList.push(gridView.getDataProvider().getJsonRow(row));
+			deletedList.push(dataProvider.getJsonRow(deletedRow[i]));
 		}
 		return {
 			createdList : createdList,
