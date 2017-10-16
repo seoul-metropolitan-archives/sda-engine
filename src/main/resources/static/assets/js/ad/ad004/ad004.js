@@ -13,7 +13,20 @@ var selectedErrorItem = {};
 
 var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH: function (caller, act, data) {
-        alert("test");
+        var _this = this;
+
+        axboot.ajax({
+            type: "POST",
+            url: "/ad/ad004/ad004/searchPopupHeader",
+            data : JSON.stringify({}),
+            async : false,
+            callback: function (list) {
+                if(undefined === list || list.length < 1)
+                    fnObj.gridView_h.addRow();
+                else
+                    fnObj.gridView_h.setData(list);
+            }
+        })
     },
     ERROR_SEARCH: function (caller, act, data) {
         /*
@@ -41,12 +54,24 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         */
         return false;
     },
+    PAGE_SAVE : function(caller, act, data)
+    {
+        //alert("저장하자");
+        ACTIONS.dispatch(ACTIONS.POPUP_HEADER_PAGE_SAVE);
+    },
     POPUP_HEADER_PAGE_SAVE: function (caller, act, data) {
+        var _this = this;
         axDialog.confirm({
             msg: "저장하시겠습니까?"
         },function() {
             if (this.key == "ok") {
-                alert("저장하자");
+                console.log(fnObj.gridView_h.getData());
+                /*
+                axboot.ajax({
+                    url : "ad/ad004/insertPopupHeader",
+                    data : this.gridView_h.getData()
+                })
+                */
             }
         });
         /*
@@ -473,6 +498,9 @@ fnObj = {
         _this.formView.initView();
         _this.gridView_h.initView();
         _this.gridView_d.initView();
+
+        ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+
     }
 };
 /*검색 창*/
@@ -533,22 +561,13 @@ fnObj.gridView_h = axboot.viewExtend(axboot.gridView, {
         this.gridObj.makeGrid();
         this.getData();
     },
-    getData: function (_type)
+    getData: function ()
     {
-        var _this = this;
-
-        axboot.ajax({
-            type: "POST",
-            url: "/ad/ad004/ad004/searchPopupHeader",
-            data : JSON.stringify({}),
-            async : false,
-            callback: function (list) {
-                if(undefined === list || list.length < 1)
-                    _this.gridObj.addRow();
-                else
-                    _this.gridObj.setData("set",list);
-            }
-        })
+        return this.gridObj.getData();
+    },
+    setData : function(list)
+    {
+        this.gridObj.setData("set",list);
     },
     addRow: function () {
         this.gridObj.addRow();
@@ -570,6 +589,7 @@ fnObj.gridView_d = axboot.viewExtend(axboot.gridView, {
     },
     getData: function (_type)
     {
+        return this.gridObj.getData();
     },
     addRow: function () {
         this.gridObj.addRow();
