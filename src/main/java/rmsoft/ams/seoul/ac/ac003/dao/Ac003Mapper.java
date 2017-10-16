@@ -2,6 +2,7 @@ package rmsoft.ams.seoul.ac.ac003.dao;
 
 import io.onsemiro.core.mybatis.MyBatisMapper;
 import rmsoft.ams.seoul.ac.ac003.vo.Ac00301VO;
+import rmsoft.ams.seoul.ac.ac003.vo.Ac00302VO;
 
 import java.util.List;
 
@@ -15,7 +16,7 @@ import java.util.List;
 public interface Ac003Mapper extends MyBatisMapper {
     List<Ac00301VO> findAllUser(String userId);
 
-    List<Ac00301VO> findUserGroupUserByUserUuid(String userUuid);
+    List<Ac00302VO> findUserGroupUserByUserUuid(String userUuid);
 
-    List<Ac00301VO> findUserGroupUserByUserGroupUuid(String userGroupUuid);
+    List<Ac00302VO> findUserGroupUserByUserGroupUuid(String userGroupUuid);
 }

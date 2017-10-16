@@ -9,7 +9,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             data: $.extend({}, {pageSize: 1000}),
             callback: function (res) {
                 console.log(res.list);
-                fnObj.gridView.setData(res.list);
+                fnObj.gridView01.setData(res.list);
             },
             options: {
                 onError: axboot.viewError
@@ -24,7 +24,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             url: "/api/v1/ac003/02/list",
             data: $.extend({}, {pageSize: 1000}, data),
             callback: function (res) {
-                fnObj.gridView01.setData(res.list);
+                fnObj.gridView02.setData(res.list);
             },
             options: {
                 onError: axboot.viewError
@@ -134,14 +134,6 @@ fnObj.pageStart = function () {
 
     //TODO 추후에 삭제될 내용으로 /실제 Grid의 컬럼 정보는 DB에서 가져올 예정
     $.ajax({
-        url: "/assets/js/column_info/ac003.js",
-        dataType: "script",
-        async: false,
-        success: function () {
-        }
-    });
-
-    $.ajax({
         url: "/assets/js/column_info/ac00301.js",
         dataType: "script",
         async: false,
@@ -157,44 +149,23 @@ fnObj.pageStart = function () {
         }
     });
 
-    _this.gridView.initView();
+    $.ajax({
+        url: "/assets/js/column_info/ac00303.js",
+        dataType: "script",
+        async: false,
+        success: function () {
+        }
+    });
+
     _this.gridView01.initView();
     _this.gridView02.initView();
+    _this.gridView03.initView();
 
     // Data 조회
     ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
 };
 
 // AC003 User Group User GridView
-fnObj.gridView = axboot.viewExtend(axboot.gridView, {
-    page: {
-        pageNumber: 0,
-        pageSize: 20
-    },
-    initView: function () {
-        this.gridObj = new GridWrapper("realgrid", "/assets/js/libs/realgrid");
-        this.gridObj.setGridStyle("100%", "100%");
-        this.gridObj.setColumnInfo(ac003.column_info).setEntityName("CONFIGURATION");
-        this.gridObj.makeGrid();
-        this.gridObj.itemClick(this.itemClick);
-    },
-    setData: function (list) {
-        this.gridObj.setData("set", list);
-
-    },
-    getData: function (_type) {
-        //this.gridObj.load("/ad/ad001/getEnviromentList.do", {});
-    },
-    addRow: function () {
-        this.gridObj.addRow();
-    },
-    itemClick: function (data) {
-        ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, data);
-    }
-});
-
-
-// AC003 Access Control Gridview
 fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     page: {
         pageNumber: 0,
@@ -218,12 +189,12 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
         this.gridObj.addRow();
     },
     itemClick: function (data) {
-        //ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, data);
+        ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, data);
     }
 });
 
 
-// AC003 GridView
+// AC003 Access Control Gridview
 fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
     page: {
         pageNumber: 0,
@@ -233,6 +204,35 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
         this.gridObj = new GridWrapper("realgrid02", "/assets/js/libs/realgrid");
         this.gridObj.setGridStyle("100%", "100%");
         this.gridObj.setColumnInfo(ac00302.column_info).setEntityName("CONFIGURATION");
+        this.gridObj.makeGrid();
+        this.gridObj.itemClick(this.itemClick);
+    },
+    setData: function (list) {
+        this.gridObj.setData("set", list);
+
+    },
+    getData: function (_type) {
+        //this.gridObj.load("/ad/ad001/getEnviromentList.do", {});
+    },
+    addRow: function () {
+        this.gridObj.addRow();
+    },
+    itemClick: function (data) {
+        //ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, data);
+    }
+});
+
+
+// AC003 GridView
+fnObj.gridView03 = axboot.viewExtend(axboot.gridView, {
+    page: {
+        pageNumber: 0,
+        pageSize: 20
+    },
+    initView: function () {
+        this.gridObj = new GridWrapper("realgrid03", "/assets/js/libs/realgrid");
+        this.gridObj.setGridStyle("100%", "100%");
+        this.gridObj.setColumnInfo(ac00303.column_info).setEntityName("CONFIGURATION");
         this.gridObj.makeGrid();
         this.gridObj.itemClick(this.itemClick);
     },

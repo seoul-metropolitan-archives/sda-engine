@@ -1,4 +1,8 @@
-var ac003 =
+/*
+ * Copyright (c) 2017. RMSoft Co.,Ltd. All rights reserved
+ */
+
+var ac00303 =
     {
         column_info:
             [
@@ -88,7 +92,7 @@ var ac003 =
                 {
                     sortNo: 9,
                     name: "description",
-                    text: "description",
+                    text: "DESCRIPTION",
                     width: 120,
                     editable: true,
                     dataType: "richtext",

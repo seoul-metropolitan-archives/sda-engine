@@ -58,9 +58,9 @@
             Z2.DESCRIPTION as description,
             Z2.NOTES as notes,
             Z2.USE_YN as useYn,
-            Z1.INSERT_UUID insertUuid,
+            <include refid="Common.UserName"><property name="userUuid" value="Z1.INSERT_UUID"/></include> as insertUuid,
             Z1.INSERT_DATE insertDate,
-            Z1.UPDATE_UUID updateUuid,
+            <include refid="Common.UserName"><property name="userUuid" value="Z1.UPDATE_UUID"/></include> as updateUuid,
             Z1.UPDATE_DATE updateDate
         FROM
             AC_USER_GROUP_USER Z1,
