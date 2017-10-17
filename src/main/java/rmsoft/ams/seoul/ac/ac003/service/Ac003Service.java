@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import rmsoft.ams.seoul.ac.ac003.dao.Ac003Mapper;
 import rmsoft.ams.seoul.ac.ac003.vo.Ac00301VO;
 import rmsoft.ams.seoul.ac.ac003.vo.Ac00302VO;
@@ -75,6 +76,15 @@ public class Ac003Service extends BaseService {
         return filter(ac003Mapper.findUserRole(ac00303VO), pageable, filter, Ac00303VO.class);
     }
 
+    @Transactional
+    public void deleteUser(AcUser acUser) {
+        acUserRepository.delete(acUser);
+    }
+
+    @Transactional
+    public void saveUser(AcUser acUser) {
+        acUserRepository.save(acUser);
+    }
 
     private Ac00301VO buildVO(AcUser acUser) {
 

@@ -47,41 +47,43 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         return false;
     },
     PAGE_SAVE: function (caller, act, data) {
-        /*
         axDialog.confirm({
-            msg: "장애조치사항을 저장하시겠습니까?"
+            msg: "Do you want to save all items?"
         }, function () {
             if (this.key == "ok") {
-                var parentData = fnObj.formView04.getData(); //화면정보를 가져온다.
-                var selectedGridData = fnObj.formView01.getData();
-                var inputData = {
-                    jisaCode: selectedGridData.jisaCode,
-                    branchCode: selectedGridData.branchCode,
-                    cornerCode: selectedGridData.cornerCode,
-                    terminalNo: selectedGridData.terminalNo,
-                    errorDatetime: selectedGridData.errorDatetime,
-                    noticeContent: parentData.noticeContent,
-                    customerInfo: parentData.customerInfo,
-                    handleContent: parentData.handleContent,
-                    lastModifyEmpName: sessionJson.userNm
-                };
+                var updateList;
+
+                var saveList = [].concat(fnObj.gridView01.getData()); // 추가되어서 수정된건
+                /*saveList.forEach(function (n) {
+                    n.isDeleted = false;
+                });
+
+                var deleteList = [].concat(fnObj.gridView01.getData("deleted")); // 삭제된건
+
+                deleteList.forEach(function (n) {
+                    n.isDeleted = true;
+                });*/
+
+               /* if (saveList.length > 0) {
+                    updateList = saveList;
+                } else if (deleteList.length > 0) {
+                    updateList = deleteList;
+                }*/
+
                 axboot
                     .call({
                         type: "PUT",
-                        url: "/api/v1/mng/error/error_handle_mng",
-                        data: JSON.stringify(inputData),
+                        url: "/api/v1/ac003/01/save",
+                        data: JSON.stringify(saveList),
                         callback: function (res) {
                             ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
                         }
                     })
                     .done(function () {
-                        //ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
-                        // ACTIONS.dispatch(ACTIONS.ITEM_CLICK, selectedErrorItem);
                         axToast.push("저장 작업이 완료되었습니다.");
                     });
             }
         });
-        */
     },
     FORM_CLEAR: function (caller, act, data) {
         /*
@@ -229,15 +231,17 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
         this.gridObj.setData("set", list);
 
     },
-    getData: function (_type) {
-        //this.gridObj.load("/ad/ad001/getEnviromentList.do", {});
+    getData: function () {
+        return this.gridObj.getData();
     },
     addRow: function () {
         this.gridObj.addRow();
     },
     itemClick: function (data) {
-        ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, data);
-        ACTIONS.dispatch(ACTIONS.PAGE_SEARCH2, data);
+        if (data.userUuid != null && data.userUuid != "") {
+            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, data);
+            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH2, data);
+        }
     }
 });
 fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {

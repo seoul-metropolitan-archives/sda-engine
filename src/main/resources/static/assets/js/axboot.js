@@ -24,7 +24,7 @@ var axboot = {};
 axboot.def = {
     "pageFunctionName": "fnObj",
     "iframeLoadingMsg": '<i class="cqc-chequer ax-loading-icon lg"></i>',
-    "dialogTitle": "CHEQUER"
+    "dialogTitle": "Confirm Dialog"
 };
 
 /**
@@ -2119,7 +2119,7 @@ axboot.preparePlugin = function () {
         window.axDialog = new ax5.ui.dialog({
             title: axboot.def.dialogTitle,
             lang: {
-                "ok": "확인", "cancel": "취소"
+                "ok": "Confirm", "cancel": "Cancel"
             },
             onStateChanged: function onStateChanged() {
                 if (this.state === "open") {

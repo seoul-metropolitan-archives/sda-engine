@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Page;
 import rmsoft.ams.seoul.common.domain.AcUser;
 
-import java.time.Instant;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
@@ -25,7 +24,7 @@ public class Ac00301VO extends BaseVO {
 
     private String userPassword;
 
-    private Instant passwordUpdateDate;
+    private String passwordUpdateDate;
 
     private String userTypeUuid;
 
