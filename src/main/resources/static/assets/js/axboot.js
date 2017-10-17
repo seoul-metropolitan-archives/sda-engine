@@ -2458,7 +2458,8 @@ axboot.gridView = {
         this.gridObj.setEntityName(this.entityName);
     },
     setData: function setData(_data,_type) {
-        _type === undefined ? "set" : _type;
+        if(!_type)
+            _type = "set";
         this.gridObj.setData(_type,_data);
     },
     getData: function getData() {
