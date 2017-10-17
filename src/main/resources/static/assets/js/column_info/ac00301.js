@@ -57,8 +57,8 @@ var ac00301 =
                     dataType: "combo",
                     required: false,
                     visible: true,
-                    values: new Array(),
-                    labels: new Array(),
+                    values: axboot.commonCodeFilter("CD006").codeArr,
+                    labels: axboot.commonCodeFilter("CD006").nameArr,
                     lookupDisplay: true,
                     editor: {
                         type: "dropDown",

@@ -13,19 +13,17 @@
     <select id="getCode" resultType="Ad00303VO" parameterType="Ad00303VO" statementType="PREPARED">
         <![CDATA[
         SELECT
-          B.CODE_DETAIL_UUID  codeDetailUUID
-          , B.CODE            code
-          , B.CODE_NAME       codeName
+            Z1.CODE_DETAIL_UUID as codeDetailUUID,
+            Z.CATEGORY_CODE categoryCode,
+            Z1.CODE as code,
+            Z1.CODE_NAME as codeName
         FROM
-          AD_CODE_HEADER A
-          , AD_CODE_DETAIL B
-        WHERE
-          A.CODE_HEADER_UUID = B.CODE_HEADER_UUID
+            AD_CODE_HEADER Z,
+            AD_CODE_DETAIL Z1
+        WHERE Z.CODE_HEADER_UUID = Z1.CODE_HEADER_UUID
          ]]>
         <if test="null != categoryCode">
-          AND
-          A.CATEGORY_CODE = #{categoryCode}
+            AND Z.CATEGORY_CODE = #{categoryCode}
         </if>
-
     </select>
 </mapper>

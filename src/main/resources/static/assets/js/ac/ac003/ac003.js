@@ -6,9 +6,8 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         axboot.ajax({
             type: "GET",
             url: "/api/v1/ac003/01/list",
-            data: $.extend({}, {pageSize: 1000}),
+            data: $.extend({}, {pageSize: 1000}, this.formView.getData()),
             callback: function (res) {
-                console.log(res.list);
                 fnObj.gridView01.setData(res.list);
             },
             options: {
@@ -37,9 +36,9 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         axboot.ajax({
             type: "GET",
             url: "/api/v1/ac003/03/list",
-            data: $.extend({}, {pageSize: 1000}),
+            data: $.extend({}, {pageSize: 1000}, data),
             callback: function (res) {
-                fnObj.gridView02.setData(res.list);
+                fnObj.gridView03.setData(res.list);
             },
             options: {
                 onError: axboot.viewError
@@ -157,6 +156,7 @@ fnObj.pageStart = function () {
         }
     });
 
+    _this.formView.initView();
     _this.gridView01.initView();
     _this.gridView02.initView();
     _this.gridView03.initView();
@@ -165,44 +165,54 @@ fnObj.pageStart = function () {
     ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
 };
 
-// AC003 User Group User GridView
-/*
-
-*/
-/*
-fnObj.gridView01 = axboot.viewExtend(axboot.realGridView, {
-    tagId : "realgrid01",
-    entityName : "CONFIGURATION",
-    itemClick : ACTIONS.PAGE_SEARCH1,
-    initView  : function() {
-        this.setColumnInfo(ac00301.column_info);
-        this.gridObj.itemClick(function(data){})
-        this.makeGrid();
-    }
-});
-// AC003 Access Control Gridview
-fnObj.gridView02 = axboot.viewExtend(axboot.realGridView, {
-    tagId : "realgrid02",
-    entityName : "CONFIGURATION",
-    initView: function () {
-        this.setColumnInfo(ac00302.column_info);
+fnObj.formView = axboot.viewExtend(axboot.formView, {
+    getDefaultData: function () {
+        return $.extend({}, axboot.formView.defaultData, {useYn: "Y"});
     },
-    itemClick: function (data) {
-        //ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, data);
-    }
-});
-// AC003 GridView
-fnObj.gridView03 = axboot.viewExtend(axboot.gridView, {
-tagId : "realgrid03",
-    entityName : "CONFIGURATION",
     initView: function () {
-        this.setColumnInfo(ac00303.column_info);
-        this.gridObj.makeGrid();
+        this.target = $("#formView01");
+        this.model = new ax5.ui.binder();
+        this.model.setModel(this.getDefaultData(), this.target);
+        this.modelFormatter = new axboot.modelFormatter(this.model); // 모델 포메터 시작
+        this.initEvent();
+    },
+    initEvent: function () {
+        var _this = this;
+    },
+    getData: function () {
+        var data = this.modelFormatter.getClearData(this.model.get()); // 모델의 값을 포멧팅 전 값으로 치환.
+        return $.extend({}, data);
+    },
+    setFormData: function (dataPath, value) {
+        this.model.set(dataPath, value);
+    },
+    setData: function (data) {
+
+        if (typeof data === "undefined") data = this.getDefaultData();
+        data = $.extend({}, data);
+
+        this.target.find('[data-ax-path="key"]').attr("readonly", "readonly");
+
+        this.model.setModel(data);
+        this.modelFormatter.formatting(); // 입력된 값을 포메팅 된 값으로 변경
+    },
+    validate: function () {
+        var rs = this.model.validate();
+        if (rs.error) {
+            alert(rs.error[0].jquery.attr("title") + '을(를) 입력해주세요.');
+            rs.error[0].jquery.focus();
+            return false;
+        }
+        return true;
+    },
+    clear: function () {
+        this.model.setModel(this.getDefaultData());
+        this.target.find('[data-ax-path="key"]').removeAttr("readonly");
     }
 });
 
 
-*/
+// AC003 User Group User GridView
 fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     page: {
         pageNumber: 0,
@@ -227,6 +237,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     },
     itemClick: function (data) {
         ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, data);
+        ACTIONS.dispatch(ACTIONS.PAGE_SEARCH2, data);
     }
 });
 fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
@@ -284,3 +295,4 @@ fnObj.gridView03 = axboot.viewExtend(axboot.gridView, {
         //ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, data);
     }
 });
+

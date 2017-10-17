@@ -232,7 +232,7 @@ fnObj.formView01 = axboot.viewExtend(axboot.formView, {
                     if (this.key == "ok") {
 
                         var userId = $('#userId').val();
-                        console.log('userId :: ', userId);
+                        //console.log('userId :: ', userId);
                         ACTIONS.dispatch(ACTIONS.RESET_PASSWORD, userId);
                     }
                 });

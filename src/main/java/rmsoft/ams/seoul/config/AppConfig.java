@@ -20,6 +20,7 @@ import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.annotation.MapperScan;
 import org.mybatis.spring.transaction.SpringManagedTransactionFactory;
 import org.springframework.beans.BeansException;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.*;
@@ -42,6 +43,8 @@ import java.util.Properties;
 
 @Slf4j
 @Configuration
+@EnableAutoConfiguration
+@ComponentScan
 @EnableTransactionManagement(proxyTargetClass = true, mode = AdviceMode.PROXY)
 @EnableJpaRepositories(basePackages = {PackageManager.CORE_BASE, PackageNames.BASE}, entityManagerFactoryRef = "entityManagerFactory")
 @EnableAspectJAutoProxy(proxyTargetClass = true)

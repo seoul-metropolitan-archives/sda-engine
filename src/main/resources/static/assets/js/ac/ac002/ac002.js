@@ -276,7 +276,7 @@ fnObj.leftMenuView = axboot.viewExtend({
     initView: function () {
         var _this  = this;
         var menuItems = ax5.util.deepCopy(TOP_MENU_DATA);
-        console.log(menuItems);
+        //console.log(menuItems);
         var column_info = [
             {
                 "name": "menuUuid",

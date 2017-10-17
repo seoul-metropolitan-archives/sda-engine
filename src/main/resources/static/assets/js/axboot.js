@@ -1,6 +1,10 @@
 "use strict";
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
+    return typeof obj;
+} : function (obj) {
+    return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+};
 
 /**
  * axboot 오브젝트 axboot 애플리케이션을 편리하게 사용하기 위한 오브젝트 입니다.
@@ -37,7 +41,8 @@ axboot.init = function () {
                 size: 6
             },
             autoResize: false,
-            onStateChanged: function onStateChanged() {},
+            onStateChanged: function onStateChanged() {
+            },
             onResize: function onResize() {
                 axboot.layoutResize();
             },
@@ -52,7 +57,7 @@ axboot.init = function () {
                     $('[data-fit-height-aside="' + name + '"]').each(function () {
                         _asideHeight += $(this).outerHeight();
                     });
-                    $this.css({ height: _pHeight - _asideHeight });
+                    $this.css({height: _pHeight - _asideHeight});
                 });
 
                 if (ax5.ui.grid_instance) {
@@ -76,7 +81,7 @@ axboot.init = function () {
                     parent.COMMON_CODE = axboot.convertCode(res);
                     axboot.pageStart();
                 },
-                options: { nomask: true }
+                options: {nomask: true}
             });
         } else {
             parent.COMMON_CODE = axboot.convertCode(parent.COMMON_CODE);
@@ -138,7 +143,7 @@ axboot.layoutResize = function (_delay) {
         $('[data-fit-height-aside="' + name + '"]').each(function () {
             _asideHeight += $(this).outerHeight();
         });
-        $this.css({ height: _pHeight - _asideHeight });
+        $this.css({height: _pHeight - _asideHeight});
     });
 
     function fn() {
@@ -161,6 +166,7 @@ axboot.layoutResize = function (_delay) {
             ax5.ui.combobox_instance.align();
         }
     }
+
     if (_delay) {
         setTimeout(function () {
             fn();
@@ -203,11 +209,16 @@ axboot.pageAutoHeight = {
             var pageHeader = $('form').attr('page-header');
 
             switch (pageHeader) {
-                case 'search-view': contentHeight -= 100; break;
-                case undefined: contentHeight -= 10; break;
-                default : contentHeight -= 50;
+                case 'search-view':
+                    contentHeight -= 100;
+                    break;
+                case undefined:
+                    contentHeight -= 10;
+                    break;
+                default :
+                    contentHeight -= 50;
             }
-            $('[role="page-content"]').css({ height: contentHeight });
+            $('[role="page-content"]').css({height: contentHeight});
         })();
     }
 };
@@ -317,9 +328,10 @@ axboot.ajax = function () {
                 if (callback) callback.apply(this, args); // callback
             }
         }).fail(function (data, textStatus, msg) {
-            if (msg == "") {} else {
+            if (msg == "") {
+            } else {
                 if (callback) callback.apply(this, [{
-                    error: { message: msg }
+                    error: {message: msg}
                 }]); // callback
             }
         }).always(function (data, textStatus, jqXHR) {
@@ -375,7 +387,7 @@ axboot.ajax = function () {
         $(toggle).each(function () {
             var $this = $(this);
             var $parent = getParent($this);
-            var relatedTarget = { relatedTarget: this };
+            var relatedTarget = {relatedTarget: this};
 
             if (!$parent.hasClass('open')) return;
 
@@ -406,7 +418,7 @@ axboot.ajax = function () {
                 $(document.createElement('div')).addClass('dropdown-backdrop').insertAfter($(this)).on('click', clearMenus);
             }
 
-            var relatedTarget = { relatedTarget: this };
+            var relatedTarget = {relatedTarget: this};
             $parent.trigger(e = $.Event('show.bs.dropdown', relatedTarget));
 
             if (e.isDefaultPrevented()) return;
@@ -534,7 +546,7 @@ axboot.ajax = function () {
 
     Modal.prototype.show = function (_relatedTarget) {
         var that = this;
-        var e = $.Event('show.bs.modal', { relatedTarget: _relatedTarget });
+        var e = $.Event('show.bs.modal', {relatedTarget: _relatedTarget});
 
         this.$element.trigger(e);
 
@@ -576,12 +588,12 @@ axboot.ajax = function () {
 
             that.enforceFocus();
 
-            var e = $.Event('shown.bs.modal', { relatedTarget: _relatedTarget });
+            var e = $.Event('shown.bs.modal', {relatedTarget: _relatedTarget});
 
             transition ? that.$dialog // wait for modal to slide in
-            .one('bsTransitionEnd', function () {
-                that.$element.trigger('focus').trigger(e);
-            }).emulateTransitionEnd(Modal.TRANSITION_DURATION) : that.$element.trigger('focus').trigger(e);
+                .one('bsTransitionEnd', function () {
+                    that.$element.trigger('focus').trigger(e);
+                }).emulateTransitionEnd(Modal.TRANSITION_DURATION) : that.$element.trigger('focus').trigger(e);
         });
     };
 
@@ -610,11 +622,11 @@ axboot.ajax = function () {
 
     Modal.prototype.enforceFocus = function () {
         $(document).off('focusin.bs.modal') // guard against infinite focus loop
-        .on('focusin.bs.modal', $.proxy(function (e) {
-            if (document !== e.target && this.$element[0] !== e.target && !this.$element.has(e.target).length) {
-                this.$element.trigger('focus');
-            }
-        }, this));
+            .on('focusin.bs.modal', $.proxy(function (e) {
+                if (document !== e.target && this.$element[0] !== e.target && !this.$element.has(e.target).length) {
+                    this.$element.trigger('focus');
+                }
+            }, this));
     };
 
     Modal.prototype.escape = function () {
@@ -752,7 +764,7 @@ axboot.ajax = function () {
             var options = $.extend({}, Modal.DEFAULTS, $this.data(), (typeof option === "undefined" ? "undefined" : _typeof(option)) == 'object' && option);
 
             if (!data) $this.data('bs.modal', data = new Modal(this, options));
-            if (typeof option == 'string') data[option](_relatedTarget);else if (options.show) data.show(_relatedTarget);
+            if (typeof option == 'string') data[option](_relatedTarget); else if (options.show) data.show(_relatedTarget);
         });
     }
 
@@ -776,7 +788,7 @@ axboot.ajax = function () {
         var $this = $(this);
         var href = $this.attr('href');
         var $target = $($this.attr('data-target') || href && href.replace(/.*(?=#[^\s]+$)/, '')); // strip for ie7
-        var option = $target.data('bs.modal') ? 'toggle' : $.extend({ remote: !/#/.test(href) && href }, $target.data(), $this.data());
+        var option = $target.data('bs.modal') ? 'toggle' : $.extend({remote: !/#/.test(href) && href}, $target.data(), $this.data());
 
         if ($this.is('a')) e.preventDefault();
 
@@ -834,7 +846,7 @@ axboot.ajax = function () {
         this.$element = $(element);
         this.options = this.getOptions(options);
         this.$viewport = this.options.viewport && $($.isFunction(this.options.viewport) ? this.options.viewport.call(this, this.$element) : this.options.viewport.selector || this.options.viewport);
-        this.inState = { click: false, hover: false, focus: false };
+        this.inState = {click: false, hover: false, focus: false};
 
         if (this.$element[0] instanceof document.constructor && !this.options.selector) {
             throw new Error('`selector` option must be specified when initializing ' + this.type + ' on the window.document object!');
@@ -856,7 +868,10 @@ axboot.ajax = function () {
             }
         }
 
-        this.options.selector ? this._options = $.extend({}, this.options, { trigger: 'manual', selector: '' }) : this.fixTitle();
+        this.options.selector ? this._options = $.extend({}, this.options, {
+            trigger: 'manual',
+            selector: ''
+        }) : this.fixTitle();
     };
 
     Tooltip.prototype.getDefaults = function () {
@@ -974,7 +989,7 @@ axboot.ajax = function () {
             var autoPlace = autoToken.test(placement);
             if (autoPlace) placement = placement.replace(autoToken, '') || 'top';
 
-            $tip.detach().css({ top: 0, left: 0, display: 'block' }).addClass(placement).data('bs.' + this.type, this);
+            $tip.detach().css({top: 0, left: 0, display: 'block'}).addClass(placement).data('bs.' + this.type, this);
 
             this.options.container ? $tip.appendTo(this.options.container) : $tip.insertAfter(this.$element);
             this.$element.trigger('inserted.bs.' + this.type);
@@ -1047,7 +1062,7 @@ axboot.ajax = function () {
 
         var delta = this.getViewportAdjustedDelta(placement, offset, actualWidth, actualHeight);
 
-        if (delta.left) offset.left += delta.left;else offset.top += delta.top;
+        if (delta.left) offset.left += delta.left; else offset.top += delta.top;
 
         var isVertical = /top|bottom/.test(placement);
         var arrowDelta = isVertical ? delta.left * 2 - width + actualWidth : delta.top * 2 - height + actualHeight;
@@ -1116,25 +1131,31 @@ axboot.ajax = function () {
         var elRect = el.getBoundingClientRect();
         if (elRect.width == null) {
             // width and height are missing in IE8, so compute them manually; see https://github.com/twbs/bootstrap/issues/14093
-            elRect = $.extend({}, elRect, { width: elRect.right - elRect.left, height: elRect.bottom - elRect.top });
+            elRect = $.extend({}, elRect, {width: elRect.right - elRect.left, height: elRect.bottom - elRect.top});
         }
         var isSvg = window.SVGElement && el instanceof window.SVGElement;
         // Avoid using $.offset() on SVGs since it gives incorrect results in jQuery 3.
         // See https://github.com/twbs/bootstrap/issues/20280
-        var elOffset = isBody ? { top: 0, left: 0 } : isSvg ? null : $element.offset();
-        var scroll = { scroll: isBody ? document.documentElement.scrollTop || document.body.scrollTop : $element.scrollTop() };
-        var outerDims = isBody ? { width: $(window).width(), height: $(window).height() } : null;
+        var elOffset = isBody ? {top: 0, left: 0} : isSvg ? null : $element.offset();
+        var scroll = {scroll: isBody ? document.documentElement.scrollTop || document.body.scrollTop : $element.scrollTop()};
+        var outerDims = isBody ? {width: $(window).width(), height: $(window).height()} : null;
 
         return $.extend({}, elRect, scroll, outerDims, elOffset);
     };
 
     Tooltip.prototype.getCalculatedOffset = function (placement, pos, actualWidth, actualHeight) {
-        return placement == 'bottom' ? { top: pos.top + pos.height, left: pos.left + pos.width / 2 - actualWidth / 2 } : placement == 'top' ? { top: pos.top - actualHeight, left: pos.left + pos.width / 2 - actualWidth / 2 } : placement == 'left' ? { top: pos.top + pos.height / 2 - actualHeight / 2, left: pos.left - actualWidth } :
-        /* placement == 'right' */{ top: pos.top + pos.height / 2 - actualHeight / 2, left: pos.left + pos.width };
+        return placement == 'bottom' ? {
+            top: pos.top + pos.height,
+            left: pos.left + pos.width / 2 - actualWidth / 2
+        } : placement == 'top' ? {
+            top: pos.top - actualHeight,
+            left: pos.left + pos.width / 2 - actualWidth / 2
+        } : placement == 'left' ? {top: pos.top + pos.height / 2 - actualHeight / 2, left: pos.left - actualWidth} :
+            /* placement == 'right' */{top: pos.top + pos.height / 2 - actualHeight / 2, left: pos.left + pos.width};
     };
 
     Tooltip.prototype.getViewportAdjustedDelta = function (placement, pos, actualWidth, actualHeight) {
-        var delta = { top: 0, left: 0 };
+        var delta = {top: 0, left: 0};
         if (!this.$viewport) return delta;
 
         var viewportPadding = this.options.viewport && this.options.viewport.padding || 0;
@@ -1220,7 +1241,7 @@ axboot.ajax = function () {
 
         if (e) {
             self.inState.click = !self.inState.click;
-            if (self.isInStateTrue()) self.enter(self);else self.leave(self);
+            if (self.isInStateTrue()) self.enter(self); else self.leave(self);
         } else {
             self.tip().hasClass('in') ? self.leave(self) : self.enter(self);
         }
@@ -1301,7 +1322,7 @@ axboot.buttonClick = function () {
 }();
 /**
  * @Object {Object} axboot.call
-*/
+ */
 
 /**
  * 여러개의 AJAX콜을 순차적으로 해야 하는 경우 callback 지옥에 빠지기 쉽다. `axboot.call & done`은 이런 상황에서 코드가 보기 어려워지는 문제를 해결 하기 위해 개발된 오브젝트 입니다
@@ -1381,7 +1402,7 @@ axboot.call = function () {
                         item.callback.call(this, res);
                         processor.call(this, callback);
                     }.bind(this),
-                    options: { nomask: false }
+                    options: {nomask: false}
                 });
             } else {
                 callback.call(this);
@@ -1530,15 +1551,15 @@ axboot.gridBuilder = function () {
 }();
 
 axboot.gridBuilder.preDefineColumns = {
-    "insDt": { width: 100, label: "등록일", align: "center" },
-    "compCd": { width: 70, label: "업체코드", align: "center" },
-    "compNm": { width: 110, label: "업체명", align: "left" },
-    "storCd": { width: 70, label: "매장코드", align: "center" },
-    "storNm": { width: 200, label: "매장명", align: "left" },
-    "userNm": { width: 100, label: "이름", align: "center" },
-    "itemCd": { width: 80, label: "품목코드", align: "center" },
-    "itemNm": { width: 150, label: "품목명", align: "left" },
-    "posItemNm": { width: 150, label: "POS단축명", align: "left" },
+    "insDt": {width: 100, label: "등록일", align: "center"},
+    "compCd": {width: 70, label: "업체코드", align: "center"},
+    "compNm": {width: 110, label: "업체명", align: "left"},
+    "storCd": {width: 70, label: "매장코드", align: "center"},
+    "storNm": {width: 200, label: "매장명", align: "left"},
+    "userNm": {width: 100, label: "이름", align: "center"},
+    "itemCd": {width: 80, label: "품목코드", align: "center"},
+    "itemNm": {width: 150, label: "품목명", align: "left"},
+    "posItemNm": {width: 150, label: "POS단축명", align: "left"},
     "delYn": {
         width: 50, label: "삭제", align: "center", formatter: function formatter() {
             return parent.COMMON_CODE["DEL_YN"].map[this.value];
@@ -1554,15 +1575,15 @@ axboot.gridBuilder.preDefineColumns = {
             return parent.COMMON_CODE["USE_YN"].map[this.value];
         }
     },
-    "sort": { width: 50, label: "정렬", align: "center" },
-    "companyJson.대표자명": { width: 100, label: "대표자명", align: "center" },
+    "sort": {width: 50, label: "정렬", align: "center"},
+    "companyJson.대표자명": {width: 100, label: "대표자명", align: "center"},
     "companyJson.사업자등록번호": {
         label: "사업자등록번호",
         width: 120,
         align: "center",
         formatter: "bizno"
     },
-    "storeInfoJson.대표자명": { width: 100, label: "대표자명", align: "center" },
+    "storeInfoJson.대표자명": {width: 100, label: "대표자명", align: "center"},
     "storeInfoJson.사업자등록번호": {
         label: "사업자등록번호",
         width: 120,
@@ -1615,14 +1636,14 @@ axboot.gridBuilder.preDefineEditor = {
             columnKeys: {
                 optionValue: "CD", optionText: "NM"
             },
-            options: [{ CD: "Y", NM: "사용" }, { CD: "N", NM: "사용안함" }]
+            options: [{CD: "Y", NM: "사용"}, {CD: "N", NM: "사용안함"}]
         }
     },
     "checkYn": {
-        type: "checkbox", config: { trueValue: "Y", falseValue: "N" }
+        type: "checkbox", config: {trueValue: "Y", falseValue: "N"}
     },
     "menu-program-auth-checkYn": {
-        type: "checkbox", config: { trueValue: "Y", falseValue: "N" },
+        type: "checkbox", config: {trueValue: "Y", falseValue: "N"},
         disabled: function disabled() {
             return this.item["program_" + this.key] == "N";
         }
@@ -1655,11 +1676,11 @@ ax5.ui.grid.formatter["bizno"] = function () {
     var val = (this.value || "").replace(/\D/g, "");
     var regExpPattern = /^([0-9]{3})\-?([0-9]{1,2})?\-?([0-9]{1,5})?.*$/,
         returnValue = val.replace(regExpPattern, function (a, b) {
-        var nval = [arguments[1]];
-        if (arguments[2]) nval.push(arguments[2]);
-        if (arguments[3]) nval.push(arguments[3]);
-        return nval.join("-");
-    });
+            var nval = [arguments[1]];
+            if (arguments[2]) nval.push(arguments[2]);
+            if (arguments[3]) nval.push(arguments[3]);
+            return nval.join("-");
+        });
     return returnValue;
 };
 
@@ -1667,13 +1688,13 @@ ax5.ui.grid.formatter["phone"] = function () {
     var val = this.value.replace(/\D/g, "");
     var regExpPattern3 = /^([0-9]{3})\-?([0-9]{1,4})?\-?([0-9]{1,4})?\-?([0-9]{1,4})?\-?([0-9]{1,4})?/,
         returnValue = val.replace(regExpPattern3, function (a, b) {
-        var nval = [arguments[1]];
-        if (arguments[2]) nval.push(arguments[2]);
-        if (arguments[3]) nval.push(arguments[3]);
-        if (arguments[4]) nval.push(arguments[4]);
-        if (arguments[5]) nval.push(arguments[5]);
-        return nval.join("-");
-    });
+            var nval = [arguments[1]];
+            if (arguments[2]) nval.push(arguments[2]);
+            if (arguments[3]) nval.push(arguments[3]);
+            if (arguments[4]) nval.push(arguments[4]);
+            if (arguments[5]) nval.push(arguments[5]);
+            return nval.join("-");
+        });
     return returnValue;
 };
 
@@ -1770,7 +1791,7 @@ axboot.modal = function () {
 
             if (axboot.def.MODAL && axboot.def.MODAL[modalConfig.modalType]) {
                 if (modalConfig.param) {
-                    $.extend(true, modalConfig, { iframe: { param: modalConfig.param } });
+                    $.extend(true, modalConfig, {iframe: {param: modalConfig.param}});
                 }
                 modalConfig = $.extend(true, {}, modalConfig, axboot.def.MODAL[modalConfig.modalType]);
             }
@@ -1934,7 +1955,7 @@ axboot.modelFormatter.clearProcessor = {
         return ("" + _v).replace(/\D/g, "");
     },
     "date": function date(_v) {
-        return ax5.util.date("" + _v, { "return": 'yyyy-MM-dd' });
+        return ax5.util.date("" + _v, {"return": 'yyyy-MM-dd'});
     },
     "time": function time(_v) {
         return ("" + _v).replace(/\D/g, "");
@@ -2120,7 +2141,7 @@ axboot.preparePlugin = function () {
             },
             onStateChanged: function onStateChanged() {
                 if (this.state === "open") {
-                    axDialogMask.open({ theme: 'danger' });
+                    axDialogMask.open({theme: 'danger'});
                 } else if (this.state === "close") {
                     axDialogMask.close();
                 }
@@ -2140,7 +2161,8 @@ axboot.preparePlugin = function () {
         window.axToast = new ax5.ui.toast({
             icon: '<i class="cqc-megaphone"></i>',
             containerPosition: "bottom-right",
-            onStateChanged: function onStateChanged() {}
+            onStateChanged: function onStateChanged() {
+            }
         });
         /**
          * @var {ax5ui} axWarningToast
@@ -2150,7 +2172,8 @@ axboot.preparePlugin = function () {
             theme: "danger",
             icon: '<i class="cqc-warning2"></i>',
             containerPosition: "bottom-left",
-            onStateChanged: function onStateChanged() {}
+            onStateChanged: function onStateChanged() {
+            }
         });
     };
 
@@ -2215,7 +2238,8 @@ axboot.treeBuilder = function () {
             }
             zTree.removeNode(nodes[0], callbackFlag);
         };
-        this.addNode = function () {};
+        this.addNode = function () {
+        };
         this.convertList2Tree = function (_list, _config) {
             _list = JSON.parse(JSON.stringify(_list));
 
@@ -2281,7 +2305,7 @@ axboot.treeBuilder = function () {
                     pushItem[childrenKey] = [];
                     pTree.push(pushItem);
 
-                    if (typeof pItem.__subTreeLength === "undefined") pItem.__subTreeLength = 1;else pItem.__subTreeLength++;
+                    if (typeof pItem.__subTreeLength === "undefined") pItem.__subTreeLength = 1; else pItem.__subTreeLength++;
 
                     pTreeItem.__subTreeLength = pItem.__subTreeLength;
                 }
@@ -2365,39 +2389,35 @@ axboot.commonView = {};
  * @type {{name: string, init: axboot.baseView.init}}
  */
 axboot.baseView =
-{
-    name : "baseView",
-    init : function()
     {
-        var _this = this;
-        $(".bdb").delegate("#inquiry","click",function(){
-            _this.inquiry();
-        });
-        $(".bdb").delegate("#save","click",function(){
-            _this.save();
-        });
-        $(document).delegate(".ax-body","keydown",function (e) {
-
-            if (e.ctrlKey && e.altKey && e.keyCode == 73) {
+        name: "baseView",
+        init: function () {
+            var _this = this;
+            $(".bdb").delegate("#inquiry", "click", function () {
                 _this.inquiry();
-            }else if(e.ctrlKey && e.altKey && e.keyCode == 83)
-            {
+            });
+            $(".bdb").delegate("#save", "click", function () {
                 _this.save();
-            }
-        });
-    }
-    ,save : function()
-    {
-        if(ACTIONS && ACTIONS.PAGE_SAVE)
+            });
+            $(document).delegate(".ax-body", "keydown", function (e) {
+
+                if (e.ctrlKey && e.altKey && e.keyCode == 73) {
+                    _this.inquiry();
+                } else if (e.ctrlKey && e.altKey && e.keyCode == 83) {
+                    _this.save();
+                }
+            });
+        }
+        , save: function () {
+        if (ACTIONS && ACTIONS.PAGE_SAVE)
             ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
     }
-    ,inquiry : function()
-    {
-        if(ACTIONS && ACTIONS.PAGE_SEARCH)
+        , inquiry: function () {
+        if (ACTIONS && ACTIONS.PAGE_SEARCH)
             ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
     }
 
-};
+    };
 
 /**
  * searchView
@@ -2451,7 +2471,7 @@ axboot.gridView = {
         return list;
     },
     addRow: function addRow() {
-        this.target.addRow({ __created__: true }, "last");
+        this.target.addRow({__created__: true}, "last");
     },
     delRow: function delRow(_type) {
         this.target.deleteRow(_type);
@@ -2489,30 +2509,29 @@ axboot.treeView = {};
  * @Object {Object} axboot.gridView
  */
 axboot.realGridView = {
-    name : "realGridView",
-    tagId : "",
+    name: "realGridView",
+    tagId: "",
     page: {
         pageNumber: 0,
         pageSize: 99999
     },
-    column_info : undefined,
-    entityName : "",
-    gridObj : undefined,
-    itemClick : undefined,
-    init : function()
-    {
+    column_info: undefined,
+    entityName: "",
+    gridObj: undefined,
+    itemClick: undefined,
+    init: function () {
 
-        if("" == this.tagId) alert("그리드 tagID를 설정해주세요.");
-        if("" == this.entityName) alert("엑셀 다운로드 명을 설정해주세요.");
+        if ("" == this.tagId) alert("그리드 tagID를 설정해주세요.");
+        if ("" == this.entityName) alert("엑셀 다운로드 명을 설정해주세요.");
 
-        this.gridObj = new GridWrapper(this.tagId,"/assets/js/libs/realgrid");
-        this.gridObj.setGridStyle("100%","100%");
+        this.gridObj = new GridWrapper(this.tagId, "/assets/js/libs/realgrid");
+        this.gridObj.setGridStyle("100%", "100%");
         this.gridObj.setEntityName(this.entityName);
     },
-    setData: function setData(_data,_type) {
-        if(!_type)
+    setData: function setData(_data, _type) {
+        if (!_type)
             _type = "set";
-        this.gridObj.setData(_type,_data);
+        this.gridObj.setData(_type, _data);
     },
     getData: function getData() {
         return this.gridObj.getData();
@@ -2523,22 +2542,19 @@ axboot.realGridView = {
     delRow: function delRow(_type) {
         return this.gridObj.removeRow();
     },
-    setColumnInfo : function(_columnInfo)
-    {
-      this.gridObj.setColumnInfo(_columnInfo);
+    setColumnInfo: function (_columnInfo) {
+        this.gridObj.setColumnInfo(_columnInfo);
     },
-    bindEvent : function()
-    {
+    bindEvent: function () {
         var _this = this;
         /*셀 클릭 시 이벤트*/
-        this.gridObj.itemClick(function(data){
-            if(undefined === _this.itemClick) return ;
+        this.gridObj.itemClick(function (data) {
+            if (undefined === _this.itemClick) return;
 
-            ACTIONS.dispatch(_this.itemClick,data);
+            ACTIONS.dispatch(_this.itemClick, data);
         });
     },
-    makeGrid : function()
-    {
+    makeGrid: function () {
         this.gridObj.makeGrid();
         this.bindEvent();
     },
@@ -2571,6 +2587,7 @@ axboot.realGridView = {
  * @Object {Object} axboot.formView
  */
 axboot.formView = {
+    name : "formView",
     clear: function clear() {
         this.model.setModel(this.getDefaultData());
         $('[data-ax5formatter]').ax5formatter("formatting");
@@ -2591,7 +2608,7 @@ axboot.formView = {
  * @Object {Object} axboot.formView.defaultData
  */
 axboot.formView.defaultData = {
-    masterCompCd: "ACN"
+    //masterCompCd: "ACN"
 };
 
 /**
@@ -2606,14 +2623,17 @@ axboot.viewExtend = function (_obj1, _obj2) {
     if (typeof _obj2 === "undefined") {
         return $.extend({}, axboot.commonView, _obj1);
     }
-    else if(_obj1.name && _obj1.name == "baseView")
-    {
+    else if (_obj1.name && _obj1.name == "baseView") {
         var retView = $.extend({}, axboot.commonView, _obj1, _obj2)
         retView.init();
         return retView;
     }
-    else if(_obj1.name && _obj1.name == "realGridView")
-    {
+    else if (_obj1.name && _obj1.name == "formView") {
+        var retView = $.extend({}, axboot.commonView,axboot.baseView, _obj1, _obj2)
+        retView.init();
+        return retView;
+    }
+    else if (_obj1.name && _obj1.name == "realGridView") {
         var retView = $.extend({}, _obj1, _obj2)
         retView.init();
         return retView;
@@ -2720,4 +2740,24 @@ axboot.viewError = function (err) {
         icon: '<i class="cqc-new"></i>',
         msg: '[에러] ' + err.message
     });
+}
+
+/**
+ * 공통코드를 Grid에서 사용하기 위해 label과 value를 분리해주는 함수
+ * @param array
+ * @param name
+ * @returns {Array}
+ */
+axboot.commonCodeFilter = function (categoryCode) {
+    var commonCodeArray = parent.COMMON_CODE[categoryCode];
+
+    var nameArr = [];
+    var codeArr = [];
+
+    commonCodeArray.forEach(function (item) {
+        codeArr.push(item['code']);
+        nameArr.push(item['codeName']);
+    });
+
+    return $.extend({}, {nameArr :nameArr }, {codeArr : codeArr});
 }

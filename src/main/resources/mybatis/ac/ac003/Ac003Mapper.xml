@@ -4,68 +4,133 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="rmsoft.ams.seoul.ac.ac003.dao.Ac003Mapper">
-    <select id="findAllUser" resultType="Ac00301VO" parameterType="String" statementType="PREPARED">
+    <select id="findAllUser" resultType="Ac00301VO" parameterType="Ac00301VO" statementType="PREPARED">
         SELECT
-            USER_UUID as userUuid,
-            USER_ID as userId,
-            USER_NAME as userNm,
-            PASSWORD as userPassword,
-            PASSWORD_UPDATE_DATE as passwordUpdateDate,
-            USER_TYPE_UUID as userTypeUuid,
-            START_PROGRAM_UUID startProgramUuid,
-            ORGANIZATION_UUID organizationUuid,
-            DESCRIPTION description,
-            NOTES notes,
-            USE_YN useYn,
-            <include refid="Common.UserName"><property name="userUuid" value="INSERT_UUID"/></include> as insertUuid,
-            INSERT_DATE as insertDate,
-            <include refid="Common.UserName"><property name="userUuid" value="UPDATE_UUID"/></include> as updateUuid,
-            UPDATE_DATE as updateDate
+        USER_UUID as userUuid,
+        USER_ID as userId,
+        USER_NAME as userNm,
+        PASSWORD as userPassword,
+        PASSWORD_UPDATE_DATE as passwordUpdateDate,
+        USER_TYPE_UUID as userTypeUuid,
+        START_PROGRAM_UUID startProgramUuid,
+        ORGANIZATION_UUID organizationUuid,
+        DESCRIPTION description,
+        NOTES notes,
+        USE_YN useYn,
+        <include refid="Common.UserName">
+            <property name="userUuid" value="INSERT_UUID"/>
+        </include>
+        as insertUuid,
+        INSERT_DATE as insertDate,
+        <include refid="Common.UserName">
+            <property name="userUuid" value="UPDATE_UUID"/>
+        </include>
+        as updateUuid,
+        UPDATE_DATE as updateDate
         FROM
-            AC_USER
-        <if test="parkingType != null">
-        WHERE USER_ID LIKE #{userId}
-        </if>
+        AC_USER
+        <where>
+            <if test="userId != null">
+                USER_ID LIKE '%' || #{userId} || '%'
+            </if>
+            <if test="userNm != null">
+                AND USER_NAME LIKE '%' || #{userNm} || '%'
+            </if>
+            <if test="userTypeUuid != null">
+                AND USER_TYPE_UUID = #{userTypeUuid}
+            </if>
+            <if test="useYn != null">
+                AND USE_YN = #{useYn}
+            </if>
+        </where>
     </select>
 
     <select id="findUserGroupUserByUserUuid" resultType="Ac00302VO" parameterType="String" statementType="PREPARED">
         SELECT
-            Z1.USER_GROUP_USER_UUID as userGroupUserUuid,
-            Z1.USER_GROUP_UUID as userGroupUuid,
-            Z2.USER_GROUP_NAME as userGroupName,
-            Z1.USER_UUID as userUuid,
-            Z2.DESCRIPTION as description,
-            Z2.NOTES as notes,
-            Z2.USE_YN as useYn,
-            <include refid="Common.UserName"><property name="userUuid" value="Z1.INSERT_UUID"/></include> as insertUuid,
-            Z1.INSERT_DATE insertDate,
-            <include refid="Common.UserName"><property name="userUuid" value="Z1.UPDATE_UUID"/></include> as updateUuid,
-            Z1.UPDATE_DATE updateDate
+        Z1.USER_GROUP_USER_UUID as userGroupUserUuid,
+        Z1.USER_GROUP_UUID as userGroupUuid,
+        Z2.USER_GROUP_NAME as userGroupName,
+        Z1.USER_UUID as userUuid,
+        Z1.DESCRIPTION as description,
+        Z1.NOTES as notes,
+        Z1.USE_YN as useYn,
+        <include refid="Common.UserName">
+            <property name="userUuid" value="Z1.INSERT_UUID"/>
+        </include>
+        as insertUuid,
+        Z1.INSERT_DATE insertDate,
+        <include refid="Common.UserName">
+            <property name="userUuid" value="Z1.UPDATE_UUID"/>
+        </include>
+        as updateUuid,
+        Z1.UPDATE_DATE updateDate
         FROM
-            AC_USER_GROUP_USER Z1,
-            AC_USER_GROUP Z2
+        AC_USER_GROUP_USER Z1,
+        AC_USER_GROUP Z2
         WHERE Z1.USER_GROUP_UUID = Z2.USER_GROUP_UUID
-          AND Z1.USER_UUID = #{userUuid}
+        AND Z1.USER_UUID = #{userUuid}
     </select>
 
     <select id="findUserGroupUserByUserGroupUuid" resultType="Ac00302VO" parameterType="String"
             statementType="PREPARED">
         SELECT
-            Z1.USER_GROUP_USER_UUID as userGroupUserUuid,
-            Z1.USER_GROUP_UUID as userGroupUuid,
-            Z2.USER_GROUP_NAME as userGroupName,
-            Z1.USER_UUID as userUuid,
-            Z2.DESCRIPTION as description,
-            Z2.NOTES as notes,
-            Z2.USE_YN as useYn,
-            <include refid="Common.UserName"><property name="userUuid" value="Z1.INSERT_UUID"/></include> as insertUuid,
-            Z1.INSERT_DATE insertDate,
-            <include refid="Common.UserName"><property name="userUuid" value="Z1.UPDATE_UUID"/></include> as updateUuid,
-            Z1.UPDATE_DATE updateDate
+        Z1.USER_GROUP_USER_UUID as userGroupUserUuid,
+        Z1.USER_GROUP_UUID as userGroupUuid,
+        Z1.USER_GROUP_NAME as userGroupName,
+        Z1.USER_UUID as userUuid,
+        Z1.DESCRIPTION as description,
+        Z1.NOTES as notes,
+        Z1.USE_YN as useYn,
+        <include refid="Common.UserName">
+            <property name="userUuid" value="Z1.INSERT_UUID"/>
+        </include>
+        as insertUuid,
+        Z1.INSERT_DATE insertDate,
+        <include refid="Common.UserName">
+            <property name="userUuid" value="Z1.UPDATE_UUID"/>
+        </include>
+        as updateUuid,
+        Z1.UPDATE_DATE updateDate
         FROM
-            AC_USER_GROUP_USER Z1,
-            AC_USER_GROUP Z2
+        AC_USER_GROUP_USER Z1,
+        AC_USER_GROUP Z2
         WHERE Z1.USER_GROUP_UUID = Z2.USER_GROUP_UUID
-          AND Z1.USER_GROUP_UUID = #{userGroupUuid}
+        AND Z1.USER_GROUP_UUID = #{userGroupUuid}
+    </select>
+
+    <select id="findUserRole" resultType="Ac00303VO" parameterType="Ac00303VO" statementType="PREPARED">
+        SELECT DISTINCT
+        Z1.ACCESS_CONTROL_UUID as accessControlUuid,
+        Z1.USER_UUID as userUuid,
+        Z1.USER_GROUP_UUID as userGroupUuid,
+        Z1.ROLE_UUID as roleUuid,
+        Z3.ROLE_NAME as roleName,
+        Z1.DESCRIPTION as description,
+        Z1.NOTES as notes,
+        Z1.USE_YN as useYn,
+        <include refid="Common.UserName">
+            <property name="userUuid" value="Z1.INSERT_UUID"/>
+        </include>
+        as insertUuid,
+        Z1.INSERT_DATE insertDate,
+        <include refid="Common.UserName">
+            <property name="userUuid" value="Z1.UPDATE_UUID"/>
+        </include>
+        as updateUuid,
+        Z1.UPDATE_DATE updateDate
+        FROM
+        AC_ACCESS_CONTROL Z1,
+        AC_USER_GROUP_USER Z2,
+        AC_ROLE Z3
+        WHERE Z1.USER_GROUP_UUID = Z2.USER_GROUP_UUID
+        AND Z1.ROLE_UUID = Z3.ROLE_UUID
+        <choose>
+            <when test="userUuid != null">
+                AND Z2.USER_UUID = #{userUuid}
+            </when>
+            <when test="userGroupUuid != null">
+                AND Z2.USER_GROUP_UUID = #{userGroupUuid}
+            </when>
+        </choose>
     </select>
 </mapper>

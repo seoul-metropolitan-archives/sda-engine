@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import rmsoft.ams.seoul.ac.ac003.service.Ac003Service;
 import rmsoft.ams.seoul.ac.ac003.vo.Ac00301VO;
 import rmsoft.ams.seoul.ac.ac003.vo.Ac00302VO;
+import rmsoft.ams.seoul.ac.ac003.vo.Ac00303VO;
 import rmsoft.ams.seoul.common.domain.AcUser;
 
 import java.util.List;
@@ -30,23 +31,29 @@ public class Ac003Controller extends BaseController {
     private Ac003Service ac003Service;
 
     @GetMapping("/01/list")
-    public Responses.PageResponse listUser(Pageable pageable, RequestParams<Ac00301VO> requestParams) {
+    public Responses.PageResponse findAllUser(Pageable pageable, RequestParams<Ac00301VO> requestParams) {
         Page<Ac00301VO> pages = ac003Service.findAllUser(pageable, requestParams);
 
         return Responses.PageResponse.of(pages.getContent(), pages);
     }
 
+    @GetMapping("/01/details")
+    public Ac00301VO details(RequestParams<Ac00301VO> requestParams) {
+        return ac003Service.findOne(requestParams);
+    }
+
     @GetMapping("/02/list")
-    public Responses.PageResponse listUserGroupUser(Pageable pageable, RequestParams<Ac00302VO> requestParams) {
+    public Responses.PageResponse findUserGroupUser(Pageable pageable, RequestParams<Ac00302VO> requestParams) {
         Page<Ac00302VO> pages = ac003Service.findUserGroupUser(pageable, requestParams);
 
         return Responses.PageResponse.of(pages.getContent(), pages);
     }
 
+    @GetMapping("/03/list")
+    public Responses.PageResponse findUserRole(Pageable pageable, RequestParams<Ac00303VO> requestParams) {
+        Page<Ac00303VO> pages = ac003Service.findUserRole(pageable, requestParams);
 
-    @GetMapping("/01/details")
-    public Ac00301VO details(RequestParams<Ac00301VO> requestParams) {
-        return ac003Service.findOne(requestParams);
+        return Responses.PageResponse.of(pages.getContent(), pages);
     }
 
     @PutMapping
