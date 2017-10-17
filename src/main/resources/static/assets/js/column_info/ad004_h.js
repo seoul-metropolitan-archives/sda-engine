@@ -49,7 +49,7 @@ var ad004_h =
             },
             {
                 sortNo: 5,
-                name: "Multiselect",
+                name: "multiselect",
                 text: "Multiselect",
                 width: 70,
                 editable: true,
@@ -76,7 +76,7 @@ var ad004_h =
             },
             {
                 sortNo: 8,
-                name: "use_YN",
+                name: "useYN",
                 text: "USE",
                 width: 50,
                 editable: true,

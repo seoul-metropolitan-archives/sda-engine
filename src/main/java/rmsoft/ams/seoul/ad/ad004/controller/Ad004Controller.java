@@ -9,6 +9,8 @@ import rmsoft.ams.seoul.ad.ad004.service.Ad004Service;
 import rmsoft.ams.seoul.ad.ad004.vo.Ad00401VO;
 import rmsoft.ams.seoul.common.domain.AdPopupHeader;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/ad/ad004/ad004")
 public class Ad004Controller
@@ -27,7 +29,7 @@ public class Ad004Controller
 
     @RequestMapping("/insertPopupHeader")
     @ResponseBody
-    public Object insertPopupHeader(@RequestBody AdPopupHeader data)
+    public Object insertPopupHeader(@RequestBody List<Ad00401VO> data)
     {
         return service.insertPopupHeader(data);
     }

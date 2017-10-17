@@ -15,4 +15,9 @@ public interface Ad004Mapper extends MyBatisMapper
 
     List<Ad00402VO> getPopupDetail(Ad00402VO param);
 
+    int insertPopupHeader(Ad00401VO data);
+    int insertPopupSQL(Ad00401VO data);
+    int updatePopupHeader(Ad00401VO data);
+    int deletePopupHeader(Ad00401VO data);
+
 }

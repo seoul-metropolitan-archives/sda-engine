@@ -24,9 +24,26 @@ public class Ad004Service extends BaseService{
         return mapper.searchPopupHeader(param);
     }
 
-    public boolean insertPopupHeader(AdPopupHeader data)
+    public boolean insertPopupHeader(List<Ad00401VO> list)
     {
-        popupHeaderRepository.save(data);
+        for (Ad00401VO data: list)
+        {
+            if(data.isCreated())
+            {
+                mapper.insertPopupHeader(data);
+            }
+            else if(data.isModified())
+            {
+                mapper.updatePopupHeader(data);
+            }
+            else if(data.isDeleted())
+            {
+                mapper.deletePopupHeader(data);
+            }
+            
+        }
+
+        //popupHeaderRepository.save(data);
         return true;
     }
     public List<Ad00402VO> searchPopupDetail(Ad00402VO param) {

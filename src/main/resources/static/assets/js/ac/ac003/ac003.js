@@ -167,6 +167,42 @@ fnObj.pageStart = function () {
 
 // AC003 User Group User GridView
 /*
+
+*/
+/*
+fnObj.gridView01 = axboot.viewExtend(axboot.realGridView, {
+    tagId : "realgrid01",
+    entityName : "CONFIGURATION",
+    itemClick : ACTIONS.PAGE_SEARCH1,
+    initView  : function() {
+        this.setColumnInfo(ac00301.column_info);
+        this.gridObj.itemClick(function(data){})
+        this.makeGrid();
+    }
+});
+// AC003 Access Control Gridview
+fnObj.gridView02 = axboot.viewExtend(axboot.realGridView, {
+    tagId : "realgrid02",
+    entityName : "CONFIGURATION",
+    initView: function () {
+        this.setColumnInfo(ac00302.column_info);
+    },
+    itemClick: function (data) {
+        //ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, data);
+    }
+});
+// AC003 GridView
+fnObj.gridView03 = axboot.viewExtend(axboot.gridView, {
+tagId : "realgrid03",
+    entityName : "CONFIGURATION",
+    initView: function () {
+        this.setColumnInfo(ac00303.column_info);
+        this.gridObj.makeGrid();
+    }
+});
+
+
+*/
 fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     page: {
         pageNumber: 0,
@@ -193,23 +229,27 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
         ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, data);
     }
 });
-*/
-fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
-    tagId : "realgrid01",
-    entityName : "CONFIGURATION",
-    itemClick : ACTIONS.PAGE_SEARCH1,
-    initView  : function() {
-        this.setColumnInfo(ac00301.column_info);
-        this.makeGrid();
-    }
-});
-// AC003 Access Control Gridview
 fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
-    tagId : "realgrid02",
-    entityName : "CONFIGURATION",
-    itemClick : ACTIONS.PAGE_SEARCH1,
+    page: {
+        pageNumber: 0,
+        pageSize: 20
+    },
     initView: function () {
-        this.setColumnInfo(ac00302.column_info);
+        this.gridObj = new GridWrapper("realgrid02", "/assets/js/libs/realgrid");
+        this.gridObj.setGridStyle("100%", "100%");
+        this.gridObj.setColumnInfo(ac00302.column_info).setEntityName("CONFIGURATION");
+        this.gridObj.makeGrid();
+        this.gridObj.itemClick(this.itemClick);
+    },
+    setData: function (list) {
+        this.gridObj.setData("set", list);
+
+    },
+    getData: function (_type) {
+        //this.gridObj.load("/ad/ad001/getEnviromentList.do", {});
+    },
+    addRow: function () {
+        this.gridObj.addRow();
     },
     itemClick: function (data) {
         //ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, data);
@@ -219,11 +259,28 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
 
 // AC003 GridView
 fnObj.gridView03 = axboot.viewExtend(axboot.gridView, {
-    tagId : "realgrid03",
-    entityName : "CONFIGURATION",
+    page: {
+        pageNumber: 0,
+        pageSize: 20
+    },
     initView: function () {
-        this.setColumnInfo(ac00303.column_info);
+        this.gridObj = new GridWrapper("realgrid03", "/assets/js/libs/realgrid");
+        this.gridObj.setGridStyle("100%", "100%");
+        this.gridObj.setColumnInfo(ac00303.column_info).setEntityName("CONFIGURATION");
         this.gridObj.makeGrid();
+        this.gridObj.itemClick(this.itemClick);
+    },
+    setData: function (list) {
+        this.gridObj.setData("set", list);
+
+    },
+    getData: function (_type) {
+        //this.gridObj.load("/ad/ad001/getEnviromentList.do", {});
+    },
+    addRow: function () {
+        this.gridObj.addRow();
+    },
+    itemClick: function (data) {
+        //ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, data);
     }
 });
-

@@ -44,6 +44,78 @@
             USE_YN = #{useYN}
         </if>
     </select>
+
+    <insert id="insertPopupHeader" parameterType="Ad00401VO" >
+      INSERT INTO AD_POPUP_HEADER
+      (
+        POPUP_HEADER_UUID
+        , POPUP_CODE
+        , POPUP_NAME
+        , SERVICE_UUID
+        , MULTISELECT_YN
+        , TREE_YN
+        , DESCRIPTION
+        , NOTES
+        , USE_YN
+        , POPUP_SQL
+        , INSERT_UUID
+        , INSERT_DATE
+        , UPDATE_UUID
+        , UPDATE_DATE
+      )
+      VALUES
+      (
+        FC_AD_GETUUID()
+        , #{popupCode}
+        , #{popupName}
+        , #{serviceUUID}
+        , #{multiselectYN}
+        , #{treeYN}
+        , #{description}
+        , #{notes}
+        , #{useYN}
+        , #{popupSQL}
+        , #{insertUuid}
+        , CURRENT_TIMESTAMP
+        , #{updateUuid}
+        , CURRENT_TIMESTAMP
+      )
+
+    </insert>
+    <update id="updatePopupHeader" parameterType="Ad00401VO" >
+      UPDATE
+        AD_POPUP_HEADER
+      SET
+        POPUP_CODE        = #{popupCode}
+        , POPUP_NAME      = #{popupName}
+        , SERVICE_UUID    = #{serviceUUID}
+        , MULTISELECT_YN  = #{multiselectYN}
+        , TREE_YN         = #{treeYN}
+        , DESCRIPTION     = #{description}
+        , NOTES           = #{notes}
+        , USE_YN          = #{useYN}
+        , POPUP_SQL       = #{popupSQL}
+        ,UPDATE_UUID      = #{updateUUID}
+        ,UPDATE_DATE      = CURRENT_TIMESTAMP
+      WHERE
+        POPUP_HEADER_UUID = #{popupHeaderUUID}
+    </update>
+    <update id="insertPopupSQL" parameterType="Ad00401VO">
+      UPDATE
+        AD_POPUP_HEADER
+      SET
+        POPUP_SQL       = #{popupSQL}
+      WHERE
+        POPUP_HEADER_UUID = #{popupHeaderUUID}
+    </update>
+    <delete id="deletePopupHeader" parameterType="Ad00401VO" >
+      DELETE
+      FROM
+        AD_POPUP_HEADER
+      WHERE
+        POPUP_HEADER_UUID = #{popupHeaderUUID}
+    </delete>
+
     <select id="getPopupDetail" resultType="Ad00402VO" parameterType="Ad00402VO" statementType="PREPARED">
         <![CDATA[
           SELECT

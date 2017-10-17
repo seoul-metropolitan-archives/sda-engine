@@ -2427,6 +2427,58 @@ axboot.searchView = {
 };
 
 /**
+ * gridView
+ * @Object {Object} axboot.gridView
+ */
+axboot.gridView = {
+    page: {
+        pageNumber: 0,
+        pageSize: 99999
+    },
+    setData: function setData(_data) {
+        this.target.setData(_data);
+    },
+    getData: function getData(_type) {
+        var list = [];
+        var _list = this.target.getList(_type);
+        if (_type == "modified" || _type == "deleted") {
+            list = ax5.util.filter(_list, function () {
+                return true;
+            });
+        } else {
+            list = _list;
+        }
+        return list;
+    },
+    addRow: function addRow() {
+        this.target.addRow({ __created__: true }, "last");
+    },
+    delRow: function delRow(_type) {
+        this.target.deleteRow(_type);
+    },
+    align: function align() {
+        this.target.align();
+    },
+    clear: function clear() {
+        this.target.setData({
+            list: [],
+            page: {
+                currentPage: 0,
+                pageSize: 0,
+                totalElements: 0,
+                totalPages: 0
+            }
+        });
+    },
+    setPageData: function setPageData(_page) {
+        this.page = $.extend(this.page, _page);
+    },
+    getPageData: function getPageData() {
+        return this.page;
+    }
+};
+
+/**
  * treeView
  * @Object {Object} axboot.treeView
  */
@@ -2436,8 +2488,8 @@ axboot.treeView = {};
  * gridView
  * @Object {Object} axboot.gridView
  */
-axboot.gridView = {
-    name : "gridView",
+axboot.realGridView = {
+    name : "realGridView",
     tagId : "",
     page: {
         pageNumber: 0,
@@ -2560,7 +2612,7 @@ axboot.viewExtend = function (_obj1, _obj2) {
         retView.init();
         return retView;
     }
-    else if(_obj1.name && _obj1.name == "gridView")
+    else if(_obj1.name && _obj1.name == "realGridView")
     {
         var retView = $.extend({}, _obj1, _obj2)
         retView.init();

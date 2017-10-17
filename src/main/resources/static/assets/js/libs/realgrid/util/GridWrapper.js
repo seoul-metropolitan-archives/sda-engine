@@ -648,7 +648,7 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 					defaultData.push((undefined === data.values || data.values.length < 1) ? "" : data.values[0]);
 					break;
 				case "check":
-					obj.renderer = defaultStyle.data.check;
+					obj.renderer = $.extend({},defaultStyle.data.check,data.renderer);
 					obj.editable = false;
                     fieldObj.defaultValue = data.defaultValue;
                     defaultData.push("");
@@ -728,22 +728,23 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 		var createdList = [];
 		var updatedList = [];
 		var deletedList = [];
-
+		var retList = [];
 		var row = undefined;
 		for (var i = 0; i < createRow.length; i++) {
-			createdList.push(dataProvider.getJsonRow(createRow[i]));
+            retList.push($.extend(dataProvider.getJsonRow(createRow[i]),{"__created__" : true}));
 		}
 		for (var i = 0; i < updateRow.length; i++) {
-			updatedList.push(dataProvider.getJsonRow(updateRow[i]));
+            retList.push($.extend(dataProvider.getJsonRow(updateRow[i]),{"__modified__" : true}));
 		}
 		for (var i = 0; i < deletedRow.length; i++) {
-			deletedList.push(dataProvider.getJsonRow(deletedRow[i]));
+            retList.push($.extend(dataProvider.getJsonRow(deletedRow[i]),{"__deleted__" : true}));
 		}
-		return {
+		/*return {
 			createdList : createdList,
 			updatedList : updatedList,
 			deletedList : deletedList
-		};
+		};*/
+		return retList;
 	};
 	this.clearRows = function() {
 		gridView.getDataProvider().clearRows();

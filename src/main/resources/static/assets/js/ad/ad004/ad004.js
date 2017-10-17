@@ -69,12 +69,18 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         },function() {
             if (this.key == "ok") {
                 console.log(fnObj.gridView_h.getData());
-                /*
                 axboot.ajax({
-                    url : "ad/ad004/insertPopupHeader",
-                    data : this.gridView_h.getData()
-                })
-                */
+                    url : "/ad/ad004/ad004/insertPopupHeader",
+                    type : "post",
+                    data : JSON.stringify(fnObj.gridView_h.getData()),
+                    callback : function(res)
+                    {
+                        if(res.result == true)
+                            alert("저장되었습니다");
+                        else
+                            alert("저장 중 문제가 발생하였습니다");
+                    }
+                });
             }
         });
         /*
