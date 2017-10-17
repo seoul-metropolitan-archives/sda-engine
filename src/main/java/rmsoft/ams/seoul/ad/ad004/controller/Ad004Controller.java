@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import rmsoft.ams.seoul.ad.ad004.service.Ad004Service;
 import rmsoft.ams.seoul.ad.ad004.vo.Ad00401VO;
+import rmsoft.ams.seoul.ad.ad004.vo.Ad00402VO;
 import rmsoft.ams.seoul.common.domain.AdPopupHeader;
 
 import java.util.List;
@@ -25,7 +26,12 @@ public class Ad004Controller
     {
         return service.searchPopupHeader(param);
     }
-
+    @RequestMapping("/getPopupDetail")
+    @ResponseBody
+    public Object getPopupDetail(@RequestBody Ad00402VO param)
+    {
+        return service.getPopupDetail(param);
+    }
 
     @RequestMapping("/insertPopupHeader")
     @ResponseBody
@@ -33,5 +39,16 @@ public class Ad004Controller
     {
         return service.insertPopupHeader(data);
     }
-
+    @RequestMapping("/insertPopupSQL")
+    @ResponseBody
+    public Object insertPopupSQL(@RequestBody Ad00401VO data)
+    {
+        return service.insertPopupSQL(data);
+    }
+    @RequestMapping("/insertPopupDetail")
+    @ResponseBody
+    public Object insertPopupDetail(@RequestBody List<Ad00402VO> list)
+    {
+        return service.insertPopupDetail(list);
+    }
 }

@@ -95,7 +95,7 @@
         , NOTES           = #{notes}
         , USE_YN          = #{useYN}
         , POPUP_SQL       = #{popupSQL}
-        ,UPDATE_UUID      = #{updateUUID}
+        ,UPDATE_UUID      = #{updateUuid}
         ,UPDATE_DATE      = CURRENT_TIMESTAMP
       WHERE
         POPUP_HEADER_UUID = #{popupHeaderUUID}

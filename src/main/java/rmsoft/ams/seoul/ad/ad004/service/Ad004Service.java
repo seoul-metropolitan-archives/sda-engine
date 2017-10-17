@@ -42,11 +42,33 @@ public class Ad004Service extends BaseService{
             }
             
         }
-
-        //popupHeaderRepository.save(data);
         return true;
     }
-    public List<Ad00402VO> searchPopupDetail(Ad00402VO param) {
+    public boolean insertPopupSQL(Ad00401VO data) {
+        mapper.insertPopupSQL(data);
+        return true;
+    }
+    public boolean insertPopupDetail(List<Ad00402VO> list)
+    {
+        for (Ad00402VO data: list)
+        {
+            if(data.isCreated())
+            {
+                mapper.insertPopupDetail(data);
+            }
+            else if(data.isModified())
+            {
+                mapper.updatePopupDetail(data);
+            }
+            else if(data.isDeleted())
+            {
+                mapper.deletePopupDetail(data);
+            }
+
+        }
+        return true;
+    }
+    public List<Ad00402VO> getPopupDetail(Ad00402VO param) {
         return mapper.getPopupDetail(param);
     }
 }

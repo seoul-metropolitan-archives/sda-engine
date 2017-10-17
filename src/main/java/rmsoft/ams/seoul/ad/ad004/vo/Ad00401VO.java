@@ -19,9 +19,8 @@ public class Ad00401VO extends BaseVO
 
     public Ad00401VO()
     {
-        this.insertUuid = this.updateUuid = SessionUtils.getCurrentLoginUserCd();
+        this.insertUuid = this.updateUuid = SessionUtils.getCurrentUser().getUserUuid();
         this.insertDate = this.updateDate = Timestamp.valueOf(DateUtils.convertToString(LocalDateTime.now(), DateUtils.DATE_TIME_PATTERN));
-        this.updateUuid = SessionUtils.getCurrentLoginUserCd();
     }
 
 
@@ -43,6 +42,6 @@ public class Ad00401VO extends BaseVO
 
     private String useYN            = "";
 
-    private String popupSQL         = "";
+    private String popupSQL         = " ";
 
 }

@@ -4,7 +4,7 @@ var ad004_h =
         [
             {
                 sortNo: 0,
-                name: "popupUUID",
+                name: "popupHeaderUUID",
                 text: "Popup UUID",
                 editable: false,
                 dataType: "code",
@@ -49,7 +49,7 @@ var ad004_h =
             },
             {
                 sortNo: 5,
-                name: "multiselect",
+                name: "multiselectYN",
                 text: "Multiselect",
                 width: 70,
                 editable: true,
@@ -146,6 +146,17 @@ var ad004_h =
                 width: 120,
                 editable: false,
                 dataType: "timestamp",
+                required: false
+            }
+            ,
+            {
+                sortNo: 15,
+                name: "popupSQL",
+                text: "Popup SQL",
+                width: 120,
+                editable: false,
+                visibale : false,
+                dataType: "text",
                 required: false
             }
         ]

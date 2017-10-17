@@ -420,8 +420,8 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 		i_height = height;
 		return this;
 	};
-	this.setOption = function() {
-		gridOption = $.extend({}, _gridDefaultOption, gridOption);
+	this.setOption = function(_gridOption) {
+		gridOption = $.extend({}, _gridDefaultOption, _gridOption);
 	};
 	
 	this.setStyle = function(name,style)
@@ -468,7 +468,11 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 	
 
 	var _initOption = function(gridView, provider) {
-		var option = gridOption === undefined ? _gridDefaultOption : gridOption;
+        var option = undefined;
+        if(gridOption)
+            option = gridOption;
+		else
+            option = _gridDefaultOption;
 		if(isTree)
 		{
             gridView.setTreeOptions({
@@ -703,6 +707,7 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 			_doSave = true;
 		}
 	};
+
 	//셀렉트 된 행 데이터 가져오는 함수
 	this.getSelectedData = function() {
 		if (gridView.getCurrent().itemIndex == -1) {
@@ -712,7 +717,18 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 					gridView.getCurrent().itemIndex);
 		}
 	};
-	
+	this.getCurrent = function()
+	{
+		return gridView.getCurrent();
+	}
+	this.getFieldIndex = function(fieldName)
+	{
+		return dataProvider.getFieldIndex(fieldName);
+	}
+	this.setValues = function(index,fieldIdx, data)
+	{
+        dataProvider.setValue(index,fieldIdx,data);
+	}
 	
 	//데이터  반환 함수
 	this.getData = function() {
@@ -730,14 +746,24 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 		var deletedList = [];
 		var retList = [];
 		var row = undefined;
+
+		var removeField = function(data)
+		{
+			delete(data["insertUUID"]);
+            delete(data["insertDate"]);
+            delete(data["updateUUID"]);
+            delete(data["updateDate"]);
+			return data;
+		}
+
 		for (var i = 0; i < createRow.length; i++) {
-            retList.push($.extend(dataProvider.getJsonRow(createRow[i]),{"__created__" : true}));
+            retList.push($.extend(removeField(dataProvider.getJsonRow(createRow[i])),{"__created__" : true}));
 		}
 		for (var i = 0; i < updateRow.length; i++) {
-            retList.push($.extend(dataProvider.getJsonRow(updateRow[i]),{"__modified__" : true}));
+            retList.push($.extend(removeField(dataProvider.getJsonRow(updateRow[i])),{"__modified__" : true}));
 		}
 		for (var i = 0; i < deletedRow.length; i++) {
-            retList.push($.extend(dataProvider.getJsonRow(deletedRow[i]),{"__deleted__" : true}));
+            retList.push($.extend(removeField(dataProvider.getJsonRow(deletedRow[i])),{"__deleted__" : true}));
 		}
 		/*return {
 			createdList : createdList,
