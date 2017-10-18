@@ -78,7 +78,7 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 	};
 	
 	var contextMenu = [{label : "ExcelExport"}];
-
+	var removeProperty = new Array();
 	//================================================
 	//lazy load시 사용 파라메터
 	var maxCount = 100;
@@ -86,6 +86,16 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 	//그리드 옵션
 	var gridOption = undefined;
 	var rootContext = p_rootContext;
+	var addRowEventCallback = function(){}
+    var removeRowEventCallback = function(){}
+    this.addRowEvent = function(_event)
+	{
+        addRowEventCallback = _event
+	}
+    this.removeRowEvent = function(_event)
+    {
+        removeRowEventCallback = _event
+    }
 	//기본 그리드 옵션
 	var _gridDefaultOption = {
 		indicator : {
@@ -387,9 +397,11 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
                      }
                  }
              });
-		 });
+             addRowEventCallback();
+         });
 		 $("#"+i_id).parents().eq(1).delegate(".btn_d","click",function(){
 		 	gridView.getDataProvider().removeRow(gridView.getCurrent().dataRow);
+             removeRowEventCallback();
 		 });
 	};
 	this.removeRow = function()
@@ -438,7 +450,20 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 		else
 			throw new Exception("Header Style은 Object로 정의해야됩니다.");
 	};
-	
+
+	this.addRemoveProperty = function(property)
+	{
+        removeProperty.push(property);
+	}
+	this.deleteRemoveProperty = function(index)
+	{
+		removeProperty.splice(index,1);
+	}
+    this.clearRemoveProperty = function(property)
+    {
+        removeProperty = new Array();
+    }
+
 	this.getHeaderStyle = function() {
 		return defaultStyle.parsing.header;
 	};
@@ -654,6 +679,7 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 				case "check":
 					obj.renderer = $.extend({},defaultStyle.data.check,data.renderer);
 					obj.editable = false;
+					obj.defaultValue = data.defaultValue;
                     fieldObj.defaultValue = data.defaultValue;
                     defaultData.push("");
 					break;

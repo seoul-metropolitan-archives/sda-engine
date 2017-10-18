@@ -1,4 +1,4 @@
-var ad004_h =
+var ad00401 =
 {
     column_info :
         [
@@ -38,8 +38,8 @@ var ad004_h =
                 dataType: "combo",
                 required: false,
                 visible: true,
-                values: new Array(),
-                labels: new Array(),
+                values: axboot.commonCodeFilter("CD006").codeArr,
+                labels: axboot.commonCodeFilter("CD006").nameArr,
                 editor: {
                     type: "dropDown",
                     dropDownCount: 10,

@@ -46,6 +46,9 @@ public class AdPopupHeader extends BaseJpaModel<AdPopupHeader.AdPopupHeaderId>
     @Comment(value="팝업 SQL")
     private String popupSQL;
 
+    @Column(name="TREE_YN")
+    @Comment(value="트리여부")
+    private String treeYN;
 
     @Override
     public AdPopupHeaderId getId() {

@@ -2,7 +2,6 @@ var fnObj = {};
 var pageSize = 1000;
 var errorStatusList = {};
 var gridView = undefined;
-var serviceList = [];
 var handleResult = "";
 var handleFailReason = "";
 var cash10kEmptyStatus = "";
@@ -41,8 +40,8 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             if (
                 this.key == "ok"
                 && ACTIONS.dispatch(ACTIONS.POPUP_HEADER_PAGE_SAVE)
-                && ACTIONS.dispatch(ACTIONS.POPUP_SQL_PAGE_SAVE)
-                && ACTIONS.dispatch(ACTIONS.GET_POPUP_DETAIL)
+                //&& ACTIONS.dispatch(ACTIONS.POPUP_SQL_PAGE_SAVE)
+                && ACTIONS.dispatch(ACTIONS.POPUP_DETAIL_PAGE_SAVE)
             )
                 alert("저장되었습니다");
         });
@@ -54,12 +53,13 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         var result = false;
         console.log(fnObj.gridView_h.getData());
         axboot.ajax({
-            url: "/ad/ad004/ad004/insertPopupHeader",
+            url: "/ad/ad004/ad004/savePopupHeader",
             type: "post",
             async: false,
             data: JSON.stringify(fnObj.gridView_h.getData()),
-            callback: function (res) {
-                res = result;
+            callback:  function (res)
+        {
+            result = res;
             }
         });
         return result;
@@ -83,7 +83,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     {
         var result = false;
         axboot.ajax({
-            url : "/ad/ad004/ad004/insertPopupDetail",
+            url : "/ad/ad004/ad004/savePopupDetail",
             type : "post",
             async : false,
             data : JSON.stringify(fnObj.gridView_d.getData()),
@@ -97,6 +97,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     GET_POPUP_DETAIL : function(data)
     {
         fnObj.sqlView.setData(fnObj.gridView_h.getSQL());
+        console.log(fnObj.gridView_h.getPopupHeaderUUID());
         axboot.ajax({
             url : "/ad/ad004/ad004/getPopupDetail"
             ,type : "POST"
@@ -141,68 +142,16 @@ fnObj = {
             success: function(){}
         });
         $.ajax({
-            url: "/assets/js/column_info/ad004_h.js",
+            url: "/assets/js/column_info/ad00401.js",
             dataType: "script",
             async : false,
             success: function(){}
         });
         $.ajax({
-            url: "/assets/js/column_info/ad004_d.js",
+            url: "/assets/js/column_info/ad00402.js",
             dataType: "script",
             async : false,
             success: function(){}
-        });
-
-        axboot.ajax({
-            type: "POST",
-            url: "/ad/ad003/getCode",
-            data : JSON.stringify({categoryCode : "CD003"}),
-            async : false,
-            callback: function (list) {
-                var data = undefined;
-                console.log(JSON.stringify(list));
-                for(var i = 0;i < list.length; i++) {
-                    /*column info 정보 갱신*/
-                    data = list[i];
-                    ad004_d.column_info[5].values.push(data.codeDetailUUID);
-                    ad004_d.column_info[5].labels.push(data.codeName);
-                }
-            }
-
-        });
-        axboot.ajax({
-            type: "POST",
-            url: "/ad/ad003/getCode",
-            data : JSON.stringify({categoryCode : "CD004"}),
-            async : false,
-            callback: function (list) {
-                var data = undefined;
-                console.log(JSON.stringify(list));
-                for(var i = 0;i < list.length; i++) {
-                    /*column info 정보 갱신*/
-                    data = list[i];
-                    ad004_d.column_info[6].values.push(data.codeDetailUUID);
-                    ad004_d.column_info[6].labels.push(data.codeName);
-                }
-            }
-
-        });
-        axboot.ajax({
-            type: "POST",
-            url: "/ad/ad003/getCode",
-            data : JSON.stringify({categoryCode : "CD005"}),
-            async : false,
-            callback: function (list) {
-                var data = undefined;
-                console.log(JSON.stringify(list));
-                for(var i = 0;i < list.length; i++) {
-                    /*column info 정보 갱신*/
-                    data = list[i];
-                    ad004_d.column_info[8].values.push(data.codeDetailUUID);
-                    ad004_d.column_info[8].labels.push(data.codeName);
-                }
-            }
-
         });
 
         /**/
@@ -216,49 +165,18 @@ fnObj = {
     }
 };
 /*검색 창*/
-fnObj.formView = axboot.viewExtend(axboot.baseView,{
+fnObj.formView = axboot.viewExtend(axboot.formView,{
+    getDefaultData: function () {
+        return $.extend({}, axboot.formView.defaultData, {useYn: "Y"});
+    },
     initView : function(){
-        /*공통 코드 가져오기*/
-        axboot.ajax({
-            type: "POST",
-            url: "/ad/ad003/getCode",
-            data : JSON.stringify({categoryCode : "CD006"}),
-            async : false,
-            callback: function (list) {
-                console.log(JSON.stringify(list));
-
-                if(undefined === list)
-                    return ;
-
-                var data = undefined;
-                for(var i = 0;i < list.length; i++)
-                {
-                    data = list[i];
-                    /*column info 정보 갱신*/
-                    ad004_h.column_info[3].values.push(data.codeDetailUUID);
-                    ad004_h.column_info[3].labels.push(data.codeName);
-
-                    /*콤보박스 생성*/
-                    $("#serviceList").append($("<option>").val(data.codeDetailUUID).text(data.codeName));
-
-                    serviceList[data.service_uuid] =
-                        {
-                            "label" : data.codeName,
-                            "value": data.codeDetailUUID
-                        }
-                }
-            },
-            options: {
-                onError: function(a,b,c)
-                {
-                    console.log(a);
-                    console.log(b);
-                    console.log(c);
-
-                }
-            }
-        });
+        this.target = $("#formView01");
+        this.model = new ax5.ui.binder();
+        this.model.setModel(this.getDefaultData(), this.target);
+        this.modelFormatter = new axboot.modelFormatter(this.model); // 모델 포메터 시작
+        this.initEvent();
     }
+    /*
     ,getData : function()
     {
         return {
@@ -267,6 +185,40 @@ fnObj.formView = axboot.viewExtend(axboot.baseView,{
             , serviceUUID   : $("#serviceList option:selected").val()
             , useYN         : $("input[name='useYN']:checked").val()
         }
+    }
+    */
+    ,initEvent: function () {
+        var _this = this;
+    },
+    getData: function () {
+        var data = this.modelFormatter.getClearData(this.model.get()); // 모델의 값을 포멧팅 전 값으로 치환.
+        return $.extend({}, data);
+    },
+    setFormData: function (dataPath, value) {
+        this.model.set(dataPath, value);
+    },
+    setData: function (data) {
+
+        if (typeof data === "undefined") data = this.getDefaultData();
+        data = $.extend({}, data);
+
+        this.target.find('[data-ax-path="key"]').attr("readonly", "readonly");
+
+        this.model.setModel(data);
+        this.modelFormatter.formatting(); // 입력된 값을 포메팅 된 값으로 변경
+    },
+    validate: function () {
+        var rs = this.model.validate();
+        if (rs.error) {
+            alert(rs.error[0].jquery.attr("title") + '을(를) 입력해주세요.');
+            rs.error[0].jquery.focus();
+            return false;
+        }
+        return true;
+    },
+    clear: function () {
+        this.model.setModel(this.getDefaultData());
+        this.target.find('[data-ax-path="key"]').removeAttr("readonly");
     }
 });
 
@@ -292,6 +244,10 @@ fnObj.sqlView = axboot.viewExtend(axboot.baseView,{
             ,popupSQL : this.targetTag.val()
         };
     }
+    ,clear : function()
+    {
+        this.targetTag.val("");
+    }
     ,convertSQL : function()
     {
         var regExp = /(SELECT?)((\s?,?([a-zA-Z0-9]*)_?,?)*)(FROM?)((\s?,?([a-zA-Z0-9]*)_?,?)*)/gi;
@@ -313,11 +269,19 @@ fnObj.gridView_h = axboot.viewExtend(axboot.realGridView, {
     itemClick : ACTIONS.GET_POPUP_DETAIL,
     initView  : function()
     {
-        this.setColumnInfo(ad004_h.column_info);
+        this.setColumnInfo(ad00401.column_info);
+        /*
         this.gridObj.setOption({
             checkBar : {visible : true}
         })
+        */
         this.makeGrid();
+        this.gridObj.addRowEvent(this.addRowEvent)
+    },
+    addRowEvent : function()
+    {
+        fnObj.gridView_d.clear();
+        fnObj.sqlView.clear();
     },
     getPopupHeaderUUID : function()
     {
@@ -338,7 +302,7 @@ fnObj.gridView_d = axboot.viewExtend(axboot.realGridView, {
     entityName : "POPUP_DETAIL",
     initView: function ()
     {
-        this.setColumnInfo(ad004_d.column_info);
+        this.setColumnInfo(ad00402.column_info);
         this.makeGrid();
     },
     dynamicSetSqlColumns : function(list)
@@ -363,13 +327,17 @@ fnObj.gridView_d = axboot.viewExtend(axboot.realGridView, {
             ,updateDate : ""
         }
         var detailList = new Array();
+        this.setData([]);
         for(var i = 0; i < list.length; i++)
         {
-            detailList.push($.extend({},popupDetailTemplate,{sqlColumn : list[i]}))
-            //this.gridObj.addRow($.extend({},popupDetailTemplate,{sqlColumn : list[i]}));
+            //detailList.push($.extend({},popupDetailTemplate,{sqlColumn : list[i]}))
+            this.gridObj.addRow($.extend({},popupDetailTemplate,{sqlColumn : list[i]}));
         }
-        this.setData(detailList);
+        //this.setData(detailList,"append");
 
+    },
+    clear : function () {
+        this.setData([]);
     }
 
 });

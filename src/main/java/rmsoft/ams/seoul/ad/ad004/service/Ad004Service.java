@@ -6,7 +6,9 @@ import org.springframework.stereotype.Service;
 import rmsoft.ams.seoul.ad.ad004.dao.Ad004Mapper;
 import rmsoft.ams.seoul.ad.ad004.vo.Ad00401VO;
 import rmsoft.ams.seoul.ad.ad004.vo.Ad00402VO;
+import rmsoft.ams.seoul.common.domain.AdPopupDetail;
 import rmsoft.ams.seoul.common.domain.AdPopupHeader;
+import rmsoft.ams.seoul.common.repository.AdPopupDetailRepository;
 import rmsoft.ams.seoul.common.repository.AdPopupHeaderRepository;
 
 import java.util.List;
@@ -18,27 +20,26 @@ public class Ad004Service extends BaseService{
     private Ad004Mapper mapper;
 
     @Autowired
-    private AdPopupHeaderRepository popupHeaderRepository;
+    private AdPopupHeaderRepository  popupHeaderRepository;
+
+    @Autowired
+    private AdPopupDetailRepository popupDetailRepository;
 
     public List<Ad00401VO> searchPopupHeader(Ad00401VO param) {
         return mapper.searchPopupHeader(param);
     }
 
-    public boolean insertPopupHeader(List<Ad00401VO> list)
+    public boolean savePopupHeader(List<AdPopupHeader> list)
     {
-        for (Ad00401VO data: list)
+        for (AdPopupHeader data: list)
         {
-            if(data.isCreated())
+            if(data.isCreated() || data.isModified())
             {
-                mapper.insertPopupHeader(data);
-            }
-            else if(data.isModified())
-            {
-                mapper.updatePopupHeader(data);
+                popupHeaderRepository.save(data);
             }
             else if(data.isDeleted())
             {
-                mapper.deletePopupHeader(data);
+                popupHeaderRepository.delete(data);
             }
             
         }
@@ -48,27 +49,26 @@ public class Ad004Service extends BaseService{
         mapper.insertPopupSQL(data);
         return true;
     }
-    public boolean insertPopupDetail(List<Ad00402VO> list)
+
+    public List<Ad00402VO> getPopupDetail(Ad00402VO param) {
+        return mapper.getPopupDetail(param);
+    }
+
+    public boolean savePopupDetail(List<AdPopupDetail> list)
     {
-        for (Ad00402VO data: list)
+        for (AdPopupDetail data: list)
         {
-            if(data.isCreated())
+            if(data.isCreated() || data.isModified())
             {
-                mapper.insertPopupDetail(data);
-            }
-            else if(data.isModified())
-            {
-                mapper.updatePopupDetail(data);
+                popupDetailRepository.save(data);
             }
             else if(data.isDeleted())
             {
-                mapper.deletePopupDetail(data);
+                popupDetailRepository.delete(data);
             }
 
         }
         return true;
     }
-    public List<Ad00402VO> getPopupDetail(Ad00402VO param) {
-        return mapper.getPopupDetail(param);
-    }
+
 }

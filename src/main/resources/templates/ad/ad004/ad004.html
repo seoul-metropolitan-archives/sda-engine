@@ -7,79 +7,83 @@
 <!--realgrid -->
 <script layout:fragment="script" type="text/javascript" th:src="@{/assets/js/ad/ad004/ad004.js}"></script>
 <div layout:fragment="base-content" class="ax-base-content">
-    <div class="cssBody" style="top:80px">
-            <div class="contents_wrap">
-                <div style=" height:30px; width:100%" class="bgf7 div_tablerow">
-                    <ul class="bdb">
-                        <th:block layout:insert="~{/fragments/page-buttons :: bookmark}"/>
-                        <th:block layout:insert="~{/fragments/page-buttons :: save-and-inquiry}"/>
-                    </ul>
-                </div>
-                <div class="bdb div_tablerow">
-                    <dl>
-                        <dt class="pdl_5">Popup Code</dt>
-                        <dd>
-                            <input type=text style="width:135px" id="popupCode">
-                        </dd>
-                        <dt>Popup Name</dt>
-                        <dd>
-                            <input type=text style="width:135px" id="popupName">
-                        </dd>
-                        <dt>Service</dt>
-                        <dd>
-                            <select style="width:135px;" id="serviceList">
-                                <option></option>
-                            </select>
-                        </dd>
-                        <dd class="w_auto">
-                            <div class="rdo_box">
-                                <span class="rdo_box_title">Use</span>
-                                <label>
-                                    <input type="radio" name="useYN" class="no_border" value="Y">Yes</label>
-                                <label>
-                                    <input type="radio" name="useYN" class="no_border" value="N">No</label>
-                                <label>
-                                    <input type="radio" name="useYN" class="no_border" checked value="">All</label>
+    <form name="formView01" id="formView01" method="post" onsubmit="return false">
+        <div class="cssBody" style="top:80px">
+                <div class="contents_wrap">
+                    <div style=" height:30px; width:100%" class="bgf7 div_tablerow">
+                        <ul class="bdb">
+                            <th:block layout:insert="~{/fragments/page-buttons :: bookmark}"/>
+                            <th:block layout:insert="~{/fragments/page-buttons :: save-and-inquiry}"/>
+                        </ul>
+                    </div>
+                    <div class="bdb div_tablerow">
+                        <dl>
+                            <dt class="pdl_5">Popup Code</dt>
+                            <dd>
+                                <input type=text style="width:135px" data-ax-path="popupCode" id="popupCode">
+                            </dd>
+                            <dt>Popup Name</dt>
+                            <dd>
+                                <input type=text style="width:135px" data-ax-path="popupName" id="popupName">
+                            </dd>
+                            <dt>Service</dt>
+                            <dd>
+                                <select data-ax-path="data-ax-path=serviceUUID" style="width:135px;" id="serviceList">
+                                    <option value=""></option>
+                                    <option th:each="item : ${serviceList}" th:value="${item.codeDetailUUID}"
+                                            th:text="${item.codeName}"/>
+                                </select>
+                            </dd>
+                            <dd class="w_auto">
+                                <div class="rdo_box">
+                                    <span class="rdo_box_title">Use</span>
+                                    <label>
+                                        <input type="radio" name="useYN" data-ax-path="useYN" class="no_border" value="Y">Yes</label>
+                                    <label>
+                                        <input type="radio" name="useYN" data-ax-path="useYN" class="no_border" value="N">No</label>
+                                    <label>
+                                        <input type="radio" name="useYN" data-ax-path="useYN" class="no_border" checked value="">All</label>
+                                </div>
+                            </dd>
+                        </dl>
+
+                    </div>
+                    <div style="height:100%; width:100%" class="div_tablerow">
+
+                        <div style="display:table; height:50%; width:100%">
+                            <ul class="bdb bdt div_tablerow bgf7" style="height:30px;">
+                                <th:block layout:insert="~{/fragments/page-buttons :: dot('Popup')}"/>
+                                <th:block layout:insert="~{/fragments/page-buttons :: add-and-delete}"/>
+                            </ul>
+                            <div style="height:100%; width:100%" class="div_tablerow bdb">
+                                <div id="realgrid" style="width:100%; height:100%"></div>
                             </div>
-                        </dd>
-                    </dl>
+                        </div>
 
+                        <div style="display:table; height:50%; width:30%; float:left" class="bdr">
+
+                            <ul class="bdb bdt div_tablerow bgf7" style="height:30px;">
+                                <th:block layout:insert="~{/fragments/page-buttons :: dot('SQL')}"/>
+                            </ul>
+                            <div style="height:100%; width:100%" class="div_tablerow bdb">
+                                <textarea rows="1" cols="1" class="txtar" id="sql"></textarea>
+                            </div>
+                        </div>
+
+
+                        <div style="display:table; height:50%; width:70%; float:left">
+
+                            <ul class="bdb bdt div_tablerow bgf7" style="height:30px;">
+                                <th:block layout:insert="~{/fragments/page-buttons :: dot('Column')}"/>
+                                <th:block layout:insert="~{/fragments/page-buttons :: add-and-delete}"/>
+                            </ul>
+                            <div style="height:100%; width:100%" class="div_tablerow bdb">
+                                <div id="realgrid2" style="width:100%; height:100%"></div>
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
-                <div style="height:100%; width:100%" class="div_tablerow">
-
-                    <div style="display:table; height:50%; width:100%">
-                        <ul class="bdb bdt div_tablerow bgf7" style="height:30px;">
-                            <th:block layout:insert="~{/fragments/page-buttons :: dot('Popup')}"/>
-                            <th:block layout:insert="~{/fragments/page-buttons :: add-and-delete}"/>
-                        </ul>
-                        <div style="height:100%; width:100%" class="div_tablerow bdb">
-                            <div id="realgrid" style="width:100%; height:100%"></div>
-                        </div>
-                    </div>
-
-                    <div style="display:table; height:50%; width:30%; float:left" class="bdr">
-
-                        <ul class="bdb bdt div_tablerow bgf7" style="height:30px;">
-                            <th:block layout:insert="~{/fragments/page-buttons :: dot('SQL')}"/>
-                        </ul>
-                        <div style="height:100%; width:100%" class="div_tablerow bdb">
-                            <textarea rows="1" cols="1" class="txtar" id="sql"></textarea>
-                        </div>
-                    </div>
-
-
-                    <div style="display:table; height:50%; width:70%; float:left">
-
-                        <ul class="bdb bdt div_tablerow bgf7" style="height:30px;">
-                            <th:block layout:insert="~{/fragments/page-buttons :: dot('Column')}"/>
-                            <th:block layout:insert="~{/fragments/page-buttons :: add-and-delete}"/>
-                        </ul>
-                        <div style="height:100%; width:100%" class="div_tablerow bdb">
-                            <div id="realgrid2" style="width:100%; height:100%"></div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-    </div>
+        </div>
+    </form>
 </div>

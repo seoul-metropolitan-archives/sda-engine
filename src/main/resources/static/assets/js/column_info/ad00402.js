@@ -1,4 +1,4 @@
-var ad004_d =
+var ad00402 =
 {
     column_info :
         [
@@ -32,8 +32,8 @@ var ad004_d =
             },
             {
                 sortNo: 2,
-                name: "Title",
-                text: "title",
+                name: "title",
+                text: "Title",
                 width: 150,
                 editable: true,
                 dataType: "text",
@@ -55,30 +55,30 @@ var ad004_d =
             },
             {
                 sortNo: 4,
-                name: "inputMethod",
+                name: "inputMethodUUID",
                 text: "Input Method",
                 width: 100,
                 editable: true,
                 dataType: "combo",
                 required: false,
                 visible: true,
-                values: new Array(),
-                labels: new Array(),
+                values: axboot.commonCodeFilter("CD003").codeArr,
+                labels: axboot.commonCodeFilter("CD003").nameArr,
                 editor: {
                     domainOnly: true
                 }
             },
             {
                 sortNo: 5,
-                name: "align",
+                name: "alignUUID",
                 text: "Align",
                 width: 70,
                 editable: true,
                 dataType: "combo",
                 required: true,
                 lookupDisplay: true, //라벨로 표시
-                values : new Array(),
-                labels : new Array(),
+                values: axboot.commonCodeFilter("CD004").codeArr,
+                labels: axboot.commonCodeFilter("CD004").nameArr,
                 editor: {
                     domainOnly: true
                 }
@@ -101,14 +101,14 @@ var ad004_d =
             },
             {
                 sortNo: 7,
-                name: "treeRelation",
+                name: "treeRelationUUID",
                 text: "Tree Relation",
                 width: 100,
                 editable: true,
                 dataType: "combo",
                 lookupDisplay: true, //라벨로 표시
-                values : new Array(),
-                labels : new Array(),
+                values: axboot.commonCodeFilter("CD005").codeArr,
+                labels: axboot.commonCodeFilter("CD005").nameArr,
                 required: false
             },
             {

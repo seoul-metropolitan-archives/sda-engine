@@ -24,43 +24,43 @@ public class AdPopupDetail extends BaseJpaModel<AdPopupDetail.AdPopupDetailId>
     @Id
     @Column(name="POPUP_DETAIL_UUID")
     @Comment(value="팝업 디테일 UUID")
-    private String popupDetailUUID;
+    private String popupDetailUUID = "";
 
     @Column(name="POPUP_HEADER_UUID")
     @Comment(value="팝업 헤더 UUID")
-    private String popupHeaderUUID;
+    private String popupHeaderUUID = "";
 
     @Column(name="SQL_COLUMN")
     @Comment(value="SQL 컬럼 명")
-    private String sqlColumn;
+    private String sqlColumn = "";
 
     @Column(name="TITLE")
     @Comment(value="제목")
-    private String title;
+    private String title = "";
 
     @Column(name="WIDTH")
     @Comment(value="넓이")
-    private String width;
+    private String width  = "";
 
     @Column(name="INPUT_METHOD_UUID")
     @Comment(value="입력 메소드 UUID")
-    private String inputMethodUUID;
+    private String inputMethodUUID  = "";
 
     @Column(name="ALIGN_UUID")
     @Comment(value="텍스트 정렬 UUID")
-    private String alignUUID;
+    private String alignUUID  = "";
 
-    @Column(name="TREE_YN")
+    @Column(name="TREE_COLUMN_YN")
     @Comment(value="트리 여부")
-    private String treeYN;
+    private String treeColumnYN = "";
 
     @Column(name="TREE_RELATION_UUID")
     @Comment(value="트리 관계 UUID")
-    private String treeRelationUUID;
+    private String treeRelationUUID = "";
 
     @Column(name="ORDER_NO")
     @Comment(value="순번")
-    private String orderNO;
+    private String orderNO = "";
 
 
     @Override

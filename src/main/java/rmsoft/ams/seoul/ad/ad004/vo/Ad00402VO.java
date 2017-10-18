@@ -1,26 +1,41 @@
 package rmsoft.ams.seoul.ad.ad004.vo;
 
 import io.onsemiro.core.vo.BaseVO;
+import io.onsemiro.utils.DateUtils;
+import io.onsemiro.utils.SessionUtils;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+
+@Data
+@EqualsAndHashCode(callSuper = false)
 public class Ad00402VO extends BaseVO
 {
-    private String popupDetailUUID;
+    public Ad00402VO()
+    {
+        this.insertUuid = this.updateUuid = SessionUtils.getCurrentUser().getUserUuid();
+        this.insertDate = this.updateDate = Timestamp.valueOf(DateUtils.convertToString(LocalDateTime.now(), DateUtils.DATE_TIME_PATTERN));
+    }
 
-    private String popupHeaderUUID;
+    private String popupDetailUUID = "";
 
-    private String sqlColumn;
+    private String popupHeaderUUID = "";
 
-    private String title;
+    private String sqlColumn = "";
 
-    private String width;
+    private String title = "";
 
-    private String inputMethodUUID;
+    private String width = "";
 
-    private String alignUUID;
+    private String inputMethodUUID = "";
 
-    private String treeYN;
+    private String alignUUID = "";
 
-    private String treeRelationUUID;
+    private String treeYN = "";
 
-    private String orderNO;
+    private String treeRelationUUID = "";
+
+    private String orderNO = "";
 }

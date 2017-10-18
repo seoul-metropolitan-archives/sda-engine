@@ -72,14 +72,6 @@ var ac00303 =
                     editable: true,
                     dataType: "check",
                     textAlignment: "center",
-                    renderer: {
-                        type: "check",
-                        shape: "",
-                        falseValues: "false",
-                        trueValues: "true",
-                        editable: "false",
-                        startEditOnClick: true,
-                    },
                     required: true
                 },
                 {

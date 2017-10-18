@@ -1,5 +1,7 @@
 package rmsoft.ams.seoul.ad.ad004.controller;
 
+import io.onsemiro.utils.ModelMapperUtils;
+import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -8,8 +10,11 @@ import org.springframework.web.bind.annotation.RestController;
 import rmsoft.ams.seoul.ad.ad004.service.Ad004Service;
 import rmsoft.ams.seoul.ad.ad004.vo.Ad00401VO;
 import rmsoft.ams.seoul.ad.ad004.vo.Ad00402VO;
+import rmsoft.ams.seoul.common.domain.AdPopupDetail;
 import rmsoft.ams.seoul.common.domain.AdPopupHeader;
 
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -33,11 +38,11 @@ public class Ad004Controller
         return service.getPopupDetail(param);
     }
 
-    @RequestMapping("/insertPopupHeader")
+    @RequestMapping("/savePopupHeader")
     @ResponseBody
-    public Object insertPopupHeader(@RequestBody List<Ad00401VO> data)
+    public Object savePopupHeader(@RequestBody List<Ad00401VO> list)
     {
-        return service.insertPopupHeader(data);
+        return service.savePopupHeader(ModelMapperUtils.mapList(list, AdPopupHeader.class));
     }
     @RequestMapping("/insertPopupSQL")
     @ResponseBody
@@ -45,10 +50,10 @@ public class Ad004Controller
     {
         return service.insertPopupSQL(data);
     }
-    @RequestMapping("/insertPopupDetail")
+    @RequestMapping("/savePopupDetail")
     @ResponseBody
-    public Object insertPopupDetail(@RequestBody List<Ad00402VO> list)
+    public Object savePopupDetail(@RequestBody List<Ad00402VO> list)
     {
-        return service.insertPopupDetail(list);
+        return service.savePopupDetail(ModelMapperUtils.mapList(list, AdPopupDetail.class));
     }
 }
