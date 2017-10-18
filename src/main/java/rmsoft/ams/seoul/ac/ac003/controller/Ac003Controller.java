@@ -42,7 +42,7 @@ public class Ac003Controller extends BaseController {
     }
 
     @GetMapping("/01/details")
-    public Ac00301VO details(RequestParams<Ac00301VO> requestParams) {
+    public AcUser details(RequestParams<Ac00301VO> requestParams) {
         return ac003Service.findOne(requestParams);
     }
 
@@ -66,6 +66,7 @@ public class Ac003Controller extends BaseController {
 
         for (Ac00301VO ac00301VO : requestParams) {
             AcUser acUser = ModelMapperUtils.map(ac00301VO, AcUser.class);
+            //AcUser orgAcUser = ac003Service.findOne(ac00301VO);
 
             //TODO 임시 코드
             if(ac00301VO.getUseYn().equals("false")){

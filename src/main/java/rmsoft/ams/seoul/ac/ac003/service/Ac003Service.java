@@ -46,12 +46,12 @@ public class Ac003Service extends BaseService {
         return filter(ac003Mapper.findAllUser(ac00301VO), pageable, "", Ac00301VO.class);
     }
 
-    public Ac00301VO findOne(RequestParams<Ac00301VO> requestParams) {
+    public AcUser findOne(RequestParams<Ac00301VO> requestParams) {
         QAcUser qAcUser = QAcUser.acUser;
 
-        Predicate predicate = qAcUser.userId.eq(requestParams.getString("userId"));
+        Predicate predicate = qAcUser.userUuid.eq(requestParams.getString("userUuid"));
 
-        return buildVO(acUserRepository.findOne(predicate));
+        return acUserRepository.findOne(predicate);
     }
 
     // USER GROUP 관련 호출부
