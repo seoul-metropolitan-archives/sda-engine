@@ -12,10 +12,12 @@
                 <button type="button" class="btn btn-default" data-page-btn="save"><i class="cqc-save"></i> 저장</button>
             </th:block>
             <th:block th:if="${authGroupMenu.delAh == 'Y'}">
-                <button type="button" class="btn btn-default" data-page-btn="delete"><i class="cqc-minus"></i> 삭제</button>
+                <button type="button" class="btn btn-default" data-page-btn="delete"><i class="cqc-minus"></i> 삭제
+                </button>
             </th:block>
             <th:block th:if="${authGroupMenu.exlAh == 'Y'}">
-                <button type="button" class="btn btn-default" data-page-btn="excel"><i class="cqc-download"></i> 엑셀</button>
+                <button type="button" class="btn btn-default" data-page-btn="excel"><i class="cqc-download"></i> 엑셀
+                </button>
             </th:block>
             <th:block th:if="${authGroupMenu.fn1Ah == 'Y'}">
                 <select data-page-btn="fn1" class="btn btn-primary" id="page-refresh">
@@ -74,16 +76,19 @@
     <div data-page-buttons class="button-warp">
         <th:block th:if="${authGroupMenu != null}">
             <th:block th:if="${authGroupMenu.schAh == 'Y'}">
-                <button type="button" class="btn btn-default" data-page-btn="search"><i class="cqc-magnifier"></i> 조회</button>
+                <button type="button" class="btn btn-default" data-page-btn="search"><i class="cqc-magnifier"></i> 조회
+                </button>
             </th:block>
             <th:block th:if="${authGroupMenu.savAh == 'Y'}">
                 <button type="button" class="btn btn-default" data-page-btn="save"><i class="cqc-save"></i> 저장</button>
             </th:block>
             <th:block th:if="${authGroupMenu.delAh == 'Y'}">
-                <button type="button" class="btn btn-default" data-page-btn="delete"><i class="cqc-minus"></i> 삭제</button>
+                <button type="button" class="btn btn-default" data-page-btn="delete"><i class="cqc-minus"></i> 삭제
+                </button>
             </th:block>
             <th:block th:if="${authGroupMenu.exlAh == 'Y'}">
-                <button type="button" class="btn btn-default" data-page-btn="excel"><i class="cqc-download"></i> 엑셀</button>
+                <button type="button" class="btn btn-default" data-page-btn="excel"><i class="cqc-download"></i> 엑셀
+                </button>
             </th:block>
             <th:block th:if="${authGroupMenu.fn1Ah == 'Y'}">
                 <select data-page-btn="fn1" class="btn btn-primary" id="page-refresh">
@@ -188,7 +193,7 @@
 </th:block>
 <th:block layout:fragment="search">
     <div style="float: right; width: 50%;">
-        <div class="src_box3" style="background-color: #fffdd6" >
+        <div class="src_box3" style="background-color: #fffdd6">
             <input type=text style="background-color: #fffdd6">
             <a href="#">
                 <img src="http://localhost:8888/images/search_normal.png" alt="search"></a>
@@ -200,6 +205,6 @@
     <li style="width:30px">
         <div class="bookmark_star"><img src="/assets/images/ams/bookmark.png" alt="즐겨찾기"></div>
     </li>
-    <li style="width:50%; text-align:left;" th:text="${pageName}"></li>
+    <li style="width:50%; text-align:left;" th:text="${pageName==null?'User':pageName}"></li>
 </th:block>
 </html>
