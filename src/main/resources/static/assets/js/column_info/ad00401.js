@@ -57,6 +57,16 @@ var ad00401 =
                 required: true
             },
             {
+                sortNo: 5,
+                name: "treeYN",
+                text: "Tree",
+                width: 70,
+                defaultValue : "N",
+                editable: true,
+                dataType: "check",
+                required: true
+            },
+            {
                 sortNo: 6,
                 name: "description",
                 text: "DESCRIPTION",

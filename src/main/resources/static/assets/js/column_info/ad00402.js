@@ -86,8 +86,8 @@ var ad00402 =
             },
             {
                 sortNo: 6,
-                name: "tree",
-                text: "Tree",
+                name: "treeColumnYN",
+                text: "Tree Column",
                 width: 250,
                 dataType : "check",
                 editable: true,

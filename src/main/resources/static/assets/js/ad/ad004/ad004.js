@@ -15,19 +15,19 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         var _this = this;
 
         if(!data)
-            data = this.formView.getData();
+            data = fnObj.formView.getData();
 
         axboot.ajax({
             type: "POST",
             url: "/ad/ad004/ad004/searchPopupHeader",
             data : JSON.stringify(data),
             async : false,
-            callback: function (list) {
-                if (undefined === list || list.length < 1) {
+            callback: function (res) {
+                if (undefined === res.list || res.list.length < 1) {
                     fnObj.gridView_h.addRow();
                 }
                 else {
-                    fnObj.gridView_h.setData(list);
+                    fnObj.gridView_h.setData(res.list);
                 }
             }
         });
@@ -105,7 +105,8 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             ,data : JSON.stringify({popupHeaderUUID : fnObj.gridView_h.getPopupHeaderUUID()})
             ,callback : function(res)
             {
-
+                fnObj.gridView_h.addDetailList(fnObj.gridView_h.gridObj.getCurrent().rowData,res);
+                fnObj.gridView_d.setData(res);
             }
         });
     },
@@ -153,6 +154,12 @@ fnObj = {
             async : false,
             success: function(){}
         });
+        $.ajax({
+            url: "/assets/js/libs/jquery-ui/jquery-ui.js",
+            dataType: "script",
+            async : false,
+            success: function(){}
+        });
 
         /**/
         _this.formView.initView();
@@ -189,6 +196,72 @@ fnObj.formView = axboot.viewExtend(axboot.formView,{
     */
     ,initEvent: function () {
         var _this = this;
+        $("#check").click(function() {
+            axboot.modal.open({
+                modalType: "COMMON_POPUP",
+                param: "",
+                sendData: function () {
+                    return {
+                        //jisaCode: fnObj.formView02.getData().jisaCode
+                    };
+                },
+                callback: function (data) {
+                    //$("#calleeEmpName").val(data.empName);
+                    //$("#calleeEmpTelno").val(data.empPhoneNo);
+
+                    this.close();
+                }
+            });
+            /*
+            var modal = new ax5.ui.modal();
+            modal.css('<link rel="stylesheet"    type="text/css"     th:href="@{${@environment.getProperty(\'config.extendedCss\')}}"/>');
+            modal.open({
+                width:800,
+                height: 600,
+                closeToEsc: true,
+                iframeLoadingMsg: '<i class="fa fa-spinner fa-5x fa-spin" aria-hidden="true"></i>',
+                iframe: {
+                    method: "get",
+                    url: "/ad/ad004/ad00401",
+                    param: "callback=modalCallback&popupCode=AU001&data='test'"
+                },
+                header: {
+                    title: "MODAL TITLE",
+                    btns: {
+                        minimize: {
+                            label: '<i class="fa fa-minus-circle" aria-hidden="false"></i>', onClick: function () {
+                                modal.minimize();
+                            }
+                        },
+                        maximize: {
+                            label: '<i class="fa fa-plus-circle" aria-hidden="true"></i>', onClick: function () {
+                                modal.maximize();
+                            }
+                        },
+                        close: {
+                            label: '<i class="fa fa-times-circle" aria-hidden="true"></i>', onClick: function () {
+                                modal.close();
+                            }
+                        }
+                    }
+                }
+            }, function () {
+                console.log(this);
+                //this.$["body"].append($("#Popup3").html());
+                this.$["body"].find(".btn_popup_ok").click(function(){
+                });
+                this.$["body"].find(".btn_popup_close").click(function(){
+                    modal.close();
+                });
+            });
+            */
+            //$("#Popup3").dialog("open");
+            //$(".allpop").css("display", "block");
+
+            event.preventDefault();
+
+        });
+
     },
     getData: function () {
         var data = this.modelFormatter.getClearData(this.model.get()); // 모델의 값을 포멧팅 전 값으로 치환.
@@ -228,9 +301,9 @@ fnObj.sqlView = axboot.viewExtend(axboot.baseView,{
     {
         var _this = this;
         this.targetTag = $("#sql");
-        this.targetTag.blur(function(){
+        $("#apply").click(function(){
             _this.convertSQL();
-        });
+        })
     }
     ,setData : function(data)
     {
@@ -250,10 +323,12 @@ fnObj.sqlView = axboot.viewExtend(axboot.baseView,{
     }
     ,convertSQL : function()
     {
-        var regExp = /(SELECT?)((\s?,?([a-zA-Z0-9]*)_?,?)*)(FROM?)((\s?,?([a-zA-Z0-9]*)_?,?)*)/gi;
-        if(regExp.test(this.targetTag.val().toUpperCase()))
+        var regExp = /(SELECT)((\s?,?([a-zA-Z0-9]*)_?,?)*)(FROM)?/gi;
+        var data = this.targetTag.val().toUpperCase();
+        var splitData = data.split("FROM");
+        if(regExp.test(splitData[0]))
         {
-            var columns = this.targetTag.val().toUpperCase().replace(regExp,"$2").replace(/\s/gi,"").split(",");
+            var columns = splitData[0].replace(regExp,"$2").split(",");
             console.log(this.targetTag.val().toUpperCase().replace(regExp,"$2"));
             console.log(columns);
             fnObj.gridView_d.dynamicSetSqlColumns(columns);
@@ -266,9 +341,10 @@ fnObj.sqlView = axboot.viewExtend(axboot.baseView,{
 fnObj.gridView_h = axboot.viewExtend(axboot.realGridView, {
     tagId : "realgrid",
     entityName : "POPUP_HEADER",
-    itemClick : ACTIONS.GET_POPUP_DETAIL,
+    tempList : {},
     initView  : function()
     {
+        var _this = this;
         this.setColumnInfo(ad00401.column_info);
         /*
         this.gridObj.setOption({
@@ -276,10 +352,48 @@ fnObj.gridView_h = axboot.viewExtend(axboot.realGridView, {
         })
         */
         this.makeGrid();
-        this.gridObj.addRowEvent(this.addRowEvent)
+        this.gridObj.addRowBeforeEvent(this.addRowBeforeEvent);
+        this.gridObj.addRowAfterEvent(this.addRowAfterEvent);
+
+        this.gridObj.itemClick(function(data){
+            if(data["popupHeaderUUID"])
+                ACTIONS.dispatch(ACTIONS.GET_POPUP_DETAIL,data);
+            else
+            {
+                var detailData = _this.tempList[_this.gridObj.getCurrent().dataRow];
+                if(detailData)
+                    fnObj.gridView_d.setData(detailData)
+                else
+                    fnObj.gridView_d.clear();
+            }
+        });
+
     },
-    addRowEvent : function()
+    addDetailList : function(rowIdx, data, isReplace)
     {
+        if(isReplace || !this.tempList[rowIdx])
+            this.tempList[rowIdx] = data;
+    },
+    addRowBeforeEvent : function()
+    {
+        var _this = this;
+        var uuid = undefined;
+        axboot.ajax({
+            url : "/ad/ad004/ad004/getUUID",
+            type : "POST",
+            async : false,
+            callback:function(res)
+            {
+                uuid = res.map.uuid;
+            }
+        });
+        var data = _this.gridObj.getDefaulData();
+        data[0] = uuid;
+        _this.gridObj.setDefaulData(data);
+    },
+    addRowAfterEvent : function()
+    {
+        fnObj.gridView_d.setTempData(this.gridObj.getCurrent().dataRow);
         fnObj.gridView_d.clear();
         fnObj.sqlView.clear();
     },
@@ -326,15 +440,55 @@ fnObj.gridView_d = axboot.viewExtend(axboot.realGridView, {
             ,updateUserName : ""
             ,updateDate : ""
         }
-        var detailList = new Array();
-        this.setData([]);
+        var data = undefined;
+
+        var dataProvider = this.gridObj.getGridView().getDataProvider();
+        var compList = dataProvider.getJsonRows();
+
+        var isExistRow = function(list,columnName,columnValue)
+        {
+            var result = false;
+            for(var i = 0; i < list.length; i++)
+            {
+                if(list[i][columnName] == columnValue && !(dataProvider.getRowState(i) == "deleted"))
+                {
+                    result = true;
+                    list.splice(i,1);
+                    break;
+                }
+            }
+            return result;
+        }
+
         for(var i = 0; i < list.length; i++)
         {
             //detailList.push($.extend({},popupDetailTemplate,{sqlColumn : list[i]}))
-            this.gridObj.addRow($.extend({},popupDetailTemplate,{sqlColumn : list[i]}));
+            data = list[i];
+            if(data.includes(" AS "))
+            {
+                data = data.split(" AS ")[1];
+            }
+            else if(data.includes("."))
+            {
+                data = data.split(".")[1];
+            }
+            data = data.replace(/\s/gi,"");
+            if(!isExistRow(compList,"sqlColumn",data))
+            {
+                this.gridObj.addRow($.extend({},popupDetailTemplate,{sqlColumn : data}));
+            }
+        }
+
+        for(var i = 0; i < compList.length;i ++)
+        {
+            var rowIndex = dataProvider.searchDataRow({
+                startIndex: -1
+                ,fields:["sqlColumn"]
+                ,values : [compList[i]["sqlColumn"]]
+            });
+            dataProvider.removeRow(rowIndex);
         }
         //this.setData(detailList,"append");
-
     },
     clear : function () {
         this.setData([]);

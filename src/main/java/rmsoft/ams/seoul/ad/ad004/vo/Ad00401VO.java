@@ -42,6 +42,6 @@ public class Ad00401VO extends BaseVO
 
     private String useYN            = "";
 
-    private String popupSQL         = " ";
+    private String popupSQL         = "";
 
 }

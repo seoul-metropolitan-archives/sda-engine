@@ -86,11 +86,16 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 	//그리드 옵션
 	var gridOption = undefined;
 	var rootContext = p_rootContext;
-	var addRowEventCallback = function(){}
+    var addRowBeforeEventCallback = function(){};
+    var addRowAfterEventCallback = function(){}
     var removeRowEventCallback = function(){}
-    this.addRowEvent = function(_event)
+    this.addRowBeforeEvent = function(_event)
+    {
+        addRowBeforeEventCallback = _event
+    }
+    this.addRowAfterEvent = function(_event)
 	{
-        addRowEventCallback = _event
+        addRowAfterEventCallback = _event
 	}
     this.removeRowEvent = function(_event)
     {
@@ -397,7 +402,6 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
                      }
                  }
              });
-             addRowEventCallback();
          });
 		 $("#"+i_id).parents().eq(1).delegate(".btn_d","click",function(){
 		 	gridView.getDataProvider().removeRow(gridView.getCurrent().dataRow);
@@ -679,9 +683,13 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 				case "check":
 					obj.renderer = $.extend({},defaultStyle.data.check,data.renderer);
 					obj.editable = false;
+
+					if(!data.defaultValue)
+                        data.defaultValue = "Y";
+
 					obj.defaultValue = data.defaultValue;
                     fieldObj.defaultValue = data.defaultValue;
-                    defaultData.push("");
+                    defaultData.push(data.defaultValue);
 					break;
 				case "button":
 					obj.button = "image";
@@ -715,10 +723,20 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 
 		return dataProvider.getRows();
 	};
+	this.setDefaultData = function(_data)
+	{
+		return defaultData = _data;
+	}
+	this.getDefaulData = function()
+	{
+		return defaultData;
+	}
 	this.addRow = function(obj) {
 		return _addRow(obj);
 	};
+
 	var _addRow = function(obj) {
+        addRowBeforeEventCallback();
 		var validate = false;
 		if (undefined === obj && appendValidate()) {
 			gridView.getDataProvider().addRow(defaultData);
@@ -732,6 +750,7 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 			gridView.getDataProvider().addRow(obj);
 			_doSave = true;
 		}
+		addRowAfterEventCallback();
 	};
 
 	//셀렉트 된 행 데이터 가져오는 함수

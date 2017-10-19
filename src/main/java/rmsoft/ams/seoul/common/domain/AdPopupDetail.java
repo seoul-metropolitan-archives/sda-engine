@@ -2,6 +2,7 @@ package rmsoft.ams.seoul.common.domain;
 
 import io.onsemiro.core.annotations.Comment;
 import io.onsemiro.core.domain.BaseJpaModel;
+import io.onsemiro.core.domain.SimpleJpaModel;
 import lombok.*;
 import org.apache.ibatis.type.Alias;
 import org.hibernate.annotations.DynamicInsert;
@@ -19,7 +20,7 @@ import java.io.Serializable;
 @IdClass(AdPopupDetail.AdPopupDetailId.class)
 @Alias("Ad004_D")
 @Table(name = "AD_POPUP_DETAIL")
-public class AdPopupDetail extends BaseJpaModel<AdPopupDetail.AdPopupDetailId>
+public class AdPopupDetail extends SimpleJpaModel<AdPopupDetail.AdPopupDetailId>
 {
     @Id
     @Column(name="POPUP_DETAIL_UUID")

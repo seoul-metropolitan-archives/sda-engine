@@ -134,7 +134,7 @@
                     url: "/common/common-popup"
                 },
                 header: {
-                    title: "Sample Modal"
+                    title: "팝업"
                 }
             },
         };

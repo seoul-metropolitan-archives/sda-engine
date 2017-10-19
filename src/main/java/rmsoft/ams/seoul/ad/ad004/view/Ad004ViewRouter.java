@@ -4,6 +4,7 @@ import io.onsemiro.controller.BaseController;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import rmsoft.ams.seoul.utils.CommonCodeUtils;
 
 @Controller
@@ -24,6 +25,11 @@ public class Ad004ViewRouter extends BaseController {
             model.addAttribute("errorClassifyCode", CommonCodeUtils.get("ERROR_CLASSIFY_CODE"));
         */
         return "/ad/ad004/ad004";
+    }
+    @GetMapping("/ad/ad004/ad00401")
+    @PostMapping("/ad/ad004/ad00401")
+    public String view2(ModelMap model) {
+        return "/ad/ad004/ad00401";
     }
 }
 
