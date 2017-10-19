@@ -1,4 +1,8 @@
-package rmsoft.ams.seoul.common;
+/*
+ * Copyright (c) 2017. RMSoft Co.,Ltd. All rights reserved
+ */
+
+package rmsoft.ams.seoul.common.controller;
 
 import io.onsemiro.core.domain.user.SessionUser;
 import io.onsemiro.utils.PhaseUtils;

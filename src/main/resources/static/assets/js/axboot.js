@@ -76,7 +76,7 @@ axboot.init = function () {
         if (typeof parent.COMMON_CODE === "undefined" && window.SCRIPT_SESSION && SCRIPT_SESSION.login) {
             // API : /api/v1/commonCodes/getAllByMap
             axboot.ajax({
-                url: "/api/v1/common-code/getAllByMap",
+                url: "/api/v1/ad/ad003/getAllByMap",
                 callback: function callback(res) {
                     parent.COMMON_CODE = axboot.convertCode(res);
                     axboot.pageStart();
@@ -282,6 +282,9 @@ axboot.ajax = function () {
     return function (http) {
         var jqxhr, httpOpts, callback;
         var options = $.extend(true, {}, defaultOption, http.options);
+
+        if(!options.onError) options.onError = axboot.viewError;
+
         if (!options.nomask) axAJAXMask.open();
 
         queue.push("1");

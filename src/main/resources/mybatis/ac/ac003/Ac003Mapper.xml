@@ -18,17 +18,17 @@
         NOTES notes,
         USE_YN useYn,
         <include refid="Common.UserName">
-            <property name="userUuid" value="INSERT_UUID"/>
+            <property name="userUuid" value="Z.INSERT_UUID"/>
         </include>
         as insertUuid,
         INSERT_DATE as insertDate,
         <include refid="Common.UserName">
-            <property name="userUuid" value="UPDATE_UUID"/>
+            <property name="userUuid" value="Z.UPDATE_UUID"/>
         </include>
         as updateUuid,
         UPDATE_DATE as updateDate
         FROM
-        AC_USER
+        AC_USER Z
         <where>
             <if test="userId != null">
                 USER_ID LIKE '%' || #{userId} || '%'

@@ -482,7 +482,8 @@ fnObj.tabView = axboot.viewExtend({
                 progNm: item.progNm,
                 menuNm: item.menuNm,
                 progPh: item.progPh,
-                url: CONTEXT_PATH + item.progPh + "?menuId=" + item.menuId,
+                menuParams: item.menuParams,
+                url: CONTEXT_PATH + item.progPh + "?menuId=" + item.menuId +"&menuParams=" + item.menuParams,
                 status: "on"
             });
             _item = this.list[this.list.length - 1];

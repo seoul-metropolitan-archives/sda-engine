@@ -101,8 +101,8 @@
             },
             "SEARCH_CORNER_MODAL": {
                 width: 500,
-                    height: 500,
-                    iframe: {
+                height: 500,
+                iframe: {
                     url: "/mng/common/search-corner-modal"
                 },
                 header: {
@@ -126,7 +126,17 @@
                     url: "/jsp/system/system-config-common-code-modal.jsp"
                 },
                 header: false
-            }
+            },
+            "COMMON_POPUP": {
+                width: 700,
+                height: 500,
+                iframe: {
+                    url: "/common/common-popup"
+                },
+                header: {
+                    title: "Sample Modal"
+                }
+            },
         };
     }
 

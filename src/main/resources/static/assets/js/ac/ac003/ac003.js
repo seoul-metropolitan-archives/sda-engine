@@ -47,14 +47,17 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         return false;
     },
     PAGE_SAVE: function (caller, act, data) {
-        axDialog.confirm({
+        ACTIONS.dispatch(ACTIONS.MODAL_OPEN);
+
+
+        /*axDialog.confirm({
             msg: "Do you want to save all items?"
         }, function () {
             if (this.key == "ok") {
                 var updateList;
 
                 var saveList = [].concat(fnObj.gridView01.getData()); // 추가되어서 수정된건
-                /*saveList.forEach(function (n) {
+                /!*saveList.forEach(function (n) {
                     n.isDeleted = false;
                 });
 
@@ -62,13 +65,13 @@ var ACTIONS = axboot.actionExtend(fnObj, {
 
                 deleteList.forEach(function (n) {
                     n.isDeleted = true;
-                });*/
+                });*!/
 
-               /* if (saveList.length > 0) {
-                    updateList = saveList;
-                } else if (deleteList.length > 0) {
-                    updateList = deleteList;
-                }*/
+                /!* if (saveList.length > 0) {
+                     updateList = saveList;
+                 } else if (deleteList.length > 0) {
+                     updateList = deleteList;
+                 }*!/
 
                 axboot
                     .call({
@@ -83,7 +86,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                         axToast.push("저장 작업이 완료되었습니다.");
                     });
             }
-        });
+        });*/
     },
     FORM_CLEAR: function (caller, act, data) {
         /*
@@ -100,23 +103,21 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     ITEM_CLICK: function (caller, act, data) {
     },
     MODAL_OPEN: function (caller, act, data) {
-        /*
         axboot.modal.open({
-            modalType: "SEARCH_AGENT_MODAL",
+            modalType: "COMMON_POPUP",
             param: "",
             sendData: function () {
                 return {
-                    jisaCode: fnObj.formView02.getData().jisaCode
+                    //jisaCode: fnObj.formView02.getData().jisaCode
                 };
             },
             callback: function (data) {
-                $("#calleeEmpName").val(data.empName);
-                $("#calleeEmpTelno").val(data.empPhoneNo);
+                //$("#calleeEmpName").val(data.empName);
+                //$("#calleeEmpTelno").val(data.empPhoneNo);
 
                 this.close();
             }
         });
-        */
     },
     dispatch: function (caller, act, data) {
         var result = ACTIONS.exec(caller, act, data);

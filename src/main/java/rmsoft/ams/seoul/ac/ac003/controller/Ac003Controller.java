@@ -1,13 +1,11 @@
 package rmsoft.ams.seoul.ac.ac003.controller;
 
 import io.onsemiro.controller.BaseController;
+import io.onsemiro.core.api.ApiException;
 import io.onsemiro.core.api.response.ApiResponse;
 import io.onsemiro.core.api.response.Responses;
-import io.onsemiro.core.code.AXBootTypes;
+import io.onsemiro.core.code.ApiStatus;
 import io.onsemiro.core.parameter.RequestParams;
-import io.onsemiro.utils.DateUtils;
-import io.onsemiro.utils.ModelMapperUtils;
-import io.onsemiro.utils.UUIDUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -42,7 +40,7 @@ public class Ac003Controller extends BaseController {
     }
 
     @GetMapping("/01/details")
-    public AcUser details(RequestParams<Ac00301VO> requestParams) {
+    public AcUser details(@RequestBody Ac00301VO requestParams) {
         return ac003Service.findOne(requestParams);
     }
 
@@ -63,39 +61,12 @@ public class Ac003Controller extends BaseController {
     @PutMapping(value = "/01/save")
     @PostMapping
     public ApiResponse saveUser(@RequestBody List<Ac00301VO> requestParams) {
+        ApiResponse apiResponse = ac003Service.saveUser(requestParams);
 
-        for (Ac00301VO ac00301VO : requestParams) {
-            AcUser acUser = ModelMapperUtils.map(ac00301VO, AcUser.class);
-            //AcUser orgAcUser = ac003Service.findOne(ac00301VO);
-
-            //TODO 임시 코드
-            if(ac00301VO.getUseYn().equals("false")){
-                acUser.setUseYn(AXBootTypes.Used.NO);
-            }else{
-                acUser.setUseYn(AXBootTypes.Used.YES);
-            }
-
-            if (acUser.getPasswordUpdateDate() == null) {
-                acUser.setPasswordUpdateDate(DateUtils.getTimestampNow());
-            }
-
-            if (acUser.getInsertDate() == null) {
-                acUser.setInsertDate(DateUtils.getTimestampNow());
-            }
-
-
-            if (ac00301VO.isDeleted()) {
-                ac003Service.deleteUser(acUser);
-            } else if (ac00301VO.isModified()) {
-                ac003Service.saveUser(acUser);
-            } else {
-                // Created
-                // TODO Insert Validation 필요
-                acUser.setUserUuid(UUIDUtils.getUUID());
-                ac003Service.saveUser(acUser);
-
-            }
+        if (apiResponse.getStatus() == -1) {
+            throw new ApiException(ApiStatus.SYSTEM_ERROR, apiResponse.getMessage());
         }
-        return ok();
+
+        return apiResponse;
     }
 }
