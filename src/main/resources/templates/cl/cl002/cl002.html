@@ -1,10 +1,216 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout/base}">
 
-</body>
+<!-- ===== [ script ] ===== -->
+<!--realgrid -->
+<script layout:fragment="script" type="text/javascript" th:src="@{/assets/js/ac/ac003/rg_ac003.js}"></script>
+
+<!-- ===== [ script ] _END_ ===== -->
+
+<!-- ===== [ base-title ] _END_ ===== -->
+
+<!-- ===== [ base-content ] ===== -->
+<div layout:fragment="base-content" class="ax-base-content">
+    <div class="cssBody" style="top:80px">
+        <div class="contents_wrap">
+            <div style=" height:31px; width:100%" class="bgf7 div_tablerow">
+                <ul class="bdb">
+                    <th:block layout:insert="~{/fragments/page-buttons :: bookmark}"/>
+                    <th:block layout:insert="~{/fragments/page-buttons :: save-and-inquiry}"/>
+                </ul>
+            </div>
+            <div class="bdb div_tablerow">
+                <dl>
+                    <dt class="pdl_5 w150">Classification Scheme</dt>
+                    <dd>
+                        <div class="src_box2" style="background-color: #fffdd6">
+                            <input type=text style="background-color: #fffdd6">
+                            <a href="#" id="dialog-link">
+                                <img src="http://localhost/@AMS/images/search_normal.png" alt="find"></a>
+                        </div>
+                    </dd>
+                    <dt class="w150">Parent Class Code</dt>
+                    <dd>
+                        <div class="src_box2">
+                            <input type=text>
+                            <a href="#" id="dialog-link">
+                                <img src="http://localhost/@AMS/images/search_normal.png" alt="find"></a>
+                        </div>
+                    </dd>
+
+                    <dt class="w150">Parent Class Name</dt>
+                    <dd>
+                        <input type=text style="width:135px">
+                    </dd>
+
+                </dl>
+                <dl>
+                    <dt class="w150 pdl_5">Status</dt>
+                    <dd>
+                        <select data-ax-path="statusUuid" style="width:135px;">
+                            <option value=""></option>
+                            <option th:each="item : ${statusUuid}" th:value="${item.codeDetailUUID}"
+                                    th:text="${item.codeName}"/>
+                        </select>
+                    </dd>
+
+
+                    <dt class="w150">Class Code</dt>
+                    <dd>
+                        <input type=text style="width:135px">
+                    </dd>
+                    <dt class="w150">Class Name</dt>
+                    <dd>
+                        <input type=text style="width:135px">
+                    </dd>
+
+                </dl>
+                <dl>
+                    <dt class="pdl_5 w150">Class Level</dt>
+                    <dd>
+                        <select data-ax-path="classLevel" style="width:135px;">
+                            <option value=""></option>
+                            <option th:each="item : ${classLevel}" th:value="${item.codeDetailUUID}"
+                                    th:text="${item.codeName}"/>
+                        </select>
+                    </dd>
+                    <dd class="w_auto">
+                        <div class="rdo_box">
+                            <span class="rdo_box_title">Use</span>
+                            <label>
+                                <input type="radio" name="radio" class="no_border">Yes</label>
+                            <label>
+                                <input type="radio" name="radio" class="no_border">No</label>
+                            <label>
+                                <input type="radio" name="radio" class="no_border" checked>All</label>
+                        </div>
+                    </dd>
+                </dl>
+
+            </div>
+            <div style="height:100%; width:100%" class="div_tablerow">
+
+                <div style="display:table; height:100%; width:15%; float:left" class="bdr">
+                    <ul class="bdb bdt div_tablerow bgf7" style="height:30px;">
+                        <th:block layout:insert="~{/fragments/page-buttons :: dot('Class Tree')}"/>
+                    </ul>
+
+                    <ul class="bdb div_tablerow" style="height:25px;">
+                        <li style="width:100%; text-align:left;">
+                            <input type=text class="yeongye" value="Classification Scheme Name" readonly style="width:99.3%">
+                        </li>
+                    </ul>
+
+                    <ul class="bdb" style="height:25px;width:100%; float:left;">
+                        <li style="width:77%">
+                            <input type="text" style="width:100%; margin-left: 0.5%;">
+                        </li>
+                        <li style="width:22%">
+                            <button class="btn_small" style="margin-right: 0">Find</button>
+                        </li>
+                    </ul>
+
+                    <ul class="bdb" style="height:30px;width:100%; float:left">
+                        <li class="bdr"><a href="#" class="open_close" id="rg_tree_allopen">Expand All</a></li>
+                        <li><a href="#" class="open_close" id="rg_tree_allclose">Collapse All</a></li>
+                    </ul>
+
+                    <div style="height:100%; width:100%" class="div_tablerow bdb">
+                        <div id="realgridT1" style="width:100%; height:100%"></div>
+                    </div>
+                </div>
+
+
+                <div style="display:table; height:100%; width:65%; float:left" class="bdr">
+                    <ul class="bdb bdt div_tablerow bgf7" style="height:30px;">
+                        <th:block layout:insert="~{/fragments/page-buttons :: dot('Class List')}"/>
+                        <th:block layout:insert="~{/fragments/page-buttons :: add-and-delete}"/>
+                    </ul>
+                    <ul class="bdb div_tablerow" style="height:25px;">
+                        <li style="width:100%; text-align:left;">
+                            <input type=text class="yeongye" value="Class Name" readonly style="width:208px">
+                        </li>
+                    </ul>
+
+                    <div style="height:100%; width:100%" class="div_tablerow bdb">
+                        <div id="realgrid" style="width:100%; height:100%"></div>
+                    </div>
+                </div>
+
+
+
+                <div style="display:table; height:100%; width:20%; float:right">
+                    <ul class="bdb bdt div_tablerow bgf7" style="height:30px;">
+                        <li style="width:88%; text-align:left;">
+                            <th:block layout:insert="~{/fragments/page-buttons :: dot('Class Details')}"/>
+                    </ul>
+                    <div style="height:100%; width:100%;" class="div_tablerow bdb">
+                        <div style="height: 100%; width: 100%; overflow-y: scroll; overflow-x: hidden; ">
+                            <div style="height: 100%; width: 98%; float: right">
+
+                                <ul style="width: 100%; height: 30px; ">
+                                    <li style="width: 25%;text-align: left">Class Name</li>
+                                    <li style="width: 75%">
+                                        <input type=text style="width:97%" class="bgf7" readonly>
+                                    </li>
+                                </ul>
+
+                                <ul style="width: 100%; height: 30px;">
+                                    <li style="width: 25%;text-align: left">Path</li>
+                                    <li style="width: 75%">
+                                        <input type=text style="width:97%" class="bgf7" readonly>
+                                    </li>
+                                </ul>
+
+                                <ul style="width: 100%; height: 30px;">
+                                    <li style="width: 25%;text-align: left">Class Level</li>
+                                    <li style="width: 75%">
+                                        <input type=text style="width:97%" class="bgf7" readonly>
+                                    </li>
+                                </ul>
+
+                                <ul style="width: 100%; height: 30px;">
+                                    <li style="width: 25%;text-align: left">Add Meta1</li>
+                                    <li style="width: 75%">
+                                        <input type=text style="width:97%">
+                                    </li>
+                                </ul>
+
+                                <ul style="width: 100%; height: 30px;">
+                                    <li style="width: 25%;text-align: left">Add Meta2</li>
+                                    <li style="width: 75%">
+                                        <input type=text style="width:97%">
+                                    </li>
+                                </ul>
+
+                                <ul style="width: 100%; height: 30px;">
+                                    <li style="width: 25%;text-align: left">Add Meta3</li>
+                                    <li style="width: 75%">
+                                        <input type=text style="width:97%">
+                                    </li>
+                                </ul>
+
+                                <ul style="width: 100%; height: 30px;">
+                                    <li style="width: 25%;text-align: left">Add Meta4</li>
+                                    <li style="width: 75%">
+                                        <input type=text style="width:97%">
+                                    </li>
+                                </ul>
+
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+
+        </div><!--오른쪽 내용영역 전체 e -->
+    </div>
+    <!-- ===== [ base-content ] _END_ ===== -->
 </html>

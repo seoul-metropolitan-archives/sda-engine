@@ -31,6 +31,7 @@ button.btn_small {
     box-sizing: border-box;
     font-weight: bold;
     line-height: 0px;
+    font-family: "nanum"
 }
 
 .btn_basic2 {
@@ -99,7 +100,7 @@ button.btn_small {
     box-sizing: border-box;
 }
 
-button.btn_a, button.btn_d, button.btn_s, button.btn_i{
+button.btn_a, button.btn_d, button.btn_s, button.btn_i, button.btn_ap, button.btn_co{
     background-image: url(/assets/images/ams/icon_main.png);
     border: 1px solid #ddd;
     width: 100px;
@@ -115,39 +116,66 @@ button.btn_a{
 }
 
 button.btn_a:hover{
-    background-position: -97px -6px;    
+    background-position: -97px -6px;
 }
 
 /*오른쪽 상단버튼 - 삭제*/
-button.btn_d{ 
+button.btn_d{
     background-position: 0px -40px;
 }
 
 button.btn_d:hover{
-    background-position: -97px -40px;    
+    background-position: -97px -40px;
 }
 
 /*오른쪽 상단버튼 - 저장*/
-button.btn_s{ 
+button.btn_s{
     background-position: -1px -74px;
 }
 
 button.btn_s:hover{
-    background-position: -98px -74px;    
+    background-position: -98px -74px;
 }
 
 /*오른쪽 상단버튼 - 검색*/
-button.btn_i{ 
+button.btn_i{
     background-position: -1px -108px;
 }
 button.btn_i:hover{
-    background-position: -98px -108px;    
+    background-position: -98px -108px;
 }
+
+/*오른쪽 상단버튼 - apply*/
+button.btn_ap{
+    background-position: -1px -142px;
+}
+button.btn_ap:hover{
+    background-position: -98px -142px;
+}
+
+/*오른쪽 상단버튼 - 공통버튼이미지*/
+button.btn_co{
+    background-position: -1px -176px;
+}
+button.btn_co:hover{
+    background-position: -98px -176px;
+}
+
 
 .btn_icon{
     float: left;
     border-right: 1px solid #dddddd;
     width: 30px;
+    height: 100%;
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+.btn_icon_co{
+    float: left;
+    border-right: 1px solid #dddddd;
+    width: 20px;
     height: 100%;
     box-sizing: border-box;
     padding: 0;
@@ -165,18 +193,18 @@ button.btn_i:hover{
     box-sizing: border-box;
     text-align: center;
     font-weight: bold;
-    
+
 }
 /*2017-02-19 추가 배영란*/
 
 /*button.btn_aa, button.btn_dd, button.btn_ss, button.btn_ii{
-    background-image: url(..//assets/images/ams/icon_main.png);
+    background-image: url(../images/icon_main.png);
     border: 1px solid #ddd;
     width: 87px;
     height: 23px;
     box-sizing: border-box;
     padding: 0;
-   
+
 }
 
 button.btn_aa{
@@ -184,33 +212,33 @@ button.btn_aa{
 }
 
 button.btn_aa:hover{
-    background-position: -92px -6px;    
+    background-position: -92px -6px;
 }*/
 
 /*오른쪽 상단버튼 - 삭제*/
-/*button.btn_dd{ 
+/*button.btn_dd{
     background-position: -5px -40px;
 }
 
 button.btn_dd:hover{
-    background-position: -92px -40px;    
+    background-position: -92px -40px;
 }*/
 
 /*오른쪽 상단버튼 - 저장*/
-/*button.btn_ss{ 
+/*button.btn_ss{
     background-position: -5px -74px;
 }
 
 button.btn_ss:hover{
-    background-position: -92px -74px;    
+    background-position: -92px -74px;
 }*/
 
 /*오른쪽 상단버튼 - 검색*/
-/*button.btn_ii{ 
+/*button.btn_ii{
     background-position: -5px -108px;
 }
 button.btn_ii:hover{
-    background-position: -92px -108px;    
+    background-position: -92px -108px;
 }*/
 
 /*.btn_icon2{

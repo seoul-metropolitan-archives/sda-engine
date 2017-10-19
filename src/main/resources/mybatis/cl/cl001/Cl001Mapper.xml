@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="rmsoft.ams.seoul.cl.cl001.dao.Cl001Mapper">
+
+    <select id="getClassificationSchemeList" resultType="Cl00101VO" parameterType="Cl00101VO" statementType="PREPARED">
+        SELECT
+          CLASSIFICATION_SCHEME_UUID as classificationSchemeUuid,
+          STATUS_UUID as statusUuid,
+          CLASSIFICATION_CODE as classificationCode,
+          CLASSIFICATION_NAME as classificationName,
+          CLASSIFICATION_TYPE_UUID as classificationTypeUuid,
+          ORDER_NO as orderNo,
+          DESCRIPTION as descrtiption,
+          NOTES as notes,
+          USE_YN as useYn,
+        <include refid="Common.UserName"><property name="userUuid" value="INSERT_UUID"/></include> as insertUuid,
+         INSERT_DATE as insertDate,
+        <include refid="Common.UserName"><property name="userUuid" value="UPDATE_UUID"/></include> as updateUuid,
+         UPDATE_DATE as updateDate
+        FROM
+        CL_CLASSIFICATION_SCHEME
+    </select>
+</mapper>

@@ -486,7 +486,8 @@ textarea {
 }
 
 button {
-    overflow: visible
+    overflow: visible;
+    margin-right: 8px;
 }
 
 button,
@@ -25463,7 +25464,16 @@ a.big_close{
     min-width: 1280px;
 
 }
-
+.backstretch{
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    top: 100px;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    z-index: -1;
+}
 .header a {
     width: auto;
     color: #fff;
@@ -25526,6 +25536,7 @@ a.big_close{
     display: table-cell;
     vertical-align: middle;
     width: 50%;
+    padding:0 1px 0 0;
 }
 
 .cssBody dl {

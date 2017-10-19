@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="rmsoft.ams.seoul.cl.cl003.dao.Cl003Mapper">
+
+    <select id="getClassifiedRecordList" resultType="Cl00301VO" parameterType="Cl00301VO" statementType="PREPARED">
+        SELECT
+         CLASSIFIED_RECORDS_UUID as classifiedRecordsUuid,
+         STATUS_UUID as statusUuid,
+         CLASS_UUID as classUuid,
+         AGGREGATION_ID as aggregationId,
+         ITEM_UUID as itemUuid,
+         CLASSIFIED_DATE as classifiedDate,
+        <include refid="Common.UserName"><property name="userUuid" value="INSERT_UUID"/></include> as insertUuid,
+         INSERT_DATE as insertDate,
+        <include refid="Common.UserName"><property name="userUuid" value="UPDATE_UUID"/></include> as updateUuid,
+         UPDATE_DATE as updateDate
+        FROM
+        CL_CLASSIFIED_RECORDS
+    </select>
+</mapper>

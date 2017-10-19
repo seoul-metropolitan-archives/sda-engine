@@ -145,7 +145,7 @@
     </li>
 </th:block>
 <!--Add 버튼 & Delete 버튼-->
-<th:block layout:fragment="add-and-delete (id)">
+<th:block layout:fragment="add-and-delete">
     <li style="text-align:right; width:68%;">
         <button class="btn_a">
             <span class="btn_icon">&nbsp;</span>
@@ -157,6 +157,28 @@
         </button>
     </li>
 </th:block>
+<!--Confirm 버튼 & Cancle 버튼 & Add 버튼 & Delete 버튼-->
+<th:block layout:fragment="confirm-and-cancle-and-save-and-inquiry">
+    <li style="text-align:right; width:48%;">
+        <button class="btn_co">
+            <span class="btn_icon_co">&nbsp;</span>
+            <span class="btn_main_txt">Confirm</span>
+        </button>
+        <button class="btn_co">
+            <span class="btn_icon_co">&nbsp;</span>
+            <span class="btn_main_txt">Cancel</span>
+        </button>
+        <button class="btn_s" th:id="save">
+            <span class="btn_icon">&nbsp;</span>
+            <span class="btn_main_txt">Save(S)</span>
+        </button>
+        <button class="btn_i" th:id="inquiry">
+            <span class="btn_icon">&nbsp;</span>
+            <span class="btn_main_txt">Inquiry(I)</span>
+        </button>
+    </li>
+</th:block>
+
 <!--Add 버튼 & Delete 버튼-->
 <th:block layout:fragment="dot (str)">
     <li style="width:50%; text-align:left;">
@@ -164,6 +186,16 @@
         <span th:text="${str}"></span>
     </li>
 </th:block>
+<th:block layout:fragment="search">
+    <div style="float: right; width: 50%;">
+        <div class="src_box3" style="background-color: #fffdd6" >
+            <input type=text style="background-color: #fffdd6">
+            <a href="#">
+                <img src="http://localhost:8888/images/search_normal.png" alt="search"></a>
+        </div>
+    </div>
+</th:block>
+<!--북마크-->
 <th:block layout:fragment="bookmark">
     <li style="width:30px">
         <div class="bookmark_star"><img src="/assets/images/ams/bookmark.png" alt="즐겨찾기"></div>

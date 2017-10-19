@@ -1,40 +1,29 @@
 package rmsoft.ams.seoul.cl.cl001.controller;
 
+import io.onsemiro.controller.BaseController;
+import io.onsemiro.core.api.response.Responses;
+import io.onsemiro.core.parameter.RequestParams;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import rmsoft.ams.seoul.cl.cl001.vo.Cl00101VO;
 import rmsoft.ams.seoul.cl.cl001.service.Cl001Service;
 
-import java.util.HashMap;
 
 @RestController
-@RequestMapping("/cl/cl001")
-public class Cl001Controller
-{
+@RequestMapping("/api/v1/cl001/")
+public class Cl001Controller extends BaseController{
 
     @Autowired
-    private Cl001Service service;
+    private Cl001Service cl001Service;
 
-    @RequestMapping("/getServiceList.do")
-    @ResponseBody
-    public Object searchPopupHeader()
-    {
-        HashMap<String,Object> response = new HashMap<String,Object>();
-        HashMap<String,Object> header = new HashMap<String,Object>();
-        HashMap<String,Object> body = new HashMap<String,Object>();
-        response.put("header",header);
-        response.put("body",body);
+    @GetMapping("/01/list")
+    public Responses.PageResponse getClassificationSchemeList(Pageable pageable, RequestParams<Cl00101VO> requestParams) {
+        Page<Cl00101VO> pages = cl001Service.getClassificationSchemeList(pageable, requestParams);
 
-        try
-        {
-            header.put("result",true);
-            body.put("list",service.getServiceList());
-        }catch(Exception ex)
-        {
-            header.put("result",false);
-        }
-
-        return response;
+        return Responses.PageResponse.of(pages.getContent(), pages);
     }
 }

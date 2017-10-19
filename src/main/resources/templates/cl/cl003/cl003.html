@@ -1,10 +1,216 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout/base}">
 
-</body>
+<!-- ===== [ script ] ===== -->
+<!--realgrid -->
+<script layout:fragment="script" type="text/javascript" th:src="@{/assets/js/ac/ac003/rg_ac003.js}"></script>
+
+<!-- ===== [ script ] _END_ ===== -->
+
+<!-- ===== [ base-title ] _END_ ===== -->
+
+<!-- ===== [ base-content ] ===== -->
+<div layout:fragment="base-content" class="ax-base-content">
+    <div class="cssBody" style="top:80px">
+        <div class="contents_wrap">
+            <div style=" height:30px; width:100%" class="bgf7 div_tablerow">
+                <ul class="bdb">
+                    <li style="width:30px">
+                        <div class="bookmark_star"><img src="images/bookmark.png" alt="bookmark"></div>
+                    </li>
+                    <li style="width:50%; text-align:left;">Classified Records</li>
+                    <li style="text-align:right; width:48%;">
+                        <button class="btn_co"  id="dialog-link5">
+                            <span class="btn_icon_co">&nbsp;</span>
+                            <span class="btn_main_txt">Classify</span>
+                        </button>
+                        <button class="btn_s">
+                            <span class="btn_icon">&nbsp;</span>
+                            <span class="btn_main_txt">Save(S)</span>
+                        </button>
+                        <button class="btn_i">
+                            <span class="btn_icon">&nbsp;</span>
+                            <span class="btn_main_txt">Inquiry(I)</span>
+                        </button>
+                    </li>
+                </ul>
+            </div>
+            <div class="bdb div_tablerow">
+                <dl>
+                    <dt class="pdl_5">Role</dt>
+                    <dd>
+                        <div class="src_box2" ><input type=text>
+                            <a href="#" id="dialog-link5">
+                                <img src="http://localhost/@AMS/images/search_normal.png" alt="search"></a>
+                        </div>
+                    </dd>
+                    <dd class="w_auto">
+                        <div style="float: right; width: 100%;">
+                            <div class="src_box3" style="background-color: #fffdd6" >
+                                <input type=text style="background-color: #fffdd6">
+                                <a href="#">
+                                    <img src="http://localhost/@AMS/images/search_normal.png" alt="search"></a>
+                            </div>
+                        </div>
+                    </dd>
+                </dl>
+
+            </div>
+
+            <div style="height:100%; width:100%" class="div_tablerow">
+
+                <div style="display:table; height:100%; width:16%; float:left" class="bdr">
+                    <ul class="bdb bdt div_tablerow bgf7" style="height:30px;">
+                        <li style="width:80%; text-align:left;">
+                            <img src="images/img_dot2.png" alt="dot">Class</li>
+                        <li style="text-align:right; width:18%;">
+
+                        </li>
+                    </ul>
+
+                    <ul class="bdb" style="height:30px;width:100%; float:left">
+                        <li class="bdr"><a href="#" class="open_close" id="rg_tree_allopen">Expand All</a></li>
+                        <li><a href="#" class="open_close" id="rg_tree_allclose">Collapse All</a></li>
+                    </ul>
+                    <div style="height:100%; width:100%" class="div_tablerow bdb">
+                        <div id="realgridT1" style="width:100%; height:100%"></div>
+                    </div>
+                </div><!--오늘쪽 내용에서 좌측 트리부분-->
+
+                <div style="display:table; height:100%; width:84%; float:left">
+
+                    <ul class="bdt bdb bgf7 div_tablerow" style="height:30px;">
+                        <li style="width:10%; text-align:left;">
+                            <img src="images/img_dot2.png" alt="dot">Aggregation</li>
+                        <li style="text-align:right; width:88%;">
+                            <button class="btn_co">
+                                <span class="btn_icon_co">&nbsp;</span>
+                                <span class="btn_main_txt">Inquiry</span>
+                            </button>
+                            <button class="btn_co">
+                                <span class="btn_icon_co">&nbsp;</span>
+                                <span class="btn_main_txt">Confrim</span>
+                            </button>
+                            <button class="btn_co">
+                                <span class="btn_icon_co">&nbsp;</span>
+                                <span class="btn_main_txt">Cancel</span>
+                            </button>
+                            <button class="btn_a">
+                                <span class="btn_icon">&nbsp;</span>
+                                <span class="btn_main_txt">Add</span>
+                            </button>
+                            <button class="btn_d">
+                                <span class="btn_icon">&nbsp;</span>
+                                <span class="btn_main_txt">Delete</span>
+                            </button>
+                        </li>
+                    </ul>
+                    <div style="height: 100%; width:100%;" class="div_tablerow" id="test">
+                        <div style="width:100%; overflow-x: hidden; overflow-y:scroll;" height="{() - 100}">
+                            <div style="float: left; width: 100%; min-height: 120%;">
+
+                                <div style="float: left; width: 200px; height: 200px"><img src="/assets/images/explorer_folder_b.jpg"></div>
+                                <div style="float: left; width: 200px; height: 200px"><img src="/assets/images/explorer_folder_b.jpg"></div>
+                                <div style="float: left; width: 200px; height: 200px"><img src="/assets/images/explorer_folder_b.jpg"></div>
+                                <div style="float: left; width: 200px; height: 200px"><img src="/assets/images/explorer_folder_b.jpg"></div>
+                                <div style="float: left; width: 200px; height: 200px"><img src="/assets/images/explorer_folder_b.jpg"></div>
+                                <div style="float: left; width: 200px; height: 200px"><img src="/assets/images/explorer_folder_b.jpg"></div>
+                                <div style="float: left; width: 200px; height: 200px"><img src="/assets/images/explorer_folder_b.jpg"></div>
+                                <div style="float: left; width: 200px; height: 200px"><img src="/assets/images/explorer_folder_b.jpg"></div>
+                                <div style="float: left; width: 200px; height: 200px"><img src="/assets/images/explorer_folder_b.jpg"></div>
+                                <div style="float: left; width: 200px; height: 200px"><img src="/assets/images/explorer_folder_b.jpg"></div>
+                                <div style="float: left; width: 200px; height: 200px"><img src="/assets/images/explorer_folder_b.jpg"></div>
+                                <div style="float: left; width: 200px; height: 200px"><img src="/assets/images/explorer_folder_b.jpg"></div>
+                                <div style="float: left; width: 200px; height: 200px"><img src="/assets/images/explorer_folder_b.jpg"></div>
+                                <div style="float: left; width: 200px; height: 200px"><img src="/assets/images/explorer_folder_b.jpg"></div>
+                                <div style="float: left; width: 200px; height: 200px"><img src="/assets/images/explorer_folder_b.jpg"></div>
+                                <div style="float: left; width: 200px; height: 200px"><img src="/assets/images/explorer_folder_b.jpg"></div>
+                                <div style="float: left; width: 200px; height: 200px"><img src="/assets/images/explorer_folder_b.jpg"></div>
+
+                                <div style="float: left; width: 200px; height: 200px"><img src="/assets/images/explorer_folder_b.jpg"></div>
+                                <div style="float: left; width: 200px; height: 200px"><img src="/assets/images/explorer_folder_b.jpg"></div>
+                                <div style="float: left; width: 200px; height: 200px"><img src="/assets/images/explorer_folder_b.jpg"></div>
+                                <div style="float: left; width: 200px; height: 200px"><img src="/assets/images/explorer_folder_b.jpg"></div>
+                                <div style="float: left; width: 200px; height: 200px"><img src="/assets/images/explorer_folder_b.jpg"></div>
+                                <div style="float: left; width: 200px; height: 200px"><img src="/assets/images/explorer_folder_b.jpg"></div>
+                                <div style="float: left; width: 200px; height: 200px"><img src="/assets/images/explorer_folder_b.jpg"></div>
+
+                                <div style="float: left; width: 200px; height: 200px"><img src="/assets/images/explorer_folder_b.jpg"></div>
+                                <div style="float: left; width: 200px; height: 200px"><img src="/assets/images/explorer_folder_b.jpg"></div>
+                                <div style="float: left; width: 200px; height: 200px"><img src="/assets/images/explorer_folder_b.jpg"></div>
+                                <div style="float: left; width: 200px; height: 200px"><img src="/assets/images/explorer_folder_b.jpg"></div>
+                                <div style="float: left; width: 200px; height: 200px"><img src="/assets/images/explorer_folder_b.jpg"></div>
+                                <div style="float: left; width: 200px; height: 200px"><img src="/assets/images/explorer_folder_b.jpg"></div>
+                                <div style="float: left; width: 200px; height: 200px"><img src="/assets/images/explorer_folder_b.jpg"></div>
+
+                                <div style="float: left; width: 200px; height: 200px"><img src="/assets/images/explorer_folder_b.jpg"></div>
+                                <div style="float: left; width: 200px; height: 200px"><img src="/assets/images/explorer_folder_b.jpg"></div>
+                                <div style="float: left; width: 200px; height: 200px"><img src="/assets/images/explorer_folder_b.jpg"></div>
+                                <div style="float: left; width: 200px; height: 200px"><img src="/assets/images/explorer_folder_b.jpg"></div>
+                                <div style="float: left; width: 200px; height: 200px"><img src="/assets/images/explorer_folder_b.jpg"></div>
+                                <div style="float: left; width: 200px; height: 200px"><img src="/assets/images/explorer_folder_b.jpg"></div>
+                                <div style="float: left; width: 200px; height: 200px"><img src="/assets/images/explorer_folder_b.jpg"></div>
+
+                                <div style="float: left; width: 200px; height: 200px"><img src="/assets/images/explorer_folder_b.jpg"></div>
+                                <div style="float: left; width: 200px; height: 200px"><img src="/assets/images/explorer_folder_b.jpg"></div>
+                                <div style="float: left; width: 200px; height: 200px"><img src="/assets/images/explorer_folder_b.jpg"></div>
+                                <div style="float: left; width: 200px; height: 200px"><img src="/assets/images/explorer_folder_b.jpg"></div>
+                                <div style="float: left; width: 200px; height: 200px"><img src="/assets/images/explorer_folder_b.jpg"></div>
+                                <div style="float: left; width: 200px; height: 200px"><img src="/assets/images/explorer_folder_b.jpg"></div>
+                                <div style="float: left; width: 200px; height: 200px"><img src="/assets/images/explorer_folder_b.jpg"></div>
+
+
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="div_tablerow" style="height:100px; width: 100%;">
+                        <dl style=" border-top: 1px solid #f00;">
+                            <dt class="pdl_5">Status</dt>
+                            <dd>
+                                <select style="width:135px;">
+                                    <option>&nbsp;</option>
+                                    <option>Status1</option>
+                                    <option>Status2</option>
+                                    <option>Status3</option>
+                                </select>
+                            </dd>
+                            <dt class="w130">Aggregation Code</dt>
+                            <dd>
+                                <input type=text style="width:135px">
+                            </dd>
+                            <dt>Title</dt>
+                            <dd>
+                                <input type=text style="width:135px">
+                            </dd>
+                        </dl>
+                        <dl>
+                            <dt class="pdl_5">Type</dt>
+                            <dd>
+                                <select style="width:135px;">
+                                    <option>&nbsp;</option>
+                                    <option>Status1</option>
+                                    <option>Status2</option>
+                                    <option>Status3</option>
+                                </select>
+                            </dd>
+                            <dt class="w130">Classified Date</dt>
+                            <dd class="w_auto">
+                                <div class="cld_box"><input type=text id="datepicker1"></div>
+                                ~
+                                <div class="cld_box"><input type=text id="datepicker2"></div>
+                            </dd>
+                        </dl>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        </div><!--오른쪽 내용영역 전체 e -->
+    </div>
+    <!-- ===== [ base-content ] _END_ ===== -->
 </html>

@@ -1,20 +1,25 @@
 package rmsoft.ams.seoul.cl.cl001.service;
 
 import io.onsemiro.core.domain.BaseService;
-import org.springframework.beans.factory.annotation.Autowired;
+import io.onsemiro.core.parameter.RequestParams;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import rmsoft.ams.seoul.cl.cl001.dao.Cl001Mapper;
-import rmsoft.ams.seoul.cl.cl001.domain.Cl001;
+import rmsoft.ams.seoul.cl.cl001.vo.Cl00101VO;
 
-import java.util.List;
+import javax.inject.Inject;
 
 @Service
-public class Cl001Service extends BaseService<Cl001, Cl001.Cl001Id>
-{
-    @Autowired
-    private Cl001Mapper mapper;
+public class Cl001Service extends BaseService {
 
-    public List<Cl001> getServiceList() {
-        return mapper.getServiceList();
+    @Inject
+    private Cl001Mapper cl001Mapper;
+
+    public Page<Cl00101VO> getClassificationSchemeList(Pageable pageable, RequestParams<Cl00101VO> requestParams) {
+
+        Cl00101VO cl00101VO = new Cl00101VO();
+
+        return filter(cl001Mapper.getClassificationSchemeList(cl00101VO), pageable, "", Cl00101VO.class);
     }
 }

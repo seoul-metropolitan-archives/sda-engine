@@ -22,8 +22,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             type: "GET",
             url: "/api/v1/ac003/02/list",
             data: $.extend({}, {pageSize: 1000}, data),
-            callback: function (res) {
-                fnObj.gridView02.setData(res.list);
+            callback: function (res) {                fnObj.gridView02.setData(res.list);
             },
             options: {
                 onError: axboot.viewError

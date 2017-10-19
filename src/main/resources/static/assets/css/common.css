@@ -4,42 +4,42 @@
 	font-family: 'nanum';
 	src: url('font/NanumGothic.eot');
 	src: local('나눔고딕'), local('NanumGothic'), url('font/NanumGothic.eot?#iefix') format('embedded-opentype'),
-		url('font/NanumGothic.woff') format('woff'),
-		url('font/NanumGothic.ttf') format('truetype');
+	url('font/NanumGothic.woff') format('woff'),
+	url('font/NanumGothic.ttf') format('truetype');
 }
 
 @font-face {
 	font-family: 'notosans';
 	src: url('font/NotoSans-Regular.eot');
 	src: local('NotoSans-Regular'), local('NotoSans-Regular'), url('font/NotoSans-Regular.eot?#iefix') format('embedded-opentype'),
-		url('font/NotoSans-Regular.woff') format('woff'),
-		url('font/NotoSans-Regular.ttf') format('truetype');
+	url('font/NotoSans-Regular.woff') format('woff'),
+	url('font/NotoSans-Regular.ttf') format('truetype');
 }
 
 @font-face {
 	font-family: 'notosansi';
 	src: url('font/NotoSans-Italic.eot');
 	src: local('NotoSans-Italic'), local('NotoSans-Italic'), url('font/NotoSans-Italic.eot?#iefix') format('embedded-opentype'),
-		url('font/NotoSans-Italic.woff') format('woff'),
-		url('font/NotoSans-Italic.ttf') format('truetype');
+	url('font/NotoSans-Italic.woff') format('woff'),
+	url('font/NotoSans-Italic.ttf') format('truetype');
 }
 
 
 /* pc 초기화 */
 
 body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,textarea,p,blockquote,th,td,input,select,textarea,button,table td {
-    margin:0;
-    padding:0; 
-    font-size: 12px;
-    font-family:nanum,"나눔고딕",NanumGothic,"맑은 고딕", Dotum,Helvetica,sans-serif;
-    
+	margin:0;
+	padding:0;
+	font-size: 12px;
+	font-family:nanum,"나눔고딕",NanumGothic,"맑은 고딕", Dotum,Helvetica,sans-serif;
+
 }
 fieldset,img {border:0 none}
 img {vertical-align:top}
 dl,ul,ol,menu,li {
-    list-style:none;
-    font-family:nanum,"나눔고딕",NanumGothic,"맑은 고딕", Dotum,Helvetica,sans-serif;
-    
+	list-style:none;
+	font-family:nanum,"나눔고딕",NanumGothic,"맑은 고딕", Dotum,Helvetica,sans-serif;
+
 }
 blockquote, q {quotes: none}
 blockquote:before, blockquote:after,q:before, q:after {content:'';content:none;}
@@ -48,15 +48,15 @@ input,select,textarea,button {vertical-align:middle}
 button {border:0 none;background-color:transparent;cursor:pointer}
 body {background:#fff}
 body,th,td,input,select,textarea{
-    font-size:16px;line-height:16px;
-    font-family:nanum,"나눔고딕",NanumGothic,"맑은 고딕", Dotum,Arial,Helvetica,sans-serif;
-    color:#333333} /* color값은 디자인가이드에 맞게사용 */
+	font-size:16px;line-height:16px;
+	font-family:nanum,"나눔고딕",NanumGothic,"맑은 고딕", Dotum,Arial,Helvetica,sans-serif;
+	color:#333333} /* color값은 디자인가이드에 맞게사용 */
 a {color:#595757;text-decoration:none}
 a:active, a:hover {text-decoration:none}
 address,caption,cite,code,dfn,em,var {font-style:normal;font-weight:normal}
 table { /*border-collapse: collapse;*/ border-spacing: 0px}
 caption, legend {
-    width:0;height:0;overflow:hidden;visibility:hidden;line-height:0;font-size:0}
+	width:0;height:0;overflow:hidden;visibility:hidden;line-height:0;font-size:0}
 
 /* 스킵네비 */
 #skipnavigation {position:absolute; left:0; top:-1000px; width:100%; height: 0px; z-index:1000; line-height:0px; font-size:0px}
@@ -123,7 +123,7 @@ caption, legend {
 .w25 {width:25% !important}
 .w30 {width:30% !important}
 .w35 {width:35% !important}
-.w40 {width:40% !important} 
+.w40 {width:40% !important}
 .w45 {width:45% !important}
 .w50 {width:50% !important}
 .w55 {width:55% !important}
@@ -382,7 +382,3 @@ caption, legend {
 .f33 {font-size:33px !important}
 .f34 {font-size:34px !important}
 .f35 {font-size:35px !important}
-
-
-
-

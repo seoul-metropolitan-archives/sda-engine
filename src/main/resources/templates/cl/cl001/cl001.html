@@ -5,51 +5,26 @@
 
 <!-- ===== [ script ] ===== -->
 <!--realgrid -->
-<script layout:fragment="script" type="text/javascript" th:src="@{/assets/js/ac/ac003/rg_ac003.js}"></script>
-
+<script layout:fragment="script" type="text/javascript" th:src="@{/assets/js/cl/cl001/cl001.js}"></script>
 <!-- ===== [ script ] _END_ ===== -->
-
-<!-- ===== [ base-title ] _END_ ===== -->
-
 <!-- ===== [ base-content ] ===== -->
 <div layout:fragment="base-content" class="ax-base-content">
     <div class="cssBody" style="top:80px">
         <div class="contents_wrap">
             <div style=" height:31px; width:100%" class="bgf7 div_tablerow">
                 <ul class="bdb">
-                    <li style="width:30px">
-                        <div class="bookmark_star"><img src="images/bookmark.png" alt="bookmark"></div>
-                    </li>
-                    <li style="width:50%; text-align:left;">Classification Scheme</li>
-                    <li style="text-align:right; width:48%;">
-                        <button class="btn_co">
-                            <span class="btn_icon_co">&nbsp;</span>
-                            <span class="btn_main_txt">Confirm</span>
-                        </button>
-                        <button class="btn_co">
-                            <span class="btn_icon_co">&nbsp;</span>
-                            <span class="btn_main_txt">Cancel</span>
-                        </button>
-                        <button class="btn_s">
-                            <span class="btn_icon">&nbsp;</span>
-                            <span class="btn_main_txt">Save(S)</span>
-                        </button>
-                        <button class="btn_i">
-                            <span class="btn_icon">&nbsp;</span>
-                            <span class="btn_main_txt">Inquiry(I)</span>
-                        </button>
-                    </li>
+                    <th:block layout:insert="~{/fragments/page-buttons :: bookmark}"/>
+                    <th:block layout:insert="~{/fragments/page-buttons :: confirm-and-cancle-and-save-and-inquiry}"/>
                 </ul>
             </div>
             <div class="bdb div_tablerow">
                 <dl>
                     <dt class="pdl_5 w130">Status</dt>
                     <dd>
-                        <select style="width:135px;">
-                            <option>&nbsp;</option>
-                            <option>Status1</option>
-                            <option>Status2</option>
-                            <option>Status3</option>
+                        <select data-ax-path="statusUuid" style="width:135px;">
+                            <option value=""></option>
+                            <option th:each="item : ${statusUuid}" th:value="${item.codeDetailUUID}"
+                                    th:text="${item.codeName}"/>
                         </select>
                     </dd>
                     <dt class="w130">Classification Code</dt>
@@ -61,11 +36,10 @@
                 <dl>
                     <dt class="pdl_5 w130">Classification Type</dt>
                     <dd>
-                        <select style="width:135px;">
-                            <option>&nbsp;</option>
-                            <option>Status1</option>
-                            <option>Status2</option>
-                            <option>Status3</option>
+                        <select data-ax-path="classLevel" style="width:135px;">
+                            <option value=""></option>
+                            <option th:each="item : ${classLevel}" th:value="${item.codeDetailUUID}"
+                                    th:text="${item.codeName}"/>
                         </select>
                     </dd>
                     <dd class="w_auto">
@@ -80,42 +54,20 @@
 
             </div>
             <div style="height:100%; width:100%" class="div_tablerow">
-
                 <div style="display:table; height:100%; width:75%; float:left" class="bdr">
                     <ul class="bdb bdt div_tablerow bgf7" style="height:30px;">
-                        <li style="width:50%; text-align:left;">
-                            <img src="images/img_dot2.png" alt="dot">Classification Scheme</li>
-                        <li style="text-align:right; width:48%;">
-                            <button class="btn_a">
-                                <span class="btn_icon">&nbsp;</span>
-                                <span class="btn_main_txt">Add</span>
-                            </button>
-                            <button class="btn_d">
-                                <span class="btn_icon">&nbsp;</span>
-                                <span class="btn_main_txt">Delete</span>
-                            </button>
-                        </li>
+                        <th:block layout:insert="~{/fragments/page-buttons :: dot('Classification Scheme')}"/>
+                        <th:block layout:insert="~{/fragments/page-buttons :: add-and-delete}"/>
                     </ul>
                     <div style="height:100%; width:100%" class="div_tablerow bdb">
-                        <div id="realgrid" style="width:100%; height:100%"></div>
+                        <div id="realgrid01" style="width:100%; height:100%"></div>
                     </div>
                 </div>
 
 
                 <div style="display:table; height:100%; width:25%; float:right">
                     <ul class="bdb bdt div_tablerow bgf7" style="height:30px;">
-                        <li style="width:88%; text-align:left;">
-                            <img src="images/img_dot2.png" alt="dot">Classification Scheme Details</li>
-                        <!-- <li style="text-align:right; width:10%;">
-                             <button class="btn_a">
-                                 <span class="btn_icon">&nbsp;</span>
-                                 <span class="btn_main_txt">Add</span>
-                             </button>
-                             <button class="btn_d">
-                                 <span class="btn_icon">&nbsp;</span>
-                                 <span class="btn_main_txt">Delete</span>
-                             </button>
-                         </li>-->
+                        <th:block layout:insert="~{/fragments/page-buttons :: dot('Classification Scheme Detail')}"/>
                     </ul>
                     <div style="height:100%; width:100%;" class="div_tablerow bdb">
                         <div style="height: 100%; width: 100%; overflow-y: scroll; overflow-x: hidden; ">
@@ -174,5 +126,6 @@
             </div>
         </div><!--오른쪽 내용영역 전체 e -->
     </div>
+</div>
     <!-- ===== [ base-content ] _END_ ===== -->
 </html>

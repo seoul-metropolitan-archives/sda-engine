@@ -676,8 +676,10 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 					obj.labels = data.labels;
 					obj.sortable = data.sortable === undefined ? false
 							: data.sortable;
-					obj.lookupDisplay = data.lookupDisplay === undefined ? true
-							: data.lookupDisplay;
+					if(!data.lookupDisplay)
+                        data.lookupDisplay = true;
+
+					obj.lookupDisplay = data.lookupDisplay;
 					defaultData.push((undefined === data.values || data.values.length < 1) ? "" : data.values[0]);
 					break;
 				case "check":

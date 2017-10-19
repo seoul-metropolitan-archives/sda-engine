@@ -1,4 +1,4 @@
-package rmsoft.ams.seoul.cl.cl003.domain;
+package rmsoft.ams.seoul.cl.cl001.vo;
 
 import io.onsemiro.core.vo.BaseVO;
 import lombok.Data;
@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class Cl003VO extends BaseVO
+public class Cl001VO extends BaseVO
 {
 
 }
