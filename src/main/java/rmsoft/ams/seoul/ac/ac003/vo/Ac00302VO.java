@@ -26,6 +26,8 @@ public class Ac00302VO extends BaseVO {
 
     private String userGroupName;
 
+    private String userUuid;
+
     private String useYn;
 
     public static Ac00302VO of(AcUserGroupUser acUserGroupUser) {

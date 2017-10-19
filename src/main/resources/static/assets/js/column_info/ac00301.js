@@ -45,8 +45,9 @@ var ac00301 =
                     text: "Date/Time Changed PW",
                     width: 150,
                     editable: false,
+                    disable: true,
                     dataType: "timestamp",
-                    disable: true
+                    required: false
                 },
                 {
                     sortNo: 6,
@@ -127,7 +128,7 @@ var ac00301 =
                     sortNo: 13,
                     name: "insertDate",
                     text: "Date/Time Created",
-                    width: 120,
+                    width: 150,
                     editable: false,
                     disable: true,
                     dataType: "timestamp",
@@ -147,7 +148,7 @@ var ac00301 =
                     sortNo: 15,
                     name: "updateDate",
                     text: "Date/Time Modified",
-                    width: 120,
+                    width: 150,
                     editable: false,
                     disable: true,
                     dataType: "timestamp",

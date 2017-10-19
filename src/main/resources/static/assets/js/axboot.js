@@ -1391,8 +1391,6 @@ axboot.call = function () {
         var processor = function processor(callback) {
             var item = self.queue.shift();
 
-            console.log('item :: ', item);
-
             if (ax5.util.isFunction(item)) {
                 item.call(this);
                 processor.call(this, callback);
@@ -2737,12 +2735,12 @@ axboot.actionExtend = function () {
 axboot.viewError = function (err) {
     axToast.confirm({
         theme: "danger",
-        width: 300,
+        width: 500,
         lang: {
-            "ok": "닫기"
+            "ok": "Close"
         },
         icon: '<i class="cqc-new"></i>',
-        msg: '[에러] ' + err.message
+        msg: '[ERROR] ' + err.message
     });
 }
 

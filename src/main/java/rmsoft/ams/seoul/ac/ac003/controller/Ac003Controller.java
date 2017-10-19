@@ -1,10 +1,8 @@
 package rmsoft.ams.seoul.ac.ac003.controller;
 
 import io.onsemiro.controller.BaseController;
-import io.onsemiro.core.api.ApiException;
 import io.onsemiro.core.api.response.ApiResponse;
 import io.onsemiro.core.api.response.Responses;
-import io.onsemiro.core.code.ApiStatus;
 import io.onsemiro.core.parameter.RequestParams;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -14,7 +12,6 @@ import rmsoft.ams.seoul.ac.ac003.service.Ac003Service;
 import rmsoft.ams.seoul.ac.ac003.vo.Ac00301VO;
 import rmsoft.ams.seoul.ac.ac003.vo.Ac00302VO;
 import rmsoft.ams.seoul.ac.ac003.vo.Ac00303VO;
-import rmsoft.ams.seoul.common.domain.AcUser;
 
 import java.util.List;
 
@@ -39,11 +36,6 @@ public class Ac003Controller extends BaseController {
         return Responses.PageResponse.of(pages.getContent(), pages);
     }
 
-    @GetMapping("/01/details")
-    public AcUser details(@RequestBody Ac00301VO requestParams) {
-        return ac003Service.findOne(requestParams);
-    }
-
     @GetMapping("/02/list")
     public Responses.PageResponse findUserGroupUser(Pageable pageable, RequestParams<Ac00302VO> requestParams) {
         Page<Ac00302VO> pages = ac003Service.findUserGroupUser(pageable, requestParams);
@@ -61,12 +53,18 @@ public class Ac003Controller extends BaseController {
     @PutMapping(value = "/01/save")
     @PostMapping
     public ApiResponse saveUser(@RequestBody List<Ac00301VO> requestParams) {
-        ApiResponse apiResponse = ac003Service.saveUser(requestParams);
+        return ac003Service.saveUser(requestParams);
+    }
 
-        if (apiResponse.getStatus() == -1) {
-            throw new ApiException(ApiStatus.SYSTEM_ERROR, apiResponse.getMessage());
-        }
+    @PutMapping(value = "/02/save")
+    @PostMapping
+    public ApiResponse saveUserGroup(@RequestBody List<Ac00302VO> requestParams) {
+        return ac003Service.saveUserGroup(requestParams);
+    }
 
-        return apiResponse;
+    @PutMapping(value = "/03/save")
+    @PostMapping
+    public ApiResponse saveUserRole(@RequestBody List<Ac00303VO> requestParams) {
+        return ac003Service.saveUserRole(requestParams);
     }
 }

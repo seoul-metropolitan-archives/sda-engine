@@ -28,24 +28,35 @@ var ac00302 =
                 },
                 {
                     sortNo: 3,
-                    name: "userGroupName",
-                    text: "User Group",
+                    name: "userUuid",
+                    text: "User ID",
                     width: 120,
                     editable: true,
                     dataType: "text",
-                    required: true
+                    required: true,
+                    visible: false
                 },
                 {
                     sortNo: 4,
+                    name: "userGroupName",
+                    text: "User Group",
+                    width: 120,
+                    editable: false,
+                    dataType: "text",
+                    required: true,
+                    visible: true
+                },
+                {
+                    sortNo: 5,
                     name: "description",
                     text: "DESCRIPTION",
                     width: 120,
                     editable: true,
                     dataType: "richtext",
-                    required: false,
+                    required: false
                 },
                 {
-                    sortNo: 5,
+                    sortNo: 6,
                     name: "notes",
                     text: "NOTES",
                     width: 120,
@@ -54,7 +65,7 @@ var ac00302 =
                     required: false
                 },
                 {
-                    sortNo: 6,
+                    sortNo: 7,
                     name: "useYn",
                     text: "USE",
                     width: 120,
@@ -64,7 +75,7 @@ var ac00302 =
                     required: true
                 },
                 {
-                    sortNo: 7,
+                    sortNo: 8,
                     name: "insertUuid",
                     text: "Created By",
                     width: 120,
@@ -74,17 +85,17 @@ var ac00302 =
                     required: false
                 },
                 {
-                    sortNo: 8,
+                    sortNo: 9,
                     name: "insertDate",
                     text: "Date/Time Created",
-                    width: 120,
+                    width: 150,
                     editable: false,
                     disable: true,
                     dataType: "timestamp",
                     required: false
                 },
                 {
-                    sortNo: 9,
+                    sortNo: 10,
                     name: "updateUuid",
                     text: "Modifed By",
                     width: 120,
@@ -94,10 +105,10 @@ var ac00302 =
                     required: false
                 },
                 {
-                    sortNo: 10,
+                    sortNo: 11,
                     name: "updateDate",
                     text: "Date/Time Modified",
-                    width: 120,
+                    width: 150,
                     editable: false,
                     disable: true,
                     dataType: "timestamp",

@@ -9,6 +9,12 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             data: $.extend({}, {pageSize: 1000}, this.formView.getData()),
             callback: function (res) {
                 fnObj.gridView01.setData(res.list);
+
+                if (res.list.length > 0) {
+                    ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, res.list[0]);
+                    ACTIONS.dispatch(ACTIONS.PAGE_SEARCH2, res.list[0]);
+                }
+
             },
             options: {
                 onError: axboot.viewError
@@ -22,7 +28,8 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             type: "GET",
             url: "/api/v1/ac003/02/list",
             data: $.extend({}, {pageSize: 1000}, data),
-            callback: function (res) {                fnObj.gridView02.setData(res.list);
+            callback: function (res) {
+                fnObj.gridView02.setData(res.list);
             },
             options: {
                 onError: axboot.viewError
@@ -46,46 +53,42 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         return false;
     },
     PAGE_SAVE: function (caller, act, data) {
-        ACTIONS.dispatch(ACTIONS.MODAL_OPEN);
-
-
-        /*axDialog.confirm({
+        axDialog.confirm({
             msg: "Do you want to save all items?"
         }, function () {
             if (this.key == "ok") {
-                var updateList;
-
-                var saveList = [].concat(fnObj.gridView01.getData()); // 추가되어서 수정된건
-                /!*saveList.forEach(function (n) {
-                    n.isDeleted = false;
-                });
-
-                var deleteList = [].concat(fnObj.gridView01.getData("deleted")); // 삭제된건
-
-                deleteList.forEach(function (n) {
-                    n.isDeleted = true;
-                });*!/
-
-                /!* if (saveList.length > 0) {
-                     updateList = saveList;
-                 } else if (deleteList.length > 0) {
-                     updateList = deleteList;
-                 }*!/
+                var userList = [].concat(fnObj.gridView01.getData());
+                var groupList = [].concat(fnObj.gridView02.getData());
+                var roleList = [].concat(fnObj.gridView03.getData());
 
                 axboot
                     .call({
                         type: "PUT",
                         url: "/api/v1/ac003/01/save",
-                        data: JSON.stringify(saveList),
+                        data: JSON.stringify(userList),
                         callback: function (res) {
-                            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+                        }
+                    })
+                    .call({
+                        type: "PUT",
+                        url: "/api/v1/ac003/02/save",
+                        data: JSON.stringify(groupList),
+                        callback: function (res) {
+                        }
+                    })
+                    .call({
+                        type: "PUT",
+                        url: "/api/v1/ac003/03/save",
+                        data: JSON.stringify(roleList),
+                        callback: function (res) {
                         }
                     })
                     .done(function () {
-                        axToast.push("저장 작업이 완료되었습니다.");
+                        ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+                        axToast.push("Data save completed");
                     });
             }
-        });*/
+        });
     },
     FORM_CLEAR: function (caller, act, data) {
         /*
@@ -117,6 +120,20 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 this.close();
             }
         });
+    },
+    PASSWORD_CHANGE_POPUP: function (caller, act, data) {
+        var promptDialog = new ax5.ui.dialog();
+
+        promptDialog.prompt({
+            title: "Password Change",
+            msg: 'Please fill new password'
+        }, function (data) {
+            console.log(this);
+            if (this.key == "ok") {
+                this.value;
+            }
+        });
+
     },
     dispatch: function (caller, act, data) {
         var result = ACTIONS.exec(caller, act, data);
@@ -237,7 +254,12 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     addRow: function () {
         this.gridObj.addRow();
     },
-    itemClick: function (data) {
+    itemClick: function (data, index) {
+        /* if (index.fieldIndex == 3) {
+             // 비밀번호 Cell 선택시
+             ACTIONS.dispatch(ACTIONS.PASSWORD_CHANGE_POPUP, data);
+         }*/
+
         if (data.userUuid != null && data.userUuid != "") {
             ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, data);
             ACTIONS.dispatch(ACTIONS.PAGE_SEARCH2, data);
@@ -260,14 +282,13 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
         this.gridObj.setData("set", list);
 
     },
-    getData: function (_type) {
-        //this.gridObj.load("/ad/ad001/getEnviromentList.do", {});
+    getData: function () {
+        return this.gridObj.getData();
     },
     addRow: function () {
         this.gridObj.addRow();
     },
-    itemClick: function (data) {
-        //ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, data);
+    itemClick: function (data, index) {
     }
 });
 
@@ -289,14 +310,12 @@ fnObj.gridView03 = axboot.viewExtend(axboot.gridView, {
         this.gridObj.setData("set", list);
 
     },
-    getData: function (_type) {
-        //this.gridObj.load("/ad/ad001/getEnviromentList.do", {});
+    getData: function () {
+        return this.gridObj.getData();
     },
     addRow: function () {
         this.gridObj.addRow();
     },
-    itemClick: function (data) {
-        //ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, data);
+    itemClick: function (data, index) {
     }
 });
-

@@ -5,13 +5,11 @@
 package rmsoft.ams.seoul.common.domain;
 
 import io.onsemiro.core.annotations.Comment;
-import io.onsemiro.core.code.AXBootTypes;
 import io.onsemiro.core.domain.BaseJpaModel;
 import lombok.*;
 import org.apache.ibatis.type.Alias;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -42,8 +40,7 @@ public class AcRoleMenu extends BaseJpaModel<AcRoleMenu.AcRoleMenuId> {
 
     @Column(name = "USE_YN", length = 1, nullable = false)
     @Comment(value = "사용여부")
-    @Type(type = "labelEnum")
-    private AXBootTypes.Used useYn = AXBootTypes.Used.YES;
+    private String useYn;
 
     @Override
     public AcRoleMenuId getId() {

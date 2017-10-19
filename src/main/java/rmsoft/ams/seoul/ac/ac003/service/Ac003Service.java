@@ -21,8 +21,8 @@ import rmsoft.ams.seoul.ac.ac003.dao.Ac003Mapper;
 import rmsoft.ams.seoul.ac.ac003.vo.Ac00301VO;
 import rmsoft.ams.seoul.ac.ac003.vo.Ac00302VO;
 import rmsoft.ams.seoul.ac.ac003.vo.Ac00303VO;
-import rmsoft.ams.seoul.common.domain.AcUser;
-import rmsoft.ams.seoul.common.domain.QAcUser;
+import rmsoft.ams.seoul.common.domain.*;
+import rmsoft.ams.seoul.common.repository.AcAccessControlRepository;
 import rmsoft.ams.seoul.common.repository.AcUserGroupUserRepository;
 import rmsoft.ams.seoul.common.repository.AcUserRepository;
 
@@ -39,13 +39,27 @@ public class Ac003Service extends BaseService {
     @Autowired
     private AcUserGroupUserRepository acUserGroupUserRepository;
 
+    @Autowired
+    private AcAccessControlRepository acAccessControlRepository;
+
     @Inject
     private Ac003Mapper ac003Mapper;
 
     @Inject
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    // USER 관련 호출부
+    /**********************************************************************************************
+     * 사용자 정보 관련 Service Methods
+     **********************************************************************************************
+     */
+
+    /**
+     * 모든 사용자 조회
+     *
+     * @param pageable
+     * @param requestParams
+     * @return
+     */
     public Page<Ac00301VO> findAllUser(Pageable pageable, RequestParams<Ac00301VO> requestParams) {
 
         Ac00301VO ac00301VO = new Ac00301VO();
@@ -57,7 +71,54 @@ public class Ac003Service extends BaseService {
         return filter(ac003Mapper.findAllUser(ac00301VO), pageable, "", Ac00301VO.class);
     }
 
-    public AcUser findOne(Ac00301VO requestParams) {
+    /**
+     * 사용자 정보 저장
+     *
+     * @param ac00301VOList
+     * @return
+     */
+    @Transactional
+    public ApiResponse saveUser(List<Ac00301VO> ac00301VOList) {
+        for (Ac00301VO ac00301VO : ac00301VOList) {
+            AcUser acUser = ModelMapperUtils.map(ac00301VO, AcUser.class);
+            AcUser orgAcUser = findOneUser(ac00301VO);
+
+            if (orgAcUser == null) {
+                // created
+                acUser.setUserUuid(UUIDUtils.getUUID());
+                acUser.setPasswordUpdateDate(DateUtils.getTimestampNow());
+                acUser.setUserPassword(bCryptPasswordEncoder.encode(ac00301VO.getUserPassword())); // 암호화
+
+                acUserRepository.save(acUser);
+            } else {
+                if (ac00301VO.isDeleted()) {
+                    acUserRepository.delete(acUser);
+                } else {
+                    if (!ac00301VO.getUserPassword().equals(orgAcUser.getUserPassword())) {
+                        // 비밀번호가 변경된 경우
+                        acUser.setPasswordUpdateDate(DateUtils.getTimestampNow());
+                        acUser.setUserPassword(bCryptPasswordEncoder.encode(ac00301VO.getUserPassword())); // 암호화
+                    } else {
+                        acUser.setPasswordUpdateDate(orgAcUser.getPasswordUpdateDate());
+                    }
+
+                    acUser.setInsertDate(orgAcUser.getInsertDate());
+                    acUser.setInsertUuid(orgAcUser.getInsertUuid());
+
+                    acUserRepository.save(acUser);
+                }
+            }
+        }
+        return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");
+    }
+
+    /**
+     * 단일 유저 조회
+     *
+     * @param requestParams
+     * @return
+     */
+    public AcUser findOneUser(Ac00301VO requestParams) {
         QAcUser qAcUser = QAcUser.acUser;
 
         Predicate predicate = qAcUser.userUuid.eq(requestParams.getUserUuid());
@@ -65,6 +126,18 @@ public class Ac003Service extends BaseService {
         return acUserRepository.findOne(predicate);
     }
 
+    /**********************************************************************************************
+     * 사용자 그룹 사용자 정보 관련 Service Methods
+     **********************************************************************************************
+     */
+
+    /**
+     * 그룹 사용자 조회
+     *
+     * @param pageable
+     * @param requestParams
+     * @return
+     */
     // USER GROUP 관련 호출부
     public Page<Ac00302VO> findUserGroupUser(Pageable pageable, RequestParams<Ac00302VO> requestParams) {
         String filter = requestParams.getString("filter", "");
@@ -72,7 +145,62 @@ public class Ac003Service extends BaseService {
         return filter(ac003Mapper.findUserGroupUserByUserUuid(requestParams.getString("userUuid")), pageable, filter, Ac00302VO.class);
     }
 
-    // USER ROLE 관련 호출부
+    /**
+     * 그룹 사용자 정보 저장
+     *
+     * @param ac00302VOList
+     * @return
+     */
+    @Transactional
+    public ApiResponse saveUserGroup(List<Ac00302VO> ac00302VOList) {
+        for (Ac00302VO ac00302VO : ac00302VOList) {
+            AcUserGroupUser acUserGroupUser = ModelMapperUtils.map(ac00302VO, AcUserGroupUser.class);
+            AcUserGroupUser orgAcUserGroupUser = findOneUserGroup(ac00302VO);
+
+            if (orgAcUserGroupUser == null) {
+                // created
+                acUserGroupUser.setUserGroupUserUuid(UUIDUtils.getUUID());
+                acUserGroupUserRepository.save(acUserGroupUser);
+            } else {
+                if (ac00302VO.isDeleted()) {
+                    acUserGroupUserRepository.delete(acUserGroupUser);
+                } else {
+                    acUserGroupUser.setInsertDate(orgAcUserGroupUser.getInsertDate());
+                    acUserGroupUser.setInsertUuid(orgAcUserGroupUser.getInsertUuid());
+
+                    acUserGroupUserRepository.save(acUserGroupUser);
+                }
+            }
+        }
+        return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");
+    }
+
+    /**
+     * 그룹 사용자 정보 단건 조회
+     *
+     * @param requestParams
+     * @return
+     */
+    public AcUserGroupUser findOneUserGroup(Ac00302VO requestParams) {
+        QAcUserGroupUser qAcUserGroupUser = QAcUserGroupUser.acUserGroupUser;
+
+        Predicate predicate = qAcUserGroupUser.userGroupUserUuid.eq(requestParams.getUserGroupUserUuid());
+
+        return acUserGroupUserRepository.findOne(predicate);
+    }
+
+    /**********************************************************************************************
+     * 사용자 접근제어 정보 관련 Service Methods
+     **********************************************************************************************
+     */
+
+    /**
+     * 사용자 접근제어 정보 조회
+     *
+     * @param pageable
+     * @param requestParams
+     * @return
+     */
     public Page<Ac00303VO> findUserRole(Pageable pageable, RequestParams<Ac00303VO> requestParams) {
         String filter = requestParams.getString("filter", "");
 
@@ -87,51 +215,57 @@ public class Ac003Service extends BaseService {
         return filter(ac003Mapper.findUserRole(ac00303VO), pageable, filter, Ac00303VO.class);
     }
 
-    public ApiResponse saveUser(List<Ac00301VO> ac00301VOList) {
-        for (Ac00301VO ac00301VO : ac00301VOList) {
-            AcUser acUser = ModelMapperUtils.map(ac00301VO, AcUser.class);
-            AcUser orgAcUser = findOne(ac00301VO);
 
-            if (orgAcUser == null) {
+    /**
+     * 사용자 접근제어 정보 저장
+     *
+     * @param ac00303VOList
+     * @return
+     */
+    @Transactional
+    public ApiResponse saveUserRole(List<Ac00303VO> ac00303VOList) {
+        for (Ac00303VO ac00303VO : ac00303VOList) {
+            AcAccessControl acAccessControl = ModelMapperUtils.map(ac00303VO, AcAccessControl.class);
+            AcAccessControl orgacAccessControl = findOneUserRole(ac00303VO);
+
+            if (orgacAccessControl == null) {
                 // created
-                acUser.setUserUuid(UUIDUtils.getUUID());
-                acUser.setPasswordUpdateDate(DateUtils.getTimestampNow());
-                acUser.setUserPassword(bCryptPasswordEncoder.encode(ac00301VO.getUserPassword())); // 암호화
-
-                saveUser(acUser);
+                acAccessControl.setAccessControlUuid(UUIDUtils.getUUID());
+                acAccessControlRepository.save(acAccessControl);
             } else {
-                if (ac00301VO.isDeleted()) {
-                    deleteUser(acUser);
+                if (ac00303VO.isDeleted()) {
+                    acAccessControlRepository.delete(acAccessControl);
                 } else {
-                    if (!ac00301VO.getUserPassword().equals(orgAcUser.getUserPassword())) {
-                        // 비밀번호가 변경된 경우
-                        acUser.setPasswordUpdateDate(DateUtils.getTimestampNow());
-                        acUser.setUserPassword(bCryptPasswordEncoder.encode(ac00301VO.getUserPassword())); // 암호화
-                    } else {
-                        acUser.setPasswordUpdateDate(orgAcUser.getPasswordUpdateDate());
-                    }
+                    acAccessControl.setInsertDate(orgacAccessControl.getInsertDate());
+                    acAccessControl.setInsertUuid(orgacAccessControl.getInsertUuid());
 
-                    acUser.setInsertDate(orgAcUser.getInsertDate());
-                    acUser.setInsertUuid(orgAcUser.getInsertUuid());
-
-                    saveUser(acUser);
+                    acAccessControlRepository.save(acAccessControl);
                 }
             }
         }
         return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");
-
     }
 
-    @Transactional
-    public void deleteUser(AcUser acUser) {
-        acUserRepository.delete(acUser);
+    /**
+     * 사용자 접근제어 정보 단건 조회
+     *
+     * @param requestParams
+     * @return
+     */
+    public AcAccessControl findOneUserRole(Ac00303VO requestParams) {
+        QAcAccessControl qAcAccessControl = QAcAccessControl.acAccessControl;
+
+        Predicate predicate = qAcAccessControl.accessControlUuid.eq(requestParams.getAccessControlUuid());
+
+        return acAccessControlRepository.findOne(predicate);
     }
 
-    @Transactional
-    public void saveUser(AcUser acUser) {
-        acUserRepository.save(acUser);
-    }
-
+    /**
+     * VO 생성 Method
+     *
+     * @param acUser
+     * @return
+     */
     private Ac00301VO buildVO(AcUser acUser) {
 
         if (acUser == null) {

@@ -1010,7 +1010,7 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 	this.itemClick  = function(_event)
 	{
         gridView.onDataCellClicked  = function(grid,index){
-            _event(grid.getDataProvider().getJsonRow(index.dataRow));
+            _event(grid.getDataProvider().getJsonRow(index.dataRow),index);
 		};
     };
 	this.setAppendValiate = function(func) {
