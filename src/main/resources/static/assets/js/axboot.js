@@ -2740,7 +2740,7 @@ axboot.viewError = function (err) {
             "ok": "Close"
         },
         icon: '<i class="cqc-new"></i>',
-        msg: '[ERROR] ' + err.message
+        msg: err.message
     });
 }
 

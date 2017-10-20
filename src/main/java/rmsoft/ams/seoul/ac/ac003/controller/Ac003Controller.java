@@ -1,6 +1,5 @@
 package rmsoft.ams.seoul.ac.ac003.controller;
 
-import io.onsemiro.controller.BaseController;
 import io.onsemiro.core.api.response.ApiResponse;
 import io.onsemiro.core.api.response.Responses;
 import io.onsemiro.core.parameter.RequestParams;
@@ -12,6 +11,7 @@ import rmsoft.ams.seoul.ac.ac003.service.Ac003Service;
 import rmsoft.ams.seoul.ac.ac003.vo.Ac00301VO;
 import rmsoft.ams.seoul.ac.ac003.vo.Ac00302VO;
 import rmsoft.ams.seoul.ac.ac003.vo.Ac00303VO;
+import rmsoft.ams.seoul.common.controller.MessageBaseController;
 
 import java.util.List;
 
@@ -24,7 +24,7 @@ import java.util.List;
  **/
 @RestController
 @RequestMapping(value = "/api/v1/ac003/")
-public class Ac003Controller extends BaseController {
+public class Ac003Controller extends MessageBaseController {
 
     @Autowired
     private Ac003Service ac003Service;

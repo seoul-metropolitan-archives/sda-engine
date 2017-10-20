@@ -53,42 +53,45 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         return false;
     },
     PAGE_SAVE: function (caller, act, data) {
-        axDialog.confirm({
+        /*axDialog.confirm({
             msg: "Do you want to save all items?"
         }, function () {
             if (this.key == "ok") {
-                var userList = [].concat(fnObj.gridView01.getData());
-                var groupList = [].concat(fnObj.gridView02.getData());
-                var roleList = [].concat(fnObj.gridView03.getData());
 
-                axboot
-                    .call({
-                        type: "PUT",
-                        url: "/api/v1/ac003/01/save",
-                        data: JSON.stringify(userList),
-                        callback: function (res) {
-                        }
-                    })
-                    .call({
-                        type: "PUT",
-                        url: "/api/v1/ac003/02/save",
-                        data: JSON.stringify(groupList),
-                        callback: function (res) {
-                        }
-                    })
-                    .call({
-                        type: "PUT",
-                        url: "/api/v1/ac003/03/save",
-                        data: JSON.stringify(roleList),
-                        callback: function (res) {
-                        }
-                    })
-                    .done(function () {
-                        ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
-                        axToast.push("Data save completed");
-                    });
             }
-        });
+        });*/
+
+
+        var userList = [].concat(fnObj.gridView01.getData());
+        var groupList = [].concat(fnObj.gridView02.getData());
+        var roleList = [].concat(fnObj.gridView03.getData());
+
+        axboot
+            .call({
+                type: "PUT",
+                url: "/api/v1/ac003/01/save",
+                data: JSON.stringify(userList),
+                callback: function (res) {
+                }
+            })
+            .call({
+                type: "PUT",
+                url: "/api/v1/ac003/02/save",
+                data: JSON.stringify(groupList),
+                callback: function (res) {
+                }
+            })
+            .call({
+                type: "PUT",
+                url: "/api/v1/ac003/03/save",
+                data: JSON.stringify(roleList),
+                callback: function (res) {
+                }
+            })
+            .done(function () {
+                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+                axToast.push("Data save completed");
+            });
     },
     FORM_CLEAR: function (caller, act, data) {
         /*

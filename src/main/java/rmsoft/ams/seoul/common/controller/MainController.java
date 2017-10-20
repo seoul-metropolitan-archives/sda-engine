@@ -8,13 +8,13 @@ import io.onsemiro.core.domain.user.SessionUser;
 import io.onsemiro.utils.PhaseUtils;
 import io.onsemiro.utils.SessionUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import rmsoft.ams.seoul.utils.CommonCodeUtils;
+import rmsoft.ams.seoul.utils.CommonMessageUtils;
 
 /**
  * Created by james on 2016-12-28.
@@ -27,6 +27,7 @@ public class MainController {
     private String appName;
 
     private String commonCodeJson;
+    private String commonMessageJson;
 
     @GetMapping("/")
     public String index() {
@@ -64,11 +65,12 @@ public class MainController {
         }*/
 
         // 무조건 공통코드를 재조회 한다.
-        if (StringUtils.isEmpty(commonCodeJson)) {
-            commonCodeJson = CommonCodeUtils.getAllByJson();
-        }
+
+        commonCodeJson = CommonCodeUtils.getAllByJson();
+        commonMessageJson = CommonMessageUtils.getAllMessageByJson();
 
         model.addAttribute("commonCodeJson", commonCodeJson);
+        model.addAttribute("commonMessageJson", commonMessageJson);
         model.addAttribute("isDevelopmentMode", PhaseUtils.isDevelopmentMode());
         model.addAttribute("axbody_class", "frame-set");
 

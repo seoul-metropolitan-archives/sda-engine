@@ -24,17 +24,18 @@
 
     <script type="text/javascript" th:src="@{/assets/js/plugins.js}"></script>
     <script type="text/javascript" th:src="@{/assets/js/axboot.js}"></script>
-    <script type="text/javascript" th:src="@{/assets/js/jquery.backstretch.min.js}" ></script>
+    <script type="text/javascript" th:src="@{/assets/js/jquery.backstretch.min.js}"></script>
 
     <script type="text/javascript">
-       /* $(function() {
-            var images = ['bg_login02.jpg', 'bg_login01.jpg', 'bg_login03.jpg'];
-            $('.background').css({'background': 'url(assets/images/' + images[Math.floor(Math.random() * images.length)] + ')'});
-        });*/
+        /* $(function() {
+             var images = ['bg_login02.jpg', 'bg_login01.jpg', 'bg_login03.jpg'];
+             $('.background').css({'background': 'url(assets/images/' + images[Math.floor(Math.random() * images.length)] + ')'});
+         });*/
 
         var sessionJson = convertJsonObj('[[${scriptSession}]]');
         var menuJson = convertJsonObj('[[${menuJson}]]');
         var commonCodeJson = convertJsonObj('[[${commonCodeJson}]]');
+        var commonMessageJson = convertJsonObj('[[${commonMessageJson}]]');
 
         var CONTEXT_PATH = 'http://[[${#httpServletRequest.serverName}]]:[[${#httpServletRequest.serverPort}]]';
         /*var CONTEXT_PATH   = 'http://[[@{${@environment.getProperty("server.url")}}]]:[[@{${@environment.getProperty("server.port")}}]]';*/
@@ -47,6 +48,10 @@
         var COMMON_CODE = (function (json) {
             return json;
         })(commonCodeJson);
+
+        var COMMON_MESSAGE = (function (json) {
+            return json;
+        })(commonMessageJson);
 
         function convertJsonObj(jsonStr) {
             return jsonStr == null || jsonStr == '' ? null : JSON.parse(jsonStr.replace(/&quot;/gi, '"'));
@@ -110,7 +115,7 @@
         "assets/images/bg_login01.jpg",
         "assets/images/bg_login02.jpg",
         "assets/images/bg_login03.jpg"
-    ],{duration:3000, fade:1000});
+    ], {duration: 3000, fade: 1000});
 </script>
 <div id="ax-frame-root" class="visible show-aside" data-root-container="true">
     <!-- header-tool -->
