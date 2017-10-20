@@ -548,6 +548,11 @@ fnObj.tabView = axboot.viewExtend({
                 iframeObject = $iframe.get(0),
                 idoc = (iframeObject.contentDocument) ? iframeObject.contentDocument : iframeObject.contentWindow.document;
 
+            if(iframeObject.contentWindow.ACTIONS && iframeObject.contentWindow.ACTIONS.dispatch && iframeObject.contentWindow.ACTIONS.CLOSE_TAB)
+            {
+                iframeObject.contentWindow.ACTIONS.dispatch(iframeObject.contentWindow.ACTIONS.CLOSE_TAB)
+            }
+
             $(idoc.body).children().each(function () {
                 $(this).remove();
             });
