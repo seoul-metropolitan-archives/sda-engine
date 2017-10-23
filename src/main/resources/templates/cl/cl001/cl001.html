@@ -9,123 +9,123 @@
 <!-- ===== [ script ] _END_ ===== -->
 <!-- ===== [ base-content ] ===== -->
 <div layout:fragment="base-content" class="ax-base-content">
-    <div class="cssBody" style="top:80px">
-        <div class="contents_wrap">
-            <div style=" height:31px; width:100%" class="bgf7 div_tablerow">
-                <ul class="bdb">
-                    <th:block layout:insert="~{/fragments/page-buttons :: bookmark}"/>
-                    <th:block layout:insert="~{/fragments/page-buttons :: confirm-and-cancle-and-save-and-inquiry}"/>
-                </ul>
-            </div>
-            <div class="bdb div_tablerow">
-                <dl>
-                    <dt class="pdl_5 w130">Status</dt>
-                    <dd>
-                        <select data-ax-path="statusUuid" style="width:135px;">
-                            <option value=""></option>
-                            <option th:each="item : ${statusUuid}" th:value="${item.codeDetailUUID}"
-                                    th:text="${item.codeName}"/>
-                        </select>
-                    </dd>
-                    <dt class="w130">Classification Code</dt>
-                    <dd><input type=text style="width:135px"></dd>
-                    <dt class="w130">Classification Name</dt>
-                    <dd><input type=text style="width:135px"></dd>
-
-                </dl>
-                <dl>
-                    <dt class="pdl_5 w130">Classification Type</dt>
-                    <dd>
-                        <select data-ax-path="classLevel" style="width:135px;">
-                            <option value=""></option>
-                            <option th:each="item : ${classLevel}" th:value="${item.codeDetailUUID}"
-                                    th:text="${item.codeName}"/>
-                        </select>
-                    </dd>
-                    <dd class="w_auto">
-                        <div class="rdo_box">
-                            <span class="rdo_box_title">Use</span>
-                            <label><input type="radio" name="radio" class="no_border">Yes</label>
-                            <label><input type="radio" name="radio" class="no_border">No</label>
-                            <label><input type="radio" name="radio" class="no_border" checked>All</label>
-                        </div>
-                    </dd>
-                </dl>
-
-            </div>
-            <div style="height:100%; width:100%" class="div_tablerow">
-                <div style="display:table; height:100%; width:75%; float:left" class="bdr">
-                    <ul class="bdb bdt div_tablerow bgf7" style="height:30px;">
-                        <th:block layout:insert="~{/fragments/page-buttons :: dot('Classification Scheme')}"/>
-                        <th:block layout:insert="~{/fragments/page-buttons :: add-and-delete}"/>
+    <form name="formView01" id="formView01" method="post" onsubmit="return false">
+        <div class="cssBody" style="top:80px">
+            <div class="contents_wrap">
+                <div style=" height:31px; width:100%" class="bgf7 div_tablerow">
+                    <ul class="bdb">
+                        <th:block layout:insert="~{/fragments/page-buttons :: bookmark}"/>
+                        <th:block layout:insert="~{/fragments/page-buttons :: confirm-and-cancle-and-save-and-inquiry}"/>
                     </ul>
-                    <div style="height:100%; width:100%" class="div_tablerow bdb">
-                        <div id="realgrid01" style="width:100%; height:100%"></div>
-                    </div>
                 </div>
+                <div class="bdb div_tablerow">
+                    <dl>
+                        <dt class="pdl_5 w130">Status</dt>
+                        <dd>
+                            <select data-ax-path="statusUuid" style="width:135px;">
+                                <option value=""></option>
+                                <option th:each="item : ${statusUuid}" th:value="${item.codeDetailUUID}" th:text="${item.codeName}"/>
+                            </select>
+                        </dd>
+                        <dt class="w130">Classification Code</dt>
+                        <dd><input type=text style="width:135px"></dd>
+                        <dt class="w130">Classification Name</dt>
+                        <dd><input type=text style="width:135px"></dd>
+
+                    </dl>
+                    <dl>
+                        <dt class="pdl_5 w130">Classification Type</dt>
+                        <dd>
+                            <select data-ax-path="classificationTypeUuid" style="width:135px;">
+                                <option value=""></option>
+                                <option th:each="item : ${classificationTypeUuid}" th:value="${item.codeDetailUUID}" th:text="${item.codeName}"/>
+                            </select>
+                        </dd>
+                        <dd class="w_auto">
+                            <div class="rdo_box">
+                                <span class="rdo_box_title">Use</span>
+                                <label><input type="radio" name="radio" class="no_border">Yes</label>
+                                <label><input type="radio" name="radio" class="no_border">No</label>
+                                <label><input type="radio" name="radio" class="no_border" checked>All</label>
+                            </div>
+                        </dd>
+                    </dl>
+
+                </div>
+                <div style="height:100%; width:100%" class="div_tablerow">
+                    <div style="display:table; height:100%; width:75%; float:left" class="bdr">
+                        <ul class="bdb bdt div_tablerow bgf7" style="height:30px;">
+                            <th:block layout:insert="~{/fragments/page-buttons :: dot('Classification Scheme')}"/>
+                            <th:block layout:insert="~{/fragments/page-buttons :: add-and-delete}"/>
+                        </ul>
+                        <div style="height:100%; width:100%" class="div_tablerow bdb">
+                            <div id="realgrid01" style="width:100%; height:100%"></div>
+                        </div>
+                    </div>
 
 
-                <div style="display:table; height:100%; width:25%; float:right">
-                    <ul class="bdb bdt div_tablerow bgf7" style="height:30px;">
-                        <th:block layout:insert="~{/fragments/page-buttons :: dot('Classification Scheme Detail')}"/>
-                    </ul>
-                    <div style="height:100%; width:100%;" class="div_tablerow bdb">
-                        <div style="height: 100%; width: 100%; overflow-y: scroll; overflow-x: hidden; ">
-                            <div style="height: 100%; width: 98%; float: right">
+                    <div style="display:table; height:100%; width:25%; float:right">
+                        <ul class="bdb bdt div_tablerow bgf7" style="height:30px;">
+                            <th:block layout:insert="~{/fragments/page-buttons :: dot('Classification Scheme Detail')}"/>
+                        </ul>
+                        <div style="height:100%; width:100%;" class="div_tablerow bdb">
+                            <div style="height: 100%; width: 100%; overflow-y: scroll; overflow-x: hidden; ">
+                                <div style="height: 100%; width: 98%; float: right">
 
-                                <ul style="width: 100%; height: 30px; ">
-                                    <li style="width: 35%;text-align: left">Classification Name</li>
-                                    <li style="width: 65%"><input type=text style="width:97%" class="bgf7" readonly></li>
-                                </ul>
+                                    <ul style="width: 100%; height: 30px; ">
+                                        <li style="width: 35%;text-align: left">Classification Name</li>
+                                        <li style="width: 65%"><input type=text style="width:97%" class="bgf7" readonly></li>
+                                    </ul>
 
-                                <ul style="width: 100%; height: 30px;">
-                                    <li style="width: 35%;text-align: left">Manager Organization</li>
-                                    <li style="width: 65%"><input type=text style="width:97%"></li>
-                                </ul>
+                                    <ul style="width: 100%; height: 30px;">
+                                        <li style="width: 35%;text-align: left">Manager Organization</li>
+                                        <li style="width: 65%"><input type=text style="width:97%"></li>
+                                    </ul>
 
-                                <ul style="width: 100%; height: 30px;">
-                                    <li style="width: 35%;text-align: left">Manager</li>
-                                    <li style="width: 65%"><input type=text style="width:97%"></li>
-                                </ul>
+                                    <ul style="width: 100%; height: 30px;">
+                                        <li style="width: 35%;text-align: left">Manager</li>
+                                        <li style="width: 65%"><input type=text style="width:97%"></li>
+                                    </ul>
 
-                                <ul style="width: 100%; height: 100px;">
-                                    <li style="width: 35%;text-align: left">Based On</li>
-                                    <li style="width: 65%; height: 100%"><textarea rows="1" cols="1" class="txtar" style="width: 97%"></textarea></li>
-                                </ul>
+                                    <ul style="width: 100%; height: 100px;">
+                                        <li style="width: 35%;text-align: left">Based On</li>
+                                        <li style="width: 65%; height: 100%"><textarea rows="1" cols="1" class="txtar" style="width: 97%"></textarea></li>
+                                    </ul>
 
-                                <ul style="width: 100%; height: 30px;">
-                                    <li style="width: 35%;text-align: left"><a href="#" class="under">Class Condition</a></li>
-                                    <li style="width: 30%;text-align: left">Use</li>
-                                    <li style="width: 35%"><input type=text style="width:96%" class="bgf7" readonly></li>
-                                </ul>
-                                <ul style="width: 100%; height: 30px;">
-                                    <li style="width: 35%;text-align: left">&nbsp;</li>
-                                    <li style="width: 30%;text-align: left">Not Use</li>
-                                    <li style="width: 35%"><input type=text style="width:96%" class="bgf7" readonly></li>
-                                </ul>
+                                    <ul style="width: 100%; height: 30px;">
+                                        <li style="width: 35%;text-align: left"><a href="#" class="under">Class Condition</a></li>
+                                        <li style="width: 30%;text-align: left">Use</li>
+                                        <li style="width: 35%"><input type=text style="width:96%" class="bgf7" readonly></li>
+                                    </ul>
+                                    <ul style="width: 100%; height: 30px;">
+                                        <li style="width: 35%;text-align: left">&nbsp;</li>
+                                        <li style="width: 30%;text-align: left">Not Use</li>
+                                        <li style="width: 35%"><input type=text style="width:96%" class="bgf7" readonly></li>
+                                    </ul>
 
-                                <ul style="width: 100%; height: 30px;">
-                                    <li style="width: 35%;text-align: left"><a href="#" class="under">Class Records Condition</a></li>
-                                    <li style="width: 30%;text-align: left">Aggregation</li>
-                                    <li style="width: 35%"><input type=text style="width:96%" class="bgf7" readonly></li>
-                                </ul>
-                                <ul style="width: 100%; height: 30px;">
-                                    <li style="width: 35%;">&nbsp;</li>
-                                    <li style="width: 30%;text-align: left">Item</li>
-                                    <li style="width: 35%"><input type=text style="width:96%" class="bgf7" readonly></li>
-                                </ul>
+                                    <ul style="width: 100%; height: 30px;">
+                                        <li style="width: 35%;text-align: left"><a href="#" class="under">Class Records Condition</a></li>
+                                        <li style="width: 30%;text-align: left">Aggregation</li>
+                                        <li style="width: 35%"><input type=text style="width:96%" class="bgf7" readonly></li>
+                                    </ul>
+                                    <ul style="width: 100%; height: 30px;">
+                                        <li style="width: 35%;">&nbsp;</li>
+                                        <li style="width: 30%;text-align: left">Item</li>
+                                        <li style="width: 35%"><input type=text style="width:96%" class="bgf7" readonly></li>
+                                    </ul>
 
 
+
+                                </div>
 
                             </div>
-
                         </div>
                     </div>
-                </div>
 
-            </div>
-        </div><!--오른쪽 내용영역 전체 e -->
-    </div>
+                </div>
+            </div><!--오른쪽 내용영역 전체 e -->
+        </div>
+    </form>
 </div>
     <!-- ===== [ base-content ] _END_ ===== -->
 </html>

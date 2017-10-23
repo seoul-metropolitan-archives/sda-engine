@@ -1,11 +1,11 @@
 var fnObj = {};
 
 var ACTIONS = axboot.actionExtend(fnObj, {
-    PAGE_SEARCH: function (caller, act, data){
+    PAGE_SEARCH: function (caller, act, data) {
         axboot.ajax({
             type: "GET",
             url: "/api/v1/cl001/01/list",
-            data: $.extend({}, {pageSize: 1000}),
+            data: $.extend({}, {pageSize: 1000, sort: "classificationCode"}, this.formView.getData()),
             callback: function (res) {
                 fnObj.gridView01.setData(res.list);
             },
@@ -15,17 +15,52 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         });
         return false;
     },
+    PAGE_SEARCH1: function (caller, act, data) {
+        axboot.ajax({
+            type: "GET",
+            url: "/api/v1/cl001/02/detail",
+            data: $.extend({}, {pageSize: 1000}, data),
+            callback: function (res) {
+                //fnObj.gridView01.setData(res.list);
+            },
+            options: {
+                onError: axboot.viewError
+            }
+        });
+    },
     ERROR_SEARCH: function (caller, act, data) {
         return false;
     },
-    POPUP_HEADER_PAGE_SAVE: function (caller, act, data) {
+    PAGE_SAVE: function (caller, act, data) {
         axDialog.confirm({
             msg: "저장하시겠습니까?"
-        },function() {
-            if (this.key == "ok") {
-                alert("저장하자");
-            }
+        }, function () {
+            if (
+                this.key == "ok"
+                && ACTIONS.dispatch(ACTIONS.TOP_GRID_SAVE)
+            // && ACTIONS.dispatch(ACTIONS.TOP_GRID_DETAIL_PAGE_SAVE)
+            )
+                alert("저장되었습니다");
         });
+    },
+    TOP_GRID_SAVE: function (caller, act, data) {
+        var result = false;
+        axboot.call({
+                type: "PUT",
+                url: "/api/v1/cl001/03/saveList",
+                data: JSON.stringify(this.gridView01.getData()),
+                callback: function (res) {
+                    ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+                    result = true;
+                }
+            })
+            .done(function () {
+                axToast.push("저장 작업이 완료되었습니다.");
+            });
+        return result;
+    },
+    TOP_GRID_DETAIL_PAGE_SAVE: function (caller, act, data) {
+        return false;
     },
     FORM_CLEAR: function (caller, act, data) {
         return false;
@@ -58,27 +93,26 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     }
 });
 
-fnObj = {
-    pageStart : function () {
-        var _this = this;
-        $.ajax({
-            url: "/assets/js/controller/simple_controller.js",
-            dataType: "script",
-            async : false,
-            success: function(){}
-        });
-        $.ajax({
-            url: "/assets/js/column_info/cl00101.js",
-            dataType: "script",
-            async : false,
-            success: function(){}
-        });
+fnObj.pageStart = function () {
+    var _this = this;
+    $.ajax({
+        url: "/assets/js/controller/simple_controller.js",
+        dataType: "script",
+        async: false,
+        success: function () {
+        }
+    });
+    $.ajax({
+        url: "/assets/js/column_info/cl00101.js",
+        dataType: "script",
+        async: false,
+        success: function () {
+        }
+    });
 
-        _this.formView.initView();
-        _this.gridView01.initView();
-        ACTIONS.dispatch(ACTIONS.PAGE_SEARCH,this.formView.getData());
-
-    }
+    _this.formView.initView();
+    _this.gridView01.initView();
+    ACTIONS.dispatch(ACTIONS.PAGE_SEARCH, this.formView.getData());
 };
 
 fnObj.formView = axboot.viewExtend(axboot.formView, {
@@ -129,16 +163,24 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
 
 /*팝업 헤더*/
 fnObj.gridView01 = axboot.viewExtend(axboot.realGridView, {
-    tagId : "realgrid01",
-    entityName : "Classification Scheme",
-    initView  : function()
-    {
+    tagId: "realgrid01",
+    entityName: "Classification Scheme",
+    initView: function () {
         this.setColumnInfo(cl00101.column_info);
-        this.gridObj.setFixedOptions(4);
+        this.gridObj.setFixedOptions({
+            colCount: 4
+        });
         this.gridObj.setOption({
-            checkBar : {visible : true}
+            checkBar: {visible: true},
+            indicator: {visible: true}
         })
         this.makeGrid();
-
+        this.gridObj.itemClick(this.itemClick);
+    },
+    itemClick: function (data) {
+        if (data.classificationSchemeUuid != null && data.classificationSchemeUuid != "") {
+            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, data);
+            /*  ACTIONS.dispatch(ACTIONS.PAGE_SEARCH2, data);*/
+        }
     }
 });

@@ -1,4 +1,4 @@
-var cl00201 =
+var cl00301 =
     {
         column_info :
             [
@@ -67,7 +67,7 @@ var cl00201 =
                     sortable: true
                 },
                 {
-                    sortNo: 6,
+                    sortNo: "6",
                     name: "classLevelUuid",
                     text: "Class Level Uuid",
                     width: 100,
@@ -77,7 +77,7 @@ var cl00201 =
                     dataType : "combo"
                 },
                 {
-                    sortNo: 7,
+                    sortNo: "7",
                     name: "orderNo",
                     text: "Order No",
                     width: 70,

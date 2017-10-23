@@ -7,6 +7,12 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             url: "/api/v1/cl002/01/list",
             data: $.extend({}, {pageSize: 1000}),
             callback: function (res) {
+                if(res.list && res.list.length < 1)
+                {
+                    fnObj.gridView01.addRow();
+                    return ;
+                }
+
                 fnObj.gridView01.setData(res.list);
             },
             options: {
@@ -130,7 +136,7 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
 /*팝업 헤더*/
 fnObj.gridView01 = axboot.viewExtend(axboot.realGridView, {
     tagId : "realgrid01",
-    entityName : "Classification Scheme",
+    entityName : "class",
     initView  : function()
     {
         this.setColumnInfo(cl00201.column_info);
@@ -139,6 +145,17 @@ fnObj.gridView01 = axboot.viewExtend(axboot.realGridView, {
             checkBar : {visible : true}
         })
         this.makeGrid();
+    },
+    setData: function (list) {
+        this.gridObj.setData("set", list);
 
+    },
+    getData: function () {
+        return this.gridObj.getData();
+    },
+    addRow: function () {
+        this.gridObj.addRow();
+    },
+    itemClick: function (data) {
     }
 });

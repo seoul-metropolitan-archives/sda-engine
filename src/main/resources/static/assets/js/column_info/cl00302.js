@@ -1,4 +1,4 @@
-var cl00201 =
+var cl00301 =
     {
         column_info :
             [
@@ -15,7 +15,7 @@ var cl00201 =
                     sortNo: 0,
                     width:30,
                     name: "classUuid",
-                    text: "Class UUID",
+                    text: "CLASSIFIED_RECORDS_UUID",
                     editable: false,
                     dataType: "code",
                     required: false,
@@ -25,7 +25,7 @@ var cl00201 =
                     sortNo: 1,
                     width:30,
                     name: "classificationSchemeUuid",
-                    text: "Classification Scheme UUID",
+                    text: "STATUS_UUID",
                     editable: false,
                     dataType: "code",
                     required: false,
@@ -35,7 +35,7 @@ var cl00201 =
                     sortNo: 2,
                     width: 120,
                     name: "statusUuid",
-                    text: "Status",
+                    text: "CLASS_UUID",
                     editable: false,
                     values: axboot.commonCodeFilter("CD111").codeArr,
                     labels: axboot.commonCodeFilter("CD111").nameArr,
@@ -44,113 +44,71 @@ var cl00201 =
                 {
                     sortNo: 3,
                     width: 150,
-                    name: "parentClassUuid",
+                    name: "AGGREGATION_ID",
                     text: "Parent Class Code",
                     editable: true
                 },
                 {
                     sortNo: 4,
                     name: "classCode",
-                    text: "Class Code",
+                    text: "ITEM_UUID",
                     width: 150,
                     dataType: "code",
                     editable: false,
-                    sortable: true
-                },
-                {
-                    sortNo: 5,
-                    name: "classCode",
-                    text: "Class Code",
-                    width: 150,
-                    dataType: "code",
-                    editable: true,
                     sortable: true
                 },
                 {
                     sortNo: 6,
-                    name: "classLevelUuid",
-                    text: "Class Level Uuid",
-                    width: 100,
-                    editable: true,
-                    values: axboot.commonCodeFilter("CD114").codeArr,
-                    labels: axboot.commonCodeFilter("CD114").nameArr,
-                    dataType : "combo"
+                    name: "description",
+                    text: "Description",
+                    width: 250,
+                    dataType: "richtext"
                 },
                 {
                     sortNo: 7,
-                    name: "orderNo",
-                    text: "Order No",
-                    width: 70,
-                    editable: true,
-                    sortable: true,
-                    datType: "number"
-                },
-                {
-                    sortNo: 8,
-                    name: "description",
-                    text: "description",
-                    width: 120,
-                    editable: true,
+                    name: "notes",
+                    text: "NOTES",
+                    width: 250,
                     dataType: "richtext",
-                    required: false,
+                    required: true
                 },
                 {
                     sortNo: 9,
-                    name: "notes",
-                    text: "NOTES",
-                    width: 120,
-                    editable: true,
-                    dataType: "richtext",
+                    name: "insertUuid",
+                    text: "Created By",
+                    width: 80,
+                    dataType: "timestamp",
+                    editable: false,
+                    disable : true,
                     required: false
                 },
                 {
                     sortNo: 10,
-                    name: "useYn",
-                    text: "USE",
-                    width: 120,
-                    editable: true,
-                    dataType: "check",
-                    textAlignment: "center",
-                    required: true
+                    name: "insertDate",
+                    text: "Date/Time Created",
+                    width: 140,
+                    dataType: "text",
+                    editable: false,
+                    required: false
                 },
                 {
                     sortNo: 11,
-                    name: "insertUuid",
-                    text: "Created By",
-                    width: 120,
-                    editable: false,
-                    disable: true,
+                    name: "updateUuid",
+                    text: "Modifed By",
+                    width: 80,
                     dataType: "text",
+                    editable: false,
+                    disable : true,
                     required: false
                 },
                 {
                     sortNo: 12,
-                    name: "insertDate",
-                    text: "Date/Time Created",
-                    width: 120,
-                    editable: false,
-                    disable: true,
-                    dataType: "timestamp",
-                    required: false
-                },
-                {
-                    sortNo: 13,
-                    name: "updateUuid",
-                    text: "Modifed By",
-                    width: 120,
-                    editable: false,
-                    disable: true,
-                    dataType: "text",
-                    required: false
-                },
-                {
-                    sortNo: 14,
                     name: "updateDate",
                     text: "Date/Time Modified",
-                    width: 120,
-                    editable: false,
-                    disable: true,
+                    width: 140,
                     dataType: "timestamp",
+                    editable: false,
+                    disable : true,
                     required: false
                 }
             ]

@@ -16,8 +16,8 @@ var cl00101 =
                     width:30,
                     name: "classificationSchemeUuid",
                     text: "Classification Scheme UUID",
-                    editable: false,
                     dataType: "code",
+                    editable: false,
                     required: false,
                     visible: false
                 },
@@ -26,11 +26,12 @@ var cl00101 =
                     width:120,
                     name: "statusUuid",
                     text: "Status",
-                    editable: false,
                     dataType: "combo",
                     values: axboot.commonCodeFilter("CD111").codeArr,
                     labels: axboot.commonCodeFilter("CD111").nameArr,
+                    editable: false,
                     required: true,
+                    disable: true
                 },
                 {
                     sortNo: 2,
@@ -38,9 +39,9 @@ var cl00101 =
                     name: "classificationCode",
                     text: "Classification Code",
                     width: 140,
-                    editable: false,
                     dataType: "text",
-                    required: true
+                    required: false,
+                    disable : true
                 },
                 {
                     sortNo: 3,
@@ -48,7 +49,7 @@ var cl00101 =
                     text: "Classification Name",
                     width: 160,
                     dataType: "code",
-                    required: true,
+                    required : true,
                 },
                 {
                     sortNo: 4,
@@ -56,41 +57,43 @@ var cl00101 =
                     text: "Classification Type",
                     width: 140,
                     dataType: "combo",
-                    required: true,
                     values: axboot.commonCodeFilter("CD112").codeArr,
-                    labels: axboot.commonCodeFilter("CD112").nameArr
+                    labels: axboot.commonCodeFilter("CD112").nameArr,
+                    required : true,
+                    disable: false
                 },
                 {
                     sortNo: 5,
                     name: "orderNo",
                     text: "Sort No",
                     width: 70,
-                    editable: true,
-                    dataType: "richtext",
-                    required: true
+                    textAlignment: "right",
+                    dataType: "number",
+                    required: false
                 },
                 {
                     sortNo: 6,
                     name: "description",
                     text: "Description",
                     width: 250,
-                    dataType: "richtext"
+                    dataType: "richtext",
+                    required: false
                 },
                 {
-                    sortNo: 8,
+                    sortNo: 7,
                     name: "notes",
                     text: "NOTES",
                     width: 250,
                     dataType: "richtext",
-                    required: true
+                    required: false
                 },
                 {
-                    sortNo: 9,
+                    sortNo: 8,
                     name: "useYn",
                     text: "Use",
                     width: 120,
                     dataType: "check",
-                    textAlignment: "right",
+                    textAlignment: "center",
                     defaultValue : "Y",
                     renderer: {
                         type: "check",
@@ -102,39 +105,42 @@ var cl00101 =
                     required: true
                 },
                 {
-                    sortNo: 10,
+                    sortNo: 9,
                     name: "insertUuid",
                     text: "Created By",
                     width: 80,
-                    editable: false,
                     dataType: "timestamp",
+                    editable: false,
+                    disable : true,
+                    required: false
+                },
+                {
+                    sortNo: 10,
+                    name: "insertDate",
+                    text: "Date/Time Created",
+                    width: 140,
+                    dataType: "text",
+                    editable: false,
                     required: false
                 },
                 {
                     sortNo: 11,
-                    name: "insertDate",
-                    text: "Date/Time Created",
-                    width: 140,
-                    editable: false,
+                    name: "updateUuid",
+                    text: "Modifed By",
+                    width: 80,
                     dataType: "text",
+                    editable: false,
+                    disable : true,
                     required: false
                 },
                 {
                     sortNo: 12,
-                    name: "updateUuid",
-                    text: "Modifed By",
-                    width: 80,
-                    editable: false,
-                    dataType: "text",
-                    required: false
-                },
-                {
-                    sortNo: 13,
                     name: "updateDate",
                     text: "Date/Time Modified",
                     width: 140,
-                    editable: false,
                     dataType: "timestamp",
+                    editable: false,
+                    disable : true,
                     required: false
                 }
             ]

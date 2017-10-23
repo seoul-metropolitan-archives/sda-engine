@@ -839,7 +839,10 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 	{
 		gridView.setFixedOptions(p_fixedOptions);
 	};
-	
+	this.setIndicator = function(p_indicator)
+	{
+		gridView.setIndicator(p_indicator);
+	}
 	
 	// ==============================
 	// 필수 값체크
