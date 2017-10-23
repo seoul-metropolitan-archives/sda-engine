@@ -4,7 +4,6 @@
 
 package rmsoft.ams.seoul.common.controller;
 
-import io.onsemiro.controller.BaseController;
 import io.onsemiro.core.api.response.Responses;
 import io.onsemiro.core.parameter.RequestParams;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +24,7 @@ import rmsoft.ams.seoul.ac.ac003.vo.Ac00301VO;
  **/
 @RestController
 @RequestMapping(value = "/api/v1/common")
-public class CommonPopupController extends BaseController {
+public class CommonPopupController extends MessageBaseController {
 
     @Autowired
     private Ac003Service ac003Service;

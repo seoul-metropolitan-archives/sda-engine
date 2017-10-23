@@ -182,7 +182,10 @@ fnObj.frameView = axboot.viewExtend({
                         fnObj.frameView.asideView.open(index);
                     } else {
                         if (menuItems[index].program) {
-                            ACTIONS.dispatch(ACTIONS.MENU_OPEN, $.extend({}, menuItems[index].program, {menuId: menuItems[index].menuId, menuNm: menuItems[index].menuNm}));
+                            ACTIONS.dispatch(ACTIONS.MENU_OPEN, $.extend({}, menuItems[index].program, {
+                                menuId: menuItems[index].menuId,
+                                menuNm: menuItems[index].menuNm
+                            }));
                         }
                     }
                 });
@@ -203,7 +206,10 @@ fnObj.frameView = axboot.viewExtend({
                                     zTree.expandNode(treeNode);
 
                                     if (treeNode.program) {
-                                        ACTIONS.dispatch(ACTIONS.MENU_OPEN, $.extend({}, treeNode.program, {menuId: treeNode.menuId, menuNm: treeNode.menuNm}));
+                                        ACTIONS.dispatch(ACTIONS.MENU_OPEN, $.extend({}, treeNode.program, {
+                                            menuId: treeNode.menuId,
+                                            menuNm: treeNode.menuNm
+                                        }));
                                     }
                                 }
                             }
@@ -219,9 +225,7 @@ fnObj.frameView = axboot.viewExtend({
                 fnObj.frameView.aside.find('[data-label-index="' + this.openedIndex + '"]').removeClass("opend");
                 fnObj.frameView.aside.find('[data-tree-body-index="' + this.openedIndex + '"]').removeClass("opend");
 
-                fnObj.frameView.
-
-                aside.find('[data-label-index="' + _index + '"]').addClass("opend");
+                fnObj.frameView.aside.find('[data-label-index="' + _index + '"]').addClass("opend");
                 fnObj.frameView.aside.find('[data-tree-body-index="' + _index + '"]').addClass("opend");
 
                 this.openedIndex = _index;
@@ -260,7 +264,10 @@ fnObj.topMenuView = axboot.viewExtend({
         this.menu.attach(this.target);
         this.menu.onClick = function () {
             if (this.program) {
-                ACTIONS.dispatch(ACTIONS.MENU_OPEN, $.extend({}, this.program, {menuId: this.menuId, menuNm: this.menuNm}));
+                ACTIONS.dispatch(ACTIONS.MENU_OPEN, $.extend({}, this.program, {
+                    menuId: this.menuId,
+                    menuNm: this.menuNm
+                }));
             }
         };
         this.menu.onStateChanged = function () {
@@ -274,7 +281,7 @@ fnObj.topMenuView = axboot.viewExtend({
 
 fnObj.leftMenuView = axboot.viewExtend({
     initView: function () {
-        var _this  = this;
+        var _this = this;
         var menuItems = ax5.util.deepCopy(TOP_MENU_DATA);
         //console.log(menuItems);
         var column_info = [
@@ -282,7 +289,7 @@ fnObj.leftMenuView = axboot.viewExtend({
                 "name": "menuUuid",
                 "fieldName": "",
                 "width": "150",
-                "visible" : false,
+                "visible": false,
                 "styles": {
                     "textAlignment": "near"
                 },
@@ -297,7 +304,7 @@ fnObj.leftMenuView = axboot.viewExtend({
                 "styles": {
                     "textAlignment": "near"
                 },
-                editable : false,
+                editable: false,
                 "header": {
                     "text": " "
                 }
@@ -306,44 +313,45 @@ fnObj.leftMenuView = axboot.viewExtend({
         this.menus = {};
         var leftMenuItems =
             {
-                menus : new Array()
+                menus: new Array()
             };
         var menu_2_list = new Array();
         var secondList = undefined;
-        for(var i = 0; i < menuItems.length; i++)
-        {
+        for (var i = 0; i < menuItems.length; i++) {
             this.menus[menuItems[i]["menuUuid"]] = menuItems[i];
             menu_2_list = menuItems[i]["children"];
 
             secondList = new Array();
-            for(var j = 0; j < menu_2_list.length; j++)
-            {
+            for (var j = 0; j < menu_2_list.length; j++) {
                 this.menus[menu_2_list[j]["menuUuid"]] = menu_2_list[j];
                 secondList.push({
-                   icon : 0
-                    , menuUuid : menu_2_list[j]["menuUuid"]
-                   ,  menuName :  menu_2_list[j]["menuName"]
-                    , program : menu_2_list[j]["program"]
+                    icon: 0
+                    , menuUuid: menu_2_list[j]["menuUuid"]
+                    , menuName: menu_2_list[j]["menuName"]
+                    , program: menu_2_list[j]["program"]
                 });
             }
             leftMenuItems.menus.push({
-                icon : 0
-                , menuUuid : menuItems[i]["menuUuid"]
-                , menuName : menuItems[i]["menuName"]
-                , menus : secondList
+                icon: 0
+                , menuUuid: menuItems[i]["menuUuid"]
+                , menuName: menuItems[i]["menuName"]
+                , menus: secondList
             });
             secondList = undefined;
         }
-        this.gridObj = new GridWrapper("realgridM1","/assets/js/libs/realgrid",true);
-        this.gridObj.setIsTree(true).setGridStyle("100%","100%")
+        this.gridObj = new GridWrapper("realgridM1", "/assets/js/libs/realgrid", true);
+        this.gridObj.setIsTree(true).setGridStyle("100%", "100%")
             .setColumnInfo(column_info).setEntityName("Menu")
             .makeGrid();
-        this.gridObj.setTreeData(leftMenuItems,"menus","","icon");
+        this.gridObj.setTreeData(leftMenuItems, "menus", "", "icon");
         this.gridObj.expandAll();
         this.gridObj.onDataCellClicked(function (grid, index) {
             var menu = _this.menus[grid.getDataProvider().getJsonRow(index.dataRow)["menuUuid"]];
             if (menu["program"]) {
-                ACTIONS.dispatch(ACTIONS.MENU_OPEN, $.extend({}, menu["program"], {menuId: menu["menuId"], menuNm: menu["menuNm"]}));
+                ACTIONS.dispatch(ACTIONS.MENU_OPEN, $.extend({}, menu["program"], {
+                    menuId: menu["menuId"],
+                    menuNm: menu["menuNm"]
+                }));
             }
         });
         //console.log(leftMenuItems);
@@ -483,7 +491,7 @@ fnObj.tabView = axboot.viewExtend({
                 menuNm: item.menuNm,
                 progPh: item.progPh,
                 menuParams: item.menuParams,
-                url: CONTEXT_PATH + item.progPh + "?menuId=" + item.menuId +"&menuParams=" + item.menuParams,
+                url: CONTEXT_PATH + item.progPh + "?menuId=" + item.menuId + "&menuParams=" + item.menuParams,
                 status: "on"
             });
             _item = this.list[this.list.length - 1];
@@ -540,7 +548,7 @@ fnObj.tabView = axboot.viewExtend({
             return false;
         }*/
         this.list = newList;
-        this.target.find('[data-tab-id="' + menuId + '"]').remove();
+        var thisTarget = this.target.find('[data-tab-id="' + menuId + '"]');
 
         // 프레임 제거
         (function () {
@@ -548,28 +556,66 @@ fnObj.tabView = axboot.viewExtend({
                 iframeObject = $iframe.get(0),
                 idoc = (iframeObject.contentDocument) ? iframeObject.contentDocument : iframeObject.contentWindow.document;
 
-            if(iframeObject.contentWindow.ACTIONS && iframeObject.contentWindow.ACTIONS.dispatch && iframeObject.contentWindow.ACTIONS.CLOSE_TAB)
-            {
-                iframeObject.contentWindow.ACTIONS.dispatch(iframeObject.contentWindow.ACTIONS.CLOSE_TAB)
+            if (iframeObject.contentWindow.isDataChanged && iframeObject.contentWindow.isDataChanged()) {
+                axDialog.confirm({
+                    msg: "변경된 데이터가 있습니다.<br>저장 후 닫으시겠습니까?"
+                }, function () {
+                    if (this.key == "ok") {
+                        if (iframeObject.contentWindow.ACTIONS && iframeObject.contentWindow.ACTIONS.dispatch && iframeObject.contentWindow.ACTIONS.CLOSE_TAB) {
+                            iframeObject.contentWindow.ACTIONS.dispatch(iframeObject.contentWindow.ACTIONS.CLOSE_TAB);
+
+                            thisTarget.remove();
+
+                            $(idoc.body).children().each(function () {
+                                $(this).remove();
+                            });
+                            idoc.innerHTML = "";
+                            $iframe
+                                .attr('src', 'about:blank')
+                                .remove();
+
+                            // force garbarge collection for IE only
+                            window.CollectGarbage && window.CollectGarbage();
+
+                        }
+                    } else {
+                        thisTarget.remove();
+
+                        $(idoc.body).children().each(function () {
+                            $(this).remove();
+                        });
+                        idoc.innerHTML = "";
+                        $iframe
+                            .attr('src', 'about:blank')
+                            .remove();
+
+                        // force garbarge collection for IE only
+                        window.CollectGarbage && window.CollectGarbage();
+                    }
+                });
+            } else {
+                thisTarget.remove();
+
+                $(idoc.body).children().each(function () {
+                    $(this).remove();
+                });
+                idoc.innerHTML = "";
+                $iframe
+                    .attr('src', 'about:blank')
+                    .remove();
+
+                // force garbarge collection for IE only
+                window.CollectGarbage && window.CollectGarbage();
             }
-
-            $(idoc.body).children().each(function () {
-                $(this).remove();
-            });
-            idoc.innerHTML = "";
-            $iframe
-                .attr('src', 'about:blank')
-                .remove();
-
-            // force garbarge collection for IE only
-            window.CollectGarbage && window.CollectGarbage();
         }).call(this);
 
         if (removeItem.status == 'on') {
             var lastIndex = this.list.length - 1;
-            this.list[lastIndex].status = 'on';
-            this.target.find('[data-tab-id="' + this.list[lastIndex].menuId + '"]').addClass("on");
-            this.frameTarget.find('[data-tab-id="' + this.list[lastIndex].menuId + '"]').addClass("on");
+            if (lastIndex > -1) {
+                this.list[lastIndex].status = 'on';
+                this.target.find('[data-tab-id="' + this.list[lastIndex].menuId + '"]').addClass("on");
+                this.frameTarget.find('[data-tab-id="' + this.list[lastIndex].menuId + '"]').addClass("on");
+            }
         }
 
         // check status = "on"
@@ -579,9 +625,12 @@ fnObj.tabView = axboot.viewExtend({
         });
         if (!hasStatusOn) {
             var lastIndex = this.list.length - 1;
-            this.list[lastIndex].status = 'on';
-            this.target.find('[data-tab-id="' + this.list[lastIndex].menuId + '"]').addClass("on");
-            this.frameTarget.find('[data-tab-id="' + this.list[lastIndex].menuId + '"]').addClass("on");
+
+            if (lastIndex > -1) {
+                this.list[lastIndex].status = 'on';
+                this.target.find('[data-tab-id="' + this.list[lastIndex].menuId + '"]').addClass("on");
+                this.frameTarget.find('[data-tab-id="' + this.list[lastIndex].menuId + '"]').addClass("on");
+            }
         }
         this.target.find('.tooltip').remove();
         this.resize();

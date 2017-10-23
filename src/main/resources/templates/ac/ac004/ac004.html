@@ -1,10 +1,14 @@
 <!DOCTYPE HTML>
+<!--
+  ~ Copyright (c) 2017. RMSoft Co.,Ltd. All rights reserved
+  -->
+
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{/layout/base}">
 
 <!-- ===== [ script ] ===== -->
-<script layout:fragment="script" type="text/javascript" th:src="@{/assets/js/ac/ac003/ac003.js}"></script>
+<script layout:fragment="script" type="text/javascript" th:src="@{/assets/js/ac/ac004/ac004.js}"></script>
 <!-- ===== [ script ] _END_ ===== -->
 
 <!-- ===== [ base-content ] ===== -->
@@ -20,31 +24,18 @@
                 </div>
                 <div class="bdb div_tablerow">
                     <dl>
-                        <dt class="pdl_5">User ID</dt>
+                        <dt class="pdl_5">User Group</dt>
                         <dd>
-                            <input type=text data-ax-path="userId" style="width:135px">
+                            <input type=text data-ax-path="userGroupName" style="width:135px">
                         </dd>
-                        <dt>User Name</dt>
-                        <dd>
-                            <input type=text data-ax-path="userNm" style="width:135px">
-                        </dd>
-                        <dt>User Type</dt>
-                        <dd>
-                            <select data-ax-path="userTypeUuid" style="width:135px;">
-                                <option value=""></option>
-                                <option th:each="item : ${userTypeUuid}" th:value="${item.codeDetailUUID}"
-                                        th:text="${item.codeName}"/>
-                            </select>
-                        </dd>
-                    </dl>
-                    <dl>
                         <dt class="none">Use</dt>
                         <dd class="pdl_5 w_auto">
                             <div class="rdo_box">
                                 <span class="rdo_box_title">Use</span>
                                 <label>
-                                    <input type="radio" name="radio" checked="checked" data-ax-path="useYn" class="no_border" value="Y"
-                                           >Yes
+                                    <input type="radio" name="radio" checked="checked" data-ax-path="useYn"
+                                           class="no_border" value="Y"
+                                    >Yes
                                 </label>
                                 <label>
                                     <input type="radio" name="radio" data-ax-path="useYn" class="no_border" value="N">No
@@ -75,7 +66,7 @@
                         </ul>
                         <ul class="bdb div_tablerow" style="height:25px;">
                             <li style="width:100%; text-align:left;">
-                                <input type=text class="yeongye" data-ax-path="userNmHeader" value="" readonly>
+                                <input type=text class="yeongye" data-ax-path="userGroupHeader" readonly>
                             </li>
                         </ul>
                         <div style="height:100%; width:100%" class="div_tablerow bdb">
@@ -91,7 +82,7 @@
                         </ul>
                         <ul class="bdb div_tablerow" style="height:25px;">
                             <li style="width:100%; text-align:left;">
-                                <input type=text class="yeongye" data-ax-path="userNmHeader" readonly>
+                                <input type=text class="yeongye" data-ax-path="userGroupHeader" readonly>
                             </li>
                         </ul>
                         <div style="height:100%; width:100%" class="div_tablerow bdb">

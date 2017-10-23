@@ -25,25 +25,25 @@ public class CommonMessageUtils {
 
         AdMessage message = null;
 
-        if (isDatabaseError) {
-            message = commonMessageList.stream()
-                    .filter(e -> e.getDbErrorCode().equals(messageCode.trim()))
-                    .findFirst().get();
-        } else {
-            message = commonMessageList.stream()
-                    .filter(e -> e.getMessageCode().equals(messageCode.trim()))
-                    .findFirst().get();
-
-        }
-
-        if (message == null) {
+        try {
             if (isDatabaseError) {
                 message = commonMessageList.stream()
-                        .filter(e -> e.getMessageCode().equals("AA004"))
+                        .filter(errorCode -> errorCode.getDbErrorCode().equals(messageCode.trim()))
                         .findFirst().get();
             } else {
                 message = commonMessageList.stream()
-                        .filter(e -> e.getMessageCode().equals("AA009"))
+                        .filter(errorCode -> errorCode.getMessageCode().equals(messageCode.trim()))
+                        .findFirst().get();
+
+            }
+        } catch (Exception e) {
+            if (isDatabaseError) {
+                message = commonMessageList.stream()
+                        .filter(errorCode -> errorCode.getMessageCode().equals("AA004"))
+                        .findFirst().get();
+            } else {
+                message = commonMessageList.stream()
+                        .filter(errorCode -> errorCode.getMessageCode().equals("AA009"))
                         .findFirst().get();
             }
         }

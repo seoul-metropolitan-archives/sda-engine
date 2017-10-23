@@ -19,7 +19,5 @@ public interface Ac003Mapper extends MyBatisMapper {
 
     List<Ac00302VO> findUserGroupUserByUserUuid(String userUuid);
 
-    List<Ac00302VO> findUserGroupUserByUserGroupUuid(String userGroupUuid);
-
     List<Ac00303VO> findUserRole(Ac00303VO ac00303VO);
 }

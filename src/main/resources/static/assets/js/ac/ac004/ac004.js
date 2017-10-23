@@ -1,17 +1,21 @@
+/*
+ * Copyright (c) 2017. RMSoft Co.,Ltd. All rights reserved
+ */
+
 var fnObj = {};
 
 var ACTIONS = axboot.actionExtend(fnObj, {
-    // User 정보 조회
+    // 그룹 정보 조회
     PAGE_SEARCH: function (caller, act, data) {
         axboot.ajax({
             type: "GET",
-            url: "/api/v1/ac003/01/list",
+            url: "/api/v1/ac004/01/list",
             data: $.extend({}, {pageSize: 1000}, this.formView.getData()),
             callback: function (res) {
                 fnObj.gridView01.setData(res.list);
 
                 if (res.list.length > 0) {
-                    fnObj.formView.setFormData("userNmHeader", res.list[0].userNm);
+                    fnObj.formView.setFormData("userGroupHeader", res.list[0].userGroupName);
 
                     ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, res.list[0]);
                     ACTIONS.dispatch(ACTIONS.PAGE_SEARCH2, res.list[0]);
@@ -28,7 +32,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH1: function (caller, act, data) {
         axboot.ajax({
             type: "GET",
-            url: "/api/v1/ac003/02/list",
+            url: "/api/v1/ac004/02/list",
             data: $.extend({}, {pageSize: 1000}, data),
             callback: function (res) {
                 fnObj.gridView02.setData(res.list);
@@ -43,7 +47,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH2: function (caller, act, data) {
         axboot.ajax({
             type: "GET",
-            url: "/api/v1/ac003/03/list",
+            url: "/api/v1/ac004/03/list",
             data: $.extend({}, {pageSize: 1000}, data),
             callback: function (res) {
                 fnObj.gridView03.setData(res.list);
@@ -55,6 +59,15 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         return false;
     },
     PAGE_SAVE: function (caller, act, data) {
+        /*axDialog.confirm({
+            msg: "Do you want to save all items?"
+        }, function () {
+            if (this.key == "ok") {
+
+            }
+        });*/
+
+
         var userList = [].concat(fnObj.gridView01.getData());
         var groupList = [].concat(fnObj.gridView02.getData());
         var roleList = [].concat(fnObj.gridView03.getData());
@@ -62,21 +75,21 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         axboot
             .call({
                 type: "PUT",
-                url: "/api/v1/ac003/01/save",
+                url: "/api/v1/ac004/01/save",
                 data: JSON.stringify(userList),
                 callback: function (res) {
                 }
             })
             .call({
                 type: "PUT",
-                url: "/api/v1/ac003/02/save",
+                url: "/api/v1/ac004/02/save",
                 data: JSON.stringify(groupList),
                 callback: function (res) {
                 }
             })
             .call({
                 type: "PUT",
-                url: "/api/v1/ac003/03/save",
+                url: "/api/v1/ac004/03/save",
                 data: JSON.stringify(roleList),
                 callback: function (res) {
                 }
@@ -151,7 +164,7 @@ fnObj.pageStart = function () {
 
     //TODO 추후에 삭제될 내용으로 /실제 Grid의 컬럼 정보는 DB에서 가져올 예정
     $.ajax({
-        url: "/assets/js/column_info/ac00301.js",
+        url: "/assets/js/column_info/ac00401.js",
         dataType: "script",
         async: false,
         success: function () {
@@ -159,7 +172,7 @@ fnObj.pageStart = function () {
     });
 
     $.ajax({
-        url: "/assets/js/column_info/ac00302.js",
+        url: "/assets/js/column_info/ac00402.js",
         dataType: "script",
         async: false,
         success: function () {
@@ -167,7 +180,7 @@ fnObj.pageStart = function () {
     });
 
     $.ajax({
-        url: "/assets/js/column_info/ac00303.js",
+        url: "/assets/js/column_info/ac00403.js",
         dataType: "script",
         async: false,
         success: function () {
@@ -230,7 +243,7 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
 });
 
 
-// AC003 User Group User GridView
+// AC004 User Group User GridView
 fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     page: {
         pageNumber: 0,
@@ -239,7 +252,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     initView: function () {
         this.gridObj = new GridWrapper("realgrid01", "/assets/js/libs/realgrid");
         this.gridObj.setGridStyle("100%", "100%");
-        this.gridObj.setColumnInfo(ac00301.column_info).setEntityName("CONFIGURATION");
+        this.gridObj.setColumnInfo(ac00401.column_info).setEntityName("CONFIGURATION");
         this.gridObj.makeGrid();
         this.gridObj.itemClick(this.itemClick);
     },
@@ -265,8 +278,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
              // 비밀번호 Cell 선택시
              ACTIONS.dispatch(ACTIONS.PASSWORD_CHANGE_POPUP, data);
          }*/
-
-        if (data.userUuid != null && data.userUuid != "") {
+        if (data.userGroupUuid != null && data.userGroupUuid != "") {
             if (isDataChanged()) {
                 axDialog.confirm({
                     msg: "변경된 데이터가 있습니다.<br>저장 하시겠습니까?"
@@ -274,22 +286,21 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
                     if (this.key == "ok") {
                         ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
                     } else {
-                        fnObj.formView.setFormData("userNmHeader", data.userNm);
+                        fnObj.formView.setFormData("userGroupHeader", data.userGroupName);
 
                         ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, data);
                         ACTIONS.dispatch(ACTIONS.PAGE_SEARCH2, data);
                     }
                 });
             } else {
-                fnObj.formView.setFormData("userNmHeader", data.userNm);
+                fnObj.formView.setFormData("userGroupHeader", data.userGroupName);
 
                 ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, data);
                 ACTIONS.dispatch(ACTIONS.PAGE_SEARCH2, data);
             }
         }
     }
-})
-;
+});
 fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
     page: {
         pageNumber: 0,
@@ -298,7 +309,7 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
     initView: function () {
         this.gridObj = new GridWrapper("realgrid02", "/assets/js/libs/realgrid");
         this.gridObj.setGridStyle("100%", "100%");
-        this.gridObj.setColumnInfo(ac00302.column_info).setEntityName("CONFIGURATION");
+        this.gridObj.setColumnInfo(ac00402.column_info).setEntityName("CONFIGURATION");
         this.gridObj.makeGrid();
         this.gridObj.itemClick(this.itemClick);
     },
@@ -309,9 +320,6 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
     getData: function () {
         return this.gridObj.getData();
     },
-    addRow: function () {
-        this.gridObj.addRow();
-    },
     isChangeData: function () {
         if (this.getData().length > 0) {
             return true;
@@ -319,12 +327,15 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
             return false;
         }
     },
+    addRow: function () {
+        this.gridObj.addRow();
+    },
     itemClick: function (data, index) {
     }
 });
 
 
-// AC003 GridView
+// AC004 GridView
 fnObj.gridView03 = axboot.viewExtend(axboot.gridView, {
     page: {
         pageNumber: 0,
@@ -333,7 +344,7 @@ fnObj.gridView03 = axboot.viewExtend(axboot.gridView, {
     initView: function () {
         this.gridObj = new GridWrapper("realgrid03", "/assets/js/libs/realgrid");
         this.gridObj.setGridStyle("100%", "100%");
-        this.gridObj.setColumnInfo(ac00303.column_info).setEntityName("CONFIGURATION");
+        this.gridObj.setColumnInfo(ac00403.column_info).setEntityName("CONFIGURATION");
         this.gridObj.makeGrid();
         this.gridObj.itemClick(this.itemClick);
     },
@@ -344,15 +355,15 @@ fnObj.gridView03 = axboot.viewExtend(axboot.gridView, {
     getData: function () {
         return this.gridObj.getData();
     },
-    addRow: function () {
-        this.gridObj.addRow();
-    },
     isChangeData: function () {
         if (this.getData().length > 0) {
             return true;
         } else {
             return false;
         }
+    },
+    addRow: function () {
+        this.gridObj.addRow();
     },
     itemClick: function (data, index) {
     }

@@ -49,7 +49,7 @@ var ac00302 =
                 {
                     sortNo: 5,
                     name: "description",
-                    text: "DESCRIPTION",
+                    text: "Description",
                     width: 120,
                     editable: true,
                     dataType: "richtext",
@@ -58,7 +58,7 @@ var ac00302 =
                 {
                     sortNo: 6,
                     name: "notes",
-                    text: "NOTES",
+                    text: "Notes",
                     width: 120,
                     editable: true,
                     dataType: "richtext",
@@ -67,7 +67,7 @@ var ac00302 =
                 {
                     sortNo: 7,
                     name: "useYn",
-                    text: "USE",
+                    text: "Use",
                     width: 120,
                     editable: true,
                     dataType: "check",

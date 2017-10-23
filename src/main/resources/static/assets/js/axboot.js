@@ -283,7 +283,7 @@ axboot.ajax = function () {
         var jqxhr, httpOpts, callback;
         var options = $.extend(true, {}, defaultOption, http.options);
 
-        if(!options.onError) options.onError = axboot.viewError;
+        if (!options.onError) options.onError = axboot.viewError;
 
         if (!options.nomask) axAJAXMask.open();
 
@@ -2414,8 +2414,27 @@ axboot.baseView =
             ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
     }
         , inquiry: function () {
-        if (ACTIONS && ACTIONS.PAGE_SEARCH)
-            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+        if (isDataChanged && isDataChanged()) {
+            axDialog.confirm({
+                msg: "변경된 데이터가 있습니다.<br>저장 하시겠습니까?"
+            }, function () {
+                if (this.key == "ok") {
+                    if (ACTIONS && ACTIONS.PAGE_SAVE) {
+                        ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
+                    }
+
+                    if (ACTIONS && ACTIONS.PAGE_SEARCH) {
+                        ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+                    }
+                } else {
+                    if (ACTIONS && ACTIONS.PAGE_SEARCH)
+                        ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+                }
+            });
+        } else {
+            if (ACTIONS && ACTIONS.PAGE_SEARCH)
+                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+        }
     }
 
     };
@@ -2589,7 +2608,7 @@ axboot.realGridView = {
  * @Object {Object} axboot.formView
  */
 axboot.formView = {
-    name : "formView",
+    name: "formView",
     clear: function clear() {
         this.model.setModel(this.getDefaultData());
         $('[data-ax5formatter]').ax5formatter("formatting");
@@ -2631,7 +2650,7 @@ axboot.viewExtend = function (_obj1, _obj2) {
         return retView;
     }
     else if (_obj1.name && _obj1.name == "formView") {
-        var retView = $.extend({}, axboot.commonView,axboot.baseView, _obj1, _obj2)
+        var retView = $.extend({}, axboot.commonView, axboot.baseView, _obj1, _obj2)
         retView.init();
         return retView;
     }
@@ -2761,5 +2780,5 @@ axboot.commonCodeFilter = function (categoryCode) {
         nameArr.push(item['codeName']);
     });
 
-    return $.extend({}, {nameArr :nameArr }, {codeArr : codeArr});
+    return $.extend({}, {nameArr: nameArr}, {codeArr: codeArr});
 }

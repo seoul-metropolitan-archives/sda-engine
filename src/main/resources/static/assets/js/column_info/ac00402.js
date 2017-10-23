@@ -2,14 +2,14 @@
  * Copyright (c) 2017. RMSoft Co.,Ltd. All rights reserved
  */
 
-var ac00303 =
+var ac00402 =
     {
         column_info:
             [
                 {
                     sortNo: 1,
-                    name: "accessControlUuid",
-                    text: "accessControlUuid",
+                    name: "userGroupUserUuid",
+                    text: "userGroupUserUuid",
                     width: 120,
                     editable: true,
                     dataType: "code",
@@ -18,12 +18,12 @@ var ac00303 =
                 },
                 {
                     sortNo: 2,
-                    name: "roleUuid",
-                    text: "roleUuid",
+                    name: "userGroupUuid",
+                    text: "UserGroup ID",
                     width: 120,
                     editable: true,
-                    dataType: "code",
-                    required: false,
+                    dataType: "text",
+                    required: true,
                     visible: false
                 },
                 {
@@ -32,24 +32,14 @@ var ac00303 =
                     text: "userUuid",
                     width: 120,
                     editable: true,
-                    dataType: "code",
-                    required: false,
+                    dataType: "text",
+                    required: true,
                     visible: false
                 },
                 {
                     sortNo: 4,
-                    name: "userGroupUuid",
-                    text: "userGroupUuid",
-                    width: 120,
-                    editable: true,
-                    dataType: "code",
-                    required: false,
-                    visible: false
-                },
-                {
-                    sortNo: 5,
-                    name: "roleName",
-                    text: "Role",
+                    name: "userNm",
+                    text: "User",
                     width: 120,
                     editable: false,
                     dataType: "text",
@@ -57,16 +47,16 @@ var ac00303 =
                     visible: true
                 },
                 {
-                    sortNo: 6,
+                    sortNo: 5,
                     name: "description",
                     text: "Description",
                     width: 120,
                     editable: true,
                     dataType: "richtext",
-                    required: false,
+                    required: false
                 },
                 {
-                    sortNo: 7,
+                    sortNo: 6,
                     name: "notes",
                     text: "Notes",
                     width: 120,
@@ -75,7 +65,7 @@ var ac00303 =
                     required: false
                 },
                 {
-                    sortNo: 8,
+                    sortNo: 7,
                     name: "useYn",
                     text: "Use",
                     width: 120,
@@ -85,7 +75,7 @@ var ac00303 =
                     required: true
                 },
                 {
-                    sortNo: 9,
+                    sortNo: 8,
                     name: "insertUuid",
                     text: "Created By",
                     width: 120,
@@ -95,7 +85,7 @@ var ac00303 =
                     required: false
                 },
                 {
-                    sortNo: 10,
+                    sortNo: 9,
                     name: "insertDate",
                     text: "Date/Time Created",
                     width: 150,
@@ -105,7 +95,7 @@ var ac00303 =
                     required: false
                 },
                 {
-                    sortNo: 11,
+                    sortNo: 10,
                     name: "updateUuid",
                     text: "Modifed By",
                     width: 120,
@@ -115,7 +105,7 @@ var ac00303 =
                     required: false
                 },
                 {
-                    sortNo: 12,
+                    sortNo: 11,
                     name: "updateDate",
                     text: "Date/Time Modified",
                     width: 150,
