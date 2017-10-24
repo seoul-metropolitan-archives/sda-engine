@@ -2422,7 +2422,7 @@ axboot.baseView =
         , inquiry: function () {
         if (isDataChanged && isDataChanged()) {
             axDialog.confirm({
-                msg: "변경된 데이터가 있습니다.<br>저장 하시겠습니까?"
+                msg: axboot.getCommonMessage("AA006")
             }, function () {
                 if (this.key == "ok") {
                     if (ACTIONS && ACTIONS.PAGE_SAVE) {

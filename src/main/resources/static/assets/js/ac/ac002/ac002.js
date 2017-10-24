@@ -559,7 +559,7 @@ fnObj.tabView = axboot.viewExtend({
 
             if (iframeObject.contentWindow.isDataChanged && iframeObject.contentWindow.isDataChanged()) {
                 axDialog.confirm({
-                    msg: "변경된 데이터가 있습니다.<br>저장 후 닫으시겠습니까?"
+                    msg: axboot.getCommonMessage("AA006")
                 }, function () {
                     if (this.key == "ok") {
                         if (iframeObject.contentWindow.ACTIONS && iframeObject.contentWindow.ACTIONS.dispatch && iframeObject.contentWindow.ACTIONS.CLOSE_TAB) {

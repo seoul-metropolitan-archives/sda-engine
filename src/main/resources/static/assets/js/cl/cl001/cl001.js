@@ -174,7 +174,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.realGridView, {
         if (data.classificationSchemeUuid != null && data.classificationSchemeUuid != "") {
             if (isDataChanged()) {
                 axDialog.confirm({
-                    msg: "변경된 데이터가 있습니다.<br>저장 하시겠습니까?"
+                    msg: axboot.getCommonMessage("AA006")
                 }, function () {
                     if (this.key == "ok") {
                         ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
