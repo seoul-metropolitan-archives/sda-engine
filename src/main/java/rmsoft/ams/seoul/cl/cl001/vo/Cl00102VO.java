@@ -14,27 +14,15 @@ public class Cl00102VO extends BaseVO {
 
     private String managerOrganization;
 
+    private String manager;
+
     private String basedOn;
 
-    private String addMetadata01;
+    private String useYes;
 
-    private String addMetadata02;
+    private String useNo;
 
-    private String addMetadata03;
+    private String aggregationCnt;
 
-    private String addMetadata04;
-
-    private String addMetadata05;
-
-    private String addMetadata06;
-
-    private String addMetadata07;
-
-    private String addMetadata08;
-
-    private String addMetadata09;
-
-    private String addMetadata10;
-
-
+    private String itemCnt;
 }

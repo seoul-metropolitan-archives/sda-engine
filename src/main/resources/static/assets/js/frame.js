@@ -12,6 +12,14 @@ var ACTIONS = axboot.actionExtend(fnObj, {
 
         return false;
     },
+    PAGE_CANCEL : function (caller, act, data) {
+
+        return false;
+    },
+    PAGE_CONFIRM: function (caller, act, data) {
+
+        return false;
+    },
     TOGGLE_ASIDE: function (caller, act, data) {
         caller.frameView.toggleAside();
     },

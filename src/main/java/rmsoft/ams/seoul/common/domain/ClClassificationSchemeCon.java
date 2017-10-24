@@ -32,15 +32,15 @@ public class ClClassificationSchemeCon extends SimpleJpaModel<ClClassificationSc
 
     @Column(name = "MANAGER_ORGANIZATION", length = 36)
     @Comment(value = "관리기관")
-    private String statusUuid;
+    private String managerOrganization;
 
     @Column(name = "MANAGER", length = 100)
     @Comment(value = "관리자")
-    private String classificationCode;
+    private String manager;
 
     @Column(name = "BASED_ON", length = 100)
     @Comment(value = "근거")
-    private String classificationTypeUuid;
+    private String basedOn;
 
     @Column(name = "ADD_METADATA01", length = 100 )
     @Comment(value = "추가메타데이터01")
@@ -77,6 +77,10 @@ public class ClClassificationSchemeCon extends SimpleJpaModel<ClClassificationSc
     @Column(name = "ADD_METADATA09", length = 100)
     @Comment(value = "추가메타데이터09")
     private String addMetadata09;
+
+    @Column(name = "ADD_METADATA10", length = 100)
+    @Comment(value = "추가메타데이터10")
+    private String addMetadata10;
 
     @Override
     public ClClassificationSchemeId getId() { return ClClassificationSchemeId.of(classificationSchemeUuid); }

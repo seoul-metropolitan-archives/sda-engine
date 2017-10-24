@@ -2400,6 +2400,12 @@ axboot.baseView =
             $(".bdb").delegate("#save", "click", function () {
                 _this.save();
             });
+            $(".bdb").delegate("#confirm", "click", function () {
+                _this.confirm();
+            });
+            $(".bdb").delegate("#cancel", "click", function () {
+                _this.cancel();
+            });
             $(document).delegate(".ax-body", "keydown", function (e) {
 
                 if (e.ctrlKey && e.altKey && e.keyCode == 73) {
@@ -2436,7 +2442,14 @@ axboot.baseView =
                 ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
         }
     }
-
+        , confirm: function () {
+        if (ACTIONS && ACTIONS.PAGE_CONFIRM)
+            ACTIONS.dispatch(ACTIONS.PAGE_CONFIRM);
+    }
+        , cancel: function () {
+        if (ACTIONS && ACTIONS.PAGE_CANCEL)
+            ACTIONS.dispatch(ACTIONS.PAGE_CANCEL);
+    }
     };
 
 /**

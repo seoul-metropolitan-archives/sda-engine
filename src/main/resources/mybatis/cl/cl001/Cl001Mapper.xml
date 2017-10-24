@@ -28,24 +28,58 @@
             <if test="classificationTypeUuid != null">
              AND CLASSIFICATION_TYPE_UUID = #{classificationTypeUuid}
             </if>
+            <if test="classificationCode != null">
+                AND CLASSIFICATION_CODE  LIKE '%' || #{classificationCode} || '%'
+            </if>
+            <if test="classificationName != null">
+                AND CLASSIFICATION_NAME  LIKE '%' || #{classificationName} || '%'
+            </if>
+            <if test="useYn != null">
+                AND USE_YN = #{useYn}
+            </if>
         </where>
     </select>
     <select id="getClassificationSchemeDetail" resultType="Cl00102VO" parameterType="Cl00102VO" statementType="PREPARED">
         SELECT
-        CLASSIFICATION_SCHEME_UUID as classificationSchemeUuid,
-        STATUS_UUID as statusUuid,
-        CLASSIFICATION_CODE as classificationCode,
-        CLASSIFICATION_NAME as classificationName,
-        CLASSIFICATION_TYPE_UUID as classificationTypeUuid,
-        ORDER_NO as orderNo,
-        DESCRIPTION as descrtiption,
-        NOTES as notes,
-        USE_YN as useYn,
-        <include refid="Common.UserName"><property name="userUuid" value="INSERT_UUID"/></include> as insertUuid,
-        INSERT_DATE as insertDate,
-        <include refid="Common.UserName"><property name="userUuid" value="UPDATE_UUID"/></include> as updateUuid,
-        UPDATE_DATE as updateDate
+          Z1.CLASSIFICATION_SCHEME_UUID as classificationSchemeUuid ,
+          Z2.MANAGER_ORGANIZATION as managerOrganization ,
+          Z2.MANAGER as manager ,
+          Z2.BASED_ON as baseOn ,
+          (
+            SELECT
+              COUNT(USE_YN)
+            FROM
+              CL_CLASS
+            WHERE
+              USE_YN = 'Y'
+           ) as useYes ,
+          (
+            SELECT
+              COUNT(USE_YN)
+            FROM
+              CL_CLASS
+            WHERE
+              USE_YN = 'n'
+           ) as useNo,
+          (
+            SELECT
+              COUNT(AGGREGATION_ID)
+            FROM
+              CL_CLASSIFIED_RECORDS
+           ) as aggregationCnt,
+          (
+            SELECT
+              COUNT(ITEM_UUID)
+            FROM
+              CL_CLASSIFIED_RECORDS
+          ) as itemCnt
         FROM
-        CL_CLASSIFICATION_SCHEME
+          CL_CLASSIFICATION_SCHEME Z1, CL_CLASSIFICATION_SCHEME_CON Z2
+        <where>
+            <if test="classificationSchemeUuid != null">
+                Z1.CLASSIFICATION_SCHEME_UUID = #{classificationSchemeUuid}
+            </if>
+            AND Z1.CLASSIFICATION_SCHEME_UUID = Z2.CLASSIFICATION_SCHEME_UUID
+        </where>
     </select>
 </mapper>

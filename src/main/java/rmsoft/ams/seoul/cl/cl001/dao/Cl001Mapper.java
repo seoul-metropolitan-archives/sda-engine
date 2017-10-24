@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface Cl001Mapper extends MyBatisMapper {
     List<Cl00101VO> getClassificationSchemeList(Cl00101VO cl00101VO);
-    List<Cl00102VO> getClassificationSchemeDetail(Cl00102VO cl00102VO);
+    Cl00102VO getClassificationSchemeDetail(Cl00102VO cl00102VO);
 }

@@ -64,6 +64,20 @@ public class CommonCodeUtils {
         return StringUtils.isEmpty(commonCode.getCodeName()) ? "미등록코드명" : commonCode.getCodeName();
     }
 
+    public static String getCodeDetailUuid(String groupCd, String name) {
+
+        if(commonCodeMap == null){
+            commonCodeMap =  getAllByMap();
+        }
+
+        List<Ad00303VO> commonCodes = commonCodeMap.get(groupCd);
+        Ad00303VO commonCode = commonCodes.stream()
+                    .filter(e -> e.getCodeName().equals(name.trim()))
+                    .findFirst().get();
+
+        return StringUtils.isEmpty(commonCode.getCodeDetailUUID()) ? "미등록코드" : commonCode.getCodeDetailUUID();
+    }
+
     public static Map<String, List<Ad00303VO>> getAllByMap() {
         Ad00303VO ad00303VO = new Ad00303VO();
         List<Ad00303VO> commonCodes = getService().getCode(ad00303VO);

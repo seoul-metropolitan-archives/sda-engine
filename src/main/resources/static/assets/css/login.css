@@ -16,7 +16,7 @@ html, body{width: 100%; height: 100%}
 #header{
     box-sizing:border-box;
     /*height: 250px;*/
-    padding 0px 0 0;
+    padding: 0px 0 0;
     text-align: center;
     
 }
@@ -123,7 +123,7 @@ label {
     display:inline-block; 
     height:15px; 
     padding:3px 0 2px 25px; 
-    background:url("../images/chk_off.gif") no-repeat 0 center; 
+    background:url("../images/ams/chk_off.gif") no-repeat 0 center;
     vertical-align:middle; 
     line-height:13px; 
     cursor:pointer
@@ -138,7 +138,7 @@ label {
     cursor:pointer
 }
 .login_chk input:checked + label {
-    background:url("../images/chk_on.gif") no-repeat 0 center
+    background:url("../images/ams/chk_on.gif") no-repeat 0 center
 }
 
 .hc { left:0; right:0; margin-left:auto; margin-right:auto; } /* 가로 중앙 정렬 */

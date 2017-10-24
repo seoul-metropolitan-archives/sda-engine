@@ -37,6 +37,10 @@ public class ClClassificationScheme extends BaseJpaModel<ClClassificationScheme.
     @Comment(value = "아이디")
     private String classificationCode;
 
+    @Column(name = "CLASSIFICATION_NAME", length = 50, nullable = false)
+    @Comment(value = "아이디")
+    private String classificationName;
+
     @Column(name = "CLASSIFICATION_TYPE_UUID", length = 50, nullable = false)
     @Comment(value = "아이디")
     private String classificationTypeUuid;

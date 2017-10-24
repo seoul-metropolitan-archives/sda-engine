@@ -1,12 +1,10 @@
 package rmsoft.ams.seoul.cl.cl001.controller;
 
-import io.onsemiro.controller.BaseController;
 import io.onsemiro.core.api.ApiException;
 import io.onsemiro.core.api.response.ApiResponse;
 import io.onsemiro.core.api.response.Responses;
 import io.onsemiro.core.code.ApiStatus;
 import io.onsemiro.core.parameter.RequestParams;
-import io.onsemiro.utils.ModelMapperUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,14 +12,14 @@ import org.springframework.web.bind.annotation.*;
 import rmsoft.ams.seoul.cl.cl001.service.Cl001Service;
 import rmsoft.ams.seoul.cl.cl001.vo.Cl00101VO;
 import rmsoft.ams.seoul.cl.cl001.vo.Cl00102VO;
-import rmsoft.ams.seoul.common.domain.ClClassificationScheme;
+import rmsoft.ams.seoul.common.controller.MessageBaseController;
 
 import java.util.List;
 
 
 @RestController
 @RequestMapping("/api/v1/cl001/")
-public class Cl001Controller extends BaseController {
+public class Cl001Controller extends MessageBaseController {
 
     @Autowired
     private Cl001Service cl001Service;

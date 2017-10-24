@@ -1,5 +1,5 @@
 var fnObj = {};
-
+var selectedItem ; //선택된 그리드 아이템
 var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH: function (caller, act, data) {
         axboot.ajax({
@@ -21,15 +21,30 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             url: "/api/v1/cl001/02/detail",
             data: $.extend({}, {pageSize: 1000}, data),
             callback: function (res) {
-                //fnObj.gridView01.setData(res.list);
+                fnObj.formView.setFormData("managerOrganization",res.managerOrganization);
+                fnObj.formView.setFormData("manager",res.manager);
+                fnObj.formView.setFormData("basedOn",res.basedOn);
+                fnObj.formView.setFormData("classificationNameTxt", selectedItem.classificationName);
+                fnObj.formView.setFormData("useNo",res.useNo);
+                fnObj.formView.setFormData("useYes",res.useYes);
+                fnObj.formView.setFormData("aggregationCnt",res.aggregationCnt);
+                fnObj.formView.setFormData("itemCnt",res.itemCnt);
+
             },
             options: {
                 onError: axboot.viewError
             }
         });
+        return false;
     },
     ERROR_SEARCH: function (caller, act, data) {
         return false;
+    },
+    PAGE_CONFIRM: function (caller, act, data) {
+        alert("Asdfasdf");
+    },
+    PAGE_CANCEL: function (caller, act, data) {
+        alert("Asdfasdf");
     },
     PAGE_SAVE: function (caller, act, data) {
         axDialog.confirm({
@@ -179,6 +194,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.realGridView, {
     },
     itemClick: function (data) {
         if (data.classificationSchemeUuid != null && data.classificationSchemeUuid != "") {
+            selectedItem = data;
             ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, data);
             /*  ACTIONS.dispatch(ACTIONS.PAGE_SEARCH2, data);*/
         }
