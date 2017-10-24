@@ -61,7 +61,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             })
             .done(function () {
                 ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
-                axToast.push("Data save completed");
+                axToast.push(axboot.getCommonMessage("AA007"));
             });
     },
     FORM_CLEAR: function (caller, act, data) {
