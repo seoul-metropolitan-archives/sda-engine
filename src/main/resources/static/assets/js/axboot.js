@@ -2795,3 +2795,15 @@ axboot.commonCodeFilter = function (categoryCode) {
 
     return $.extend({}, {nameArr: nameArr}, {codeArr: codeArr});
 }
+
+axboot.getCommonMessage = function (messageCode) {
+    var commonMessage = parent.COMMON_MESSAGE.filter(function (item) {
+        return item.messageCode === messageCode;
+    });
+
+    if(commonMessage.length > 0){
+        return commonMessage[0].messageName;
+    }else{
+        return "지정된 공통 메세지가 없습니다.";
+    }
+}

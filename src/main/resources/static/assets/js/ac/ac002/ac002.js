@@ -549,6 +549,7 @@ fnObj.tabView = axboot.viewExtend({
         }*/
         this.list = newList;
         var thisTarget = this.target.find('[data-tab-id="' + menuId + '"]');
+        var _this = this;
 
         // 프레임 제거
         (function () {
@@ -577,6 +578,32 @@ fnObj.tabView = axboot.viewExtend({
                             // force garbarge collection for IE only
                             window.CollectGarbage && window.CollectGarbage();
 
+                            if (removeItem.status == 'on') {
+                                var lastIndex = _this.list.length - 1;
+                                if (lastIndex > -1) {
+                                    _this.list[lastIndex].status = 'on';
+                                    _this.target.find('[data-tab-id="' + _this.list[lastIndex].menuId + '"]').addClass("on");
+                                    _this.frameTarget.find('[data-tab-id="' + _this.list[lastIndex].menuId + '"]').addClass("on");
+                                }
+                            }
+
+                            // check status = "on"
+                            var hasStatusOn = false;
+                            _this.list.forEach(function (_item) {
+                                if (_item.status == "on") hasStatusOn = true;
+                            });
+                            if (!hasStatusOn) {
+                                var lastIndex = _this.list.length - 1;
+
+                                if (lastIndex > -1) {
+                                    _this.list[lastIndex].status = 'on';
+                                    _this.target.find('[data-tab-id="' + _this.list[lastIndex].menuId + '"]').addClass("on");
+                                    _this.frameTarget.find('[data-tab-id="' + _this.list[lastIndex].menuId + '"]').addClass("on");
+                                }
+                            }
+                            _this.target.find('.tooltip').remove();
+                            _this.resize();
+
                         }
                     } else {
                         thisTarget.remove();
@@ -591,6 +618,32 @@ fnObj.tabView = axboot.viewExtend({
 
                         // force garbarge collection for IE only
                         window.CollectGarbage && window.CollectGarbage();
+
+                        if (removeItem.status == 'on') {
+                            var lastIndex = _this.list.length - 1;
+                            if (lastIndex > -1) {
+                                _this.list[lastIndex].status = 'on';
+                                _this.target.find('[data-tab-id="' + _this.list[lastIndex].menuId + '"]').addClass("on");
+                                _this.frameTarget.find('[data-tab-id="' + _this.list[lastIndex].menuId + '"]').addClass("on");
+                            }
+                        }
+
+                        // check status = "on"
+                        var hasStatusOn = false;
+                        _this.list.forEach(function (_item) {
+                            if (_item.status == "on") hasStatusOn = true;
+                        });
+                        if (!hasStatusOn) {
+                            var lastIndex = _this.list.length - 1;
+
+                            if (lastIndex > -1) {
+                                _this.list[lastIndex].status = 'on';
+                                _this.target.find('[data-tab-id="' + _this.list[lastIndex].menuId + '"]').addClass("on");
+                                _this.frameTarget.find('[data-tab-id="' + _this.list[lastIndex].menuId + '"]').addClass("on");
+                            }
+                        }
+                        _this.target.find('.tooltip').remove();
+                        _this.resize();
                     }
                 });
             } else {
@@ -606,34 +659,34 @@ fnObj.tabView = axboot.viewExtend({
 
                 // force garbarge collection for IE only
                 window.CollectGarbage && window.CollectGarbage();
+
+                if (removeItem.status == 'on') {
+                    var lastIndex = this.list.length - 1;
+                    if (lastIndex > -1) {
+                        this.list[lastIndex].status = 'on';
+                        this.target.find('[data-tab-id="' + this.list[lastIndex].menuId + '"]').addClass("on");
+                        this.frameTarget.find('[data-tab-id="' + this.list[lastIndex].menuId + '"]').addClass("on");
+                    }
+                }
+
+                // check status = "on"
+                var hasStatusOn = false;
+                this.list.forEach(function (_item) {
+                    if (_item.status == "on") hasStatusOn = true;
+                });
+                if (!hasStatusOn) {
+                    var lastIndex = this.list.length - 1;
+
+                    if (lastIndex > -1) {
+                        this.list[lastIndex].status = 'on';
+                        this.target.find('[data-tab-id="' + this.list[lastIndex].menuId + '"]').addClass("on");
+                        this.frameTarget.find('[data-tab-id="' + this.list[lastIndex].menuId + '"]').addClass("on");
+                    }
+                }
+                this.target.find('.tooltip').remove();
+                this.resize();
             }
         }).call(this);
-
-        if (removeItem.status == 'on') {
-            var lastIndex = this.list.length - 1;
-            if (lastIndex > -1) {
-                this.list[lastIndex].status = 'on';
-                this.target.find('[data-tab-id="' + this.list[lastIndex].menuId + '"]').addClass("on");
-                this.frameTarget.find('[data-tab-id="' + this.list[lastIndex].menuId + '"]').addClass("on");
-            }
-        }
-
-        // check status = "on"
-        var hasStatusOn = false;
-        this.list.forEach(function (_item) {
-            if (_item.status == "on") hasStatusOn = true;
-        });
-        if (!hasStatusOn) {
-            var lastIndex = this.list.length - 1;
-
-            if (lastIndex > -1) {
-                this.list[lastIndex].status = 'on';
-                this.target.find('[data-tab-id="' + this.list[lastIndex].menuId + '"]').addClass("on");
-                this.frameTarget.find('[data-tab-id="' + this.list[lastIndex].menuId + '"]').addClass("on");
-            }
-        }
-        this.target.find('.tooltip').remove();
-        this.resize();
     },
     bindEvent: function () {
         var _this = this;

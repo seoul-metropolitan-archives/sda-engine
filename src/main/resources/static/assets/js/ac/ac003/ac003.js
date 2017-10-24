@@ -239,6 +239,9 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     initView: function () {
         this.gridObj = new GridWrapper("realgrid01", "/assets/js/libs/realgrid");
         this.gridObj.setGridStyle("100%", "100%");
+        this.gridObj.setFixedOptions({
+            colCount: 2
+        });
         this.gridObj.setColumnInfo(ac00301.column_info).setEntityName("CONFIGURATION");
         this.gridObj.makeGrid();
         this.gridObj.itemClick(this.itemClick);
@@ -267,7 +270,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
          }*/
 
         if (data.userUuid != null && data.userUuid != "") {
-            if (isDataChanged()) {
+            if (fnObj.gridView02.isChangeData() == true || fnObj.gridView03.isChangeData() == true) {
                 axDialog.confirm({
                     msg: "변경된 데이터가 있습니다.<br>저장 하시겠습니까?"
                 }, function () {
@@ -298,6 +301,9 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
     initView: function () {
         this.gridObj = new GridWrapper("realgrid02", "/assets/js/libs/realgrid");
         this.gridObj.setGridStyle("100%", "100%");
+        this.gridObj.setFixedOptions({
+            colCount: 1
+        });
         this.gridObj.setColumnInfo(ac00302.column_info).setEntityName("CONFIGURATION");
         this.gridObj.makeGrid();
         this.gridObj.itemClick(this.itemClick);
@@ -333,6 +339,9 @@ fnObj.gridView03 = axboot.viewExtend(axboot.gridView, {
     initView: function () {
         this.gridObj = new GridWrapper("realgrid03", "/assets/js/libs/realgrid");
         this.gridObj.setGridStyle("100%", "100%");
+        this.gridObj.setFixedOptions({
+            colCount: 1
+        });
         this.gridObj.setColumnInfo(ac00303.column_info).setEntityName("CONFIGURATION");
         this.gridObj.makeGrid();
         this.gridObj.itemClick(this.itemClick);

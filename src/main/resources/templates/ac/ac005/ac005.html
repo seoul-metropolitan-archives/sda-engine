@@ -8,7 +8,7 @@
       layout:decorate="~{/layout/base}">
 
 <!-- ===== [ script ] ===== -->
-<script layout:fragment="script" type="text/javascript" th:src="@{/assets/js/ac/ac004/ac004.js}"></script>
+<script layout:fragment="script" type="text/javascript" th:src="@{/assets/js/ac/ac005/ac005.js}"></script>
 <!-- ===== [ script ] _END_ ===== -->
 
 <!-- ===== [ base-content ] ===== -->
@@ -24,9 +24,9 @@
                 </div>
                 <div class="bdb div_tablerow">
                     <dl>
-                        <dt class="pdl_5">User Group</dt>
+                        <dt class="pdl_5">Role</dt>
                         <dd>
-                            <input type=text data-ax-path="userGroupName" style="width:135px">
+                            <input type=text data-ax-path="roleName" style="width:135px">
                         </dd>
                         <dt class="none">Use</dt>
                         <dd class="pdl_5 w_auto">
@@ -47,46 +47,23 @@
                         </dd>
                     </dl>
                 </div>
-                <div style="height:100%; width:100%" class="div_tablerow">
-                    <div style="display:table; height:50%; width:100%">
-                        <ul class="bdb bdt div_tablerow bgf7" style="height:30px;">
-                            <th:block layout:insert="~{/fragments/page-buttons :: dot('User Group')}"/>
+                <div style="height:100%; width:100%" class="bgf7 div_tablerow">
+                    <div style="display:table; height:100%; width:43.7%; float:left" class="bdr">
+                        <ul class="bdb bdt div_tablerow" style="height:30px;">
+                            <th:block layout:insert="~{/fragments/page-buttons :: dot('Role')}"/>
                             <th:block layout:insert="~{/fragments/page-buttons :: add-and-delete}"/>
                         </ul>
                         <div style="height:100%; width:100%" class="div_tablerow bdb">
                             <div id="realgrid01" style="width:100%; height:100%"></div>
                         </div>
                     </div>
-
-                    <div style="display:table; height:50%; width:50%; float:left" class="bdr">
-
-                        <ul class="bdb bdt bgf7 div_tablerow" style="height:30px;">
-                            <th:block layout:insert="~{/fragments/page-buttons :: dot ('User')}"/>
+                    <div style="display:table; height:100%; width:56.3%; float:right">
+                        <ul class="bdb bdt div_tablerow" style="height:30px;">
+                            <th:block layout:insert="~{/fragments/page-buttons :: dot('Permission')}"/>
                             <th:block layout:insert="~{/fragments/page-buttons :: add-and-delete}"/>
-                        </ul>
-                        <ul class="bdb div_tablerow" style="height:25px;">
-                            <li style="width:100%; text-align:left;">
-                                <input type=text class="yeongye" data-ax-path="userGroupHeader" readonly>
-                            </li>
                         </ul>
                         <div style="height:100%; width:100%" class="div_tablerow bdb">
                             <div id="realgrid02" style="width:100%; height:100%"></div>
-                        </div>
-                    </div>
-
-
-                    <div style="display:table; height:50%; width:50%; float:left">
-                        <ul class="bdb bdt bgf7 div_tablerow" style="height:30px;">
-                            <th:block layout:insert="~{/fragments/page-buttons :: dot ('Role')}"/>
-                            <th:block layout:insert="~{/fragments/page-buttons :: add-and-delete}"/>
-                        </ul>
-                        <ul class="bdb div_tablerow" style="height:25px;">
-                            <li style="width:100%; text-align:left;">
-                                <input type=text class="yeongye" data-ax-path="userGroupHeader" readonly>
-                            </li>
-                        </ul>
-                        <div style="height:100%; width:100%" class="div_tablerow bdb">
-                            <div id="realgrid03" style="width:100%; height:100%"></div>
                         </div>
                     </div>
                 </div>

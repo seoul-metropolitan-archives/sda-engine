@@ -20,36 +20,40 @@ import java.io.Serializable;
 @DynamicUpdate
 @Entity
 @EqualsAndHashCode(callSuper = true)
-@Table(name = "AC_ROLE")
-@IdClass(AcRole.AcRoleId.class)
-@Alias("AcRole")
-public class AcRole extends BaseJpaModel<AcRole.AcRoleId> {
+@Table(name = "AC_ROLE_PERMISSION")
+@IdClass(AcRolePermission.AcRolePermissionId.class)
+@Alias("AcRolePermission")
+public class AcRolePermission extends BaseJpaModel<AcRolePermission.AcRolePermissionId> {
 
     @Id
+    @Column(name = "ROLE_PERMISSION_UUID", length = 36, nullable = false)
+    @Comment(value = "Role Permission UUID")
+    private String rolePermissionUuid;
+
     @Column(name = "ROLE_UUID", length = 36, nullable = false)
-    @Comment(value = "Role UUID")
+    @Comment(value = "Role Uuid")
     private String roleUuid;
 
-    @Column(name = "ROLE_NAME", length = 50, nullable = false)
-    @Comment(value = "Role Name")
-    private String roleName;
+    @Column(name = "PERMISSION_UUID", length = 36, nullable = false)
+    @Comment(value = "Permission UUID")
+    private String permissionUuid;
 
     @Column(name = "USE_YN", length = 1, nullable = false)
     @Comment(value = "사용여부")
     private String useYn;
 
     @Override
-    public AcRoleId getId() {
-        return AcRoleId.of(roleUuid);
+    public AcRolePermissionId getId() {
+        return AcRolePermissionId.of(rolePermissionUuid);
     }
 
     @Embeddable
     @Data
     @NoArgsConstructor
     @RequiredArgsConstructor(staticName = "of")
-    public static class AcRoleId implements Serializable {
+    public static class AcRolePermissionId implements Serializable {
 
         @NonNull
-        private String roleUuid;
+        private String rolePermissionUuid;
     }
 }
