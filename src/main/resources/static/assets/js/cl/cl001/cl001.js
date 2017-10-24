@@ -41,22 +41,14 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         return false;
     },
     PAGE_CONFIRM: function (caller, act, data) {
-        alert("Asdfasdf");
+
     },
     PAGE_CANCEL: function (caller, act, data) {
-        alert("Asdfasdf");
+
     },
     PAGE_SAVE: function (caller, act, data) {
-        axDialog.confirm({
-            msg: "저장하시겠습니까?"
-        }, function () {
-            if (
-                this.key == "ok"
-                && ACTIONS.dispatch(ACTIONS.TOP_GRID_SAVE)
-            // && ACTIONS.dispatch(ACTIONS.TOP_GRID_DETAIL_PAGE_SAVE)
-            )
-                alert("저장되었습니다");
-        });
+        ACTIONS.dispatch(ACTIONS.TOP_GRID_SAVE);
+        // ACTIONS.dispatch(ACTIONS.TOP_GRID_DETAIL_PAGE_SAVE);
     },
     TOP_GRID_SAVE: function (caller, act, data) {
         var result = false;
@@ -74,29 +66,8 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             });
         return result;
     },
-    TOP_GRID_DETAIL_PAGE_SAVE: function (caller, act, data) {
-        return false;
-    },
-    FORM_CLEAR: function (caller, act, data) {
-        return false;
-    },
-    ITEM_CLICK: function (caller, act, data) {
-        return false;
-    },
-    SEND_STEXT: function (caller, act, data) {
-        return false;
-    },
-    SEND_STEXT_CANCEL: function (caller, act, data) {
-        return false;
-    },
-    MODAL_OPEN: function (caller, act, data) {
-        return false;
-    },
-    ROLE_GRID_DATA_INIT: function (caller, act, data) {
-        return false;
-    },
-    ROLE_GRID_DATA_GET: function (caller, act, data) {
-        return false;
+    CLOSE_TAB: function (caller, act, data) {
+        ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
     },
     dispatch: function (caller, act, data) {
         var result = ACTIONS.exec(caller, act, data);
@@ -192,11 +163,44 @@ fnObj.gridView01 = axboot.viewExtend(axboot.realGridView, {
         this.makeGrid();
         this.gridObj.itemClick(this.itemClick);
     },
+    isChangeData: function () {
+        if (this.getData().length > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    },
     itemClick: function (data) {
         if (data.classificationSchemeUuid != null && data.classificationSchemeUuid != "") {
-            selectedItem = data;
-            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, data);
-            /*  ACTIONS.dispatch(ACTIONS.PAGE_SEARCH2, data);*/
+            if (isDataChanged()) {
+                axDialog.confirm({
+                    msg: "변경된 데이터가 있습니다.<br>저장 하시겠습니까?"
+                }, function () {
+                    if (this.key == "ok") {
+                        ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
+                    } else {
+                        selectedItem = data;
+                        ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, data);
+                    }
+                });
+            } else {
+                selectedItem = data;
+                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, data);
+            }
         }
     }
 });
+
+/**
+ * [필수]
+ * Grid 데이터 변경 여부를 체크하기 위한 함수
+ * 모든 페이지에 넣기를 권고하며, 안넣은 경우 데이터 변경여부를 확인하지 않음
+ * @returns {boolean}
+ */
+isDataChanged = function () {
+    if (fnObj.gridView01.isChangeData() == true) {
+        return true;
+    } else {
+        return false;
+    }
+}
