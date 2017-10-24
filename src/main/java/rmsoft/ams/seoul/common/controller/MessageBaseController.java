@@ -9,6 +9,8 @@ import io.onsemiro.core.api.ApiException;
 import io.onsemiro.core.api.response.ApiResponse;
 import io.onsemiro.core.code.ApiStatus;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import rmsoft.ams.seoul.utils.CommonMessageUtils;
 
@@ -19,6 +21,8 @@ import java.sql.SQLException;
  */
 @ControllerAdvice
 public class MessageBaseController extends BaseController {
+    private static final Logger logger = LoggerFactory.getLogger(MessageBaseController.class);
+
 
     @Override
     public ApiResponse handleApiException(ApiException e) {
@@ -40,6 +44,25 @@ public class MessageBaseController extends BaseController {
                 apiResponse = ApiResponse.error(ApiStatus.SYSTEM_ERROR, message);
             }
         }
-        return apiResponse;
+        return ApiResponse.error(ApiStatus.SYSTEM_ERROR, CommonMessageUtils.getMessage("AA005"));
+    }
+
+    @Override
+    protected void errorLogging(Throwable throwable) {
+
+        if (logger.isErrorEnabled()) {
+
+            Throwable rootCause = ExceptionUtils.getRootCause(throwable);
+
+            if (rootCause != null) {
+                throwable = rootCause;
+            }
+
+            if (throwable.getMessage() != null) {
+                logger.error(throwable.getMessage(), throwable);
+            } else {
+                logger.error("ERROR", throwable);
+            }
+        }
     }
 }

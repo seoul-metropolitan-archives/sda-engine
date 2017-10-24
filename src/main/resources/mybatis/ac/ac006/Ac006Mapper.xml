@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  ~ Copyright (c) 2017. RMSoft Co.,Ltd. All rights reserved
+  -->
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="rmsoft.ams.seoul.ac.ac006.dao.Ac006Mapper">
+    <select id="findAllPermission" resultType="Ac00601VO" parameterType="Ac00601VO"
+            statementType="PREPARED">
+        SELECT
+            Z1.PERMISSION_UUID as permissionUuid,
+            Z1.PERMISSION_NAME as permissionName,
+            Z1.PMS_PROGRAM_UUID as pmsProgramUuid,
+            (SELECT PROGRAM_NAME FROM AD_PROGRAM WHERE PROGRAM_UUID = Z1.PMS_PROGRAM_UUID) as programName,
+            Z1.PMS_ENTITY_TYPE_UUID as pmsEntityTypeUuid,
+            (SELECT ENTITY_TYPE_NAME FROM AD_ENTITY_TYPE WHERE ENTITY_TYPE_UUID = Z1.PMS_ENTITY_TYPE_UUID) as entityTypeName,
+            Z1.PMS_FUNCTION_UUID as pmsFunctionUuid,
+            Z1.DESCRIPTION as description,
+            Z1.NOTES as notes,
+            Z1.USE_YN as useYn,
+            <include refid="Common.UserName">
+                <property name="userUuid" value="Z1.INSERT_UUID"/>
+            </include>
+            as insertUuid,
+            Z1.INSERT_DATE insertDate,
+            <include refid="Common.UserName">
+                <property name="userUuid" value="Z1.UPDATE_UUID"/>
+            </include>
+            as updateUuid,
+            Z1.UPDATE_DATE updateDate
+        FROM
+            AC_PERMISSION Z1
+        <where>
+            <if test="permissionName != null">
+                Z1.PERMISSION_NAME LIKE '%' || #{permissionName} || '%'
+            </if>
+            <if test="useYn != null">
+                AND Z1.USE_YN = #{useYn}
+            </if>
+            <if test="pmsProgramUuid != null">
+                AND Z1.PMS_PROGRAM_UUID = #{pmsProgramUuid}
+            </if>
+            <if test="pmsEntityTypeUuid != null">
+                AND Z1.PMS_ENTITY_TYPE_UUID = #{pmsEntityTypeUuid}
+            </if>
+            <if test="pmsFunctionUuid != null">
+                AND Z1.PMS_FUNCTION_UUID = #{pmsFunctionUuid}
+            </if>
+        </where>
+    </select>
+</mapper>
