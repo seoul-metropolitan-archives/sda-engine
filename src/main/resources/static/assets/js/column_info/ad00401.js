@@ -55,7 +55,8 @@ var ad00401 =
                 width: 70,
                 editable: true,
                 dataType: "check",
-                required: true
+                required: true,
+                defaultValue : "N",
             },
             {
                 sortNo: 5,
@@ -73,8 +74,7 @@ var ad00401 =
                 text: "DESCRIPTION",
                 width: 250,
                 editable: true,
-                dataType: "richtext",
-                required: true,
+                dataType: "richtext"
             },
             {
                 sortNo: 7,
@@ -82,8 +82,7 @@ var ad00401 =
                 text: "NOTES",
                 width: 250,
                 editable: true,
-                dataType: "richtext",
-                required: true
+                dataType: "richtext"
             },
             {
                 sortNo: 8,
@@ -94,13 +93,6 @@ var ad00401 =
                 dataType: "check",
                 textAlignment: "center",
                 defaultValue : "Y",
-                renderer: {
-                    type: "check",
-                    shape: "",
-                    falseValues: "N",
-                    trueValues: "Y",
-                    startEditOnClick: true,
-                },
                 required: true
             },
             {

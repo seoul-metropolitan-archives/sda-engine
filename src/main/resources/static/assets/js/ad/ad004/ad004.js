@@ -189,7 +189,6 @@ fnObj.formView = axboot.viewExtend(axboot.formView,{
                 param: "",
                 sendData: function () {
                     return {
-                        //jisaCode: fnObj.formView02.getData().jisaCode
                     };
                 },
                 callback: function (data) {

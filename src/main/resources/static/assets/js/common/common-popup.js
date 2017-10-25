@@ -67,40 +67,6 @@ var CODE = {};
 
 // fnObj 기본 함수 스타트와 리사이즈
 fnObj.pageStart = function () {
-    var _this = this;
-
-    //TODO 추후에 삭제될 내용으로 /실제 Grid의 컬럼 정보는 DB에서 가져올 예정
-    $.ajax({
-        url: "/assets/js/column_info/ac00301.js",
-        dataType: "script",
-        async: false,
-        success: function () {
-        }
-    });
-
-    $.ajax({
-        url: "/assets/js/column_info/ac00302.js",
-        dataType: "script",
-        async: false,
-        success: function () {
-        }
-    });
-
-    $.ajax({
-        url: "/assets/js/column_info/ac00303.js",
-        dataType: "script",
-        async: false,
-        success: function () {
-        }
-    });
-
-    _this.formView.initView();
-    _this.gridView01.initView();
-    _this.gridView02.initView();
-    _this.gridView03.initView();
-
-    // Data 조회
-    //ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
 };
 
 fnObj.pageResize = function () {
@@ -160,12 +126,13 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
         pageNumber: 0,
         pageSize: 20
     },
+    tagId : "popupGrid01",
     initView: function () {
-        this.gridObj = new GridWrapper("realgrid01", "/assets/js/libs/realgrid");
-        this.gridObj.setGridStyle("100%", "100%");
+        /*
         this.gridObj.setColumnInfo(ac00301.column_info).setEntityName("CONFIGURATION");
         this.gridObj.makeGrid();
         this.gridObj.itemClick(this.itemClick);
+        */
     },
     setData: function (list) {
         this.gridObj.setData("set", list);
@@ -178,9 +145,5 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
         this.gridObj.addRow();
     },
     itemClick: function (data) {
-        if (data.userUuid != null && data.userUuid != "") {
-            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, data);
-            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH2, data);
-        }
     }
 });

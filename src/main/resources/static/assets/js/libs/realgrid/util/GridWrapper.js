@@ -143,7 +143,7 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
             startEdit: true,	//붙여넣게 될 값이 복수 행이 아니고, 붙여넣을 행이 아직 편집 중이 아니면 편집을 시작
             commitEdit: true,	//복수 행 붙여넣기일 때 기존 편집 상태를 commit
             enableAppend: true,	//붙여넣을 복수 행이 기존 행의 범위를 넘어설 때 행을 추가
-            fillFieldDefaults: true,	//행 추가시 포함되지 않은 필드의 값을 data field의 기본값으로 채움
+            fillFieldDefaults: false,	//행 추가시 포함되지 않은 필드의 값을 data field의 기본값으로 채움
             fillColumnDefaults: true,	//행 추가시 포함되지 않은 필드의 값을 컬럼의 기본값으로 채움
             forceRowValidation: true,	//복수행 붙여 넣기 중 행별로 행 validation을 실행
             forceColumnValidation: true,	//복수행 붙여 넣기 중 행별로 컬럼 validation을 실행
