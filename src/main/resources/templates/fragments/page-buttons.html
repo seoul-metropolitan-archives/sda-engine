@@ -241,7 +241,8 @@
     </li>
     <li style="width:50%; text-align:left;" th:text="${pageName==null?'User':pageName}"></li>
 </th:block>
-<th:block layout:fragment="searchInputYello (lb,dap)">
+
+<th:block layout:fragment="searchInputYellow (lb,dap)">
     <dt class="pdl_5 w150" th:text="${lb}"></dt>
     <dd>
         <div class="src_box2" style="background-color: #fffdd6">
@@ -251,8 +252,9 @@
         </div>
     </dd>
 </th:block>
-<th:block layout:fragment="searchInput (lb,dap) ">
-    <dt class="w150" th:text="${lb}"></dt>
+
+<th:block layout:fragment="searchInput (lb,dap)">
+    <dt class="pdl_5 w150" th:text="${lb}"></dt>
     <dd>
         <div class="src_box2">
             <input th:attr="data-ax-path=${dap}"  type="text">
