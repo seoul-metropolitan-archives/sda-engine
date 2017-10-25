@@ -4,7 +4,6 @@
 
 package rmsoft.ams.seoul.ac.ac004.service;
 
-import com.querydsl.core.types.Predicate;
 import io.onsemiro.core.api.response.ApiResponse;
 import io.onsemiro.core.code.ApiStatus;
 import io.onsemiro.core.domain.BaseService;
@@ -23,7 +22,9 @@ import rmsoft.ams.seoul.ac.ac004.dao.Ac004Mapper;
 import rmsoft.ams.seoul.ac.ac004.vo.Ac00401VO;
 import rmsoft.ams.seoul.ac.ac004.vo.Ac00402VO;
 import rmsoft.ams.seoul.ac.ac004.vo.Ac00403VO;
-import rmsoft.ams.seoul.common.domain.*;
+import rmsoft.ams.seoul.common.domain.AcAccessControl;
+import rmsoft.ams.seoul.common.domain.AcUserGroup;
+import rmsoft.ams.seoul.common.domain.AcUserGroupUser;
 import rmsoft.ams.seoul.common.repository.AcAccessControlRepository;
 import rmsoft.ams.seoul.common.repository.AcUserGroupRepository;
 import rmsoft.ams.seoul.common.repository.AcUserGroupUserRepository;
@@ -79,16 +80,18 @@ public class Ac004Service extends BaseService {
      */
     @Transactional
     public ApiResponse saveGroup(List<Ac00401VO> ac00401VOList) {
-        for (Ac00401VO ac00401VO : ac00401VOList) {
-            AcUserGroup acUserGroup = ModelMapperUtils.map(ac00401VO, AcUserGroup.class);
-            AcUserGroup orgAcUserGroup = findOneUserGroup(ac00401VO);
+        List<AcUserGroup> acUserGroupList = ModelMapperUtils.mapList(ac00401VOList, AcUserGroup.class);
+        AcUserGroup orgAcUserGroup = null;
+
+        for (AcUserGroup acUserGroup : acUserGroupList) {
+            orgAcUserGroup = acUserGroupRepository.findOne(acUserGroup.getId());
 
             if (orgAcUserGroup == null) {
                 // created
                 acUserGroup.setUserGroupUuid(UUIDUtils.getUUID());
                 acUserGroupRepository.save(acUserGroup);
             } else {
-                if (ac00401VO.isDeleted()) {
+                if (acUserGroup.isDeleted()) {
                     acUserGroupRepository.delete(acUserGroup);
                 } else {
                     acUserGroup.setInsertDate(orgAcUserGroup.getInsertDate());
@@ -99,20 +102,6 @@ public class Ac004Service extends BaseService {
             }
         }
         return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");
-    }
-
-    /**
-     * 단일 그룹 조회
-     *
-     * @param requestParams the request params
-     * @return ac user
-     */
-    public AcUserGroup findOneUserGroup(Ac00401VO requestParams) {
-        QAcUserGroup qAcUserGroup = QAcUserGroup.acUserGroup;
-
-        Predicate predicate = qAcUserGroup.userGroupUuid.eq(requestParams.getUserGroupUuid());
-
-        return acUserGroupRepository.findOne(predicate);
     }
 
     /**********************************************************************************************
@@ -142,40 +131,28 @@ public class Ac004Service extends BaseService {
      */
     @Transactional
     public ApiResponse saveUserGroup(List<Ac00402VO> ac00402VOList) {
-        for (Ac00402VO ac00402VO : ac00402VOList) {
-            AcUserGroupUser acUserGroupGroupUser = ModelMapperUtils.map(ac00402VO, AcUserGroupUser.class);
-            AcUserGroupUser orgAcUserGroupUser = findOneUserGroup(ac00402VO);
+        List<AcUserGroupUser> acUserGroupUserList = ModelMapperUtils.mapList(ac00402VOList, AcUserGroupUser.class);
+        AcUserGroupUser orgAcUserGroupUser = null;
+
+        for (AcUserGroupUser acUserGroupUser : acUserGroupUserList) {
+            orgAcUserGroupUser = acUserGroupUserRepository.findOne(acUserGroupUser.getId());
 
             if (orgAcUserGroupUser == null) {
                 // created
-                acUserGroupGroupUser.setUserGroupUserUuid(UUIDUtils.getUUID());
-                acUserGroupUserRepository.save(acUserGroupGroupUser);
+                acUserGroupUser.setUserGroupUserUuid(UUIDUtils.getUUID());
+                acUserGroupUserRepository.save(acUserGroupUser);
             } else {
-                if (ac00402VO.isDeleted()) {
-                    acUserGroupUserRepository.delete(acUserGroupGroupUser);
+                if (acUserGroupUser.isDeleted()) {
+                    acUserGroupUserRepository.delete(acUserGroupUser);
                 } else {
-                    acUserGroupGroupUser.setInsertDate(orgAcUserGroupUser.getInsertDate());
-                    acUserGroupGroupUser.setInsertUuid(orgAcUserGroupUser.getInsertUuid());
+                    acUserGroupUser.setInsertDate(orgAcUserGroupUser.getInsertDate());
+                    acUserGroupUser.setInsertUuid(orgAcUserGroupUser.getInsertUuid());
 
-                    acUserGroupUserRepository.save(acUserGroupGroupUser);
+                    acUserGroupUserRepository.save(acUserGroupUser);
                 }
             }
         }
         return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");
-    }
-
-    /**
-     * 그룹 사용자 정보 단건 조회
-     *
-     * @param requestParams the request params
-     * @return ac user group user
-     */
-    public AcUserGroupUser findOneUserGroup(Ac00402VO requestParams) {
-        QAcUserGroupUser qAcUserGroupUser = QAcUserGroupUser.acUserGroupUser;
-
-        Predicate predicate = qAcUserGroupUser.userGroupUserUuid.eq(requestParams.getUserGroupUserUuid());
-
-        return acUserGroupUserRepository.findOne(predicate);
     }
 
     /**********************************************************************************************
@@ -213,40 +190,28 @@ public class Ac004Service extends BaseService {
      */
     @Transactional
     public ApiResponse saveUserRole(List<Ac00403VO> ac00403VOList) {
-        for (Ac00403VO ac00403VO : ac00403VOList) {
-            AcAccessControl acAccessControl = ModelMapperUtils.map(ac00403VO, AcAccessControl.class);
-            AcAccessControl orgacAccessControl = findOneUserRole(ac00403VO);
+        List<AcAccessControl> acAccessControlList = ModelMapperUtils.mapList(ac00403VOList, AcAccessControl.class);
+        AcAccessControl orgAcAccessControl = null;
 
-            if (orgacAccessControl == null) {
+        for (AcAccessControl acAccessControl : acAccessControlList) {
+            orgAcAccessControl = acAccessControlRepository.findOne(acAccessControl.getId());
+
+            if (orgAcAccessControl == null) {
                 // created
                 acAccessControl.setAccessControlUuid(UUIDUtils.getUUID());
                 acAccessControlRepository.save(acAccessControl);
             } else {
-                if (ac00403VO.isDeleted()) {
+                if (acAccessControl.isDeleted()) {
                     acAccessControlRepository.delete(acAccessControl);
                 } else {
-                    acAccessControl.setInsertDate(orgacAccessControl.getInsertDate());
-                    acAccessControl.setInsertUuid(orgacAccessControl.getInsertUuid());
+                    acAccessControl.setInsertDate(orgAcAccessControl.getInsertDate());
+                    acAccessControl.setInsertUuid(orgAcAccessControl.getInsertUuid());
 
                     acAccessControlRepository.save(acAccessControl);
                 }
             }
         }
         return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");
-    }
-
-    /**
-     * 사용자 접근제어 정보 단건 조회
-     *
-     * @param requestParams the request params
-     * @return ac access control
-     */
-    public AcAccessControl findOneUserRole(Ac00403VO requestParams) {
-        QAcAccessControl qAcAccessControl = QAcAccessControl.acAccessControl;
-
-        Predicate predicate = qAcAccessControl.accessControlUuid.eq(requestParams.getAccessControlUuid());
-
-        return acAccessControlRepository.findOne(predicate);
     }
 
     /**

@@ -4,7 +4,6 @@
 
 package rmsoft.ams.seoul.ac.ac006.service;
 
-import com.querydsl.core.types.Predicate;
 import io.onsemiro.core.api.response.ApiResponse;
 import io.onsemiro.core.code.ApiStatus;
 import io.onsemiro.core.domain.BaseService;
@@ -20,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 import rmsoft.ams.seoul.ac.ac006.dao.Ac006Mapper;
 import rmsoft.ams.seoul.ac.ac006.vo.Ac00601VO;
 import rmsoft.ams.seoul.common.domain.AcPermission;
-import rmsoft.ams.seoul.common.domain.QAcPermission;
 import rmsoft.ams.seoul.common.repository.AcPermissionRepository;
 
 import javax.inject.Inject;
@@ -72,39 +70,27 @@ public class Ac006Service extends BaseService {
      */
     @Transactional
     public ApiResponse savePermission(List<Ac00601VO> ac00601VOList) {
-        for (Ac00601VO ac00601VO : ac00601VOList) {
-            AcPermission acPermission = ModelMapperUtils.map(ac00601VO, AcPermission.class);
-            AcPermission orgPermission = findOnePermission(ac00601VO);
+        List<AcPermission> acPermissionList = ModelMapperUtils.mapList(ac00601VOList, AcPermission.class);
+        AcPermission orgAcPermission = null;
 
-            if (orgPermission == null) {
+        for (AcPermission acPermission : acPermissionList) {
+            orgAcPermission = acPermissionRepository.findOne(acPermission.getId());
+
+            if (orgAcPermission == null) {
                 // created
                 acPermission.setPermissionUuid(UUIDUtils.getUUID());
                 acPermissionRepository.save(acPermission);
             } else {
-                if (ac00601VO.isDeleted()) {
+                if (acPermission.isDeleted()) {
                     acPermissionRepository.delete(acPermission);
                 } else {
-                    acPermission.setInsertDate(orgPermission.getInsertDate());
-                    acPermission.setInsertUuid(orgPermission.getInsertUuid());
+                    acPermission.setInsertDate(orgAcPermission.getInsertDate());
+                    acPermission.setInsertUuid(orgAcPermission.getInsertUuid());
 
                     acPermissionRepository.save(acPermission);
                 }
             }
         }
         return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");
-    }
-
-    /**
-     * 퍼미션 단건 조회
-     *
-     * @param requestParams the request params
-     * @return ac user group user
-     */
-    public AcPermission findOnePermission(Ac00601VO requestParams) {
-        QAcPermission qAcPermission = QAcPermission.acPermission;
-
-        Predicate predicate = qAcPermission.permissionUuid.eq(requestParams.getPermissionUuid());
-
-        return acPermissionRepository.findOne(predicate);
     }
 }
