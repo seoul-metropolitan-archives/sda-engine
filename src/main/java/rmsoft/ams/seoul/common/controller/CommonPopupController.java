@@ -23,7 +23,7 @@ import rmsoft.ams.seoul.ac.ac003.vo.Ac00301VO;
  * @since 2017-10-12 오후 5:48
  **/
 @RestController
-@RequestMapping(value = "/api/v1/common")
+@RequestMapping(value = "/api/v1/common/popup")
 public class CommonPopupController extends MessageBaseController {
 
     @Autowired

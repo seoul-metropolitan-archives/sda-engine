@@ -15,7 +15,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH: function (caller, act, data) {
         axboot.ajax({
             type: "POST",
-            url: "/ad/ad001/getEnviromentList.do",
+            url: "/ad/ad002/getMessageList.do",
             data: JSON.stringify(fnObj.searchView.getData()),
             callback: function (res) {
                 console.log(res);
@@ -27,9 +27,10 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         });
     },
     PAGE_SAVE: function (caller, act, data) {
+        console.log(fnObj.gridView01.getData());
         axboot.ajax({
             type: "POST",
-            url: "/ad/ad001/save.do",
+            url: "/ad/ad002/save.do",
             data: JSON.stringify(fnObj.gridView01.getData()),
             callback: function (res) {
                 axToast.push(axboot.getCommonMessage("AA007"));
@@ -56,7 +57,7 @@ var fnObj = {
     pageStart : function () {
         var _this = this;
         $.ajax({
-            url: "/assets/js/column_info/ad001.js",
+            url: "/assets/js/column_info/ad00201.js",
             dataType: "script",
             async : false,
             success: function(){}
@@ -118,7 +119,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.realGridView, {
     tagId : "realgrid01",
     initView: function ()
     {
-        this.gridObj.setColumnInfo(ad00101.column_info);
+        this.gridObj.setColumnInfo(ad00201.column_info);
         this.gridObj.setEntityName($("#realgridName").text());
         this.gridObj.makeGrid();
         this.gridObj.itemClick(function(data){

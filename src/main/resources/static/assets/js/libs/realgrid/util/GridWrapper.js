@@ -121,9 +121,21 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 			updatable : true,
 			editable : true,
 			deletable : true,
-			commitWhenExitLast : false,
-			crossWhenExitLast : false,
-			enterToTab : true
+			commitWhenExitLast : false,	//tab/enter 키로 마지막 셀을 벗어날 때 행 commit 한다.
+			crossWhenExitLast : true,	//tab/enter 키로 마지막 셀을 벗어날 때 다음 행으로 이동한다.
+            useTabKey : true,			//true면 Tab 키로 셀 이동할 수 있다.
+            enterToNextRow : false,		//enter 입력시 다음 row로 이동
+            enterToEdit: true,			//enter 시 텍스트 편집
+            skipReadOnly : false,		//true이면 컬럼간 이동시 readOnly 셀은 건너뛰고 다음 컬럼 셀로 이동한다.
+            skipReadOnlyCell : false, 	//true이면 한 컬럼에서 행간(Vertical 컬럼 그룹 행을 포함) 이동시 readOnly 셀은 건너뛰고 다음 행의 컬럼 셀로 이동한다.
+            appendWhenExitLast : true, 	//commitWhenExitLast 가 true 일 경우 enterb/tab 키로 마지막셀을 벗어날 경우 행이 추가된다.
+            appendWhenInsertKey : false, //Insert 키 입력시 해당 위치에 행이 삽입되는 것이 아니라 가장 마지막행에 추가된다.
+            editWhenFocused : false, 	//셀이 선택될때마다 에디터가 표시된다.
+            editWhenClickFocused : true, //한번 선택된 셀을 다시한번 선택하면 에디터가 표시된다.(더블 클릭이 아님)
+            revertable : false,			//dataProvider.softDeleting = true 인 경우 삭제 상태인 행들을 ctrl+shift+del 키 입력시 원래 상태로 되돌리겠는지의 여부를 설정한다.
+            maxLengthToNextCell : false, //column.editor.maxLength에 지정한 자리수 만큼 입력되면 다음 셀로 이동된다.editFormat이 있는 경우 보여지는 글자를 기준으로 maxLength가 체크된다. (numberEditor, dateEditor)multiLine의 경우 \n과 같이 제어문자도 글자수에 포함된다.
+            innerDraggable : true,		//Inner Drag & Drop기능 사용 여부를 지정한다
+        	enterToTab : false
 		},
 		sort : {
 			enabled : true
@@ -180,12 +192,11 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 				visible: true
 			}
 		};
-	var editorDefaultOption = {
+	var editorDefaultOptions = {
 		useCssStyleDropDownList : true,
 		useCssStyleDatePicker : true,
 		useCssStylePopupMenu : true,
 		useCssStyleMultiCheck : true,
-		skipReadOnly : true,
 		applyCellFont: true
 	};
 	var displayDefaultOption = {
@@ -366,7 +377,19 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 
 	var bindEvent = function() {
 		gridView.onKeyDown = keyDown;
+
+		gridView.onCurrentChanged = function(grid,newIndex)
+		{
+
+		}
+
 		var _callback = callback;
+		//사용자가 Insert 키를 눌러 새로운 행을 삽입하거나, 마지막 행에서 아래 화살표를 눌러 행을 추가하려고 할 때 호출된다. 이 콜백에서 행 추가 불가 메시지를 리턴하면 행 추가가 금지된다.
+        gridView.onRowInserting = function (grid, itemIndex) {
+            addRowBeforeEventCallback();
+            addRowAfterEventCallback();
+        };
+
 		gridView.onContextMenuItemClicked = function (grid, label, index) {
 			switch(label.label)
 			{
@@ -527,7 +550,7 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 		{
             gridView.setOptions(option);
             gridView.setGroupingOptions(groupingDefaultOptions);
-            gridView.setEditOptions(editorDefaultOption);
+            //gridView.setEditOptions(editorDefaultOptions);
             gridView.setStyles(defaultStyle.parsing);
             gridView.setFilteringOptions(filteringDefaultOptions);
             gridView.setDisplayOptions(displayDefaultOption);
@@ -564,6 +587,7 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 	 *              boolean }
 	 */
 	this.setColumnInfo = function(list) {
+        firstFocusColumnName = undefined;
 		var columnList = [];
 		var fieldList = [];
 		var data = undefined;
@@ -601,18 +625,18 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 				visible : data.visible === undefined ? true : data.visible,
 				readOnly : !(data.editable === undefined ? true : data.editable)
 			};
-			if (i === 0)
+			if (!firstFocusColumnName && obj.visible == true && obj.editable == true)
 				firstFocusColumnName = data.name;
 			// tab사용시 마지막 컬럼사용하기 때문에 세팅.
 			if (data.editable)
 				lastFocusColumnName = data.name;
-
 			// 필수여부 (비활성 여부 빠져있음.)
 			if (data.disable) {
 				styles = defaultStyle.column.disable;
+                obj.editable = false;
 			} else if (data.required) {
 				styles = defaultStyle.column.required;
-				obj.requiredMessage = obj.header.text + "는 반드시 입력해야 됩니다.";
+				obj.requiredMessage = axboot.getCommonMessage("AA008");
 			} else {
 				styles = defaultStyle._default;
 			}
@@ -680,7 +704,10 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
                         data.lookupDisplay = true;
 
 					obj.lookupDisplay = data.lookupDisplay;
-					defaultData.push((undefined === data.values || data.values.length < 1) ? "" : data.values[0]);
+					if(!data.values)
+                        defaultData.push("");
+					else
+                        defaultData.push(data.values[0]);
 					break;
 				case "check":
 					obj.renderer = $.extend({},defaultStyle.data.check,data.renderer);
@@ -725,11 +752,12 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 
 		return dataProvider.getRows();
 	};
+
 	this.setDefaultData = function(_data)
 	{
 		return defaultData = _data;
 	}
-	this.getDefaulData = function()
+	this.getDefaultData = function()
 	{
 		return defaultData;
 	}
@@ -738,7 +766,8 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 	};
 
 	var _addRow = function(obj) {
-        addRowBeforeEventCallback();
+		if(addRowBeforeEventCallback)
+        	addRowBeforeEventCallback();
 		var validate = false;
 		if (undefined === obj && appendValidate()) {
 			gridView.getDataProvider().addRow(defaultData);
@@ -752,7 +781,8 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 			gridView.getDataProvider().addRow(obj);
 			_doSave = true;
 		}
-		addRowAfterEventCallback();
+		if(addRowAfterEventCallback)
+			addRowAfterEventCallback();
 	};
 
 	//셀렉트 된 행 데이터 가져오는 함수
@@ -797,9 +827,12 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 		var removeField = function(data)
 		{
 			delete(data["insertUUID"]);
+            delete(data["insertUuid"]);
             delete(data["insertDate"]);
             delete(data["updateUUID"]);
+            delete(data["updateUuid"]);
             delete(data["updateDate"]);
+            console.log(data);
 			return data;
 		}
 
@@ -885,6 +918,7 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 	// keyDown event
 	var keyDown = function(grid, key, ctrl, shift, alt) {
 		var result = true;
+		//return ;
 		switch (key) {
 			case 40:
 				_addRow(function() {
@@ -904,6 +938,8 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 				result = true;
 				break;
 			case 9:
+
+				var isNextRow = lastFocusColumnName == gridView.getCurrent().fieldName;
 				var isAppending = false;
 				_addRow(function() {
 					if (_getRowCnt() === 0 ||
@@ -917,12 +953,12 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 						return false;
 					}
 				});
-				if (isAppending) {
+				if (isAppending || isNextRow) {
 	
 					var current = gridView.getCurrent();
 					current.dataRow++;
-					current.itemIndex++;
-					current.fieldIndex = 1;
+					current.itemIndex = dataProvider.getFieldIndex(firstFocusColumnName);
+					current.fieldIndex = dataProvider.getFieldIndex(firstFocusColumnName);
 					current.column = firstFocusColumnName;
 					current.fieldName = firstFocusColumnName;
 					console.log(current);
@@ -935,7 +971,19 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 		}
 		return result;
 	};
+	this.setColumnProperty = function(columnName,condition)
+	{
+        var styles = {};
+        if(type == "disable")
+		 	styles =  _defaultStyle.column.disable;
+        else if(type == "required")
+            styles =  _defaultStyle.column.required;
 
+        gridView.setColumnProperty(
+            columnName,
+            "dynamicStyles", condition
+        )
+	}
 	this.setValidations = function(validations) {
 		var column = undefined;
 		for (var i = 0; i < validations.length; i++) {
@@ -1013,8 +1061,19 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 	this.itemClick  = function(_event)
 	{
         gridView.onDataCellClicked  = function(grid,index){
+            if(-1 == index.dataRow || -1 == index.itemIndex)
+                return ;
+
             _event(grid.getDataProvider().getJsonRow(index.dataRow),index);
 		};
+        gridView.onCurrentRowChanged =  function (grid, oldRow, newRow) {
+        	console.log(grid.getCurrent());
+
+        	if(-1 == grid.getCurrent().dataRow || -1 == grid.getCurrent().itemIndex)
+        		return ;
+
+	         _event(grid.getDataProvider().getJsonRow(grid.getCurrent().dataRow),grid.getCurrent());
+        }
     };
 	this.setAppendValiate = function(func) {
 		if (typeof func == "function") {
@@ -1022,15 +1081,18 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 		} else {
 			throw "함수만 설정 가능합니다.";
 		}
-
 	};
-
+	this.commit = function()
+	{
+        dataProvider.clearRowStates(true, false);
+    }
 	init();
 
 };
-
-var gridEvent = 
+/*
+GridWrapper.prototype =
 {
 };
+*/
 
 

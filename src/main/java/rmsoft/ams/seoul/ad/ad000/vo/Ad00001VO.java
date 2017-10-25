@@ -9,8 +9,11 @@ import lombok.*;
 @EqualsAndHashCode(callSuper = false)
 public class Ad00001VO extends BaseVO
 {
-    private String service_uuid;
-    private String service_code;
-    private String service_name;
-    private String install_yn;
+    private String configurationUuid;
+
+    private String configurationCode;
+
+    private String configurationValue;
+
+    private String useYN;
 }

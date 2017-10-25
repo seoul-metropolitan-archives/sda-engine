@@ -3,41 +3,42 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="rmsoft.ams.seoul.ad.ad001.dao.Ad001Mapper">
+<mapper namespace="rmsoft.ams.seoul.ad.ad002.dao.Ad002Mapper">
 
-    <select id="select" resultType="Ad00101VO" parameterType="Ad00101VO" statementType="PREPARED">
+    <select id="select" resultType="Ad00201VO" parameterType="Ad00201VO" statementType="PREPARED">
             <![CDATA[
             SELECT
-               Z.CONFIGURATION_UUID configurationUUID,
-               Z.CONFIGURATION_CODE configurationCode,
-               Z.CONFIGURATION_VALUE configurationValue,
+               Z.MESSAGE_UUID messageUUID,
+               Z.MESSAGE_CODE messageCode,
+               Z.MESSAGE_NAME messageName,
                Z.SERVICE_UUID serviceUuid,
+               Z.DB_ERROR_CODE dbErrorCode,
                Z.DESCRIPTION description,
                Z.NOTES notes,
                Z.USE_YN useYN,
-            ]]>
+               ]]>
                <include refid="Common.UserName"><property name="userUuid" value="Z.INSERT_UUID"/></include> as insertUuid,
-            <![CDATA[
+              <![CDATA[
                Z.INSERT_DATE as insertDate,
-            ]]>
+               ]]>
                <include refid="Common.UserName"><property name="userUuid" value="Z.UPDATE_UUID"/></include> as updateUuid,
-            <![CDATA[
+               <![CDATA[
                Z.UPDATE_DATE as updateDate
+               ]]>
             FROM
-               AD_CONFIGURATION Z
+              AD_MESSAGE Z
             WHERE
               1=1
-            ]]>
-        <if test="null != configurationCode and '' != configurationCode">
+        <if test="null != messageCode and '' != messageCode">
             <![CDATA[
             AND
-            Z.CONFIGURATION_CODE LIKE '%' || #{configurationCode} || '%'
+            Z.MESSAGE_CODE LIKE '%' || #{messageCode} || '%'
             ]]>
         </if>
-        <if test="null != configurationValue and '' != configurationValue">
+        <if test="null != messageName and '' != messageName">
             <![CDATA[
             AND
-            Z.CONFIGURATION_VALUE LIKE '%' || #{configurationValue} || '%'
+            Z.MESSAGE_NAME LIKE '%' || #{messageName} || '%'
             ]]>
         </if>
         <if test="null != serviceUuid and '' != serviceUuid">

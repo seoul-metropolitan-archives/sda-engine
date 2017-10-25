@@ -8,21 +8,21 @@
     <select id="searchPopupHeader" resultType="Ad00401VO" parameterType="Ad00401VO" statementType="PREPARED">
     <![CDATA[
         SELECT
-          POPUP_HEADER_UUID  popupHeaderUUID
-          , POPUP_CODE      popupCode
-          , POPUP_NAME      popupName
-          , SERVICE_UUID    serviceUUID
-          , MULTISELECT_YN  multiselectYN
-          , TREE_YN         treeYN
-          , DESCRIPTION     description
-          , NOTES           notes
-          , USE_YN          useYN
-          , POPUP_SQL       popupSQL
+          POPUP_HEADER_UUID  popupHeaderUUID,
+          POPUP_CODE      popupCode,
+          POPUP_NAME      popupName,
+          SERVICE_UUID    serviceUUID,
+          MULTISELECT_YN  multiselectYN,
+          TREE_YN         treeYN,
+          DESCRIPTION     description,
+          NOTES           notes,
+          USE_YN          useYN,
+          POPUP_SQL       popupSQL,
         ]]>
-        , <include refid="Common.UserName"><property name="userUuid" value="INSERT_UUID"/></include> as insertUuid
-        , INSERT_DATE as insertDate
-        , <include refid="Common.UserName"><property name="userUuid" value="UPDATE_UUID"/></include> as updateUuid
-        ,  UPDATE_DATE as updateDate
+         <include refid="Common.UserName"><property name="userUuid" value="INSERT_UUID"/></include> as insertUuid,
+         INSERT_DATE as insertDate,
+         <include refid="Common.UserName"><property name="userUuid" value="UPDATE_UUID"/></include> as updateUuid,
+          UPDATE_DATE as updateDate
         FROM
           AD_POPUP_HEADER
         WHERE

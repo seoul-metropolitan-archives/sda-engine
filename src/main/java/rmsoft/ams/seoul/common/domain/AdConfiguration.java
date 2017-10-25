@@ -22,9 +22,9 @@ import java.io.Serializable;
 public class AdConfiguration  extends BaseJpaModel<AdConfiguration.AdConfigurationId>
 {
     @Id
-    @Column(name="CONFIGURATION UUID")
+    @Column(name="CONFIGURATION_UUID")
     @Comment(value="설정 UUID")
-    private String configurationUUID;
+    private String configurationUuid;
 
     @Column(name="CONFIGURATION_CODE")
     @Comment(value="설정 코드")
@@ -36,11 +36,15 @@ public class AdConfiguration  extends BaseJpaModel<AdConfiguration.AdConfigurati
 
     @Column(name="SERVICE_UUID")
     @Comment(value="서비스 UUID")
-    private String serviceUUID;
+    private String serviceUuid;
+
+    @Column(name="USE_YN")
+    @Comment(value="사용여부")
+    private String useYN;
 
     @Override
     public AdConfigurationId getId() {
-        return AdConfigurationId.of(configurationUUID);
+        return AdConfigurationId.of(configurationUuid);
     }
 
     @Embeddable
@@ -49,7 +53,7 @@ public class AdConfiguration  extends BaseJpaModel<AdConfiguration.AdConfigurati
     @RequiredArgsConstructor(staticName = "of")
     public static class AdConfigurationId implements Serializable {
         @NonNull
-        private String configurationUUID;
+        private String configurationUuid;
     }
 
 }

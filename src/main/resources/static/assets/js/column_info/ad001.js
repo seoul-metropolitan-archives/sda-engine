@@ -1,11 +1,11 @@
-var ad001 =
+var ad00101 =
 {
     column_info :
         [
             {
                 sortNo: 1,
-                name: "configurationUUID",
-                text: "ConfigurationUUID",
+                name: "configurationUuid",
+                text: "ConfigurationUuid",
                 width: 120,
                 editable: true,
                 dataType: "code",
@@ -32,15 +32,15 @@ var ad001 =
             },
             {
                 sortNo: 4,
-                name: "serviceUUID",
+                name: "serviceUuid",
                 text: "Service",
                 width: 120,
                 editable: true,
                 dataType: "combo",
                 required: false,
                 visible: true,
-                values: new Array(),
-                labels: new Array(),
+                values: axboot.commonCodeFilter("CD006").codeArr,
+                labels: axboot.commonCodeFilter("CD006").nameArr,
                 lookupDisplay : true,
                 editor: {
                     type: "dropDown",
@@ -79,20 +79,12 @@ var ad001 =
             },
             {
                 sortNo: 8,
-                name: "use_YN",
+                name: "useYN",
                 text: "USE",
                 width: 120,
                 editable: true,
                 dataType: "check",
                 textAlignment: "center",
-                renderer: {
-                    type: "check",
-                    shape: "",
-                    falseValues: "false",
-                    trueValues: "true",
-                    editable: "false",
-                    startEditOnClick: true,
-                },
                 required: true
             },
             {
@@ -106,7 +98,7 @@ var ad001 =
             },
             {
                 sortNo: 9,
-                name: "insertUUID",
+                name: "insertUuid",
                 text: "Created By",
                 width: 120,
                 editable: false,
@@ -137,7 +129,7 @@ var ad001 =
             },
             {
                 sortNo: 12,
-                name: "updateUUID",
+                name: "updateUuid",
                 text: "Modifed By",
                 width: 120,
                 editable: false,

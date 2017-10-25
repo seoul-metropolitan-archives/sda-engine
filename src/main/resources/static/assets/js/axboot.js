@@ -2407,12 +2407,14 @@ axboot.baseView =
                 _this.cancel();
             });
             $(document).delegate(".ax-body", "keydown", function (e) {
-
+                if(e.keyCode == 13)
+                    return ;
                 if (e.ctrlKey && e.altKey && e.keyCode == 73) {
                     _this.inquiry();
                 } else if (e.ctrlKey && e.altKey && e.keyCode == 83) {
                     _this.save();
                 }
+
             });
         }
         , save: function () {
@@ -2555,7 +2557,6 @@ axboot.realGridView = {
     init: function () {
 
         if ("" == this.tagId) alert("그리드 tagID를 설정해주세요.");
-        if ("" == this.entityName) alert("엑셀 다운로드 명을 설정해주세요.");
 
         this.gridObj = new GridWrapper(this.tagId, "/assets/js/libs/realgrid");
         this.gridObj.setGridStyle("100%", "100%");
@@ -2613,7 +2614,14 @@ axboot.realGridView = {
     },
     getPageData: function getPageData() {
         return this.page;
-    }
+    },
+    isChangeData: function () {
+        if (this.getData().length > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    },
 };
 
 /**

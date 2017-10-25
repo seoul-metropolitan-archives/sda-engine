@@ -24,7 +24,7 @@ public class AdPopupHeader extends BaseJpaModel<AdPopupHeader.AdPopupHeaderId>
     @Id
     @Column(name="POPUP_HEADER_UUID")
     @Comment(value="팝업 UUID")
-    private String popupHeaderUUID;
+    private String popupHeaderUuid;
 
     @Column(name="POPUP_CODE")
     @Comment(value="팝업 코드")
@@ -36,7 +36,7 @@ public class AdPopupHeader extends BaseJpaModel<AdPopupHeader.AdPopupHeaderId>
 
     @Column(name="SERVICE_UUID")
     @Comment(value="서비스 UUID")
-    private String serviceUUID;
+    private String serviceUuid;
 
     @Column(name="MULTISELECT_YN")
     @Comment(value="멀티 셀렉트 YN")
@@ -56,7 +56,7 @@ public class AdPopupHeader extends BaseJpaModel<AdPopupHeader.AdPopupHeaderId>
 
     @Override
     public AdPopupHeaderId getId() {
-        return AdPopupHeaderId.of(popupHeaderUUID);
+        return AdPopupHeaderId.of(popupHeaderUuid);
     }
 
 
@@ -67,7 +67,7 @@ public class AdPopupHeader extends BaseJpaModel<AdPopupHeader.AdPopupHeaderId>
     public static class AdPopupHeaderId implements Serializable
     {
         @NonNull
-        private String popupHeaderUUID;
+        private String popupHeaderUuid;
     }
 
 }

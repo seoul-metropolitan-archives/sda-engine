@@ -16,7 +16,6 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode(callSuper = false)
 public class Ad00401VO extends BaseVO
 {
-
     public Ad00401VO()
     {
         this.insertUuid = this.updateUuid = SessionUtils.getCurrentUser().getUserUuid();

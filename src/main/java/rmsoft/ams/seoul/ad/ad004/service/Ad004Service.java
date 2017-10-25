@@ -37,6 +37,7 @@ public class Ad004Service extends BaseService {
     public ApiResponse savePopupHeader(List<AdPopupHeader> list) {
         for (AdPopupHeader data : list) {
             if (data.isCreated()) {
+                data.setPopupHeaderUuid(UUIDUtils.getUUID());
                 popupHeaderRepository.save(data);
             } else if (data.isModified()) {
                 popupHeaderRepository.save(data);
@@ -48,18 +49,15 @@ public class Ad004Service extends BaseService {
         return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");
     }
 
-    public boolean insertPopupSQL(Ad00401VO data) {
-        mapper.insertPopupSQL(data);
-        return true;
-    }
-
     public List<Ad00402VO> getPopupDetail(Ad00402VO param) {
         return mapper.getPopupDetail(param);
     }
 
+    @Transactional
     public ApiResponse savePopupDetail(List<AdPopupDetail> list) {
         for (AdPopupDetail data : list) {
             if (data.isCreated()) {
+                data.setPopupDetailUuid(UUIDUtils.getUUID());
                 popupDetailRepository.save(data);
             } else if (data.isModified()) {
                 popupDetailRepository.save(data);

@@ -1,158 +1,134 @@
-var ad00401 =
+var ad00201 =
 {
     column_info :
         [
             {
-                sortNo: 0,
-                name: "popupHeaderUUID",
-                text: "Popup UUID",
-                editable: false,
+                sortNo: 1,
+                name: "messageUuid",
+                text: "MessageUUID",
+                width: 120,
+                editable: true,
                 dataType: "code",
                 required: false,
                 visible: false
             },
             {
-                sortNo: 1,
-                name: "popupCode",
-                text: "Popup Code",
-                editable: true,
-                dataType: "code",
-                required: true,
-                visible: true
-            },
-            {
                 sortNo: 2,
-                name: "popupName",
-                text: "Popup Name",
-                width: 150,
+                name: "messageCode",
+                text: "Message Code",
+                width: 120,
                 editable: true,
                 dataType: "text",
                 required: true
             },
             {
                 sortNo: 3,
-                name: "serviceUUID",
-                text: "Service UUID",
-                width: 130,
+                name: "messageName",
+                text: "Environment Name",
+                width: 120,
+                editable: true,
+                dataType: "text",
+                required: true
+            },
+            {
+                sortNo: 4,
+                name: "serviceUuid",
+                text: "Service",
+                width: 120,
                 editable: true,
                 dataType: "combo",
                 required: false,
                 visible: true,
                 values: axboot.commonCodeFilter("CD006").codeArr,
                 labels: axboot.commonCodeFilter("CD006").nameArr,
+                lookupDisplay : true,
                 editor: {
                     type: "dropDown",
                     dropDownCount: 10,
                     domainOnly: true, //domainOnly가 true이면 목록에 있는 값들만 선택할 수 있습니다.
                     textReadOnly: false, // true이면 키 입력이 안되며 선택만 할 수 있습니다.
                 }
-
             },
             {
                 sortNo: 5,
-                name: "multiselectYN",
-                text: "Multiselect",
-                width: 70,
+                name: "dbErrorCode",
+                text: "DB Error Code",
+                width: 120,
                 editable: true,
-                dataType: "check",
-                required: true
-            },
-            {
-                sortNo: 5,
-                name: "treeYN",
-                text: "Tree",
-                width: 70,
-                defaultValue : "N",
-                editable: true,
-                dataType: "check",
-                required: true
+                dataType: "text",
+                required: false,
+                visible: true
             },
             {
                 sortNo: 6,
                 name: "description",
                 text: "DESCRIPTION",
-                width: 250,
+                width: 120,
                 editable: true,
                 dataType: "richtext",
-                required: true,
+                required: false,
             },
             {
                 sortNo: 7,
                 name: "notes",
                 text: "NOTES",
-                width: 250,
+                width: 120,
                 editable: true,
                 dataType: "richtext",
-                required: true
+                required: false
             },
             {
                 sortNo: 8,
                 name: "useYN",
                 text: "USE",
-                width: 50,
+                width: 120,
                 editable: true,
                 dataType: "check",
                 textAlignment: "center",
-                defaultValue : "Y",
-                renderer: {
-                    type: "check",
-                    shape: "",
-                    falseValues: "N",
-                    trueValues: "Y",
-                    startEditOnClick: true,
-                },
+                defaultValue:"Y",
                 required: true
             },
             {
                 sortNo: 9,
-                name: "insertUUID",
+                name: "insertUuid",
                 text: "Created By",
                 width: 120,
+                editable: false,
                 dataType: "text",
-                editable : false,
-                readonly : true,
                 visible: true,
-                required: false,
-                disable: true
+                disable : true,
+                required: false
             },
             {
                 sortNo: 11,
                 name: "insertDate",
                 text: "Date/Time Created",
                 width: 120,
+                editable: false,
+                disable : true,
                 dataType: "timestamp",
-                required: false,
-                disable: true
+                required: false
             },
             {
                 sortNo: 12,
-                name: "updateUUID",
+                name: "updateUuid",
                 text: "Modifed By",
                 width: 120,
+                editable: false,
                 visible: true,
+                disable : true,
                 dataType: "text",
-                required: false,
-                disable: true
+                required: false
             },
             {
-                sortNo: 14,
+                sortNo: 13,
                 name: "updateDate",
                 text: "Date/Time Modified",
                 width: 120,
+                editable: false,
+                disable : true,
                 dataType: "timestamp",
-                required: false,
-                disable: true
-            }
-            ,
-            {
-                sortNo: 15,
-                name: "popupSQL",
-                text: "Popup SQL",
-                width: 120,
-                visible : false,
-                dataType: "text",
-                required: false,
-                disable: true
+                required: false
             }
         ]
 }

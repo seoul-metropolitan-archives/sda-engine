@@ -23,10 +23,10 @@ public class AdCodeDetail extends BaseJpaModel<AdCodeDetail.AdCodeDetailId> {
     @Id
     @Column(name = "CODE_DETAIL_UUID")
     @Comment(value = "코드 디테일 UUID")
-    private String codeDetailUUID;
+    private String codeDetailUuid;
     @Column(name = "CODE_HEADER_UUID")
     @Comment(value = "코드 해더 UUID")
-    private String codeHeaderUUID;
+    private String codeHeaderUuid;
     @Column(name = "CODE")
     @Comment(value = "코드")
     private String code;
@@ -81,7 +81,7 @@ public class AdCodeDetail extends BaseJpaModel<AdCodeDetail.AdCodeDetailId> {
 
     @Override
     public AdCodeDetailId getId() {
-        return AdCodeDetailId.of(codeDetailUUID);
+        return AdCodeDetailId.of(codeDetailUuid);
     }
 
     @Embeddable
@@ -90,6 +90,6 @@ public class AdCodeDetail extends BaseJpaModel<AdCodeDetail.AdCodeDetailId> {
     @RequiredArgsConstructor(staticName = "of")
     public static class AdCodeDetailId implements Serializable {
         @NonNull
-        private String codeDetailUUID;
+        private String codeDetailUuid;
     }
 }

@@ -24,7 +24,7 @@ public class AdCodeHeader extends BaseJpaModel<AdCodeHeader.AdCodeHeaderId>
     @Id
     @Column(name="CODE_HEADER_UUID")
     @Comment(value="코드 해더 UUID")
-    private String codeHeaderUUID;
+    private String codeHeaderUuid;
     @Column(name="CATEGORY_CODE")
     @Comment(value="목록 코드")
     private String categoryCode;
@@ -33,13 +33,13 @@ public class AdCodeHeader extends BaseJpaModel<AdCodeHeader.AdCodeHeaderId>
     private String categoryName;
     @Column(name="SERVICE_UUID")
     @Comment(value="서비스 UUID")
-    private String serviceUUID;
+    private String serviceUuid;
     @Column(name="CODE_TYPE_UUID")
     @Comment(value="코드 유형 UUID")
-    private String codeTypeUUID;
+    private String codeTypeUuid;
     @Column(name="ORDER_METHOD_UUID")
     @Comment(value="정렬방법 UUID")
-    private String orderMethodUUID;
+    private String orderMethodUuid;
     @Column(name="DESCRIPTION")
     @Comment(value="설명")
     private String description;
@@ -82,7 +82,7 @@ public class AdCodeHeader extends BaseJpaModel<AdCodeHeader.AdCodeHeaderId>
 
     @Override
     public AdCodeHeaderId getId() {
-        return AdCodeHeaderId.of(codeHeaderUUID);
+        return AdCodeHeaderId.of(codeHeaderUuid);
     }
 
 
@@ -93,7 +93,7 @@ public class AdCodeHeader extends BaseJpaModel<AdCodeHeader.AdCodeHeaderId>
     public static class AdCodeHeaderId implements Serializable
     {
         @NonNull
-        private String codeHeaderUUID;
+        private String codeHeaderUuid;
     }
 
 }

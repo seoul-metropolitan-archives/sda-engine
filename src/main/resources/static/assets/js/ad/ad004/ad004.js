@@ -1,14 +1,6 @@
 var fnObj = {};
-var pageSize = 1000;
-var errorStatusList = {};
 var gridView = undefined;
-var handleResult = "";
-var handleFailReason = "";
-var cash10kEmptyStatus = "";
-var cash50kEmptyStatus = "";
 
-var selectedIndex = "";
-var selectedErrorItem = {};
 
 var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH: function (caller, act, data) {
@@ -23,7 +15,8 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             data : JSON.stringify(data),
             async : false,
             callback: function (res) {
-                if (undefined === res.list || res.list.length < 1) {
+                if (undefined === res.list || res.list.length < 1)
+                {
                     fnObj.gridView_h.addRow();
                 }
                 else {
@@ -34,18 +27,12 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     },
     PAGE_SAVE : function(caller, act, data)
     {
-        axDialog.confirm({
-                msg: "저장하시겠습니까?"
-            },function() {
+
             if (
-                this.key == "ok"
-                && ACTIONS.dispatch(ACTIONS.POPUP_HEADER_PAGE_SAVE)
-                //&& ACTIONS.dispatch(ACTIONS.POPUP_SQL_PAGE_SAVE)
+                ACTIONS.dispatch(ACTIONS.POPUP_HEADER_PAGE_SAVE)
                 && ACTIONS.dispatch(ACTIONS.POPUP_DETAIL_PAGE_SAVE)
             )
-                alert("저장되었습니다");
-        });
-        //ACTIONS.dispatch(ACTIONS.POPUP_HEADER_PAGE_SAVE);
+                axToast.push(axboot.getCommonMessage("AA007"));
     },
     POPUP_HEADER_PAGE_SAVE: function (caller, act, data) {
         var _this = this;
@@ -58,23 +45,20 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             async: false,
             data: JSON.stringify(fnObj.gridView_h.getData()),
             callback:  function (res)
-        {
-            result = res;
-            }
-        });
-        return result;
-    },
-    POPUP_SQL_PAGE_SAVE : function()
-    {
-        var result = false;
-        axboot.ajax({
-            url : "/ad/ad004/ad004/insertPopupSQL",
-            type : "post",
-            async : false,
-            data : JSON.stringify(fnObj.sqlView.getData()),
-            callback : function(res)
             {
                 result = res;
+                if(result)
+                {
+                    try
+                    {
+                        fnObj.gridView_h.gridObj.commit();
+                    }catch(e)
+                    {
+                        console.log("커밋 에러남");
+                    }
+
+                }
+
             }
         });
         return result;
@@ -90,6 +74,16 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             callback : function(res)
             {
                 result = res;
+                if(result)
+                {
+                    try
+                    {
+                        fnObj.gridView_d.gridObj.commit();
+                    }catch(e)
+                    {
+                        console.log("커밋 에러남");
+                    }
+                }
             }
         });
         return result;
@@ -105,12 +99,15 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             ,data : JSON.stringify({popupHeaderUUID : fnObj.gridView_h.getPopupHeaderUUID()})
             ,callback : function(res)
             {
-                fnObj.gridView_h.addDetailList(fnObj.gridView_h.gridObj.getCurrent().rowData,res);
-                fnObj.gridView_d.setData(res);
+                fnObj.gridView_d.setData(res.list);
             }
         });
     },
     FORM_CLEAR: function (caller, act, data) {
+    },
+    CLOSE_TAB : function()
+    {
+        alert("닫힌다! 살려줘!");
     },
     dispatch: function (caller, act, data) {
         var result = ACTIONS.exec(caller, act, data);
@@ -174,7 +171,7 @@ fnObj = {
 /*검색 창*/
 fnObj.formView = axboot.viewExtend(axboot.formView,{
     getDefaultData: function () {
-        return $.extend({}, axboot.formView.defaultData, {useYn: "Y"});
+        return $.extend({}, axboot.formView.defaultData);
     },
     initView : function(){
         this.target = $("#formView01");
@@ -183,17 +180,7 @@ fnObj.formView = axboot.viewExtend(axboot.formView,{
         this.modelFormatter = new axboot.modelFormatter(this.model); // 모델 포메터 시작
         this.initEvent();
     }
-    /*
-    ,getData : function()
-    {
-        return {
-            popupCode       : $("#popupCode").val()
-            , popupName     : $("#popupName").val()
-            , serviceUUID   : $("#serviceList option:selected").val()
-            , useYN         : $("input[name='useYN']:checked").val()
-        }
-    }
-    */
+
     ,initEvent: function () {
         var _this = this;
         $("#check").click(function() {
@@ -265,8 +252,19 @@ fnObj.formView = axboot.viewExtend(axboot.formView,{
     },
     getData: function () {
         var data = this.modelFormatter.getClearData(this.model.get()); // 모델의 값을 포멧팅 전 값으로 치환.
+        console.log($.extend({}, data));
         return $.extend({}, data);
     },
+    /*
+    getData : function()
+    {
+        return {
+            popupCode       : $("#popupCode").val()
+            , popupName     : $("#popupName").val()
+            , serviceUUID   : $("#serviceList option:selected").val()
+            , useYN         : $("input[name='useYN']:checked").val()
+        }
+    },*/
     setFormData: function (dataPath, value) {
         this.model.set(dataPath, value);
     },
@@ -301,13 +299,19 @@ fnObj.sqlView = axboot.viewExtend(axboot.baseView,{
     {
         var _this = this;
         this.targetTag = $("#sql");
+        $("#sql").keydown(function(){
+            fnObj.gridView_h.setPopupSQL(_this.targetTag.val());
+        })
         $("#apply").click(function(){
             _this.convertSQL();
-        })
+        });
     }
     ,setData : function(data)
     {
-        this.targetTag.text(data);
+        if(!data)
+            data = "";
+
+        this.targetTag.val(data);
     }
     ,getData : function()
     {
@@ -341,7 +345,7 @@ fnObj.sqlView = axboot.viewExtend(axboot.baseView,{
 fnObj.gridView_h = axboot.viewExtend(axboot.realGridView, {
     tagId : "realgrid",
     entityName : "POPUP_HEADER",
-    tempList : {},
+    beforeRowIdx : undefined,
     initView  : function()
     {
         var _this = this;
@@ -356,23 +360,34 @@ fnObj.gridView_h = axboot.viewExtend(axboot.realGridView, {
         this.gridObj.addRowAfterEvent(this.addRowAfterEvent);
 
         this.gridObj.itemClick(function(data){
-            if(data["popupHeaderUUID"])
+            if(fnObj.gridView_d.getData().length < 1)
+            {
                 ACTIONS.dispatch(ACTIONS.GET_POPUP_DETAIL,data);
+            }
             else
             {
-                var detailData = _this.tempList[_this.gridObj.getCurrent().dataRow];
-                if(detailData)
-                    fnObj.gridView_d.setData(detailData)
-                else
-                    fnObj.gridView_d.clear();
+                axDialog.confirm({
+                    msg: "변경사항이 있습니다. 저장하시겠습니까?"
+                },function() {
+                    if(this.key == "ok")
+                    {
+                        ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
+                    }
+                });
             }
         });
-
     },
-    addDetailList : function(rowIdx, data, isReplace)
+    addDetailList : function(uuid, groupName,data, isReplace)
     {
-        if(isReplace || !this.tempList[rowIdx])
-            this.tempList[rowIdx] = data;
+        if(isReplace || !this.tempList[uuid])
+        {
+            if(!this.tempList[uuid])
+                this.tempList[uuid] = {};
+
+            this.tempList[uuid][groupName] = data;
+        }
+
+
     },
     addRowBeforeEvent : function()
     {
@@ -387,13 +402,13 @@ fnObj.gridView_h = axboot.viewExtend(axboot.realGridView, {
                 uuid = res.map.uuid;
             }
         });
-        var data = _this.gridObj.getDefaulData();
+        var data = fnObj.gridView_h.gridObj.getDefaultData();
         data[0] = uuid;
-        _this.gridObj.setDefaulData(data);
+        fnObj.gridView_h.gridObj.setDefaultData(data);
+        fnObj.gridView_d.clear();
     },
     addRowAfterEvent : function()
     {
-        fnObj.gridView_d.setTempData(this.gridObj.getCurrent().dataRow);
         fnObj.gridView_d.clear();
         fnObj.sqlView.clear();
     },
@@ -495,3 +510,11 @@ fnObj.gridView_d = axboot.viewExtend(axboot.realGridView, {
     }
 
 });
+isDataChanged = function()
+{
+    if (fnObj.gridView_h.isChangeData() == true || fnObj.gridView_d.isChangeData() == true) {
+        return true;
+    } else {
+        return false;
+    }
+}

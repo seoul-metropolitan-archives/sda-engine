@@ -162,7 +162,16 @@ fnObj.gridView01 = axboot.viewExtend(axboot.realGridView, {
         })
         this.makeGrid();
         this.gridObj.itemClick(this.itemClick);
-    },
+        this.gridObj.setColumnProperty("statusUuid"
+            , "dynamicStyles", [{
+                "criteria": "name == 'Draft'",
+                "styles": {
+                    "readonly": false
+                }
+            }]
+        );
+    }
+    ,
     isChangeData: function () {
         if (this.getData().length > 0) {
             return true;

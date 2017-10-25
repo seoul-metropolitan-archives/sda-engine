@@ -5,9 +5,102 @@
 
 <mapper namespace="rmsoft.ams.seoul.ad.ad003.dao.Ad003Mapper">
 
-    <select id="selectDetail" resultType="Ad00302VO" parameterType="Ad00302VO" statementType="PREPARED">
-    <![CDATA[
+    <select id="searchCodeHeader" resultType="Ad00301VO" parameterType="Ad00301VO" statementType="PREPARED">
+        <![CDATA[
+        SELECT
+          CODE_HEADER_UUID as codeHeaderUuid,
+          CATEGORY_CODE as categoryCode,
+          CATEGORY_NAME as categoryName,
+          CODE_TYPE_UUID as codeTypeUuid,
+          ORDER_METHOD_UUID as orderMethodUuid,
+          SERVICE_UUID as serviceUuid,
+          DESCRIPTION as description,
+          NOTES as notes,
+          USE_YN as useYN,
+          ATTRIBUTE01 as attribute01,
+          ATTRIBUTE02 as attribute02,
+          ATTRIBUTE03 as attribute03,
+          ATTRIBUTE04 as attribute04,
+          ATTRIBUTE05 as attribute05,
+          ATTRIBUTE06 as attribute06,
+          ATTRIBUTE07 as attribute07,
+          ATTRIBUTE08 as attribute08,
+          ATTRIBUTE09 as attribute09,
+          ATTRIBUTE10 as attribute10,
+          ]]>
+        <include refid="Common.UserName"> <property name="userUuid" value="Z.INSERT_UUID"/> </include> as insertUuid,
+        <![CDATA[
+               Z.INSERT_DATE as insertDate,
+               ]]>
+        <include refid="Common.UserName"> <property name="userUuid" value="Z.UPDATE_UUID"/></include> as updateUuid,
+        <![CDATA[
+               Z.UPDATE_DATE as updateDate
+        FROM
+            AD_CODE_HEADER Z
+        ]]>
+        <where>
+            <if test="null != categoryCode and '' != categoryCode">
+                <![CDATA[
+                Z.CATEGORY_CODE LIKE '%'|| #{categoryCode} || '%'
+                ]]>
+            </if>
+            <if test="null != categoryName and '' != categoryName">
+                <![CDATA[
+                Z.CATEGORY_NAME  LIKE '%'|| #{categoryName} || '%'
+                ]]>
+            </if>
+            <if test="null != serviceUuid and '' != serviceUuid">
+                <![CDATA[
+                Z.SERVICE_UUID = #{serviceUuid}
+                ]]>
+            </if>
+            <if test="null != codeTypeUuid and '' != codeTypeUuid">
+                <![CDATA[
+                Z.CODE_TYPE_UUID = #{codeTypeUuid}
+                ]]>
+            </if>
+            <if test="null != useYN and '' != useYN">
+                <![CDATA[
+                Z.USE_YN = #{useYN}
+                ]]>
+            </if>
+        </where>
 
+    </select>
+    <select id="getCodeDetailList" resultType="Ad00302VO" parameterType="Ad00302VO" statementType="PREPARED">
+        <![CDATA[
+        SELECT
+          Z.CODE_DETAIL_UUID as codeDetailUuid,
+          Z.CODE as code,
+          Z.CODE_NAME as codeName,
+          Z.DEFAULT_YN as defaultYN,
+          Z.ORDER_NO as orderNo,
+          Z.CODE_HEADER_UUID as codeHeaderUuid,
+          Z.DESCRIPTION as description,
+          Z.NOTES as notes,
+          Z.USE_YN as useYN,
+          Z.ATTRIBUTE01 as attribute01,
+          Z.ATTRIBUTE02 as attribute02,
+          Z.ATTRIBUTE03 as attribute03,
+          Z.ATTRIBUTE04 as attribute04,
+          Z.ATTRIBUTE05 as attribute05,
+          Z.ATTRIBUTE06 as attribute06,
+          Z.ATTRIBUTE07 as attribute07,
+          Z.ATTRIBUTE08 as attribute08,
+          Z.ATTRIBUTE09 as attribute09,
+          Z.ATTRIBUTE10 as attribute10,
+        ]]>
+        <include refid="Common.UserName"> <property name="userUuid" value="Z.INSERT_UUID"/> </include> as insertUuid,
+        <![CDATA[
+               Z.INSERT_DATE as insertDate,
+          ]]>
+        <include refid="Common.UserName"><property name="userUuid" value="Z.UPDATE_UUID"/></include>as updateUuid,
+        <![CDATA[
+               Z.UPDATE_DATE as updateDate
+        FROM
+            AD_CODE_DETAIL Z
+        WHERE
+            Z.CODE_HEADER_UUID = #{codeHeaderUuid}
         ]]>
     </select>
     <select id="getCode" resultType="Ad00303VO" parameterType="Ad00303VO" statementType="PREPARED">
