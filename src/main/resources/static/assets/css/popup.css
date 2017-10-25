@@ -1,0 +1,242 @@
+
+/*팝업공통사항*/
+.allpop{
+    border: 1px solid #ddd;
+    text-align:center; 
+    position:fixed;
+    box-sizing: border-box;
+    width:360px; 
+    height:286px; 
+    background-color: #fff;
+    margin: 0px;
+    z-index: 1001;
+    top:40%;
+    display: none;
+}
+
+.allpop table{
+    width:100%; height: 100%; border-collapse: collapse; 
+}
+
+.allpop td{
+    text-align: left;
+    vertical-align:baseline;
+}
+
+.allpop td.title{
+   /* height:20px;
+    background-color:#f7f7f7;
+    border-bottom: 1px solid #ddd;
+    line-height: 20px;*/
+    /*width:100%; */
+    background-color:#f7f7f7; 
+    border-bottom:1px solid #ddd;
+    text-indent: 3px;
+    
+}
+
+.pop{
+    border: 1px solid #ddd;
+    text-align:center; 
+    position:fixed;
+    box-sizing: border-box;
+    width:360px; 
+    height:286px; 
+    background-color: #fff;
+    margin: 0px;
+    z-index: 1001;
+}
+
+.pop_sch{
+    width:100%; height:100%; text-align:left; padding:0 0 0 0px; float: left;
+}
+.input_sz{height:23px; width:287px; margin:0 0px 0 0
+    
+}
+
+.allpop td.foot{
+    text-align: right;
+    /*background-color:#ccc;*/
+    /*border-top: 1px solid #ddd;*/
+    /*height:25px;*/
+}
+.userfoot{
+    text-align: center;
+    background-color:#f7f7f7;
+    border-top: 1px solid #ddd;
+    padding-top:0px;
+    height:27px;
+}
+
+
+
+
+/*저장버튼 누른후 나오는 팝업창 시작 (3가지 경우) */
+/*
+.save_ok{
+    width:400px; 
+    height:150px; 
+    top:250px; 
+    left:50%;
+    display: block;
+    overflow: hidden;
+    position: fixed;
+    background-color: #fff;
+    margin-left:-200px;
+}
+*/
+
+.allpop td.oktxt{
+    text-align: center;
+    vertical-align:middle;
+    height:100%;
+    line-height: 130%;
+    background-color: #fff;
+}
+
+.hc { left:-20%; right:0; margin-left:auto; margin-right:auto; } /* 가로 중앙 정렬 */
+.vc { top:-20%; bottom:0; margin-top:auto; margin-bottom:auto;} /* 세로 중앙 정렬 */ 
+
+
+/*사용자설정 팝업 */
+
+.user_edit{
+    border: 1px solid #ddd;
+    width:270px; 
+    height:200px; 
+    top:30px; 
+    right:50px;
+    background-color: #fff;
+    display: none;
+    position: fixed;
+    z-index: 10000;
+}
+
+.user_edit input{
+    width: 90%;
+}
+.user_edit input.onlyread{
+    background-color:#ddd; 
+    color:#999        
+}
+
+
+/* 검색 팝업*/
+/*
+.search_pop{
+    width:321px; 
+    height:400px; 
+    top:300px; 
+    left:200px;
+    background-color: #fff;
+    display: block;
+}
+*/
+
+/*안내팝업*/
+.info_pop{
+    border: 1px solid #ddd;
+    text-align:center; 
+    position:absolute;
+    box-sizing: border-box;
+    width:360px; 
+    height:auto; 
+    background-color: #f2f2f2;
+    left:50%;
+    margin-left: -220px;
+    z-index: 1001;
+    top:30%;
+}
+
+.footradius{
+    text-align: right;
+    background-color:#e9e9e9;
+    border: 1px solid #ddd;
+    box-sizing: border-box;
+    width:100%;
+    border-radius: 3px;
+    position: absolute;
+    padding-top: 2px;
+    height: 28px;
+    bottom: 0;
+    left:0
+}
+
+.pop_inq{
+        width:100%;
+    position: absolute;
+    padding-top: 3px;
+    height: 30px;
+    top: 0;
+    left:0
+}
+
+.info_poptitle{width:100%; height:30px;text-align:left; float:left; padding:8px 0 0 5px}
+.info_poptitle>img{vertical-align: middle; margin-right:5px}
+.info_poptxt{width:100%;height:150px;background-color:#ffffff;float:left; padding:5px; margin-bottom: 6px}
+.info_popfoot{height:30px; width:100%; float:left;}
+
+
+.layer_pop{overflow:hidden; position: relative;padding: 0; top: 0; margin: 0;}
+.layer_pop_tree{width: 20%; height: 455px; position: absolute; left:0; top: 0;}
+.layer_pop_tree2{width: 400px; height: 100%; position: absolute; left:0; top: 30px;}
+.layer_pop_grid{width: 80%; height: 395px; position: absolute; left: 20%; top: 0;padding: 0; margin: 0}
+.layer_pop_grid2{width: 100%; height: 365px; position: absolute; left: 0; top: 425px;padding: 0; margin: 0}
+.layer_pop_grid3{width: 1293px; height: 395px; position: absolute; left: 400px; top: 0;padding-top: 30px; margin: 0}
+
+
+.submit_updown{
+height: 30px; width:100%; text-align: center; position: absolute; left: 0; top:396px; font-size: 30px; 
+}
+
+.layer_pop dl{
+    width:auto; display: flex; justify-content: left; align-items: center;
+}
+.layer_pop dt{float:left;width:100px;}
+.layer_pop dt.w_50{float:left;width:50px;}
+.layer_pop dt.w120{float:left;width:119px;}
+.layer_pop dt.w130{float:left;width:129px;}
+.layer_pop dt.w150{float:left;width:149px;}
+.layer_pop dd{float:left;width:149px}
+.layer_pop dd.w200{float:left;width:199px}
+.layer_pop dd.w250{float:left;width:249px}
+.layer_pop dd.w300{float:left;width:299px}
+.layer_pop dd.w350{float:left;width:349px}
+.layer_pop dd.w400{float:left;width:399px;}
+.layer_pop dd.w600{float:left;width:599px;}
+.layer_pop dd.w_auto{float:left;width:auto;}
+.layer_pop dd.w_20{float:left;width:20px;}
+.layer_pop dd.w_50{float:left;width:50px;}
+
+
+.submit_arr2 {
+    border:1px solid #777;
+    width: 100px;
+    height: 28px; 
+    text-align:center;
+    vertical-align: middle;
+    position: relative;
+    opacity: 0.5;
+    left: 38%;
+    float: left;
+    margin: 0 50px;
+    background-color:#ddd;
+    
+} 
+
+.submit_arr2:hover {
+    border:1px solid #777;
+    background-color: #eee;
+    opacity: 0.7;
+} 
+
+.submit_arr2 img {
+    margin-top: 0px
+} 
+
+
+.submit_arr2 a {
+    display: block;
+    width: 100%;
+    height: 100%;
+} 
