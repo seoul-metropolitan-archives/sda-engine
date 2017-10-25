@@ -187,7 +187,7 @@ button.btn_co:hover{
     margin-left: 0px;
     border: 0px solid #dddddd;
     background-color:#fff;
-    font: 23px;
+    font-size : 12px;
     height: 90%;
     line-height: 20px;
     box-sizing: border-box;
