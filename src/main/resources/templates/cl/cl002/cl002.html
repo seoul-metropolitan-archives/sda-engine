@@ -23,26 +23,12 @@
             </div>
             <div class="bdb div_tablerow">
                 <dl>
-                    <dt class="pdl_5 w150">Classification Scheme</dt>
-                    <dd>
-                        <div class="src_box2" style="background-color: #fffdd6">
-                            <input type=text style="background-color: #fffdd6">
-                            <a href="#" id="dialog-link">
-                                <img src="/static/assets/images/ams/search_normal.png" alt="find"></a>
-                        </div>
-                    </dd>
-                    <dt class="w150">Parent Class Code</dt>
-                    <dd>
-                        <div class="src_box2">
-                            <input type=text>
-                            <a href="#" id="dialog-link">
-                                <img src="/static/assets/images/ams/search_normal.png" alt="find"></a>
-                        </div>
-                    </dd>
+                    <th:block layout:insert="~{/fragments/page-buttons :: searchInputYello ('Classification Scheme','classificationSchemeUuid')}"/>
+                    <th:block layout:insert="~{/fragments/page-buttons :: searchInput ('Parent Class Code','classCode')}"/>
 
                     <dt class="w150">Parent Class Name</dt>
                     <dd>
-                        <input type=text style="width:135px">
+                        <input data-ax-path="className" type=text style="width:135px">
                     </dd>
 
                 </dl>
@@ -70,7 +56,7 @@
                 <dl>
                     <dt class="pdl_5 w150">Class Level</dt>
                     <dd>
-                        <select data-ax-path="classLevel" style="width:135px;">
+                        <select data-ax-path="classLevelUuid" style="width:135px;">
                             <option value=""></option>
                             <option th:each="item : ${classLevel}" th:value="${item.codeDetailUUID}"
                                     th:text="${item.codeName}"/>
@@ -79,12 +65,9 @@
                     <dd class="w_auto">
                         <div class="rdo_box">
                             <span class="rdo_box_title">Use</span>
-                            <label>
-                                <input type="radio" name="radio" class="no_border">Yes</label>
-                            <label>
-                                <input type="radio" name="radio" class="no_border">No</label>
-                            <label>
-                                <input type="radio" name="radio" class="no_border" checked>All</label>
+                            <label><input type="radio" name="radio" checked="checked" data-ax-path="useYn" class="no_border" value="Y">Yes</label>
+                            <label><input type="radio" name="radio" data-ax-path="useYn" class="no_border" value="N">No</label>
+                            <label><input type="radio" name="radio" data-ax-path="useYn" class="no_border" value="">All</label>
                         </div>
                     </dd>
                 </dl>
@@ -142,8 +125,7 @@
 
                 <div style="display:table; height:100%; width:20%; float:right">
                     <ul class="bdb bdt div_tablerow bgf7" style="height:30px;">
-                        <li style="width:88%; text-align:left;">
-                            <th:block layout:insert="~{/fragments/page-buttons :: dot('Class Details')}"/>
+                        <th:block layout:insert="~{/fragments/page-buttons :: dot('Class Details')}"/>
                     </ul>
                     <div style="height:100%; width:100%;" class="div_tablerow bdb">
                         <div style="height: 100%; width: 100%; overflow-y: scroll; overflow-x: hidden; ">
