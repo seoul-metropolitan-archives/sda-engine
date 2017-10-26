@@ -42,6 +42,14 @@ public class AcRoleMenu extends BaseJpaModel<AcRoleMenu.AcRoleMenuId> {
     @Comment(value = "사용여부")
     private String useYn;
 
+    @Column(name = "SAVE_YN", length = 1)
+    @Comment(value = "저장가능여부")
+    private String saveYn;
+
+    @Column(name = "INQUIRY_YN", length = 1)
+    @Comment(value = "조회가능여부")
+    private String inquiryYn;
+
     @Override
     public AcRoleMenuId getId() {
         return AcRoleMenuId.of(roleMenuUuid);

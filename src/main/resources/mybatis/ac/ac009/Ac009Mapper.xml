@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  ~ Copyright (c) 2017. RMSoft Co.,Ltd. All rights reserved
+  -->
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="rmsoft.ams.seoul.ac.ac009.dao.Ac009Mapper">
+    <select id="findAllMenu" resultType="Ac00901VO" parameterType="Ac00901VO"
+            statementType="PREPARED">
+        SELECT
+            Z1.MENU_UUID as menuUuid,
+            Z1.PARENT_MENU_CODE as parentMenuCode,
+            Z1.MENU_CODE as menuCode,
+            Z1.MENU_NAME as menuName,
+            Z1.PROGRAM_UUID as programUuid,
+            Z2.PROGRAM_ID as programId,
+            Z2.PROGRAM_NAME as programName,
+            Z1.PARAMETER as parameter,
+            Z1.DESCRIPTION as description,
+            Z1.NOTES as notes,
+            Z1.USE_YN as useYn,
+            <include refid="Common.UserName">
+                <property name="userUuid" value="Z1.INSERT_UUID"/>
+            </include>
+            as insertUuid,
+            Z1.INSERT_DATE insertDate,
+            <include refid="Common.UserName">
+                <property name="userUuid" value="Z1.UPDATE_UUID"/>
+            </include>
+            as updateUuid,
+            Z1.UPDATE_DATE updateDate
+        FROM
+            AD_MENU Z1,
+            AD_PROGRAM Z2
+        WHERE Z1.PROGRAM_UUID = Z2.PROGRAM_UUID
+        <if test="parentMenuCode != null">
+           AND Z1.PARENT_MENU_CODE LIKE '%' || #{parentMenuCode} || '%'
+        </if>
+        <if test="menuCode != null">
+           AND Z1.MENU_CODE LIKE '%' || #{menuCode} || '%'
+        </if>
+        <if test="menuName != null">
+           AND Z1.MENU_NAME LIKE '%' || #{menuName} || '%'
+        </if>
+        <if test="programId != null">
+           AND Z2.PROGRAM_ID LIKE '%' || #{programId} || '%'
+        </if>
+        <if test="programName != null">
+           AND Z2.PROGRAM_NAME LIKE '%' || #{programName} || '%'
+        </if>
+        <if test="parameter != null">
+           AND  Z1.PARAMETER LIKE '%' || #{parameter} || '%'
+        </if>
+        <if test="useYn != null">
+            AND Z1.USE_YN = #{useYn}
+        </if>
+        ORDER BY Z1.MENU_CODE ASC
+    </select>
+</mapper>

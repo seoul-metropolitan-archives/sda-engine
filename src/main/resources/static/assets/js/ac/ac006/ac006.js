@@ -179,13 +179,6 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     addRow: function () {
         this.gridObj.addRow();
     },
-    isChangeData: function () {
-        if (this.getData().length > 0) {
-            return true;
-        } else {
-            return false;
-        }
-    },
     itemClick: function (data, index) {
         if (data.permissionUuid != null && data.permissionUuid != "") {
             ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, data);

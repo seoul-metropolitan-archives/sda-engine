@@ -255,13 +255,6 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     addRow: function () {
         this.gridObj.addRow();
     },
-    isChangeData: function () {
-        if (this.getData().length > 0) {
-            return true;
-        } else {
-            return false;
-        }
-    },
     itemClick: function (data, index) {
         /* if (index.fieldIndex == 3) {
              // 비밀번호 Cell 선택시
@@ -312,13 +305,6 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
     getData: function () {
         return this.gridObj.getData();
     },
-    isChangeData: function () {
-        if (this.getData().length > 0) {
-            return true;
-        } else {
-            return false;
-        }
-    },
     addRow: function () {
         this.gridObj.addRow();
     },
@@ -349,13 +335,6 @@ fnObj.gridView03 = axboot.viewExtend(axboot.gridView, {
     },
     getData: function () {
         return this.gridObj.getData();
-    },
-    isChangeData: function () {
-        if (this.getData().length > 0) {
-            return true;
-        } else {
-            return false;
-        }
     },
     addRow: function () {
         this.gridObj.addRow();

@@ -9,7 +9,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH: function (caller, act, data) {
         axboot.ajax({
             type: "GET",
-            url: "/api/v1/ac005/01/list",
+            url: "/api/v1/ac008/01/list",
             data: $.extend({}, {pageSize: 1000}, this.formView.getData()),
             callback: function (res) {
                 fnObj.gridView01.setData(res.list);
@@ -25,42 +25,19 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         });
         return false;
     },
-    // Role Permission 조회
-    PAGE_SEARCH1: function (caller, act, data) {
-        axboot.ajax({
-            type: "GET",
-            url: "/api/v1/ac005/02/list",
-            data: $.extend({}, {pageSize: 1000}, data),
-            callback: function (res) {
-                fnObj.gridView02.setData(res.list);
-            },
-            options: {
-                onError: axboot.viewError
-            }
-        });
-        return false;
-    },
     PAGE_SAVE: function (caller, act, data) {
-        var roleList = [].concat(fnObj.gridView01.getData());
-        var rolePermissionList = [].concat(fnObj.gridView02.getData());
+        var programList = [].concat(fnObj.gridView01.getData());
 
         axboot
             .call({
                 type: "PUT",
-                url: "/api/v1/ac005/01/save",
-                data: JSON.stringify(roleList),
-                callback: function (res) {
-                }
-            })
-            .call({
-                type: "PUT",
-                url: "/api/v1/ac005/02/save",
-                data: JSON.stringify(rolePermissionList),
+                url: "/api/v1/ac008/01/save",
+                data: JSON.stringify(programList),
                 callback: function (res) {
                 }
             })
             .done(function () {
-                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+                //ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
                 axToast.push(axboot.getCommonMessage("AA007"));
             });
     },
@@ -115,15 +92,7 @@ fnObj.pageStart = function () {
 
     //TODO 추후에 삭제될 내용으로 /실제 Grid의 컬럼 정보는 DB에서 가져올 예정
     $.ajax({
-        url: "/assets/js/column_info/ac00501.js",
-        dataType: "script",
-        async: false,
-        success: function () {
-        }
-    });
-
-    $.ajax({
-        url: "/assets/js/column_info/ac00502.js",
+        url: "/assets/js/column_info/ac00801.js",
         dataType: "script",
         async: false,
         success: function () {
@@ -132,7 +101,6 @@ fnObj.pageStart = function () {
 
     _this.formView.initView();
     _this.gridView01.initView();
-    _this.gridView02.initView();
 
     // Data 조회
     ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
@@ -185,7 +153,7 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
 });
 
 
-// AC005 User Group User GridView
+// AC008 User Group User GridView
 fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     page: {
         pageNumber: 0,
@@ -194,10 +162,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     initView: function () {
         this.gridObj = new GridWrapper("realgrid01", "/assets/js/libs/realgrid");
         this.gridObj.setGridStyle("100%", "100%");
-        this.gridObj.setFixedOptions({
-            colCount: 1
-        });
-        this.gridObj.setColumnInfo(ac00501.column_info).setEntityName("CONFIGURATION");
+        this.gridObj.setColumnInfo(ac00801.column_info).setEntityName("CONFIGURATION");
         this.gridObj.makeGrid();
         this.gridObj.itemClick(this.itemClick);
     },
@@ -212,49 +177,9 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
         this.gridObj.addRow();
     },
     itemClick: function (data, index) {
-        if (data.roleUuid != null && data.roleUuid != "") {
-            if (fnObj.gridView02.isChangeData() == true) {
-                axDialog.confirm({
-                    msg: axboot.getCommonMessage("AA006")
-                }, function () {
-                    if (this.key == "ok") {
-                        ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
-                    } else {
-                        ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, data);
-                    }
-                });
-            } else {
-                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, data);
-            }
+        if (data.permissionUuid != null && data.permissionUuid != "") {
+            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, data);
         }
-    }
-});
-fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
-    page: {
-        pageNumber: 0,
-        pageSize: 20
-    },
-    initView: function () {
-        this.gridObj = new GridWrapper("realgrid02", "/assets/js/libs/realgrid");
-        this.gridObj.setGridStyle("100%", "100%");
-        this.gridObj.setFixedOptions({
-            colCount: 1
-        });
-        this.gridObj.setColumnInfo(ac00502.column_info).setEntityName("CONFIGURATION");
-        this.gridObj.makeGrid();
-        this.gridObj.itemClick(this.itemClick);
-    },
-    setData: function (list) {
-        this.gridObj.setData("set", list);
-
-    },
-    getData: function () {
-        return this.gridObj.getData();
-    },
-    addRow: function () {
-        this.gridObj.addRow();
-    },
-    itemClick: function (data, index) {
     }
 });
 
@@ -265,7 +190,7 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
  * @returns {boolean}
  */
 isDataChanged = function () {
-    if (fnObj.gridView01.isChangeData() == true || fnObj.gridView02.isChangeData() == true) {
+    if (fnObj.gridView01.isChangeData() == true) {
         return true;
     } else {
         return false;

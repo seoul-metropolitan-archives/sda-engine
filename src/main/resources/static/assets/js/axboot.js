@@ -2505,6 +2505,16 @@ axboot.gridView = {
         }
         return list;
     },
+    initChangedData: function(){
+        this.gridObj.commit();
+    },
+    isChangeData: function () {
+        if (this.getData().length > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    },
     addRow: function addRow() {
         this.target.addRow({__created__: true}, "last");
     },

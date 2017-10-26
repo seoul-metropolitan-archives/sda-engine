@@ -8,7 +8,7 @@
       layout:decorate="~{/layout/base}">
 
 <!-- ===== [ script ] ===== -->
-<script layout:fragment="script" type="text/javascript" th:src="@{/assets/js/ac/ac006/ac006.js}"></script>
+<script layout:fragment="script" type="text/javascript" th:src="@{/assets/js/ac/ac008/ac008.js}"></script>
 <!-- ===== [ script ] _END_ ===== -->
 
 <!-- ===== [ base-content ] ===== -->
@@ -24,24 +24,26 @@
                 </div>
                 <div class="bdb div_tablerow">
                     <dl>
-                        <dt class="pdl_5">Permission</dt>
+                        <dt class="pdl_5">Program ID</dt>
                         <dd>
-                            <input type=text data-ax-path="permissionName" style="width:135px">
+                            <input type=text data-ax-path="programId" style="width:135px">
                         </dd>
-                        <th:block layout:insert="~{/fragments/page-buttons :: searchInput ('Program','pmsProgramUuid')}"/>
-                        <th:block layout:insert="~{/fragments/page-buttons :: searchInput ('Entity Type','pmsEntityTypeUuid')}"/>
-                        <dt>Function</dt>
+                        <dt>Program Name</dt>
                         <dd>
-                            <select data-ax-path="pmsFunctionUuid" style="width:135px;">
+                            <input type=text data-ax-path="programName" style="width:135px">
+                        </dd>
+                        <dt>Service</dt>
+                        <dd>
+                            <select data-ax-path="serviceUuid" style="width:135px;">
                                 <option value=""></option>
-                                <option th:each="item : ${pmsFunctionUuid}" th:value="${item.codeDetailUUID}"
+                                <option th:each="item : ${serviceUuid}" th:value="${item.codeDetailUUID}"
                                         th:text="${item.codeName}"/>
                             </select>
                         </dd>
                     </dl>
                     <dl>
                         <dt class="none">Use</dt>
-                        <dd class="w_auto pdl_5">
+                        <dd class="pdl_5 w_auto">
                             <div class="rdo_box">
                                 <span class="rdo_box_title">Use</span>
                                 <label>
@@ -58,11 +60,8 @@
                             </div>
                         </dd>
                     </dl>
-
                 </div>
-
                 <div style="height:100%; width:100%" class="bgf7 div_tablerow">
-
                     <div style="height:100%; width:100%" class="div_table">
                         <ul class="bdb bdt div_tablerow" style="height:30px;">
                             <th:block layout:insert="~{/fragments/page-buttons :: dot('Permission')}"/>
