@@ -56,9 +56,9 @@ public class Ac009Service extends BaseService {
         ac00901VO.setParentMenuCode(requestParams.getString("parentMenuCode"));
         ac00901VO.setMenuCode(requestParams.getString("menuCode"));
         ac00901VO.setMenuName(requestParams.getString("menuName"));
-        ac00901VO.setProgramId(requestParams.getString("programId").toUpperCase());
+        ac00901VO.setProgramId(requestParams.getString("programId"));
         ac00901VO.setProgramName(requestParams.getString("programName"));
-        ac00901VO.setParameter(requestParams.getString("parameter").toLowerCase());
+        ac00901VO.setParameter(requestParams.getString("parameter"));
         ac00901VO.setUseYn(requestParams.getString("useYn"));
 
         return filter(ac009Mapper.findAllMenu(ac00901VO), pageable, filter, Ac00901VO.class);
