@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  ~ Copyright (c) 2017. RMSoft Co.,Ltd. All rights reserved
+  -->
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="rmsoft.ams.seoul.common.dao.CommonPopupMapper">
+
+    <resultMap id="columnInfoVO" type="rmsoft.ams.seoul.common.vo.BaseColumnVO">
+        <discriminator javaType="String" column="dataType">
+            <case resultType="rmsoft.ams.seoul.common.vo.TextColumnVO" value="text"></case>
+            <case resultType="rmsoft.ams.seoul.common.vo.CheckColumnVO" value="check"></case>
+            <case resultType="rmsoft.ams.seoul.common.vo.DateColumnVO" value="date"></case>
+        </discriminator>
+    </resultMap>
+    <select id="getColumnInfo" resultMap="columnInfoVO" parameterType="rmsoft.ams.seoul.common.domain.AdPopupHeader" statementType="PREPARED">
+      SELECT
+        (SELECT LOWER(CODE) FROM AD_CODE_DETAIL WHERE CODE_DETAIL_UUID = ALIGN_UUID) as textAlignment,
+        (SELECT LOWER(CODE) FROM AD_CODE_DETAIL WHERE CODE_DETAIL_UUID = INPUT_METHOD_UUID) as dataType,
+        ORDER_NO as sortNo,
+        SQL_COLUMN as name,
+        TITLE as text,
+        TREE_COLUMN_YN as treeColumnYN,
+        WIDTH width
+      FROM
+        AD_POPUP_DETAIL Z1,
+        AD_POPUP_HEADER Z2
+      WHERE
+        Z1.POPUP_HEADER_UUID = Z2.POPUP_HEADER_UUID
+        AND
+        POPUP_CODE = #{popupCode}
+    </select>
+</mapper>

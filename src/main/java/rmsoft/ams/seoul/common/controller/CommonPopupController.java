@@ -10,10 +10,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import rmsoft.ams.seoul.ac.ac003.service.Ac003Service;
 import rmsoft.ams.seoul.ac.ac003.vo.Ac00301VO;
+import rmsoft.ams.seoul.common.domain.AdPopupHeader;
+import rmsoft.ams.seoul.common.service.CommonPopupService;
+
+import java.util.ArrayList;
 
 /**
  * Ac003Controller
@@ -27,12 +32,11 @@ import rmsoft.ams.seoul.ac.ac003.vo.Ac00301VO;
 public class CommonPopupController extends MessageBaseController {
 
     @Autowired
-    private Ac003Service ac003Service;
+    private CommonPopupService commonPopupService;
 
-    @GetMapping("/01/list")
-    public Responses.PageResponse findAllUser(Pageable pageable, RequestParams<Ac00301VO> requestParams) {
-        Page<Ac00301VO> pages = ac003Service.findAllUser(pageable, requestParams);
-
-        return Responses.PageResponse.of(pages.getContent(), pages);
+    @RequestMapping("/getColumnInfo")
+    public Responses.ListResponse getColumnInfo(@RequestBody AdPopupHeader adPopupHeader ) {
+        return Responses.ListResponse.of(commonPopupService.getColumnInfo(adPopupHeader));
     }
+
 }

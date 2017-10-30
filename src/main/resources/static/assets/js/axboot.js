@@ -2571,7 +2571,6 @@ axboot.realGridView = {
         this.gridObj = new GridWrapper(this.tagId, "/assets/js/libs/realgrid");
         this.gridObj.setGridStyle("100%", "100%");
         this.gridObj.setEntityName(this.entityName);
-        this.gridObj.setOption()
     },
     setData: function setData(_data, _type) {
         if (!_type)

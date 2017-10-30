@@ -1033,10 +1033,14 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 	{
         gridView.expandAll()
 	};
-	this.setTreeData = function(list, rowsProp, childrenProp, iconProp)
+	this.setTreeDataForJSON = function(list, rowsProp, childrenProp, iconProp)
 	{
         dataProvider.setJsonRows(list, rowsProp, childrenProp, iconProp);
 	};
+    this.setTreeDataForArray = function(list, childrenProp)
+    {
+        dataProvider.setRows(list, childrenProp);
+    };
 	this.setListCount = function(_listCount)
 	{
 		maxCount = _listCount;
@@ -1085,6 +1089,7 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 
             _event(grid.getDataProvider().getJsonRow(index.dataRow),index);
 		};
+        /*
         gridView.onCurrentRowChanged =  function (grid, oldRow, newRow) {
         	console.log(grid.getCurrent());
 
@@ -1093,6 +1098,7 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 
 	         _event(grid.getDataProvider().getJsonRow(grid.getCurrent().dataRow),grid.getCurrent());
         }
+        */
     };
 	this.setAppendValiate = function(func) {
 		if (typeof func == "function") {

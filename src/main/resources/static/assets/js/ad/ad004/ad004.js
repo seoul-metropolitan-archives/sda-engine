@@ -186,7 +186,7 @@ fnObj.formView = axboot.viewExtend(axboot.formView,{
         $("#check").click(function() {
             axboot.modal.open({
                 modalType: "COMMON_POPUP",
-                param: "",
+                param: "popupCode='PU001'",
                 sendData: function () {
                     return {
                     };

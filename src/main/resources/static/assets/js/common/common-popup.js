@@ -64,9 +64,9 @@ var ACTIONS = axboot.actionExtend(fnObj, {
 });
 
 var CODE = {};
-
 // fnObj 기본 함수 스타트와 리사이즈
 fnObj.pageStart = function () {
+    fnObj.gridView01.initView();
 };
 
 fnObj.pageResize = function () {
@@ -120,12 +120,7 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
 });
 
 
-// AC003 User Group User GridView
-fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
-    page: {
-        pageNumber: 0,
-        pageSize: 20
-    },
+fnObj.gridView01 = axboot.viewExtend(axboot.realGridView, {
     tagId : "popupGrid01",
     initView: function () {
         /*
@@ -133,6 +128,24 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
         this.gridObj.makeGrid();
         this.gridObj.itemClick(this.itemClick);
         */
+
+        fnObj.gridView01.initGrid();
+    },
+    initGrid : function()
+    {
+        axboot.ajax({
+            url : "/api/v1/common/popup/getColumnInfo",
+            dataType : "JSON",
+            type : "POST",
+            data: JSON.stringify({popupCode : "PU001"}),
+            callback : function(res)
+            {
+                fnObj.gridView01.gridObj.setColumnInfo(res.list);
+                fnObj.gridView01.gridObj.makeGrid();
+                //fnObj.gridView01.gridObj.setData("set",[{"USER_NAME" : "test",""}])
+                console.log(res.list);
+            }
+        })
     },
     setData: function (list) {
         this.gridObj.setData("set", list);

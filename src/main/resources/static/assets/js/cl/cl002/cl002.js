@@ -288,7 +288,8 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     },
     setData: function (list) {
 
-        this.gridObj.setTreeData(list, "orderKey", "", "icon");
+        //this.gridObj.setTreeData(list, "orderKey", "", "icon");
+        this.gridObj.setTreeDataForArray(list, "orderKey");
         this.gridObj.expandAll();
     },
     isChangeData: function () {
