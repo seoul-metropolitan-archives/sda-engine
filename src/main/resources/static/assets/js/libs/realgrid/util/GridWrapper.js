@@ -548,20 +548,17 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
                 "summaryMode": "aggregate",
                 "stateBar": {
                     "visible": false
-                }
+                },
+				"header" : option.header === undefined ? {"visible": false} : option.header,
+                "footer" : option.footer === undefined? {"visible": false} : option.footer
             });
+            console.log(option.header === undefined ? true : option.header);
             //visible: 인디케이터 영역의 화면 표시여부를 지정합니다.
-            gridView.setIndicator({
-                visible: false
-            });
+            gridView.setIndicator(option.indicator === undefined? {"visible": false} : option.indicator);
 
-            gridView.setStateBar({
-                visible: false
-            });
+            gridView.setStateBar(option.stateBar === undefined? {"visible": false} : option.stateBar);
 
-            gridView.setCheckBar({
-                visible: false
-            });
+            gridView.setCheckBar(option.checkBar === undefined? {"visible": false} : option.checkBar);
 		}
 		else
 		{
@@ -578,7 +575,10 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 		}
 
 	};
-
+	this.setDisplayOptions = function(option)
+	{
+        gridView.setDisplayOptions(option);
+	}
 	/**
 	 * 그리드 생성
 	 */

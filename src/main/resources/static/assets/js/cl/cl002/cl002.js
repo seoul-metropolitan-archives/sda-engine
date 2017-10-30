@@ -274,12 +274,15 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     initView: function () {
         this.gridObj = new GridWrapper("realgrid01", "/assets/js/libs/realgrid", true);
         this.gridObj.setIsTree(true).setGridStyle("100%", "100%")
+            .setOption({
+            footer:{visible:false},
+            header: { visible: false },
+            checkBar: {visible: false},
+            indicator: {visible: false},
+            stateBar:{visible:false}
+        })
         this.gridObj.setColumnInfo(cl00201.column_info).setEntityName("ClassName").makeGrid();
 
-        this.gridObj.setOption({
-            checkBar: {visible: true},
-            indicator: {visible: true}
-        });
         this.gridObj.getGridView().setFooter({
             resizable: false,
             visible: false,
