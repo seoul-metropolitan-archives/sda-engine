@@ -1033,6 +1033,10 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 	{
         gridView.expandAll()
 	};
+    this.setTreeData = function(list, rowsProp, childrenProp, iconProp)
+	{
+        dataProvider.setJsonRows(list, rowsProp, childrenProp, iconProp);
+	}
 	this.setTreeDataForJSON = function(list, rowsProp, childrenProp, iconProp)
 	{
         dataProvider.setJsonRows(list, rowsProp, childrenProp, iconProp);
