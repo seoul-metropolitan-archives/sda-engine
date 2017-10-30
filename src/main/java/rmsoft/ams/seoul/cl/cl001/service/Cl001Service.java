@@ -1,12 +1,10 @@
 package rmsoft.ams.seoul.cl.cl001.service;
 
-import com.querydsl.core.types.Predicate;
 import io.netty.util.internal.StringUtil;
 import io.onsemiro.core.api.response.ApiResponse;
 import io.onsemiro.core.code.ApiStatus;
 import io.onsemiro.core.domain.BaseService;
 import io.onsemiro.core.parameter.RequestParams;
-import io.onsemiro.utils.DateUtils;
 import io.onsemiro.utils.ModelMapperUtils;
 import io.onsemiro.utils.UUIDUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,9 +15,6 @@ import rmsoft.ams.seoul.cl.cl001.dao.Cl001Mapper;
 import rmsoft.ams.seoul.cl.cl001.vo.Cl00101VO;
 import rmsoft.ams.seoul.cl.cl001.vo.Cl00102VO;
 import rmsoft.ams.seoul.common.domain.ClClassificationScheme;
-import rmsoft.ams.seoul.common.domain.ClClassificationSchemeCon;
-import rmsoft.ams.seoul.common.domain.QClClassificationScheme;
-import rmsoft.ams.seoul.common.domain.QClClassificationSchemeCon;
 import rmsoft.ams.seoul.common.repository.ClClassificationSchemeConRepository;
 import rmsoft.ams.seoul.common.repository.ClClassificationSchemeRepository;
 import rmsoft.ams.seoul.utils.CommonCodeUtils;
@@ -58,41 +53,40 @@ public class Cl001Service extends BaseService {
     }
 
     public ApiResponse updateClassificationSchemeList(List<Cl00101VO> list){
-        for (Cl00101VO cl00101VO : list) {
-            ClClassificationScheme clClassificationScheme = ModelMapperUtils.map(cl00101VO,ClClassificationScheme.class);
-            ClClassificationScheme orgClClassificationScheme = findOneClClassificationScheme(cl00101VO);
-
+        List<ClClassificationScheme> clClassificationSchemeList = ModelMapperUtils.mapList(list,ClClassificationScheme.class);
+        ClClassificationScheme orgClClassificationScheme = null;
+        for (ClClassificationScheme clClassificationScheme : clClassificationSchemeList) {
 
             if(StringUtil.isNullOrEmpty(clClassificationScheme.getClassificationSchemeUuid())){
                 clClassificationScheme.setClassificationSchemeUuid(UUIDUtils.getUUID());
             }
 
             if (clClassificationScheme.isCreated() || clClassificationScheme.isModified()) {
-
                 clClassificationScheme.setStatusUuid(CommonCodeUtils.getCodeDetailUuid("CD111","Draft"));
 
                 if(clClassificationScheme.isModified()) {
+                    orgClClassificationScheme = clClassificationSchemeRepository.findOne(clClassificationScheme.getId());
                     clClassificationScheme.setInsertDate(orgClClassificationScheme.getInsertDate());
                     clClassificationScheme.setInsertUuid(orgClClassificationScheme.getInsertUuid());
                 }
                 clClassificationSchemeRepository.save(clClassificationScheme);
             } else if (clClassificationScheme.isDeleted()) {
                 clClassificationSchemeRepository.delete(clClassificationScheme);
+                //연관 테이블 데이터 삭제 (상세)
+
+
+
             }
         }
 
         return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");
     }
 
-    public ClClassificationScheme findOneClClassificationScheme(Cl00101VO requestParam) {
+    /*public ClClassificationScheme findOneClClassificationScheme(Cl00101VO requestParam) {
         QClClassificationScheme qClClassificationScheme = QClClassificationScheme.clClassificationScheme;
 
         Predicate predicate = qClClassificationScheme.classificationSchemeUuid.eq(requestParam.getClassificationSchemeUuid());
 
         return clClassificationSchemeRepository.findOne(predicate);
-    }
-
-
-
-
+    }*/
 }

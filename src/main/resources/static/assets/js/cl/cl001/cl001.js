@@ -38,10 +38,8 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         return false;
     },
     ERROR_SEARCH: function (caller, act, data) {
-        return false;
     },
     PAGE_CONFIRM: function (caller, act, data) {
-
     },
     PAGE_CANCEL: function (caller, act, data) {
 
@@ -69,6 +67,9 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     CLOSE_TAB: function (caller, act, data) {
         ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
     },
+    MENU_OPEN: function (caller,act, data){
+
+    },
     dispatch: function (caller, act, data) {
         var result = ACTIONS.exec(caller, act, data);
         if (result != "error") {
@@ -94,6 +95,14 @@ fnObj.pageStart = function () {
         async: false,
         success: function () {
         }
+    });
+
+    $(document).delegate(".under.classCondition", "click", function () {
+        ACTIONS.dispatch(ACTIONS.MENU_OPEN);
+    });
+
+    $(document).delegate(".under.classRecordCondition", "click", function () {
+        ACTIONS.dispatch(ACTIONS.MENU_OPEN);
     });
 
     _this.formView.initView();
@@ -162,22 +171,14 @@ fnObj.gridView01 = axboot.viewExtend(axboot.realGridView, {
         })
         this.makeGrid();
         this.gridObj.itemClick(this.itemClick);
-        this.gridObj.setColumnProperty("statusUuid"
+        /*this.gridObj.setColumnProperty("statusUuid"
             , "dynamicStyles", [{
                 "criteria": "name == 'Draft'",
                 "styles": {
                     "readonly": false
                 }
             }]
-        );
-    }
-    ,
-    isChangeData: function () {
-        if (this.getData().length > 0) {
-            return true;
-        } else {
-            return false;
-        }
+        );*/
     },
     itemClick: function (data) {
         if (data.classificationSchemeUuid != null && data.classificationSchemeUuid != "") {

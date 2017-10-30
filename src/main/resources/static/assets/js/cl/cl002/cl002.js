@@ -1,19 +1,78 @@
 var fnObj = {};
-
+var classificationSchemeUuid = "";
+var jsonClassData;
+var dataProvider;
+var treeView;
 var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH: function (caller, act, data){
         axboot.ajax({
             type: "GET",
-            url: "/api/v1/cl002/01/list",
-            data: $.extend({}, {pageSize: 1000}),
+            url: "/api/v1/cl002/01/getClassificationScheme",
+            callback: function (res) {
+                fnObj.formView.setFormData("classificationCode",res.map.classificationCode);
+                fnObj.formView.setFormData("classificationName",res.map.classificationName);
+                classificationSchemeUuid = res.map.classificationSchemeUuid;
+                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1);
+            },
+            options: {
+                onError: axboot.viewError
+            }
+        });
+        // axboot.ajax({
+        //     type: "GET",
+        //     url: "/api/v1/cl002/02/getClassList",
+        //     async: true,
+        //     data: $.extend({}, {pageSize: 1000}, this.formView.getData()),
+        //     callback: function (res) {
+        //         fnObj.gridView01.setData(res.list);
+        //     },
+        //     options: {
+        //         onError: axboot.viewError
+        //     }
+        // });
+        // axboot.ajax({
+        //     type: "GET",
+        //     url: "/api/v1/cl002/03/getClassHierarchyList",
+        //     async: true,
+        //     data: $.extend({}, {pageSize: 1000}, this.formView.getData()),
+        //     callback: function (res) {
+        //         fnObj.gridView02.setData(res.list);
+        //     },
+        //     options: {
+        //         onError: axboot.viewError
+        //     }
+        // });
+        // return false;
+    },
+    PAGE_SEARCH1: function (caller, act, data) {
+        axboot.ajax({
+             type: "GET",
+             url: "/api/v1/cl002/03/getClassHierarchyList",
+             async: true,
+             data: $.extend({}, {pageSize: 1000}, classificationSchemeUuid),
+             callback: function (res) {
+                 dataProvider = new RealGridJS.LocalDataProvider();
+
+                 jsonClassData = res.list;
+                ACTIONS.dispatch(fnObj.gridView01.setData(res.list));
+             },
+             options: {
+                 onError: axboot.viewError
+             }
+        });
+        axboot.ajax({
+            type: "GET",
+            url: "/api/v1/cl002/02/getClassList",
+            async: true,
+            data: $.extend({}, {pageSize: 1000}, this.formView.getData()),
             callback: function (res) {
                 if(res.list && res.list.length < 1)
                 {
-                    fnObj.gridView01.addRow();
+                    fnObj.gridView02.addRow();
                     return ;
                 }
 
-                fnObj.gridView01.setData(res.list);
+                fnObj.gridView02.setData(res.list);
             },
             options: {
                 onError: axboot.viewError
@@ -21,38 +80,56 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         });
         return false;
     },
-    ERROR_SEARCH: function (caller, act, data) {
-        return false;
-    },
-    POPUP_HEADER_PAGE_SAVE: function (caller, act, data) {
-        axDialog.confirm({
-            msg: "저장하시겠습니까?"
-        },function() {
-            if (this.key == "ok") {
-                alert("저장하자");
+    /*PAGE_SEARCH1: function (caller, act, data) {
+        axboot.ajax({
+            type: "GET",
+            url: "/api/v1/cl002/02/detail",
+            data: $.extend({}, {pageSize: 1000}, data),
+            callback: function (res) {
+                /!*fnObj.formView.setFormData("managerOrganization",res.managerOrganization);
+                fnObj.formView.setFormData("manager",res.manager);
+                fnObj.formView.setFormData("basedOn",res.basedOn);
+                fnObj.formView.setFormData("classificationNameTxt", selectedItem.classificationName);
+                fnObj.formView.setFormData("useNo",res.useNo);
+                fnObj.formView.setFormData("useYes",res.useYes);
+                fnObj.formView.setFormData("aggregationCnt",res.aggregationCnt);
+                fnObj.formView.setFormData("itemCnt",res.itemCnt);*!/
+            },
+            options: {
+                onError: axboot.viewError
             }
         });
-    },
-    FORM_CLEAR: function (caller, act, data) {
         return false;
+    },*/
+
+    ERROR_SEARCH: function (caller, act, data) {
     },
-    ITEM_CLICK: function (caller, act, data) {
-        return false;
+    PAGE_CONFIRM: function (caller, act, data) {
     },
-    SEND_STEXT: function (caller, act, data) {
-        return false;
+    PAGE_CANCEL: function (caller, act, data) {
     },
-    SEND_STEXT_CANCEL: function (caller, act, data) {
-        return false;
+    PAGE_SAVE: function (caller, act, data) {
+        ACTIONS.dispatch(ACTIONS.TOP_GRID_SAVE);
+        // ACTIONS.dispatch(ACTIONS.TOP_GRID_DETAIL_PAGE_SAVE);
     },
-    MODAL_OPEN: function (caller, act, data) {
-        return false;
+    TOP_GRID_SAVE: function (caller, act, data) {
+        var result = false;
+        axboot.call({
+            type: "PUT",
+            url: "/api/v1/cl002/03/saveList",
+            data: JSON.stringify(this.gridView01.getData()),
+            callback: function (res) {
+                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+                result = true;
+            }
+        })
+            .done(function () {
+                axToast.push("저장 작업이 완료되었습니다.");
+            });
+        return result;
     },
-    ROLE_GRID_DATA_INIT: function (caller, act, data) {
-        return false;
-    },
-    ROLE_GRID_DATA_GET: function (caller, act, data) {
-        return false;
+    CLOSE_TAB: function (caller, act, data) {
+        ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
     },
     dispatch: function (caller, act, data) {
         var result = ACTIONS.exec(caller, act, data);
@@ -64,27 +141,36 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     }
 });
 
-fnObj = {
-    pageStart : function () {
-        var _this = this;
-        $.ajax({
-            url: "/assets/js/controller/simple_controller.js",
-            dataType: "script",
-            async : false,
-            success: function(){}
-        });
-        $.ajax({
-            url: "/assets/js/column_info/cl00201.js",
-            dataType: "script",
-            async : false,
-            success: function(){}
-        });
+fnObj.pageStart = function () {
+    var _this = this;
+    $.ajax({
+        url: "/assets/js/controller/simple_controller.js",
+        dataType: "script",
+        async: false,
+        success: function () {
+        }
+    });
 
-        _this.formView.initView();
-        _this.gridView01.initView();
-        ACTIONS.dispatch(ACTIONS.PAGE_SEARCH,this.formView.getData());
+    $.ajax({
+        url: "/assets/js/column_info/cl00201.js",
+        dataType: "script",
+        async: false,
+        success: function () {
+        }
+    });
 
-    }
+    $.ajax({
+        url: "/assets/js/column_info/cl00202.js",
+        dataType: "script",
+        async: false,
+        success: function () {
+        }
+    });
+
+    _this.formView.initView();
+    _this.gridView01.initView();
+    _this.gridView02.initView();
+    ACTIONS.dispatch(ACTIONS.PAGE_SEARCH, this.formView.getData());
 };
 
 fnObj.formView = axboot.viewExtend(axboot.formView, {
@@ -130,32 +216,116 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
     clear: function () {
         this.model.setModel(this.getDefaultData());
         this.target.find('[data-ax-path="key"]').removeAttr("readonly");
+    },
+    expandAll:function(){
+        treeView.expandAll();
+    },
+    collapseAll:function() {
+        treeView.collapseAll();
     }
 });
 
-/*팝업 헤더*/
-fnObj.gridView01 = axboot.viewExtend(axboot.realGridView, {
-    tagId : "realgrid01",
-    entityName : "class",
-    initView  : function()
-    {
-        this.setColumnInfo(cl00201.column_info);
-        this.gridObj.setFixedOptions(4);
+
+/*
+fnObj.gridView01 = axboot.viewExtend({
+    initView: function () {
+    },
+    setData: function (list) {
+        dataProvider = new RealGridJS.LocalTreeDataProvider();
+        treeView = new RealGridJS.TreeView("realgrid01");
+        treeView.setDataSource(dataProvider);
+
+        dataProvider.setFields([{
+            fieldName: "orderKey"
+        }, {
+            fieldName: "className"
+        }]);
+
+        treeView.setColumns([{
+            name: "className",
+            fieldName: "className",
+            width: 240,
+            editable:false
+        }]);
+
+        treeView.setFooter({
+            resizable: false,
+            visible: false
+        });
+
+        treeView.setOptions({
+            footer:{visible:false},
+            header: { visible: false },
+            checkBar: {visible: false},
+            indicator: {visible: false},
+            stateBar:{visible:false}
+        });
+        treeView.setDisplayOptions({
+            fitStyle:"evenFill"
+        });
+
+        dataProvider.setRows(list,"orderKey");
+        treeView.expandAll();
+    }
+});
+*/
+
+fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
+    initView: function () {
+        this.gridObj = new GridWrapper("realgrid01", "/assets/js/libs/realgrid", true);
+        this.gridObj.setIsTree(true).setGridStyle("100%", "100%")
+        this.gridObj.setColumnInfo(cl00201.column_info).setEntityName("ClassName").makeGrid();
+
         this.gridObj.setOption({
-            checkBar : {visible : true}
+            checkBar: {visible: true},
+            indicator: {visible: true}
+        });
+        this.gridObj.getGridView().setFooter({
+            resizable: false,
+            visible: false,
+        });
+                //this.gridObj.itemClick(this.itemClick);
+    },
+    setData: function (list) {
+
+        this.gridObj.setTreeData(list, "orderKey", "", "icon");
+        this.gridObj.expandAll();
+    },
+    isChangeData: function () {
+        return false;
+    }
+});
+
+fnObj.gridView02 = axboot.viewExtend(axboot.realGridView, {
+    tagId: "realgrid02",
+    entityName: "Class Grid",
+    initView: function () {
+        this.setColumnInfo(cl00202.column_info);
+        this.gridObj.setFixedOptions({
+            colCount: 4
+        });
+        this.gridObj.setOption({
+            checkBar: {visible: true},
+            indicator: {visible: true}
         })
         this.makeGrid();
     },
-    setData: function (list) {
-        this.gridObj.setData("set", list);
-
-    },
-    getData: function () {
-        return this.gridObj.getData();
-    },
-    addRow: function () {
-        this.gridObj.addRow();
+    isChangeData: function () {
     },
     itemClick: function (data) {
     }
 });
+/**
+ * [필수]
+ * Grid 데이터 변경 여부를 체크하기 위한 함수
+ * 모든 페이지에 넣기를 권고하며, 안넣은 경우 데이터 변경여부를 확인하지 않음
+ * @returns {boolean}
+ */
+/*
+isDataChanged = function () {
+    if (fnObj.gridView01.isChangeData() == true) {
+        return true;
+    } else {
+        return false;
+    }
+}*/

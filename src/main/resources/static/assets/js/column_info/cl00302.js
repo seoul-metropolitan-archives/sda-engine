@@ -44,7 +44,7 @@ var cl00301 =
                 {
                     sortNo: 3,
                     width: 150,
-                    name: "AGGREGATION_ID",
+                    name: "AGGREGATION_UUID",
                     text: "Parent Class Code",
                     editable: true
                 },

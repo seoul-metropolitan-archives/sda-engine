@@ -10,7 +10,7 @@
          CLASSIFIED_RECORDS_UUID as classifiedRecordsUuid,
          STATUS_UUID as statusUuid,
          CLASS_UUID as classUuid,
-         AGGREGATION_ID as aggregationId,
+         AGGREGATION_UUID as aggregationUuid,
          ITEM_UUID as itemUuid,
          CLASSIFIED_DATE as classifiedDate,
         <include refid="Common.UserName"><property name="userUuid" value="INSERT_UUID"/></include> as insertUuid,

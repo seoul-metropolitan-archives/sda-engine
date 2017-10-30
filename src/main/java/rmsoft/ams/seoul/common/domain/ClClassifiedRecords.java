@@ -37,7 +37,7 @@ public class ClClassifiedRecords extends BaseJpaModel<ClClassifiedRecords.ClClas
     @Comment(value = "분류UUID")
     private String classUuid;
 
-    @Column(name = "AGGREGATION_ID", length = 36)
+    @Column(name = "AGGREGATION_UUID", length = 36)
     @Comment(value = "집합ID")
     private String aggregationId;
 

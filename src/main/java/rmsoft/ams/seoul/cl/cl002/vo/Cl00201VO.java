@@ -5,6 +5,10 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
@@ -20,5 +24,10 @@ public class Cl00201VO extends BaseVO {
     private int orderNo;
     private String orderKey;
     private String useYn;
+    private List<Cl00201VO> children = new ArrayList<>();
+
+    public void addChildren(Cl00201VO menu) {
+        children.add(menu);
+    }
 
 }

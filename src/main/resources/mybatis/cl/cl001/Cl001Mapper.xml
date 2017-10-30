@@ -63,7 +63,7 @@
            ) as useNo,
           (
             SELECT
-              COUNT(AGGREGATION_ID)
+              COUNT(AGGREGATION_UUID)
             FROM
               CL_CLASSIFIED_RECORDS
            ) as aggregationCnt,
