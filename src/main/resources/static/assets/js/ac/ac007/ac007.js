@@ -339,6 +339,9 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
         this.gridObj.getGridView()._dataSource.setRows(list, "menuCode");
         this.gridObj.expandAll();
     },
+    getData: function () {
+        return this.gridObj.getData();
+    },
     isChangeData: function () {
         return false;
     }
@@ -387,44 +390,4 @@ isDataChanged = function () {
     } else {
         return false;
     }
-}
-
-makeTreeData = function (menuJsonData) {
-    var menuItems = convertJsonObj(menuJsonData);
-
-    this.menus = {};
-    var leftMenuItems =
-        {
-            menus: new Array()
-        };
-    var menu_2_list = new Array();
-    var secondList = undefined;
-    for (var i = 0; i < menuItems.length; i++) {
-        this.menus[menuItems[i]["menuUuid"]] = menuItems[i];
-        menu_2_list = menuItems[i]["children"];
-
-        secondList = new Array();
-        for (var j = 0; j < menu_2_list.length; j++) {
-            this.menus[menu_2_list[j]["menuUuid"]] = menu_2_list[j];
-            secondList.push({
-                icon: 0
-                , menuUuid: menu_2_list[j]["menuUuid"]
-                , menuName: menu_2_list[j]["menuName"]
-                , program: menu_2_list[j]["program"]
-            });
-        }
-        leftMenuItems.menus.push({
-            icon: 0
-            , menuUuid: menuItems[i]["menuUuid"]
-            , menuName: menuItems[i]["menuName"]
-            , menus: secondList
-        });
-        secondList = undefined;
-    }
-
-    return leftMenuItems;
-}
-
-function convertJsonObj(jsonStr) {
-    return jsonStr == null || jsonStr == '' ? null : JSON.parse(jsonStr.replace(/&quot;/gi, '"'));
 }
