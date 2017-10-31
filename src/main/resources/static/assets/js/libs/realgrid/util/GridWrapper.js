@@ -72,7 +72,7 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 	var imageUrl = "/images/";
 
 	var isTree = undefined == _isTree ? false: true;
-
+    var childrenProp = undefined;
 	var appendValidate = function() {
 		return true;
 	};
@@ -834,7 +834,12 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 	this.getData = function() {
         gridView.commit();
 		var dataProvider = gridView.getDataProvider();
-		var rows = dataProvider.getRows();
+		var rows = undefined;
+		if(isTree)
+			rows = dataProvider.getJsonRows(-1,true,childrenProp,"icon");
+		else
+            rows = dataProvider.getRows();
+
 		var rowState = dataProvider.getAllStateRows();
 
 		var createRow = rowState.created;
@@ -1045,9 +1050,10 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 	{
         dataProvider.setJsonRows(list, rowsProp, childrenProp, iconProp);
 	};
-    this.setTreeDataForArray = function(list, childrenProp)
+    this.setTreeDataForArray = function(list, _childrenProp)
     {
-        dataProvider.setRows(list, childrenProp);
+        childrenProp = _childrenProp;
+        dataProvider.setRows(list, _childrenProp);
     };
 	this.setListCount = function(_listCount)
 	{

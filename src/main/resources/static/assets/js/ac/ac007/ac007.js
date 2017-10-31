@@ -335,8 +335,7 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
     },
     setData: function (list) {
         //this.gridObj.gridView.getDataProvider().setRows(list, "menuCode");
-
-        this.gridObj.getGridView()._dataSource.setRows(list, "menuCode");
+        this.gridObj.setTreeDataForArray(list, "menuCode");
         this.gridObj.expandAll();
     },
     getData: function () {
