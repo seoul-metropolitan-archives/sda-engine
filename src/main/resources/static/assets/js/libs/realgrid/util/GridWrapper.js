@@ -1116,7 +1116,14 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
     };
 	this.getCheckedList = function()
 	{
-        return gridView.getCheckedRows(false);
+        var rowIndexList = gridView.getCheckedRows(false);
+        var checkList = new Array();
+        for(var i = 0; i < rowIndexList.length; i++)
+		{
+            checkList.push(dataProvider.getJsonRow(rowIndexList[i]));
+		}
+
+        return checkList;
 	}
 	this.setAppendValiate = function(func) {
 		if (typeof func == "function") {
