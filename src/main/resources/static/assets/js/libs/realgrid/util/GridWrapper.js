@@ -821,10 +821,14 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 	{
 		return dataProvider.getFieldIndex(fieldName);
 	}
-	this.setValues = function(index,fieldIdx, data)
+	this.setValue = function(index,fieldIdx, data)
 	{
         dataProvider.setValue(index,fieldIdx,data);
 	}
+    this.setValues = function(itemIndex,values, strict)
+    {
+        dataProvider.setValues(itemIndex,values,strict);
+    }
 	
 	//데이터  반환 함수
 	this.getData = function() {

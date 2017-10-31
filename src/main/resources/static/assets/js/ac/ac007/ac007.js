@@ -309,21 +309,18 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
         this.gridObj.onDataCellClicked(function (grid, index) {
             if (index.fieldIndex == 8 && index.fieldName == "allYn") {
                 var menuInfo = grid.getDataProvider().getJsonRow(index.dataRow);
-
+                // Y 에서 N 으로 바꾸면 다른 값도 모두 N으로 세팅
                 if (menuInfo.allYn == "Y") {
-                    // Y 에서 N 으로 바꾸면 다른 값도 모두 N으로 세팅
-                    menuInfo.allYn = "N";
-                    menuInfo.useYn = "N";
-                    menuInfo.saveYn = "N";
-                    menuInfo.inquiryYn = "N";
+                    menuInfo["useYn"] = "N";
+                    menuInfo["saveYn"] = "N";
+                    menuInfo["inquiryYn"] = "N";
                 } else {
-                    menuInfo.allYn = "Y";
-                    menuInfo.useYn = "Y";
-                    menuInfo.saveYn = "Y";
-                    menuInfo.inquiryYn = "Y";
+                    menuInfo["useYn"] = "Y";
+                    menuInfo["saveYn"] = "Y";
+                    menuInfo["inquiryYn"] = "Y";
                 }
-
                 grid.getDataProvider().updateRow(index.dataRow, menuInfo);
+                grid.commit(true);
             }
             //var menu = _this.menus[grid.getDataProvider().getJsonRow(index.dataRow)["menuUuid"]];
             //if (menu["program"]) {
