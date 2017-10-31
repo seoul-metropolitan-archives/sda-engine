@@ -655,7 +655,7 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
                 obj.editable = false;
 			} else if (data.required) {
 				styles = defaultStyle.column.required;
-				obj.requiredMessage = axboot.getCommonMessage("AA008");
+				//obj.requiredMessage = axboot.getCommonMessage("AA008");
 			} else {
 				styles = defaultStyle._default;
 			}
@@ -1114,6 +1114,10 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
         }
         */
     };
+	this.getCheckedList = function()
+	{
+        return gridView.getCheckedRows(false);
+	}
 	this.setAppendValiate = function(func) {
 		if (typeof func == "function") {
 			appendValidate = func;
