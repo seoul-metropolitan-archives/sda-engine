@@ -234,7 +234,7 @@ fnObj.sqlView = axboot.viewExtend(axboot.baseView,{
     {
         var _this = this;
         this.targetTag = $("#sql");
-        $("#sql").keydown(function(){
+        $("#sql").keyup(function(){
             fnObj.gridView_h.setPopupSQL(_this.targetTag.val());
         })
         $("#apply").click(function(){

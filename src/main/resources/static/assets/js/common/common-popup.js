@@ -22,12 +22,10 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         return false;
     },
     PAGE_CHOICE: function (caller, act, data) {
-    var list = caller.gridView01.getData();
-    if (list.length > 0) {
+        var list = caller.gridView01.getData();
         if (parent && parent.axboot && parent.axboot.modal) {
             parent.axboot.modal.callback(list); // 부모창에 callback 호출
         }
-    }
     /*else {
         alert("선택된 목록이 없습니다.");
     }*/
@@ -76,8 +74,16 @@ fnObj.formView01 = axboot.viewExtend(axboot.formView, {
 
         $("#searchField").keydown(function(event){
             console.log(event.keyCode);
-           if(event.keyCode == 13)
-               ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+            switch(event.keyCode)
+            {
+                case 13:
+                    ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+                    break;
+                case 40:
+                    if(fnObj.gridView01.gridObj.getData().length)
+                        fnObj.gridView01.gridObj.setFocus();
+                    break;
+            }
         });
 
         $("#searchField").focus();
@@ -129,6 +135,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     entityName : "",
     initView: function () {
         this.initGrid();
+        this.initEvent();
     },
     initGrid : function()
     {
@@ -150,7 +157,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
 
                 fnObj.gridView01.gridObj.setGridStyle("100%", "100%");
                 fnObj.gridView01.gridObj.setEntityName(fnObj.gridView01.entityName);
-
+                fnObj.isMultiselect = res["popupInfo"]["multiselectYN"] == 'Y';
                 fnObj.gridView01.gridObj.setOption({
                     checkBar: {visible: res["popupInfo"]["multiselectYN"] == 'Y',exclusive: res["popupInfo"]["multiselectYN"] != 'Y' },
                     indicator: {visible: true}
@@ -183,7 +190,17 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
             }
         });
     },
-
+    initEvent : function()
+    {
+        fnObj.gridView01.gridObj.onKeydown(function(grid, key, ctrl, shift, alt){
+            switch (key) {
+                case 13:
+                    ACTIONS.dispatch(ACTIONS.PAGE_CHOICE);
+                    ACTIONS.dispatch(ACTIONS.PAGE_CLOSE);
+                    break;
+            }
+        });
+    },
     setData : function(list)
     {
         if(fnObj.isTree == "Y")
@@ -238,6 +255,10 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     },
     getData : function()
     {
-        return this.gridObj.getCheckedList();
+        if(fnObj.isMultiselect)
+            return this.gridObj.getCheckedList();
+        else
+            return this.gridObj.getSelectedData();
+
     }
 });

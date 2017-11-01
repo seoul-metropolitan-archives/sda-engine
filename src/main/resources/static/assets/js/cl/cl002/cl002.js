@@ -9,7 +9,9 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             type: "GET",
             url: "/api/v1/cl002/01/getClassificationScheme",
             callback: function (res) {
-                fnObj.formView.setFormData("classificationCode",res.map.classificationCode);
+
+                $("input[data-ax-path='classificationCode']").attr("classificationCode",res.map.classificationCode);
+                fnObj.formView.setFormData("classificationCode",res.map.classificationName);
                 fnObj.formView.setFormData("classificationName",res.map.classificationName);
                 classificationSchemeUuid = res.map.classificationSchemeUuid;
                 ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1);
@@ -128,6 +130,22 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             });
         return result;
     },
+    SEARCH_CLASS_SCH : function(caller, act, data)
+    {
+        axboot.modal.open({
+            modalType: "COMMON_POPUP",
+            sendData: function () {
+                return data;
+            },
+            callback: function (data) {
+                $("input[data-ax-path='classificationCode']").val(data["CLASSIFICATION_NAME"])
+                $("input[data-ax-path='classificationCode']").attr("classificationCode",data["CLASSIFICATION_CODE"])
+                console.log(data);
+                if(this.close)
+                    this.close();
+            }
+        });
+    },
     CLOSE_TAB: function (caller, act, data) {
         ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
     },
@@ -186,10 +204,32 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
     },
     initEvent: function () {
         var _this = this;
+        $("input[data-ax-path='classificationCode']").parents().eq(1).find("a").click(function(){
+            if("" != $("input[data-ax-path='classificationCode']").val().trim())
+            {
+                var data = {
+                    popupCode : "PU101",
+                    searchData : $("input[data-ax-path='classificationCode']").val().trim()
+                };
+                ACTIONS.dispatch(ACTIONS.SEARCH_CLASS_SCH,data);
+            }
+        });
+        $("input[data-ax-path='classificationCode']").focusout(function(){
+
+            if("" != $(this).val().trim())
+            {
+                var data = {
+                    popupCode : "PU101",
+                    searchData : $(this).val().trim()
+                };
+                ACTIONS.dispatch(ACTIONS.SEARCH_CLASS_SCH,data);
+            }
+        });
+
     },
     getData: function () {
         var data = this.modelFormatter.getClearData(this.model.get()); // 모델의 값을 포멧팅 전 값으로 치환.
-        return $.extend({}, data);
+        return $.extend({}, data,{classificationCode : $("input[data-ax-path='classificationCode']").attr("classificationCode")});
     },
     setFormData: function (dataPath, value) {
         this.model.set(dataPath, value);
@@ -325,11 +365,10 @@ fnObj.gridView02 = axboot.viewExtend(axboot.realGridView, {
  * 모든 페이지에 넣기를 권고하며, 안넣은 경우 데이터 변경여부를 확인하지 않음
  * @returns {boolean}
  */
-/*
 isDataChanged = function () {
     if (fnObj.gridView01.isChangeData() == true) {
         return true;
     } else {
         return false;
     }
-}*/
+}

@@ -391,7 +391,15 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
             }
         });
 	};
+	this.onRowsPasted = function(_rowsPasted)
+	{
+        gridView.onRowsPasted = _rowsPasted;
+	}
 
+	this.onKeydown = function(_keydown)
+	{
+        gridView.onKeyDown = _keydown;
+	}
 	var bindEvent = function() {
 		gridView.onKeyDown = keyDown;
 
@@ -829,8 +837,11 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
     {
         dataProvider.setValues(itemIndex,values,strict);
     }
-	
-	//데이터  반환 함수
+    this.setFocus = function()
+	{
+		gridView.setFocus();
+	}
+    //데이터  반환 함수
 	this.getData = function() {
         gridView.commit();
 		var dataProvider = gridView.getDataProvider();

@@ -262,6 +262,7 @@ fnObj.gridView02 = axboot.viewExtend(axboot.realGridView, {
         this.setColumnInfo(ad00302.column_info);
         this.makeGrid();
         this.gridObj.addRowBeforeEvent(this.addRowBeforeEvent);
+        this.gridObj.onRowsPasted(this.onRowsPasted);
     },
     clear : function () {
         this.setData([]);
@@ -271,6 +272,14 @@ fnObj.gridView02 = axboot.viewExtend(axboot.realGridView, {
         var data = fnObj.gridView02.gridObj.getDefaultData();
         data[1] = fnObj.gridView01.getCodeHeaderUUID();
         fnObj.gridView02.gridObj.setDefaultData(data);
+    },
+    onRowsPasted : function(grid, items)
+    {
+        var data = undefined;
+        for(var i = 0; i < items.length; i++)
+        {
+            fnObj.gridView02.gridObj.setValue(items[i],1,fnObj.gridView01.getCodeHeaderUUID());
+        }
     }
 
 });
