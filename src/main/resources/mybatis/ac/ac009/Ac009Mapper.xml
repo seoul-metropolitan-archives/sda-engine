@@ -35,7 +35,7 @@
         FROM
             AD_MENU Z1,
             AD_PROGRAM Z2
-        WHERE Z1.PROGRAM_UUID = Z2.PROGRAM_UUID
+        WHERE Z1.PROGRAM_UUID = Z2.PROGRAM_UUID(+)
         <if test="parentMenuCode != null">
            AND Z1.PARENT_MENU_CODE LIKE '%' || #{parentMenuCode} || '%'
         </if>
