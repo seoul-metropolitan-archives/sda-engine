@@ -20,6 +20,7 @@
       SELECT
         (SELECT LOWER(CODE) FROM AD_CODE_DETAIL WHERE CODE_DETAIL_UUID = ALIGN_UUID) as textAlignment,
         (SELECT LOWER(CODE) FROM AD_CODE_DETAIL WHERE CODE_DETAIL_UUID = INPUT_METHOD_UUID) as dataType,
+        (SELECT LOWER(CODE)FROM AD_CODE_DETAIL WHERE CODE_DETAIL_UUID = TREE_RELATION_UUID) as treeRelationType,
         ORDER_NO as sortNo,
         SQL_COLUMN as name,
         TITLE as text,
@@ -32,5 +33,21 @@
         Z1.POPUP_HEADER_UUID = Z2.POPUP_HEADER_UUID
         AND
         POPUP_CODE = #{popupCode}
+        order by ORDER_NO
+    </select>
+    <select id="popupInfo" parameterType="rmsoft.ams.seoul.common.domain.AdPopupHeader" resultType="rmsoft.ams.seoul.common.domain.AdPopupHeader">
+      SELECT
+        POPUP_HEADER_UUID as popupHeaderUuid,
+        POPUP_CODE as popupCode,
+        POPUP_NAME as popupName,
+        TREE_YN as treeYN,
+        MULTISELECT_YN as multiselectYN
+      FROM
+        AD_POPUP_HEADER
+      WHERE
+        POPUP_CODE = #{popupCode}
+    </select>
+    <select id="getSQL" parameterType="java.util.HashMap" resultType="java.lang.String">
+      SELECT POPUP_SQL FROM AD_POPUP_HEADER WHERE POPUP_CODE = #{popupCode}
     </select>
 </mapper>

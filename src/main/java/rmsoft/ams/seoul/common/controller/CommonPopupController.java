@@ -19,6 +19,7 @@ import rmsoft.ams.seoul.common.domain.AdPopupHeader;
 import rmsoft.ams.seoul.common.service.CommonPopupService;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 /**
  * Ac003Controller
@@ -34,9 +35,15 @@ public class CommonPopupController extends MessageBaseController {
     @Autowired
     private CommonPopupService commonPopupService;
 
-    @RequestMapping("/getColumnInfo")
-    public Responses.ListResponse getColumnInfo(@RequestBody AdPopupHeader adPopupHeader ) {
-        return Responses.ListResponse.of(commonPopupService.getColumnInfo(adPopupHeader));
+    @RequestMapping("/getPopupInfo")
+    public Responses.MapResponse getPopupInfo(@RequestBody AdPopupHeader adPopupHeader ) {
+
+        return Responses.MapResponse.of(commonPopupService.getPopupInfo(adPopupHeader));
+    }
+    @RequestMapping("/search")
+    public Responses.ListResponse search(@RequestBody Map<String,Object> param ) {
+
+        return Responses.ListResponse.of(commonPopupService.search(param));
     }
 
 }

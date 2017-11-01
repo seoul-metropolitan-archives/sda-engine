@@ -22,5 +22,7 @@ public abstract class BaseColumnVO
     private boolean visible = true;
     private String textAlignment = "";
     private String defaultValue = "";
+    private String treeRelationType = "";
+    private String treeColumnYN = "";
 
 }

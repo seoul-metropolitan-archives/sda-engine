@@ -11,46 +11,26 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     },
     PAGE_SEARCH: function (caller, act, data) {
         axboot.ajax({
-            url: "/api/v1/mng/common/search_terminal",
-            data: $.extend({}, this.gridView01.getPageData()),
+            url: "/api/v1/common/popup/search",
+            dataType : "JSON",
+            type : "POST",
+            data: JSON.stringify(this.formView01.getData()),
             callback: function (res) {
-                caller.gridView01.setData(res);
+                caller.gridView01.setData(res.list);
             }
         });
         return false;
     },
     PAGE_CHOICE: function (caller, act, data) {
-        var list = caller.gridView01.getData("selected");
-        if (list.length > 0) {
-            if (parent && parent.axboot && parent.axboot.modal) {
-                parent.axboot.modal.callback(list[0]);
-            }
-        } else {
-            alert("선택된 목록이 없습니다.");
+    var list = caller.gridView01.getData();
+    if (list.length > 0) {
+        if (parent && parent.axboot && parent.axboot.modal) {
+            parent.axboot.modal.callback(list); // 부모창에 callback 호출
         }
-    },
-    PAGE_DEL: function (caller, act, data) {
-        if (!confirm("정말 삭제 하시겠습니까?")) return;
-
-        var list = caller.gridView01.getData("selected");
-        list.forEach(function (n) {
-            n.__deleted__ = true;
-        });
-
-        axboot.ajax({
-            type: "PUT",
-            url: "/api/v1/files",
-            data: JSON.stringify(list),
-            callback: function (res) {
-                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
-            }
-        });
-    },
-    ITEM_CLICK: function (caller, act, data) {
-        ACTIONS.dispatch(ACTIONS.PAGE_CHOICE);
-    },
-    GRID_0_PAGING: function (caller, act, data) {
-        caller.searchView.setPageNumber(data);
+    }
+    /*else {
+        alert("선택된 목록이 없습니다.");
+    }*/
     },
     dispatch: function (caller, act, data) {
         var result = ACTIONS.exec(caller, act, data);
@@ -66,6 +46,10 @@ var ACTIONS = axboot.actionExtend(fnObj, {
 var CODE = {};
 // fnObj 기본 함수 스타트와 리사이즈
 fnObj.pageStart = function () {
+    var parentsData = parent.axboot.modal.getData();
+    this.popupCode = parentsData["popupCode"];
+    $("#searchField").val(parentsData["searchData"]);
+    fnObj.formView01.initView();
     fnObj.gridView01.initView();
 };
 
@@ -73,9 +57,9 @@ fnObj.pageResize = function () {
 
 };
 
-fnObj.formView = axboot.viewExtend(axboot.formView, {
+fnObj.formView01 = axboot.viewExtend(axboot.formView, {
     getDefaultData: function () {
-        return $.extend({}, axboot.formView.defaultData, {useYn: "Y"});
+        return $.extend({}, axboot.formView.defaultData);
     },
     initView: function () {
         this.target = $("#formView01");
@@ -86,9 +70,30 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
     },
     initEvent: function () {
         var _this = this;
+        $("#inquiry").click(function(){
+            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+        });
+
+        $("#searchField").keydown(function(event){
+            console.log(event.keyCode);
+           if(event.keyCode == 13)
+               ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+        });
+
+        $("#searchField").focus();
+        
+        $("#okPopup").click(function(){
+            ACTIONS.dispatch(ACTIONS.PAGE_CHOICE);
+            ACTIONS.dispatch(ACTIONS.PAGE_CLOSE);
+        });
+        $("#closePopup").click(function(){
+            ACTIONS.dispatch(ACTIONS.PAGE_CLOSE);
+        });
     },
     getData: function () {
         var data = this.modelFormatter.getClearData(this.model.get()); // 모델의 값을 포멧팅 전 값으로 치환.
+        console.log($.extend({}, data));
+        data = {popupCode : fnObj.popupCode,searchField : $("#searchField").val(),isTree : fnObj.isTree}
         return $.extend({}, data);
     },
     setFormData: function (dataPath, value) {
@@ -119,44 +124,120 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
     }
 });
 
-
-fnObj.gridView01 = axboot.viewExtend(axboot.realGridView, {
+fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     tagId : "popupGrid01",
+    entityName : "",
     initView: function () {
-        /*
-        this.gridObj.setColumnInfo(ac00301.column_info).setEntityName("CONFIGURATION");
-        this.gridObj.makeGrid();
-        this.gridObj.itemClick(this.itemClick);
-        */
-
-        fnObj.gridView01.initGrid();
+        this.initGrid();
     },
     initGrid : function()
     {
+        var _this = this;
         axboot.ajax({
-            url : "/api/v1/common/popup/getColumnInfo",
+            url : "/api/v1/common/popup/getPopupInfo",
             dataType : "JSON",
             type : "POST",
-            data: JSON.stringify({popupCode : "PU001"}),
+            async : false,
+            data: JSON.stringify({popupCode : fnObj.popupCode}),
             callback : function(res)
             {
-                fnObj.gridView01.gridObj.setColumnInfo(res.list);
-                fnObj.gridView01.gridObj.makeGrid();
-                //fnObj.gridView01.gridObj.setData("set",[{"USER_NAME" : "test",""}])
-                console.log(res.list);
-            }
-        })
-    },
-    setData: function (list) {
-        this.gridObj.setData("set", list);
+                res = res.map;
+                fnObj.isTree = res["popupInfo"]["treeYN"];
+                if(fnObj.isTree == 'Y')
+                    fnObj.gridView01.gridObj = new GridWrapper(fnObj.gridView01.tagId, "/assets/js/libs/realgrid",true);
+                else
+                    fnObj.gridView01.gridObj = new GridWrapper(fnObj.gridView01.tagId, "/assets/js/libs/realgrid");
 
+                fnObj.gridView01.gridObj.setGridStyle("100%", "100%");
+                fnObj.gridView01.gridObj.setEntityName(fnObj.gridView01.entityName);
+
+                fnObj.gridView01.gridObj.setOption({
+                    checkBar: {visible: res["popupInfo"]["multiselectYN"] == 'Y',exclusive: res["popupInfo"]["multiselectYN"] != 'Y' },
+                    indicator: {visible: true}
+                });
+                if(res["popupInfo"]["treeYN"] == 'Y')
+                {
+                    var treeData = undefined;
+                    for(var i = 0; i < res.columnInfo.length; i++)
+                    {
+                        treeData = res.columnInfo[i];
+                        if("Y" == treeData.treeColumnYN)
+                        {
+                            fnObj.treeColumn = treeData["name"];
+                        }else if("parent" == treeData.treeRelationType)
+                        {
+                            fnObj.parent = treeData["name"];
+                        }else if("child" == treeData.treeRelationType)
+                        {
+                            fnObj.child = treeData["name"];
+                        }
+
+                    }
+                }
+                console.log(res.columnInfo);
+                fnObj.gridView01.gridObj.setColumnInfo(res.columnInfo);
+                fnObj.gridView01.gridObj.makeGrid();
+                $("#popupGrid01").fadeIn(100);
+                //fnObj.gridView01.gridObj.setData("set",[{"USER_NAME" : "test",""}])
+                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+            }
+        });
     },
-    getData: function () {
-        return this.gridObj.getData();
+
+    setData : function(list)
+    {
+        if(fnObj.isTree == "Y")
+        {
+            var treeList = new Array();
+            var data = undefined;
+            list.sort(function(a, b) {
+                if (undefined == a[fnObj.parent]||null == a[fnObj.parent]) {
+                    return -1;
+                } else {
+                    return a[fnObj.parent]| - b[fnObj.parent];
+                }
+            });
+            console.log(list);
+
+
+            var matchingData = function(key, list)
+            {
+                var retList = new Array();
+                for(var i = 0; i < list.length; i++)
+                {
+                    if( key == list[i][fnObj.parent] )
+                    {
+                        list[i].icon = 0;
+                        list[i].rows =  matchingData(list[i][fnObj.child], list);
+                        retList.push(list[i]);
+                    }
+                }
+                return retList;
+
+            }
+
+            var treeData = undefined;
+            for(var i = 0; i < list.length; i++)
+            {
+                treeData = list[i];
+                if(treeData[fnObj.parent] == null)
+                {
+                    treeData.icon = 0;
+                    treeData.rows = matchingData(list[i][fnObj.child],list);
+                    treeList.push(treeData);
+                }
+            }
+            console.log(JSON.stringify({rows:treeList}));
+            fnObj.gridView01.gridObj.setTreeData({rows:treeList}, "rows", "", "icon");
+            //fnObj.gridView01.gridObj.setTreeDataForArray(treeList,"rows");
+        }
+        else
+            this.gridObj.setData("set", list);
+
+        $("#popupGrid01").fadeIn(100);
     },
-    addRow: function () {
-        this.gridObj.addRow();
-    },
-    itemClick: function (data) {
+    getData : function()
+    {
+        return this.gridObj.getCheckedList();
     }
 });

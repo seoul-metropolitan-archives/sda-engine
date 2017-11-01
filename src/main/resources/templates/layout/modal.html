@@ -7,24 +7,26 @@
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1"/>
     <meta name="apple-mobile-web-app-capable" content="yes">
 
-    <title th:text="${@environment.getProperty('config.title')}">title</title>
-
+    <title th:text="${@environment.getProperty('config.amstitle')}">title</title>
+    <link rel="stylesheet" type="text/css" href="/assets/css/common.css">
+    <link rel="stylesheet" type="text/css" href="/assets/css/button.css">
+    <link rel="stylesheet" type="text/css" href="/assets/css/popup.css">
+    <!--<link rel="stylesheet" type="text/css" href="/assets/css/ams_layout.css">-->
     <link rel="shortcut icon" type="image/x-icon" th:href="@{/assets/favicon.ico/}"/>
     <link rel="icon"          type="image/x-icon" th:href="@{/assets/favicon.ico/}"/>
     <link rel="stylesheet"    type="text/css"     th:href="@{${@environment.getProperty('config.extendedCss')}}"/>
-    <link rel="stylesheet" type="text/css" href="/assets/css/common.css">
-    <link rel="stylesheet" type="text/css" href="/assets/css/popup.css">
-    <link rel="stylesheet" type="text/css" href="/assets/css/button.css">
 </head>
 
-<body class="ax-body baseStyle" th:classappend="${axbody_class}" th:attr="data-page-auto-height=${auto_height == null ? 'true' : 'false'}">
+<body class="ax-body" th:classappend="${axbody_class}" th:attr="data-page-auto-height=${auto_height == null ? 'true' : 'false'}">
 
-<div id="ax-modal-base-root" data-root-container="true">
+<!--<div id="ax-modal-base-root" data-root-container="true">-->
+<div id="ax-base-root" data-root-container="true">
     <!--<div layout:fragment="base-title"></div>-->
     <div layout:fragment="base-content"></div>
 </div>
 
 </body>
+
 <script type="text/javascript" th:src="@{/assets/js/libs/realgrid/realgridjs-lic.js}"></script>
 <script type="text/javascript" th:src="@{/assets/js/libs/realgrid/realgridjs_eval.1.1.25.min.js}"></script>
 <script type="text/javascript" th:src="@{/assets/js/libs/realgrid/realgridjs-api.1.1.25.js}"></script>
@@ -38,7 +40,6 @@
     var CONTEXT_PATH   = 'http://[[${#httpServletRequest.serverName}]]:[[${#httpServletRequest.serverPort}]]';
     /*var CONTEXT_PATH   = 'http://[[@{${@environment.getProperty("server.url")}}]]:[[@{${@environment.getProperty("server.port")}}]]';*/
     var SCRIPT_SESSION = (function(json){return json;})(sessionJson);
-
     function convertJsonObj(jsonStr) {
         return jsonStr == null || jsonStr == '' ? null : JSON.parse(jsonStr.replace(/&quot;/gi, '"'));
     }
@@ -46,5 +47,4 @@
 <script type="text/javascript" th:src="@{/axboot.config.js}"></script>
 <script layout:fragment="js"></script>
 <script layout:fragment="script"></script>
-
 </html>

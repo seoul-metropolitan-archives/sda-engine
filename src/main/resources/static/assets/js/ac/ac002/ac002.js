@@ -343,6 +343,7 @@ fnObj.leftMenuView = axboot.viewExtend({
         this.gridObj.setIsTree(true).setGridStyle("100%", "100%")
             .setColumnInfo(column_info).setEntityName("Menu")
             .makeGrid();
+        console.log(leftMenuItems);
         this.gridObj.setTreeData(leftMenuItems, "menus", "", "icon");
         this.gridObj.expandAll();
         this.gridObj.onDataCellClicked(function (grid, index) {

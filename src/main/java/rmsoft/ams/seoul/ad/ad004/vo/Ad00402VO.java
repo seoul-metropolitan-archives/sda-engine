@@ -33,7 +33,7 @@ public class Ad00402VO extends BaseVO
 
     private String alignUUID = "";
 
-    private String treeYN = "";
+    private String treeColumnYN = "";
 
     private String treeRelationUUID = "";
 
