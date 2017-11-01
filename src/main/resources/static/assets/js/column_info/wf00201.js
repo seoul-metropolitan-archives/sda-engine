@@ -2,14 +2,14 @@
  * Copyright (c) 2017. RMSoft Co.,Ltd. All rights reserved
  */
 
-var ac00502 =
+var wf00201 =
     {
         column_info:
             [
                 {
                     sortNo: 1,
-                    name: "rolePermissionUuid",
-                    text: "rolePermissionUuid",
+                    name: "workflowUuid",
+                    text: "workflowUuid",
                     width: 120,
                     editable: true,
                     dataType: "code",
@@ -18,85 +18,24 @@ var ac00502 =
                 },
                 {
                     sortNo: 2,
-                    name: "roleUuid",
-                    text: "roleUuid",
-                    width: 120,
+                    name: "workflowName",
+                    text: "Workflow Name",
+                    width: 200,
                     editable: true,
-                    dataType: "code",
-                    required: false,
-                    visible: false
+                    dataType: "text",
+                    required: true
                 },
                 {
                     sortNo: 3,
-                    name: "permissionUuid",
-                    text: "permissionUuid",
-                    width: 120,
-                    editable: true,
-                    dataType: "code",
-                    required: false,
-                    visible: false
-                },
-                {
-                    sortNo: 4,
-                    name: "pmsProgramUuid",
-                    text: "pmsProgramUuid",
-                    width: 120,
-                    editable: true,
-                    dataType: "code",
-                    required: false,
-                    visible: false
-                },
-                {
-                    sortNo: 5,
-                    name: "pmsEntityTypeUuid",
-                    text: "pmsEntityTypeUuid",
-                    width: 120,
-                    editable: true,
-                    dataType: "code",
-                    required: false,
-                    visible: false
-                },
-                {
-                    sortNo: 6,
-                    name: "permissionName",
-                    text: "Permission",
-                    width: 150,
-                    editable: false,
-                    dataType: "text",
-                    required: true,
-                    visible: true
-                },
-                {
-                    sortNo: 7,
-                    name: "programName",
-                    text: "Program",
-                    width: 150,
-                    editable: false,
-                    dataType: "text",
-                    required: true,
-                    visible: true
-                },
-                {
-                    sortNo: 8,
-                    name: "entityTypeName",
-                    text: "Entity Type",
-                    width: 150,
-                    editable: false,
-                    dataType: "text",
-                    required: true,
-                    visible: true
-                },
-                {
-                    sortNo: 9,
-                    name: "pmsFunctionUuid",
-                    text: "Function",
+                    name: "serviceUuid",
+                    text: "Service",
                     width: 100,
                     editable: true,
                     dataType: "combo",
                     required: true,
                     visible: true,
-                    values: axboot.commonCodeFilter("CD108").codeArr,
-                    labels: axboot.commonCodeFilter("CD108").nameArr,
+                    values: axboot.commonCodeFilter("CD006").codeArr,
+                    labels: axboot.commonCodeFilter("CD006").nameArr,
                     lookupDisplay: true,
                     editor: {
                         type: "dropDown",
@@ -106,7 +45,7 @@ var ac00502 =
                     }
                 },
                 {
-                    sortNo: 10,
+                    sortNo: 4,
                     name: "description",
                     text: "Description",
                     width: 250,
@@ -115,7 +54,7 @@ var ac00502 =
                     required: false,
                 },
                 {
-                    sortNo: 11,
+                    sortNo: 5,
                     name: "notes",
                     text: "Notes",
                     width: 250,
@@ -124,7 +63,7 @@ var ac00502 =
                     required: false
                 },
                 {
-                    sortNo: 12,
+                    sortNo: 6,
                     name: "useYn",
                     text: "Use",
                     width: 50,
@@ -134,7 +73,7 @@ var ac00502 =
                     required: true
                 },
                 {
-                    sortNo: 13,
+                    sortNo: 7,
                     name: "insertUuid",
                     text: "Created By",
                     width: 80,
@@ -144,7 +83,7 @@ var ac00502 =
                     required: false
                 },
                 {
-                    sortNo: 14,
+                    sortNo: 8,
                     name: "insertDate",
                     text: "Date/Time Created",
                     width: 140,
@@ -154,7 +93,7 @@ var ac00502 =
                     required: false
                 },
                 {
-                    sortNo: 15,
+                    sortNo: 9,
                     name: "updateUuid",
                     text: "Modifed By",
                     width: 80,
@@ -164,7 +103,7 @@ var ac00502 =
                     required: false
                 },
                 {
-                    sortNo: 16,
+                    sortNo: 10,
                     name: "updateDate",
                     text: "Date/Time Modified",
                     width: 140,
