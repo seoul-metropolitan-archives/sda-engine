@@ -2433,8 +2433,8 @@ axboot.baseView =
                 _this.cancel();
             });
             $(document).delegate(".ax-body", "keydown", function (e) {
-                if(e.keyCode == 13)
-                    return ;
+                if (e.keyCode == 13)
+                    return;
                 if (e.ctrlKey && e.altKey && e.keyCode == 73) {
                     _this.inquiry();
                 } else if (e.ctrlKey && e.altKey && e.keyCode == 83) {
@@ -2531,7 +2531,7 @@ axboot.gridView = {
         }
         return list;
     },
-    initChangedData: function(){
+    initChangedData: function () {
         this.gridObj.commit();
     },
     isChangeData: function () {
@@ -2844,9 +2844,17 @@ axboot.getCommonMessage = function (messageCode) {
         return item.messageCode === messageCode;
     });
 
-    if(commonMessage.length > 0){
+    if (commonMessage.length > 0) {
         return commonMessage[0].messageName;
-    }else{
+    } else {
         return "지정된 공통 메세지가 없습니다.";
+    }
+}
+
+axboot.isUndefined = function (value) {
+    if (typeof value === "undefined") {
+        return true;
+    } else {
+        return false;
     }
 }

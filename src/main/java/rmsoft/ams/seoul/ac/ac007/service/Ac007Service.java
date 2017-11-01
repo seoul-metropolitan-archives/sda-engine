@@ -12,6 +12,7 @@ import io.onsemiro.utils.ModelMapperUtils;
 import io.onsemiro.utils.UUIDUtils;
 import lombok.extern.slf4j.Slf4j;
 import ma.glasnost.orika.BoundMapperFacade;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -94,7 +95,9 @@ public class Ac007Service extends BaseService {
         AcRoleMenu orgAcRoleMenu = null;
 
         for (AcRoleMenu acRoleMenu : acRoleMenuList) {
-            orgAcRoleMenu = acRoleMenuRepository.findOne(acRoleMenu.getId());
+            if (StringUtils.isNotEmpty(acRoleMenu.getRoleMenuUuid())) {
+                orgAcRoleMenu = acRoleMenuRepository.findOne(acRoleMenu.getId());
+            }
 
             if (orgAcRoleMenu == null) {
                 // created

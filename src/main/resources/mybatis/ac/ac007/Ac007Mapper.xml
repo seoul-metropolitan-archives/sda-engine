@@ -38,6 +38,8 @@
     <select id="findRoleMenu" resultType="Ac00702VO" parameterType="String"
             statementType="PREPARED">
         SELECT
+            Z1.ROLE_MENU_UUID as roleMenuUuid,
+            #{roleUuid} as roleUuid,
             Z2.MENU_UUID as menuUuid,
             Z2.PARENT_MENU_CODE as parentMenuCode,
             REPLACE(Z2.MENU_CODE, '-','.') as menuCode,

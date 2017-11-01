@@ -5,20 +5,17 @@
 var fnObj = {};
 
 var ACTIONS = axboot.actionExtend(fnObj, {
-    // ROLE 정보
+    // JOB 조회
     PAGE_SEARCH: function (caller, act, data) {
         axboot.ajax({
             type: "GET",
-            url: "/api/v1/ac007/01/list",
+            url: "/api/v1/wf001/01/list",
             data: $.extend({}, {pageSize: 1000}, this.formView.getData()),
             callback: function (res) {
                 fnObj.gridView01.setData(res.list);
 
                 if (res.list.length > 0) {
-                    fnObj.formView.setFormData("roleNameHeader", res.list[0].roleName);
-
                     ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, res.list[0]);
-                    ACTIONS.dispatch(ACTIONS.PAGE_SEARCH2, res.list[0]);
                 }
 
             },
@@ -28,11 +25,11 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         });
         return false;
     },
-    // 롤 메뉴 조회
+    // Parameter 조회
     PAGE_SEARCH1: function (caller, act, data) {
         axboot.ajax({
             type: "GET",
-            url: "/api/v1/ac007/02/list",
+            url: "/api/v1/wf001/02/list",
             data: $.extend({}, {pageSize: 1000}, data),
             callback: function (res) {
                 fnObj.gridView02.setData(res.list);
@@ -43,37 +40,22 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         });
         return false;
     },
-    // 롤 퍼미션 조회
-    PAGE_SEARCH2: function (caller, act, data) {
-        axboot.ajax({
-            type: "GET",
-            url: "/api/v1/ac007/03/list",
-            data: $.extend({}, {pageSize: 1000}, data),
-            callback: function (res) {
-                fnObj.gridView03.setData(res.list);
-            },
-            options: {
-                onError: axboot.viewError
-            }
-        });
-        return false;
-    },
     PAGE_SAVE: function (caller, act, data) {
-        var roleMenuList = [].concat(fnObj.gridView02.getData());
-        var permissionList = [].concat(fnObj.gridView03.getData());
+        var jobList = [].concat(fnObj.gridView01.getData());
+        var parameterList = [].concat(fnObj.gridView02.getData());
 
         axboot
             .call({
                 type: "PUT",
-                url: "/api/v1/ac007/02/save",
-                data: JSON.stringify(roleMenuList),
+                url: "/api/v1/wf001/01/save",
+                data: JSON.stringify(jobList),
                 callback: function (res) {
                 }
             })
             .call({
                 type: "PUT",
-                url: "/api/v1/ac007/03/save",
-                data: JSON.stringify(permissionList),
+                url: "/api/v1/wf001/02/save",
+                data: JSON.stringify(parameterList),
                 callback: function (res) {
                 }
             })
@@ -113,20 +95,6 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             }
         });
     },
-    PASSWORD_CHANGE_POPUP: function (caller, act, data) {
-        var promptDialog = new ax5.ui.dialog();
-
-        promptDialog.prompt({
-            title: "Password Change",
-            msg: 'Please fill new password'
-        }, function (data) {
-            console.log(this);
-            if (this.key == "ok") {
-                this.value;
-            }
-        });
-
-    },
     CLOSE_TAB: function (caller, act, data) {
         ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
     },
@@ -147,7 +115,7 @@ fnObj.pageStart = function () {
 
     //TODO 추후에 삭제될 내용으로 /실제 Grid의 컬럼 정보는 DB에서 가져올 예정
     $.ajax({
-        url: "/assets/js/column_info/ac00701.js",
+        url: "/assets/js/column_info/wf00101.js",
         dataType: "script",
         async: false,
         success: function () {
@@ -155,15 +123,7 @@ fnObj.pageStart = function () {
     });
 
     $.ajax({
-        url: "/assets/js/column_info/ac00702.js",
-        dataType: "script",
-        async: false,
-        success: function () {
-        }
-    });
-
-    $.ajax({
-        url: "/assets/js/column_info/ac00703.js",
+        url: "/assets/js/column_info/wf00102.js",
         dataType: "script",
         async: false,
         success: function () {
@@ -173,7 +133,6 @@ fnObj.pageStart = function () {
     _this.formView.initView();
     _this.gridView01.initView();
     _this.gridView02.initView();
-    _this.gridView03.initView();
 
     // Data 조회
     ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
@@ -226,7 +185,7 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
 });
 
 
-// AC007 User Group User GridView
+// AC005 User Group User GridView
 fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     page: {
         pageNumber: 0,
@@ -235,7 +194,10 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     initView: function () {
         this.gridObj = new GridWrapper("realgrid01", "/assets/js/libs/realgrid");
         this.gridObj.setGridStyle("100%", "100%");
-        this.gridObj.setColumnInfo(ac00701.column_info).setEntityName("CONFIGURATION");
+        this.gridObj.setFixedOptions({
+            colCount: 1
+        });
+        this.gridObj.setColumnInfo(wf00101.column_info).setEntityName("CONFIGURATION");
         this.gridObj.makeGrid();
         this.gridObj.itemClick(this.itemClick);
     },
@@ -250,107 +212,35 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
         this.gridObj.addRow();
     },
     itemClick: function (data, index) {
-        /* if (index.fieldIndex == 3) {
-             // 비밀번호 Cell 선택시
-             ACTIONS.dispatch(ACTIONS.PASSWORD_CHANGE_POPUP, data);
-         }*/
-
-        if (data.roleUuid != null && data.roleUuid != "") {
-            if (fnObj.gridView02.isChangeData() == true || fnObj.gridView03.isChangeData() == true) {
+        if (data.jobUuid != null && data.jobUuid != "") {
+            if (fnObj.gridView02.isChangeData() == true) {
                 axDialog.confirm({
                     msg: axboot.getCommonMessage("AA006")
                 }, function () {
                     if (this.key == "ok") {
                         ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
                     } else {
-                        fnObj.formView.setFormData("roleNameHeader", data.roleName);
-
                         ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, data);
-                        ACTIONS.dispatch(ACTIONS.PAGE_SEARCH2, data);
                     }
                 });
             } else {
-                fnObj.formView.setFormData("roleNameHeader", data.roleName);
-
                 ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, data);
-                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH2, data);
             }
         }
     }
 });
-
 fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
     page: {
         pageNumber: 0,
         pageSize: 20
     },
     initView: function () {
-        this.gridObj = new GridWrapper("realgrid02", "/assets/js/libs/realgrid", true);
-        this.gridObj.setIsTree(true).setGridStyle("100%", "100%").setOption({
-            footer: {visible: false},
-            header: {visible: true},
-            checkBar: {visible: false},
-            indicator: {visible: false},
-            stateBar: {visible: false}
-        });
-
-        this.gridObj.setColumnInfo(ac00702.column_info).setEntityName("Menu").makeGrid();
-        this.gridObj.onDataCellClicked(function (grid, index) {
-            grid.commit(true);
-
-            if (index.fieldName == "allYn") {
-                var menuInfo = grid.getDataProvider().getJsonRow(index.dataRow);
-                // Y 에서 N 으로 바꾸면 다른 값도 모두 N으로 세팅
-                if (menuInfo.allYn == "Y") {
-                    menuInfo["useYn"] = "N";
-                    menuInfo["saveYn"] = "N";
-                    menuInfo["inquiryYn"] = "N";
-                } else {
-                    menuInfo["useYn"] = "Y";
-                    menuInfo["saveYn"] = "Y";
-                    menuInfo["inquiryYn"] = "Y";
-                }
-                grid.getDataProvider().updateRow(index.dataRow, menuInfo);
-                grid.commit(true);
-            }
-            //var menu = _this.menus[grid.getDataProvider().getJsonRow(index.dataRow)["menuUuid"]];
-            //if (menu["program"]) {
-            /* ACTIONS.dispatch(ACTIONS.MENU_OPEN, $.extend({}, menu["program"], {
-                 menuId: menu["menuId"],
-                 menuNm: menu["menuNm"]
-             }));*/
-            //}
-        });
-
-        //this.gridObj.itemClick(this.itemClick);
-    },
-    setData: function (list) {
-        //this.gridObj.gridView.getDataProvider().setRows(list, "menuCode");
-        this.gridObj.setTreeDataForArray(list, "menuCode");
-        this.gridObj.expandAll();
-    },
-    getData: function () {
-        return this.gridObj.getData();
-    },
-    isChangeData: function () {
-        return false;
-    }
-});
-
-
-// AC007 GridView
-fnObj.gridView03 = axboot.viewExtend(axboot.gridView, {
-    page: {
-        pageNumber: 0,
-        pageSize: 20
-    },
-    initView: function () {
-        this.gridObj = new GridWrapper("realgrid03", "/assets/js/libs/realgrid");
+        this.gridObj = new GridWrapper("realgrid02", "/assets/js/libs/realgrid");
         this.gridObj.setGridStyle("100%", "100%");
         this.gridObj.setFixedOptions({
             colCount: 1
         });
-        this.gridObj.setColumnInfo(ac00703.column_info).setEntityName("CONFIGURATION");
+        this.gridObj.setColumnInfo(wf00102.column_info).setEntityName("CONFIGURATION");
         this.gridObj.makeGrid();
         this.gridObj.itemClick(this.itemClick);
     },
@@ -375,7 +265,7 @@ fnObj.gridView03 = axboot.viewExtend(axboot.gridView, {
  * @returns {boolean}
  */
 isDataChanged = function () {
-    if (fnObj.gridView01.isChangeData() == true || fnObj.gridView02.isChangeData() == true || fnObj.gridView03.isChangeData() == true) {
+    if (fnObj.gridView01.isChangeData() == true || fnObj.gridView02.isChangeData() == true) {
         return true;
     } else {
         return false;

@@ -17,6 +17,26 @@ var ac00702 =
                     visible: false
                 },
                 {
+                    sortNo: 1,
+                    name: "roleMenuUuid",
+                    text: "roleMenuUuid",
+                    width: 120,
+                    editable: true,
+                    dataType: "code",
+                    required: false,
+                    visible: false
+                },
+                {
+                    sortNo: 1,
+                    name: "roleUuid",
+                    text: "roleUuid",
+                    width: 120,
+                    editable: true,
+                    dataType: "code",
+                    required: false,
+                    visible: false
+                },
+                {
                     sortNo: 2,
                     name: "programUuid",
                     text: "programUuid",

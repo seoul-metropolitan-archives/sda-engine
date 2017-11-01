@@ -16,6 +16,10 @@ import java.util.List;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 public class Ac00702VO extends BaseVO {
+    private String roleMenuUuid;
+
+    private String roleUuid;
+
     private String menuUuid;
 
     private String parentMenuCode;

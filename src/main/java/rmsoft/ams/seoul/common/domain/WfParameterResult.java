@@ -1,0 +1,83 @@
+/*
+ * Copyright (c) 2017. RMSoft Co.,Ltd. All rights reserved
+ */
+
+package rmsoft.ams.seoul.common.domain;
+
+import io.onsemiro.core.annotations.Comment;
+import io.onsemiro.core.domain.SimpleJpaModel;
+import lombok.*;
+import org.apache.ibatis.type.Alias;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
+
+import javax.persistence.*;
+import java.io.Serializable;
+
+@Setter
+@Getter
+@DynamicInsert
+@DynamicUpdate
+@Entity
+@EqualsAndHashCode(callSuper = true)
+@Table(name = "WF_PARAMETER_RESULT")
+@IdClass(WfParameterResult.WfParameterResultId.class)
+@Alias("WfParameterResult")
+public class WfParameterResult extends SimpleJpaModel<WfParameterResult.WfParameterResultId> {
+
+    @Id
+    @Column(name = "PARAMETER_RESULT_UUID", length = 36, nullable = false)
+    @Comment(value = "Parameter Result UUID")
+    private String parameterResultUuid;
+
+    @Column(name = "JOB_RESULT_UUID", length = 36, nullable = false)
+    @Comment(value = "Job Result UUID")
+    private String jobResultUuid;
+
+    @Column(name = "PARAMETER_UUID", length = 36, nullable = false)
+    @Comment(value = "Parameter UUID")
+    private String parameterUuid;
+
+    @Column(name = "PARAMETER_NAME", length = 50, nullable = false)
+    @Comment(value = "Parameter Name")
+    private String parameterName;
+
+    @Column(name = "BATCH_ID", nullable = false)
+    @Comment(value = "Batch ID")
+    private long batchId;
+
+    @Column(name = "DATA_TYPE_UUID", length = 36, nullable = false)
+    @Comment(value = "Data Type UUID")
+    private String dataTypeUuid;
+
+    @Column(name = "IN_OUT_UUID", length = 36, nullable = false)
+    @Comment(value = "In Out UUID")
+    private String inOutUuid;
+
+    @Column(name = "VALUE", length = 100)
+    @Comment(value = "Value")
+    private String value;
+
+    @Column(name = "DISPLAY_YN", length = 1, nullable = false)
+    @Comment(value = "Display")
+    private String displayYn;
+
+    @Column(name = "REQUIRED_YN", length = 1, nullable = false)
+    @Comment(value = "Required")
+    private String requiredYn;
+
+    @Override
+    public WfParameterResultId getId() {
+        return WfParameterResultId.of(parameterResultUuid);
+    }
+
+    @Embeddable
+    @Data
+    @NoArgsConstructor
+    @RequiredArgsConstructor(staticName = "of")
+    public static class WfParameterResultId implements Serializable {
+
+        @NonNull
+        private String parameterResultUuid;
+    }
+}
