@@ -1,8 +1,4 @@
 <!DOCTYPE HTML>
-<!--
-  ~ Copyright (c) 2017. RMSoft Co.,Ltd. All rights reserved
-  -->
-
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{/layout/modal}">
@@ -11,40 +7,32 @@
 <script layout:fragment="script" type="text/javascript" th:src="@{/assets/js/common/common-popup.js}"></script>
 <!-- ===== [ script ] _END_ ===== -->
 
-<!-- ===== [ base-title ] ===== -->
-<div layout:fragment="base-title" class="ax-base-title" role="page-title">
-    <h1 class="title"><i class="cqc-browser"></i> Sample Popup</h1>
-    <p class="desc" th:text="${pageRemark}"/>
-</div>
-<!-- ===== [ base-title ] _END_ ===== -->
-
 <!-- ===== [ base-content ] ===== -->
 <div layout:fragment="base-content" class="ax-base-content">
-    <!--<th:block layout:insert="~{/fragments/page-buttons :: modal-buttons}"/>
-    <th:block layout:insert="~{/fragments/page-header  :: search-t(id='searchView0', label='코드 검색')}"/>-->
     <th:block layout:insert="~{/fragments/page-content :: content}" th:with="orientation='vertical',
         attr='{width: \'*\'}', style='padding-right: 0px;'">
-        <!-- ===== [ page-content ] ===== -->
-        <div layout:fragment="content-detail" id="Popup3" class="allpop" style="width:100%;height:100%;padding:0; overflow:hidden;display:block;top: 0%;">
-            <div style="width:100%; height:10%; padding-top:1%">
-                <input type="text" class="input_sz">
-                <button class="btn_4txt" style="margin:0">Inquiry</button>
-            </div>
-            <div style="height:79%; width:100%;top:11%; border:1px solid #ddd; margin-bottom:1%">
-                <div style="width: 100%; height: 100%;">
-                    <div id="popupGrid01">
-
+    <!--<th:block layout:insert="~{/fragments/page-content :: content}" th:with="orientation='vertical',
+        attr1='{width: \'*\'}', style1='padding-right: 10px',
+        attr2='{width: \'*\'}',   style2='padding: 0px 10px'">-->
+        <form name="formView01" id="formView01" method="post" onsubmit="return false">
+            <div layout:fragment="content-detail" class="allpop"
+                 style="width:100%;height:100%;padding:0; overflow:hidden;display:block;top: 0%;">
+                <div style="width:100%; height:10%; padding-top:1%">
+                    <input type="text" class="input_sz" data-ax-path="searchField" id="searchField">
+                    <button class="btn_4txt" styble="margin:0" id="inquiry">Inquiry</button>
+                </div>
+                <div style="height:79%; width:100%;top:11%; border:1px solid #ddd; margin-bottom:1%">
+                    <div id="popupGrid01" data-fit-height-content="grid-view-01" style="height: 300px;"></div>
+                </div>
+                <div class="foot" style="height:10%; width:100%; top:90%">
+                    <div class="footradius">
+                        <button class="btn_3txt" id="okPopup">Ok</button>
+                        <button class="btn_3txt" id="closePopup">Cancel</button>
                     </div>
                 </div>
             </div>
-            <div class="foot" style="height:10%; width:100%; top:90%">
-                <div class="footradius">
-                    <button class="btn_3txt">Ok</button>
-                    <button class="btn_3txt">Cancel</button>
-                </div>
-            </div>
-        </div>
-        <!-- ===== [ page-content ] _END_ ===== -->
+        </form>
+
     </th:block>
 </div>
 <!-- ===== [ base-content ] _END_ ===== -->

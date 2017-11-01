@@ -32,7 +32,9 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 ACTIONS.dispatch(ACTIONS.POPUP_HEADER_PAGE_SAVE)
                 && ACTIONS.dispatch(ACTIONS.POPUP_DETAIL_PAGE_SAVE)
             )
+            {
                 axToast.push(axboot.getCommonMessage("AA007"));
+            }
     },
     POPUP_HEADER_PAGE_SAVE: function (caller, act, data) {
         var _this = this;
@@ -74,15 +76,11 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             callback : function(res)
             {
                 result = res;
-                if(result)
-                {
-                    try
-                    {
-                        fnObj.gridView_d.gridObj.commit();
-                    }catch(e)
-                    {
-                        console.log("커밋 에러남");
-                    }
+                try {
+                    result = true;
+                    fnObj.gridView_d.gridObj.commit();
+                } catch (e) {
+                    console.log("커밋 에러남");
                 }
             }
         });
@@ -121,24 +119,6 @@ var ACTIONS = axboot.actionExtend(fnObj, {
 fnObj = {
     pageStart : function () {
         var _this = this;
-        $.ajax({
-            url: "/assets/js/controller/simple_controller.js",
-            dataType: "script",
-            async : false,
-            success: function(){}
-        });
-        $.ajax({
-            url: "/assets/js/ad/ad000/ad000_controller.js",
-            dataType: "script",
-            async : false,
-            success: function(){}
-        });
-        $.ajax({
-            url: "/assets/js/ad/ad004/ad004_controller.js",
-            dataType: "script",
-            async : false,
-            success: function(){}
-        });
         $.ajax({
             url: "/assets/js/column_info/ad00401.js",
             dataType: "script",
@@ -186,64 +166,20 @@ fnObj.formView = axboot.viewExtend(axboot.formView,{
         $("#check").click(function() {
             axboot.modal.open({
                 modalType: "COMMON_POPUP",
-                param: "popupCode='PU001'",
                 sendData: function () {
                     return {
+                        popupCode : "PU001",
+                        searchData : "사용자01"
                     };
                 },
                 callback: function (data) {
                     //$("#calleeEmpName").val(data.empName);
                     //$("#calleeEmpTelno").val(data.empPhoneNo);
-
-                    this.close();
+                    console.log(data);
+                    if(this.close)
+                        this.close();
                 }
             });
-            /*
-            var modal = new ax5.ui.modal();
-            modal.css('<link rel="stylesheet"    type="text/css"     th:href="@{${@environment.getProperty(\'config.extendedCss\')}}"/>');
-            modal.open({
-                width:800,
-                height: 600,
-                closeToEsc: true,
-                iframeLoadingMsg: '<i class="fa fa-spinner fa-5x fa-spin" aria-hidden="true"></i>',
-                iframe: {
-                    method: "get",
-                    url: "/ad/ad004/ad00401",
-                    param: "callback=modalCallback&popupCode=AU001&data='test'"
-                },
-                header: {
-                    title: "MODAL TITLE",
-                    btns: {
-                        minimize: {
-                            label: '<i class="fa fa-minus-circle" aria-hidden="false"></i>', onClick: function () {
-                                modal.minimize();
-                            }
-                        },
-                        maximize: {
-                            label: '<i class="fa fa-plus-circle" aria-hidden="true"></i>', onClick: function () {
-                                modal.maximize();
-                            }
-                        },
-                        close: {
-                            label: '<i class="fa fa-times-circle" aria-hidden="true"></i>', onClick: function () {
-                                modal.close();
-                            }
-                        }
-                    }
-                }
-            }, function () {
-                console.log(this);
-                //this.$["body"].append($("#Popup3").html());
-                this.$["body"].find(".btn_popup_ok").click(function(){
-                });
-                this.$["body"].find(".btn_popup_close").click(function(){
-                    modal.close();
-                });
-            });
-            */
-            //$("#Popup3").dialog("open");
-            //$(".allpop").css("display", "block");
-
             event.preventDefault();
 
         });
@@ -417,7 +353,7 @@ fnObj.gridView_h = axboot.viewExtend(axboot.realGridView, {
     },
     setPopupSQL : function(sql)
     {
-        this.gridObj.setValues(this.gridObj.getCurrent().dataRow,this.gridObj.getFieldIndex("popupSQL"), sql);
+        this.gridObj.setValue(this.gridObj.getCurrent().dataRow,this.gridObj.getFieldIndex("popupSQL"), sql);
     },
     getSQL : function()
     {

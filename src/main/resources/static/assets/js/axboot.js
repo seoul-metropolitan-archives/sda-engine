@@ -1787,6 +1787,32 @@ axboot.modal = function () {
      */
     var open = function open(modalConfig) {
 
+        if("COMMON_POPUP" == modalConfig.modalType)
+        {
+            if(modalConfig.sendData)
+            {
+                var list = null;
+                var reqData = modalConfig.sendData();
+                axboot.ajax({
+                    url: "/api/v1/common/popup/search",
+                    dataType : "JSON",
+                    type : "POST",
+                    async : false,
+                    data: JSON.stringify({popupCode : reqData["popupCode"],searchField : reqData["searchData"],isTree : false}),
+                    callback: function (res) {
+                        list = res.list;
+                    }
+                });
+            }
+
+            if(list.length == 1)
+            {
+                modalConfig.callback(list[0]);
+                return;
+            }
+
+        }
+
         modalConfig = $.extend(true, {}, defaultOption, modalConfig);
         if (modalConfig.modalType) {
 
