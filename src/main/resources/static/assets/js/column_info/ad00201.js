@@ -16,7 +16,7 @@ var ad00201 =
                 sortNo: 2,
                 name: "messageCode",
                 text: "Message Code",
-                width: 120,
+                width: 150,
                 editable: true,
                 dataType: "text",
                 required: true
@@ -25,7 +25,7 @@ var ad00201 =
                 sortNo: 3,
                 name: "messageName",
                 text: "Message Name",
-                width: 120,
+                width: 200,
                 editable: true,
                 dataType: "text",
                 required: true
@@ -34,7 +34,7 @@ var ad00201 =
                 sortNo: 4,
                 name: "serviceUuid",
                 text: "Service",
-                width: 120,
+                width: 130,
                 editable: true,
                 dataType: "combo",
                 required: false,
@@ -53,7 +53,7 @@ var ad00201 =
                 sortNo: 5,
                 name: "dbErrorCode",
                 text: "DB Error Code",
-                width: 120,
+                width: 150,
                 editable: true,
                 dataType: "text",
                 required: false,
@@ -62,8 +62,8 @@ var ad00201 =
             {
                 sortNo: 6,
                 name: "description",
-                text: "DESCRIPTION",
-                width: 120,
+                text: "Description",
+                width: 200,
                 editable: true,
                 dataType: "richtext",
                 required: false,
@@ -71,8 +71,8 @@ var ad00201 =
             {
                 sortNo: 7,
                 name: "notes",
-                text: "NOTES",
-                width: 120,
+                text: "Notes",
+                width: 200,
                 editable: true,
                 dataType: "richtext",
                 required: false
@@ -81,7 +81,7 @@ var ad00201 =
                 sortNo: 8,
                 name: "useYN",
                 text: "USE",
-                width: 120,
+                width: 50,
                 editable: true,
                 dataType: "check",
                 textAlignment: "center",
@@ -92,18 +92,21 @@ var ad00201 =
                 sortNo: 9,
                 name: "insertUuid",
                 text: "Created By",
-                width: 120,
+                width: 80,
                 editable: false,
                 dataType: "text",
                 visible: true,
                 disable : true,
-                required: false
+                required: false,
+                renderer : {
+                    showTooltip : true
+                }
             },
             {
                 sortNo: 11,
                 name: "insertDate",
                 text: "Date/Time Created",
-                width: 120,
+                width: 140,
                 editable: false,
                 disable : true,
                 dataType: "timestamp",
@@ -113,18 +116,21 @@ var ad00201 =
                 sortNo: 12,
                 name: "updateUuid",
                 text: "Modifed By",
-                width: 120,
+                width: 80,
                 editable: false,
                 visible: true,
                 disable : true,
                 dataType: "text",
-                required: false
+                required: false,
+                renderer : {
+                    showTooltip : true
+                }
             },
             {
                 sortNo: 13,
                 name: "updateDate",
                 text: "Date/Time Modified",
-                width: 120,
+                width: 140,
                 editable: false,
                 disable : true,
                 dataType: "timestamp",

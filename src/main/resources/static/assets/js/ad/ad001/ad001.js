@@ -56,7 +56,7 @@ var fnObj = {
     pageStart : function () {
         var _this = this;
         $.ajax({
-            url: "/assets/js/column_info/ad001.js",
+            url: "/assets/js/column_info/ad00101.js",
             dataType: "script",
             async : false,
             success: function(){}

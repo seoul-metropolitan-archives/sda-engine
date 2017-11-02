@@ -2516,6 +2516,7 @@ axboot.gridView = {
         pageNumber: 0,
         pageSize: 99999
     },
+    tagId : "",
     uuidFieldName : "",
     parentsUuidFieldName : "",
     parentsGrid : undefined,
@@ -2541,16 +2542,39 @@ axboot.gridView = {
     getData: function getData() {
         return this.gridObj.getData();
     },
-    addRow: function() {
+    initInstance : function()
+    {
+        this.gridObj = new GridWrapper(this.tagId, "/assets/js/libs/realgrid");
+        this.gridObj.setGridStyle("100%", "100%");
+        this.gridObj.setMakeObj(this);
+    },
+    makeGrid : function(){
+        this.gridObj.makeGrid();
+        this.bindEvent();
+    },
+    bindEvent : function(){
+        if(this.parentsGrid)
+            this.gridObj.addRowBeforeEvent(this.addRowBeforeEventForChildGrid);
+        else
+            this.gridObj.addRowBeforeEvent(this.addRowBeforeEvent);
+        this.gridObj.onRowsPasted(this.onRowsPasted);
+    },
+    addRowBeforeEventForChildGrid: function(wrapperObj,_this) {
 
-        if(parentsGrid)
+        if(_this.parentsGrid)
         {
-            var data = this.gridObj.getDefaultData();
-            data[this.gridObj.getFieldIndex(this.parentsUuidFieldName)] = parentsGrid.getUUID();
-            this.gridObj.setDefaultData(data);
+            var data = wrapperObj.getDefaultData();
+            data[wrapperObj.getFieldIndex(_this.parentsUuidFieldName)] = _this.parentsGrid.getUUID();
+            wrapperObj.setDefaultData(data);
         }
-
-        return this.gridObj.addRow();
+    },
+    getCurrentData : function()
+    {
+        return this.gridObj.getSelectedData();
+    },
+    setFocus : function()
+    {
+        this.gridObj.setFocus();
     },
     delRow: function (_type) {
         return this.gridObj.removeRow();
@@ -2577,11 +2601,10 @@ axboot.gridView = {
 
         }
     },
-    addRowBeforeEvent : function()
+    addRowBeforeEvent : function(wrapperObj)
     {
-        var _this = this;
         var uuid = undefined;
-        var data = _this.gridObj.getDefaultData();
+        var data = wrapperObj.getDefaultData();
         axboot.ajax({
             url : "/api/v1/common/getUUID",
             type : "POST",
@@ -2593,8 +2616,7 @@ axboot.gridView = {
         });
 
         data[0] = uuid;
-        this.gridObj.setDefaultData(data);
-        this.gridView02.clear();
+        wrapperObj.setDefaultData(data);
     },
 };
 
@@ -2654,7 +2676,12 @@ axboot.realGridView = {
             ACTIONS.dispatch(_this.itemClick, data);
         });
     },
+    getCurrentData : function()
+    {
+        return this.gridObj.getSelectedData();
+    },
     makeGrid: function () {
+
         this.gridObj.makeGrid();
         this.bindEvent();
     },

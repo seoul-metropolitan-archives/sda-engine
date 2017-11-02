@@ -15,15 +15,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             data : JSON.stringify(data),
             async : false,
             callback: function (res) {
-                console.log(res);
-                if (undefined === res.list || res.list.length < 1)
-                {
-                    fnObj.gridView01.setData([]);
-                    fnObj.gridView01.addRow();
-                }
-                else {
-                    fnObj.gridView01.setData(res.list);
-                }
+                fnObj.gridView01.setData(res.list);
             }
         });
     },
@@ -142,6 +134,8 @@ fnObj = {
 
         ACTIONS.dispatch(ACTIONS.PAGE_SEARCH,this.formView.getData());
 
+        ACTIONS.dispatch(ACTIONS.GET_CODE_DETAIL,this.gridView01.getCurrentData());
+
     }
 };
 /*검색 창*/
@@ -217,7 +211,9 @@ fnObj.gridView01 = axboot.viewExtend(axboot.realGridView, {
         this.makeGrid();
         this.gridObj.addRowBeforeEvent(this.addRowBeforeEvent);
         this.gridObj.addRowAfterEvent(this.addRowAfterEvent);
-
+        this.gridObj.setFixedOptions({
+            colCount : 2
+        })
         this.gridObj.itemClick(function(data){
             if(fnObj.gridView02.getData().length < 1)
             {
@@ -272,6 +268,9 @@ fnObj.gridView02 = axboot.viewExtend(axboot.realGridView, {
         this.makeGrid();
         this.gridObj.addRowBeforeEvent(this.addRowBeforeEvent);
         this.gridObj.onRowsPasted(this.onRowsPasted);
+        this.gridObj.setFixedOptions({
+            colCount : 2
+        })
     },
     clear : function () {
         this.setData([]);

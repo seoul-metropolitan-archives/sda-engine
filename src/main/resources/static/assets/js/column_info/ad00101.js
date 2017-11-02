@@ -16,7 +16,7 @@ var ad00101 =
                 sortNo: 2,
                 name: "configurationCode",
                 text: "Environment Code",
-                width: 120,
+                width: 150,
                 editable: true,
                 dataType: "text",
                 required: true
@@ -25,7 +25,7 @@ var ad00101 =
                 sortNo: 3,
                 name: "configurationValue",
                 text: "Environment Value",
-                width: 120,
+                width: 150,
                 editable: true,
                 dataType: "text",
                 required: true
@@ -34,7 +34,7 @@ var ad00101 =
                 sortNo: 4,
                 name: "serviceUuid",
                 text: "Service",
-                width: 120,
+                width: 130,
                 editable: true,
                 dataType: "combo",
                 required: false,
@@ -69,10 +69,19 @@ var ad00101 =
                 }
             },*/
             {
+                sortNo: 6,
+                name: "description",
+                text: "Description",
+                width: 250,
+                editable: true,
+                dataType: "richtext",
+                required: false,
+            },
+            {
                 sortNo: 7,
                 name: "notes",
-                text: "NOTES",
-                width: 120,
+                text: "Notes",
+                width: 250,
                 editable: true,
                 dataType: "richtext",
                 required: false
@@ -81,47 +90,32 @@ var ad00101 =
                 sortNo: 8,
                 name: "useYN",
                 text: "USE",
-                width: 120,
+                width: 50,
                 editable: true,
                 dataType: "check",
                 textAlignment: "center",
                 required: true
             },
-            {
-                sortNo: 6,
-                name: "description",
-                text: "DESCRIPTION",
-                width: 120,
-                editable: true,
-                dataType: "richtext",
-                required: false,
-            },
+
             {
                 sortNo: 9,
                 name: "insertUuid",
                 text: "Created By",
-                width: 120,
+                width: 80,
                 editable: false,
                 dataType: "text",
                 visible: false,
                 disable : true,
-                required: false
-            },
-            {
-                sortNo: 10,
-                name: "insertUserName",
-                text: "Created By",
-                width: 120,
-                editable: false,
-                dataType: "text",
-                disable : true,
-                required: false
+                required: false,
+                renderer : {
+                    showTooltip : true
+                }
             },
             {
                 sortNo: 11,
                 name: "insertDate",
                 text: "Date/Time Created",
-                width: 120,
+                width: 140,
                 editable: false,
                 disable : true,
                 dataType: "timestamp",
@@ -131,28 +125,21 @@ var ad00101 =
                 sortNo: 12,
                 name: "updateUuid",
                 text: "Modifed By",
-                width: 120,
+                width: 80,
                 editable: false,
                 visible: false,
                 disable : true,
                 dataType: "text",
-                required: false
-            },
-            {
-                sortNo: 13,
-                name: "updateUserName",
-                text: "Modifed By",
-                width: 120,
-                editable: false,
-                disable : true,
-                dataType: "text",
-                required: false
+                required: false,
+                renderer : {
+                    showTooltip : true
+                }
             },
             {
                 sortNo: 14,
                 name: "updateDate",
                 text: "Date/Time Modified",
-                width: 120,
+                width: 140,
                 editable: false,
                 disable : true,
                 dataType: "timestamp",

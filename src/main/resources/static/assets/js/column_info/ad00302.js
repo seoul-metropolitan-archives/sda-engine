@@ -24,6 +24,7 @@ var ad00302 =
                 sortNo: 2,
                 name: "code",
                 text: "Code",
+                width : 130,
                 editable: true,
                 dataType: "code",
                 required: true,
@@ -33,7 +34,7 @@ var ad00302 =
                 sortNo: 3,
                 name: "codeName",
                 text: "Code Name",
-                width: 150,
+                width: 170,
                 editable: true,
                 dataType: "text",
                 required: true
@@ -42,7 +43,7 @@ var ad00302 =
                 sortNo: 3,
                 name: "defaultYN",
                 text: "Default",
-                width: 150,
+                width: 70,
                 editable: true,
                 dataType: "check",
                 defaultValue : "Y",
@@ -50,9 +51,23 @@ var ad00302 =
             },
             {
                 sortNo: 4,
+                name: "orderNO",
+                text: "Order No",
+                width: 80,
+                editable: true,
+                dataType: "text",
+                textAlignment: "far",
+                editor: {
+                    editFormat: "#,##0.##",
+                    multipleChar: "+",
+                    textAlignment : "far"
+                }
+            },
+            {
+                sortNo: 5,
                 name: "description",
                 text: "DESCRIPTION",
-                width: 250,
+                width: 260,
                 editable: true,
                 dataType: "richtext",
                 required: false,
@@ -61,7 +76,7 @@ var ad00302 =
                 sortNo: 5,
                 name: "notes",
                 text: "NOTES",
-                width: 250,
+                width: 260,
                 editable: true,
                 dataType: "richtext",
                 required: false
@@ -79,7 +94,7 @@ var ad00302 =
                 sortNo: 11,
                 name: "attribute01",
                 text: "Value1",
-                width: 250,
+                width: 110,
                 editable: true,
                 dataType: "text",
                 required: false
@@ -88,7 +103,7 @@ var ad00302 =
                 sortNo: 12,
                 name: "attribute02",
                 text: "Value2",
-                width: 250,
+                width: 110,
                 editable: true,
                 dataType: "text",
                 required: false
@@ -97,7 +112,7 @@ var ad00302 =
                 sortNo: 13,
                 name: "attribute03",
                 text: "Value3",
-                width: 250,
+                width: 110,
                 editable: true,
                 dataType: "text",
                 required: false
@@ -106,7 +121,7 @@ var ad00302 =
                 sortNo: 14,
                 name: "attribute04",
                 text: "Value4",
-                width: 250,
+                width: 110,
                 editable: true,
                 dataType: "text",
                 required: false
@@ -115,7 +130,7 @@ var ad00302 =
                 sortNo: 15,
                 name: "attribute05",
                 text: "Value5",
-                width: 250,
+                width: 110,
                 editable: true,
                 dataType: "text",
                 required: false
@@ -124,16 +139,16 @@ var ad00302 =
                 sortNo: 16,
                 name: "attribute06",
                 text: "Value6",
-                width: 250,
+                width: 110,
                 editable: true,
                 dataType: "text",
                 required: false
             },
             {
-                sortNo: 10,
+                sortNo: 17,
                 name: "attribute07",
                 text: "Value7",
-                width: 250,
+                width: 110,
                 editable: true,
                 dataType: "text",
                 required: false
@@ -142,7 +157,7 @@ var ad00302 =
                 sortNo: 18,
                 name: "attribute08",
                 text: "Value8",
-                width: 250,
+                width: 110,
                 editable: true,
                 dataType: "text",
                 required: false
@@ -151,7 +166,7 @@ var ad00302 =
                 sortNo: 19,
                 name: "attribute09",
                 text: "Value9",
-                width: 250,
+                width: 110,
                 editable: true,
                 dataType: "text",
                 required: false
@@ -160,7 +175,7 @@ var ad00302 =
                 sortNo: 20,
                 name: "attribute10",
                 text: "Value10",
-                width: 250,
+                width: 110,
                 editable: true,
                 dataType: "text",
                 required: false
@@ -169,7 +184,7 @@ var ad00302 =
                 sortNo: 90,
                 name: "insertUuid",
                 text: "Created By",
-                width: 120,
+                width: 80,
                 dataType: "text",
                 editable : false,
                 readonly : true,
@@ -181,7 +196,7 @@ var ad00302 =
                 sortNo: 91,
                 name: "insertDate",
                 text: "Date/Time Created",
-                width: 120,
+                width: 140,
                 dataType: "timestamp",
                 required: false,
                 disable: true
@@ -190,7 +205,7 @@ var ad00302 =
                 sortNo: 92,
                 name: "updateUuid",
                 text: "Modifed By",
-                width: 120,
+                width: 80,
                 visible: true,
                 dataType: "text",
                 required: false,
@@ -200,7 +215,7 @@ var ad00302 =
                 sortNo: 93,
                 name: "updateDate",
                 text: "Date/Time Modified",
-                width: 120,
+                width: 140,
                 dataType: "timestamp",
                 required: false,
                 disable: true

@@ -4,7 +4,7 @@ var ad00401 =
         [
             {
                 sortNo: 0,
-                name: "popupHeaderUUID",
+                name: "popupHeaderUuid",
                 text: "Popup UUID",
                 editable: false,
                 dataType: "code",
@@ -16,6 +16,7 @@ var ad00401 =
                 name: "popupCode",
                 text: "Popup Code",
                 editable: true,
+                width: 150,
                 dataType: "code",
                 required: true,
                 visible: true
@@ -31,13 +32,14 @@ var ad00401 =
             },
             {
                 sortNo: 3,
-                name: "serviceUUID",
-                text: "Service UUID",
+                name: "serviceUuid",
+                text: "Service",
                 width: 130,
                 editable: true,
                 dataType: "combo",
                 required: false,
                 visible: true,
+                required: true,
                 values: axboot.commonCodeFilter("CD006").codeArr,
                 labels: axboot.commonCodeFilter("CD006").nameArr,
                 editor: {
@@ -71,7 +73,7 @@ var ad00401 =
             {
                 sortNo: 6,
                 name: "description",
-                text: "DESCRIPTION",
+                text: "Description",
                 width: 250,
                 editable: true,
                 dataType: "richtext"
@@ -79,7 +81,7 @@ var ad00401 =
             {
                 sortNo: 7,
                 name: "notes",
-                text: "NOTES",
+                text: "Notes",
                 width: 250,
                 editable: true,
                 dataType: "richtext"
@@ -93,44 +95,50 @@ var ad00401 =
                 dataType: "check",
                 textAlignment: "center",
                 defaultValue : "Y",
-                required: true
+                required: false
             },
             {
                 sortNo: 9,
-                name: "insertUUID",
+                name: "insertUuid",
                 text: "Created By",
-                width: 120,
+                width: 80,
                 dataType: "text",
                 editable : false,
                 readonly : true,
                 visible: true,
                 required: false,
-                disable: true
+                disable: true,
+                renderer : {
+                    showTooltip : true
+                }
             },
             {
                 sortNo: 11,
                 name: "insertDate",
                 text: "Date/Time Created",
-                width: 120,
+                width: 140,
                 dataType: "timestamp",
                 required: false,
                 disable: true
             },
             {
                 sortNo: 12,
-                name: "updateUUID",
+                name: "updateUuid",
                 text: "Modifed By",
-                width: 120,
+                width: 80,
                 visible: true,
                 dataType: "text",
                 required: false,
-                disable: true
+                disable: true,
+                renderer : {
+                    showTooltip : true
+                }
             },
             {
                 sortNo: 14,
                 name: "updateDate",
                 text: "Date/Time Modified",
-                width: 120,
+                width: 140,
                 dataType: "timestamp",
                 required: false,
                 disable: true

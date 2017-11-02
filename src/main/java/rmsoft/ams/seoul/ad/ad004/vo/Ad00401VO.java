@@ -23,13 +23,13 @@ public class Ad00401VO extends BaseVO
     }
 
 
-    private String popupHeaderUUID  = "";
+    private String popupHeaderUuid  = "";
 
     private String popupCode        = "";
 
     private String popupName        = "";
 
-    private String serviceUUID      = "";
+    private String serviceUuid      = "";
 
     private String multiselectYN    = "Y";
 

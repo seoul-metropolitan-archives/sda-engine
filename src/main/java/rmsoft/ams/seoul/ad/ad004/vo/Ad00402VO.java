@@ -19,9 +19,9 @@ public class Ad00402VO extends BaseVO
         this.insertDate = this.updateDate = Timestamp.valueOf(DateUtils.convertToString(LocalDateTime.now(), DateUtils.DATE_TIME_PATTERN));
     }
 
-    private String popupDetailUUID = "";
+    private String popupDetailUuid = "";
 
-    private String popupHeaderUUID = "";
+    private String popupHeaderUuid = "";
 
     private String sqlColumn = "";
 
@@ -29,13 +29,13 @@ public class Ad00402VO extends BaseVO
 
     private String width = "";
 
-    private String inputMethodUUID = "";
+    private String inputMethodUuid = "";
 
-    private String alignUUID = "";
+    private String alignUuid = "";
 
     private String treeColumnYN = "";
 
-    private String treeRelationUUID = "";
+    private String treeRelationUuid = "";
 
     private String orderNO = "";
 }

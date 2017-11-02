@@ -4,7 +4,7 @@ var ad00402 =
         [
             {
                 sortNo: 0,
-                name: "popupDetailUUID",
+                name: "popupDetailUuid",
                 text: "Popup Detail UUID",
                 editable: false,
                 dataType: "code",
@@ -13,7 +13,7 @@ var ad00402 =
             },
             {
                 sortNo: 0,
-                name: "popupHeaderUUID",
+                name: "popupHeaderUuid",
                 text: "Popup Header UUID",
                 editable: false,
                 dataType: "code",
@@ -28,7 +28,8 @@ var ad00402 =
                 width: 150,
                 dataType: "code",
                 required: true,
-                visible: true
+                visible: true,
+                renderer : {showTooltip : true}
             },
             {
                 sortNo: 2,
@@ -37,30 +38,33 @@ var ad00402 =
                 width: 150,
                 editable: true,
                 dataType: "text",
-                required: true
+                required: true,
+                renderer : {showTooltip : true}
             },
             {
                 sortNo: 3,
                 name: "width",
                 text: "Width",
-                width: 130,
+                width: 100,
                 editable: true,
                 dataType: "number",
                 required: true,
                 sortable : true,
+                textAlignment: "far",
                 editor: {
                     editFormat: "#,##0.##",
-                    multipleChar: "+"
+                    multipleChar: "+",
+                    textAlignment : "far"
                 }
             },
             {
                 sortNo: 4,
-                name: "inputMethodUUID",
+                name: "inputMethodUuid",
                 text: "Input Method",
                 width: 100,
                 editable: true,
                 dataType: "combo",
-                required: false,
+                required: true,
                 visible: true,
                 values: axboot.commonCodeFilter("CD003").codeArr,
                 labels: axboot.commonCodeFilter("CD003").nameArr,
@@ -70,9 +74,9 @@ var ad00402 =
             },
             {
                 sortNo: 5,
-                name: "alignUUID",
+                name: "alignUuid",
                 text: "Align",
-                width: 70,
+                width: 100,
                 editable: true,
                 dataType: "combo",
                 required: true,
@@ -88,7 +92,7 @@ var ad00402 =
                 sortNo: 6,
                 name: "treeColumnYN",
                 text: "Tree Column",
-                width: 250,
+                width: 90,
                 dataType : "check",
                 editable: true,
                 sortable: true,
@@ -101,7 +105,7 @@ var ad00402 =
             },
             {
                 sortNo: 7,
-                name: "treeRelationUUID",
+                name: "treeRelationUuid",
                 text: "Tree Relation",
                 width: 100,
                 editable: true,
@@ -119,6 +123,7 @@ var ad00402 =
                 editable: true,
                 sortable: true,
                 dataType: "number",
+                textAlignment: "far",
                 editor: {
                     type: "number",
                     textAlignment: "far",
@@ -128,38 +133,40 @@ var ad00402 =
             },
             {
                 sortNo: 9,
-                name: "insertUUID",
+                name: "insertUuid",
                 text: "Created By",
-                width: 120,
+                width: 80,
                 editable: false,
                 dataType: "text",
-                visible: false,
-                required: false
+                visible: true,
+                required: false,
+                renderer : {showTooltip : true}
             },
             {
                 sortNo: 11,
                 name: "insertDate",
                 text: "Date/Time Created",
-                width: 120,
+                width: 140,
                 editable: false,
                 dataType: "timestamp",
                 required: false
             },
             {
                 sortNo: 12,
-                name: "updateUUID",
+                name: "updateUuid",
                 text: "Modifed By",
-                width: 120,
+                width: 80,
                 editable: false,
-                visible: false,
+                visible: true,
                 dataType: "text",
-                required: false
+                required: false,
+                renderer : {showTooltip : true}
             },
             {
                 sortNo: 14,
                 name: "updateDate",
                 text: "Date/Time Modified",
-                width: 120,
+                width: 140,
                 editable: false,
                 dataType: "timestamp",
                 required: false

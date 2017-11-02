@@ -37,7 +37,8 @@ public class Ad004Service extends BaseService {
     public ApiResponse savePopupHeader(List<AdPopupHeader> list) {
         for (AdPopupHeader data : list) {
             if (data.isCreated()) {
-                data.setPopupHeaderUuid(UUIDUtils.getUUID());
+                if(null == data.getPopupHeaderUuid() || data.getPopupHeaderUuid().equals(""))
+                    data.setPopupHeaderUuid(UUIDUtils.getUUID());
                 popupHeaderRepository.save(data);
             } else if (data.isModified()) {
                 popupHeaderRepository.save(data);

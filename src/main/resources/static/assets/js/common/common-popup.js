@@ -17,6 +17,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             data: JSON.stringify(this.formView01.getData()),
             callback: function (res) {
                 caller.gridView01.setData(res.list);
+                caller.gridView01.gridObj.getGridView().resetSize();
             }
         });
         return false;
@@ -80,7 +81,7 @@ fnObj.formView01 = axboot.viewExtend(axboot.formView, {
                     ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
                     break;
                 case 40:
-                    if(fnObj.gridView01.gridObj.getData().length)
+                    if(fnObj.gridView01.gridObj.getRowCnt().length > 0)
                         fnObj.gridView01.gridObj.setFocus();
                     break;
             }

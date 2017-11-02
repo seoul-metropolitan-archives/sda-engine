@@ -34,6 +34,8 @@ Number.prototype.zf = function(len){return this.toString().zf(len);};
 
 
 var GridWrapper = function(p_id,p_rootContext,_isTree) {
+	var makeObj = undefined;
+    var _this = this;
 	//Grid id
 	var i_id = p_id;
 	//Excel Export시 사용되는 Entity 이름
@@ -104,6 +106,10 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
     {
         removeRowEventCallback = _event
     }
+    this.setMakeObj = function(_makeObj)
+	{
+        makeObj = _makeObj;
+	}
 	//기본 그리드 옵션
 	var _gridDefaultOption = {
 		indicator : {
@@ -113,7 +119,7 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 			visible : false
 		},
 		stateBar : {
-			visible : true
+			visible : false
 		},
 		footer : {
 			visible : false
@@ -413,7 +419,7 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 	{
 		return popupIndex[position];
 	}
-
+	var validateColumn = {};
 	var showPopup = function(grid, currentField, searchData, rows, popupData,preSearch)
 	{
 		var retData = undefined;
@@ -482,19 +488,24 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
         gridView.onValidationFail = function (grid, itemIndex, column, err) {
            axToast.push(axboot.getCommonMessage("AA008"));
         }
+        gridView.onEditChange = function(grid, index, value){
+            //index.fieldIndex
+			/*
+            if(validateColumn[index.fieldName] && !validateColumn[index.fieldName](value))
+            		grid.cancel();
+            */
+		}
 		gridView.onEditCommit = function (grid, index, oldValue, newValue)
 		{
-			if(!newValue || "" == newValue)
-			{
-				grid.cancel();
-                return ;
-			}
-
-
 		    doRequiredValidation = false;
             var popupData = getPopupData(index.fieldIndex);
             if(!popupData) {
                 return;
+            }
+            if(!newValue || "" == newValue)
+            {
+                grid.cancel();
+                return ;
             }
             if(-1 == index.itemIndex)
             	return ;
@@ -528,10 +539,11 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 		}
 
 		var _callback = callback;
+
 		//사용자가 Insert 키를 눌러 새로운 행을 삽입하거나, 마지막 행에서 아래 화살표를 눌러 행을 추가하려고 할 때 호출된다. 이 콜백에서 행 추가 불가 메시지를 리턴하면 행 추가가 금지된다.
         gridView.onRowInserting = function (grid, itemIndex) {
-            addRowBeforeEventCallback();
-            addRowAfterEventCallback();
+            addRowBeforeEventCallback(_this,makeObj);
+            addRowAfterEventCallback(_this,makeObj);
         };
 
 		gridView.onContextMenuItemClicked = function (grid, label, index) {
@@ -682,6 +694,28 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
             console.log(option.header === undefined ? true : option.header);
 
 
+            gridView.setDisplayOptions({fitStyle : "evenFill",focusBorderWidth : 1});
+            gridView.setStyles({
+				header : {
+                    background: "linear,#f2f2f2",
+                    fontSize: 12,
+                    fontFamily: "nanum",
+                    foreground: "#000000",
+                    borderRight: "#cccccc,1",
+                    fontBold: false,
+                },
+				body : {
+					borderRight : "#ff000000,0px",
+                    borderBottom : "#f0000000,0px",
+					line : "#ffaaaaaa,0px",
+					fontSize : 12,
+					fontFamily : "nanum",
+					grid : {
+						border : "#ffffffff,0"
+					}
+
+				}
+			});
 
             //visible: 인디케이터 영역의 화면 표시여부를 지정합니다.
             gridView.setIndicator(option.indicator === undefined? {"visible": false} : option.indicator);
@@ -702,7 +736,11 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
             gridView.setSortingOptions({
                 style: "inclusive"
             });
-
+            gridView.setIndicator({
+				visible : true,
+				styles : {background : "linear,#f2f2f2", fontFamily : "nanum"}
+			})
+            gridView.setStateBar(option.stateBar === undefined? {"visible": false} : option.stateBar);
             dataProvider.setOptions(providerDefaultOption);
             // gridView.setStyles(defaultStyle.event.selection);
 		}
@@ -825,14 +863,33 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 					};
                     obj.displayRegExp = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/gi;
                     obj.displayReplace = "";
+                    validateColumn[data.name] = function(value)
+					{
+						var regexp = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/gi;
+                        var result = regexp.test(value);
+						if(value)
+                        	value = value.replace(regexp,"");
+						return !result;
+					}
                     defaultData.push("");
 					break;
 				case "number":
-					obj.displayRegExp = /\B(?=(\d{3})+(?!\d))/g;
-					obj.displayReplace = ",";
-					obj.style = {textAlignment: "far"};
                     defaultData.push("");
+                    validateColumn[data.name] = function(value)
+                    {
+                        var regexp = /[^0-9]/gi;
+                        var result = regexp.test(value);
+                        if(value)
+                            value = value.replace(regexp,"");
+                        return !result;
+                    }
 					break;
+                case "commanumber":
+                    obj.displayRegExp = /\B(?=(\d{3})+(?!\d))/g;
+                    obj.displayReplace = ",";
+                    obj.style = {textAlignment: "far"};
+                    defaultData.push("");
+                    break;
 				case "date":
 					obj.editor = dateEditorStyle;
 					obj.styles = $.extend({}, defaultStyle.data.date, obj.styles );
@@ -859,12 +916,20 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
                     fieldObj.datetimeFormat = "iso"
                     defaultData.push("");
 					break;
-                case "richtext":
+				case "richtext":
                     obj.type = "text";
                     obj.editor = {
                         type: "multiline",
 						textWrap : "normal"
                     };
+                    obj.styles = {
+                    	textAlignment : "near"
+						, background : "#ffffffff"
+						, fontSize : 12
+						, fontFamily : "nanum"
+						, fontBold : false
+					}
+					obj.renderer = {showTooltip : true};
                     defaultData.push("");
                     break;
 				case "text":
@@ -940,10 +1005,9 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 	this.addRow = function(obj) {
 		return _addRow(obj);
 	};
-
 	var _addRow = function(obj) {
 		if(addRowBeforeEventCallback)
-        	addRowBeforeEventCallback();
+        	addRowBeforeEventCallback(_this,makeObj);
 		var validate = false;
 		if (undefined === obj && appendValidate()) {
 			gridView.getDataProvider().addRow(defaultData);
@@ -958,7 +1022,7 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 			_doSave = true;
 		}
 		if(addRowAfterEventCallback)
-			addRowAfterEventCallback();
+			addRowAfterEventCallback(_this,makeObj);
 	};
 
 	//셀렉트 된 행 데이터 가져오는 함수
