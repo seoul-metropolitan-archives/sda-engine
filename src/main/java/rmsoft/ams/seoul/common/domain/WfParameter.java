@@ -38,9 +38,13 @@ public class WfParameter extends BaseJpaModel<WfParameter.WfParameterId> {
     @Comment(value = "Parameter Name")
     private String parameterName;
 
-    @Column(name = "DATA_TYPE_UUID", length = 36, nullable = false)
-    @Comment(value = "Data Type UUID")
-    private String dataTypeUuid;
+    @Column(name = "INPUT_METHOD_UUID", length = 36)
+    @Comment(value = "Input Code UUID")
+    private String inputCodeUuid;
+
+    @Column(name = "INPUT_CODE_UUID", length = 36, nullable = false)
+    @Comment(value = "Input Method UUID")
+    private String inputMethodUuid;
 
     @Column(name = "IN_OUT_UUID", length = 36, nullable = false)
     @Comment(value = "In Out UUID")

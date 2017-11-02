@@ -41,8 +41,10 @@ var ac00402 =
                     name: "userNm",
                     text: "User",
                     width: 150,
-                    editable: false,
-                    dataType: "text",
+                    editable: true,
+                    dataType: "popup",
+                    popupCode : "PU107",
+                    sqlColumn : {USER_UUID : "userUuid",USER_NAME : "userName"},
                     required: true,
                     visible: true
                 },

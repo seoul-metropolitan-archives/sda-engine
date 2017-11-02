@@ -9,7 +9,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH: function (caller, act, data) {
         axboot.ajax({
             type: "GET",
-            url: "/api/v1/ac005/01/list",
+            url: "/api/v1/sp001/01/list",
             data: $.extend({}, {pageSize: 1000}, this.formView.getData()),
             callback: function (res) {
                 fnObj.gridView01.setData(res.list);
@@ -29,7 +29,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH1: function (caller, act, data) {
         axboot.ajax({
             type: "GET",
-            url: "/api/v1/ac005/02/list",
+            url: "/api/v1/sp001/02/list",
             data: $.extend({}, {pageSize: 1000}, data),
             callback: function (res) {
                 fnObj.gridView02.setData(res.list);
@@ -47,14 +47,14 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         axboot
             .call({
                 type: "PUT",
-                url: "/api/v1/ac005/01/save",
+                url: "/api/v1/sp001/01/save",
                 data: JSON.stringify(roleList),
                 callback: function (res) {
                 }
             })
             .call({
                 type: "PUT",
-                url: "/api/v1/ac005/02/save",
+                url: "/api/v1/sp001/02/save",
                 data: JSON.stringify(rolePermissionList),
                 callback: function (res) {
                 }
@@ -115,7 +115,7 @@ fnObj.pageStart = function () {
 
     //TODO 추후에 삭제될 내용으로 /실제 Grid의 컬럼 정보는 DB에서 가져올 예정
     $.ajax({
-        url: "/assets/js/column_info/ac00501.js",
+        url: "/assets/js/column_info/sp00101.js",
         dataType: "script",
         async: false,
         success: function () {
@@ -123,7 +123,7 @@ fnObj.pageStart = function () {
     });
 
     $.ajax({
-        url: "/assets/js/column_info/ac00502.js",
+        url: "/assets/js/column_info/sp00102.js",
         dataType: "script",
         async: false,
         success: function () {
@@ -136,23 +136,7 @@ fnObj.pageStart = function () {
 
     // Data 조회
     ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
-
-    // Layout Resize Event
-    $('[data-ax5layout]').ax5layout({
-        splitter: {
-            size: 6
-        },
-        autoResize: false,
-        onResize: function onResize() {
-            fnObj.gridView01.gridObj.getGridView().resetSize();
-            fnObj.gridView02.gridObj.getGridView().resetSize();
-        },
-    });
 };
-
-/*fnObj.pageResize = function () {
-    //
-};*/
 
 fnObj.formView = axboot.viewExtend(axboot.formView, {
     getDefaultData: function () {
@@ -213,7 +197,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
         this.gridObj.setFixedOptions({
             colCount: 1
         });
-        this.gridObj.setColumnInfo(ac00501.column_info).setEntityName("CONFIGURATION");
+        this.gridObj.setColumnInfo(sp00101.column_info).setEntityName("CONFIGURATION");
         this.gridObj.makeGrid();
         this.gridObj.itemClick(this.itemClick);
     },
@@ -256,7 +240,7 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
         this.gridObj.setFixedOptions({
             colCount: 1
         });
-        this.gridObj.setColumnInfo(ac00502.column_info).setEntityName("CONFIGURATION");
+        this.gridObj.setColumnInfo(sp00102.column_info).setEntityName("CONFIGURATION");
         this.gridObj.makeGrid();
         this.gridObj.itemClick(this.itemClick);
     },

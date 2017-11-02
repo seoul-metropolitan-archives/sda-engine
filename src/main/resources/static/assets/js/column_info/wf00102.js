@@ -31,7 +31,7 @@ var wf00102 =
                     name: "parameterName",
                     text: "Parameter Name",
                     width: 200,
-                    editable: false,
+                    editable: true,
                     dataType: "text",
                     required: true,
                     visible: true

@@ -135,7 +135,7 @@ var ac00702 =
                     editable: true,
                     dataType: "check",
                     textAlignment: "center",
-                    required: false
+                    required: true
                 },
                 {
                     sortNo: 12,
@@ -145,7 +145,7 @@ var ac00702 =
                     editable: true,
                     dataType: "check",
                     textAlignment: "center",
-                    required: false
+                    required: true
                 },
                 {
                     sortNo: 13,

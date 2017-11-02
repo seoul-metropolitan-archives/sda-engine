@@ -51,8 +51,10 @@ var ac00303 =
                     name: "roleName",
                     text: "Role",
                     width: 150,
-                    editable: false,
-                    dataType: "text",
+                    editable: true,
+                    dataType: "popup",
+                    popupCode : "PU109",
+                    sqlColumn : {ROLE_UUID : "roleUuid",ROLE_NAME : "roleName"},
                     required: true,
                     visible: true
                 },

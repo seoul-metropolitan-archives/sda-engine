@@ -2,14 +2,14 @@
  * Copyright (c) 2017. RMSoft Co.,Ltd. All rights reserved
  */
 
-var ac00801 =
+var sp00102 =
     {
         column_info:
             [
                 {
                     sortNo: 1,
-                    name: "programUuid",
-                    text: "programUuid",
+                    name: "rolePermissionUuid",
+                    text: "rolePermissionUuid",
                     width: 120,
                     editable: true,
                     dataType: "code",
@@ -18,35 +18,85 @@ var ac00801 =
                 },
                 {
                     sortNo: 2,
-                    name: "programId",
-                    text: "Program ID",
+                    name: "roleUuid",
+                    text: "roleUuid",
                     width: 120,
                     editable: true,
-                    dataType: "text",
-                    required: true,
-                    visible: true
+                    dataType: "code",
+                    required: false,
+                    visible: false
                 },
                 {
                     sortNo: 3,
-                    name: "programName",
-                    text: "Program Name",
-                    width: 150,
+                    name: "permissionUuid",
+                    text: "permissionUuid",
+                    width: 120,
                     editable: true,
+                    dataType: "code",
+                    required: false,
+                    visible: false
+                },
+                {
+                    sortNo: 4,
+                    name: "pmsProgramUuid",
+                    text: "pmsProgramUuid",
+                    width: 120,
+                    editable: true,
+                    dataType: "code",
+                    required: false,
+                    visible: false
+                },
+                {
+                    sortNo: 5,
+                    name: "pmsEntityTypeUuid",
+                    text: "pmsEntityTypeUuid",
+                    width: 120,
+                    editable: true,
+                    dataType: "code",
+                    required: false,
+                    visible: false
+                },
+                {
+                    sortNo: 6,
+                    name: "permissionName",
+                    text: "Permission",
+                    width: 150,
+                    editable: false,
                     dataType: "text",
                     required: true,
                     visible: true
                 },
                 {
-                    sortNo: 4,
-                    name: "serviceUuid",
-                    text: "Service",
-                    width: 130,
+                    sortNo: 7,
+                    name: "programName",
+                    text: "Program",
+                    width: 150,
+                    editable: false,
+                    dataType: "text",
+                    required: true,
+                    visible: true
+                },
+                {
+                    sortNo: 8,
+                    name: "entityTypeName",
+                    text: "Entity Type",
+                    width: 150,
+                    editable: false,
+                    dataType: "text",
+                    required: true,
+                    visible: true
+                },
+                {
+                    sortNo: 9,
+                    name: "pmsFunctionUuid",
+                    text: "Function",
+                    width: 100,
                     editable: true,
                     dataType: "combo",
                     required: true,
                     visible: true,
-                    values: axboot.commonCodeFilter("CD006").codeArr,
-                    labels: axboot.commonCodeFilter("CD006").nameArr,
+                    values: axboot.commonCodeFilter("CD108").codeArr,
+                    labels: axboot.commonCodeFilter("CD108").nameArr,
                     lookupDisplay: true,
                     editor: {
                         type: "dropDown",
@@ -56,17 +106,7 @@ var ac00801 =
                     }
                 },
                 {
-                    sortNo: 5,
-                    name: "url",
-                    text: "URL",
-                    width: 250,
-                    editable: true,
-                    dataType: "text",
-                    required: false,
-                    visible: true
-                },
-                {
-                    sortNo: 6,
+                    sortNo: 10,
                     name: "description",
                     text: "Description",
                     width: 250,
@@ -75,7 +115,7 @@ var ac00801 =
                     required: false,
                 },
                 {
-                    sortNo: 7,
+                    sortNo: 11,
                     name: "notes",
                     text: "Notes",
                     width: 250,
@@ -84,7 +124,7 @@ var ac00801 =
                     required: false
                 },
                 {
-                    sortNo: 8,
+                    sortNo: 12,
                     name: "useYn",
                     text: "Use",
                     width: 50,
@@ -94,7 +134,7 @@ var ac00801 =
                     required: true
                 },
                 {
-                    sortNo: 9,
+                    sortNo: 13,
                     name: "insertUuid",
                     text: "Created By",
                     width: 80,
@@ -104,7 +144,7 @@ var ac00801 =
                     required: false
                 },
                 {
-                    sortNo: 10,
+                    sortNo: 14,
                     name: "insertDate",
                     text: "Date/Time Created",
                     width: 140,
@@ -114,7 +154,7 @@ var ac00801 =
                     required: false
                 },
                 {
-                    sortNo: 11,
+                    sortNo: 15,
                     name: "updateUuid",
                     text: "Modifed By",
                     width: 80,
@@ -124,7 +164,7 @@ var ac00801 =
                     required: false
                 },
                 {
-                    sortNo: 12,
+                    sortNo: 16,
                     name: "updateDate",
                     text: "Date/Time Modified",
                     width: 140,

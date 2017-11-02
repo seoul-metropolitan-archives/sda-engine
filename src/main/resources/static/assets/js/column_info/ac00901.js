@@ -73,6 +73,7 @@ var ac00901 =
                     name: "programName",
                     text: "Program Name",
                     width: 140,
+                    disable: true,
                     editable: false,
                     dataType: "text",
                     required: false,

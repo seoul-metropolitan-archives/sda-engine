@@ -61,7 +61,7 @@ var ac00601 =
                     name: "permissionName",
                     text: "Permission",
                     width: 150,
-                    editable: false,
+                    editable: true,
                     dataType: "text",
                     required: true,
                     visible: true
@@ -71,9 +71,11 @@ var ac00601 =
                     name: "programName",
                     text: "Program",
                     width: 150,
-                    editable: false,
-                    dataType: "text",
-                    required: true,
+                    editable: true,
+                    dataType: "popup",
+                    popupCode: "PU001",
+                    sqlColumn: {PROGRAM_UUID: "pmsProgramUuid", PROGRAM_NAME: "programName"},
+                    required: false,
                     visible: true
                 },
                 {
@@ -81,8 +83,13 @@ var ac00601 =
                     name: "entityTypeName",
                     text: "Entity Type",
                     width: 180,
-                    editable: false,
-                    dataType: "text",
+                    editable: true,
+                    dataType: "popup",
+                    popupCode: "PU110",
+                    sqlColumn: {
+                        ENTITY_TYPE_UUID: "pmsEntityTypeUuid",
+                        ENTITY_TYPE_NAME: "entityTypeName"
+                    },
                     required: true,
                     visible: true
                 },

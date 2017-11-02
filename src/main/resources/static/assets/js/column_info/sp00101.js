@@ -2,14 +2,14 @@
  * Copyright (c) 2017. RMSoft Co.,Ltd. All rights reserved
  */
 
-var ac00801 =
+var sp00101 =
     {
         column_info:
             [
                 {
                     sortNo: 1,
-                    name: "programUuid",
-                    text: "programUuid",
+                    name: "roleUuid",
+                    text: "roleUuid",
                     width: 120,
                     editable: true,
                     dataType: "code",
@@ -18,55 +18,15 @@ var ac00801 =
                 },
                 {
                     sortNo: 2,
-                    name: "programId",
-                    text: "Program ID",
-                    width: 120,
-                    editable: true,
-                    dataType: "text",
-                    required: true,
-                    visible: true
-                },
-                {
-                    sortNo: 3,
-                    name: "programName",
-                    text: "Program Name",
+                    name: "roleName",
+                    text: "Role",
                     width: 150,
                     editable: true,
                     dataType: "text",
-                    required: true,
-                    visible: true
+                    required: true
                 },
                 {
-                    sortNo: 4,
-                    name: "serviceUuid",
-                    text: "Service",
-                    width: 130,
-                    editable: true,
-                    dataType: "combo",
-                    required: true,
-                    visible: true,
-                    values: axboot.commonCodeFilter("CD006").codeArr,
-                    labels: axboot.commonCodeFilter("CD006").nameArr,
-                    lookupDisplay: true,
-                    editor: {
-                        type: "dropDown",
-                        dropDownCount: 10,
-                        domainOnly: true, //domainOnly가 true이면 목록에 있는 값들만 선택할 수 있습니다.
-                        textReadOnly: false, // true이면 키 입력이 안되며 선택만 할 수 있습니다.
-                    }
-                },
-                {
-                    sortNo: 5,
-                    name: "url",
-                    text: "URL",
-                    width: 250,
-                    editable: true,
-                    dataType: "text",
-                    required: false,
-                    visible: true
-                },
-                {
-                    sortNo: 6,
+                    sortNo: 3,
                     name: "description",
                     text: "Description",
                     width: 250,
@@ -75,7 +35,7 @@ var ac00801 =
                     required: false,
                 },
                 {
-                    sortNo: 7,
+                    sortNo: 4,
                     name: "notes",
                     text: "Notes",
                     width: 250,
@@ -84,7 +44,7 @@ var ac00801 =
                     required: false
                 },
                 {
-                    sortNo: 8,
+                    sortNo: 5,
                     name: "useYn",
                     text: "Use",
                     width: 50,
@@ -94,7 +54,7 @@ var ac00801 =
                     required: true
                 },
                 {
-                    sortNo: 9,
+                    sortNo: 6,
                     name: "insertUuid",
                     text: "Created By",
                     width: 80,
@@ -104,7 +64,7 @@ var ac00801 =
                     required: false
                 },
                 {
-                    sortNo: 10,
+                    sortNo: 7,
                     name: "insertDate",
                     text: "Date/Time Created",
                     width: 140,
@@ -114,7 +74,7 @@ var ac00801 =
                     required: false
                 },
                 {
-                    sortNo: 11,
+                    sortNo: 8,
                     name: "updateUuid",
                     text: "Modifed By",
                     width: 80,
@@ -124,7 +84,7 @@ var ac00801 =
                     required: false
                 },
                 {
-                    sortNo: 12,
+                    sortNo: 9,
                     name: "updateDate",
                     text: "Date/Time Modified",
                     width: 140,
