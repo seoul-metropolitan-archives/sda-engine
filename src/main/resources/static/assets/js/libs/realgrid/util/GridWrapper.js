@@ -83,6 +83,9 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 	//lazy load시 사용 파라메터
 	var maxCount = 100;
 	//================================================
+
+    var requiredColumnList = new Array();
+
 	//그리드 옵션
 	var gridOption = undefined;
 	var rootContext = p_rootContext;
@@ -410,7 +413,8 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 	{
 		return popupIndex[position];
 	}
-	var showPopup = function(searchData, rows, popupData,preSearch)
+
+	var showPopup = function(grid, currentField, searchData, rows, popupData,preSearch)
 	{
 		var retData = undefined;
         axboot.modal.open({
@@ -425,14 +429,30 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
             callback: function (data) {
                 //$("#calleeEmpName").val(data.empName);
                 //$("#calleeEmpTelno").val(data.empPhoneNo);
+                var currentValue = "";
+                for(var key in popupData["sqlColumn"])
+                {
+                    if(popupData["sqlColumn"][key] == currentField)
+                    {
+                        dataProvider.setValue(rows,popupData["sqlColumn"][key],data[key]);
+                        currentValue = data[key];
+                    }
+                }
+
                 console.log(data);
                 retData = data;
                 for(var key in data)
                 {
-                    if(popupData["sqlColumn"][key])
-                        dataProvider.setValue(rows,popupData["sqlColumn"][key],data[key]);
-                }
+                    try {
+                        if(popupData["sqlColumn"][key])
+                            dataProvider.setValue(rows,popupData["sqlColumn"][key],data[key]);
+                    }
+                    catch(exception)
+                    {
 
+                    }
+                }
+                doRequiredValidation = true;
                 if(this.close)
                     this.close();
             }
@@ -440,64 +460,66 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
         if(popCallback)
             popCallback(retData);
 	}
-
+    var doRequiredValidation = true;
 	var bindEvent = function() {
 		gridView.onKeyDown = keyDown;
 
-        gridView.onValidationFail = function (grid, itemIndex, column, err) {
-        	console.log("왜안타");
-           axToast.push(axboot.getCommonMessage("AA008"));
+        gridView.onValidateColumn = function(grid, column, inserting, value) {
+            var error = {};
+            for(var i = 0;i < requiredColumnList.length; i++)
+            {
+                if (column.fieldName === requiredColumnList[i] && doRequiredValidation) {
+                    if (value == undefined ||value == "") {
+                        error.level = RealGridJS.ValidationLevel.ERROR;
+                        error.message = axboot.getCommonMessage("AA008");
+                    }
+
+                };
+            }
+            return error;
         }
 
+        gridView.onValidationFail = function (grid, itemIndex, column, err) {
+           axToast.push(axboot.getCommonMessage("AA008"));
+        }
 		gridView.onEditCommit = function (grid, index, oldValue, newValue)
 		{
+			if(!newValue || "" == newValue)
+			{
+				grid.cancel();
+                return ;
+			}
+
+
+		    doRequiredValidation = false;
             var popupData = getPopupData(index.fieldIndex);
             if(!popupData) {
                 return;
             }
             if(-1 == index.itemIndex)
             	return ;
-            showPopup(newValue,index.itemIndex,popupData);
+            showPopup(grid, index.fieldName,newValue,index.itemIndex,popupData);
 			console.log(index.fieldName);
 		}
 
         gridView.onImageButtonClicked = function(grid, itemIndex, column, buttonIdex, name)
 		{
-            grid.commit(true);
+
             var popupData = getPopupData(column.dataIndex);
             if(!popupData)
                 return ;
+            try {
+                grid.commit(true);
+			}catch(exception)
+			{
+                grid.getDataProvider().rollback(true);
+			}
+
             var data = grid.getDataProvider().getJsonRow(itemIndex);
             console.log(data[column.fieldName]);
             console.log(getPopupData(column.dataIndex));
 
-            if("" == data[column.fieldName])
-            	return ;
-            showPopup(data[column.fieldName],itemIndex,popupData,false);
-            /*axboot.modal.open({
-                modalType: "COMMON_POPUP",
-                sendData: function () {
-                    return {
-                        popupCode : popupData["popupCode"],
-                        searchData : data[column.fieldName]
-                    };
-                },
-                callback: function (data) {
-                    //$("#calleeEmpName").val(data.empName);
-                    //$("#calleeEmpTelno").val(data.empPhoneNo);
-                    console.log(data);
-
-                    for(var key in data)
-					{
-                        dataProvider.setValue(itemIndex,popupData["sqlColumn"][key],data[key]);
-					}
-
-                    if(this.close)
-                        this.close();
-                }
-            });
-			*/
-
+            showPopup(grid, column.fieldName,data[column.fieldName],itemIndex,popupData,false);
 		}
 
 		gridView.onCurrentChanged = function(grid,newIndex)
@@ -767,6 +789,7 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
                 obj.editable = false;
 			} else if (data.required) {
 				styles = defaultStyle.column.required;
+				requiredColumnList.push(data.name);
 				obj.requiredMessage = "["+data.text+"] "+axboot.getCommonMessage("AA008");
 			} else {
 				styles = defaultStyle._default;
@@ -778,7 +801,8 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 				fontSize : data.fontSize === undefined ? 12 : data.fontSize,
 				fontBold : data.fontBold === undefined ? false : data.fontBold
 			},obj.styles);
-			
+
+
 			// 데이터 타입
 			switch (data.dataType) {
 				case "popup":
