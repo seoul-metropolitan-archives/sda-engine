@@ -454,6 +454,8 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
                 return;
             }
             grid.commit(true);
+            if(-1 == oldIndex.itemIndex)
+            	return ;
             var data = grid.getDataProvider().getJsonRow(oldIndex.itemIndex);
             if("" == data[oldIndex.fieldName])
             	return ;
