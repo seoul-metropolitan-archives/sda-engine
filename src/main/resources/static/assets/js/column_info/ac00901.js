@@ -62,7 +62,9 @@ var ac00901 =
                     text: "Program ID",
                     width: 120,
                     editable: true,
-                    dataType: "text",
+                    dataType: "popup",
+                    popupCode : "PU116",
+                    sqlColumn : {PROGRAM_ID : "programId",PROGRAM_NAME : "programName"},
                     required: false,
                     visible: true
                 },

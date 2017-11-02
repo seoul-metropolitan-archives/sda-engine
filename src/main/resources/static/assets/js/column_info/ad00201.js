@@ -24,7 +24,7 @@ var ad00201 =
             {
                 sortNo: 3,
                 name: "messageName",
-                text: "Environment Name",
+                text: "Message Name",
                 width: 120,
                 editable: true,
                 dataType: "text",

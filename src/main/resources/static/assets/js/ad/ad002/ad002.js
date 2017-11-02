@@ -27,13 +27,16 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         });
     },
     PAGE_SAVE: function (caller, act, data) {
-        console.log(fnObj.gridView01.getData());
+        if(fnObj.gridView01.getData().length < 1)
+            return ;
+
         axboot.ajax({
             type: "POST",
             url: "/ad/ad002/save.do",
             data: JSON.stringify(fnObj.gridView01.getData()),
             callback: function (res) {
                 axToast.push(axboot.getCommonMessage("AA007"));
+                fnObj.gridView01.gridObj.commit();fnObj.gridView01
             },
             options: {
                 onError: axboot.viewError
@@ -80,6 +83,14 @@ fnObj.searchView = axboot.viewExtend(axboot.formView,{
         this.initEvent();
     },
     initEvent: function () {
+        $("input").keydown(function(event){
+            switch(event.keyCode)
+            {
+                case 40:
+                    fnObj.gridView01.gridObj.setFocus();
+                    break;
+            }
+        })
     },
     getData: function () {
         var data = this.modelFormatter.getClearData(this.model.get()); // 모델의 값을 포멧팅 전 값으로 치환.

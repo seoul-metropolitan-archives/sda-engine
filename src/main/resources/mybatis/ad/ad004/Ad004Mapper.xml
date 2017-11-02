@@ -43,6 +43,8 @@
             AND
             USE_YN = #{useYN}
         </if>
+        ORDER BY
+          POPUP_CODE
     </select>
 
     <insert id="insertPopupHeader" parameterType="Ad00401VO" >
@@ -138,5 +140,7 @@
             AD_POPUP_DETAIL
           WHERE
             POPUP_HEADER_UUID = #{popupHeaderUUID}
+          ORDER BY
+            ORDER_NO
     </select>
 </mapper>

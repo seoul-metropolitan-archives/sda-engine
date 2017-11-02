@@ -39,33 +39,40 @@
             AD_CODE_HEADER Z
         ]]>
         <where>
+            1=1
             <if test="null != categoryCode and '' != categoryCode">
                 <![CDATA[
+                AND
                 Z.CATEGORY_CODE LIKE '%'|| #{categoryCode} || '%'
                 ]]>
             </if>
             <if test="null != categoryName and '' != categoryName">
                 <![CDATA[
+                AND
                 Z.CATEGORY_NAME  LIKE '%'|| #{categoryName} || '%'
                 ]]>
             </if>
             <if test="null != serviceUuid and '' != serviceUuid">
                 <![CDATA[
+                AND
                 Z.SERVICE_UUID = #{serviceUuid}
                 ]]>
             </if>
             <if test="null != codeTypeUuid and '' != codeTypeUuid">
                 <![CDATA[
+                AND
                 Z.CODE_TYPE_UUID = #{codeTypeUuid}
                 ]]>
             </if>
             <if test="null != useYN and '' != useYN">
                 <![CDATA[
+                AND
                 Z.USE_YN = #{useYN}
                 ]]>
             </if>
         </where>
-
+        ORDER BY
+        Z.CATEGORY_CODE
     </select>
     <select id="getCodeDetailList" resultType="Ad00302VO" parameterType="Ad00302VO" statementType="PREPARED">
         <![CDATA[
@@ -101,6 +108,8 @@
             AD_CODE_DETAIL Z
         WHERE
             Z.CODE_HEADER_UUID = #{codeHeaderUuid}
+        ORDER BY
+          Z.CODE
         ]]>
     </select>
     <select id="getCode" resultType="Ad00303VO" parameterType="Ad00303VO" statementType="PREPARED">
@@ -118,5 +127,6 @@
         <if test="null != categoryCode">
             AND Z.CATEGORY_CODE = #{categoryCode}
         </if>
+
     </select>
 </mapper>

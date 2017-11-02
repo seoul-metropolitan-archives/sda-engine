@@ -32,7 +32,7 @@
                             </dd>
                             <dt>Service</dt>
                             <dd>
-                                <select data-ax-path="serviceUUID" style="width:135px;" id="serviceList">
+                                <select data-ax-path="serviceUuid" style="width:135px;" id="serviceList">
                                     <option value=""></option>
                                     <option th:each="item : ${serviceList}" th:value="${item.codeDetailUUID}"
                                             th:text="${item.codeName}"/>
@@ -40,7 +40,7 @@
                             </dd>
                             <dt>Code Type</dt>
                             <dd>
-                                <select data-ax-path="codeDetailUUID" style="width:135px;" id="codeList">
+                                <select data-ax-path="codeTypeUuid" style="width:135px;" id="codeList">
                                     <option value=""></option>
                                     <option th:each="item : ${codeList}" th:value="${item.codeDetailUUID}"
                                             th:text="${item.codeName}"/>
@@ -53,11 +53,11 @@
                                 <div class="rdo_box">
                                     <span class="rdo_box_title">Use</span>
                                     <label>
-                                        <input type="radio" name="radio" class="no_border" checked>Yes</label>
+                                        <input type="radio" name="radio" data-ax-path="useYN" class="no_border" value="Y" >Yes</label>
                                     <label>
-                                        <input type="radio" name="radio" class="no_border">No</label>
+                                        <input type="radio" name="radio" data-ax-path="useYN" class="no_border" value="N">No</label>
                                     <label>
-                                        <input type="radio" name="radio" class="no_border">All</label>
+                                        <input type="radio" name="radio" data-ax-path="useYN" class="no_border" value="" checked>All</label>
                                 </div>
                             </dd>
                         </dl>

@@ -15,8 +15,10 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             data : JSON.stringify(data),
             async : false,
             callback: function (res) {
+                console.log(res);
                 if (undefined === res.list || res.list.length < 1)
                 {
+                    fnObj.gridView01.setData([]);
                     fnObj.gridView01.addRow();
                 }
                 else {
@@ -156,7 +158,14 @@ fnObj.formView = axboot.viewExtend(axboot.formView,{
     }
 
     ,initEvent: function () {
-
+        $("input").keydown(function(event){
+            switch(event.keyCode)
+            {
+                case 40:
+                    fnObj.gridView01.gridObj.setFocus();
+                    break;
+            }
+        })
     },
     getData: function () {
         var data = this.modelFormatter.getClearData(this.model.get()); // 모델의 값을 포멧팅 전 값으로 치환.

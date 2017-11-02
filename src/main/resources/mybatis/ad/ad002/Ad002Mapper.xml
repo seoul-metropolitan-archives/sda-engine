@@ -53,6 +53,8 @@
             Z.USE_YN = #{useYN}
             ]]>
         </if>
+        ORDER BY
+          Z.MESSAGE_CODE
     </select>
 
 </mapper>
