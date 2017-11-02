@@ -410,11 +410,12 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 	{
 		return popupIndex[position];
 	}
-	var showPopup = function(searchData, rows, popupData)
+	var showPopup = function(searchData, rows, popupData,preSearch)
 	{
 		var retData = undefined;
         axboot.modal.open({
             modalType: "COMMON_POPUP",
+            preSearch : preSearch,
             sendData: function () {
                 return {
                     popupCode : popupData["popupCode"],
@@ -448,32 +449,31 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
            axToast.push(axboot.getCommonMessage("AA008"));
         }
 
-		gridView.onCurrentChanging = function(grid, oldIndex, newIndex)
+		gridView.onEditCommit = function (grid, index, oldValue, newValue)
 		{
-            var popupData = getPopupData(oldIndex.fieldIndex);
+            var popupData = getPopupData(index.fieldIndex);
             if(!popupData) {
                 return;
             }
-            grid.commit(true);
-            if(-1 == oldIndex.itemIndex)
+            if(-1 == index.itemIndex)
             	return ;
-            var data = grid.getDataProvider().getJsonRow(oldIndex.itemIndex);
-            if("" == data[oldIndex.fieldName])
-            	return ;
-            showPopup(data[oldIndex.fieldName],oldIndex.itemIndex,popupData);
-			console.log(oldIndex);
+            showPopup(newValue,index.itemIndex,popupData);
+			console.log(index.fieldName);
 		}
 
         gridView.onImageButtonClicked = function(grid, itemIndex, column, buttonIdex, name)
 		{
             grid.commit(true);
+            var popupData = getPopupData(column.dataIndex);
+            if(!popupData)
+                return ;
             var data = grid.getDataProvider().getJsonRow(itemIndex);
             console.log(data[column.fieldName]);
             console.log(getPopupData(column.dataIndex));
-            var popupData = getPopupData(column.dataIndex);
+
             if("" == data[column.fieldName])
             	return ;
-            showPopup(data[column.fieldName],itemIndex,popupData);
+            showPopup(data[column.fieldName],itemIndex,popupData,false);
             /*axboot.modal.open({
                 modalType: "COMMON_POPUP",
                 sendData: function () {

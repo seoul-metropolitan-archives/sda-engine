@@ -1787,7 +1787,7 @@ axboot.modal = function () {
      */
     var open = function open(modalConfig) {
 
-        if("COMMON_POPUP" == modalConfig.modalType)
+        if("COMMON_POPUP" == modalConfig.modalType && (undefined == modalConfig.preSearch ||modalConfig.preSearch) )
         {
             if(modalConfig.sendData)
             {
