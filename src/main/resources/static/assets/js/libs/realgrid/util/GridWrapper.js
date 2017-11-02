@@ -428,7 +428,8 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
                 retData = data;
                 for(var key in data)
                 {
-                    dataProvider.setValue(rows,popupData["sqlColumn"][key],data[key]);
+                    if(popupData["sqlColumn"][key])
+                        dataProvider.setValue(rows,popupData["sqlColumn"][key],data[key]);
                 }
 
                 if(this.close)

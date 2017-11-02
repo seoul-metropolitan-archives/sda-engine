@@ -328,8 +328,9 @@ fnObj.gridView01 = axboot.viewExtend(axboot.realGridView, {
     {
         var _this = this;
         var uuid = undefined;
+        var data = _this.gridObj.getDefaultData();
         axboot.ajax({
-            url : "/ad/ad004/ad004/getUUID",
+            url : "/api/v1/common/getUUID",
             type : "POST",
             async : false,
             callback:function(res)
@@ -337,10 +338,10 @@ fnObj.gridView01 = axboot.viewExtend(axboot.realGridView, {
                 uuid = res.map.uuid;
             }
         });
-        var data = fnObj.gridView01.gridObj.getDefaultData();
+
         data[0] = uuid;
-        fnObj.gridView01.gridObj.setDefaultData(data);
-        fnObj.gridView02.clear();
+        this.gridObj.setDefaultData(data);
+        this.gridView02.clear();
     },
     addRowAfterEvent : function()
     {

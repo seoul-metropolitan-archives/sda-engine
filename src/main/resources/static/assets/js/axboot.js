@@ -2516,21 +2516,9 @@ axboot.gridView = {
         pageNumber: 0,
         pageSize: 99999
     },
-    setData: function setData(_data) {
-        this.target.setData(_data);
-    },
-    getData: function getData(_type) {
-        var list = [];
-        var _list = this.target.getList(_type);
-        if (_type == "modified" || _type == "deleted") {
-            list = ax5.util.filter(_list, function () {
-                return true;
-            });
-        } else {
-            list = _list;
-        }
-        return list;
-    },
+    uuidFieldName : "",
+    parentsUuidFieldName : "",
+    parentsGrid : undefined,
     initChangedData: function () {
         this.gridObj.commit();
     },
@@ -2541,32 +2529,73 @@ axboot.gridView = {
             return false;
         }
     },
-    addRow: function addRow() {
-        this.target.addRow({__created__: true}, "last");
+    getUUID : function()
+    {
+        return this.gridObj.getSelectedData()[this.uuidFieldName];
     },
-    delRow: function delRow(_type) {
-        this.target.deleteRow(_type);
+    setData: function setData(_data, _type) {
+        if (!_type)
+            _type = "set";
+        this.gridObj.setData(_type, _data);
     },
-    align: function align() {
-        this.target.align();
+    getData: function getData() {
+        return this.gridObj.getData();
     },
-    clear: function clear() {
-        this.target.setData({
-            list: [],
-            page: {
-                currentPage: 0,
-                pageSize: 0,
-                totalElements: 0,
-                totalPages: 0
-            }
-        });
+    addRow: function() {
+
+        if(parentsGrid)
+        {
+            var data = this.gridObj.getDefaultData();
+            data[this.gridObj.getFieldIndex(this.parentsUuidFieldName)] = parentsGrid.getUUID();
+            this.gridObj.setDefaultData(data);
+        }
+
+        return this.gridObj.addRow();
+    },
+    delRow: function (_type) {
+        return this.gridObj.removeRow();
+    },
+    setColumnInfo: function (_columnInfo) {
+        this.gridObj.setColumnInfo(_columnInfo);
     },
     setPageData: function setPageData(_page) {
         this.page = $.extend(this.page, _page);
     },
     getPageData: function getPageData() {
         return this.page;
-    }
+    },
+    onRowsPasted : function(grid, items)
+    {
+        var data = undefined;
+        for(var i = 0; i < items.length; i++)
+        {
+            if(parentsGrid)
+            {
+                this.gridObj.setValue(items[i],1, parentsGrid.getUUID());
+                data[this.gridObj.getFieldIndex(this.parentsUuidFieldName)] = parentsGrid.getUUID();
+            }
+
+        }
+    },
+    addRowBeforeEvent : function()
+    {
+        var _this = this;
+        var uuid = undefined;
+        var data = _this.gridObj.getDefaultData();
+        axboot.ajax({
+            url : "/api/v1/common/getUUID",
+            type : "POST",
+            async : false,
+            callback:function(res)
+            {
+                uuid = res.map.uuid;
+            }
+        });
+
+        data[0] = uuid;
+        this.gridObj.setDefaultData(data);
+        this.gridView02.clear();
+    },
 };
 
 /**
@@ -2609,6 +2638,7 @@ axboot.realGridView = {
     addRow: function addRow() {
         return this.gridObj.addRow();
     },
+    
     delRow: function delRow(_type) {
         return this.gridObj.removeRow();
     },
