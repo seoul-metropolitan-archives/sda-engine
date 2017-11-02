@@ -27381,3 +27381,347 @@ a.small_open {
 .div_table {
     display: table;
 }
+
+
+<!-- 20171103 이혁준 css 필요해서 추가 ( 레코드 서비스) -->
+
+
+/* explorer */
+
+.explorer_folder_empty {
+    float: left;
+    width: 70px;
+    height: 105px;
+    margin: 5px 4px 0px 4px;
+    text-align: center;
+    padding: 5px;
+    /*margin-bottom: 0; */
+    padding-top: 2px;
+}
+
+.explorer_folder_full {
+    float: left;
+    width: 70px;
+    height: 105px;
+    margin: 5px 4px 0px 4px;
+    text-align: center;
+    padding: 5px;
+    margin-bottom: 0;
+    padding-top: 2px;
+}
+
+.explorer_file {
+    float: left;
+    width: 70px;
+    height: 105px;
+    margin: 5px 4px 0px 4px;
+    text-align: center;
+    padding: 5px;
+    margin-bottom: 0;
+    padding-top: 2px;
+}
+
+.explorer_img {
+    float: left;
+    width: 70px;
+    height: 105px;
+    margin: 5px 4px 0px 4px;
+    text-align: center;
+    padding: 5px;
+    margin-bottom: 0;
+    padding-top: 2px;
+}
+
+.explorer_4line {
+    width: 70px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    /* 라인수 */
+    -webkit-box-orient: vertical;
+    word-wrap: break-word;
+    line-height: 1.2em;
+    height: 4.8em;
+    /* line-height 가 1.2em 이고 4라인을 자르기 때문에 height는 1.2em * 4 = 4.8em */
+    text-align: left;
+    word-break: break-all;
+}
+
+.explorer_text {
+    width: auto;
+    height: auto;
+    text-align: left;
+    word-break: break-all;
+    float: left;
+}
+
+.explorer_folder_empty:hover {
+    background-color: #cae8ff;
+    cursor: pointer
+}
+
+.explorer_folder_full:hover {
+    background-color: #cae8ff;
+    cursor: pointer
+}
+
+.explorer_file:hover {
+    background-color: #cae8ff;
+    cursor: pointer
+}
+
+.explorer_img:hover {
+    background-color: #cae8ff;
+    cursor: pointer
+}
+
+.explorer_grid {
+    display: none
+}
+
+.explorer_list {
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    position: relative;
+}
+
+.explorer_list_cont {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    float: left
+}
+
+.exp-menu {}
+
+.exp-menu li {
+    float: left;
+    list-style: none;
+    position: relative;
+    width: 125px;
+    z-index: 100;
+}
+
+.exp-menu li:hover {
+    /*background: white; border-right:1px solid silver; border-left:1px solid silver; box-sizing: border-box*/
+    background: #cae8ff;
+}
+
+.exp-menu li:hover>a {
+    color: black;
+    font-weight: bold;
+}
+
+.exp-menu li ul {
+    display: none;
+    /*position: absolute; */
+    z-index: 100;
+    width: 124px;
+    height: auto;
+    float: left;
+    border-bottom: 1px solid silver;
+    box-sizing;
+}
+
+.exp-menu li>a {
+    color: black;
+    display: block;
+    padding: 6px 6px 8px 6px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.exp-menu li ul li {
+    float: left;
+    width: 125px;
+    height: auto;
+    background-color: #f7f7f7;
+    border-left: 1px solid silver;
+    border-right: 1px solid silver;
+    box-sizing: border-box;
+}
+
+.exp-menu li ul li>a {
+    text-align: left;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.exp-menu li ul li:hover {
+    background-color: #e6f1ff;
+    border-left: 1px solid silver;
+    border-right: 1px solid silver;
+    box-sizing: border-box
+}
+
+.exp-menu li ul li:hover a {
+    color: #333333;
+}
+
+.exp_detail {
+    height: 97px;
+    width: 100%;
+    display: block
+}
+
+.exp_detail span {
+    display: block;
+    float: left;
+    padding: 3px 0
+}
+
+.exp_check {
+    position: absolute;
+    margin: -4px 0 0 -3px
+}
+
+
+/*view aggregation*/
+
+.cont_wrap01 {
+    height: auto;
+    float: left;
+    margin: 8px;
+    line-height: 150%
+}
+
+.cont_wrap01 ul li {
+    text-align: left;
+    vertical-align: top;
+    word-break: break-all;
+}
+
+.cont_wrap01 ul li b,
+.cont_wrap01 ul li span,
+.cont_wrap01 ul li ol li b,
+.cont_wrap01 ul li ol li span {
+    text-align: left;
+    width: 100%;
+    display: block;
+    height: auto;
+    vertical-align: top
+}
+
+.cont_wrap01 ul li ol li {
+    width: 100%;
+    text-align: left;
+    display: block;
+    padding-bottom: 6px;
+    float: left;
+    height: auto;
+    vertical-align: top;
+    word-break: break-all
+}
+
+.cont_wrap02 {
+    height: auto;
+    float: left;
+    margin-top: 8px
+}
+
+.cont_wrap02 ul li {
+    width: 100%;
+    float: left;
+    text-align: left;
+    padding: 5px
+}
+
+.cont_title ul li {
+    width: 90%;
+    text-align: left;
+    font-size: 16px;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+
+/*View item*/
+
+.cont_display {
+    padding: 5px 0 10px 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    margin-bottom: 5px
+}
+
+.cont_display ul li {
+    text-align: center;
+    width: 100%;
+    height: auto;
+}
+
+.cont_display img {
+    width: 380px
+}
+
+.top_move {
+    position: fixed;
+    width: 10%;
+    height: 40px;
+    right: 0px;
+    bottom: 5px;
+    text-align: center;
+    margin-left: 10px
+}
+
+.top_move a {
+    display: block;
+    width: 40px;
+    height: 35px;
+    background-color: cadetblue;
+    color: #ffffff;
+    padding-top: 5px
+}
+
+.btn_del {
+    display: block;
+    width: 15px;
+    height: 15px;
+    text-align: center;
+    background-color: #fff;
+    line-height: 16px;
+    float: right;
+    color: #333;
+    font-weight: bold;
+    border-radius: 3px 3px;
+    margin-top: 3px;
+    border: 1px solid #929292;
+    font-size: 8px;
+}
+
+.comp_list_wrap {
+    margin-bottom: 20px;
+    width: 100%;
+    height: 250px;
+    /*border-left: 1px solid #ddd;
+    border-right: 1px solid #ddd*/
+}
+
+
+/*aggregation*/
+
+.serv_title {
+    border: 1px solid #ddd;
+    margin-top: 10px;
+    background-color: #f7f7f7;
+    padding: 5px;
+    cursor: pointer
+}
+
+.serv_cont {
+    padding: 0.5%;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #ddd;
+    display: none;
+    width: 100%
+}
+
+.open_btn {
+    float: right;
+    background-color: #f7f7f7;
+    border: 0;
+    padding-bottom: 6px
+}
