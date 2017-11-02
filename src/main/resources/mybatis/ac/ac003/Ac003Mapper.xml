@@ -6,41 +6,42 @@
 <mapper namespace="rmsoft.ams.seoul.ac.ac003.dao.Ac003Mapper">
     <select id="findAllUser" resultType="Ac00301VO" parameterType="Ac00301VO" statementType="PREPARED">
         SELECT
-            USER_UUID as userUuid,
-            USER_ID as userId,
-            USER_NAME as userNm,
-            PASSWORD as userPassword,
-            PASSWORD_UPDATE_DATE as passwordUpdateDate,
-            USER_TYPE_UUID as userTypeUuid,
-            START_PROGRAM_UUID startProgramUuid,
-            ORGANIZATION_UUID organizationUuid,
-            DESCRIPTION description,
-            NOTES notes,
-            USE_YN useYn,
+            Z.USER_UUID as userUuid,
+            Z.USER_ID as userId,
+            Z.USER_NAME as userNm,
+            Z.PASSWORD as userPassword,
+            Z.PASSWORD_UPDATE_DATE as passwordUpdateDate,
+            Z.USER_TYPE_UUID as userTypeUuid,
+            Z.START_PROGRAM_UUID startProgramUuid,
+            (SELECT PROGRAM_NAME FROM AD_PROGRAM WHERE PROGRAM_UUID = Z.START_PROGRAM_UUID)as startProgramName,
+            Z.ORGANIZATION_UUID organizationUuid,
+            Z.DESCRIPTION description,
+            Z.NOTES notes,
+            Z.USE_YN useYn,
             <include refid="Common.UserName">
                 <property name="userUuid" value="Z.INSERT_UUID"/>
             </include>
             as insertUuid,
-            INSERT_DATE as insertDate,
+            Z.INSERT_DATE as insertDate,
             <include refid="Common.UserName">
                 <property name="userUuid" value="Z.UPDATE_UUID"/>
             </include>
             as updateUuid,
-            UPDATE_DATE as updateDate
+            Z.UPDATE_DATE as updateDate
         FROM
         AC_USER Z
         <where>
             <if test="userId != null">
-                USER_ID LIKE '%' || #{userId} || '%'
+                Z.USER_ID LIKE '%' || #{userId} || '%'
             </if>
             <if test="userNm != null">
-                AND USER_NAME LIKE '%' || #{userNm} || '%'
+                AND Z.USER_NAME LIKE '%' || #{userNm} || '%'
             </if>
             <if test="userTypeUuid != null">
-                AND USER_TYPE_UUID = #{userTypeUuid}
+                AND Z.USER_TYPE_UUID = #{userTypeUuid}
             </if>
             <if test="useYn != null">
-                AND USE_YN = #{useYn}
+                AND Z.USE_YN = #{useYn}
             </if>
         </where>
     </select>

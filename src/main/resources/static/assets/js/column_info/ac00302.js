@@ -41,8 +41,10 @@ var ac00302 =
                     name: "userGroupName",
                     text: "User Group",
                     width: 150,
-                    editable: false,
-                    dataType: "text",
+                    editable: true,
+                    dataType: "popup",
+                    popupCode : "PU108",
+                    sqlColumn : {USER_GROUP_UUID : "userGroupUuid",USER_GROUP_NAME : "userGroupName"},
                     required: true,
                     visible: true
                 },

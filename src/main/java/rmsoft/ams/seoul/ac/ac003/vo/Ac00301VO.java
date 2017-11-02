@@ -31,6 +31,8 @@ public class Ac00301VO extends BaseVO {
 
     private String startProgramUuid;
 
+    private String startProgramName;
+
     private String organizationUuid;
 
     private String regDate;

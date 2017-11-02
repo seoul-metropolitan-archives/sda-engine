@@ -13,6 +13,16 @@ var ac00301 =
                     visible: false
                 },
                 {
+                    sortNo: 1,
+                    name: "startProgramUuid",
+                    text: "startProgramUuid",
+                    width: 120,
+                    editable: true,
+                    dataType: "code",
+                    required: false,
+                    visible: false
+                },
+                {
                     sortNo: 2,
                     name: "userId",
                     text: "User ID",
@@ -70,12 +80,15 @@ var ac00301 =
                 },
                 {
                     sortNo: 7,
-                    name: "startProgramUuid",
+                    name: "startProgramName",
                     text: "Startup Program",
                     width: 150,
                     editable: true,
-                    dataType: "text",
-                    required: false
+                    dataType: "popup",
+                    popupCode : "PU001",
+                    sqlColumn : {PROGRAM_UUID : "startProgramUuid",PROGRAM_NAME : "startProgramName"},
+                    required: false,
+                    visible: true
                 },
                 {
                     sortNo: 8,
@@ -83,8 +96,18 @@ var ac00301 =
                     text: "Organization",
                     width: 120,
                     editable: true,
-                    dataType: "text",
-                    required: false
+                    dataType: "combo",
+                    required: false,
+                    visible: true,
+                    values: axboot.commonCodeFilter("CD109").codeArr,
+                    labels: axboot.commonCodeFilter("CD109").nameArr,
+                    lookupDisplay: true,
+                    editor: {
+                        type: "dropDown",
+                        dropDownCount: 10,
+                        domainOnly: true, //domainOnly가 true이면 목록에 있는 값들만 선택할 수 있습니다.
+                        textReadOnly: false, // true이면 키 입력이 안되며 선택만 할 수 있습니다.
+                    }
                 },
                 {
                     sortNo: 9,
