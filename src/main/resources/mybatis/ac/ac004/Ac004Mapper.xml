@@ -70,7 +70,7 @@
             Z1.USER_UUID as userUuid,
             Z1.USER_GROUP_UUID as userGroupUuid,
             Z1.ROLE_UUID as roleUuid,
-            Z3.ROLE_NAME as roleName,
+            Z2.ROLE_NAME as roleName,
             Z1.DESCRIPTION as description,
             Z1.NOTES as notes,
             Z1.USE_YN as useYn,
@@ -86,16 +86,11 @@
             Z1.UPDATE_DATE updateDate
         FROM
             AC_ACCESS_CONTROL Z1,
-            AC_USER_GROUP_USER Z2,
-            AC_ROLE Z3
-        WHERE Z1.USER_GROUP_UUID = Z2.USER_GROUP_UUID
-        AND Z1.ROLE_UUID = Z3.ROLE_UUID
+            AC_ROLE Z2
+        WHERE Z1.ROLE_UUID = Z2.ROLE_UUID
         <choose>
-            <when test="userUuid != null">
-                AND Z2.USER_UUID = #{userUuid}
-            </when>
             <when test="userGroupUuid != null">
-                AND Z2.USER_GROUP_UUID = #{userGroupUuid}
+                AND Z1.USER_GROUP_UUID = #{userGroupUuid}
             </when>
         </choose>
     </select>
