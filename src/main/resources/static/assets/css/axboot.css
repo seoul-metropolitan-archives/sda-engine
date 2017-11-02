@@ -27381,7 +27381,21 @@ a.small_open {
 .div_table {
     display: table;
 }
+.textdeco1 {
+    text-decoration: none;
+}
 
+.textdeco2 {
+    text-decoration: underline;
+}
+
+.textdeco3 {
+    text-decoration: overline;
+}
+
+.textdeco4 {
+    text-decoration: line-through;
+}
 
 <!-- 20171103 이혁준 css 필요해서 추가 ( 레코드 서비스) -->
 
