@@ -5,7 +5,9 @@
 var fnObj = {};
 var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_CLOSE: function (caller, act, data) {
-       parent.axboot.modal.close();
+        if (parent) {
+            parent.axboot.modal.close();
+        }
     },
     PAGE_SEARCH: function (caller, act, data) {
         axboot.ajax({
