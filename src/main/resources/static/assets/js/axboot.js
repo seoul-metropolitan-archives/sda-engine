@@ -2519,6 +2519,7 @@ axboot.gridView = {
     },
     tagId: "",
     uuidFieldName: "",
+    primaryKey : "",
     parentsUuidFieldName: "",
     parentsGrid: undefined,
     initChangedData: function () {
@@ -2532,7 +2533,14 @@ axboot.gridView = {
         }
     },
     getUUID: function () {
-        return this.gridObj.getSelectedData()[this.uuidFieldName];
+
+        var key = "";
+        if(undefined == this.uuidFieldName || "" == this.uuidFieldName)
+        {
+            key = this.primaryKey;
+        }
+
+        return this.gridObj.getSelectedData()[key];
     },
     setData: function setData(_data, _type) {
         if (!_type)
