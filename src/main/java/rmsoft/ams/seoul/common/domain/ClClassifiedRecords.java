@@ -24,6 +24,7 @@ import java.io.Serializable;
 @IdClass(ClClassifiedRecords.ClClassifiedRecordsId.class)
 @Alias("ClClassifiedRecords")
 public class ClClassifiedRecords extends BaseJpaModel<ClClassifiedRecords.ClClassifiedRecordsId> {
+
     @Id
     @Column(name = "CLASSIFIED_RECORDS_UUID", length = 36, nullable = false)
     @Comment(value = "분류기록UUID")

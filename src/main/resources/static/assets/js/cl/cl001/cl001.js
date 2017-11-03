@@ -11,6 +11,8 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             data: $.extend({}, {pageSize: 1000, sort: "classificationCode"}, this.formView.getData()),
             callback: function (res) {
                 fnObj.gridView01.setData(res.list);
+                fnObj.gridView01.disabledColumn();
+
             },
             options: {
                 onError: axboot.viewError
@@ -205,6 +207,27 @@ fnObj.gridView01 = axboot.viewExtend(axboot.realGridView, {
                 }
             }]
         );*/
+    },
+    disabledColumn : function()
+    {
+        var codes = axboot.commonCodeFilter("CD111").codeArr;
+        var names = axboot.commonCodeFilter("CD111").nameArr;
+        var state = undefined;
+        for(var i = 0; i < names.length; i++)
+        {
+            if(names[i] == "Confirm")
+            {
+                state = codes[i];
+                break;
+            }
+        }
+        this.gridObj.setCustomCellStyleRows("disable",function(row){
+
+            if(row["statusUuid"] == state)
+                return true;
+            else
+                return false;
+        },["classificationName","classificationTypeUuid","orderNo","useYn"]);
     },
     itemClick: function (data) {
         if (data.classificationSchemeUuid != null && data.classificationSchemeUuid != "") {

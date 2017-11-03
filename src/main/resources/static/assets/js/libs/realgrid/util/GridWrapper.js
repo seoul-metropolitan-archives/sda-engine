@@ -87,13 +87,14 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 	//================================================
 
     var requiredColumnList = new Array();
+    var defaultEditColumnProperties = new Array();
 
 	//그리드 옵션
 	var gridOption = undefined;
 	var rootContext = p_rootContext;
     var addRowBeforeEventCallback = function(){};
-    var addRowAfterEventCallback = function(){}
-    var removeRowEventCallback = function(){}
+    var addRowAfterEventCallback = function(){};
+    var removeRowEventCallback = function(){};
     this.addRowBeforeEvent = function(_event)
     {
         addRowBeforeEventCallback = _event
@@ -436,6 +437,7 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
                 //$("#calleeEmpName").val(data.empName);
                 //$("#calleeEmpTelno").val(data.empPhoneNo);
                 var currentValue = "";
+                grid.commit(true);
                 for(var key in popupData["sqlColumn"])
                 {
                     if(popupData["sqlColumn"][key] == currentField)
@@ -444,9 +446,9 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
                         currentValue = data[key];
                     }
                 }
-
                 console.log(data);
                 retData = data;
+                grid.commit(true);
                 for(var key in data)
                 {
                     try {
@@ -458,6 +460,7 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 
                     }
                 }
+                grid.commit(true);
                 doRequiredValidation = true;
                 if(this.close)
                     this.close();
@@ -816,6 +819,9 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 				visible : data.visible === undefined ? true : data.visible,
 				readOnly : !(data.editable === undefined ? true : data.editable)
 			};
+
+            defaultEditColumnProperties[obj.name] = obj.editable;
+
 			if (!firstFocusColumnName && obj.visible == true && obj.editable == true)
 				firstFocusColumnName = data.name;
 			// tab사용시 마지막 컬럼사용하기 때문에 세팅.
@@ -1166,8 +1172,7 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 		}
 
 	};
-	// ==============================
-	// keyDown event
+    // keyDown event
 	var keyDown = function(grid, key, ctrl, shift, alt) {
 		var result = true;
 		//return ;
@@ -1206,7 +1211,7 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 					}
 				});
 				if (isAppending || isNextRow) {
-	
+
 					var current = gridView.getCurrent();
 					current.dataRow++;
 					current.itemIndex = dataProvider.getFieldIndex(firstFocusColumnName);
@@ -1223,20 +1228,92 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 		}
 		return result;
 	};
-	this.setColumnProperty = function(columnName,condition)
-	{
-        var styles = {};
+    // ==============================
+    this.setCustomCellStyleRows = function(type, conditionFunc, columnNames)
+    {
+        var styles = undefined;
+        var editable  =false;
         if(type == "disable")
-		 	styles =  _defaultStyle.column.disable;
-        else if(type == "required")
+        {
+            styles =  _defaultStyle.column.disable;
+            editable  = false;
+        }
+    	else if(type == "required")
+		{
             styles =  _defaultStyle.column.required;
+            editable  = true;
+        }
 
-        gridView.setColumnProperty(
-            columnName,
-            "dynamicStyles", condition
-        )
-	}
-	this.setValidations = function(validations) {
+        if(!styles)
+            return ;
+        var rows = dataProvider.getJsonRows(0,-1);
+
+        var columnIndexList = new Array();
+
+        for(var i = 0; i < columnNames.length; i++)
+		{
+            columnIndexList.push(dataProvider.getFieldIndex(columnNames[i]));
+		}
+
+
+        var applyData = {rows : new Array(), columns : columnNames}
+        gridView.addCellStyle("customStyle01", styles, true);
+        for(var i = 0; i < rows.length; i++)
+		{
+			if(conditionFunc(rows[i]))
+			{
+                applyData.rows.push(i);
+
+                for(var j = 0; j < columnIndexList.length; j++)
+				{
+                    gridView.setCellStyle(i, columnIndexList[j], "customStyle01",true);
+				}
+			}
+		}
+
+
+
+		/*
+        gridView.setCellStyleRows(
+            applyData.rows,
+            applyData.columns,
+            "customStyle01"
+        );
+        */
+        /*해당 그리드가 수정관련한 부분에 대해서 못하거나 할 수 있게 만들어주는 함수*/
+        gridView.onCurrentRowChanged = function (grid, oldRow, newRow) {
+            var curr = grid.getCurrent();
+			var doSetting  = false;
+            for(var i = 0; i < applyData.rows.length; i++)
+			{
+				if(applyData.rows[i] == curr.dataRow)
+				{
+                    doSetting = true;
+				}
+			}
+			//setting을 해야되는 경우 진행
+			if(doSetting)
+			{
+				for(var i = 0; i < applyData.columns.length; i++)
+				{
+                    grid.setColumnProperty(applyData.columns[i], "editable", editable);
+				}
+			}
+			else
+			{
+                //setting에 영향을 안받을 경우에는 기본값으로 복원
+				for(var column in defaultEditColumnProperties)
+				{
+                    grid.setColumnProperty(column, "editable", defaultEditColumnProperties[column]);
+				}
+			}
+        }
+        var sel = {startItem: 1, endItem: 1, style: "block"};
+        gridView.setSelection(sel);
+        gridView.resetCurrent();
+
+    }
+    this.setValidations = function(validations) {
 		var column = undefined;
 		for (var i = 0; i < validations.length; i++) {
 			column = gridView.columnByName(validations[i].fieldName);

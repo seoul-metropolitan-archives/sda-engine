@@ -117,7 +117,7 @@ var ad00402 =
             },
             {
                 sortNo: 8,
-                name: "orderNo",
+                name: "orderNO",
                 text: "Order No",
                 width: 100,
                 editable: true,
