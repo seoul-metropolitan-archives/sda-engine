@@ -6,6 +6,8 @@ package rmsoft.ams.seoul.sp.sp001.controller;
 
 import io.onsemiro.core.api.response.ApiResponse;
 import io.onsemiro.core.api.response.Responses;
+import io.onsemiro.core.domain.program.menu.Menu;
+import io.onsemiro.core.domain.program.menu.MenuService;
 import io.onsemiro.core.parameter.RequestParams;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -32,11 +34,14 @@ public class Sp001Controller extends MessageBaseController {
     @Autowired
     private Ac005Service ac005Service;
 
-    @GetMapping("/01/list")
-    public Responses.PageResponse findAllRole(Pageable pageable, RequestParams<Ac00501VO> requestParams) {
-        Page<Ac00501VO> pages = ac005Service.findAllRole(pageable, requestParams);
+    @Autowired
+    private MenuService menuService;
 
-        return Responses.PageResponse.of(pages.getContent(), pages);
+    @GetMapping("/01/list")
+    public Responses.ListResponse findAllMenu(Pageable pageable, RequestParams<Ac00501VO> requestParams) {
+        List<Menu> pages = menuService.findAllMenu("");
+
+        return Responses.ListResponse.of(pages);
     }
 
     @GetMapping("/02/list")
