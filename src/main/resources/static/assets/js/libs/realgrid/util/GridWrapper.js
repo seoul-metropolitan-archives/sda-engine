@@ -1064,7 +1064,7 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 	{
 		return dataProvider;
 	}
-	this.getJSONRows = function()
+	this.getJsonRows = function()
 	{
 		var rows = undefined;
         if(isTree)

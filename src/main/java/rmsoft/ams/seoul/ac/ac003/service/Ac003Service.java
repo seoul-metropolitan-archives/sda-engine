@@ -88,7 +88,7 @@ public class Ac003Service extends BaseService {
 
             if (orgAcUser == null) {
                 // created
-                acUser.setUserUuid(UUIDUtils.getUUID());
+                //acUser.setUserUuid(UUIDUtils.getUUID());
                 acUser.setPasswordUpdateDate(DateUtils.getTimestampNow());
                 acUser.setUserPassword(bCryptPasswordEncoder.encode(acUser.getUserPassword())); // 암호화
 

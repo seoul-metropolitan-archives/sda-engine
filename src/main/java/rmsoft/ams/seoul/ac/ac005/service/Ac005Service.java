@@ -80,7 +80,7 @@ public class Ac005Service extends BaseService {
 
             if (orgAcRole == null) {
                 // created
-                acRole.setRoleUuid(UUIDUtils.getUUID());
+                //acRole.setRoleUuid(UUIDUtils.getUUID());
                 acRoleRepository.save(acRole);
             } else {
                 if (acRole.isDeleted()) {

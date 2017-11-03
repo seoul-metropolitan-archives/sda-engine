@@ -2617,6 +2617,9 @@ axboot.gridView = {
         data[0] = uuid;
         wrapperObj.setDefaultData(data);
     },
+    clearData : function(){
+        this.setData([]);
+    }
 };
 
 /**
