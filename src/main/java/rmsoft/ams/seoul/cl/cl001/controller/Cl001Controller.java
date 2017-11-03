@@ -35,14 +35,23 @@ public class Cl001Controller extends BaseController {
 
     @GetMapping("/02/detail")
     public Cl00102VO getClassificationSchemeDetail(RequestParams<Cl00101VO> requestParams) {
-        Cl00102VO cl00102VO = cl001Service.getClassificationSchemeDetail(requestParams);
         return cl001Service.getClassificationSchemeDetail(requestParams);
     }
 
-    @PutMapping(value = "/03/saveList")
+    @PutMapping(value = "/03/updateClassificationSchemeList")
     @PostMapping
     public ApiResponse updateClassificationSchemeList(@RequestBody List<Cl00101VO> requestParams) {
         ApiResponse apiResponse = cl001Service.updateClassificationSchemeList(requestParams);
+        if(apiResponse.getStatus() == -1) {
+            throw new ApiException(ApiStatus.SYSTEM_ERROR, apiResponse.getMessage());
+        }
+        return apiResponse;
+    }
+
+    @PutMapping(value = "/04/updateStatus")
+    @PostMapping
+    public ApiResponse updateStatus(@RequestBody List<Cl00101VO> requestParams) {
+        ApiResponse apiResponse = cl001Service.updateStatus(requestParams);
         if(apiResponse.getStatus() == -1) {
             throw new ApiException(ApiStatus.SYSTEM_ERROR, apiResponse.getMessage());
         }

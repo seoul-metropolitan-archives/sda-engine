@@ -88,7 +88,7 @@ public class Ac004Service extends BaseService {
 
             if (orgAcUserGroup == null) {
                 // created
-                acUserGroup.setUserGroupUuid(UUIDUtils.getUUID());
+                //acUserGroup.setUserGroupUuid(UUIDUtils.getUUID());
                 acUserGroupRepository.save(acUserGroup);
             } else {
                 if (acUserGroup.isDeleted()) {

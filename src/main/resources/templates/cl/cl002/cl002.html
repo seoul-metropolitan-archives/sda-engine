@@ -19,17 +19,17 @@
                 <div style=" height:31px; width:100%" class="bgf7 div_tablerow">
                     <ul class="bdb">
                         <th:block layout:insert="~{/fragments/page-buttons :: bookmark}"/>
-                        <th:block layout:insert="~{/fragments/page-buttons :: confirm-and-cancle-and-save-and-inquiry}"/>
+                        <th:block layout:insert="~{/fragments/page-buttons :: confirm-and-cancel-and-save-and-inquiry}"/>
                     </ul>
                 </div>
                 <div class="bdb div_tablerow">
                     <dl>
                        <th:block layout:insert="~{/fragments/page-buttons :: searchInputYellow ('Classification Scheme','classificationCode')}"/>
-                       <th:block layout:insert="~{/fragments/page-buttons :: searchInput ('Parent Class Code','classCode')}"/>
+                       <th:block layout:insert="~{/fragments/page-buttons :: searchInput ('Parent Class Code','parentClassCode')}"/>
 
                         <dt class="w150">Parent Class Name</dt>
                         <dd>
-                            <input data-ax-path="className" type=text style="width:135px">
+                            <input data-ax-path="parentClassName" type=text style="width:135px">
                         </dd>
 
                     </dl>
@@ -46,11 +46,11 @@
 
                         <dt class="w150">Class Code</dt>
                         <dd>
-                            <input type=text style="width:135px">
+                            <input data-ax-path="classCode" type=text style="width:135px">
                         </dd>
                         <dt class="w150">Class Name</dt>
                         <dd>
-                            <input type=text style="width:135px">
+                            <input data-ax-path="className" type=text style="width:135px">
                         </dd>
 
                     </dl>
@@ -135,49 +135,49 @@
                                     <ul style="width: 100%; height: 30px; ">
                                         <li style="width: 25%;text-align: left">Class Name</li>
                                         <li style="width: 75%">
-                                            <input type=text style="width:97%" class="bgf7" readonly>
+                                            <input data-ax-path="detailClassName" type=text style="width:97%" class="bgf7" readonly>
                                         </li>
                                     </ul>
 
                                     <ul style="width: 100%; height: 30px;">
                                         <li style="width: 25%;text-align: left">Path</li>
                                         <li style="width: 75%">
-                                            <input type=text style="width:97%" class="bgf7" readonly>
+                                            <input data-ax-path="detailPath" type=text style="width:97%" class="bgf7" readonly>
                                         </li>
                                     </ul>
 
                                     <ul style="width: 100%; height: 30px;">
                                         <li style="width: 25%;text-align: left">Class Level</li>
                                         <li style="width: 75%">
-                                            <input type=text style="width:97%" class="bgf7" readonly>
+                                            <input data-ax-path="detailClassLevel" type=text style="width:97%" class="bgf7" readonly>
                                         </li>
                                     </ul>
 
                                     <ul style="width: 100%; height: 30px;">
                                         <li style="width: 25%;text-align: left">Add Meta1</li>
                                         <li style="width: 75%">
-                                            <input type=text style="width:97%">
+                                            <input data-ax-path="detailAddMetadata01" type=text style="width:97%">
                                         </li>
                                     </ul>
 
                                     <ul style="width: 100%; height: 30px;">
                                         <li style="width: 25%;text-align: left">Add Meta2</li>
                                         <li style="width: 75%">
-                                            <input type=text style="width:97%">
+                                            <input data-ax-path="detailAddMetadata02" type=text style="width:97%">
                                         </li>
                                     </ul>
 
                                     <ul style="width: 100%; height: 30px;">
                                         <li style="width: 25%;text-align: left">Add Meta3</li>
                                         <li style="width: 75%">
-                                            <input type=text style="width:97%">
+                                            <input data-ax-path="detailAddMetadata03" type=text style="width:97%">
                                         </li>
                                     </ul>
 
                                     <ul style="width: 100%; height: 30px;">
                                         <li style="width: 25%;text-align: left">Add Meta4</li>
                                         <li style="width: 75%">
-                                            <input type=text style="width:97%">
+                                            <input data-ax-path="detailAddMetadata04" type=text style="width:97%">
                                         </li>
                                     </ul>
 

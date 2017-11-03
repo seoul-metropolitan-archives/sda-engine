@@ -1787,26 +1787,27 @@ axboot.modal = function () {
      */
     var open = function open(modalConfig) {
 
-        if("COMMON_POPUP" == modalConfig.modalType && (undefined == modalConfig.preSearch ||modalConfig.preSearch) )
-        {
-            if(modalConfig.sendData)
-            {
+        if ("COMMON_POPUP" == modalConfig.modalType && (undefined == modalConfig.preSearch || modalConfig.preSearch)) {
+            if (modalConfig.sendData) {
                 var list = null;
                 var reqData = modalConfig.sendData();
                 axboot.ajax({
                     url: "/api/v1/common/popup/search",
-                    dataType : "JSON",
-                    type : "POST",
-                    async : false,
-                    data: JSON.stringify({popupCode : reqData["popupCode"],searchField : reqData["searchData"],isTree : false}),
+                    dataType: "JSON",
+                    type: "POST",
+                    async: false,
+                    data: JSON.stringify({
+                        popupCode: reqData["popupCode"],
+                        searchField: reqData["searchData"],
+                        isTree: false
+                    }),
                     callback: function (res) {
                         list = res.list;
                     }
                 });
             }
 
-            if(list.length == 1)
-            {
+            if (list.length == 1) {
                 modalConfig.callback(list[0]);
                 return;
             }
@@ -2420,14 +2421,14 @@ axboot.baseView =
         name: "baseView",
         init: function () {
             var _this = this;
+            $(".bdb").delegate("#confirm", "click", function () {
+                _this.confirm();
+            });
             $(".bdb").delegate("#inquiry", "click", function () {
                 _this.inquiry();
             });
             $(".bdb").delegate("#save", "click", function () {
                 _this.save();
-            });
-            $(".bdb").delegate("#confirm", "click", function () {
-                _this.confirm();
             });
             $(".bdb").delegate("#cancel", "click", function () {
                 _this.cancel();
@@ -2516,10 +2517,11 @@ axboot.gridView = {
         pageNumber: 0,
         pageSize: 99999
     },
-    tagId : "",
-    uuidFieldName : "",
-    parentsUuidFieldName : "",
-    parentsGrid : undefined,
+    tagId: "",
+    uuidFieldName: "",
+    primaryKey : "",
+    parentsUuidFieldName: "",
+    parentsGrid: undefined,
     initChangedData: function () {
         this.gridObj.commit();
     },
@@ -2530,9 +2532,15 @@ axboot.gridView = {
             return false;
         }
     },
-    getUUID : function()
-    {
-        return this.gridObj.getSelectedData()[this.uuidFieldName];
+    getUUID: function () {
+
+        var key = "";
+        if(undefined == this.uuidFieldName || "" == this.uuidFieldName)
+        {
+            key = this.primaryKey;
+        }
+
+        return this.gridObj.getSelectedData()[key];
     },
     setData: function setData(_data, _type) {
         if (!_type)
@@ -2542,38 +2550,34 @@ axboot.gridView = {
     getData: function getData() {
         return this.gridObj.getData();
     },
-    initInstance : function()
-    {
+    initInstance: function () {
         this.gridObj = new GridWrapper(this.tagId, "/assets/js/libs/realgrid");
         this.gridObj.setGridStyle("100%", "100%");
         this.gridObj.setMakeObj(this);
     },
-    makeGrid : function(){
+    makeGrid: function () {
         this.gridObj.makeGrid();
         this.bindEvent();
     },
-    bindEvent : function(){
-        if(this.parentsGrid)
+    bindEvent: function () {
+        if (this.parentsGrid)
             this.gridObj.addRowBeforeEvent(this.addRowBeforeEventForChildGrid);
         else
             this.gridObj.addRowBeforeEvent(this.addRowBeforeEvent);
         this.gridObj.onRowsPasted(this.onRowsPasted);
     },
-    addRowBeforeEventForChildGrid: function(wrapperObj,_this) {
+    addRowBeforeEventForChildGrid: function (wrapperObj, _this) {
 
-        if(_this.parentsGrid)
-        {
+        if (_this.parentsGrid) {
             var data = wrapperObj.getDefaultData();
             data[wrapperObj.getFieldIndex(_this.parentsUuidFieldName)] = _this.parentsGrid.getUUID();
             wrapperObj.setDefaultData(data);
         }
     },
-    getCurrentData : function()
-    {
+    getCurrentData: function () {
         return this.gridObj.getSelectedData();
     },
-    setFocus : function()
-    {
+    setFocus: function () {
         this.gridObj.setFocus();
     },
     delRow: function (_type) {
@@ -2588,29 +2592,24 @@ axboot.gridView = {
     getPageData: function getPageData() {
         return this.page;
     },
-    onRowsPasted : function(grid, items)
-    {
+    onRowsPasted: function (grid, items) {
         var data = undefined;
-        for(var i = 0; i < items.length; i++)
-        {
-            if(parentsGrid)
-            {
-                this.gridObj.setValue(items[i],1, parentsGrid.getUUID());
+        for (var i = 0; i < items.length; i++) {
+            if (parentsGrid) {
+                this.gridObj.setValue(items[i], 1, parentsGrid.getUUID());
                 data[this.gridObj.getFieldIndex(this.parentsUuidFieldName)] = parentsGrid.getUUID();
             }
 
         }
     },
-    addRowBeforeEvent : function(wrapperObj)
-    {
+    addRowBeforeEvent: function (wrapperObj) {
         var uuid = undefined;
         var data = wrapperObj.getDefaultData();
         axboot.ajax({
-            url : "/api/v1/common/getUUID",
-            type : "POST",
-            async : false,
-            callback:function(res)
-            {
+            url: "/api/v1/common/getUUID",
+            type: "POST",
+            async: false,
+            callback: function (res) {
                 uuid = res.map.uuid;
             }
         });
@@ -2618,6 +2617,9 @@ axboot.gridView = {
         data[0] = uuid;
         wrapperObj.setDefaultData(data);
     },
+    clearData : function(){
+        this.setData([]);
+    }
 };
 
 /**
@@ -2660,7 +2662,7 @@ axboot.realGridView = {
     addRow: function addRow() {
         return this.gridObj.addRow();
     },
-    
+
     delRow: function delRow(_type) {
         return this.gridObj.removeRow();
     },
@@ -2676,8 +2678,7 @@ axboot.realGridView = {
             ACTIONS.dispatch(_this.itemClick, data);
         });
     },
-    getCurrentData : function()
-    {
+    getCurrentData: function () {
         return this.gridObj.getSelectedData();
     },
     makeGrid: function () {

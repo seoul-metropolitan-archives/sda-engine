@@ -189,6 +189,37 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
         this.model.setModel(this.getDefaultData(), this.target);
         this.modelFormatter = new axboot.modelFormatter(this.model); // 모델 포메터 시작
         this.initEvent();
+
+        axboot.buttonClick(this, "data-form-view-01-btn", {
+            "select-all": function () {
+                var dataLists = fnObj.gridView02.gridObj.getJsonRows();
+
+                dataLists.forEach(function (menuInfo) {
+                    if (menuInfo.allYn == "Y") {
+                        menuInfo["useYn"] = "Y";
+                        menuInfo["saveYn"] = "Y";
+                        menuInfo["inquiryYn"] = "Y";
+                    }
+                });
+
+                fnObj.gridView02.gridObj.getDataProvider().updateRows(0, dataLists, 0, -1);
+                fnObj.gridView02.gridObj.commit(true);
+            },
+            "deselect-all": function () {
+                var dataLists = fnObj.gridView02.gridObj.getJsonRows();
+
+                dataLists.forEach(function (menuInfo) {
+                    if (menuInfo.allYn == "N") {
+                        menuInfo["useYn"] = "N";
+                        menuInfo["saveYn"] = "N";
+                        menuInfo["inquiryYn"] = "N";
+                    }
+                });
+
+                fnObj.gridView02.gridObj.getDataProvider().updateRows(0, dataLists, 0, -1);
+                fnObj.gridView02.gridObj.commit(true);
+            }
+        });
     },
     initEvent: function () {
         var _this = this;
@@ -232,22 +263,14 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
         pageNumber: 0,
         pageSize: 20
     },
+    tagId: "realgrid01",
+    primaryKey: "roleUuid",
+    entityName: "Role",
     initView: function () {
-        this.gridObj = new GridWrapper("realgrid01", "/assets/js/libs/realgrid");
-        this.gridObj.setGridStyle("100%", "100%");
-        this.gridObj.setColumnInfo(ac00701.column_info).setEntityName("CONFIGURATION");
-        this.gridObj.makeGrid();
+        this.initInstance();
+        this.setColumnInfo(ac00701.column_info);
+        this.makeGrid();
         this.gridObj.itemClick(this.itemClick);
-    },
-    setData: function (list) {
-        this.gridObj.setData("set", list);
-
-    },
-    getData: function () {
-        return this.gridObj.getData();
-    },
-    addRow: function () {
-        this.gridObj.addRow();
     },
     itemClick: function (data, index) {
         /* if (index.fieldIndex == 3) {
@@ -344,27 +367,18 @@ fnObj.gridView03 = axboot.viewExtend(axboot.gridView, {
         pageNumber: 0,
         pageSize: 20
     },
+    tagId: "realgrid03",
+    entityName: "Permission",
+    primaryKey: "rolePermissionUuid",
+    parentsUuidFieldName: "roleUuid",
+    parentsGrid: fnObj.gridView01,
     initView: function () {
-        this.gridObj = new GridWrapper("realgrid03", "/assets/js/libs/realgrid");
-        this.gridObj.setGridStyle("100%", "100%");
+        this.initInstance();
         this.gridObj.setFixedOptions({
             colCount: 1
         });
-        this.gridObj.setColumnInfo(ac00703.column_info).setEntityName("CONFIGURATION");
-        this.gridObj.makeGrid();
-        this.gridObj.itemClick(this.itemClick);
-    },
-    setData: function (list) {
-        this.gridObj.setData("set", list);
-
-    },
-    getData: function () {
-        return this.gridObj.getData();
-    },
-    addRow: function () {
-        this.gridObj.addRow();
-    },
-    itemClick: function (data, index) {
+        this.setColumnInfo(ac00703.column_info);
+        this.makeGrid();
     }
 });
 

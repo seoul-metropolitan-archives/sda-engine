@@ -1,5 +1,8 @@
 var fnObj = {};
 var selectedItem ; //선택된 그리드 아이템
+var CONFIRM_STATUS = "Confirm";
+var CANCEL_STATUS = "Draft";
+
 var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH: function (caller, act, data) {
         axboot.ajax({
@@ -8,6 +11,8 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             data: $.extend({}, {pageSize: 1000, sort: "classificationCode"}, this.formView.getData()),
             callback: function (res) {
                 fnObj.gridView01.setData(res.list);
+                fnObj.gridView01.disabledColumn();
+
             },
             options: {
                 onError: axboot.viewError
@@ -29,7 +34,6 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 fnObj.formView.setFormData("useYes",res.useYes);
                 fnObj.formView.setFormData("aggregationCnt",res.aggregationCnt);
                 fnObj.formView.setFormData("itemCnt",res.itemCnt);
-
             },
             options: {
                 onError: axboot.viewError
@@ -39,10 +43,34 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     },
     ERROR_SEARCH: function (caller, act, data) {
     },
+    STATUS_UPATE: function (caller, act, data) {
+        var rows = fnObj.gridView01.gridObj.getCheckedList();
+
+        if(!rows || rows.length < 1) return;
+
+        var params = rows.filter(function (item) {
+            item.changeStatus = data;
+            return item.classificationSchemeUuid !== "";
+        });
+
+        axboot.ajax({
+            type: "PUT",
+            url: "/api/v1/cl001/04/updateStatus",
+            data: JSON.stringify(params),
+            callback: function (res) {
+                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+            },
+            options: {
+                onError: axboot.viewError
+            }
+        });
+    },
+
     PAGE_CONFIRM: function (caller, act, data) {
+        ACTIONS.dispatch(ACTIONS.STATUS_UPATE,CONFIRM_STATUS);
     },
     PAGE_CANCEL: function (caller, act, data) {
-
+        ACTIONS.dispatch(ACTIONS.STATUS_UPATE,CANCEL_STATUS);
     },
     PAGE_SAVE: function (caller, act, data) {
         ACTIONS.dispatch(ACTIONS.TOP_GRID_SAVE);
@@ -52,7 +80,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         var result = false;
         axboot.call({
                 type: "PUT",
-                url: "/api/v1/cl001/03/saveList",
+                url: "/api/v1/cl001/03/updateClassificationSchemeList",
                 data: JSON.stringify(this.gridView01.getData()),
                 callback: function (res) {
                     ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
@@ -179,6 +207,27 @@ fnObj.gridView01 = axboot.viewExtend(axboot.realGridView, {
                 }
             }]
         );*/
+    },
+    disabledColumn : function()
+    {
+        var codes = axboot.commonCodeFilter("CD111").codeArr;
+        var names = axboot.commonCodeFilter("CD111").nameArr;
+        var state = undefined;
+        for(var i = 0; i < names.length; i++)
+        {
+            if(names[i] == "Confirm")
+            {
+                state = codes[i];
+                break;
+            }
+        }
+        this.gridObj.setCustomCellStyleRows("disable",function(row){
+
+            if(row["statusUuid"] == state)
+                return true;
+            else
+                return false;
+        },["classificationName","classificationTypeUuid","orderNo","useYn"]);
     },
     itemClick: function (data) {
         if (data.classificationSchemeUuid != null && data.classificationSchemeUuid != "") {

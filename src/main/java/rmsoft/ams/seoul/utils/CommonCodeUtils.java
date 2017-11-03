@@ -72,10 +72,24 @@ public class CommonCodeUtils {
 
         List<Ad00303VO> commonCodes = commonCodeMap.get(groupCd);
         Ad00303VO commonCode = commonCodes.stream()
-                    .filter(e -> e.getCodeName().equals(name.trim()))
-                    .findFirst().get();
+                .filter(e -> e.getCodeName().equals(name.trim()))
+                .findFirst().get();
 
         return StringUtils.isEmpty(commonCode.getCodeDetailUUID()) ? "미등록코드" : commonCode.getCodeDetailUUID();
+    }
+
+    public static String getDetailCode(String groupCd, String cdUuid) {
+
+        if(commonCodeMap == null){
+            commonCodeMap =  getAllByMap();
+        }
+
+        List<Ad00303VO> commonCodes = commonCodeMap.get(groupCd);
+        Ad00303VO commonCode = commonCodes.stream()
+                .filter(e -> e.getCodeDetailUUID().equals(cdUuid.trim()))
+                .findFirst().get();
+
+        return StringUtils.isEmpty(commonCode.getCode()) ? "미등록코드" : commonCode.getCode();
     }
 
     public static Map<String, List<Ad00303VO>> getAllByMap() {

@@ -44,7 +44,7 @@ var ac00402 =
                     editable: true,
                     dataType: "popup",
                     popupCode : "PU107",
-                    sqlColumn : {USER_UUID : "userUuid",USER_NAME : "userName"},
+                    sqlColumn : {USER_UUID : "userUuid",USER_NAME : "userNm"},
                     required: true,
                     visible: true
                 },

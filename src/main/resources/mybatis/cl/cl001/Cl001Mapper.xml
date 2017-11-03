@@ -82,4 +82,23 @@
             AND Z1.CLASSIFICATION_SCHEME_UUID = Z2.CLASSIFICATION_SCHEME_UUID
         </where>
     </select>
+    <select id="getMaxClassificationCode" resultType="String" parameterType="Cl00101VO" statementType="PREPARED">
+        SELECT CLASSIFICATION_CODE
+        FROM
+        (
+            SELECT Z.*, ROW_NUMBER() OVER(ORDER BY CLASSIFICATION_CODE DESC)
+            FROM CL_CLASSIFICATION_SCHEME Z
+            <where>
+                <if test="classificationTypeUuid != null">
+                    Z.CLASSIFICATION_TYPE_UUID = #{classificationTypeUuid}
+                </if>
+            </where>
+        )
+        WHERE ROWNUM = 1
+    </select>
+    <select id="getChildClass" resultType="int" parameterType="String" statementType="PREPARED">
+        SELECT COUNT(*)
+        FROM CL_CLASS
+        WHERE CLASSIFICATION_SCHEME_UUID = #{classificationSchemeUuid}
+    </select>
 </mapper>

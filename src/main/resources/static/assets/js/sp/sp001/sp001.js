@@ -12,27 +12,12 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             url: "/api/v1/sp001/01/list",
             data: $.extend({}, {pageSize: 1000}, this.formView.getData()),
             callback: function (res) {
-                fnObj.gridView01.setData(res.list);
+                caller.treeView01.setData({}, res.list, data);
 
-                if (res.list.length > 0) {
+                /*if (res.list.length > 0) {
                     ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, res.list[0]);
-                }
+                }*/
 
-            },
-            options: {
-                onError: axboot.viewError
-            }
-        });
-        return false;
-    },
-    // Role Permission 조회
-    PAGE_SEARCH1: function (caller, act, data) {
-        axboot.ajax({
-            type: "GET",
-            url: "/api/v1/sp001/02/list",
-            data: $.extend({}, {pageSize: 1000}, data),
-            callback: function (res) {
-                fnObj.gridView02.setData(res.list);
             },
             options: {
                 onError: axboot.viewError
@@ -42,20 +27,12 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     },
     PAGE_SAVE: function (caller, act, data) {
         var roleList = [].concat(fnObj.gridView01.getData());
-        var rolePermissionList = [].concat(fnObj.gridView02.getData());
 
         axboot
             .call({
                 type: "PUT",
                 url: "/api/v1/sp001/01/save",
                 data: JSON.stringify(roleList),
-                callback: function (res) {
-                }
-            })
-            .call({
-                type: "PUT",
-                url: "/api/v1/sp001/02/save",
-                data: JSON.stringify(rolePermissionList),
                 callback: function (res) {
                 }
             })
@@ -98,6 +75,28 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     CLOSE_TAB: function (caller, act, data) {
         ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
     },
+    TREEITEM_CLICK: function (caller, act, data) {
+        if (typeof data.menuId === "undefined") {
+            caller.formView01.clear();
+
+            axDialog.confirm({
+                title: '[NOTICE]',
+                msg: '신규 생성된 메뉴는 저장 후 편집 할수 있습니다. \r\n지금 저장 하시겠습니까?'
+            }, function () {
+                if (this.key == "ok") {
+                    ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
+                }
+            });
+            return;
+        }
+        caller.formView01.setData(data);
+    },
+    TREEITEM_DESELECTE: function (caller, act, data) {
+        caller.formView01.clear();
+    },
+    TREE_ROOTNODE_ADD: function (caller, act, data) {
+        caller.treeView01.addRootNode();
+    },
     dispatch: function (caller, act, data) {
         var result = ACTIONS.exec(caller, act, data);
         if (result != "error") {
@@ -132,7 +131,7 @@ fnObj.pageStart = function () {
 
     _this.formView.initView();
     _this.gridView01.initView();
-    _this.gridView02.initView();
+    _this.treeView01.initView();
 
     // Data 조회
     ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
@@ -229,32 +228,184 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
         }
     }
 });
-fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
-    page: {
-        pageNumber: 0,
-        pageSize: 20
+
+/**
+ * treeView
+ */
+fnObj.treeView01 = axboot.viewExtend(axboot.treeView, {
+    param: {},
+    deletedList: [],
+    newCount: 0,
+    addRootNode: function () {
+        var _this = this;
+        var nodes = _this.target.zTree.getSelectedNodes();
+        var treeNode = nodes[0];
+
+        // root
+        treeNode = _this.target.zTree.addNodes(null, {
+            id: "_isnew_" + (++_this.newCount),
+            pId: 0,
+            name: "새 메뉴",
+            __created__: true,
+            menuGrpCd: _this.param.menuGrpCd
+        });
+
+        if (treeNode) {
+            _this.target.zTree.editName(treeNode[0]);
+        }
+        fnObj.treeView01.deselectNode();
     },
     initView: function () {
-        this.gridObj = new GridWrapper("realgrid02", "/assets/js/libs/realgrid");
-        this.gridObj.setGridStyle("100%", "100%");
-        this.gridObj.setFixedOptions({
-            colCount: 1
-        });
-        this.gridObj.setColumnInfo(sp00102.column_info).setEntityName("CONFIGURATION");
-        this.gridObj.makeGrid();
-        this.gridObj.itemClick(this.itemClick);
-    },
-    setData: function (list) {
-        this.gridObj.setData("set", list);
+        var _this = this;
 
+        $('[data-tree-view-01-btn]').click(function () {
+            var _act = this.getAttribute("data-tree-view-01-btn");
+            switch (_act) {
+                case "add":
+                    ACTIONS.dispatch(ACTIONS.TREE_ROOTNODE_ADD);
+                    break;
+                case "delete":
+                    //ACTIONS.dispatch(ACTIONS.ITEM_DEL);
+                    break;
+            }
+        });
+
+        this.target = axboot.treeBuilder($('[data-z-tree="tree-view-01"]'), {
+            view: {
+                dblClickExpand: false,
+                addHoverDom: function (treeId, treeNode) {
+                    var sObj = $("#" + treeNode.tId + "_span");
+                    if (treeNode.editNameFlag || $("#addBtn_" + treeNode.tId).length > 0) return;
+                    var addStr = "<span class='button add' id='addBtn_" + treeNode.tId
+                        + "' title='add node' onfocus='this.blur();'></span>";
+                    sObj.after(addStr);
+                    var btn = $("#addBtn_" + treeNode.tId);
+                    if (btn) {
+                        btn.bind("click", function () {
+                            _this.target.zTree.addNodes(
+                                treeNode,
+                                {
+                                    id: "_isnew_" + (++_this.newCount),
+                                    pId: treeNode.id,
+                                    name: "새 메뉴",
+                                    __created__: true,
+                                    menuGrpCd: _this.param.menuGrpCd
+                                }
+                            );
+                            _this.target.zTree.selectNode(treeNode.children[treeNode.children.length - 1]);
+                            _this.target.editName();
+                            fnObj.treeView01.deselectNode();
+                            return false;
+                        });
+                    }
+                },
+                removeHoverDom: function (treeId, treeNode) {
+                    $("#addBtn_" + treeNode.tId).unbind().remove();
+                }
+            },
+            edit: {
+                enable: true,
+                editNameSelectAll: true
+            },
+            callback: {
+                beforeDrag: function () {
+                    //return false;
+                },
+                onClick: function (e, treeId, treeNode, isCancel) {
+                    ACTIONS.dispatch(ACTIONS.TREEITEM_CLICK, treeNode);
+                },
+                onRename: function (e, treeId, treeNode, isCancel) {
+                    treeNode.__modified__ = true;
+                },
+                onRemove: function (e, treeId, treeNode, isCancel) {
+                    if (!treeNode.__created__) {
+                        treeNode.__deleted__ = true;
+                        _this.deletedList.push(treeNode);
+                    }
+                    fnObj.treeView01.deselectNode();
+                }
+            }
+        }, []);
+    },
+    setData: function (_searchData, _tree, _data) {
+        this.param = $.extend({}, _searchData);
+        this.target.setData(_tree);
+
+        if (_data && typeof _data.menuId !== "undefined") {
+            // selectNode
+            (function (_tree, _keyName, _key) {
+                var nodes = _tree.getNodes();
+                var findNode = function (_arr) {
+                    var i = _arr.length;
+                    while (i--) {
+                        if (_arr[i][_keyName] == _key) {
+                            _tree.selectNode(_arr[i]);
+                        }
+                        if (_arr[i].children && _arr[i].children.length > 0) {
+                            findNode(_arr[i].children);
+                        }
+                    }
+                };
+                findNode(nodes);
+            })(this.target.zTree, "menuId", _data.menuId);
+        }
     },
     getData: function () {
-        return this.gridObj.getData();
+        var _this = this;
+        var tree = this.target.getData();
+
+        var convertList = function (_tree) {
+            var _newTree = [];
+            _tree.forEach(function (n, nidx) {
+                var item = {};
+                if (n.__created__ || n.__modified__) {
+                    item = {
+                        __created__: n.__created__,
+                        __modified__: n.__modified__,
+                        menuId: n.menuId,
+                        menuGrpCd: _this.param.menuGrpCd,
+                        menuNm: n.name,
+                        parentId: n.parentId,
+                        sort: nidx,
+                        progCd: n.progCd,
+                        level: n.level
+                    };
+                } else {
+                    item = {
+                        menuId: n.menuId,
+                        menuGrpCd: n.menuGrpCd,
+                        menuNm: n.name,
+                        parentId: n.parentId,
+                        sort: nidx,
+                        progCd: n.progCd,
+                        level: n.level
+                    };
+                }
+                if (n.children && n.children.length) {
+                    item.children = convertList(n.children);
+                }
+                _newTree.push(item);
+            });
+            return _newTree;
+        };
+        var newTree = convertList(tree);
+        return newTree;
     },
-    addRow: function () {
-        this.gridObj.addRow();
+    getDeletedList: function () {
+        return this.deletedList;
     },
-    itemClick: function (data, index) {
+    clearDeletedList: function () {
+        this.deletedList = [];
+        return true;
+    },
+    updateNode: function (data) {
+        var treeNodes = this.target.getSelectedNodes();
+        if (treeNodes[0]) {
+            treeNodes[0].progCd = data.progCd;
+        }
+    },
+    deselectNode: function () {
+        ACTIONS.dispatch(ACTIONS.TREEITEM_DESELECTE);
     }
 });
 
