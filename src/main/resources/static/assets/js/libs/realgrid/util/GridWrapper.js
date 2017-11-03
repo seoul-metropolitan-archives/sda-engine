@@ -1060,6 +1060,19 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 	{
 		gridView.setFocus();
 	}
+	this.getDataProvider = function()
+	{
+		return dataProvider;
+	}
+	this.getJSONRows = function()
+	{
+		var rows = undefined;
+        if(isTree)
+            rows = dataProvider.getJsonRows(-1,true,childrenProp,"icon");
+        else
+            rows = dataProvider.getRows();
+        return rows;
+	}
     //데이터  반환 함수
 	this.getData = function() {
         gridView.commit();
