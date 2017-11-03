@@ -15,5 +15,6 @@ public class Cl00101VO extends BaseVO {
     private String classificationTypeUuid;
     private int orderNo;
     private String useYn;
+    private String changeStatus;
 
 }

@@ -49,9 +49,6 @@
             <if test="classCode != null">
                 AND CLASS_CODE = #{classCode}
             </if>
-            <if test="className != null">
-                AND CLASS_NAME = #{className}
-            </if>
             <if test="classLevelUuid != null">
                 AND CLASS_LEVEL_UUID = #{classLevelUuid}
             </if>
@@ -62,22 +59,23 @@
     </select>
     <select id="getClassHierarchyList" resultType="cl00201VO" parameterType="cl00201VO" statementType="PREPARED">
         SELECT
-          CLASS_UUID as classUuid,
-          CLASSIFICATION_SCHEME_UUID as classificationSchemeUuid,
-          STATUS_UUID as statusUuid,
-          PARENT_CLASS_UUID as parentClassUuid,
-          CLASS_CODE as classCode,
-          CLASS_NAME as className,
-          CLASS_LEVEL_UUID as classLevelUuid,
-          ORDER_NO as orderNo,
-          REPLACE(ORDER_KEY,'-','.' )as orderKey,
-          USE_YN as useYn,
-          <include refid="Common.UserName"><property name="userUuid" value="INSERT_UUID"/></include> as insertUuid,
-          INSERT_DATE as insertDate,
-          <include refid="Common.UserName"><property name="userUuid" value="UPDATE_UUID"/></include> as updateUuid,
-          UPDATE_DATE as updateDate
+        CLASS_UUID as classUuid,
+        CLASSIFICATION_SCHEME_UUID as classificationSchemeUuid,
+        STATUS_UUID as statusUuid,
+        PARENT_CLASS_UUID as parentClassUuid,
+        CLASS_CODE as classCode,
+        CLASS_NAME as className,
+        '[' || ORDER_NO || '] ' || CLASS_NAME as classTreeName,
+        CLASS_LEVEL_UUID as classLevelUuid,
+        ORDER_NO as orderNo,
+        REPLACE(ORDER_KEY,'-','.' )as orderKey,
+        USE_YN as useYn,
+        <include refid="Common.UserName"><property name="userUuid" value="INSERT_UUID"/></include> as insertUuid,
+        INSERT_DATE as insertDate,
+        <include refid="Common.UserName"><property name="userUuid" value="UPDATE_UUID"/></include> as updateUuid,
+        UPDATE_DATE as updateDate
         FROM
-          CL_CLASS
+        CL_CLASS
         <where>
             <if test="classificationSchemeUuid != null">
                 CLASSIFICATION_SCHEME_UUID = #{classificationSchemeUuid}
@@ -86,5 +84,97 @@
         START WITH PARENT_CLASS_UUID IS NULL
         CONNECT BY PRIOR CLASS_UUID = PARENT_CLASS_UUID
         ORDER SIBLINGS BY ORDER_NO
+    </select>
+    <select id="getSelectedClassList" resultType="cl00201VO" parameterType="cl00201VO" statementType="PREPARED">
+        SELECT
+        Z1.CLASS_UUID as classUuid,
+        Z1.CLASSIFICATION_SCHEME_UUID as classificationSchemeUuid,
+        Z1.STATUS_UUID as statusUuid,
+        Z1.PARENT_CLASS_UUID as parentClassUuid,
+        Z1.CLASS_CODE as classCode,
+        Z1.CLASS_NAME as className,
+        Z1.CLASS_LEVEL_UUID as classLevelUuid,
+        Z1.ORDER_NO as orderNo,
+        Z.CLASS_CODE as parentClassCode,
+        REPLACE(Z1.ORDER_KEY,
+        '-',
+        '.' )as orderKey,
+        Z1.USE_YN as useYn,
+        <include refid="Common.UserName"><property name="userUuid" value="INSERT_UUID"/></include> as insertUuid,
+        Z1.INSERT_DATE as insertDate,
+        <include refid="Common.UserName"><property name="userUuid" value="UPDATE_UUID"/></include> as updateUuid,
+        Z1.UPDATE_DATE as updateDate
+        FROM
+        CL_CLASS Z, CL_CLASS Z1
+        <where>
+            <if test="classificationSchemeUuid != null">
+                Z1.CLASSIFICATION_SCHEME_UUID = #{classificationSchemeUuid}
+            </if>
+            <if test="parentClassName != null and orderNo != null"    >
+                AND Z1.PARENT_CLASS_UUID IN (
+                                  SELECT
+                                          CLASS_UUID
+                                  FROM
+                                          CL_CLASS
+                                  WHERE
+                                          CLASS_NAME LIKE '%' || #{parentClassName} || '%'
+                                          AND ORDER_NO = #{orderNo}
+                )
+            </if>
+            <if test="orderKey != null">
+                AND Z1.ORDER_KEY LIKE  #{orderKey} || '%'
+            </if>
+            <if test="orderNo != null">
+                AND Z1.ORDER_NO != #{orderNo}
+            </if>
+            <if test="classCode != null">
+                AND Z1.CLASS_CODE LIKE '%' || #{classCode} || '%'
+            </if>
+            <if test="className != null">
+                AND Z1.CLASS_NAME LIKE '%' || #{className} || '%'
+            </if>
+            <if test="useYn != null">
+                AND Z1.USE_YN = #{useYn}
+            </if>
+            <if test="classLevelUuid != null">
+                AND Z1.CLASS_LEVEL_UUID = #{classLevelUuid}
+            </if>
+            <if test="statusUuid != null">
+                AND Z1.STATUS_UUID = #{statusUuid}
+            </if>
+            <if test="parentClassCode != null">
+                AND Z.CLASS_CODE = #{parentClassCode}
+            </if>
+            AND Z.CLASS_UUID (+) = Z1.PARENT_CLASS_UUID
+        </where>
+        START WITH Z1.PARENT_CLASS_UUID IS NULL
+        CONNECT BY PRIOR Z1.CLASS_UUID = Z1.PARENT_CLASS_UUID
+        ORDER SIBLINGS BY Z1.ORDER_NO
+    </select>
+    <select id="getSelectedClassDetail" resultType="cl00202VO" parameterType="cl00201VO" statementType="PREPARED">
+        SELECT
+        CLASS_UUID as classUuid,
+        RECORD_SCHEDULE_UUID as recordScheduleUuid,
+        ADD_METADATA01 as addMetadata01,
+        ADD_METADATA02 as addMetadata02,
+        ADD_METADATA03 as addMetadata03,
+        ADD_METADATA04 as addMetadata04,
+        ADD_METADATA05 as addMetadata05,
+        ADD_METADATA06 as addMetadata06,
+        ADD_METADATA07 as addMetadata07,
+        ADD_METADATA08 as addMetadata08,
+        ADD_METADATA09 as addMetadata09,
+        ADD_METADATA10 as addMetadata10,
+        <include refid="Common.UserName"><property name="userUuid" value="INSERT_UUID"/></include> as insertUuid,
+        INSERT_DATE as insertDate,
+        <include refid="Common.UserName"><property name="userUuid" value="UPDATE_UUID"/></include> as updateUuid,
+        UPDATE_DATE as updateDate
+        FROM
+        CL_CLASS_CON
+        <where>
+            <if test="classUuid != null">
+                CLASS_UUID = #{classUuid}
+            </if>
+        </where>
     </select>
 </mapper>

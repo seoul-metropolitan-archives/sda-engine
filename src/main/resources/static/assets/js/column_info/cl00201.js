@@ -12,12 +12,39 @@ var cl00201 =
                     visible : false
                 },
                 {
-                    sortNo: 0,
+                    sortNo: 1,
                     width:140,
-                    name: "className",
-                    text: "CLASS_NAME",
+                    name: "classTreeName",
+                    text: "CLASS_TREE_NAME",
                     editable: false,
                     dataType: "code"
+                },
+                {
+                    sortNo: 2,
+                    width:140,
+                    name: "classificationSchemeUuid",
+                    text: "CLASSIFICATION_SCHEME_UUID",
+                    editable: false,
+                    dataType: "code",
+                    visible : false
+                },
+                {
+                    sortNo: 3,
+                    width:140,
+                    name: "orderNo",
+                    text: "ORDER_NO",
+                    editable: false,
+                    dataType: "code",
+                    visible : false
+                },
+                {
+                    sortNo: 4,
+                    width:140,
+                    name: "parentClassUuid",
+                    text: "PARENT_CLASS_UUID",
+                    editable: false,
+                    dataType: "code",
+                    visible : false
                 }
             ]
     }

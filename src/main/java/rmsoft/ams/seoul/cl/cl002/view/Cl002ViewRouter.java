@@ -13,6 +13,7 @@ public class Cl002ViewRouter extends MessageBaseController {
     public String view(ModelMap model) {
         model.addAttribute("statusUuid", CommonCodeUtils.get("CD113"));
         model.addAttribute("classLevel", CommonCodeUtils.get("CD114"));
+
         return "/cl/cl002/cl002";
     }
 }

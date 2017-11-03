@@ -24,10 +24,8 @@ public class Cl00201VO extends BaseVO {
     private int orderNo;
     private String orderKey;
     private String useYn;
-    private List<Cl00201VO> children = new ArrayList<>();
-
-    public void addChildren(Cl00201VO menu) {
-        children.add(menu);
-    }
-
+    private String changeStatus;
+    private String parentClassName;
+    private String parentClassCode;
+    private String classTreeName;
 }

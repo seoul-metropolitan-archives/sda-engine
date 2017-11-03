@@ -36,17 +36,21 @@ var cl00202 =
                     width: 120,
                     name: "statusUuid",
                     text: "Status",
-                    editable: false,
-                    values: axboot.commonCodeFilter("CD111").codeArr,
-                    labels: axboot.commonCodeFilter("CD111").nameArr,
+                    editable: true,
+                    values: axboot.commonCodeFilter("CD113").codeArr,
+                    labels: axboot.commonCodeFilter("CD113").nameArr,
                     dataType : "combo"
                 },
                 {
                     sortNo: 3,
                     width: 150,
-                    name: "parentClassUuid",
+                    name: "parentClassCode",
                     text: "Parent Class Code",
-                    editable: true
+                    editable: true,
+                    dataType: "popup",
+                    popupCode : "PU117",
+                    sqlColumn : {CLASS_CODE : "parentClassCode",CLASS_UUID: "parentClassUuid"},
+                    visible: true
                 },
                 {
                     sortNo: 4,
@@ -59,10 +63,10 @@ var cl00202 =
                 },
                 {
                     sortNo: 5,
-                    name: "classCode",
-                    text: "Class Code",
+                    name: "className",
+                    text: "Class Name",
                     width: 150,
-                    dataType: "code",
+                    dataType: "text",
                     editable: true,
                     sortable: true
                 },
@@ -152,6 +156,23 @@ var cl00202 =
                     disable: true,
                     dataType: "timestamp",
                     required: false
+                },
+                {
+                    sortNo: 15,
+                    name: "orderKey",
+                    text: "ORDER_KEY",
+                    width: 120,
+                    visible:false
+                },
+                {
+                    sortNo: 16,
+                    name: "changeStatus",
+                    visible:false
+                },
+                {
+                    sortNo: 17,
+                    name: "parentClassUuid",
+                    visible:false
                 }
             ]
     }

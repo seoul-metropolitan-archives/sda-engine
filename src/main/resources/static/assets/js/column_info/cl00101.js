@@ -142,6 +142,11 @@ var cl00101 =
                     editable: false,
                     disable : true,
                     required: false
+                },
+                {
+                    sortNo: 13,
+                    name: "changeStatus",
+                    visible: false
                 }
             ]
     }

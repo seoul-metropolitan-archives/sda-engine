@@ -2420,14 +2420,14 @@ axboot.baseView =
         name: "baseView",
         init: function () {
             var _this = this;
+            $(".bdb").delegate("#confirm", "click", function () {
+                _this.confirm();
+            });
             $(".bdb").delegate("#inquiry", "click", function () {
                 _this.inquiry();
             });
             $(".bdb").delegate("#save", "click", function () {
                 _this.save();
-            });
-            $(".bdb").delegate("#confirm", "click", function () {
-                _this.confirm();
             });
             $(".bdb").delegate("#cancel", "click", function () {
                 _this.cancel();
