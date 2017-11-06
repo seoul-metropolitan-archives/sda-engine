@@ -52,7 +52,8 @@ var cl00202 =
                     dataType: "popup",
                     popupCode : "PU117",
                     sqlColumn : {CLASS_CODE : "parentClassCode",CLASS_UUID: "parentClassUuid",CHILD_CLASS_LEVEL : "classLevelUuid",CLASS_NAME: "parentClassName"},
-                    visible: true
+                    visible: true,
+                    required:false
                 },
                 {
                     sortNo: 4,
@@ -62,7 +63,8 @@ var cl00202 =
                     editable: false,
                     disable : true,
                     dataType: "text",
-                    visible: true
+                    visible: true,
+                    required : false
                 },
                 {
                     sortNo: 5,
@@ -72,7 +74,7 @@ var cl00202 =
                     dataType: "code",
                     editable: false,
                     disable: true,
-                    required : true
+                    required : false
 
                 },
                 {

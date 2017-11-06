@@ -2534,8 +2534,8 @@ axboot.gridView = {
     },
     getUUID: function () {
 
-        var key = "";
-        if(undefined == this.uuidFieldName || "" == this.uuidFieldName)
+        var key = this.uuidFieldName;
+        if(undefined == key || "" == key)
         {
             key = this.primaryKey;
         }
