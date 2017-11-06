@@ -136,7 +136,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     entityName : "",
     initView: function () {
         this.initGrid();
-        this.initEvent();
+
     },
     initGrid : function()
     {
@@ -188,6 +188,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
                 $("#popupGrid01").fadeIn(100);
                 //fnObj.gridView01.gridObj.setData("set",[{"USER_NAME" : "test",""}])
                 ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+                fnObj.gridView01.initEvent();
             }
         });
     },

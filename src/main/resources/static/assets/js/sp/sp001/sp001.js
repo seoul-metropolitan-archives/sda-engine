@@ -13,7 +13,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             data: $.extend({}, {pageSize: 1000}, this.formView.getData()),
             callback: function (res) {
                 caller.treeView01.setData({}, res.list, data);
-
+                console.log(res.list);
                 /*if (res.list.length > 0) {
                     ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, res.list[0]);
                 }*/

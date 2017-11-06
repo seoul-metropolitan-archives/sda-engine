@@ -238,6 +238,32 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
         });
         this.setColumnInfo(wf00102.column_info);
         this.makeGrid();
+
+        var codes = axboot.commonCodeFilter("CD128").codeArr;
+        var names = axboot.commonCodeFilter("CD128").nameArr;
+        var enableList = new Array();
+        for(var i = 0; i < names.length; i++)
+        {
+            if(names[i] == "팝업" || names[i] == "콤보")
+            {
+                enableList.push(codes[i]);
+            }
+        }
+        var _this = this;
+        this.gridObj.onEditChange(function(grid, index, value){
+            _this.gridObj.setCustomCellStyleRows("disable",function(row){
+
+                for(var rowIndex = 0; rowIndex < enableList.length; rowIndex++)
+                {
+                    if(row["inputMethodUuid"] == enableList[rowIndex])
+                        return false;
+                    else
+                        return true;
+                }
+
+            },["inputCodeUuid"]);
+            
+        });
     }
 });
 

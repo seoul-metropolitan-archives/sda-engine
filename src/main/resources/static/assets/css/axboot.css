@@ -27739,7 +27739,7 @@ a.small_open {
     border: 0;
     padding-bottom: 6px
 }
-.ztree ul
+.ztree ul li
 {
     display : list-item;
 }

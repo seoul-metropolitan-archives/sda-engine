@@ -64,7 +64,7 @@ var ac00901 =
                     editable: true,
                     dataType: "popup",
                     popupCode : "PU116",
-                    sqlColumn : {PROGRAM_ID : "programId",PROGRAM_NAME : "programName"},
+                    sqlColumn : {PROGRAM_UUID : "programUuid",PROGRAM_ID : "programId",PROGRAM_NAME : "programName"},
                     required: false,
                     visible: true
                 },

@@ -88,7 +88,7 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 
     var requiredColumnList = new Array();
     var defaultEditColumnProperties = new Array();
-
+	var defaultStyles = new Array();
 	//그리드 옵션
 	var gridOption = undefined;
 	var rootContext = p_rootContext;
@@ -423,13 +423,34 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 	var validateColumn = {};
 	var showPopup = function(grid, currentField, searchData, rows, popupData,preSearch)
 	{
+		var popupCode = "";
+        if(typeof popupData["popupCode"] == "string")
+		{
+            popupCode = popupData["popupCode"];
+		}else if(typeof popupData["popupCode"] == "object")
+		{
+            var fieldname = Object.keys(popupData["popupCode"])[0];
+            var currentData = _this.getSelectedData();
+            var checkData = currentData[fieldname];
+            if(typeof popupData["popupCode"][fieldname] == "function")
+            	popupCode = popupData["popupCode"][fieldname] (checkData);
+		}
+
+		if("" == popupCode)
+		{
+            return ;
+		}
+
+
+
+
 		var retData = undefined;
         axboot.modal.open({
             modalType: "COMMON_POPUP",
             preSearch : preSearch,
             sendData: function () {
                 return {
-                    popupCode : popupData["popupCode"],
+                    popupCode : popupCode,
                     searchData : searchData
                 };
             },
@@ -466,10 +487,17 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
                     this.close();
             }
         });
+
         if(popCallback)
             popCallback(retData);
 	}
     var doRequiredValidation = true;
+	var _onEditChange = undefined;
+	this.onEditChange = function(p_onEditChange)
+	{
+        _onEditChange =p_onEditChange;
+	}
+
 	var bindEvent = function() {
 		gridView.onKeyDown = keyDown;
 
@@ -491,13 +519,20 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
         gridView.onValidationFail = function (grid, itemIndex, column, err) {
            axToast.push(axboot.getCommonMessage("AA008"));
         }
+
+
         gridView.onEditChange = function(grid, index, value){
+
+        	if(_onEditChange)
+        		_onEditChange(grid, index, value)
             //index.fieldIndex
 			/*
             if(validateColumn[index.fieldName] && !validateColumn[index.fieldName](value))
             		grid.cancel();
             */
 		}
+
+
 		gridView.onEditCommit = function (grid, index, oldValue, newValue)
 		{
 		    doRequiredValidation = false;
@@ -512,6 +547,9 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
             }
             if(-1 == index.itemIndex)
             	return ;
+
+
+
             showPopup(grid, index.fieldName,newValue,index.itemIndex,popupData);
 			console.log(index.fieldName);
 		}
@@ -747,8 +785,15 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
             dataProvider.setOptions(providerDefaultOption);
             // gridView.setStyles(defaultStyle.event.selection);
 		}
-
+        initStyle();
 	};
+	var initStyle = function()
+	{
+        gridView.addCellStyle("editable", _defaultStyle._default, true);
+        gridView.addCellStyle("_default", _defaultStyle.column.editable, true);
+        gridView.addCellStyle("required", _defaultStyle.column.disable, true);
+        gridView.addCellStyle("editable", _defaultStyle.column.required, true);
+	}
 	this.setDisplayOptions = function(option)
 	{
         gridView.setDisplayOptions(option);
@@ -826,17 +871,23 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 				firstFocusColumnName = data.name;
 			// tab사용시 마지막 컬럼사용하기 때문에 세팅.
 			if (data.editable)
-				lastFocusColumnName = data.name;
+			{
+                defaultStyles[data.name] = "editable";
+                lastFocusColumnName = data.name;
+			}
 			// 필수여부 (비활성 여부 빠져있음.)
 			if (data.disable) {
 				styles = defaultStyle.column.disable;
+                defaultStyles[data.name] = "disable";
                 obj.editable = false;
 			} else if (data.required) {
 				styles = defaultStyle.column.required;
 				requiredColumnList.push(data.name);
 				obj.requiredMessage = "["+data.text+"] "+axboot.getCommonMessage("AA008");
+                defaultStyles[data.name] = "required";
 			} else {
 				styles = defaultStyle._default;
+                defaultStyles[data.name] = "_default";
 			}
 
 			obj.styles = $.extend({},styles, {
@@ -1267,6 +1318,7 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 
         if(!styles)
             return ;
+        gridView.commit();
         var rows = dataProvider.getJsonRows(0,-1);
 
         var columnIndexList = new Array();
@@ -1289,6 +1341,11 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 				{
                     gridView.setCellStyle(i, columnIndexList[j], "customStyle01",true);
 				}
+			}else {
+                for(var j = 0; j < columnIndexList.length; j++)
+                {
+                    gridView.setCellStyle(i, columnIndexList[j], defaultStyles[columnIndexList[j]],true);
+                }
 			}
 		}
 
@@ -1326,6 +1383,7 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 				for(var column in defaultEditColumnProperties)
 				{
                     grid.setColumnProperty(column, "editable", defaultEditColumnProperties[column]);
+                    grid.setCellStyle(curr.dataRow, column, defaultStyles[column],true);
 				}
 			}
         }

@@ -81,8 +81,30 @@ var wf00102 =
                     width: 100,
                     editable: false,
                     dataType: "popup",
-                    popupCode : "PU001",
-                    sqlColumn : {PROGRAM_UUID : "inputCodeUuid",PROGRAM_NAME : "inputCodeName"},
+                    popupCode : { inputMethodUuid : function(checkData)
+                                                {
+                                                    var conditionlist = axboot.commonCodeFilter("CD128").codeArr;
+                                                    var retData = "";
+                                                    for(var conditionIndex = 0; conditionIndex < conditionlist.length; conditionIndex++)
+                                                    {
+
+                                                        if(checkData == conditionlist[conditionIndex])
+                                                        {
+                                                            if("콤보" == axboot.commonCodeFilter("CD128").nameArr[conditionIndex])
+                                                            {
+                                                                retData = "PU118";
+                                                                break;
+                                                            }else if("팝업" == axboot.commonCodeFilter("CD128").nameArr[conditionIndex])
+                                                            {
+                                                                retData = "PU119";
+                                                                break;
+                                                            }
+                                                        }
+                                                    }
+                                                    return retData;
+                                                }
+                                },
+                    sqlColumn : {UUID : "inputCodeUuid",NAME : "inputCodeName"},
                     required: false,
                     visible: true
                 },
