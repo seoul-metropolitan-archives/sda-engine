@@ -21,7 +21,7 @@ public class Cl00201VO extends BaseVO {
     private String classCode;
     private String className;
     private String classLevelUuid;
-    private int orderNo;
+    private String orderNo;
     private String orderKey;
     private String useYn;
     private String changeStatus;

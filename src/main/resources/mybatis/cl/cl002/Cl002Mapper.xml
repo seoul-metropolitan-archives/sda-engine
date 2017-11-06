@@ -45,6 +45,9 @@
             <if test="parentClassUuid != null">
                 AND  PARENT_CLASS_UUID = #{parentClassUuid}
             </if>
+            <if test="classUuid != null">
+                AND Z1.CLASS_UUID != #{classUuid}
+            </if>
             <if test="statusUuid != null">
                 AND STATUS_UUID = #{statusUuid}
             </if>
@@ -67,7 +70,7 @@
         PARENT_CLASS_UUID as parentClassUuid,
         CLASS_CODE as classCode,
         CLASS_NAME as className,
-        '[' || ORDER_NO || '] ' || CLASS_NAME as classTreeName,
+        '[' || FC_AD_CODE_NM(CLASS_LEVEL_UUID) || '] ' || CLASS_NAME as classTreeName,
         CLASS_LEVEL_UUID as classLevelUuid,
         ORDER_NO as orderNo,
         ORDER_KEY as orderKey,
@@ -127,9 +130,6 @@
             <if test="orderKey != null">
                 AND Z1.ORDER_KEY LIKE  #{orderKey} || '%'
             </if>
-            <if test="orderNo != null">
-                AND Z1.ORDER_NO != #{orderNo}
-            </if>
             <if test="classCode != null">
                 AND Z1.CLASS_CODE LIKE '%' || #{classCode} || '%'
             </if>
@@ -141,6 +141,9 @@
             </if>
             <if test="classLevelUuid != null">
                 AND Z1.CLASS_LEVEL_UUID = #{classLevelUuid}
+            </if>
+            <if test="classUuid != null">
+                AND Z1.CLASS_UUID != #{classUuid}
             </if>
             <if test="statusUuid != null">
                 AND Z1.STATUS_UUID = #{statusUuid}
@@ -198,13 +201,12 @@
         AND ROWNUM = 1
         ORDER BY Z.CLASS_CODE DESC
     </select>
-    <select id="updateStatusConfirm" resultType="cl00201VO" parameterType="String" statementType="PREPARED">
+    <update id="updateStatusConfirm"  parameterType="String" statementType="PREPARED">
         UPDATE
           CL_CLASS
         SET
           STATUS_UUID = #{statusUuid},
           UPDATE_UUID = #{updateUuid}
         WHERE ORDER_KEY LIKE #{orderKey} || '%'
-
-    </select>
+    </update>
 </mapper>

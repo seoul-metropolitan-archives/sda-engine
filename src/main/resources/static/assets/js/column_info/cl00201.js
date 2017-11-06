@@ -54,6 +54,15 @@ var cl00201 =
                     editable: false,
                     dataType: "code",
                     visible : false
+                },
+                {
+                    sortNo: 5,
+                    width:140,
+                    name: "classUuid",
+                    text: "Class Uuid",
+                    editable: false,
+                    dataType: "code",
+                    visible : false
                 }
             ]
     }

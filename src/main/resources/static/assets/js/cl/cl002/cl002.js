@@ -52,7 +52,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             type: "GET",
             url: "/api/v1/cl002/04/getSelectedClassList",
             async: true,
-            data: $.extend({}, selectedTreeItem ,this.formView.getData()),
+            data: $.extend({},  {pageSize: 1000},selectedTreeItem ,this.formView.getData()),
             callback: function (res) {
                 if(res.list && res.list.length < 1)
                 {
@@ -70,6 +70,11 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         return false;
     },
     PAGE_SEARCH3: function (caller, act, data) { //상세
+        if(data["classUuid"] == "undefined" || data["classUuid"] == "" ){
+            setDefaultClassDetails();
+            return;
+        }
+
         axboot.ajax({
             type: "GET",
             url: "/api/v1/cl002/05/getSelectedClassDetail",
@@ -484,9 +489,9 @@ getPreClassLevels = function(key) {
             return item.orderKey === steps[0] + '.' +steps[1] ;
         });
         if(steps.length ==3){
-            return "[1] " + levelOne[0].className + " >> " + "[2] " + levelTwo[0].className;
+            return  levelOne[0].classTreeName + " >> " + levelTwo[0].classTreeName;
         }else{
-            return "[1] " + levelOne[0].className;
+            return levelOne[0].classTreeName;
         }
     }
     else return;

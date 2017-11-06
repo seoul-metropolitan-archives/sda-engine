@@ -77,7 +77,7 @@ public class Cl002Controller extends MessageBaseController{
         return apiResponse;
     }
 
-    @PutMapping(value = "/03/updateClassList")
+/*    @PutMapping(value = "/03/updateClassList")
     @PostMapping
     public ApiResponse updateClassSchemeList(@RequestBody List<Cl00201VO> requestParams) {
         ApiResponse apiResponse = cl002Service.updateClassList(requestParams);
@@ -85,5 +85,11 @@ public class Cl002Controller extends MessageBaseController{
             throw new ApiException(ApiStatus.SYSTEM_ERROR, apiResponse.getMessage());
         }
         return apiResponse;
+    }*/
+
+    @PutMapping(value = "/03/updateClassList")
+    @PostMapping
+    public void updateClassSchemeList(@RequestBody List<Cl00201VO> requestParams) {
+        cl002Service.updateClassList(requestParams);
     }
 }

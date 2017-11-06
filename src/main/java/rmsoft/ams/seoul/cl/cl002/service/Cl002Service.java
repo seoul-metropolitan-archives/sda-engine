@@ -63,17 +63,16 @@ public class Cl002Service extends BaseService {
 
         Cl00201VO cl00201VO = new Cl00201VO();
         cl00201VO.setClassificationSchemeUuid(requestParams.getString("classificationSchemeUuid"));
-        if (StringUtils.isNotEmpty(requestParams.getString("orderNo"))) {
-            cl00201VO.setOrderNo(Integer.parseInt(requestParams.getString("orderNo")));
-        }
+        cl00201VO.setOrderNo(requestParams.getString("orderNo"));
         cl00201VO.setOrderKey(requestParams.getString("orderKey"));
         cl00201VO.setParentClassCode(requestParams.getString("parentClassCode"));
         cl00201VO.setParentClassName(requestParams.getString("parentClassName"));
         cl00201VO.setStatusUuid(requestParams.getString("statusUuid"));
-        cl00201VO.setClassCode(requestParams.getString("classCode"));
+        cl00201VO.setClassCode(requestParams.getString("classCodeForm"));
         cl00201VO.setClassName(requestParams.getString("className"));
         cl00201VO.setUseYn(requestParams.getString("useYn"));
         cl00201VO.setClassLevelUuid(requestParams.getString("classLevelUuid"));
+        cl00201VO.setClassUuid(requestParams.getString("classUuid"));
 
         return filter(cl002Mapper.getSelectedClassList(cl00201VO), pageable, "", Cl00201VO.class);
     }
@@ -138,6 +137,7 @@ public class Cl002Service extends BaseService {
         String detailCode = "";
         String maxCode = "";
         String maxDefaultCode = "";
+        String orderKey = "";
 
         for (ClClass clClass : clClassList) {
             if (StringUtil.isNullOrEmpty(clClass.getClassUuid())) { //Insert
@@ -161,9 +161,12 @@ public class Cl002Service extends BaseService {
                 clClass.setClassUuid(UUIDUtils.getUUID()); //UUID 생성
                 clClass.setClassCode(detailCode);
 
+                clClass.setClassLevelUuid(CommonCodeUtils.getCodeDetailUuid("CD114", clClass.getClassLevelUuid()));
+
                 // Oracle Function Call
-                String orderKey = jdbcTemplate.queryForObject("select AMS.FC_CL_CLASS_SORTKEY('" + clClass.getParentClassUuid() + "' , '" + clClass.getOrderNo() + "') from dual", String.class);
+                orderKey = jdbcTemplate.queryForObject("select AMS.FC_CL_CLASS_SORTKEY('" + clClass.getParentClassUuid() + "' , '" + clClass.getOrderNo() + "') from dual", String.class);
                 clClass.setOrderKey(orderKey);
+
             }
 
             if (clClass.isCreated() || clClass.isModified()) {
@@ -171,6 +174,12 @@ public class Cl002Service extends BaseService {
 
                 if (clClass.isModified()) {
                     orgClClass = clClassRepository.findOne(clClass.getId());
+                    if(orgClClass.getParentClassUuid() != clClass.getParentClassUuid() ||
+                            orgClClass.getOrderNo() != clClass.getOrderNo()){
+                        orderKey = jdbcTemplate.queryForObject("select AMS.FC_CL_CLASS_SORTKEY('" + clClass.getParentClassUuid() + "' , '" + clClass.getOrderNo() + "') from dual", String.class);
+                        clClass.setOrderKey(orderKey);
+                    }
+
                     clClass.setInsertDate(orgClClass.getInsertDate());
                     clClass.setInsertUuid(orgClClass.getInsertUuid());
                 }
