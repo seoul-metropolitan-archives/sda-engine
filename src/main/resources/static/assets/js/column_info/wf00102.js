@@ -38,31 +38,12 @@ var wf00102 =
                 },
                 {
                     sortNo: 4,
-                    name: "dataTypeUuid",
-                    text: "Data Type",
-                    width: 100,
-                    editable: true,
-                    dataType: "combo",
-                    required: false,
-                    visible: true,
-                    values: axboot.commonCodeFilter("CD128").codeArr,
-                    labels: axboot.commonCodeFilter("CD128").nameArr,
-                    lookupDisplay: true,
-                    editor: {
-                        type: "dropDown",
-                        dropDownCount: 10,
-                        domainOnly: true, //domainOnly가 true이면 목록에 있는 값들만 선택할 수 있습니다.
-                        textReadOnly: false, // true이면 키 입력이 안되며 선택만 할 수 있습니다.
-                    }
-                },
-                {
-                    sortNo: 5,
                     name: "inOutUuid",
                     text: "In/Out",
                     width: 100,
                     editable: true,
                     dataType: "combo",
-                    required: false,
+                    required: true,
                     visible: true,
                     values: axboot.commonCodeFilter("CD129").codeArr,
                     labels: axboot.commonCodeFilter("CD129").nameArr,
@@ -75,17 +56,59 @@ var wf00102 =
                     }
                 },
                 {
-                    sortNo: 6,
-                    name: "defaultValue",
-                    text: "Defalut Value",
-                    width: 150,
-                    editable: false,
-                    dataType: "text",
+                    sortNo: 5,
+                    name: "inputMethodUuid",
+                    text: "Input Method",
+                    width: 100,
+                    editable: true,
+                    dataType: "combo",
                     required: true,
+                    visible: true,
+                    values: axboot.commonCodeFilter("CD128").codeArr,
+                    labels: axboot.commonCodeFilter("CD128").nameArr,
+                    lookupDisplay: true,
+                    editor: {
+                        type: "dropDown",
+                        dropDownCount: 10,
+                        domainOnly: true, //domainOnly가 true이면 목록에 있는 값들만 선택할 수 있습니다.
+                        textReadOnly: false, // true이면 키 입력이 안되며 선택만 할 수 있습니다.
+                    }
+                },
+                {
+                    sortNo: 6,
+                    name: "inputCodeUuid",
+                    text: "Input Code",
+                    width: 100,
+                    editable: false,
+                    dataType: "popup",
+                    popupCode : "PU001",
+                    sqlColumn : {PROGRAM_UUID : "inputCodeUuid",PROGRAM_NAME : "inputCodeName"},
+                    required: false,
                     visible: true
                 },
                 {
                     sortNo: 7,
+                    name: "inputCodeName",
+                    text: "Input Name",
+                    width: 200,
+                    disable: true,
+                    editable: false,
+                    dataType: "text",
+                    required: false,
+                    visible: true
+                },
+                {
+                    sortNo: 8,
+                    name: "defaultValue",
+                    text: "Defalut Value",
+                    width: 150,
+                    editable: true,
+                    dataType: "text",
+                    required: false,
+                    visible: true
+                },
+                {
+                    sortNo: 9,
                     name: "displayYn",
                     text: "Display",
                     width: 70,
@@ -95,7 +118,7 @@ var wf00102 =
                     required: true
                 },
                 {
-                    sortNo: 8,
+                    sortNo: 10,
                     name: "requiredYn",
                     text: "Required",
                     width: 70,
@@ -105,7 +128,7 @@ var wf00102 =
                     required: true
                 },
                 {
-                    sortNo: 9,
+                    sortNo: 11,
                     name: "description",
                     text: "Description",
                     width: 250,
@@ -114,7 +137,7 @@ var wf00102 =
                     required: false,
                 },
                 {
-                    sortNo: 10,
+                    sortNo: 12,
                     name: "notes",
                     text: "Notes",
                     width: 250,
@@ -123,7 +146,7 @@ var wf00102 =
                     required: false
                 },
                 {
-                    sortNo: 11,
+                    sortNo: 13,
                     name: "useYn",
                     text: "Use",
                     width: 50,
@@ -133,7 +156,7 @@ var wf00102 =
                     required: true
                 },
                 {
-                    sortNo: 12,
+                    sortNo: 14,
                     name: "insertUuid",
                     text: "Created By",
                     width: 80,
@@ -143,7 +166,7 @@ var wf00102 =
                     required: false
                 },
                 {
-                    sortNo: 13,
+                    sortNo: 15,
                     name: "insertDate",
                     text: "Date/Time Created",
                     width: 140,
@@ -153,7 +176,7 @@ var wf00102 =
                     required: false
                 },
                 {
-                    sortNo: 14,
+                    sortNo: 16,
                     name: "updateUuid",
                     text: "Modifed By",
                     width: 80,
@@ -163,7 +186,7 @@ var wf00102 =
                     required: false
                 },
                 {
-                    sortNo: 15,
+                    sortNo: 17,
                     name: "updateDate",
                     text: "Date/Time Modified",
                     width: 140,

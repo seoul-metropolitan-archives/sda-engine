@@ -189,7 +189,7 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
 fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     page: {
         pageNumber: 0,
-        pageSize: 20
+        pageSize: 10000
     },
     initView: function () {
         this.gridObj = new GridWrapper("realgrid01", "/assets/js/libs/realgrid");
@@ -232,7 +232,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
 fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
     page: {
         pageNumber: 0,
-        pageSize: 20
+        pageSize: 10000
     },
     initView: function () {
         this.gridObj = new GridWrapper("realgrid02", "/assets/js/libs/realgrid");

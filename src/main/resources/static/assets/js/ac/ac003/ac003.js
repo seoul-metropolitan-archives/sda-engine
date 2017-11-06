@@ -234,7 +234,7 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
 fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     page: {
         pageNumber: 0,
-        pageSize: 20
+        pageSize: 10000
     },
     tagId: "realgrid01",
     primaryKey: "userUuid",
@@ -284,7 +284,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
 fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
     page: {
         pageNumber: 0,
-        pageSize: 20
+        pageSize: 10000
     },
     tagId: "realgrid02",
     entityName: "UserGroup",
@@ -306,7 +306,7 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
 fnObj.gridView03 = axboot.viewExtend(axboot.gridView, {
     page: {
         pageNumber: 0,
-        pageSize: 20
+        pageSize: 10000
     },
     tagId: "realgrid03",
     entityName: "Role",

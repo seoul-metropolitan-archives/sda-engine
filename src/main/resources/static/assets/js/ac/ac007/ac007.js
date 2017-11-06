@@ -261,7 +261,7 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
 fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     page: {
         pageNumber: 0,
-        pageSize: 20
+        pageSize: 10000
     },
     tagId: "realgrid01",
     primaryKey: "roleUuid",
@@ -305,7 +305,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
 fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
     page: {
         pageNumber: 0,
-        pageSize: 20
+        pageSize: 10000
     },
     initView: function () {
         this.gridObj = new GridWrapper("realgrid02", "/assets/js/libs/realgrid", true);
@@ -365,7 +365,7 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
 fnObj.gridView03 = axboot.viewExtend(axboot.gridView, {
     page: {
         pageNumber: 0,
-        pageSize: 20
+        pageSize: 10000
     },
     tagId: "realgrid03",
     entityName: "Permission",

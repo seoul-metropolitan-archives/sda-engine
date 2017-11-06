@@ -91,7 +91,7 @@ fnObj.pageResize = function () {
 fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     page: {
         pageNumber: 0,
-        pageSize: 20
+        pageSize: 10000
     },
     initView: function () {
         var _this = this;

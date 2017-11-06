@@ -148,7 +148,7 @@ fnObj.searchView = axboot.viewExtend(axboot.searchView, {
 fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     page: {
         pageNumber: 0,
-        pageSize: 20
+        pageSize: 10000
     },
     initView: function () {
         var _this = this;
@@ -257,7 +257,7 @@ fnObj.formView01 = axboot.viewExtend(axboot.formView, {
 fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
     page: {
         pageNumber: 0,
-        pageSize: 20
+        pageSize: 10000
     },
     initView: function () {
         var _this = this;

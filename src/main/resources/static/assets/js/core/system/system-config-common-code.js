@@ -128,7 +128,7 @@ fnObj.pageButtonView = axboot.viewExtend({
                 $("#filter").val("");
                 $("#commonCode").val("");
                 sortData = {};
-                fnObj.gridView01.setPageData({pageNumber: 0, pageSize: 20});
+                fnObj.gridView01.setPageData({pageNumber: 0, pageSize: 10000});
                 fnObj.gridView01.initView();
                 fnObj.gridView01.setPageData({pageNumber: 0});
                 ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
@@ -164,7 +164,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
 
     page: {
         pageNumber: 0,
-        pageSize: 20
+        pageSize: 10000
     },
     initView: function () {
         var _this = this;

@@ -81,7 +81,7 @@ public class Wf001Service extends BaseService {
 
             if (orgWfJob == null) {
                 // created
-                wfJob.setJobUuid(UUIDUtils.getUUID());
+                //wfJob.setJobUuid(UUIDUtils.getUUID());
                 wfJobRepository.save(wfJob);
             } else {
                 if (wfJob.isDeleted()) {
