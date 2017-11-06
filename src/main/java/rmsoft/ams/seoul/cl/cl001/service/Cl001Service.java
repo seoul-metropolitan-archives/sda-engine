@@ -65,9 +65,9 @@ public class Cl001Service extends BaseService {
             if(StringUtil.isNullOrEmpty(clClassificationScheme.getClassificationSchemeUuid())){ //Insert
                 clClassificationScheme.setClassificationSchemeUuid(UUIDUtils.getUUID()); //UUID 생성
                 detailCode = CommonCodeUtils.getDetailCode("CD112",clClassificationScheme.getClassificationTypeUuid());//해당분류타입의 분류코드
-
-                if(StringUtils.isNotEmpty(getMaxClassificationCode(clClassificationScheme.getClassificationTypeUuid()))){ //분류코드 조합
-                    ctUuid = StringUtils.trim(getMaxClassificationCode(clClassificationScheme.getClassificationTypeUuid())).substring(3,6);
+                ctUuid = getMaxClassificationCode(clClassificationScheme.getClassificationTypeUuid());
+                if(StringUtils.isNotEmpty(ctUuid)){ //분류코드 조합
+                    ctUuid = StringUtils.trim(ctUuid).substring(3,6);
                     ctUuid = String.valueOf(Integer.parseInt(ctUuid) + 1);
 
                     if(ctUuid.length() == 1 ){

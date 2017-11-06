@@ -1036,8 +1036,16 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 		if (gridView.getCurrent().itemIndex == -1) {
 			return undefined;
 		} else {
-			return gridView.getDataProvider().getJsonRow(
-					gridView.getCurrent().itemIndex);
+			if(isTree)
+			{
+                return gridView.getDataProvider().getJsonRow(
+                    gridView.getCurrent().dataRow);
+			}
+			else {
+                return gridView.getDataProvider().getJsonRow(
+                    gridView.getCurrent().itemIndex);
+			}
+
 		}
 	};
 	this.getCurrent = function()

@@ -14,4 +14,7 @@ public interface Cl002Mapper extends MyBatisMapper
     List<Cl00201VO> getClassHierarchyList(Cl00201VO cl00201VO);
     Cl00101VO getClassificationScheme();
     Cl00202VO getSelectedClassDetail(Cl00201VO cl00201VO);
+    int getChildClass(String classUuid);
+    String getMaxClassCode(String classificationSchemeUuid);
+    void updateStatusConfirm(Cl00201VO cl00201VO);
 }

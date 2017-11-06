@@ -5,7 +5,9 @@ import io.onsemiro.core.api.response.ApiResponse;
 import io.onsemiro.core.code.ApiStatus;
 import io.onsemiro.core.domain.BaseService;
 import io.onsemiro.core.parameter.RequestParams;
+import io.onsemiro.utils.DateUtils;
 import io.onsemiro.utils.ModelMapperUtils;
+import io.onsemiro.utils.SessionUtils;
 import io.onsemiro.utils.UUIDUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,12 +19,15 @@ import rmsoft.ams.seoul.cl.cl002.dao.Cl002Mapper;
 import rmsoft.ams.seoul.cl.cl002.vo.Cl00201VO;
 import rmsoft.ams.seoul.cl.cl002.vo.Cl00202VO;
 import rmsoft.ams.seoul.common.domain.ClClass;
+import rmsoft.ams.seoul.common.domain.ClClassCon;
 import rmsoft.ams.seoul.common.domain.ClClassificationScheme;
 import rmsoft.ams.seoul.common.domain.ClClassificationSchemeCon;
 import rmsoft.ams.seoul.common.repository.ClClassRepository;
 import rmsoft.ams.seoul.utils.CommonCodeUtils;
 
 import javax.inject.Inject;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -59,9 +64,7 @@ public class Cl002Service extends BaseService {
         if(StringUtils.isNotEmpty(requestParams.getString("orderNo")) ){
             cl00201VO.setOrderNo(Integer.parseInt(requestParams.getString("orderNo")));
         }
-        if(StringUtils.isNotEmpty(requestParams.getString("orderKey"))){
-            cl00201VO.setOrderKey(requestParams.getString("orderKey").replaceAll("[.]","-"));
-        }
+        cl00201VO.setOrderKey(requestParams.getString("orderKey"));
         cl00201VO.setParentClassCode(requestParams.getString("parentClassCode"));
         cl00201VO.setParentClassName(requestParams.getString("parentClassName"));
         cl00201VO.setStatusUuid(requestParams.getString("statusUuid"));
@@ -86,7 +89,28 @@ public class Cl002Service extends BaseService {
         cl00201VO.setClassUuid(requestParams.getString("classUuid"));
         return cl002Mapper.getSelectedClassDetail(cl00201VO);
     }
-    public ApiResponse updateStatus(List<Cl00201VO> list){
+
+    public void updateStatusConfirm(List<Cl00201VO> lists){
+        List<ClClass> clClassList = ModelMapperUtils.mapList(lists,ClClass.class);
+        ClClass orgClClass = null;
+        String changeStatusNm = "";
+        String changeStatusCd = "";
+        int index = 0;
+        for (Cl00201VO cl00201VO : lists) {
+            orgClClass = clClassRepository.findOne(clClassList.get(index).getId());
+            changeStatusNm = cl00201VO.getChangeStatus() == "" ?  "Draft" : cl00201VO.getChangeStatus();
+            changeStatusCd = CommonCodeUtils.getCodeDetailUuid("CD113",changeStatusNm);
+            if(orgClClass.getStatusUuid() != changeStatusCd){
+                cl00201VO.setStatusUuid(changeStatusCd);
+                cl00201VO.setUpdateUuid(SessionUtils.getCurrentLoginUserUuid());
+                cl00201VO.setUpdateDate(Timestamp.valueOf(DateUtils.convertToString(LocalDateTime.now(), DateUtils.DATE_TIME_PATTERN)));
+            }
+            cl002Mapper.updateStatusConfirm(cl00201VO);
+            index++;
+        }
+    }
+
+    public ApiResponse updateStatusCancel(List<Cl00201VO> list){
         List<ClClass> clClassList = ModelMapperUtils.mapList(list,ClClass.class);
         ClClass orgClClass = null;
         int index = 0;
@@ -104,19 +128,39 @@ public class Cl002Service extends BaseService {
         return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");
     }
 
-    public ApiResponse updateClassList(List<Cl00202VO> list){
+    public ApiResponse updateClassList(List<Cl00201VO> list){
         List<ClClass> clClassList = ModelMapperUtils.mapList(list,ClClass.class);
         ClClass orgClClass = null;
-        ClClassificationSchemeCon clClassificationSchemeCon = null;
+        ClClassCon clClassCon = null;
         String ctUuid = "";
         String detailCode = "";
+        String maxCode = "";
+        String maxDefaultCode = "";
         for (ClClass clClass : clClassList) {
             if(StringUtil.isNullOrEmpty(clClass.getClassificationSchemeUuid())){ //Insert
+
+                maxCode = getMaxClassCode(clClass.getClassificationSchemeUuid());
+                if(StringUtils.isNotEmpty(maxCode)){ //분류코드 조합
+                    maxDefaultCode = StringUtils.trim(maxCode).substring(0,7);
+                    ctUuid = StringUtils.trim(maxCode).substring(7);
+                    ctUuid = String.valueOf(Integer.parseInt(ctUuid) + 1);
+
+                    if(ctUuid.length() == 1 ){
+                        ctUuid = "000" + ctUuid;
+                    }else if(ctUuid.length() == 2 ){
+                        ctUuid = "00" + ctUuid;
+                    }else if(ctUuid.length() == 3){
+                        ctUuid = "0" + ctUuid;
+                    }
+                    detailCode = maxDefaultCode + ctUuid;
+                }
+
                 clClass.setClassUuid(UUIDUtils.getUUID()); //UUID 생성
+                clClass.setClassCode(detailCode);
             }
 
             if (clClass.isCreated() || clClass.isModified()) {
-                clClass.setStatusUuid(CommonCodeUtils.getCodeDetailUuid("CD111","Draft"));
+                clClass.setStatusUuid(CommonCodeUtils.getCodeDetailUuid("CD113","Draft"));
 
                 if(clClass.isModified()) {
                     orgClClass = clClassRepository.findOne(clClass.getId());
@@ -125,16 +169,17 @@ public class Cl002Service extends BaseService {
                 }
                 clClassRepository.save(clClass);
             } else if (clClass.isDeleted()) {
-                /*if(getChildClass(clClassificationScheme.getClassificationSchemeUuid()) == 0 ){
-                    clClassificationSchemeRepository.delete(clClassificationScheme);
-                    clClassificationSchemeCon = new ClClassificationSchemeCon();
-                    clClassificationSchemeCon.setClassificationSchemeUuid(clClassificationScheme.getClassificationSchemeUuid());
-                    clClassificationSchemeConRepository.delete(clClassificationSchemeCon);
-                }*/
-                //연관 테이블 데이터 삭제 (상세)
+                if(getChildClass(clClass.getClassUuid()) == 0 ){
+                    clClassRepository.delete(clClass);
+                }
             }
         }
 
         return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");
     }
+
+    public int getChildClass(String classUuid){
+        return  cl002Mapper.getChildClass(classUuid);
+    }
+    public String getMaxClassCode(String classificationSchemeUuid){return  cl002Mapper.getMaxClassCode(classificationSchemeUuid);}
 }

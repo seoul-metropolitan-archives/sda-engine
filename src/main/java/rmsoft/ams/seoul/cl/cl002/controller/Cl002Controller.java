@@ -37,37 +37,49 @@ public class Cl002Controller extends MessageBaseController{
 
         return Responses.MapResponse.of(response);
     }
+
     @GetMapping("/02/getClassList")
     public Responses.PageResponse getClassList(Pageable pageable, RequestParams<Cl00201VO> requestParams) {
         Page<Cl00201VO> pages = cl002Service.getClassList(pageable, requestParams);
         return Responses.PageResponse.of(pages.getContent(), pages);
     }
+
     @GetMapping("/03/getClassHierarchyList")
     public Responses.PageResponse getClassHierarchyList(Pageable pageable, String classificationSchemeUuid) {
         Page<Cl00201VO> pages = cl002Service.getClassHierarchyList(pageable, classificationSchemeUuid);
         return Responses.PageResponse.of(pages.getContent(), pages);
     }
+
     @GetMapping("/04/getSelectedClassList")
     public Responses.PageResponse getSelectedClassList(Pageable pageable, RequestParams<Cl00201VO> requestParams) {
         Page<Cl00201VO> pages = cl002Service.getSelectedClassList(pageable, requestParams);
         return Responses.PageResponse.of(pages.getContent(), pages);
     }
+
     @GetMapping("/05/getSelectedClassDetail")
     public Cl00202VO getSelectedClassDetail(Pageable pageable, RequestParams<Cl00201VO> requestParams) {
         return cl002Service.getSelectedClassDetail(pageable, requestParams);
     }
-    @PutMapping(value = "/06/updateStatus")
+
+    @PutMapping(value = "/06/updateStatusConfirm")
     @PostMapping
-    public ApiResponse updateStatus(@RequestBody List<Cl00201VO> requestParams) {
-        ApiResponse apiResponse = cl002Service.updateStatus(requestParams);
+    public void updateStatusConfirm(@RequestBody List<Cl00201VO> requestParams) {
+        cl002Service.updateStatusConfirm(requestParams);
+    }
+
+    @PutMapping(value = "/06/updateStatusCancel")
+    @PostMapping
+    public ApiResponse updateStatusCanCel(@RequestBody List<Cl00201VO> requestParams) {
+        ApiResponse apiResponse = cl002Service.updateStatusCancel(requestParams);
         if(apiResponse.getStatus() == -1) {
             throw new ApiException(ApiStatus.SYSTEM_ERROR, apiResponse.getMessage());
         }
         return apiResponse;
     }
+
     @PutMapping(value = "/03/updateClassList")
     @PostMapping
-    public ApiResponse updateClassSchemeList(@RequestBody List<Cl00202VO> requestParams) {
+    public ApiResponse updateClassSchemeList(@RequestBody List<Cl00201VO> requestParams) {
         ApiResponse apiResponse = cl002Service.updateClassList(requestParams);
         if(apiResponse.getStatus() == -1) {
             throw new ApiException(ApiStatus.SYSTEM_ERROR, apiResponse.getMessage());

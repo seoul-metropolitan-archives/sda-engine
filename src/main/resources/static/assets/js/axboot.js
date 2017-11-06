@@ -2571,6 +2571,7 @@ axboot.gridView = {
         if (_this.parentsGrid) {
             var data = wrapperObj.getDefaultData();
             data[wrapperObj.getFieldIndex(_this.parentsUuidFieldName)] = _this.parentsGrid.getUUID();
+            console.log(data);
             wrapperObj.setDefaultData(data);
         }
     },

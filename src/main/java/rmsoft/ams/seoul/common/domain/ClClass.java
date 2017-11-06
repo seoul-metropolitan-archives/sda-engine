@@ -24,6 +24,7 @@ import java.io.Serializable;
 @IdClass(ClClass.ClClassId.class)
 @Alias("ClClass")
 public class ClClass extends BaseJpaModel<ClClass.ClClassId> {
+
     @Id
     @Column(name = "CLASS_UUID", length = 40, nullable = false)
     @Comment(value = "분류UUID")

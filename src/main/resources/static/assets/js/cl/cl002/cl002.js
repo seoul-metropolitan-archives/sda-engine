@@ -61,6 +61,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 }
 
                 fnObj.gridView02.setData(res.list);
+                fnObj.gridView02.disabledColumn();
             },
             options: {
                 onError: axboot.viewError
@@ -90,18 +91,23 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         return false;
     },
     STATUS_UPATE: function (caller, act, data) {
+
+    },
+    ERROR_SEARCH: function (caller, act, data) {
+    },
+    PAGE_CONFIRM: function (caller, act, data) {
         var rows = fnObj.gridView02.gridObj.getCheckedList();
 
         if(!rows || rows.length < 1) return;
 
         var params = rows.filter(function (item) {
-            item.changeStatus = data;
+            item.changeStatus = CONFIRM_STATUS;
             return item.classUuid !== "";
         });
 
         axboot.ajax({
             type: "PUT",
-            url: "/api/v1/cl002/06/updateStatus",
+            url: "/api/v1/cl002/06/updateStatusConfirm",
             data: JSON.stringify(params),
             callback: function (res) {
                 ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
@@ -111,13 +117,27 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             }
         });
     },
-    ERROR_SEARCH: function (caller, act, data) {
-    },
-    PAGE_CONFIRM: function (caller, act, data) {
-        ACTIONS.dispatch(ACTIONS.STATUS_UPATE,CONFIRM_STATUS);
-    },
     PAGE_CANCEL: function (caller, act, data) {
-        ACTIONS.dispatch(ACTIONS.STATUS_UPATE,CANCEL_STATUS);
+        var rows = fnObj.gridView02.gridObj.getCheckedList();
+
+        if(!rows || rows.length < 1) return;
+
+        var params = rows.filter(function (item) {
+            item.changeStatus = CANCEL_STATUS;
+            return item.classUuid !== "";
+        });
+
+        axboot.ajax({
+            type: "PUT",
+            url: "/api/v1/cl002/06/updateStatusCancel",
+            data: JSON.stringify(params),
+            callback: function (res) {
+                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+            },
+            options: {
+                onError: axboot.viewError
+            }
+        });
     },
     PAGE_SAVE: function (caller, act, data) {
         ACTIONS.dispatch(ACTIONS.TOP_GRID_SAVE);
@@ -328,16 +348,19 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
 });
 
 fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
+    tagId : "realgrid01",
+    uuidFieldName : "classificationSchemeUuid",
+    entityName : "ClassName",
     initView: function () {
         this.gridObj = new GridWrapper("realgrid01", "/assets/js/libs/realgrid", true);
         this.gridObj.setIsTree(true).setGridStyle("100%", "100%")
             .setOption({
-            footer:{visible:false},
-            header: { visible: false },
-            checkBar: {visible: false},
-            indicator: {visible: false},
-            stateBar:{visible:false}
-        })
+                footer:{visible:false},
+                header: { visible: false },
+                checkBar: {visible: false},
+                indicator: {visible: false},
+                stateBar:{visible:false}
+            })
         this.gridObj.setColumnInfo(cl00201.column_info).setEntityName("ClassName").makeGrid();
 
         this.gridObj.setDisplayOptions({
@@ -362,10 +385,14 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
 
 });
 
-fnObj.gridView02 = axboot.viewExtend(axboot.realGridView, {
-    tagId: "realgrid02",
-    entityName: "Class Grid",
+fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
+    tagId : "realgrid02",
+    entityName : "Class Grid",
+    uuidFieldName : "classUuid",
+    parentsUuidFieldName : "classificationSchemeUuid",
+    parentsGrid : fnObj.gridView01,
     initView: function () {
+        this.initInstance();
         this.setColumnInfo(cl00202.column_info);
         this.gridObj.setFixedOptions({
             colCount: 4
@@ -377,9 +404,31 @@ fnObj.gridView02 = axboot.viewExtend(axboot.realGridView, {
         this.makeGrid();
         this.gridObj.itemClick(this.itemClick);
     },
+    disabledColumn : function()
+    {
+        var codes = axboot.commonCodeFilter("CD113").codeArr;
+        var names = axboot.commonCodeFilter("CD113").nameArr;
+        var state = undefined;
+        for(var i = 0; i < names.length; i++)
+        {
+            if(names[i] == "Confirm")
+            {
+                state = codes[i];
+                break;
+            }
+        }
+        this.gridObj.setCustomCellStyleRows("disable",function(row){
+
+            if(row["statusUuid"] == state)
+                return true;
+            else
+                return false;
+        },["parentClassCode","className","classLevelUuid","orderNo","description"]);
+    },
     isChangeData: function () {
     },
     itemClick: function (data) {
+        setDeleteBtn(data);
         if (data.classificationSchemeUuid != null && data.classificationSchemeUuid != "") {
             if (isDataChanged()) {
                 axDialog.confirm({
@@ -427,16 +476,25 @@ getPreClassLevels = function(key) {
     var levelOne = {};
     var levelTwo =  {};
 
-    if(steps && steps.length == 3){
+    if(steps && steps.length >= 2){
         levelOne = classList.filter(function (item) {
            return item.orderKey === steps[0];
         });
         levelTwo = classList.filter(function (item) {
             return item.orderKey === steps[0] + '.' +steps[1] ;
         });
-
-        return levelOne[0].className + " >> " + levelTwo[0].className;
+        if(steps.length ==3){
+            return "[1] " + levelOne[0].className + " >> " + "[2] " + levelTwo[0].className;
+        }else{
+            return "[1] " + levelOne[0].className;
+        }
     }
     else return;
-
+}
+setDeleteBtn =function(rowData){
+    var dBtn = $("#delete");
+    var idx = axboot.commonCodeFilter("CD113").codeArr.indexOf(rowData["statusUuid"])
+    if(axboot.commonCodeFilter("CD113").codeArr[idx] == "Confirm" ){
+        dBtn.disabled = 'disabled';
+    }
 }

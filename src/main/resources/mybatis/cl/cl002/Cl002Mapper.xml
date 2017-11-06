@@ -13,7 +13,9 @@
             FROM
               CL_CLASSIFICATION_SCHEME
             WHERE
-              ROWNUM <= 1
+              FC_AD_CODE(STATUS_UUID) = 'CONFIRM'
+              AND USE_YN = 'Y'
+              AND ROWNUM <= 1
             ORDER BY
               CLASSIFICATION_CODE ASC
         ]]>
@@ -68,7 +70,7 @@
         '[' || ORDER_NO || '] ' || CLASS_NAME as classTreeName,
         CLASS_LEVEL_UUID as classLevelUuid,
         ORDER_NO as orderNo,
-        REPLACE(ORDER_KEY,'-','.' )as orderKey,
+        ORDER_KEY as orderKey,
         USE_YN as useYn,
         <include refid="Common.UserName"><property name="userUuid" value="INSERT_UUID"/></include> as insertUuid,
         INSERT_DATE as insertDate,
@@ -96,9 +98,10 @@
         Z1.CLASS_LEVEL_UUID as classLevelUuid,
         Z1.ORDER_NO as orderNo,
         Z.CLASS_CODE as parentClassCode,
-        REPLACE(Z1.ORDER_KEY,
-        '-',
-        '.' )as orderKey,
+        Z.CLASS_NAME as parentClassName,
+        Z1.DESCRIPTION as description,
+        Z1.NOTES as notes,
+        Z1.ORDER_KEY as orderKey,
         Z1.USE_YN as useYn,
         <include refid="Common.UserName"><property name="userUuid" value="INSERT_UUID"/></include> as insertUuid,
         Z1.INSERT_DATE as insertDate,
@@ -176,5 +179,32 @@
                 CLASS_UUID = #{classUuid}
             </if>
         </where>
+    </select>
+    <select id="getChildClass" resultType="int" parameterType="String" statementType="PREPARED">
+        SELECT COUNT(*)
+        FROM CL_CLASS
+        WHERE PARENT_CLASS_UUID = #{classUuid}
+    </select>
+    <select id="getMaxClassCode" resultType="String" parameterType="String" statementType="PREPARED">
+        SELECT Z.CLASS_CODE
+        FROM CL_CLASS Z
+        WHERE Z.CLASS_CODE LIKE
+          (
+            SELECT CLASSIFICATION_CODE
+            FROM CL_CLASSIFICATION_SCHEME
+            WHERE CLASSIFICATION_SCHEME_UUID = #{classificationSchemeUuid}
+           )
+          || '%'
+        AND ROWNUM = 1
+        ORDER BY Z.CLASS_CODE DESC
+    </select>
+    <select id="updateStatusConfirm" resultType="cl00201VO" parameterType="String" statementType="PREPARED">
+        UPDATE
+          CL_CLASS
+        SET
+          STATUS_UUID = #{statusUuid},
+          UPDATE_UUID = #{updateUuid}
+        WHERE ORDER_KEY LIKE #{orderKey} || '%'
+
     </select>
 </mapper>

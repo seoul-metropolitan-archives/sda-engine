@@ -36,10 +36,12 @@ var cl00202 =
                     width: 120,
                     name: "statusUuid",
                     text: "Status",
-                    editable: true,
+                    editable: false,
                     values: axboot.commonCodeFilter("CD113").codeArr,
                     labels: axboot.commonCodeFilter("CD113").nameArr,
-                    dataType : "combo"
+                    dataType : "combo",
+                    disable : true,
+                    required : true
                 },
                 {
                     sortNo: 3,
@@ -49,39 +51,52 @@ var cl00202 =
                     editable: true,
                     dataType: "popup",
                     popupCode : "PU117",
-                    sqlColumn : {CLASS_CODE : "parentClassCode",CLASS_UUID: "parentClassUuid"},
+                    sqlColumn : {CLASS_CODE : "parentClassCode",CLASS_UUID: "parentClassUuid",CHILD_CLASS_LEVEL : "classLevelUuid",CLASS_NAME: "parentClassName"},
                     visible: true
                 },
                 {
                     sortNo: 4,
+                    width: 150,
+                    name: "parentClassName",
+                    text: "Parent Class Name",
+                    editable: false,
+                    disable : true,
+                    dataType: "text",
+                    visible: true
+                },
+                {
+                    sortNo: 5,
                     name: "classCode",
                     text: "Class Code",
                     width: 150,
                     dataType: "code",
                     editable: false,
-                    sortable: true
+                    disable: true,
+                    required : true
+
                 },
                 {
-                    sortNo: 5,
+                    sortNo: 6,
                     name: "className",
                     text: "Class Name",
                     width: 150,
                     dataType: "text",
                     editable: true,
-                    sortable: true
+                    required : true
                 },
                 {
-                    sortNo: 6,
+                    sortNo: 7,
                     name: "classLevelUuid",
-                    text: "Class Level Uuid",
+                    text: "Class Level",
                     width: 100,
                     editable: true,
                     values: axboot.commonCodeFilter("CD114").codeArr,
                     labels: axboot.commonCodeFilter("CD114").nameArr,
-                    dataType : "combo"
+                    dataType : "combo",
+                    required : true
                 },
                 {
-                    sortNo: 7,
+                    sortNo: 8,
                     name: "orderNo",
                     text: "Order No",
                     width: 70,
@@ -90,16 +105,16 @@ var cl00202 =
                     datType: "number"
                 },
                 {
-                    sortNo: 8,
+                    sortNo: 9,
                     name: "description",
                     text: "description",
                     width: 120,
                     editable: true,
                     dataType: "richtext",
-                    required: false,
+                    required: false
                 },
                 {
-                    sortNo: 9,
+                    sortNo: 10,
                     name: "notes",
                     text: "NOTES",
                     width: 120,
@@ -108,17 +123,18 @@ var cl00202 =
                     required: false
                 },
                 {
-                    sortNo: 10,
+                    sortNo: 11,
                     name: "useYn",
                     text: "USE",
                     width: 120,
                     editable: true,
                     dataType: "check",
+                    defaultValue : "Y",
                     textAlignment: "center",
                     required: true
                 },
                 {
-                    sortNo: 11,
+                    sortNo: 12,
                     name: "insertUuid",
                     text: "Created By",
                     width: 120,
@@ -128,7 +144,7 @@ var cl00202 =
                     required: false
                 },
                 {
-                    sortNo: 12,
+                    sortNo: 13,
                     name: "insertDate",
                     text: "Date/Time Created",
                     width: 120,
@@ -138,7 +154,7 @@ var cl00202 =
                     required: false
                 },
                 {
-                    sortNo: 13,
+                    sortNo: 14,
                     name: "updateUuid",
                     text: "Modifed By",
                     width: 120,
@@ -148,7 +164,7 @@ var cl00202 =
                     required: false
                 },
                 {
-                    sortNo: 14,
+                    sortNo: 15,
                     name: "updateDate",
                     text: "Date/Time Modified",
                     width: 120,
@@ -158,19 +174,19 @@ var cl00202 =
                     required: false
                 },
                 {
-                    sortNo: 15,
+                    sortNo: 16,
                     name: "orderKey",
                     text: "ORDER_KEY",
                     width: 120,
                     visible:false
                 },
                 {
-                    sortNo: 16,
+                    sortNo: 17,
                     name: "changeStatus",
                     visible:false
                 },
                 {
-                    sortNo: 17,
+                    sortNo: 18,
                     name: "parentClassUuid",
                     visible:false
                 }
