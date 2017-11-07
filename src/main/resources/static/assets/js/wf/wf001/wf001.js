@@ -264,7 +264,7 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
                         result = true;
                 }
                 return result;
-            },["inputCodeUuid"]);
+            },["inputCodeUuid"],false);
             
         });
     }

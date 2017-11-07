@@ -51,7 +51,7 @@ var cl00202 =
                     editable: true,
                     dataType: "popup",
                     popupCode : "PU117",
-                    sqlColumn : {CLASS_CODE : "parentClassCode",CLASS_UUID: "parentClassUuid",CHILD_CLASS_LEVEL : "classLevelUuid",CLASS_NAME: "parentClassName"},
+                    sqlColumn : {CLASS_CODE : "parentClassCode",CLASS_UUID: "parentClassUuid",CHILD_CLASS_LEVEL_UUID  : "classLevelUuid",CLASS_NAME: "parentClassName"},
                     visible: true,
                     required:false
                 },

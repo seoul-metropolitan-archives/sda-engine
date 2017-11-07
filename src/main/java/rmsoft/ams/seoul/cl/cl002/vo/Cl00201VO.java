@@ -28,4 +28,5 @@ public class Cl00201VO extends BaseVO {
     private String parentClassName;
     private String parentClassCode;
     private String classTreeName;
+    private String orderKey1;
 }

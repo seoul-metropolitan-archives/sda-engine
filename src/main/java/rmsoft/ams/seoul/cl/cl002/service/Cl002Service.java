@@ -21,6 +21,7 @@ import rmsoft.ams.seoul.cl.cl002.vo.Cl00201VO;
 import rmsoft.ams.seoul.cl.cl002.vo.Cl00202VO;
 import rmsoft.ams.seoul.common.domain.ClClass;
 import rmsoft.ams.seoul.common.domain.ClClassCon;
+import rmsoft.ams.seoul.common.repository.ClClassConRepository;
 import rmsoft.ams.seoul.common.repository.ClClassRepository;
 import rmsoft.ams.seoul.utils.CommonCodeUtils;
 
@@ -40,6 +41,9 @@ public class Cl002Service extends BaseService {
 
     @Autowired
     private ClClassRepository clClassRepository;
+
+    @Autowired
+    private ClClassConRepository clClassConRepository;
 
     public Cl00101VO getClassificationScheme() {
 
@@ -90,6 +94,7 @@ public class Cl002Service extends BaseService {
         cl00201VO.setClassUuid(requestParams.getString("classUuid"));
         return cl002Mapper.getSelectedClassDetail(cl00201VO);
     }
+
 
     public void updateStatusConfirm(List<Cl00201VO> lists) {
         List<ClClass> clClassList = ModelMapperUtils.mapList(lists, ClClass.class);
@@ -161,7 +166,9 @@ public class Cl002Service extends BaseService {
                 clClass.setClassUuid(UUIDUtils.getUUID()); //UUID 생성
                 clClass.setClassCode(detailCode);
 
-                clClass.setClassLevelUuid(CommonCodeUtils.getCodeDetailUuid("CD114", clClass.getClassLevelUuid()));
+               clClass.setClassLevelUuid(CommonCodeUtils.getCodeDetailUuid("CD114", clClass.getClassLevelUuid()));
+
+                clClass.setClassLevelUuid(clClass.getClassLevelUuid());
 
                 // Oracle Function Call
                 orderKey = jdbcTemplate.queryForObject("select AMS.FC_CL_CLASS_SORTKEY('" + clClass.getParentClassUuid() + "' , '" + clClass.getOrderNo() + "') from dual", String.class);
@@ -174,8 +181,13 @@ public class Cl002Service extends BaseService {
 
                 if (clClass.isModified()) {
                     orgClClass = clClassRepository.findOne(clClass.getId());
-                    if(orgClClass.getParentClassUuid() != clClass.getParentClassUuid() ||
-                            orgClClass.getOrderNo() != clClass.getOrderNo()){
+                    if(isEmpty(orgClClass.getParentClassUuid())){ orgClClass.setParentClassUuid("");}
+                    if(isEmpty(orgClClass.getOrderNo())){ orgClClass.setOrderNo("");}
+                    if(isEmpty(clClass.getParentClassUuid())){ clClass.setParentClassUuid("");}
+                    if(isEmpty(clClass.getOrderNo())){ clClass.setOrderNo("");}
+
+                    if(!orgClClass.getParentClassUuid().equals(clClass.getParentClassUuid()) ||
+                                    !orgClClass.getOrderNo().equals(clClass.getOrderNo())){
                         orderKey = jdbcTemplate.queryForObject("select AMS.FC_CL_CLASS_SORTKEY('" + clClass.getParentClassUuid() + "' , '" + clClass.getOrderNo() + "') from dual", String.class);
                         clClass.setOrderKey(orderKey);
                     }
@@ -192,6 +204,28 @@ public class Cl002Service extends BaseService {
         }
 
         return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");
+    }
+
+    public void updateClassCon(RequestParams<Cl00202VO> requestParams) {
+        ClClassCon clClassCon = new ClClassCon();
+        if(StringUtils.isEmpty(requestParams.getString("classUuid"))){
+            return;
+        }
+        clClassCon.setClassUuid(requestParams.getString("classUuid"));
+        clClassCon.setAddMetadata01(requestParams.getString("detailAddMetadata01"));
+        clClassCon.setAddMetadata02(requestParams.getString("detailAddMetadata02"));
+        clClassCon.setAddMetadata03(requestParams.getString("detailAddMetadata03"));
+        clClassCon.setAddMetadata04(requestParams.getString("detailAddMetadata04"));
+
+        ClClassCon orgClClassCon = null;
+
+        orgClClassCon = clClassConRepository.findOne(clClassCon.getId());
+
+        if(orgClClassCon != null){
+            clClassCon.setInsertDate(orgClClassCon.getInsertDate());
+            clClassCon.setInsertUuid(orgClClassCon.getInsertUuid());
+        }
+        clClassConRepository.save(clClassCon);
     }
 
     public int getChildClass(String classUuid) {

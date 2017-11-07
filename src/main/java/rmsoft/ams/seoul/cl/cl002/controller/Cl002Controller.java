@@ -31,6 +31,7 @@ public class Cl002Controller extends MessageBaseController{
     public Responses.MapResponse getClassificationScheme() {
         Map<String,Object> response = new HashMap<String,Object>();
         Cl00101VO cl00101VO = cl002Service.getClassificationScheme();
+        if(cl00101VO == null) return null;
         response.put("classificationCode",cl00101VO.getClassificationCode());
         response.put("classificationName",cl00101VO.getClassificationName());
         response.put("classificationSchemeUuid",cl00101VO.getClassificationSchemeUuid());
@@ -67,7 +68,7 @@ public class Cl002Controller extends MessageBaseController{
         cl002Service.updateStatusConfirm(requestParams);
     }
 
-    @PutMapping(value = "/06/updateStatusCancel")
+    @PutMapping(value = "/07/updateStatusCancel")
     @PostMapping
     public ApiResponse updateStatusCanCel(@RequestBody List<Cl00201VO> requestParams) {
         ApiResponse apiResponse = cl002Service.updateStatusCancel(requestParams);
@@ -77,19 +78,15 @@ public class Cl002Controller extends MessageBaseController{
         return apiResponse;
     }
 
-/*    @PutMapping(value = "/03/updateClassList")
+    @PutMapping(value = "/08/updateClassList")
     @PostMapping
-    public ApiResponse updateClassSchemeList(@RequestBody List<Cl00201VO> requestParams) {
-        ApiResponse apiResponse = cl002Service.updateClassList(requestParams);
-        if(apiResponse.getStatus() == -1) {
-            throw new ApiException(ApiStatus.SYSTEM_ERROR, apiResponse.getMessage());
-        }
-        return apiResponse;
-    }*/
-
-    @PutMapping(value = "/03/updateClassList")
-    @PostMapping
-    public void updateClassSchemeList(@RequestBody List<Cl00201VO> requestParams) {
+    public void updateClassList(@RequestBody List<Cl00201VO> requestParams) {
         cl002Service.updateClassList(requestParams);
+    }
+
+    @GetMapping("/09/updateClassCon")
+    public void updateClassCon(RequestParams<Cl00202VO> requestParams) {
+        cl002Service.updateClassCon(requestParams);
+
     }
 }
