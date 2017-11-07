@@ -74,6 +74,7 @@
         CLASS_LEVEL_UUID as classLevelUuid,
         ORDER_NO as orderNo,
         ORDER_KEY as orderKey,
+        SUBSTR(SYS_CONNECT_BY_PATH(ROWNUM, '.'), 2 , length(SYS_CONNECT_BY_PATH(ROWNUM, '.'))) as orderKey1,
         USE_YN as useYn,
         <include refid="Common.UserName"><property name="userUuid" value="INSERT_UUID"/></include> as insertUuid,
         INSERT_DATE as insertDate,
@@ -129,6 +130,9 @@
             </if>
             <if test="orderKey != null">
                 AND Z1.ORDER_KEY LIKE  #{orderKey} || '%'
+            </if>
+            <if test="orderKey != null">
+                AND Z1.ORDER_KEY NOT LIKE #{orderKey}
             </if>
             <if test="classCode != null">
                 AND Z1.CLASS_CODE LIKE '%' || #{classCode} || '%'

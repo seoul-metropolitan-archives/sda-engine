@@ -5,7 +5,7 @@ var cl00201 =
                 {
                     sortNo: 0,
                     width:140,
-                    name: "orderKey",
+                    name: "orderKey1",
                     text: "ORDER_KEY",
                     editable: false,
                     dataType: "code",
@@ -60,6 +60,15 @@ var cl00201 =
                     width:140,
                     name: "classUuid",
                     text: "Class Uuid",
+                    editable: false,
+                    dataType: "code",
+                    visible : false
+                },
+                {
+                    sortNo: 0,
+                    width:140,
+                    name: "orderKey",
+                    text: "ORDER_KEY",
                     editable: false,
                     dataType: "code",
                     visible : false

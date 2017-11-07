@@ -6,6 +6,7 @@ package rmsoft.ams.seoul.common.domain;
 
 import io.onsemiro.core.annotations.Comment;
 import io.onsemiro.core.domain.BaseJpaModel;
+import io.onsemiro.core.domain.SimpleJpaModel;
 import lombok.*;
 import org.apache.ibatis.type.Alias;
 import org.hibernate.annotations.DynamicInsert;
@@ -23,7 +24,7 @@ import java.io.Serializable;
 @Table(name = "CL_CLASS_CON")
 @IdClass(ClClassCon.ClClassConId.class)
 @Alias("ClClassCon")
-public class ClClassCon extends BaseJpaModel<ClClassCon.ClClassConId> {
+public class ClClassCon extends SimpleJpaModel<ClClassCon.ClClassConId> {
     @Id
     @Column(name = "CLASS_UUID", length = 40, nullable = false)
     @Comment(value = "분류UUID")

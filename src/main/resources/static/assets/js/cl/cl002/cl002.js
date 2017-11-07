@@ -5,6 +5,7 @@ var classList = new Object();
 var CONFIRM_STATUS = "Confirm";
 var CANCEL_STATUS = "Draft";
 var selectedTreeItem = {orderKey:"", classTreeName:"",classificationSchemeUuid:"",orderNo:"",parentClassUuid:""}; //선택된 트리 아이템
+var isDetailChanged = false;
 
 var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH0: function (caller, act, data){ //초기조회, Inquiry
@@ -62,6 +63,13 @@ var ACTIONS = axboot.actionExtend(fnObj, {
 
                 fnObj.gridView02.setData(res.list);
                 fnObj.gridView02.disabledColumn();
+                selectedItem = fnObj.gridView02.getRowData();
+                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH3, fnObj.gridView02.getRowData());
+                if(isDetailChanged == true){
+                    isDetailChanged = false;
+                }
+                setDefaultClassDetails();
+
             },
             options: {
                 onError: axboot.viewError
@@ -88,6 +96,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 fnObj.formView.setFormData("detailAddMetadata02",res.addMetadata02);
                 fnObj.formView.setFormData("detailAddMetadata03",res.addMetadata03);
                 fnObj.formView.setFormData("detailAddMetadata04",res.addMetadata04);
+                isDetailChanged = false;
             },
             options: {
                 onError: axboot.viewError
@@ -152,10 +161,14 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         var result = false;
         axboot.call({
             type: "PUT",
-            url: "/api/v1/cl002/03/updateClassList",
+            url: "/api/v1/cl002/08/updateClassList",
             data: JSON.stringify(this.gridView02.getData()),
             callback: function (res) {
-                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+                if(isDetailChanged){
+                    ACTIONS.dispatch(ACTIONS.TOP_GRID_DETAIL_PAGE_SAVE);
+                }else{
+                    ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+                }
                 result = true;
             }
         })
@@ -163,6 +176,19 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 axToast.push("저장 작업이 완료되었습니다.");
             });
         return result;
+    },
+    TOP_GRID_DETAIL_PAGE_SAVE: function () {
+        axboot.ajax({
+            type: "GET",
+            url: "/api/v1/cl002//09/updateClassCon",
+            data: $.extend({},  {pageSize: 1000},selectedItem ,this.formView.getData()),
+            callback: function (res) {
+                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+            },
+            options: {
+                onError: axboot.viewError
+            }
+        });
     },
     SEARCH_CLASS_SCH : function(caller, act, data)
     {
@@ -301,6 +327,19 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
             }
         });
 
+        $("input[data-ax-path='detailAddMetadata01']").change(function(){
+            isDetailChanged = true;
+        });
+        $("input[data-ax-path='detailAddMetadata02']").change(function(){
+            isDetailChanged = true;
+        });
+        $("input[data-ax-path='detailAddMetadata03']").change(function(){
+            isDetailChanged = true;
+        });
+        $("input[data-ax-path='detailAddMetadata04']").change(function(){
+            isDetailChanged = true;
+        });
+
         $(".bdb").delegate("#rg_tree_allopen", "click", function () {
             _this.expandAll();
         });
@@ -374,15 +413,37 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
         this.gridObj.itemClick(this.itemClick);
     },
     setData: function (list) {
-        this.gridObj.setTreeDataForArray(list, "orderKey");
+        this.gridObj.setTreeDataForArray(list, "orderKey1");
     },
     isChangeData: function () {
-        return false;
+        if (this.getData().length > 0) {
+            return true;
+        } else {
+            return false;
+        }
     },
     itemClick: function (data, index) {
-        selectedTreeItem = data
-        ACTIONS.dispatch(ACTIONS.PAGE_SEARCH2);
-        setDefaultClassDetails();
+        if(selectedItem != null){
+            if (fnObj.gridView02.isChangeData() == true ||isDetailChanged == true) {
+                axDialog.confirm({
+                    msg: axboot.getCommonMessage("AA006")
+                }, function () {
+                    if (this.key == "ok") {
+                        ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
+                    } else {
+                        selectedTreeItem = data
+                        ACTIONS.dispatch(ACTIONS.PAGE_SEARCH2);
+                    }
+                });
+            } else {
+                selectedTreeItem = data
+                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH2);
+            }
+        }else{
+            selectedTreeItem = data
+            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH2);
+        }
+
     },
     getData: function () {
         return this.gridObj.getData();
@@ -431,25 +492,34 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
         },["parentClassCode","className","classLevelUuid","orderNo","description"]);
     },
     isChangeData: function () {
+        if (this.getData().length > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    },
+    getRowData: function (){
+        return this.gridObj.getSelectedData();
     },
     itemClick: function (data) {
-        setDeleteBtn(data);
-        if (data.classificationSchemeUuid != null && data.classificationSchemeUuid != "") {
-            if (isDataChanged()) {
+        selectedItem = data;
+        if (fnObj.formView.getData().detailClassName != null && fnObj.formView.getData().detailClassName != "") {
+
+            if (isDetailChanged == true ) {
                 axDialog.confirm({
                     msg: axboot.getCommonMessage("AA006")
                 }, function () {
                     if (this.key == "ok") {
-                        // ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
+                        ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
                     } else {
-                        selectedItem = data;
                         ACTIONS.dispatch(ACTIONS.PAGE_SEARCH3, data);
                     }
                 });
             } else {
-                selectedItem = data;
                 ACTIONS.dispatch(ACTIONS.PAGE_SEARCH3, data);
             }
+        }else {
+            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH3, data);
         }
     }
 });
@@ -475,6 +545,7 @@ setDefaultClassDetails = function(){
     fnObj.formView.setFormData("detailAddMetadata02",'');
     fnObj.formView.setFormData("detailAddMetadata03",'');
     fnObj.formView.setFormData("detailAddMetadata04",'');
+    isDetailChanged = false;
 }
 getPreClassLevels = function(key) {
     var steps = key.split('.') ;
@@ -495,11 +566,4 @@ getPreClassLevels = function(key) {
         }
     }
     else return;
-}
-setDeleteBtn =function(rowData){
-    var dBtn = $("#delete");
-    var idx = axboot.commonCodeFilter("CD113").codeArr.indexOf(rowData["statusUuid"])
-    if(axboot.commonCodeFilter("CD113").codeArr[idx] == "Confirm" ){
-        dBtn.disabled = 'disabled';
-    }
 }
