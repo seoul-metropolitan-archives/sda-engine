@@ -2,6 +2,7 @@ var fnObj = {};
 var selectedItem ; //선택된 그리드 아이템
 var CONFIRM_STATUS = "Confirm";
 var CANCEL_STATUS = "Draft";
+var isDetailChanged = false;
 
 var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH: function (caller, act, data) {
@@ -12,7 +13,8 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             callback: function (res) {
                 fnObj.gridView01.setData(res.list);
                 fnObj.gridView01.disabledColumn();
-
+                isDetailChanged = false;
+                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1);
             },
             options: {
                 onError: axboot.viewError
@@ -24,16 +26,17 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         axboot.ajax({
             type: "GET",
             url: "/api/v1/cl001/02/detail",
-            data: $.extend({}, {pageSize: 1000}, data),
+            data: $.extend({}, {pageSize: 1000}, fnObj.gridView01.getSelectedData()),
             callback: function (res) {
                 fnObj.formView.setFormData("managerOrganization",res.managerOrganization);
                 fnObj.formView.setFormData("manager",res.manager);
                 fnObj.formView.setFormData("basedOn",res.basedOn);
-                fnObj.formView.setFormData("classificationNameTxt", selectedItem.classificationName);
+                fnObj.formView.setFormData("classificationNameTxt", fnObj.gridView01.getSelectedData().classificationName);
                 fnObj.formView.setFormData("useNo",res.useNo);
                 fnObj.formView.setFormData("useYes",res.useYes);
                 fnObj.formView.setFormData("aggregationCnt",res.aggregationCnt);
                 fnObj.formView.setFormData("itemCnt",res.itemCnt);
+
             },
             options: {
                 onError: axboot.viewError
@@ -83,7 +86,8 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 url: "/api/v1/cl001/03/updateClassificationSchemeList",
                 data: JSON.stringify(this.gridView01.getData()),
                 callback: function (res) {
-                    ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+                    ACTIONS.dispatch(ACTIONS.TOP_GRID_DETAIL_PAGE_SAVE);
+
                     result = true;
                 }
             })
@@ -91,6 +95,20 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 axToast.push("저장 작업이 완료되었습니다.");
             });
         return result;
+    },
+    TOP_GRID_DETAIL_PAGE_SAVE :function () {
+        axboot.ajax({
+            type: "GET",
+            url: "/api/v1/cl001/05/updateClassificationSchemeConDetail",
+            data: $.extend({},  {pageSize: 1000},fnObj.gridView01.getSelectedData() ,this.formView.getData()),
+            callback: function (res) {
+                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+            },
+            options: {
+                onError: axboot.viewError
+            }
+        });
+        ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
     },
     CLOSE_TAB: function (caller, act, data) {
         ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
@@ -151,6 +169,15 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
     },
     initEvent: function () {
         var _this = this;
+        $("textarea[data-ax-path='basedOn']").change(function(){
+            isDetailChanged = true;
+        });
+        $("input[data-ax-path='managerOrganization']").change(function(){
+            isDetailChanged = true;
+        });
+        $("input[data-ax-path='manager']").change(function(){
+            isDetailChanged = true;
+        });
     },
     getData: function () {
         var data = this.modelFormatter.getClearData(this.model.get()); // 모델의 값을 포멧팅 전 값으로 치환.
@@ -199,14 +226,9 @@ fnObj.gridView01 = axboot.viewExtend(axboot.realGridView, {
         })
         this.makeGrid();
         this.gridObj.itemClick(this.itemClick);
-        /*this.gridObj.setColumnProperty("statusUuid"
-            , "dynamicStyles", [{
-                "criteria": "name == 'Draft'",
-                "styles": {
-                    "readonly": false
-                }
-            }]
-        );*/
+    },
+    getSelectedData : function(){
+        return this.gridObj.getSelectedData()
     },
     disabledColumn : function()
     {
@@ -231,19 +253,17 @@ fnObj.gridView01 = axboot.viewExtend(axboot.realGridView, {
     },
     itemClick: function (data) {
         if (data.classificationSchemeUuid != null && data.classificationSchemeUuid != "") {
-            if (isDataChanged()) {
+            if (isDataChanged() || isDetailChanged) {
                 axDialog.confirm({
                     msg: axboot.getCommonMessage("AA006")
                 }, function () {
                     if (this.key == "ok") {
                         ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
                     } else {
-                        selectedItem = data;
                         ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, data);
                     }
                 });
             } else {
-                selectedItem = data;
                 ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, data);
             }
         }

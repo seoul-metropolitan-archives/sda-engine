@@ -136,6 +136,29 @@ public class Cl001Service extends BaseService {
         return  cl001Mapper.getChildClass(classificationSchemeUuid);
     }
 
+    public void updateClassificationSchemeConDetail(RequestParams<Cl00102VO> requestParams) {
+        ClClassificationSchemeCon clClassificationSchemeCon = new ClClassificationSchemeCon();
+
+        if(StringUtils.isEmpty(requestParams.getString("classificationSchemeUuid"))){
+            return;
+        }
+
+        clClassificationSchemeCon.setClassificationSchemeUuid(requestParams.getString("classificationSchemeUuid"));
+        clClassificationSchemeCon.setBasedOn(requestParams.getString("basedOn"));
+        clClassificationSchemeCon.setManager(requestParams.getString("manager"));
+        clClassificationSchemeCon.setManagerOrganization(requestParams.getString("managerOrganization"));
+
+        ClClassificationSchemeCon orgClClassCon = null;
+
+        orgClClassCon = clClassificationSchemeConRepository.findOne(clClassificationSchemeCon.getId());
+
+        if(orgClClassCon != null){
+            clClassificationSchemeCon.setInsertDate(orgClClassCon.getInsertDate());
+            clClassificationSchemeCon.setInsertUuid(orgClClassCon.getInsertUuid());
+        }
+        clClassificationSchemeConRepository.save(clClassificationSchemeCon);
+    }
+
     /*public ClClassificationScheme findOneClClassificationScheme(Cl00101VO requestParam) {
         QClClassificationScheme qClClassificationScheme = QClClassificationScheme.clClassificationScheme;
 

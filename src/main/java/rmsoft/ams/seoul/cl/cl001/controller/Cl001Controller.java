@@ -57,4 +57,9 @@ public class Cl001Controller extends BaseController {
         }
         return apiResponse;
     }
+
+    @GetMapping("/05/updateClassificationSchemeConDetail")
+    public void updateClassificationSchemeConDetail(RequestParams<Cl00102VO> requestParams) {
+        cl001Service.updateClassificationSchemeConDetail(requestParams);
+    }
 }

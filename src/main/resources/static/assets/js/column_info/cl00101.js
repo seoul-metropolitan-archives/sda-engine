@@ -60,7 +60,8 @@ var cl00101 =
                     values: axboot.commonCodeFilter("CD112").codeArr,
                     labels: axboot.commonCodeFilter("CD112").nameArr,
                     required : true,
-                    disable: false
+                    disable: false,
+                    editable : true
                 },
                 {
                     sortNo: 5,

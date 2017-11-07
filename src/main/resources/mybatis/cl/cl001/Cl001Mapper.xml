@@ -44,7 +44,7 @@
           Z1.CLASSIFICATION_SCHEME_UUID as classificationSchemeUuid ,
           Z2.MANAGER_ORGANIZATION as managerOrganization ,
           Z2.MANAGER as manager ,
-          Z2.BASED_ON as baseOn ,
+          Z2.BASED_ON as basedOn ,
           (
             SELECT
               COUNT(USE_YN)

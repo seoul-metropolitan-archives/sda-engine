@@ -14,6 +14,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             url: "/api/v1/cl002/01/getClassificationScheme",
             data: $.extend({}, {pageSize: 1000}, this.formView.getData()),
             callback: function (res) {
+                if(Object.keys(res).length < 1) return;
 
                 $("input[data-ax-path='classificationCode']").attr("classificationCode",res.map.classificationCode);
                 fnObj.formView.setFormData("classificationCode",res.map.classificationName);
