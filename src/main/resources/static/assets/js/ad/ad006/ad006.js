@@ -66,20 +66,23 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             callback:  function (res)
             {
                 result = res;
-                if(result)
-                {
-                    try
-                    {
+                if(result) {
+                    try {
                         fnObj.gridView_h.gridObj.commit();
-                    }catch(e)
-                    {
+                    } catch (e) {
                         console.log("커밋 에러남");
                     }
 
                 }
 
+            },
+            options: {
+                onError: axboot.viewError
             }
         });
+        if(!result)
+            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH,fnObj.formView.getData());
+
         return result;
     },
     ENTITY_COLUMN_PAGE_SAVE : function(data)
@@ -99,8 +102,16 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 } catch (e) {
                     console.log("커밋 에러남");
                 }
+            },
+            options: {
+                onError: axboot.viewError
             }
         });
+        if(!result){
+            ACTIONS.dispatch(ACTIONS.GET_ENTITY_DETAIL,fnObj.gridView_h.gridObj.getSelectedData());
+}
+
+
         return result;
     },
     FORM_CLEAR: function (caller, act, data) {

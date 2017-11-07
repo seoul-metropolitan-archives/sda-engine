@@ -53,7 +53,7 @@ public class Ad006Service extends BaseService {
                 adEntityTypeRepository.save(adEntityType);
             } else if (adEntityType.isDeleted()) {
                 if(mapper.checkEntityType(adEntityType.getEntityType())>0){
-                    return ApiResponse.of(ApiStatus.SYSTEM_ERROR, CommonMessageUtils.getMessage("AD010_01"));
+                    return ApiResponse.error(ApiStatus.SYSTEM_ERROR, CommonMessageUtils.getMessage("AD010_01"));
                 } else {
                     adEntityTypeRepository.delete(adEntityType);
                 }
@@ -81,7 +81,7 @@ public class Ad006Service extends BaseService {
                 adEntityColumnRepository.save(adEntityColumn);
             } else if (adEntityColumn.isDeleted()) {
                 if(mapper.checkEntityColumn(adEntityColumn)>0){
-                    return ApiResponse.of(ApiStatus.SYSTEM_ERROR, CommonMessageUtils.getMessage("AD010_02"));
+                    return ApiResponse.error(ApiStatus.SYSTEM_ERROR, CommonMessageUtils.getMessage("AD010_02"));
                 } else {
                     adEntityColumnRepository.delete(adEntityColumn);
                 }
