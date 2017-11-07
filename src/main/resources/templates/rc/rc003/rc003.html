@@ -1,0 +1,420 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout/base}">
+
+
+<!-- ===== [ script ] ===== -->
+<script layout:fragment="script" type="text/javascript" th:src="@{/assets/js/rc/rc003/rc003.js}"></script>
+<!--realgrid -->
+
+<!-- ===== [ base-content ] ===== -->
+<div layout:fragment="base-content" class="ax-base-content">
+    <form name="formView01" id="formView01" method="post" onsubmit="return false">
+        <div class="cssBody" style="top:80px">
+            <div style="display:table; height:100%; width:100%">
+
+                <div class="contents_wrap">
+                    <div style=" height:30px; width:100%" class="bgf7 div_tablerow">
+                        <ul class="bdb">
+                            <li style="width:30px">
+                                <div class="bookmark_star"><img src="images/bookmark.png" alt="bookmark"></div>
+                            </li>
+                            <li style="width:50%; text-align:left;">View Aggregation</li>
+                            <li style="text-align:right; width:48%;">
+                                <button class="btn_s">
+                                    <span class="btn_icon">&nbsp;</span>
+                                    <span class="btn_main_txt">Save(S)</span>
+                                </button>
+                                <button class="btn_i">
+                                    <span class="btn_icon">&nbsp;</span>
+                                    <span class="btn_main_txt">Inquiry(I)</span>
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="div_tablerow">
+                        <ul style="height: 30px; width: 100%" class="bdb">
+                            <li style="width: 2%;"><img src="images/icon/fo.png" alt="folder"></li>
+                            <li style="width: 78%; text-align: left">Root > root2 > root3</li>
+                            <li style="width: 19.5%; padding-right: 0.5%">
+                                <!--    <div class="src_box3" ><input type=text>
+                              <a href="#" id="dialog-link5">
+                              <img src="images/search_normal.png" alt="search"></a>
+                              </div>-->
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="bdb div_tablerow cont_title">
+                        <ul style="height: 30px; width: 100%">
+                            <li class="pdl_10">
+                                Record Group - 2017's Seoul Digital Archives Material design guideline
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div style="height:100%; width:100%" class="div_tablerow">
+
+                        <div style="display:table; height:100%; width:16%; float:left" class="bdr">
+                            <ul class="bdb bdt div_tablerow bgf7" style="height:30px;">
+                                <li style="width:80%; text-align:left;">
+                                    <img src="images/img_dot2.png" alt="dot">Record Hierarchy
+                                </li>
+                                <li style="text-align:right; width:18%;">
+
+                                </li>
+                            </ul>
+
+                            <ul class="bdb" style="height:30px;width:100%; float:left">
+                                <li class="bdr"><a href="#" class="open_close" id="rg_tree_allopen">Expand</a></li>
+                                <li><a href="#" class="open_close" id="rg_tree_allclose">Collapse</a></li>
+                            </ul>
+                            <div style="height:100%; width:100%" class="div_tablerow bdb">
+                                <div id="realgridT1" style="width:100%; height:100%"></div>
+                            </div>
+                        </div>
+                        <!--오늘쪽 내용에서 좌측 트리부분-->
+
+                        <div style="display:table; height:100%; width:84%; float:left">
+
+                            <ul class="bdb bdt div_tablerow bgf7" style="height:30px;">
+                                <li style="width:50%; text-align:left;">
+                                    <img src="images/img_dot2.png" alt="dot">Aggregation Details
+                                </li>
+                                <li style="text-align:right; width:48%;">
+                                    <!--<button class="btn_co">
+                                        <span class="btn_icon_co">&nbsp;</span>
+                                        <span class="btn_main_txt">Freeze</span>
+                                    </button>
+                                    <button class="btn_co">
+                                        <span class="btn_icon_co">&nbsp;</span>
+                                        <span class="btn_main_txt">Cancel</span>
+                                    </button>
+                                    <button class="btn_a">
+                                        <span class="btn_icon">&nbsp;</span>
+                                        <span class="btn_main_txt">Add</span>
+                                    </button>
+                                    <button class="btn_d">
+                                        <span class="btn_icon">&nbsp;</span>
+                                        <span class="btn_main_txt">Delete</span>
+                                    </button>-->
+                                </li>
+                            </ul>
+                            <div style="height:100%; width:100%;" class="div_tablerow">
+                                <div class="explorer_list">
+                                    <div id="topmove" class="explorer_list_cont">
+
+                                        <div class="bdt cont_wrap01" style="width: 86%;">
+
+                                            <!-- system metadata -->
+                                            <div class="serv_title" style="border-top:0; margin-top: 0">
+                                                <span><b>System Metadata</b></span>
+                                            </div>
+                                            <div class="bdb" style="padding: 5px;">
+                                                <ul>
+                                                    <li style="width: 33%;">
+                                                        <b>Code </b>
+                                                        <div>wo0120</div>
+                                                    </li>
+                                                    <li style="width: 33%;">
+                                                        <b>Type </b>
+                                                        <div>Normal</div>
+                                                    </li>
+                                                    <li style="width: 34%;">
+                                                        <b>Published Status </b>
+                                                        <div>Published</div>
+                                                    </li>
+                                                </ul>
+
+                                                <ul class="pdt_20">
+                                                    <li style="width: 66%;">
+                                                        <b>Title </b>
+                                                        <div>2017's Seoul Digital Archives Material design guideline
+                                                        </div>
+                                                    </li>
+
+                                                    <li style="width: 34%;">
+                                                        <b>Level </b>
+                                                        <div>Record Group</div>
+                                                    </li>
+                                                </ul>
+
+                                                <ul style="padding-top: 32px">
+                                                    <li style="width: 49%;">
+                                                        <b>Description </b>
+                                                        <div>
+                                                            서울특별시는 1946년 서울시청으로 출범하여, 1949년 서울특별시청으로 승격되었다. 주요 업무는 정책 및
+                                                            기획, 예산 및 조직 관리, 정보화 사업 추진, 청사 및 문서 관리, 사유재산 관리, 지역 산업정책 수립
+                                                            집행, 종합방재계획 수립, 재난 및 복구, 민바우이, 교통정책 등의 업무를 수행한다. 또 주택계획 및
+                                                            재개발, 여성정책, 감사 및 국제협력, 시민 보건복지, 문화예술 진흥 및 관광진흥, 도시계획 수립 및 조정,
+                                                            도시 생태계 보호, 건설행정, 도로사업, 하천·유수지 관리, 시설물 안전점검 및 유지 관리, 도로 복구,
+                                                            청계천복원 총괄 계획수립·조정, 지하철 건설공사 및 재산 관리, 수돗물의 안전 공급과 급수 등 서울특별시와
+                                                            관련된 전반적인 업무를 총괄한다.
+                                                            <br> 서울특별시 기록물군은 조직의 기능과 기록물 유형에 따라 행정지원, 건설건축지원, 농업기반시설관리,
+                                                            사회단체관리, 사회복지시설관리, 소방관리, 지방세정, 지역 및 도시개발산업지원, 토지지적관리, 정부간행물의
+                                                            13개 기록물계열로 구성되어 있다.
+
+                                                        </div>
+                                                    </li>
+                                                    <li style="width: 2%;">
+                                                    </li>
+                                                    <li style="width: 49%;">
+                                                        <b>Notes </b>
+                                                        <div>
+                                                            "1955.07.15 국군묘지로 발족
+                                                            <br> 1965.03.30 국립묘지로 승격, 개칭
+                                                            <br> 1996.06.01 국립현충원으로 기관명칭 개칭
+                                                            <br> 2006.01.30 국립서울현충원으로 관리가관 명칭 변경
+                                                        </div>
+                                                    </li>
+                                                </ul>
+
+                                                <ul class="pdt_20">
+                                                    <li style="width: 33%;">
+                                                        <b>Author </b>
+                                                        <div>김태형(1986~)</div>
+                                                    </li>
+                                                    <li style="width: 67%;">
+                                                        <b>From </b>
+                                                        <div>Record Group : 2017's Seoul Digital Archives Material</div>
+                                                    </li>
+
+                                                </ul>
+
+                                                <ul class="pdt_20">
+                                                    <li style="width: 33%;">
+                                                        <b>Date of Description </b>
+                                                        <div> 2017-01-01</div>
+                                                    </li>
+                                                    <li style="width: 67%;">
+                                                        <b>Includes </b>
+                                                        <div>시리즈(140)을 포함하고 있습니다.
+                                                            <br> 파일(80)을 포함하고 있습니다.
+                                                        </div>
+                                                    </li>
+
+                                                </ul>
+
+                                            </div>
+                                            <!-- system metadata -->
+
+                                            <!-- Contextual Metadata  -->
+                                            <div class="bdb bdt mgt_10 bgf7 bdr bdl " style="padding: 5px;">
+                                                <span><b>Contextual Metadata</b></span>
+                                            </div>
+                                            <div class="bdb" style="padding: 5px;">
+
+                                                <ul>
+                                                    <li style="width: 49%">
+                                                        <ol>
+                                                            <li>
+                                                                <b>Provenance </b>
+                                                                <div>서울특별시 >> 행정국 >> 정보공개정책과 >> 기록문화팀</div>
+                                                            </li>
+                                                            <li class="pdt_20">
+                                                                <b>Creator </b>
+                                                                <div>Whatomugh, Isaac Abraham(1996~2014)</div>
+                                                            </li>
+                                                            <li class="pdt_20">
+                                                                <b>Date of Creation</b>
+                                                                <div>[between 1955 and 1965]</div>
+                                                            </li>
+                                                        </ol>
+                                                    </li>
+                                                    <li style="width: 2%;">
+                                                    </li>
+                                                    <li style="width: 49%;">
+                                                        <b>Reference Code </b>
+                                                        <div>
+                                                            c7db746c-2344-4efc-f7ca3b483ecc
+                                                            <br> (구전자문서 시스템)
+                                                            <br> 1331383-ZZ00007-2004-000001-002
+                                                            <br> (신전자문서 시스템)
+                                                            <br>
+                                                            04-1312241-B1000620080806000214547-2013-TRD05781C55A763FA
+                                                            <br> (표준 기록관리 시스템)
+                                                        </div>
+                                                    </li>
+                                                </ul>
+
+                                                <ul class="pdt_20">
+                                                    <li style="width: 49%;">
+                                                        <b>Additional Metadata 01 </b>
+                                                        <div> Additional Metadata Contents 01</div>
+                                                    </li>
+                                                    <li style="width: 2%;">
+                                                    </li>
+                                                    <li style="width: 49%;">
+                                                        <b>Additional Metadata 02 </b>
+                                                        <div>Additional Metadata Contents 02</div>
+                                                    </li>
+                                                </ul>
+
+                                                <ul class="pdt_20">
+                                                    <li style="width: 49%;">
+                                                        <b>Additional Metadata 03 </b>
+                                                        <div> Additional Metadata Contents 03</div>
+                                                    </li>
+                                                    <li style="width: 2%;">
+                                                    </li>
+                                                    <li style="width: 49%;">
+                                                        <b>Additional Metadata 04 </b>
+                                                        <div>Additional Metadata Contents 04</div>
+                                                    </li>
+                                                </ul>
+
+                                                <ul class="pdt_20">
+                                                    <li style="width: 49%;">
+                                                        <b>Additional Metadata 05 </b>
+                                                        <div> Additional Metadata Contents 05</div>
+                                                    </li>
+                                                    <li style="width: 2%;">
+                                                    </li>
+                                                    <li style="width: 49%;">
+                                                        <b>Additional Metadata 06 </b>
+                                                        <div>Additional Metadata Contents 06</div>
+                                                    </li>
+                                                </ul>
+
+                                                <ul class="pdt_20">
+                                                    <li style="width: 49%;">
+                                                        <b>Additional Metadata 07 </b>
+                                                        <div> Additional Metadata Contents 07</div>
+                                                    </li>
+                                                    <li style="width: 2%;">
+                                                    </li>
+                                                    <li style="width: 49%;">
+                                                        <b>Additional Metadata 08 </b>
+                                                        <div>Additional Metadata Contents 08</div>
+                                                    </li>
+                                                </ul>
+
+                                                <ul class="pdt_20">
+                                                    <li style="width: 49%;">
+                                                        <b>Additional Metadata 09 </b>
+                                                        <div> Additional Metadata Contents 09</div>
+                                                    </li>
+                                                    <li style="width: 2%;">
+                                                    </li>
+                                                    <li style="width: 49%;">
+                                                        <b>Additional Metadata 10 </b>
+                                                        <div>Additional Metadata Contents 11</div>
+                                                    </li>
+                                                </ul>
+
+                                            </div>
+                                            <!-- Contextual Metadata  -->
+
+
+                                            <!-- Storage Service  -->
+                                            <div class="togl01 serv_title">
+                                                <b>Storage Service</b>
+                                                <input type="button" value="▼" id="open_btn1" class="open_btn">
+                                            </div>
+                                            <div class="togl01_show serv_cont" style="padding: 30px 0">
+                                                Storage Service contents
+                                            </div>
+                                            <!-- Storage Service -->
+
+
+                                            <!-- Long Term Preservation Service  -->
+                                            <div class="togl02 serv_title">
+                                                <b>Long Term Preservation Service</b>
+                                                <input type="button" value="▼" id="open_btn2" class="open_btn">
+                                            </div>
+                                            <div class="togl02_show serv_cont">
+                                                Long Term Preservation Service contents
+                                            </div>
+                                            <!-- Long Term Preservation Service -->
+
+
+                                        </div>
+
+                                        <!--우측메뉴 시작-->
+
+                                        <div class="bdt cont_wrap02" style="width: 11%;">
+                                            <div style="border:0px;">
+                                                <!--<div class="bdb pdb_20" style="padding: 5px">
+                                              <span><b>Title</b></span>
+                                            </div>
+                                            -->
+                                                <!--ADD -->
+                                                <div class="bdb pdb_30">
+                                                    <ul>
+                                                        <li>
+                                                            <b>Add</b>
+                                                        </li>
+                                                        <li>
+                                                            <span><img src="images/icon/icon12.png"
+                                                                       alt="aggregation"></span>
+                                                            <span>Aggregation</span>
+                                                        </li>
+                                                        <li>
+                                                            <span><img src="images/icon/icon11.png" alt="item"></span>
+                                                            <span>Item</span>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <!--ADD -->
+
+
+                                                <!--Editor-->
+                                                <div class="bdb pdb_30">
+                                                    <ul>
+                                                        <li>
+                                                            <b>Do</b>
+                                                        </li>
+                                                        <li>
+                                                            <span><img src="images/icon/icon05.png" alt="edit"></span>
+                                                            <span>Edit</span>
+                                                        </li>
+                                                        <!--<li>
+                                                    <span><img src="images/icon/icon06.png"></span>
+                                                    <span>Digital Object</span>
+                                                    </li>-->
+                                                        <li>
+                                                            <span><img src="images/icon/icon07.png" alt="move"></span>
+                                                            <span>Move</span>
+                                                        </li>
+                                                        <!--<li>
+                                                    <span><img src="images/icon/icon08.png"></span>
+                                                    <span>Duplicate</span>
+                                                    </li>-->
+                                                        <li>
+                                                            <span><img src="images/icon/icon15.png" alt="update"></span>
+                                                            <span>Update Status</span>
+                                                        </li>
+                                                        <li style="border-bottom: 1px dotted #ddd; width: 85%">
+                                                            <span><img src="images/icon/icon13.png" alt="delete"></span>
+                                                            <span>Delete</span>
+                                                        </li>
+                                                        <li>
+                                                            <span><img src="images/icon/icon14.png"
+                                                                       alt="classify"></span>
+                                                            <span>Classify</span>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <!--Editor-->
+
+
+                                                <div class="top_move">
+                                                    <a href="#topmove">&and;<br>Top</a>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <!--우측메뉴 끝-->
+
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
