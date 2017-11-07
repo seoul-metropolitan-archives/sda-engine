@@ -38,6 +38,7 @@ var wf00202 =
                 },
                 {
                     sortNo: 3,
+                    autoincrement : true,
                     name: "sequence",
                     text: "Sequence",
                     width: 70,

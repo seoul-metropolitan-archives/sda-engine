@@ -496,6 +496,7 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 	this.onEditChange = function(p_onEditChange)
 	{
         _onEditChange =p_onEditChange;
+        return true;
 	}
 
 	var bindEvent = function() {
@@ -524,12 +525,7 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
         gridView.onEditChange = function(grid, index, value){
 
         	if(_onEditChange)
-        		_onEditChange(grid, index, value)
-            //index.fieldIndex
-			/*
-            if(validateColumn[index.fieldName] && !validateColumn[index.fieldName](value))
-            		grid.cancel();
-            */
+        		_onEditChange(grid, index, value);
 		}
 
 
@@ -815,6 +811,8 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 		gridView.onDataCellClicked()
 		
 	};
+	var autoIncrementList = new Array();
+
 	/**
 	 * 컬럼 데이터 설정
 	 * 
@@ -865,6 +863,10 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 			};
 
             defaultEditColumnProperties[obj.name] = obj.editable;
+
+            if(data.autoincrement)
+                autoIncrementList.push({index: i, name
+				 : data.name});
 
 			if (!firstFocusColumnName && obj.visible == true && obj.editable == true)
 				firstFocusColumnName = data.name;
@@ -1061,17 +1063,65 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 	this.addRow = function(obj) {
 		return _addRow(obj);
 	};
+
+	var setAutoIncrementData = function()
+	{
+		var list = _this.getJsonRows();
+
+		var getNumber = function(list, key)
+		{
+			var intData = 0;
+
+			for(var i = 0; i < list.length; i++)
+			{
+                intData = parseInt(list[i][key])
+
+				if(!isNaN(intData))
+				{
+					break;
+				}
+			}
+
+			if(isNaN(intData))
+				intData = 0;
+
+			return intData;
+
+		}
+
+		for(var i = 0; i < autoIncrementList.length; i++)
+		{
+
+			if(list.length < 1)
+			{
+                defaultData[autoIncrementList[i]["index"]] = 1;
+			}
+			else
+			{
+                list.sort(function(a,b){
+                    return b[autoIncrementList[i]["index"]] - a[autoIncrementList[i]["index"]];
+                });
+                defaultData[autoIncrementList[i]["index"]] = getNumber(list,autoIncrementList[i]["index"])+1;
+			}
+		}
+	}
+
 	var _addRow = function(obj) {
 		if(addRowBeforeEventCallback)
         	addRowBeforeEventCallback(_this,makeObj);
 		var validate = false;
+
+		setAutoIncrementData();
 		if (undefined === obj && appendValidate()) {
+            setAutoIncrementData();
 			gridView.getDataProvider().addRow(defaultData);
 			_doSave = true;
+
 		} else if (typeof obj == "function") {
 			if (obj()) {
+                setAutoIncrementData();
 				gridView.getDataProvider().addRow(defaultData);
-				_doSave = true;
+                _doSave = true;
 			}
 		} else if (typeof obj == "object") {
 			gridView.getDataProvider().addRow(obj);
@@ -1300,7 +1350,7 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 		return result;
 	};
     // ==============================
-    this.setCustomCellStyleRows = function(type, conditionFunc, columnNames)
+    this.setCustomCellStyleRows = function(type, conditionFunc, columnNames,doCommit)
     {
         var styles = undefined;
         var editable  =false;
@@ -1317,7 +1367,9 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 
         if(!styles)
             return ;
-        gridView.commit();
+        if(undefined === doCommit || doCommit)
+        	gridView.commit();
+
         var rows = dataProvider.getJsonRows(0,-1);
 
         var columnIndexList = new Array();
@@ -1375,6 +1427,9 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 				{
                     grid.setColumnProperty(applyData.columns[i], "editable", editable);
 				}
+                var sel = {startItem: 1, endItem: 1, style: "block"};
+                gridView.setSelection(sel);
+                gridView.resetCurrent();
 			}
 			else
 			{
@@ -1386,9 +1441,6 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 				}
 			}
         }
-        var sel = {startItem: 1, endItem: 1, style: "block"};
-        gridView.setSelection(sel);
-        gridView.resetCurrent();
 
     }
     this.setValidations = function(validations) {
