@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="rmsoft.ams.seoul.rc.rc006.dao.Rc006Mapper">
+
+    <select id="searchLevelOfDescription" resultType="Rc00601VO" parameterType="Rc00601VO" statementType="PREPARED">
+    <![CDATA[
+      SELECT LEVEL_UUID  as  levelUuid
+            , LEVEL_NO    as  levelNo
+            , LEVEL_NAME  as  levelName
+            , SHORT_NAME  as  shortName
+            , DESCRIPTION as  description
+            , NOTES       as  netes
+            , USE_YN      as  useYN
+            ]]>
+            , <include refid="Common.UserName"><property name="userUuid" value="INSERT_UUID"/></include> as insertUuid
+    <![CDATA[
+            , INSERT_DATE       as  insertDate
+            ]]>
+            , <include refid="Common.UserName"><property name="userUuid" value="UPDATE_UUID"/></include> as updateUuid
+    <![CDATA[
+            , UPDATE_DATE       as  updateDate
+            FROM RC_LEVEL
+            ORDER BY LEVEL_NO, LEVEL_NAME
+            ]]>
+
+
+    </select>
+
+
+
+</mapper>
