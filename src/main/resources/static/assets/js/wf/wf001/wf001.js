@@ -252,15 +252,18 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
         var _this = this;
         this.gridObj.onEditChange(function(grid, index, value){
             _this.gridObj.setCustomCellStyleRows("disable",function(row){
-
+                var result = false;
                 for(var rowIndex = 0; rowIndex < enableList.length; rowIndex++)
                 {
                     if(row["inputMethodUuid"] == enableList[rowIndex])
-                        return false;
+                    {
+                        result = false;
+                        break;
+                    }
                     else
-                        return true;
+                        result = true;
                 }
-
+                return result;
             },["inputCodeUuid"]);
             
         });
