@@ -1,0 +1,88 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout/base}">
+
+<!-- ===== [ script ] ===== -->
+<script layout:fragment="script" type="text/javascript" th:src="@{/assets/js/ad/ad006/ad006.js}"></script>
+<!-- ===== [ script ] _END_ ===== -->
+
+<!-- ===== [ base-content ] ===== -->
+<div layout:fragment="base-content" class="ax-base-content">
+    <form name="formView01" id="formView01" method="post" onsubmit="return false">
+    <div class="cssBody" style="top:80px">
+        <div style="display:table; height:100%; width:100%">
+            <div class="contents_wrap">
+                <div style=" height:30px; width:100%" class="bgf7 div_tablerow">
+                    <ul class="bdb">
+                        <th:block layout:insert="~{/fragments/page-buttons :: bookmark}"/>
+                        <th:block layout:insert="~{/fragments/page-buttons :: save-and-inquiry}"/>
+                    </ul>
+                </div>
+                <div class="bdb div_tablerow">
+                    <dl>
+                        <dt class="pdl_5">Entity Type</dt>
+                        <dd>
+                            <input type=text data-ax-path="entityType" style="width:135px">
+                        </dd>
+                        <dt>Entity Name</dt>
+                        <dd>
+                            <input type=text data-ax-path="entityName" style="width:135px">
+                        </dd>
+                        <dd class="w_auto">
+                            <div class="rdo_box">
+                                <span class="rdo_box_title">Use</span>
+                                <label>
+                                    <input type="radio" name="radio" checked="checked" data-ax-path="useYN" class="no_border" value="Y">Yes
+                                </label>
+                                <label>
+                                    <input type="radio" name="radio" data-ax-path="useYN" class="no_border" value="N">No
+                                </label>
+                                <label>
+                                    <input type="radio" name="radio" data-ax-path="useYN" class="no_border" value="">All
+                                </label>
+                            </div>
+                        </dd>
+                    </dl>
+
+                </div>
+                <div style="height:100%; width:100%" class="div_tablerow">
+
+                    <div style="display:table; height:50%; width:100%">
+                        <ul class="bdb bdt div_tablerow bgf7" style="height:30px;">
+                            <th:block layout:insert="~{/fragments/page-buttons :: dot('Entity Type')}"/>
+                            <th:block layout:insert="~{/fragments/page-buttons :: add-and-delete}"/>
+                        </ul>
+                        <div style="height:100%; width:100%" class="div_tablerow bdb">
+                            <div id="realgrid1" style="width:100%; height:100%"></div>
+                        </div>
+                    </div>
+
+                    <div style="display:table; height:50%; width:100%">
+                        <ul class="bdb bdt div_tablerow bgf7" style="height:30px;">
+                            <th:block layout:insert="~{/fragments/page-buttons :: dot ('Column')}"/>
+                            <th:block layout:insert="~{/fragments/page-buttons :: add-and-delete}"/>
+                        </ul>
+                        <ul class="bdb div_tablerow" style="height:25px;">
+                            <li style="width:100%; text-align:left;">
+                                <input type=text class="yeongye" data-ax-path="entityTypeCode" value="" readonly style="width:205px">
+                            </li>
+                        </ul>
+                        <div style="height:100%; width:100%" class="div_tablerow bdb">
+                            <div id="realgrid2" style="width:100%; height:100%"></div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+    </form>
+</div>
+
+    <!--오른쪽 내용영역 전체 e -->
+
+
+</html>

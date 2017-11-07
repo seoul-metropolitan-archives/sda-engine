@@ -4,7 +4,6 @@
       layout:decorate="~{/layout/base}">
 
 
-
 <!-- ===== [ script ] ===== -->
 <script layout:fragment="script" type="text/javascript" th:src="@{/assets/js/rc/rc001/rc001.js}"></script>
 <!--realgrid -->
@@ -53,12 +52,13 @@
                         <li class="bdr"><a href="#" class="open_close" id="rg_tree_allopen">Expand</a></li>
                         <li><a href="#" class="open_close" id="rg_tree_allclose">Collapse</a></li>
                     </ul>
-                    <div style="height:100%; width:100%" class="div_tablerow bdb">
-                        <div id="realgridT1" style="width:100%; height:100%"></div>
+                    <div style="height:100%; width:100%;    " class="div_tablerow bdb">
+                        <!--<div id="realgridT1" style="width:100%; height:100%"></div>-->
+                        <div data-z-tree="tree-view-01" data-fit-height-content="tree-view-01" style="height: 100%;width : 100%;overflow-x: auto;" class="ztree"></div>
                     </div>
                 </div><!--오늘쪽 내용에서 좌측 트리부분-->
 
-                <div style="display:table; height:100%; width:84%; float:left">
+                <div style="display:table; height:100%; width:82.8%; float:left">
 
                     <ul class="bdt bdb bgf7 div_tablerow" style="height:30px;">
                         <li style="width:40%; text-align:left;">

@@ -58,6 +58,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 if(res.list && res.list.length < 1)
                 {
                     fnObj.gridView02.setData([]);
+                    fnObj.gridView02.disabledColumn();
                     return ;
                 }
 

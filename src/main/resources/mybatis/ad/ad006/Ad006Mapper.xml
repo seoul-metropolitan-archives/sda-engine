@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="rmsoft.ams.seoul.ad.ad006.dao.Ad006Mapper">
+
+    <select id="searchEntityType" resultType="Ad00601VO" parameterType="Ad00601VO" statementType="PREPARED">
+    <![CDATA[
+      SELECT ENTITY_TYPE_UUID  as  entityTypeUuid
+            , ENTITY_TYPE_CODE  as  entityType
+            , ENTITY_TYPE_NAME  as  entityName
+            , DESCRIPTION       as  description
+            , NOTES             as  netes
+            , USE_YN            as  useYN
+            , AUDIT_YN          as  auditYN
+            ]]>
+            , <include refid="Common.UserName"><property name="userUuid" value="INSERT_UUID"/></include> as insertUuid
+    <![CDATA[
+            , INSERT_DATE       as  insertDate
+            ]]>
+            , <include refid="Common.UserName"><property name="userUuid" value="UPDATE_UUID"/></include> as updateUuid
+    <![CDATA[
+            , UPDATE_DATE       as  updateDate
+            FROM AD_ENTITY_TYPE
+        WHERE
+        1=1
+            ]]>
+        <if test="null != entityType and '' != entityType">
+    <![CDATA[
+            AND
+            ENTITY_TYPE_CODE = #{entityType}
+          ]]>
+        </if>
+        <if test="null != entityName and '' != entityName">
+    <![CDATA[
+            AND
+            ENTITY_TYPE_NAME = #{entityName}
+          ]]>
+        </if>
+        <if test="null != useYN and '' != useYN">
+    <![CDATA[
+            AND
+            USE_YN = #{useYN}
+          ]]>
+        </if>
+
+    </select>
+
+    <select id="getEntityColumnList" resultType="Ad00602VO" parameterType="Ad00602VO" statementType="PREPARED">
+        <![CDATA[
+      SELECT Z1.*
+            , Z2.COMMENTS AS comments
+            , Z2.DATA_TYPE AS dataType2
+            , Z2.NULLABLE AS nullable
+        FROM(
+      SELECT AA.ENTITY_TYPE_CODE               as  entityTypeCode
+            , BB.ENTITY_COLUMN_UUID             as  entityColumnUuid
+            , BB.ENTITY_TYPE_UUID               as  entityTypeUuid
+            , BB.GLOSSARY_UUID                  as  glossaryUuid
+            , CC.TERM_CODE                      as  termCode
+            , CC.TERM_NAME                      as  termName
+            , FC_AD_CODE_NM(CC.DATA_TYPE_UUID)  as  dataType1
+            , BB.AUDIT_YN                       as  auditYN
+            , BB.DESCRIPTION                    as  description
+            , BB.NOTES                          as  notes
+            , BB.USE_YN                         as  useYN
+            ]]>
+        , <include refid="Common.UserName"><property name="userUuid" value="INSERT_UUID"/></include> as insertUuid
+        <![CDATA[
+            , BB.INSERT_DATE                    as  insertDate
+            ]]>
+        , <include refid="Common.UserName"><property name="userUuid" value="UPDATE_UUID"/></include> as updateUuid
+        <![CDATA[
+            , BB.UPDATE_DATE                    as  updateDate
+        FROM AD_ENTITY_TYPE AA
+            , AD_ENTITY_COLUMN BB
+            , AD_GLOSSARY CC
+        WHERE
+            AA.ENTITY_TYPE_UUID = BB.ENTITY_TYPE_UUID
+            AND
+            BB.GLOSSARY_UUID = CC.GLOSSARY_UUID ) Z1
+            ,(SELECT A.TABLE_NAME, A.COLUMN_NAME, B.COMMENTS, A.DATA_TYPE, A.NULLABLE FROM ALL_TAB_COLUMNS A, ALL_COL_COMMENTS B WHERE A.TABLE_NAME = B.TABLE_NAME AND  A.COLUMN_NAME = B.COLUMN_NAME) Z2
+         WHERE
+            Z1.entityTypeCode = Z2.TABLE_NAME(+)
+            AND
+            Z1.termCode = Z2.COLUMN_NAME(+)
+            AND
+            Z1.entityTypeUuid = #{entityTypeUuid}
+            ]]>
+
+    </select>
+
+    <select id="checkEntityType" resultType="int" parameterType="String" statementType="PREPARED">
+        <![CDATA[
+          SELECT COUNT(DISTINCT TABLE_NAME) FROM  ALL_TAB_COLUMNS WHERE TABLE_NAME = #{entityType}
+                ]]>
+    </select>
+
+    <select id="checkEntityColumn" resultType="int" parameterType="AdEntityColumn" statementType="PREPARED">
+        <![CDATA[
+          SELECT COUNT(1)
+            FROM
+            ALL_TAB_COLUMNS Z1, AD_ENTITY_TYPE Z2, AD_GLOSSARY Z3
+            WHERE
+            Z1.TABLE_NAME = Z2.ENTITY_TYPE_CODE
+            AND
+            Z1.COLUMN_NAME = Z3.TERM_CODE
+            AND
+            Z2.ENTITY_TYPE_UUID = #{entityTypeUuid}
+            AND
+            Z3.GLOSSARY_UUID = #{glossaryUuid}
+                ]]>
+    </select>
+
+</mapper>

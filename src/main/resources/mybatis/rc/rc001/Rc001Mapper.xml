@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="rmsoft.ams.seoul.rc.rc001.dao.Rc001Mapper">
+
+    <select id="getAggregationNode" resultType="Rc00101VO" parameterType="Rc00101VO" statementType="PREPARED">
+        <![CDATA[
+            SELECT
+              AGGREGATION_UUID as uuid
+              , PARENT_AGGREGATION_UUID as parentUuid
+              , TITLE as name
+              , (SELECT LOWER (CODE_NAME) FROM AD_CODE_DETAIL WHERE CODE_DETAIL_UUID = TYPE_UUID) as nodeType
+            FROM
+              RC_AGGREGATION
+
+        ]]>
+        <if test=" null == uuid or '' == uuid">
+            WHERE
+              PARENT_AGGREGATION_UUID IS NULL
+        </if>
+          <if test=" null != uuid and '' != uuid">
+            WHERE
+              PARENT_AGGREGATION_UUID = {uuid}
+          </if>
+    </select>
+    <select id="getItemNode" resultType="Rc00101VO" parameterType="Rc00101VO" statementType="PREPARED">
+        <![CDATA[
+            SELECT
+              ITEM_UUID as uuid
+              , AGGREGATION_UUID as parentUuid
+              , TITLE as name
+              , 'item' as nodeType
+            FROM
+                RC_ITEM
+        ]]>
+        <if test=" null != uuid and '' != uuid">
+            WHERE
+            AGGREGATION_UUID = {uuid}
+        </if>
+    </select>
+</mapper>

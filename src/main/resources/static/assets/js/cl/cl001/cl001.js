@@ -223,7 +223,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.realGridView, {
         }
         this.gridObj.setCustomCellStyleRows("disable",function(row){
 
-            if(row["statusUuid"] == state)
+            if(row["inputMethodUuid"] == state)
                 return true;
             else
                 return false;
