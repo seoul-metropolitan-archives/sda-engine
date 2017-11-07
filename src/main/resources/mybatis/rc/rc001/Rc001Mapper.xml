@@ -16,7 +16,7 @@
               RC_AGGREGATION
 
         ]]>
-        <if test=" null == uuid and '' == uuid">
+        <if test=" null == uuid or '' == uuid">
             WHERE
               PARENT_AGGREGATION_UUID IS NULL
         </if>

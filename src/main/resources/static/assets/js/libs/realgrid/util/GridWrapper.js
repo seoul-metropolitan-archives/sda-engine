@@ -789,10 +789,9 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 	};
 	var initStyle = function()
 	{
-        gridView.addCellStyle("editable", _defaultStyle._default, true);
-        gridView.addCellStyle("_default", _defaultStyle.column.editable, true);
-        gridView.addCellStyle("required", _defaultStyle.column.disable, true);
-        gridView.addCellStyle("editable", _defaultStyle.column.required, true);
+        gridView.addCellStyle("_default", _defaultStyle._default, true);
+        gridView.addCellStyle("required", _defaultStyle.column.required, true);
+        gridView.addCellStyle("editable", _defaultStyle.column.editable, true);
 	}
 	this.setDisplayOptions = function(option)
 	{

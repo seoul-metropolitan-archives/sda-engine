@@ -436,6 +436,11 @@ fnObj.treeView01 = axboot.viewExtend(axboot.treeView, {
                     //$("#addBtn_" + treeNode.tId).unbind().remove();
                 }
             },
+            async: {
+                enable: true,
+                url: "/rc/rc001/getAllNodes",
+                autoParam: ["uuid"]
+            },
             edit: {
                 enable: true,
                 editNameSelectAll: false,
