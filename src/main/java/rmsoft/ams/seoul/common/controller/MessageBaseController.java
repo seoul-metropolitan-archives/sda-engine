@@ -41,7 +41,7 @@ public class MessageBaseController extends BaseController {
             if (rootCause instanceof SQLException) {
                 String[] oraCode = rootCause.getLocalizedMessage().split(":");
                 String message = CommonMessageUtils.getMessage(oraCode[0], true);
-                apiResponse = ApiResponse.error(ApiStatus.SYSTEM_ERROR, message);
+                return apiResponse = ApiResponse.error(ApiStatus.SYSTEM_ERROR, message);
             }
         }
         return ApiResponse.error(ApiStatus.SYSTEM_ERROR, CommonMessageUtils.getMessage("AA005"));

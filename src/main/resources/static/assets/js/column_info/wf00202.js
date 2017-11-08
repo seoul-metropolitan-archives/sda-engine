@@ -53,7 +53,9 @@ var wf00202 =
                     text: "Job Name",
                     width: 210,
                     editable: true,
-                    dataType: "text",
+                    dataType: "popup",
+                    popupCode : "PU124",
+                    sqlColumn : {JOB_UUID: "jobUuid",JOB_NAME: "jobName",API:"API"},
                     required: true,
                     visible: true
                 },
@@ -62,9 +64,10 @@ var wf00202 =
                     name: "api",
                     text: "API",
                     width: 200,
-                    editable: true,
+                    disable: true,
+                    editable: false,
                     dataType: "text",
-                    required: true,
+                    required: false,
                     visible: true
                 },
                 {

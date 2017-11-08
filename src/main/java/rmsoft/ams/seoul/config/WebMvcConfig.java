@@ -161,7 +161,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter implements Application
 
         resourceBundleMessageSource.setBasename("classpath:messages/messages");
         resourceBundleMessageSource.setDefaultEncoding("UTF-8");
-        resourceBundleMessageSource.setFallbackToSystemLocale(true);
+        resourceBundleMessageSource.setFallbackToSystemLocale(false);
 
         return resourceBundleMessageSource;
     }
@@ -173,7 +173,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter implements Application
 
         cookieLocaleResolver.setCookieName("language");
         cookieLocaleResolver.setCookiePath("/");
-        cookieLocaleResolver.setDefaultLocale(new Locale("ko_KR"));
+        cookieLocaleResolver.setDefaultLocale(new Locale("en_US"));
 
         return cookieLocaleResolver;
     }

@@ -54,7 +54,7 @@
         })(commonMessageJson);
 
         function convertJsonObj(jsonStr) {
-            return jsonStr == null || jsonStr == '' ? null : JSON.parse(jsonStr.replace(/&quot;/gi, '"'));
+            return jsonStr == null || jsonStr == '' ? null : JSON.parse(jsonStr.replace(/&quot;/gi, '"').replace(/\r\n|\n/gi, "<br />"));
         }
     </script>
     <script type="text/javascript" th:src="@{/axboot.config.js}"></script>

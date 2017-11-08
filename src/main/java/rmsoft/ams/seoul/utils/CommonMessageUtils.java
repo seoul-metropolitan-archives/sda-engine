@@ -28,11 +28,11 @@ public class CommonMessageUtils {
         try {
             if (isDatabaseError) {
                 message = commonMessageList.stream()
-                        .filter(errorCode -> errorCode.getDbErrorCode().equals(messageCode.trim()))
+                        .filter(errorCode -> errorCode.getDbErrorCode() != null && errorCode.getDbErrorCode().equals(messageCode.trim()))
                         .findFirst().get();
             } else {
                 message = commonMessageList.stream()
-                        .filter(errorCode -> errorCode.getMessageCode().equals(messageCode.trim()))
+                        .filter(errorCode -> errorCode.getMessageCode() != null && errorCode.getMessageCode().equals(messageCode.trim()))
                         .findFirst().get();
 
             }

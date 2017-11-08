@@ -49,7 +49,7 @@ public class AdMessage extends BaseJpaModel<AdMessage.AdMessageId> {
     @Comment(value = "서비스 UUID")
     private String serviceUuid;
 
-    @Column(name = "DB_ERROR_CODE", length = 20)
+    @Column(name = "DB_ERROR_CODE", length = 20, columnDefinition="default ' '")
     @Comment(value = "DB 오류코드")
     private String dbErrorCode;
 

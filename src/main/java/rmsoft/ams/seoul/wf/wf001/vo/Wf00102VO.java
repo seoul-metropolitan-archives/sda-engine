@@ -28,6 +28,10 @@ public class Wf00102VO extends BaseVO {
 
     private String inputCodeUuid;
 
+    private String inputCode;
+
+    private String inputCodeName;
+
     private String inputMethodUuid;
 
     private String inOutUuid;

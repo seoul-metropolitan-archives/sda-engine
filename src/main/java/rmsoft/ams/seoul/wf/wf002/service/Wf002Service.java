@@ -81,7 +81,7 @@ public class Wf002Service extends BaseService {
 
             if (orgWfWorkflow == null) {
                 // created
-                wfWorkflow.setWorkflowUuid(UUIDUtils.getUUID());
+                //wfWorkflow.setWorkflowUuid(UUIDUtils.getUUID());
                 wfWorkflowRepository.save(wfWorkflow);
             } else {
                 if (wfWorkflow.isDeleted()) {
