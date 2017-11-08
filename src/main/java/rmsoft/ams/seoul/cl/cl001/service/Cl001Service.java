@@ -84,14 +84,12 @@ public class Cl001Service extends BaseService {
 
                 }
                 clClassificationScheme.setClassificationCode(detailCode);
+                clClassificationScheme.setStatusUuid(CommonCodeUtils.getCodeDetailUuid("CD111","Draft"));
             }
 
             if (clClassificationScheme.isCreated() || clClassificationScheme.isModified()) {
-                clClassificationScheme.setStatusUuid(CommonCodeUtils.getCodeDetailUuid("CD111","Draft"));
-
                 if(clClassificationScheme.isModified()) {
                     orgClClassificationScheme = clClassificationSchemeRepository.findOne(clClassificationScheme.getId());
-
                     clClassificationScheme.setInsertDate(orgClClassificationScheme.getInsertDate());
                     clClassificationScheme.setInsertUuid(orgClClassificationScheme.getInsertUuid());
                 }
