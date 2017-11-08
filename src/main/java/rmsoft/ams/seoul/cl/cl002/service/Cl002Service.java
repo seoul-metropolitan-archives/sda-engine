@@ -173,12 +173,11 @@ public class Cl002Service extends BaseService {
                 // Oracle Function Call
                 orderKey = jdbcTemplate.queryForObject("select AMS.FC_CL_CLASS_SORTKEY('" + clClass.getParentClassUuid() + "' , '" + clClass.getOrderNo() + "') from dual", String.class);
                 clClass.setOrderKey(orderKey);
+                clClass.setStatusUuid(CommonCodeUtils.getCodeDetailUuid("CD113", "Draft"));
 
             }
 
             if (clClass.isCreated() || clClass.isModified()) {
-                clClass.setStatusUuid(CommonCodeUtils.getCodeDetailUuid("CD113", "Draft"));
-
                 if (clClass.isModified()) {
                     orgClClass = clClassRepository.findOne(clClass.getId());
                     if(isEmpty(orgClClass.getParentClassUuid())){ orgClClass.setParentClassUuid("");}

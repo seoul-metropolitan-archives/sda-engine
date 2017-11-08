@@ -56,6 +56,8 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             async: true,
             data: $.extend({},  {pageSize: 1000},selectedTreeItem ,this.formView.getData()),
             callback: function (res) {
+                setDefaultClassDetails();
+
                 if(res.list && res.list.length < 1)
                 {
                     fnObj.gridView02.setData([]);
@@ -70,7 +72,6 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 if(isDetailChanged == true){
                     isDetailChanged = false;
                 }
-                setDefaultClassDetails();
 
             },
             options: {
@@ -92,7 +93,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             data: $.extend({}, {pageSize: 1000}, data),
             callback: function (res) {
                 fnObj.formView.setFormData("detailClassName",selectedItem.className);
-                fnObj.formView.setFormData("detailPath",getPreClassLevels(selectedItem.orderKey));
+                fnObj.formView.setFormData("detailPath",selectedItem.path);
                 fnObj.formView.setFormData("detailClassLevel",axboot.commonCodeFilter("CD114").nameArr[axboot.commonCodeFilter("CD114").codeArr.indexOf(selectedItem.classLevelUuid)] + '단계');
                 fnObj.formView.setFormData("detailAddMetadata01",res.addMetadata01);
                 fnObj.formView.setFormData("detailAddMetadata02",res.addMetadata02);
@@ -145,7 +146,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
 
         axboot.ajax({
             type: "PUT",
-            url: "/api/v1/cl002/06/updateStatusCancel",
+            url: "/api/v1/cl002/07/updateStatusCancel",
             data: JSON.stringify(params),
             callback: function (res) {
                 ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
@@ -549,23 +550,10 @@ setDefaultClassDetails = function(){
     fnObj.formView.setFormData("detailAddMetadata04",'');
     isDetailChanged = false;
 }
+/*
 getPreClassLevels = function(key) {
-    var steps = key.split('.') ;
-    var levelOne = {};
-    var levelTwo =  {};
-
-    if(steps && steps.length >= 2){
-        levelOne = classList.filter(function (item) {
-           return item.orderKey === steps[0];
-        });
-        levelTwo = classList.filter(function (item) {
-            return item.orderKey === steps[0] + '.' +steps[1] ;
-        });
-        if(steps.length ==3){
-            return  levelOne[0].classTreeName + " >> " + levelTwo[0].classTreeName;
-        }else{
-            return levelOne[0].classTreeName;
-        }
-    }
-    else return;
-}
+    var path = classList.filter(function (item) {
+       return item.orderKey === key.path;
+    });
+    return path;
+}*/

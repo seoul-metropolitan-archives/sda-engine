@@ -191,6 +191,15 @@ var cl00202 =
                     sortNo: 18,
                     name: "parentClassUuid",
                     visible:false
+                },
+                {
+                    sortNo: 0,
+                    width:140,
+                    name: "path",
+                    text: "PATH",
+                    editable: false,
+                    dataType: "code",
+                    visible : false
                 }
             ]
     }
