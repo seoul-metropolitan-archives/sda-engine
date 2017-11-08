@@ -9,5 +9,7 @@ public class Rc00101VO extends BaseVO
     private String uuid;
     private String parentUuid;
     private String nodeType;
+    private String level;
     private String name;
+    private int childCnt;
 }

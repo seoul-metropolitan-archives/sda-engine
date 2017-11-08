@@ -18,14 +18,13 @@
                 <div style=" height:30px; width:100%" class="bgf7 div_tablerow">
                     <ul class="bdb">
                         <th:block layout:insert="~{/fragments/page-buttons :: bookmark}"/>
-                        <li style="width:50%; text-align:left;" th:text="${pageName}">Record Explorer</li>
                         <th:block layout:insert="~{/fragments/page-buttons :: save-and-inquiry}"/>
                     </ul>
                 </div>
                 <div class="bdb div_tablerow">
                    <ul style="height: 30px; width: 100%">
                        <li style="width: 2%;"><img src="/assets/images/ams/icon/fo.png" alt="folder"></li>
-                       <li style="width: 78%; text-align: left">Root > root2 > root3</li>
+                       <li style="width: 78%; text-align: left" id="navigatorArea"><span class="navigator" level="0" uuid="">Root</span></li>
                        <li style="width: 19.5%; padding-right: 0.5%">
                             <div class="src_box3" ><input type=text>
                           <a href="#" id="dialog-link5">
@@ -54,7 +53,7 @@
                     </ul>
                     <div style="height:100%; width:100%;    " class="div_tablerow bdb">
                         <!--<div id="realgridT1" style="width:100%; height:100%"></div>-->
-                        <div data-z-tree="tree-view-01" data-fit-height-content="tree-view-01" style="height: 100%;width : 100%;overflow-x: auto;" class="ztree"></div>
+                        <div data-z-tree="tree-view-01" data-fit-height-content="tree-view-01" style="height: 100%;width : 100%;overflow-x: auto; max-width: 271px;" class="ztree"></div>
                     </div>
                 </div><!--오늘쪽 내용에서 좌측 트리부분-->
 
@@ -109,729 +108,68 @@
                        
                     </ul>
                     <div style="height:100%; width:100%;" class="div_tablerow">
-                        <div style="width:100%; height:100%;" id="realgrid" class="explorer_grid"></div>
+                        <div style="width:100%; height:100%;" id="realgrid01" class="explorer_grid"></div>
                         <div class="explorer_list">
-                            <div style="width: 100%; height: 100%; position: absolute; float: left">
-                               
-                                 <div class="explorer_folder_empty" title="폴더안에는 아무것도 없는 것을 나타내는 아이콘이니다.">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_folder.png" alt="folder"></div>
-                                    <div class="explorer_4line">폴더안에는 아무것도 없는 것을 나타내는 아이콘이니다.</div>
+                            <div style="display:none" id="template">
+                                <div>
+                                    <div class="imageTag"></div>
+                                    <div class="titleTag"></div>
                                 </div>
-                                
-                                <div class="explorer_folder_full" title="3줄일때는 클래스에 ">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_folder_go.png" alt="folder"></div>
-                                    <div class="explorer_text">3줄일때는 클래스에 </div>
-                                </div> 
-                                
-                                 <div class="explorer_folder_full" title="1줄일때는 mbg_30">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_folder_f.png" alt="folder"></div>
-                                    <div class="explorer_text">mbg_30</div>
-                                </div> 
-                                
-                                 <div class="explorer_folder_full" title="두줄 mgb_30">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_folder_f_go.png" alt="folder"></div>
-                                    <div class="explorer_text">바로가기 </div>
-                                </div> 
-                                
-                                  <div class="explorer_folder_empty" title="폴더안에는 아무것도 없는 것을 나타내는 아이콘이니다.">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_folder.png" alt="folder"></div>
-                                    <div class="explorer_4line">폴더안에는 아무것도 없는 것을 나타내는 아이콘이니다.</div>
-                                </div>
-                                
-                                <div class="explorer_folder_full" title="3줄일때는 클래스에 ">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_folder_go.png" alt="folder"></div>
-                                    <div class="explorer_text">3줄일때는 클래스에 </div>
-                                </div> 
-                                
-                                 <div class="explorer_folder_full" title="1줄일때는 ">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_folder_f.png" alt="folder"></div>
-                                    <div class="explorer_text">mbg_30</div>
-                                </div> 
-                                
-                                 <div class="explorer_folder_full" title="두줄 ">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_folder_f_go.png" alt="folder"></div>
-                                    <div class="explorer_text">바로가기 </div>
-                                </div> 
-                            
-                                
-                                <div class="explorer_file" title="두줄 ">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_file.png" alt="file"></div>
-                                    <div class="explorer_text">두줄 </div>
-                                </div> 
-                                
-                                <div class="explorer_img" title="일반파일입니다.">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_file_go.png" alt="file"></div>
-                                    <div class="explorer_text">일반파일입니다.바로가기</div>
-                                </div> 
-                                
-                                <div class="explorer_file" title="이미지파일이에요">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_file_img.png" alt="image"></div>
-                                    <div class="explorer_text">이미지파일이에요</div>
-                                </div> 
-                                
-                                <div class="explorer_img" title="이미지파일입니다.">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_file_img_go.png" alt="images"></div>
-                                    <div class="explorer_text">이미지파일입니다.바로가기</div>
-                                </div> 
-                                <div class="explorer_file" title="두줄 mgb_30">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_file.png" alt="file"></div>
-                                    <div class="explorer_text">두줄 </div>
-                                </div> 
-                                 <div class="explorer_file" title="이미지파일이에요">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_file_img.png" alt="image"></div>
-                                    <div class="explorer_text">이미지파일이에요</div>
-                                </div> 
-                                
-                                <div class="explorer_img" title="이미지파일입니다.">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_file_img_go.png" alt="images"></div>
-                                    <div class="explorer_text">이미지파일입니다.바로가기</div>
-                                </div> 
-                                <div class="explorer_file" title="두줄 ">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_file.png" alt="file"></div>
-                                    <div class="explorer_text">두줄 </div>
-                                </div> 
-                                 <div class="explorer_file" title="이미지파일이에요">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_file_img.png" alt="image"></div>
-                                    <div class="explorer_text">이미지파일이에요</div>
-                                </div> 
-                                
-                                 <div class="explorer_folder_empty" title="폴더안에는 아무것도 없는 것을 나타내는 아이콘이니다.">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_folder.png" alt="folder"></div>
-                                    <div class="explorer_4line">폴더안에는 아무것도 없는 것을 나타내는 아이콘이니다.</div>
-                                </div>
-                                
-                                <div class="explorer_folder_full" title="3줄일때는 클래스에 ">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_folder_go.png" alt="folder"></div>
-                                    <div class="explorer_text">3줄일때는 클래스에 </div>
-                                </div> 
-                                
-                                 <div class="explorer_folder_full" title="1줄일때는 mbg_30">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_folder_f.png" alt="folder"></div>
-                                    <div class="explorer_text">mbg_30</div>
-                                </div> 
-                                
-                                 <div class="explorer_folder_full" title="두줄 mgb_30">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_folder_f_go.png" alt="folder"></div>
-                                    <div class="explorer_text">바로가기 </div>
-                                </div> 
-                                
-                                  <div class="explorer_folder_empty" title="폴더안에는 아무것도 없는 것을 나타내는 아이콘이니다.">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_folder.png" alt="folder"></div>
-                                    <div class="explorer_4line">폴더안에는 아무것도 없는 것을 나타내는 아이콘이니다.</div>
-                                </div>
-                                
-                                <div class="explorer_folder_full" title="3줄일때는 클래스에 ">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_folder_go.png" alt="folder"></div>
-                                    <div class="explorer_text">3줄일때는 클래스에 </div>
-                                </div> 
-                                
-                                 <div class="explorer_folder_full" title="1줄일때는 ">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_folder_f.png" alt="folder"></div>
-                                    <div class="explorer_text">mbg_30</div>
-                                </div> 
-                                
-                                 <div class="explorer_folder_full" title="두줄 ">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_folder_f_go.png" alt="folder"></div>
-                                    <div class="explorer_text">바로가기 </div>
-                                </div> 
-                            
-                                
-                                <div class="explorer_file" title="두줄 ">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_file.png" alt="file"></div>
-                                    <div class="explorer_text">두줄 </div>
-                                </div> 
-                                
-                                <div class="explorer_img" title="일반파일입니다.">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_file_go.png" alt="file"></div>
-                                    <div class="explorer_text">일반파일입니다.바로가기</div>
-                                </div> 
-                                
-                                <div class="explorer_file" title="이미지파일이에요">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_file_img.png" alt="image"></div>
-                                    <div class="explorer_text">이미지파일이에요</div>
-                                </div> 
-                                
-                                <div class="explorer_img" title="이미지파일입니다.">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_file_img_go.png" alt="images"></div>
-                                    <div class="explorer_text">이미지파일입니다.바로가기</div>
-                                </div> 
-                                <div class="explorer_file" title="두줄 mgb_30">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_file.png" alt="file"></div>
-                                    <div class="explorer_text">두줄 </div>
-                                </div> 
-                                 <div class="explorer_file" title="이미지파일이에요">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_file_img.png" alt="image"></div>
-                                    <div class="explorer_text">이미지파일이에요</div>
-                                </div> 
-                                
-                                <div class="explorer_img" title="이미지파일입니다.">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_file_img_go.png" alt="images"></div>
-                                    <div class="explorer_text">이미지파일입니다.바로가기</div>
-                                </div> 
-                                <div class="explorer_file" title="두줄 ">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_file.png" alt="file"></div>
-                                    <div class="explorer_text">두줄 </div>
-                                </div> 
-                                 <div class="explorer_file" title="이미지파일이에요">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_file_img.png" alt="image"></div>
-                                    <div class="explorer_text">이미지파일이에요</div>
-                                </div> 
-                                 <div class="explorer_folder_empty" title="폴더안에는 아무것도 없는 것을 나타내는 아이콘이니다.">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_folder.png" alt="folder"></div>
-                                    <div class="explorer_4line">폴더안에는 아무것도 없는 것을 나타내는 아이콘이니다.</div>
-                                </div>
-                                
-                                <div class="explorer_folder_full" title="3줄일때는 클래스에 ">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_folder_go.png" alt="folder"></div>
-                                    <div class="explorer_text">3줄일때는 클래스에 </div>
-                                </div> 
-                                
-                                 <div class="explorer_folder_full" title="1줄일때는 mbg_30">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_folder_f.png" alt="folder"></div>
-                                    <div class="explorer_text">mbg_30</div>
-                                </div> 
-                                
-                                 <div class="explorer_folder_full" title="두줄 mgb_30">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_folder_f_go.png" alt="folder"></div>
-                                    <div class="explorer_text">바로가기 </div>
-                                </div> 
-                                
-                                  <div class="explorer_folder_empty" title="폴더안에는 아무것도 없는 것을 나타내는 아이콘이니다.">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_folder.png" alt="folder"></div>
-                                    <div class="explorer_4line">폴더안에는 아무것도 없는 것을 나타내는 아이콘이니다.</div>
-                                </div>
-                                
-                                <div class="explorer_folder_full" title="3줄일때는 클래스에 ">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_folder_go.png" alt="folder"></div>
-                                    <div class="explorer_text">3줄일때는 클래스에 </div>
-                                </div> 
-                                
-                                 <div class="explorer_folder_full" title="1줄일때는 ">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_folder_f.png" alt="folder"></div>
-                                    <div class="explorer_text">mbg_30</div>
-                                </div> 
-                                
-                                 <div class="explorer_folder_full" title="두줄 ">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_folder_f_go.png" alt="folder"></div>
-                                    <div class="explorer_text">바로가기 </div>
-                                </div> 
-                            
-                                
-                                <div class="explorer_file" title="두줄 ">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_file.png" alt="file"></div>
-                                    <div class="explorer_text">두줄 </div>
-                                </div> 
-                                
-                                <div class="explorer_img" title="일반파일입니다.">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_file_go.png" alt="file"></div>
-                                    <div class="explorer_text">일반파일입니다.바로가기</div>
-                                </div> 
-                                
-                                <div class="explorer_file" title="이미지파일이에요">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_file_img.png" alt="image"></div>
-                                    <div class="explorer_text">이미지파일이에요</div>
-                                </div> 
-                                
-                                <div class="explorer_img" title="이미지파일입니다.">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_file_img_go.png" alt="images"></div>
-                                    <div class="explorer_text">이미지파일입니다.바로가기</div>
-                                </div> 
-                                <div class="explorer_file" title="두줄 mgb_30">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_file.png" alt="file"></div>
-                                    <div class="explorer_text">두줄 </div>
-                                </div> 
-                                 <div class="explorer_file" title="이미지파일이에요">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_file_img.png" alt="image"></div>
-                                    <div class="explorer_text">이미지파일이에요</div>
-                                </div> 
-                                
-                                <div class="explorer_img" title="이미지파일입니다.">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_file_img_go.png" alt="images"></div>
-                                    <div class="explorer_text">이미지파일입니다.바로가기</div>
-                                </div> 
-                                <div class="explorer_file" title="두줄 ">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_file.png" alt="file"></div>
-                                    <div class="explorer_text">두줄 </div>
-                                </div> 
-                                 <div class="explorer_file" title="이미지파일이에요">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_file_img.png" alt="image"></div>
-                                    <div class="explorer_text">이미지파일이에요</div>
-                                </div> 
-                                 <div class="explorer_folder_empty" title="폴더안에는 아무것도 없는 것을 나타내는 아이콘이니다.">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_folder.png" alt="folder"></div>
-                                    <div class="explorer_4line">폴더안에는 아무것도 없는 것을 나타내는 아이콘이니다.</div>
-                                </div>
-                                
-                                <div class="explorer_folder_full" title="3줄일때는 클래스에 ">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_folder_go.png" alt="folder"></div>
-                                    <div class="explorer_text">3줄일때는 클래스에 </div>
-                                </div> 
-                                
-                                 <div class="explorer_folder_full" title="1줄일때는 mbg_30">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_folder_f.png" alt="folder"></div>
-                                    <div class="explorer_text">mbg_30</div>
-                                </div> 
-                                
-                                 <div class="explorer_folder_full" title="두줄 mgb_30">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_folder_f_go.png" alt="folder"></div>
-                                    <div class="explorer_text">바로가기 </div>
-                                </div> 
-                                
-                                  <div class="explorer_folder_empty" title="폴더안에는 아무것도 없는 것을 나타내는 아이콘이니다.">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_folder.png" alt="folder"></div>
-                                    <div class="explorer_4line">폴더안에는 아무것도 없는 것을 나타내는 아이콘이니다.</div>
-                                </div>
-                                
-                                <div class="explorer_folder_full" title="3줄일때는 클래스에 ">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_folder_go.png" alt="folder"></div>
-                                    <div class="explorer_text">3줄일때는 클래스에 </div>
-                                </div> 
-                                
-                                 <div class="explorer_folder_full" title="1줄일때는 ">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_folder_f.png" alt="folder"></div>
-                                    <div class="explorer_text">mbg_30</div>
-                                </div> 
-                                
-                                 <div class="explorer_folder_full" title="두줄 ">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_folder_f_go.png" alt="folder"></div>
-                                    <div class="explorer_text">바로가기 </div>
-                                </div> 
-                            
-                                
-                                <div class="explorer_file" title="두줄 ">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_file.png" alt="file"></div>
-                                    <div class="explorer_text">두줄 </div>
-                                </div> 
-                                
-                                <div class="explorer_img" title="일반파일입니다.">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_file_go.png" alt="file"></div>
-                                    <div class="explorer_text">일반파일입니다.바로가기</div>
-                                </div> 
-                                
-                                <div class="explorer_file" title="이미지파일이에요">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_file_img.png" alt="image"></div>
-                                    <div class="explorer_text">이미지파일이에요</div>
-                                </div> 
-                                
-                                <div class="explorer_img" title="이미지파일입니다.">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_file_img_go.png" alt="images"></div>
-                                    <div class="explorer_text">이미지파일입니다.바로가기</div>
-                                </div> 
-                                <div class="explorer_file" title="두줄 mgb_30">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_file.png" alt="file"></div>
-                                    <div class="explorer_text">두줄 </div>
-                                </div> 
-                                 <div class="explorer_file" title="이미지파일이에요">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_file_img.png" alt="image"></div>
-                                    <div class="explorer_text">이미지파일이에요</div>
-                                </div> 
-                                
-                                <div class="explorer_img" title="이미지파일입니다.">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_file_img_go.png" alt="images"></div>
-                                    <div class="explorer_text">이미지파일입니다.바로가기</div>
-                                </div> 
-                                <div class="explorer_file" title="두줄 ">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_file.png" alt="file"></div>
-                                    <div class="explorer_text">두줄 </div>
-                                </div> 
-                                 <div class="explorer_file" title="이미지파일이에요">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_file_img.png" alt="image"></div>
-                                    <div class="explorer_text">이미지파일이에요</div>
-                                </div> 
-                                 <div class="explorer_folder_empty" title="폴더안에는 아무것도 없는 것을 나타내는 아이콘이니다.">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_folder.png" alt="folder"></div>
-                                    <div class="explorer_4line">폴더안에는 아무것도 없는 것을 나타내는 아이콘이니다.</div>
-                                </div>
-                                
-                                <div class="explorer_folder_full" title="3줄일때는 클래스에 ">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_folder_go.png" alt="folder"></div>
-                                    <div class="explorer_text">3줄일때는 클래스에 </div>
-                                </div> 
-                                
-                                 <div class="explorer_folder_full" title="1줄일때는 mbg_30">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_folder_f.png" alt="folder"></div>
-                                    <div class="explorer_text">mbg_30</div>
-                                </div> 
-                                
-                                 <div class="explorer_folder_full" title="두줄 mgb_30">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_folder_f_go.png" alt="folder"></div>
-                                    <div class="explorer_text">바로가기 </div>
-                                </div> 
-                                
-                                  <div class="explorer_folder_empty" title="폴더안에는 아무것도 없는 것을 나타내는 아이콘이니다.">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_folder.png" alt="folder"></div>
-                                    <div class="explorer_4line">폴더안에는 아무것도 없는 것을 나타내는 아이콘이니다.</div>
-                                </div>
-                                
-                                <div class="explorer_folder_full" title="3줄일때는 클래스에 ">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_folder_go.png" alt="folder"></div>
-                                    <div class="explorer_text">3줄일때는 클래스에 </div>
-                                </div> 
-                                
-                                 <div class="explorer_folder_full" title="1줄일때는 ">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_folder_f.png" alt="folder"></div>
-                                    <div class="explorer_text">mbg_30</div>
-                                </div> 
-                                
-                                 <div class="explorer_folder_full" title="두줄 ">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_folder_f_go.png" alt="folder"></div>
-                                    <div class="explorer_text">바로가기 </div>
-                                </div> 
-                            
-                                
-                                <div class="explorer_file" title="두줄 ">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_file.png" alt="file"></div>
-                                    <div class="explorer_text">두줄 </div>
-                                </div> 
-                                
-                                <div class="explorer_img" title="일반파일입니다.">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_file_go.png" alt="file"></div>
-                                    <div class="explorer_text">일반파일입니다.바로가기</div>
-                                </div> 
-                                
-                                <div class="explorer_file" title="이미지파일이에요">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_file_img.png" alt="image"></div>
-                                    <div class="explorer_text">이미지파일이에요</div>
-                                </div> 
-                                
-                                <div class="explorer_img" title="이미지파일입니다.">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_file_img_go.png" alt="images"></div>
-                                    <div class="explorer_text">이미지파일입니다.바로가기</div>
-                                </div> 
-                                <div class="explorer_file" title="두줄 mgb_30">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_file.png" alt="file"></div>
-                                    <div class="explorer_text">두줄 </div>
-                                </div> 
-                                 <div class="explorer_file" title="이미지파일이에요">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_file_img.png" alt="image"></div>
-                                    <div class="explorer_text">이미지파일이에요</div>
-                                </div> 
-                                
-                                <div class="explorer_img" title="이미지파일입니다.">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_file_img_go.png" alt="images"></div>
-                                    <div class="explorer_text">이미지파일입니다.바로가기</div>
-                                </div> 
-                                <div class="explorer_file" title="두줄 ">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_file.png" alt="file"></div>
-                                    <div class="explorer_text">두줄 </div>
-                                </div> 
-                                 <div class="explorer_file" title="이미지파일이에요">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_file_img.png" alt="image"></div>
-                                    <div class="explorer_text">이미지파일이에요</div>
-                                </div> 
-                                 <div class="explorer_folder_empty" title="폴더안에는 아무것도 없는 것을 나타내는 아이콘이니다.">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_folder.png" alt="folder"></div>
-                                    <div class="explorer_4line">폴더안에는 아무것도 없는 것을 나타내는 아이콘이니다.</div>
-                                </div>
-                                
-                                <div class="explorer_folder_full" title="3줄일때는 클래스에 ">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_folder_go.png" alt="folder"></div>
-                                    <div class="explorer_text">3줄일때는 클래스에 </div>
-                                </div> 
-                                
-                                 <div class="explorer_folder_full" title="1줄일때는 mbg_30">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_folder_f.png" alt="folder"></div>
-                                    <div class="explorer_text">mbg_30</div>
-                                </div> 
-                                
-                                 <div class="explorer_folder_full" title="두줄 mgb_30">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_folder_f_go.png" alt="folder"></div>
-                                    <div class="explorer_text">바로가기 </div>
-                                </div> 
-                                
-                                  <div class="explorer_folder_empty" title="폴더안에는 아무것도 없는 것을 나타내는 아이콘이니다.">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_folder.png" alt="folder"></div>
-                                    <div class="explorer_4line">폴더안에는 아무것도 없는 것을 나타내는 아이콘이니다.</div>
-                                </div>
-                                
-                                <div class="explorer_folder_full" title="3줄일때는 클래스에 ">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_folder_go.png" alt="folder"></div>
-                                    <div class="explorer_text">3줄일때는 클래스에 </div>
-                                </div> 
-                                
-                                 <div class="explorer_folder_full" title="1줄일때는 ">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_folder_f.png" alt="folder"></div>
-                                    <div class="explorer_text">mbg_30</div>
-                                </div> 
-                                
-                                 <div class="explorer_folder_full" title="두줄 ">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_folder_f_go.png" alt="folder"></div>
-                                    <div class="explorer_text">바로가기 </div>
-                                </div> 
-                            
-                                
-                                <div class="explorer_file" title="두줄 ">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_file.png" alt="file"></div>
-                                    <div class="explorer_text">두줄 </div>
-                                </div> 
-                                
-                                <div class="explorer_img" title="일반파일입니다.">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_file_go.png" alt="file"></div>
-                                    <div class="explorer_text">일반파일입니다.바로가기</div>
-                                </div> 
-                                
-                                <div class="explorer_file" title="이미지파일이에요">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_file_img.png" alt="image"></div>
-                                    <div class="explorer_text">이미지파일이에요</div>
-                                </div> 
-                                
-                                <div class="explorer_img" title="이미지파일입니다.">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_file_img_go.png" alt="images"></div>
-                                    <div class="explorer_text">이미지파일입니다.바로가기</div>
-                                </div> 
-                                <div class="explorer_file" title="두줄 mgb_30">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_file.png" alt="file"></div>
-                                    <div class="explorer_text">두줄 </div>
-                                </div> 
-                                 <div class="explorer_file" title="이미지파일이에요">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_file_img.png" alt="image"></div>
-                                    <div class="explorer_text">이미지파일이에요</div>
-                                </div> 
-                                
-                                <div class="explorer_img" title="이미지파일입니다.">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_file_img_go.png" alt="images"></div>
-                                    <div class="explorer_text">이미지파일입니다.바로가기</div>
-                                </div> 
-                                <div class="explorer_file" title="두줄 ">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_file.png" alt="file"></div>
-                                    <div class="explorer_text">두줄 </div>
-                                </div> 
-                                 <div class="explorer_file" title="이미지파일이에요">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_file_img.png" alt="image"></div>
-                                    <div class="explorer_text">이미지파일이에요</div>
-                                </div> 
-                               
-                                 <div class="explorer_folder_empty" title="폴더안에는 아무것도 없는 것을 나타내는 아이콘이니다.">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_folder.png" alt="folder"></div>
-                                    <div class="explorer_4line">폴더안에는 아무것도 없는 것을 나타내는 아이콘이니다.</div>
-                                </div>
-                                
-                                <div class="explorer_folder_full" title="3줄일때는 클래스에 ">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_folder_go.png" alt="folder"></div>
-                                    <div class="explorer_text">3줄일때는 클래스에 </div>
-                                </div> 
-                                
-                                 <div class="explorer_folder_full" title="1줄일때는 mbg_30">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_folder_f.png" alt="folder"></div>
-                                    <div class="explorer_text">mbg_30</div>
-                                </div> 
-                                
-                                 <div class="explorer_folder_full" title="두줄 mgb_30">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_folder_f_go.png" alt="folder"></div>
-                                    <div class="explorer_text">바로가기 </div>
-                                </div> 
-                                
-                                  <div class="explorer_folder_empty" title="폴더안에는 아무것도 없는 것을 나타내는 아이콘이니다.">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_folder.png" alt="folder"></div>
-                                    <div class="explorer_4line">폴더안에는 아무것도 없는 것을 나타내는 아이콘이니다.</div>
-                                </div>
-                                
-                                <div class="explorer_folder_full" title="3줄일때는 클래스에 ">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_folder_go.png" alt="folder"></div>
-                                    <div class="explorer_text">3줄일때는 클래스에 </div>
-                                </div> 
-                                
-                                 <div class="explorer_folder_full" title="1줄일때는 ">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_folder_f.png" alt="folder"></div>
-                                    <div class="explorer_text">mbg_30</div>
-                                </div> 
-                                
-                                 <div class="explorer_folder_full" title="두줄 ">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_folder_f_go.png" alt="folder"></div>
-                                    <div class="explorer_text">바로가기 </div>
-                                </div> 
-                            
-                                
-                                <div class="explorer_file" title="두줄 ">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_file.png" alt="file"></div>
-                                    <div class="explorer_text">두줄 </div>
-                                </div> 
-                                
-                                <div class="explorer_img" title="일반파일입니다.">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_file_go.png" alt="file"></div>
-                                    <div class="explorer_text">일반파일입니다.바로가기</div>
-                                </div> 
-                                
-                                <div class="explorer_file" title="이미지파일이에요">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_file_img.png" alt="image"></div>
-                                    <div class="explorer_text">이미지파일이에요</div>
-                                </div> 
-                                
-                                <div class="explorer_img" title="이미지파일입니다.">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_file_img_go.png" alt="images"></div>
-                                    <div class="explorer_text">이미지파일입니다.바로가기</div>
-                                </div> 
-                                <div class="explorer_file" title="두줄 mgb_30">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_file.png" alt="file"></div>
-                                    <div class="explorer_text">두줄 </div>
-                                </div> 
-                                 <div class="explorer_file" title="이미지파일이에요">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_file_img.png" alt="image"></div>
-                                    <div class="explorer_text">이미지파일이에요</div>
-                                </div> 
-                                
-                                <div class="explorer_img" title="이미지파일입니다.">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_file_img_go.png" alt="images"></div>
-                                    <div class="explorer_text">이미지파일입니다.바로가기</div>
-                                </div> 
-                                <div class="explorer_file" title="두줄 ">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_file.png" alt="file"></div>
-                                    <div class="explorer_text">두줄 </div>
-                                </div> 
-                                 <div class="explorer_file" title="이미지파일이에요">
-                                    <div class="exp_check"><input type="checkbox"></div>
-                                    <div><img src="/assets/images/ams/explorer_file_img.png" alt="image"></div>
-                                    <div class="explorer_text">이미지파일이에요</div>
-                                </div> 
-                            
+                            </div>
+                            <div style="width: 100%; height: 100%; position: absolute; float: left" id="iconListArea">
                             </div>
                         </div>
                     </div>
                     <div class="div_tablerow exp_detail">
                         <div style="width:5%; height: 80px; float: left;border-top:1px solid #ddd; text-align: center; line-height: 70px">
-                            <img src="/assets/images/ams/explorer_folder_f.png" alt="폴더이미지">
-                        </div>                        
-                        <div style="width:95%; height: 97px; float: left;border-top:1px solid #ddd">
+                            <img src="" id="archiveType" alt="">
+                        </div>
+                        <div style="display:none;" id="templateAggregationInfoArea">
                             <div style="width: 100%">
-                               <span style="width: 48%; "><b>Title </b>: 서울특별시</span>
+                                <span style="width: 48%; " class="info"><b class="title">Title :</b> </span>
+
+                                <span style="width: 24%;" class="info"><b class="author">Author :</b> </span>
+
+                                <span style="width: 28%;" class="info"><b class="code">Code :</b> </span>
+                            </div>
+                            <div style="width: 100%">
+                                <span style="width: 30%;" class="info"><b class="level">Level :</b> </span>
+
+                                <span style="width: 18%;" class="info"><b class="type">Type :</b> </span>
+
+                                <span style="width: 24%;" class="info"><b class="descDate">Date :</b> </span>
+
+                                <span style="width: 28%;" class="info"><b class="publishedStatus">Published Status :</b> </span>
+                            </div>
+
+                            <div style="width: 100%">
+                                <span style="width: 48%;" class="info"><b class="description">Description :</b> </span>
+                                <span style="width: 52%;" class="info"><b class="notes">Notes :</b> </span>
+                            </div>
+
+
+                        </div>
+                        <div style="width:95%; height: 97px; float: left;border-top:1px solid #ddd" id="aggregationInfoArea">
+                            <div style="width: 100%">
+                               <span style="width: 48%; " class="info"><b class="title">Title :</b> </span>
                                
-                               <span style="width: 24%;"><b>Author </b>: 김길동</span>
+                               <span style="width: 24%;" class="info"><b class="author">Author :</b> </span>
                                
-                               <span style="width: 28%;"><b>Code</b> : 10303-133301000</span>
+                               <span style="width: 28%;" class="info"><b class="code">Code :</b> </span>
                            </div>
                            <div style="width: 100%">
-                               <span style="width: 30%;"><b>Level</b> : Record Group</span>
+                               <span style="width: 30%;" class="info"><b class="level">Level :</b> </span>
                                 
-                               <span style="width: 18%;"><b>Type</b> : Normal</span>
+                               <span style="width: 18%;" class="info"><b class="type">Type :</b> </span>
                                
-                               <span style="width: 24%;"><b>Date</b> : 2017-10-19 ~ 2017-10-23</span>
+                               <span style="width: 24%;" class="info"><b class="descDate">Date :</b> </span>
                                
-                               <span style="width: 28%;"><b>Published Status </b>: Published</span>
+                               <span style="width: 28%;" class="info"><b class="publishedStatus">Published Status :</b> </span>
                            </div>
                            
                            <div style="width: 100%">
-                               <span style="width: 48%;"><b>Description</b> : 서울 기록관 영구기록물 관리시스템SDA(Seoul Digital Archives)의 개발과 관련한 기록물서울 기록관 영구기록물 관리시스템SDA(Seoul Digital Archives)의A(Seoul Digital 기록물서울 기록관 영구기록물 관리</span>
-                               
-                               
-                               <span style="width: 52%;"><b>Notes </b>: 서울 기록관 영구기록물 관리시스템SDA(Seoul Digital Archives)의 개발과 관련한 기록물</span>
+                               <span style="width: 48%;" class="info"><b class="description">Description :</b> </span>
+                               <span style="width: 52%;" class="info"><b class="notes">Notes :</b> </span>
                            </div>
                            
                 

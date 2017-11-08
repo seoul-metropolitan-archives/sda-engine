@@ -330,6 +330,26 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 					}]
 			}
 		},
+		tree : {
+			header: {
+				background: "linear,#f2f2f2",
+				fontSize: 12,
+				fontFamily: "nanum",
+				foreground: "#000000",
+				borderRight: "#cccccc,1",
+				fontBold: false,
+			},
+            body: {
+                borderRight: "#ff000000,0px",
+                borderBottom: "#f0000000,0px",
+                line: "#ffaaaaaa,0px",
+                fontSize: 12,
+                fontFamily: "nanum",
+                grid: {
+                    border: "#ffffffff,0"
+                }
+            }
+		},
 		parsing : // 데이터 파싱시 사용되는 스타일
 		{
 			header : {
@@ -658,17 +678,14 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 	
 	this.setStyle = function(name,style)
 	{
-		if(name instanceof String && style instanceof Object)
-		{
-			
-		}
+        defaultStyle[name] = style;
 	};
-	this.setStyle = function(style)
+	this.setStyle = function(style,value)
 	{
 		if(style instanceof Object)
 			defaultStyle.header = $.extend({},defaultStyle,style);
 		else
-			throw new Exception("Header Style은 Object로 정의해야됩니다.");
+            defaultStyle[style] = value;
 	};
 
 	this.addRemoveProperty = function(property)
@@ -683,7 +700,6 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
     {
         removeProperty = new Array();
     }
-
 	this.getHeaderStyle = function() {
 		return defaultStyle.parsing.header;
 	};
@@ -732,28 +748,10 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 
 
             gridView.setDisplayOptions({fitStyle : "evenFill",focusBorderWidth : 1});
-            gridView.setStyles({
-				header : {
-                    background: "linear,#f2f2f2",
-                    fontSize: 12,
-                    fontFamily: "nanum",
-                    foreground: "#000000",
-                    borderRight: "#cccccc,1",
-                    fontBold: false,
-                },
-				body : {
-					borderRight : "#ff000000,0px",
-                    borderBottom : "#f0000000,0px",
-					line : "#ffaaaaaa,0px",
-					fontSize : 12,
-					fontFamily : "nanum",
-					grid : {
-						border : "#ffffffff,0"
-					}
-
-				}
-			});
-
+            gridView.setStyles(defaultStyle.tree);
+            gridView.setEditorOptions({
+                applyCellFont: true
+            });
             //visible: 인디케이터 영역의 화면 표시여부를 지정합니다.
             gridView.setIndicator(option.indicator === undefined? {"visible": false} : option.indicator);
 
@@ -788,6 +786,22 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
         gridView.addCellStyle("_default", _defaultStyle._default, true);
         gridView.addCellStyle("required", _defaultStyle.column.required, true);
         gridView.addCellStyle("editable", _defaultStyle.column.editable, true);
+
+        var imgs = new RealGridJS.ImageList("iconList1","/assets/images/ams/icon/");
+        imgs.addUrls([
+            "fi.png"
+            ,"fi_v.png"
+            ,"fo.png"
+            ,"fo_v.png"
+            ,"fo_t.png"
+            ,"im.png"
+            ,"im_v.png"
+            ,"fo_op.png"
+            ,"fo.op_t.png"
+            ,"fo_op_v.png"
+		]);
+        gridView.registerImageList(imgs);
+
 	}
 	this.setDisplayOptions = function(option)
 	{
@@ -1023,6 +1037,19 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 					obj.button = "image";
 					obj.imageButtons = $.extend({},defaultStyle.data.imageButtons,data.imageButtons);
                     defaultData.push("");
+					break;
+				case "icon":
+					obj.renderer = {type : "icon",textVisible : false}
+					obj.dynamicStyles = data.dynamicStyles;
+                    fieldObj.dynamicStyles = data.dynamicStyles;
+					obj.imageList = data.imageList;
+                    fieldObj.imageList = data.imageList;
+                    obj.values = data.values;
+                    obj.labels = data.labels;
+					obj.lookupDisplay = true;
+					obj.editable  = false;
+					obj.editor = {type : "dropDown",dropDownCount:data.values.length,domainOnly : true,textReadOnly : false}
+					obj.styles= {background:"#ffffffff",iconIndex: 0,iconLocation:"center",iconAlignment:"center",iconOffset:4,iconPadding:4}
 					break;
 				default:
 					defaultData.push("");

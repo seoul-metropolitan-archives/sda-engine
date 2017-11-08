@@ -2519,7 +2519,7 @@ axboot.gridView = {
     },
     tagId: "",
     uuidFieldName: "",
-    primaryKey : "",
+    primaryKey: "",
     parentsUuidFieldName: "",
     parentsGrid: undefined,
     initChangedData: function () {
@@ -2535,8 +2535,7 @@ axboot.gridView = {
     getUUID: function () {
 
         var key = this.uuidFieldName;
-        if(undefined == key || "" == key)
-        {
+        if (undefined == key || "" == key) {
             key = this.primaryKey;
         }
 
@@ -2618,7 +2617,7 @@ axboot.gridView = {
         data[0] = uuid;
         wrapperObj.setDefaultData(data);
     },
-    clearData : function(){
+    clearData: function () {
         this.setData([]);
     }
 };

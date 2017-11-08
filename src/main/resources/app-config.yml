@@ -1,6 +1,6 @@
 config:
-  title: "서울기록원 AMS 시스템"
-  amstitle: "서울기록원"
+  title: "AMS"
+  amstitle: "AMS"
   copyrights: "ONSEMIRO 1.0.0 - Web Application Framework © 2016-2017"
   logo:
     header: /assets/images/header-logo.png

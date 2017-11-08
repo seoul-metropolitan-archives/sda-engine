@@ -14,6 +14,7 @@
             color: black;
         }
     </style>
+    <link rel="stylesheet" type="text/css" href="/assets/css/common.css">
     <script type="text/javascript">
         axboot.requireSession('[[@{${@environment.getProperty("config.sessionCookie")}}]]');
 
@@ -65,22 +66,22 @@
             <h1 class="h_logo">&nbsp;</h1>
         </div>
 
-        <div id="scontent">
+        <div id="content">
             <form name="login-form" class="" method="post" action="/api/login" onsubmit="return fnObj.login();" autocomplete="off">
-                <div class="blind">로그인</div>
+                <div class="blind">Login</div>
                 <div class="input_row">
                         <span class="input_box">
-                            <label class="lbl">아이디</label>
-                            <input type="text" id="userId" name="userId" placeholder="아이디" class="int" maxlength="41" tabindex="1" required="required" autofocus="autofocus" >
+                            <label class="lbl">User ID</label>
+                            <input type="text" id="userId" name="userId" placeholder="User ID" class="int" maxlength="41" tabindex="1" required="required" autofocus="autofocus" >
                         </span>
                 </div>
                 <div class="input_row">
                         <span class="input_box">
-                            <label class="lbl">비밀번호</label>
-                            <input type="password" name="userPassword" id="userPassword" placeholder="비밀번호" class="int" maxlength="16" tabindex="2">
+                            <label class="lbl">Password</label>
+                            <input type="password" name="userPassword" id="userPassword" placeholder="Password" class="int" maxlength="16" tabindex="2">
                         </span>
                 </div>
-                <input type="submit" title="로그인"  value="로그인" class="btn_login" >
+                <input type="submit" title="Sign In"  value="Sign In" class="btn_login" >
             </form>
         </div>
     </div>

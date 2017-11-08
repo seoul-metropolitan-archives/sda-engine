@@ -8,21 +8,21 @@
     <select id="getAggregationNode" resultType="Rc00101VO" parameterType="Rc00101VO" statementType="PREPARED">
         <![CDATA[
             SELECT
-              AGGREGATION_UUID as uuid
-              , PARENT_AGGREGATION_UUID as parentUuid
-              , TITLE as name
-              , (SELECT LOWER (CODE_NAME) FROM AD_CODE_DETAIL WHERE CODE_DETAIL_UUID = TYPE_UUID) as nodeType
+              Z1.AGGREGATION_UUID as uuid
+              , Z1.PARENT_AGGREGATION_UUID as parentUuid
+              , Z1.TITLE as name
+              , (SELECT LOWER (CODE_NAME) FROM AD_CODE_DETAIL WHERE CODE_DETAIL_UUID = Z1.TYPE_UUID) as nodeType
+              , (SELECT LEVEL_NO FROM RC_LEVEL WHERE LEVEL_UUID = Z1.LEVEL_UUID) as "level"
+              , (
+                (SELECT COUNT(*) FROM RC_AGGREGATION WHERE PARENT_AGGREGATION_UUID = Z1.AGGREGATION_UUID)
+                +(SELECT COUNT(*) FROM RC_ITEM WHERE AGGREGATION_UUID = Z1.AGGREGATION_UUID)
+                )as childCnt
             FROM
-              RC_AGGREGATION
-
+              RC_AGGREGATION Z1
         ]]>
-        <if test=" null == uuid or '' == uuid">
-            WHERE
-              PARENT_AGGREGATION_UUID IS NULL
-        </if>
           <if test=" null != uuid and '' != uuid">
             WHERE
-              PARENT_AGGREGATION_UUID = {uuid}
+              PARENT_AGGREGATION_UUID = #{uuid}
           </if>
     </select>
     <select id="getItemNode" resultType="Rc00101VO" parameterType="Rc00101VO" statementType="PREPARED">
@@ -37,7 +37,91 @@
         ]]>
         <if test=" null != uuid and '' != uuid">
             WHERE
-            AGGREGATION_UUID = {uuid}
+            AGGREGATION_UUID = #{uuid}
         </if>
+    </select>
+    <select id="getAggregationInfo" resultType="Rc00102VO" parameterType="Rc00101VO" statementType="PREPARED">
+      <![CDATA[
+            SELECT
+              (SELECT CODE_NAME FROM AD_CODE_DETAIL WHERE CODE_DETAIL_UUID = Z1.PUBLISHED_STATUS_UUID) as publishedStatus
+              , AGGREGATION_CODE as code
+              , TITLE as title
+              , (SELECT CODE_NAME FROM AD_CODE_DETAIL WHERE CODE_DETAIL_UUID = Z1.TYPE_UUID) as "type"
+              , (SELECT LEVEL_NO FROM RC_LEVEL WHERE LEVEL_UUID = Z1.LEVEL_UUID) as "level"
+              , AUTHOR as author
+              , DESCRIPTION_START_DATE as descStrDate
+              , DESCRIPTION_END_DATE as descEdDate
+              , DESCRIPTION as description
+              , NOTES as notes
+            FROM
+                RC_AGGREGATION Z1
+            WHERE
+                AGGREGATION_UUID = #{uuid}
+        ]]>
+    </select>
+    <select id="getItemInfo" resultType="Rc00102VO" parameterType="Rc00101VO" statementType="PREPARED">
+        <![CDATA[
+            SELECT
+              (SELECT CODE_NAME FROM AD_CODE_DETAIL WHERE CODE_DETAIL_UUID = Z1.PUBLISHED_STATUS_UUID) as publishedStatus
+              , ITEM_CODE as code
+              , TITLE as title
+              , (SELECT CODE_NAME FROM AD_CODE_DETAIL WHERE CODE_DETAIL_UUID = Z1.TYPE_UUID) as "type"
+              , AUTHOR as author
+              , DESCRIPTION_START_DATE as descStrDate
+              , DESCRIPTION_END_DATE as descEdDate
+              , DESCRIPTION as description
+              , NOTES as notes
+            FROM
+                RC_ITEM Z1
+            WHERE
+                ITEM_UUID = #{uuid}
+        ]]>
+    </select>
+    <select id="getGridDataInAggregation" resultType="Rc00103VO" parameterType="Rc00101VO" statementType="PREPARED">
+            SELECT
+              AGGREGATION_UUID as uuid
+              ,(SELECT CODE_NAME FROM AD_CODE_DETAIL WHERE CODE_DETAIL_UUID = Z1.PUBLISHED_STATUS_UUID) as publishedStatus
+              , AGGREGATION_CODE as code
+              , TITLE as title
+              , (SELECT CODE_NAME FROM AD_CODE_DETAIL WHERE CODE_DETAIL_UUID = Z1.TYPE_UUID) as "type"
+              , (SELECT LEVEL_NO FROM RC_LEVEL WHERE LEVEL_UUID = Z1.LEVEL_UUID) as "level"
+              , AUTHOR as author
+              , DESCRIPTION_START_DATE as descStrDate
+              , DESCRIPTION_END_DATE as descEdDate
+              , DESCRIPTION as description
+              , NOTES as notes
+                , (
+                (SELECT COUNT(*) FROM RC_AGGREGATION WHERE PARENT_AGGREGATION_UUID = Z1.AGGREGATION_UUID)
+                +(SELECT COUNT(*) FROM RC_ITEM WHERE AGGREGATION_UUID = Z1.AGGREGATION_UUID)
+                )as childCnt
+            FROM
+                RC_AGGREGATION Z1
+            <if test=" null == uuid or '' == uuid">
+                WHERE
+                PARENT_AGGREGATION_UUID IS NULL
+            </if>
+            <if test=" null != uuid and '' != uuid">
+                WHERE
+                PARENT_AGGREGATION_UUID = #{uuid}
+            </if>
+    </select>
+    <select id="getGridDataInItem" resultType="Rc00103VO" parameterType="Rc00101VO" statementType="PREPARED">
+          SELECT
+              ITEM_UUID as uuid
+              ,(SELECT CODE_NAME FROM AD_CODE_DETAIL WHERE CODE_DETAIL_UUID = Z1.PUBLISHED_STATUS_UUID) as publishedStatus
+              , ITEM_CODE as code
+              , TITLE as title
+              , (SELECT CODE_NAME FROM AD_CODE_DETAIL WHERE CODE_DETAIL_UUID = Z1.TYPE_UUID) as "type"
+              , '-1' as "level"
+              , AUTHOR as author
+              , DESCRIPTION_START_DATE as descStrDate
+              , DESCRIPTION_END_DATE as descEdDate
+              , DESCRIPTION as description
+              , NOTES as notes
+
+            FROM
+                RC_ITEM Z1
+            WHERE
+                AGGREGATION_UUID = #{uuid}
     </select>
 </mapper>

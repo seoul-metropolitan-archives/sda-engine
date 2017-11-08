@@ -11,10 +11,14 @@
 
     <title th:text="${@environment.getProperty('config.title')}">title</title>
 
-    <link rel="shortcut icon" type="image/x-icon" th:href="@{/assets/favicon.ico/}"/>
-    <link rel="icon" type="image/x-icon" th:href="@{/assets/favicon.ico/}"/>
+    <link rel="shortcut icon" type="image/x-icon" th:href="@{/assets/images/ams/favicon00.png}"/>
+    <link rel="icon" type="image/x-icon" th:href="@{/assets/images/ams/favicon00.png}"/>
     <link rel="stylesheet" type="text/css" th:href="@{${@environment.getProperty('config.extendedCss')}}"/>
+
     <link layout:fragment="css"/>
+    <link rel="stylesheet" type="text/css" href="/assets/css/common.css">
+    <link rel="stylesheet" type="text/css" href="/assets/css/button.css">
+    <link rel="stylesheet" type="text/css" href="/assets/css/ams_layout.css">
     <script type="text/javascript" th:src="@{/assets/js/libs/realgrid/realgridjs-lic.js}"></script>
     <script type="text/javascript" th:src="@{/assets/js/libs/realgrid/realgridjs_eval.1.1.25.min.js}"></script>
     <script type="text/javascript" th:src="@{/assets/js/libs/realgrid/realgridjs-api.1.1.25.js}"></script>
@@ -123,7 +127,7 @@
         <div class="ax-split-col" style="height: 100%;">
             <div class="ax-split-panel text-align-left">
                 <div class="ax-split-col ax-frame-logo-info">
-                    <div class="ax-split-panel">서울 기록원</div>
+                    <div class="ax-split-panel">Seoul Metropolitan Archives</div>
                 </div>
             </div>
             <div class="ax-split-panel text-align-right">
@@ -137,7 +141,8 @@
                     <div class="panel-split"></div>
                     <div class="ax-split-panel">
                         <a th:href="@{/api/logout}">
-                            <span th:text="#{axboot.admin.logout}"></span>
+                            <!--<span th:text="#{axboot.admin.logout}"></span>-->
+                            <span>Sign Out</span>
                         </a>
                     </div>
                 </div>
@@ -179,9 +184,9 @@
             <div class="left_top1 bdb"><!--height: 3.7%;-->
                 <ul>
                     <li class="left-all-menu bdr">
-                        <a href="#" onclick="allmenuView()">전체메뉴</a></li>
+                        <a href="#" onclick="allmenuView()">Full Menu</a></li>
                     <li class="left-my-menu">
-                        <a href="#" onclick="mymenuView()">나의메뉴</a></li>
+                        <a href="#" onclick="mymenuView()">My Menu</a></li>
                 </ul>
             </div><!--전체메뉴 나의 메뉴 탭부분-->
             <div class="left_top2"><!--height: 3.7%;-->
@@ -189,7 +194,7 @@
                     <li style="padding:0 1%;width:76%">
                         <input type="text" style="width:100%;vertical-align:middle"></li>
                     <li style="width:24%">
-                        <button class="btn_small">검색</button>
+                        <button class="btn_small">Search</button>
                     </li>
                 </ul>
             </div><!--메인 좌측 검색부분-->
