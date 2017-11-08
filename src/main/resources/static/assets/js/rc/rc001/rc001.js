@@ -727,7 +727,11 @@ fnObj.treeView01 = axboot.viewExtend(axboot.commonView, {
                         fnObj.naviView.setData(path[i]);
                     }
 
-                    ACTIONS.dispatch(ACTIONS.GET_SUBDATA, reqData);
+                    if($(".explorer_grid").css("display")=="none")
+                        ACTIONS.dispatch(ACTIONS.GET_SUBDATA,reqData);
+                    else
+                        ACTIONS.dispatch(ACTIONS.GET_GRID_DATA,reqData);
+                    //ACTIONS.dispatch(ACTIONS.GET_SUBDATA, reqData);
                 },
                 onRename: function (e, treeId, treeNode, isCancel) {
                     treeNode.__modified__ = true;
