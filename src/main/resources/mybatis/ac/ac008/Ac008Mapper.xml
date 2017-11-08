@@ -45,5 +45,6 @@
                 AND Z1.USE_YN = #{useYn}
             </if>
         </where>
+        ORDER BY Z1.PROGRAM_ID ASC
     </select>
 </mapper>

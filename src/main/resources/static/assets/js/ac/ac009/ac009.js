@@ -34,6 +34,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 url: "/api/v1/ac009/01/save",
                 data: JSON.stringify(menuList),
                 callback: function (res) {
+                    fnObj.gridView01.gridObj.commit();
                 }
             })
             .done(function () {

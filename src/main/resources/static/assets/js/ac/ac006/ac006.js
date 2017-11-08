@@ -34,10 +34,11 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 url: "/api/v1/ac006/01/save",
                 data: JSON.stringify(permissionList),
                 callback: function (res) {
+                    fnObj.gridView01.gridObj.commit();
                 }
             })
             .done(function () {
-                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+                //ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
                 axToast.push(axboot.getCommonMessage("AA007"));
             });
     },

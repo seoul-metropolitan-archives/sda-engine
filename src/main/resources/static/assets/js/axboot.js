@@ -2199,7 +2199,7 @@ axboot.preparePlugin = function () {
         window.axWarningToast = new ax5.ui.toast({
             theme: "danger",
             icon: '<i class="cqc-warning2"></i>',
-            containerPosition: "bottom-left",
+            containerPosition: "top-right",
             onStateChanged: function onStateChanged() {
             }
         });

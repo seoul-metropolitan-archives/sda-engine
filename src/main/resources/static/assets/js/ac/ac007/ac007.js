@@ -19,6 +19,9 @@ var ACTIONS = axboot.actionExtend(fnObj, {
 
                     ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, res.list[0]);
                     ACTIONS.dispatch(ACTIONS.PAGE_SEARCH2, res.list[0]);
+                } else {
+                    fnObj.gridView02.clearData();
+                    fnObj.gridView03.clearData();
                 }
 
             },
@@ -68,6 +71,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 url: "/api/v1/ac007/02/save",
                 data: JSON.stringify(roleMenuList),
                 callback: function (res) {
+                    fnObj.gridView01.gridObj.commit();
                 }
             })
             .call({
@@ -75,10 +79,11 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 url: "/api/v1/ac007/03/save",
                 data: JSON.stringify(permissionList),
                 callback: function (res) {
+                    fnObj.gridView02.gridObj.commit();
                 }
             })
             .done(function () {
-                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+                //ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
                 axToast.push(axboot.getCommonMessage("AA007"));
             });
     },
@@ -96,20 +101,19 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     },
     ITEM_CLICK: function (caller, act, data) {
     },
-    MODAL_OPEN: function (caller, act, data) {
+    SEARCH_ROLE_POPUP: function (caller, act, data) {
         axboot.modal.open({
             modalType: "COMMON_POPUP",
-            param: "",
             sendData: function () {
-                return {
-                    //jisaCode: fnObj.formView02.getData().jisaCode
-                };
+                return data;
             },
             callback: function (data) {
-                //$("#calleeEmpName").val(data.empName);
-                //$("#calleeEmpTelno").val(data.empPhoneNo);
+                fnObj.formView.setFormData("roleUuid", data["ROLE_UUID"]);
+                fnObj.formView.setFormData("roleName", data["ROLE_NAME"]);
 
-                this.close();
+                if (this.close)
+                    this.close();
+                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH, data);
             }
         });
     },
@@ -223,6 +227,27 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
     },
     initEvent: function () {
         var _this = this;
+
+        $("input[data-ax-path='roleName']").parents().eq(1).find("a").click(function () {
+            if ("" != $("input[data-ax-path='roleName']").val().trim()) {
+                var data = {
+                    popupCode: "PU109",
+                    searchData: $("input[data-ax-path='roleName']").val().trim()
+                };
+                ACTIONS.dispatch(ACTIONS.SEARCH_ROLE_POPUP, data);
+            }
+        });
+        $("input[data-ax-path='roleName']").focusout(function(){
+
+            if("" != $(this).val().trim())
+            {
+                var data = {
+                    popupCode : "PU109",
+                    searchData : $(this).val().trim()
+                };
+                ACTIONS.dispatch(ACTIONS.SEARCH_ROLE_POPUP,data);
+            }
+        });
     },
     getData: function () {
         var data = this.modelFormatter.getClearData(this.model.get()); // 모델의 값을 포멧팅 전 값으로 치환.

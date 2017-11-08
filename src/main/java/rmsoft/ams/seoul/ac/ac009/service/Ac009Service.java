@@ -4,6 +4,7 @@
 
 package rmsoft.ams.seoul.ac.ac009.service;
 
+import com.querydsl.core.types.Predicate;
 import io.onsemiro.core.api.response.ApiResponse;
 import io.onsemiro.core.code.ApiStatus;
 import io.onsemiro.core.domain.BaseService;
@@ -19,6 +20,8 @@ import org.springframework.transaction.annotation.Transactional;
 import rmsoft.ams.seoul.ac.ac009.dao.Ac009Mapper;
 import rmsoft.ams.seoul.ac.ac009.vo.Ac00901VO;
 import rmsoft.ams.seoul.common.domain.AdMenu;
+import rmsoft.ams.seoul.common.domain.QAcRoleMenu;
+import rmsoft.ams.seoul.common.repository.AcRoleMenuRepository;
 import rmsoft.ams.seoul.common.repository.AdMenuRepository;
 
 import javax.inject.Inject;
@@ -33,6 +36,9 @@ public class Ac009Service extends BaseService {
 
     @Autowired
     private AdMenuRepository adMenuRepository;
+
+    @Autowired
+    private AcRoleMenuRepository acRoleMenuRepository;
 
     @Inject
     private Ac009Mapper ac009Mapper;
@@ -85,6 +91,13 @@ public class Ac009Service extends BaseService {
             } else {
                 if (adMenu.isDeleted()) {
                     adMenuRepository.delete(adMenu);
+
+                    // 메뉴가 삭제되므로, Role Menu도 모두 삭제
+                    QAcRoleMenu qAcRoleMenu = QAcRoleMenu.acRoleMenu;
+                    Predicate predicate = qAcRoleMenu.menuUuid.eq(adMenu.getMenuUuid());
+
+                    acRoleMenuRepository.delete(acRoleMenuRepository.findAll(predicate));
+
                 } else {
                     adMenu.setInsertDate(orgAdMenu.getInsertDate());
                     adMenu.setInsertUuid(orgAdMenu.getInsertUuid());

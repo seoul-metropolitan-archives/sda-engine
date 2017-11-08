@@ -9,7 +9,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH: function (caller, act, data) {
         axboot.ajax({
             type: "GET",
-            url: "/api/v1/wf002/01/list",
+            url: "/api/v1/wf003/01/list",
             data: $.extend({}, {pageSize: 1000}, this.formView.getData()),
             callback: function (res) {
                 fnObj.gridView01.setData(res.list);
@@ -31,7 +31,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH1: function (caller, act, data) {
         axboot.ajax({
             type: "GET",
-            url: "/api/v1/wf002/02/list",
+            url: "/api/v1/wf003/02/list",
             data: $.extend({}, {pageSize: 1000}, data),
             callback: function (res) {
                 fnObj.gridView02.setData(res.list);
@@ -49,7 +49,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         axboot
             .call({
                 type: "PUT",
-                url: "/api/v1/wf002/01/save",
+                url: "/api/v1/wf003/01/save",
                 data: JSON.stringify(workflowist),
                 callback: function (res) {
                     fnObj.gridView01.gridObj.commit();
@@ -57,7 +57,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             })
             .call({
                 type: "PUT",
-                url: "/api/v1/wf002/02/save",
+                url: "/api/v1/wf003/02/save",
                 data: JSON.stringify(workflowJobList),
                 callback: function (res) {
                     fnObj.gridView02.gridObj.commit();
@@ -119,7 +119,7 @@ fnObj.pageStart = function () {
 
     //TODO 추후에 삭제될 내용으로 /실제 Grid의 컬럼 정보는 DB에서 가져올 예정
     $.ajax({
-        url: "/assets/js/column_info/wf00201.js",
+        url: "/assets/js/column_info/wf00301.js",
         dataType: "script",
         async: false,
         success: function () {
@@ -127,7 +127,7 @@ fnObj.pageStart = function () {
     });
 
     $.ajax({
-        url: "/assets/js/column_info/wf00202.js",
+        url: "/assets/js/column_info/wf00302.js",
         dataType: "script",
         async: false,
         success: function () {
@@ -140,6 +140,9 @@ fnObj.pageStart = function () {
 
     // Data 조회
     ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+
+    //TODO 개발하고 지워야함
+    axWarningToast.push("개발이 진행중인 화면입니다.");
 };
 
 fnObj.formView = axboot.viewExtend(axboot.formView, {
@@ -203,7 +206,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
         this.gridObj.setFixedOptions({
             colCount: 1
         });
-        this.setColumnInfo(wf00201.column_info);
+        this.setColumnInfo(wf00301.column_info);
         this.makeGrid();
         this.gridObj.itemClick(this.itemClick);
     },
@@ -222,6 +225,8 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
             } else {
                 ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, data);
             }
+        } else {
+            fnObj.gridView02.clearData();
         }
     }
 });
@@ -240,7 +245,7 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
         this.gridObj.setFixedOptions({
             colCount: 1
         });
-        this.setColumnInfo(wf00202.column_info);
+        this.setColumnInfo(wf00302.column_info);
         this.makeGrid();
     }
 });

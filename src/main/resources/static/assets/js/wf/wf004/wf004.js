@@ -1,15 +1,11 @@
-/*
- * Copyright (c) 2017. RMSoft Co.,Ltd. All rights reserved
- */
-
 var fnObj = {};
 
 var ACTIONS = axboot.actionExtend(fnObj, {
-    // JOB 조회
+    // User 정보 조회
     PAGE_SEARCH: function (caller, act, data) {
         axboot.ajax({
             type: "GET",
-            url: "/api/v1/wf002/01/list",
+            url: "/api/v1/wf004/01/list",
             data: $.extend({}, {pageSize: 1000}, this.formView.getData()),
             callback: function (res) {
                 fnObj.gridView01.setData(res.list);
@@ -18,6 +14,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                     ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, res.list[0]);
                 } else {
                     fnObj.gridView02.clearData();
+                    fnObj.gridView03.clearData();
                 }
 
             },
@@ -27,11 +24,11 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         });
         return false;
     },
-    // Parameter 조회
+    // User 그룹정보 조회
     PAGE_SEARCH1: function (caller, act, data) {
         axboot.ajax({
             type: "GET",
-            url: "/api/v1/wf002/02/list",
+            url: "/api/v1/wf004/02/list",
             data: $.extend({}, {pageSize: 1000}, data),
             callback: function (res) {
                 fnObj.gridView02.setData(res.list);
@@ -42,25 +39,49 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         });
         return false;
     },
+    // 퍼미션 조회
+    PAGE_SEARCH2: function (caller, act, data) {
+        axboot.ajax({
+            type: "GET",
+            url: "/api/v1/wf004/03/list",
+            data: $.extend({}, {pageSize: 1000}, data),
+            callback: function (res) {
+                fnObj.gridView03.setData(res.list);
+            },
+            options: {
+                onError: axboot.viewError
+            }
+        });
+        return false;
+    },
     PAGE_SAVE: function (caller, act, data) {
-        var workflowist = [].concat(fnObj.gridView01.getData());
-        var workflowJobList = [].concat(fnObj.gridView02.getData());
+        var workflowList = [].concat(fnObj.gridView01.getData());
+        var jobList = [].concat(fnObj.gridView02.getData());
+        var parameterList = [].concat(fnObj.gridView03.getData());
 
         axboot
             .call({
                 type: "PUT",
-                url: "/api/v1/wf002/01/save",
-                data: JSON.stringify(workflowist),
+                url: "/api/v1/wf004/01/save",
+                data: JSON.stringify(workflowList),
                 callback: function (res) {
                     fnObj.gridView01.gridObj.commit();
                 }
             })
             .call({
                 type: "PUT",
-                url: "/api/v1/wf002/02/save",
-                data: JSON.stringify(workflowJobList),
+                url: "/api/v1/wf004/02/save",
+                data: JSON.stringify(jobList),
                 callback: function (res) {
                     fnObj.gridView02.gridObj.commit();
+                }
+            })
+            .call({
+                type: "PUT",
+                url: "/api/v1/wf004/03/save",
+                data: JSON.stringify(parameterList),
+                callback: function (res) {
+                    fnObj.gridView03.gridObj.commit();
                 }
             })
             .done(function () {
@@ -99,6 +120,20 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             }
         });
     },
+    PASSWORD_CHANGE_POPUP: function (caller, act, data) {
+        var promptDialog = new ax5.ui.dialog();
+
+        promptDialog.prompt({
+            title: "Password Change",
+            msg: 'Please fill new password'
+        }, function (data) {
+            console.log(this);
+            if (this.key == "ok") {
+                this.value;
+            }
+        });
+
+    },
     CLOSE_TAB: function (caller, act, data) {
         ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
     },
@@ -119,7 +154,7 @@ fnObj.pageStart = function () {
 
     //TODO 추후에 삭제될 내용으로 /실제 Grid의 컬럼 정보는 DB에서 가져올 예정
     $.ajax({
-        url: "/assets/js/column_info/wf00201.js",
+        url: "/assets/js/column_info/wf00401.js",
         dataType: "script",
         async: false,
         success: function () {
@@ -127,7 +162,15 @@ fnObj.pageStart = function () {
     });
 
     $.ajax({
-        url: "/assets/js/column_info/wf00202.js",
+        url: "/assets/js/column_info/wf00402.js",
+        dataType: "script",
+        async: false,
+        success: function () {
+        }
+    });
+
+    $.ajax({
+        url: "/assets/js/column_info/wf00403.js",
         dataType: "script",
         async: false,
         success: function () {
@@ -137,9 +180,14 @@ fnObj.pageStart = function () {
     _this.formView.initView();
     _this.gridView01.initView();
     _this.gridView02.initView();
+    _this.gridView03.initView();
 
     // Data 조회
     ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+
+    //TODO 개발하고 지워야함
+    axWarningToast.push("개발이 진행중인 화면입니다.");
+
 };
 
 fnObj.formView = axboot.viewExtend(axboot.formView, {
@@ -189,21 +237,21 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
 });
 
 
-// AC005 User Group User GridView
+// AC003 User Group User GridView
 fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     page: {
         pageNumber: 0,
         pageSize: 10000
     },
     tagId: "realgrid01",
-    primaryKey: "workflowUuid",
-    entityName: "Workflow",
+    primaryKey: "userUuid",
+    entityName: "User",
     initView: function () {
         this.initInstance();
         this.gridObj.setFixedOptions({
             colCount: 1
         });
-        this.setColumnInfo(wf00201.column_info);
+        this.setColumnInfo(wf00401.column_info);
         this.makeGrid();
         this.gridObj.itemClick(this.itemClick);
     },
@@ -220,27 +268,74 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
                     }
                 });
             } else {
+                fnObj.gridView03.clearData();
                 ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, data);
             }
+        } else {
+            fnObj.gridView02.clearData();
+            fnObj.gridView03.clearData();
         }
     }
-});
+})
+;
 fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
     page: {
         pageNumber: 0,
         pageSize: 10000
     },
     tagId: "realgrid02",
-    entityName: "Job",
-    primaryKey: "workflow_job_Uuid",
-    parentsUuidFieldName: "workflowUuid",
+    entityName: "UserGroup",
+    primaryKey: "userGroupUserUuid",
+    parentsUuidFieldName: "userUuid",
     parentsGrid: fnObj.gridView01,
     initView: function () {
         this.initInstance();
         this.gridObj.setFixedOptions({
             colCount: 1
         });
-        this.setColumnInfo(wf00202.column_info);
+        this.setColumnInfo(wf00402.column_info);
+        this.makeGrid();
+        this.gridObj.itemClick(this.itemClick);
+    },
+    itemClick: function (data, index) {
+        if (data.jobUuid != null && data.jobUuid != "") {
+            if (fnObj.gridView03.isChangeData() == true) {
+                axDialog.confirm({
+                    msg: axboot.getCommonMessage("AA006")
+                }, function () {
+                    if (this.key == "ok") {
+                        ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
+                    } else {
+                        ACTIONS.dispatch(ACTIONS.PAGE_SEARCH2, data);
+                    }
+                });
+            } else {
+                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH2, data);
+            }
+        } else {
+            fnObj.gridView03.clearData();
+        }
+    }
+});
+
+
+// AC003 GridView
+fnObj.gridView03 = axboot.viewExtend(axboot.gridView, {
+    page: {
+        pageNumber: 0,
+        pageSize: 10000
+    },
+    tagId: "realgrid03",
+    entityName: "Role",
+    primaryKey: "accessControlUuid",
+    parentsUuidFieldName: "userUuid",
+    parentsGrid: fnObj.gridView01,
+    initView: function () {
+        this.initInstance();
+        this.gridObj.setFixedOptions({
+            colCount: 1
+        });
+        this.setColumnInfo(wf00403.column_info);
         this.makeGrid();
     }
 });
@@ -252,7 +347,7 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
  * @returns {boolean}
  */
 isDataChanged = function () {
-    if (fnObj.gridView01.isChangeData() == true || fnObj.gridView02.isChangeData() == true) {
+    if (fnObj.gridView01.isChangeData() == true || fnObj.gridView02.isChangeData() == true || fnObj.gridView03.isChangeData() == true) {
         return true;
     } else {
         return false;
