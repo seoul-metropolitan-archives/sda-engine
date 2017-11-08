@@ -170,7 +170,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 if(isDetailChanged){
                     ACTIONS.dispatch(ACTIONS.TOP_GRID_DETAIL_PAGE_SAVE);
                 }else{
-                    ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+                    // ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
                 }
                 result = true;
             }
@@ -186,7 +186,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             url: "/api/v1/cl002//09/updateClassCon",
             data: $.extend({},  {pageSize: 1000},selectedItem ,this.formView.getData()),
             callback: function (res) {
-                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+                // ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
             },
             options: {
                 onError: axboot.viewError
