@@ -40,6 +40,7 @@ public class CommonPopupController extends MessageBaseController {
 
         return Responses.MapResponse.of(commonPopupService.getPopupInfo(adPopupHeader));
     }
+
     @RequestMapping("/search")
     public Responses.ListResponse search(@RequestBody Map<String,Object> param ) {
 

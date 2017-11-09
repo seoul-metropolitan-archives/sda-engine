@@ -37,7 +37,7 @@ public class Ad006Controller extends MessageBaseController {
     }
 
     @RequestMapping("/getEntityColumnList")
-    public Responses.ListResponse getEntityColumnList(@RequestBody Ad00602VO param) {
+    public Responses.ListResponse getEntityColumnList(@RequestBody Ad00601VO param) {
         return Responses.ListResponse.of(service.getEntityColumnList(param));
     }
 

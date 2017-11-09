@@ -518,10 +518,32 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
         _onEditChange =p_onEditChange;
         return true;
 	}
-
+	var dataCellDbClicked = new Array();
+	this.onDataCellDblClicked = function(_event)
+	{
+        dataCellDbClicked.push(_event);
+	}
 	var bindEvent = function() {
-		gridView.onKeyDown = keyDown;
+        if(!isTree)
+			gridView.onKeyDown = keyDown;
+		else
+			gridView.onKeyDown = function(grid, key, ctrl, shift, alt){
+				if(key == 13)
+				{
+					var index = grid.getCurrent();
+                    if(-1 == index.dataRow || -1 == index.itemIndex)
+                        return ;
+					if(_event)
+                    	_event(grid.getDataProvider().getJsonRow(index.dataRow),index);
+				}
+			}
+		gridView.onDataCellDblClicked = function(grid,index){
+            for(var i = 0; i < dataCellDbClicked.length; i++)
+			{
+                dataCellDbClicked[i](grid,index);
+			}
 
+		}
         gridView.onValidateColumn = function(grid, column, inserting, value) {
             var error = {};
             for(var i = 0;i < requiredColumnList.length; i++)
@@ -1500,6 +1522,10 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 	{
         gridView.expandAll()
 	};
+	this.collapseAll = function()
+	{
+		gridView.collapseAll();
+	}
     this.setTreeData = function(list, rowsProp, childrenProp, iconProp)
 	{
         dataProvider.setJsonRows(list, rowsProp, childrenProp, iconProp);
@@ -1517,6 +1543,34 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 	{
 		maxCount = _listCount;
 	};
+	var searchStartIndex = -1;
+	this.search = function(fieldList,value){
+		if(isTree)
+		{
+            var ret = dataProvider.searchData({fields:fieldList, value:value,  startIndex:searchStartIndex+1,partialMatch:true ,wrap:true,select : true});
+            if (ret) {
+                var rowId = ret.dataRow;
+                var parents = dataProvider.getAncestors(rowId);
+                if (parents) {
+                    for (var i = parents.length - 1; i >= 0 ; i--) {
+                        gridView.expand(gridView.getItemIndex(parents[i]));
+                    }
+                    searchStartIndex = rowId;
+                    gridView.setCurrent({itemIndex:gridView.getItemIndex(rowId), fieldIndex:ret.fieldIndex})
+                }
+            }
+		}
+		else {
+            var dataRow = dataProvider.searchDataRow({startIndex: 0, fields: fieldList, value: value, startIndex:searchStartIndex+1,partialMatch:true,select : true});
+            var ret = dataProvider.getRows(dataRow,dataRow)
+            if(ret)
+			{
+                searchStartIndex = gridView.getItemIndex(dataRow);
+                gridView.setCurrent({itemIndex:treeView.getItemIndex(dataRow), fieldIndex:ret.fieldIndex})
+			}
+
+		}
+	}
 	this.load = function(url,data,parsingCallback)
 	{
 

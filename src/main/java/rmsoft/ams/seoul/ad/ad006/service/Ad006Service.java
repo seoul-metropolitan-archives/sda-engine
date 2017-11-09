@@ -34,7 +34,7 @@ public class Ad006Service extends BaseService {
     public List<Ad00601VO> searchEntityType(Ad00601VO param) {
         return mapper.searchEntityType(param);
     }
-    public List<Ad00602VO> getEntityColumnList(Ad00602VO param) { return mapper.getEntityColumnList(param); }
+    public List<Ad00602VO> getEntityColumnList(Ad00601VO param) { return mapper.getEntityColumnList(param); }
 
     @Transactional
     public ApiResponse saveEntityType(List<Ad00601VO> ad00601VOList) {
