@@ -21,6 +21,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 }
                 else {
                     fnObj.gridView_h.setData(res.list);
+
                 }
             }
         });
@@ -149,7 +150,7 @@ fnObj = {
         _this.gridView_d.initView();
 
         ACTIONS.dispatch(ACTIONS.PAGE_SEARCH,this.formView.getData());
-
+        ACTIONS.dispatch(ACTIONS.GET_ENTITY_DETAIL, this.gridView_h.gridObj.getSelectedData());
     }
 };
 /*검색 창*/
