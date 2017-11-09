@@ -4,9 +4,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH: function (caller, act, data) {
         axboot.ajax({
             url: "/rc/rc001/getAllNodes",
-            dataType : "JSON",
-            type:"POST",
-            data: JSON.stringify(data),
+            data: $.extend({},data,{isDisplayItem : $("#isDisplayItem").prop("checked")}),
             callback: function (res) {
                 console.log(res.list);
                 fnObj.treeView01.setData({}, res.list, data);
@@ -403,6 +401,10 @@ fnObj.naviView = axboot.viewExtend({
     {
         return {uuid : $(".navigator:last").attr("uuid")};
     },
+    getRoot : function()
+    {
+        return {uuid : $(".navigator:first").attr("uuid")};
+    },
     clear : function()
     {
         $("#navigatorArea .navigator").each(function(idx)
@@ -456,6 +458,10 @@ fnObj.iconView = axboot.viewExtend({
     },
     initEvent : function() {
         var _this = this;
+        $("#isDisplayItem").change(function(){
+            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH,fnObj.naviView.getRoot());
+        });
+
         $("body").keydown(function(event){
             fnObj.iconView.pressedCtrl = event.ctrlKey;
         });
@@ -488,12 +494,19 @@ fnObj.iconView = axboot.viewExtend({
             {
                 uuid = $(this).parents().eq(index).attr("uuid")
                 imgSrc = $(this).parents().eq(index).find(".imageTag").find("img").prop("src")
+                //컨트롤 누르고 클릭 시 해당 아이템들이 다중으로 선택되어야된다
                 if(fnObj.iconView.pressedCtrl)
                 {
                     $(this).parents().eq(index).addClass("selected")
                 }
+                else {
+                    //컨트롤 누르지 않고 클릭 시 해당 아이템만 선택되어야된다
+                    $("#iconListArea .selected").each(function(){
+                        $(this).removeClass("selected");
+                    });
+                    $(this).parents().eq(index).addClass("selected")
+                }
             }
-
 
             $("#archiveType").prop("src",imgSrc);
 
@@ -1001,14 +1014,19 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView,{
         var _this = this;
         this.initInstance();
         this.setColumnInfo(rc00101.column_info);
+
+        this.gridObj.onDataCellDblClicked(this.itemDbClick);
+
+
         this.makeGrid();
         this.gridObj.addRowAfterEvent(this.addRowAfterEvent);
         this.gridObj.itemClick(this.itemClick);
     },
-    itemClick : function(data){
+    itemDbClick : function(grid,index)
+    {
         var reqData = fnObj.gridView01.gridObj.getSelectedData();
         fnObj.naviView.setData({uuid : reqData["uuid"],name : reqData["title"]});
-        if(data["iconType"] == "file")
+        if(reqData["iconType"] == "file")
         {
             //차후에 뷰어 붙여야된다
             return;
@@ -1021,6 +1039,9 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView,{
                 delete(reqData[key]);
         }
         ACTIONS.dispatch(ACTIONS.GET_GRID_DATA,reqData);
+    },
+    itemClick : function(data){
+
     },
     setData : function(list)
     {

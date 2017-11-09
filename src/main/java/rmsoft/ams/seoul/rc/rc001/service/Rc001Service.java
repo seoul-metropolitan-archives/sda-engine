@@ -23,7 +23,9 @@ public class Rc001Service extends BaseService
         nodes.addAll(rc001Mapper.getAggregationNode(param));
 
         //
-        if(null != param.getUuid() && !param.getUuid().equals(""))
+        if(null != param.getIsDisplayItem() && param.getIsDisplayItem().equals("true")
+                //||(null != param.getUuid() && !param.getUuid().equals(""))
+                )
             nodes.addAll(rc001Mapper.getItemNode(param));
 
         return nodes;
