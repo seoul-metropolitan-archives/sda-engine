@@ -379,10 +379,10 @@ fnObj.tabView = axboot.viewExtend({
                 'arrow': '▸'
             },
             items: [
-                {icon: '<i class="cqc-ccw"></i>', label: '현재 탭 새로고침', action: "reload"},
+                {icon: '<i class="cqc-ccw"></i>', label: 'Reload Current Tab', action: "reload"},
                 /*{icon: '<i class="cqc-cancel3"></i>', label: '현재탭 닫기', action: "close"},*/
-                {icon: '<i class="cqc-cancel3"></i>', label: '현재탭 제외하고 닫기', action: "closeAnother"},
-                {icon: '<i class="cqc-cancel"></i>', label: '모든탭 닫기', action: "closeAll"}
+                {icon: '<i class="cqc-cancel3"></i>', label: 'Close All Tabs Except Current Tab', action: "closeAnother"},
+                {icon: '<i class="cqc-cancel"></i>', label: 'Close All Tabs', action: "closeAll"}
             ]
         });
 

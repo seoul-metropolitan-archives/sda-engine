@@ -16,6 +16,8 @@ var ACTIONS = axboot.actionExtend(fnObj, {
 
                 if (res.list.length > 0) {
                     ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, res.list[0]);
+                } else {
+                    fnObj.gridView02.clearData();
                 }
 
             },
@@ -50,6 +52,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 url: "/api/v1/wf002/01/save",
                 data: JSON.stringify(workflowist),
                 callback: function (res) {
+                    fnObj.gridView01.gridObj.commit();
                 }
             })
             .call({
@@ -57,10 +60,11 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 url: "/api/v1/wf002/02/save",
                 data: JSON.stringify(workflowJobList),
                 callback: function (res) {
+                    fnObj.gridView02.gridObj.commit();
                 }
             })
             .done(function () {
-                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+                //ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
                 axToast.push(axboot.getCommonMessage("AA007"));
             });
     },

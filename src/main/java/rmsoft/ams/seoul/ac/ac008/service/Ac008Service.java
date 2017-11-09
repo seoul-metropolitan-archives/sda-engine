@@ -4,6 +4,7 @@
 
 package rmsoft.ams.seoul.ac.ac008.service;
 
+import com.querydsl.core.types.Predicate;
 import io.onsemiro.core.api.response.ApiResponse;
 import io.onsemiro.core.code.ApiStatus;
 import io.onsemiro.core.domain.BaseService;
@@ -18,7 +19,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import rmsoft.ams.seoul.ac.ac008.dao.Ac008Mapper;
 import rmsoft.ams.seoul.ac.ac008.vo.Ac00801VO;
+import rmsoft.ams.seoul.common.domain.AdMenu;
 import rmsoft.ams.seoul.common.domain.AdProgram;
+import rmsoft.ams.seoul.common.domain.QAcRoleMenu;
+import rmsoft.ams.seoul.common.domain.QAdMenu;
+import rmsoft.ams.seoul.common.repository.AcRoleMenuRepository;
+import rmsoft.ams.seoul.common.repository.AdMenuRepository;
 import rmsoft.ams.seoul.common.repository.AdProgramRepository;
 
 import javax.inject.Inject;
@@ -33,6 +39,12 @@ public class Ac008Service extends BaseService {
 
     @Autowired
     private AdProgramRepository adProgramRepository;
+
+    @Autowired
+    private AdMenuRepository adMenuRepository;
+
+    @Autowired
+    private AcRoleMenuRepository acRoleMenuRepository;
 
     @Inject
     private Ac008Mapper ac008Mapper;
@@ -83,6 +95,22 @@ public class Ac008Service extends BaseService {
             } else {
                 if (adProgram.isDeleted()) {
                     adProgramRepository.delete(adProgram);
+
+                    // 프로그램이 삭제되면 관련 Menu 삭제
+                    QAdMenu qAdMenu = QAdMenu.adMenu;
+                    Predicate predicate = qAdMenu.programUuid.eq(adProgram.getProgramUuid());
+
+                    Iterable<AdMenu> delMenuList = adMenuRepository.findAll(predicate);
+
+                    delMenuList.forEach(adMenu -> {
+                        // 메뉴삭제
+                        adMenuRepository.delete(adMenu.getId());
+
+                        // 메뉴가 삭제되므로 관련 Role Menu 도 찾아서 삭제
+                        QAcRoleMenu qAcRoleMenu = QAcRoleMenu.acRoleMenu;
+                        acRoleMenuRepository.delete(acRoleMenuRepository.findAll(qAcRoleMenu.menuUuid.eq(adMenu.getMenuUuid())));
+                    });
+
                 } else {
                     adProgram.setInsertDate(orgAdProgram.getInsertDate());
                     adProgram.setInsertUuid(orgAdProgram.getInsertUuid());

@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  ~ Copyright (c) 2017. RMSoft Co.,Ltd. All rights reserved
+  -->
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="rmsoft.ams.seoul.wf.wf004.dao.Wf004Mapper">
+    <select id="findAllWorkflow" resultType="Wf00401VO" parameterType="Wf00401VO" statementType="PREPARED">
+        SELECT
+            Z.WORKFLOW_UUID as workflowUuid,
+            Z.WORKFLOW_NAME as workflowName,
+            Z.SERVICE_UUID as serviceUuid,
+            Z.DESCRIPTION description,
+            Z.NOTES notes,
+            Z.USE_YN useYn,
+            <include refid="Common.UserName">
+                <property name="userUuid" value="Z.INSERT_UUID"/>
+            </include>
+            as insertUuid,
+            Z.INSERT_DATE as insertDate,
+            <include refid="Common.UserName">
+                <property name="userUuid" value="Z.UPDATE_UUID"/>
+            </include>
+            as updateUuid,
+            Z.UPDATE_DATE as updateDate
+        FROM
+            WF_WORKFLOW Z
+        <where>
+            <if test="workflowName != null">
+                Z.WORKFLOW_NAME LIKE '%' || #{workflowName} || '%'
+            </if>
+            <if test="serviceUuid != null">
+                AND Z.SERVICE_UUID = #{serviceUuid}
+            </if>
+            <if test="useYn != null">
+                AND Z.USE_YN = #{useYn}
+            </if>
+        </where>
+    </select>
+
+    <select id="findWorkflowJob" resultType="Wf00402VO" parameterType="String"
+            statementType="PREPARED">
+        SELECT
+            Z1.WORKFLOW_JOB_UUID as workflowJobUuid,
+            Z1.WORKFLOW_UUID as workflowUuid,
+            Z1.SEQUENCE as sequence,
+            Z1.JOB_UUID as jobUuid,
+            Z2.JOB_NAME as jobName,
+            Z2.API as api,
+            Z1.SKIP_YN as skipYn,
+            Z1.TERMINATE_YN as terminateYn,
+            Z1.DESCRIPTION as description,
+            Z1.NOTES as notes,
+            Z1.USE_YN as useYn,
+            <include refid="Common.UserName">
+                <property name="userUuid" value="Z1.INSERT_UUID"/>
+            </include>
+            as insertUuid,
+            Z1.INSERT_DATE insertDate,
+            <include refid="Common.UserName">
+                <property name="userUuid" value="Z1.UPDATE_UUID"/>
+            </include>
+            as updateUuid,
+            Z1.UPDATE_DATE updateDate
+        FROM
+            WF_WORKFLOW_JOB Z1,
+            WF_JOB Z2
+        WHERE Z1.JOB_UUID = Z2.JOB_UUID
+          AND Z1.WORKFLOW_UUID = #{workflowUuid}
+        ORDER BY Z1.SEQUENCE ASC
+    </select>
+
+    <select id="findParameter" resultType="Wf00403VO" parameterType="String"
+            statementType="PREPARED">
+        SELECT ZZ1.PARAMETER_UUID as parameterUuid,
+                ZZ1.JOB_UUID as jobUuid,
+                ZZ1.PARAMETER_NAME as parameterName,
+                ZZ1.INPUT_METHOD_UUID as inputMethodUuid,
+                ZZ1.INPUT_CODE_UUID as inputCodeUuid,
+                CASE WHEN ZZ1.INPUT_METHOD_CODE = 'COMBO'
+                        THEN (SELECT CATEGORY_CODE FROM AD_CODE_HEADER WHERE CODE_HEADER_UUID = ZZ1.INPUT_CODE_UUID)
+                      WHEN ZZ1.INPUT_METHOD_CODE = 'POPUP'
+                        THEN (SELECT   POPUP_CODE  FROM AD_POPUP_HEADER WHERE POPUP_HEADER_UUID = ZZ1.INPUT_CODE_UUID)
+                      ELSE ''
+                END as inputCode,
+                CASE WHEN ZZ1.INPUT_METHOD_CODE = 'COMBO'
+                        THEN (SELECT CATEGORY_NAME FROM AD_CODE_HEADER WHERE CODE_HEADER_UUID = ZZ1.INPUT_CODE_UUID)
+                      WHEN ZZ1.INPUT_METHOD_CODE = 'POPUP'
+                        THEN (SELECT   POPUP_NAME  FROM AD_POPUP_HEADER WHERE POPUP_HEADER_UUID = ZZ1.INPUT_CODE_UUID)
+                      ELSE ''
+                END as inputCodeName,
+                ZZ1.IN_OUT_UUID as inOutUuid,
+                ZZ1.DEFAULT_VALUE as defaultValue,
+                ZZ1.DISPLAY_YN as displayYn,
+                ZZ1.REQUIRED_YN as requiredYn,
+                ZZ1.DESCRIPTION as description,
+                ZZ1.NOTES as notes,
+                ZZ1.USE_YN as useYn,
+                ZZ1.INSERT_UUID as insertUuid,
+                ZZ1.INSERT_DATE as insertDate,
+                ZZ1.UPDATE_UUID as updateUuid,
+                ZZ1.UPDATE_DATE as updateDate
+        FROM (
+                SELECT
+                        Z1.PARAMETER_UUID,
+                        Z1.JOB_UUID,
+                        Z1.PARAMETER_NAME,
+                        Z1.INPUT_METHOD_UUID,
+                        (SELECT CODE
+                        FROM AD_CODE_HEADER ZZ1,
+                        AD_CODE_DETAIL ZZ2
+                        WHERE ZZ1.CODE_HEADER_UUID = ZZ2.CODE_HEADER_UUID
+                        AND ZZ1.CATEGORY_CODE = 'CD128'
+                        AND ZZ2.CODE_DETAIL_UUID = Z1.INPUT_METHOD_UUID) as INPUT_METHOD_CODE,
+                        Z1.INPUT_CODE_UUID,
+                        Z1.IN_OUT_UUID,
+                        Z1.DEFAULT_VALUE,
+                        Z1.DISPLAY_YN,
+                        Z1.REQUIRED_YN,
+                        Z1.DESCRIPTION,
+                        Z1.NOTES,
+                        Z1.USE_YN,
+                        <include refid="Common.UserName">
+                            <property name="userUuid" value="Z1.INSERT_UUID"/>
+                        </include> as INSERT_UUID,
+                        Z1.INSERT_DATE,
+                        <include refid="Common.UserName">
+                            <property name="userUuid" value="Z1.UPDATE_UUID"/>
+                        </include> as UPDATE_UUID,
+                        Z1.UPDATE_DATE
+                FROM
+                    WF_PARAMETER Z1
+                WHERE
+                    Z1.JOB_UUID = #{jobUuid}
+        ) ZZ1
+    </select>
+</mapper>

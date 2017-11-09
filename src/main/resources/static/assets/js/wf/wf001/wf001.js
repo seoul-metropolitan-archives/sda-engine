@@ -16,6 +16,8 @@ var ACTIONS = axboot.actionExtend(fnObj, {
 
                 if (res.list.length > 0) {
                     ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, res.list[0]);
+                } else {
+                    fnObj.gridView02.clearData();
                 }
 
             },
@@ -50,6 +52,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 url: "/api/v1/wf001/01/save",
                 data: JSON.stringify(jobList),
                 callback: function (res) {
+                    fnObj.gridView01.gridObj.commit();
                 }
             })
             .call({
@@ -57,10 +60,11 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 url: "/api/v1/wf001/02/save",
                 data: JSON.stringify(parameterList),
                 callback: function (res) {
+                    fnObj.gridView02.gridObj.commit();
                 }
             })
             .done(function () {
-                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+                //ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
                 axToast.push(axboot.getCommonMessage("AA007"));
             });
     },
@@ -151,6 +155,9 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
     },
     initEvent: function () {
         var _this = this;
+
+
+
     },
     getData: function () {
         var data = this.modelFormatter.getClearData(this.model.get()); // 모델의 값을 포멧팅 전 값으로 치환.
@@ -242,21 +249,17 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
         var codes = axboot.commonCodeFilter("CD128").codeArr;
         var names = axboot.commonCodeFilter("CD128").nameArr;
         var enableList = new Array();
-        for(var i = 0; i < names.length; i++)
-        {
-            if(names[i] == "팝업" || names[i] == "콤보")
-            {
+        for (var i = 0; i < names.length; i++) {
+            if (names[i] == "팝업" || names[i] == "콤보") {
                 enableList.push(codes[i]);
             }
         }
         var _this = this;
-        this.gridObj.onEditChange(function(grid, index, value){
-            _this.gridObj.setCustomCellStyleRows("disable",function(row){
+        this.gridObj.onEditChange(function (grid, index, value) {
+            _this.gridObj.setCustomCellStyleRows("disable", function (row) {
                 var result = false;
-                for(var rowIndex = 0; rowIndex < enableList.length; rowIndex++)
-                {
-                    if(row["inputMethodUuid"] == enableList[rowIndex])
-                    {
+                for (var rowIndex = 0; rowIndex < enableList.length; rowIndex++) {
+                    if (row["inputMethodUuid"] == enableList[rowIndex]) {
                         result = false;
                         break;
                     }
@@ -264,8 +267,8 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
                         result = true;
                 }
                 return result;
-            },["inputCodeUuid"],false);
-            
+            }, ["inputCodeUuid"], false);
+
         });
     }
 });

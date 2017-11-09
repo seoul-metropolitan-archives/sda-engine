@@ -23463,6 +23463,7 @@ jQuery.fn.ax5formatter = function () {
                     self.menuBar.target.html(activeMenu);
 
                     // click, mouseover
+
                     self.menuBar.target.bind("click", function (e) {
                         if (!e) return this;
                         var target = U.findParentNode(e.target, function (target) {

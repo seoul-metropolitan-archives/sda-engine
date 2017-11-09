@@ -15,6 +15,9 @@ var ACTIONS = axboot.actionExtend(fnObj, {
 
                     ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, res.list[0]);
                     ACTIONS.dispatch(ACTIONS.PAGE_SEARCH2, res.list[0]);
+                } else {
+                    fnObj.gridView02.clearData();
+                    fnObj.gridView03.clearData();
                 }
 
             },
@@ -65,6 +68,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 url: "/api/v1/ac003/01/save",
                 data: JSON.stringify(userList),
                 callback: function (res) {
+                    fnObj.gridView01.gridObj.commit();
                 }
             })
             .call({
@@ -72,6 +76,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 url: "/api/v1/ac003/02/save",
                 data: JSON.stringify(groupList),
                 callback: function (res) {
+                    fnObj.gridView02.gridObj.commit();
                 }
             })
             .call({
@@ -79,10 +84,11 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 url: "/api/v1/ac003/03/save",
                 data: JSON.stringify(roleList),
                 callback: function (res) {
+                    fnObj.gridView03.gridObj.commit();
                 }
             })
             .done(function () {
-                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+                //ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
                 axToast.push(axboot.getCommonMessage("AA007"));
             });
     },
@@ -274,7 +280,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
                 ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, data);
                 ACTIONS.dispatch(ACTIONS.PAGE_SEARCH2, data);
             }
-        }else{
+        } else {
             fnObj.gridView02.clearData();
             fnObj.gridView03.clearData();
         }

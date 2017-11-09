@@ -3,16 +3,16 @@
     if (axboot && axboot.def) {
 
         axboot.def["DEFAULT_TAB_LIST"] = [
-            {
+            /*{
                 menuId: "f529cda4-04ac-4b26-82ab-6b441a3d0015",
-                id: "error-monitoring",
+                id: "User",
                 progNm: 'User',
                 menuNm: 'User',
                 progPh: '/ac/ac003/ac003',
                 url: '/ac/ac003/ac003',
                 status: "on",
                 fixed: true
-            }
+            }*/
         ];
 
         axboot.def["API"] = {

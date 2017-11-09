@@ -678,7 +678,8 @@ html {
 body {
     font-family: "Noto Sans KR", "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 13px;
-    line-height: 1.42857;
+    /*2017.11.08
+    line-height: 1.42857;*/
     color: #333;
     /*background-color: #ECF0F5*/
 }
@@ -694,7 +695,7 @@ textarea {
 
 a {
     color: #616161;
-    text-decoration: none
+    text-decoration: none !important
 }
 
 a:hover,
@@ -11910,7 +11911,8 @@ button.close {
 
 .ax5-ui-menubar.axboot .ax-menu-body .ax-menu-item .ax-menu-item-cell {
     padding-left: 5px;
-    font-size: 1em
+    font-size: 1em;
+    color: #000;
 }
 
 .ax5-ui-menu.info .ax-menu-body .ax-menu-item .ax-menu-item-cell {
@@ -11949,16 +11951,24 @@ button.close {
 }
 
 .ax5-ui-menu.axboot .ax-menu-body {
-    padding: 5px 0px;
+    padding: 0px 0px;
     text-align: center;
     position: relative;
-    overflow: hidden
+    overflow: hidden;
+    /*
+    퍼블리싱 요건사항에 대한 수정 2017.11.8
+    padding: 5px 0px;
+    */
+    background: #f7f7f7;
+    border: 1px solid silver;
 }
 
 .ax5-ui-menu.axboot .ax-menu-body .ax-menu-item {
     padding: 4px 0px;
     text-align: left;
-    background: #fff;
+    /*퍼블리싱 요건사항에 대한 수정 2017.11.8*/
+    /*background: #fff;*/
+    background: #f7f7f7;
     color: #2c2c2c;
     cursor: pointer;
     font-size: 13px;
@@ -12054,8 +12064,14 @@ button.close {
 
 .ax5-ui-menu.axboot .ax-menu-body .ax-menu-item:hover,
 .ax5-ui-menu.axboot .ax-menu-body .ax-menu-item.hover {
+
+    background: #E0E0E0;
+
+    /*
+    2017.11.08 퍼블리싱 관련 수정
     background: #ECF0F5;
     color: #3DACFC
+    */
 }
 
 .ax5-ui-menu.axboot .ax-menu-body .ax-menu-item:hover .ax-menu-item-cell.ax-menu-item-checkbox .item-checkbox-wrap:after,
@@ -20415,15 +20431,15 @@ h3 {
 .ax-split-col .panel-split {
     display: table-cell;
     vertical-align: middle;
-    width: 5px
+    width: 10px
 }
 
 .ax-split-col .panel-split:before {
     content: ' ';
     display: block;
     width: 0px;
-    height: 10px;
-    border-left: 1px solid #aaa;
+    height: 12px;
+    border-left: 2.4px solid #aaa;
     margin: 0 auto
 }
 
@@ -23104,7 +23120,8 @@ ul.zTreeDragUL[data-z-tree] {
 .ax-body.frame-set #ax-frame-root .ax-frame-header-tool .ax-frame-user-info {
     height: 100%;
     width: auto;
-    margin-right: 10px;
+    margin-right: 6px;
+    /*margin-right: 10px;*/
     margin-left: auto;
     color: #fff;
     font-size: 0.8em;
@@ -23211,7 +23228,7 @@ a.big_close{
     position: absolute;
     top: 50px;    left: 220px;
     width: 100%;
-    height: 30px;
+    height: 31px;
     background-color: #fff;
     border-bottom: 1px solid #dddddd;
 }
@@ -23243,14 +23260,20 @@ a.big_close{
     position: relative;
     display: table-cell;
     box-sizing: border-box;
+    height: 31px;
+    /*
+    2017.11.09
     height: 30px;
+    */
     line-height: 29px;
     min-width: 120px;
     padding: 0 10px;
     padding-right: 22px;
     border-right: 1px solid #dddddd;
     color: #000;
-    font-size: 0.9em;
+    /*font-size: 0.9em;*/
+    font-weight: bold;
+    font-size: 12px;
     margin: 0 0px;
     background-color: #ffffff;
     border-bottom: 1px solid #dddddd;
@@ -23277,6 +23300,8 @@ a.big_close{
 .ax-body.frame-set #ax-frame-root .ax-frame-header-tab #ax-frame-header-tab-container .tab-item.on {
     background-color: #f7f7f7;
     border-bottom:#f7f7f7;
+    /*2017.11.08 요청에 의한 추가*/
+    border-top: 2px solid #098b62;
     /*background-image: -webkit-linear-gradient(top, #3DACFC, #3DACFC);
     background-image: linear-gradient(to bottom, #3DACFC, #3DACFC);
     border-bottom: 1px solid #3DACFC;
@@ -26305,6 +26330,7 @@ img {
     padding: 0 4px;
     display: block;
     float: left;
+    width : 50px;
     margin-right: 6px;
     text-align: center
 }
@@ -27470,22 +27496,22 @@ a.small_open {
     float: left;
 }
 
-.explorer_folder_empty:hover {
+.explorer_folder_empty:hover,.explorer_folder_empty.selected {
     background-color: #cae8ff;
     cursor: pointer
 }
 
-.explorer_folder_full:hover {
+.explorer_folder_full:hover,.explorer_folder_full.selected {
     background-color: #cae8ff;
     cursor: pointer
 }
 
-.explorer_file:hover {
+.explorer_file:hover,.explorer_file.selected {
     background-color: #cae8ff;
     cursor: pointer
 }
 
-.explorer_img:hover {
+.explorer_img:hover,.explorer_img.selected {
     background-color: #cae8ff;
     cursor: pointer
 }
