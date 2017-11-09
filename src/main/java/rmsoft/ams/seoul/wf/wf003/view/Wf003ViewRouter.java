@@ -26,5 +26,10 @@ public class Wf003ViewRouter extends BaseController {
 
         return "/wf/wf003/wf003";
     }
+
+    @GetMapping("/wf/wf003/wf003_p01")
+    public String viewPopup(ModelMap model) {
+        return "/wf/wf003/wf003_p01";
+    }
 }
 

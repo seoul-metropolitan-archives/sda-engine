@@ -16,12 +16,16 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import rmsoft.ams.seoul.common.domain.WfParameter;
 import rmsoft.ams.seoul.common.domain.WfWorkflow;
 import rmsoft.ams.seoul.common.domain.WfWorkflowJob;
+import rmsoft.ams.seoul.common.repository.WfParameterRepository;
 import rmsoft.ams.seoul.common.repository.WfWorkflowJobRepository;
 import rmsoft.ams.seoul.common.repository.WfWorkflowRepository;
 import rmsoft.ams.seoul.wf.wf003.dao.Wf003Mapper;
 import rmsoft.ams.seoul.wf.wf003.vo.Wf00301VO;
+import rmsoft.ams.seoul.wf.wf003.vo.Wf00301_P0101VO;
+import rmsoft.ams.seoul.wf.wf003.vo.Wf00301_P0102VO;
 import rmsoft.ams.seoul.wf.wf003.vo.Wf00302VO;
 
 import javax.inject.Inject;
@@ -39,6 +43,9 @@ public class Wf003Service extends BaseService {
 
     @Autowired
     private WfWorkflowJobRepository wfWorkflowJobRepository;
+
+    @Autowired
+    private WfParameterRepository wfParameterRepository;
 
     @Inject
     private Wf003Mapper wf003Mapper;
@@ -142,6 +149,70 @@ public class Wf003Service extends BaseService {
                     wfWorkflowJob.setInsertUuid(orgWfWorkflowJob.getInsertUuid());
 
                     wfWorkflowJobRepository.save(wfWorkflowJob);
+                }
+            }
+        }
+        return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");
+    }
+
+
+    /**********************************************************************************
+     *  POPUP
+     **********************************************************************************/
+    /**
+     * 모든 Job 조회
+     *
+     * @param pageable      the pageable
+     * @param requestParams the request params
+     * @return page
+     */
+    public Page<Wf00301_P0101VO> findAllJob(Pageable pageable, RequestParams<Wf00301_P0101VO> requestParams) {
+
+        Wf00301_P0101VO wf00301_p0101VO = new Wf00301_P0101VO();
+        wf00301_p0101VO.setJobName(requestParams.getString("jobName"));
+        wf00301_p0101VO.setApi(requestParams.getString("api"));
+        wf00301_p0101VO.setUseYn(requestParams.getString("useYn"));
+
+        return filter(wf003Mapper.findAllJob(wf00301_p0101VO), pageable, "", Wf00301_P0101VO.class);
+    }
+
+    /**
+     * 파라미터 조회
+     *
+     * @param pageable      the pageable
+     * @param requestParams the request params
+     * @return page
+     */
+    public Page<Wf00301_P0102VO> findParameter(Pageable pageable, RequestParams<Wf00301_P0102VO> requestParams) {
+        String filter = requestParams.getString("filter", "");
+
+        return filter(wf003Mapper.findParameter(requestParams.getString("jobUuid")), pageable, filter, Wf00301_P0102VO.class);
+    }
+
+    /**
+     * @param wf00301_p0102VOList
+     * @return
+     */
+    @Transactional
+    public ApiResponse saveParameter(List<Wf00301_P0102VO> wf00301_p0102VOList) {
+        List<WfParameter> wfParameterList = ModelMapperUtils.mapList(wf00301_p0102VOList, WfParameter.class);
+        WfParameter orgWfParameter = null;
+
+        for (WfParameter wfParameter : wfParameterList) {
+            orgWfParameter = wfParameterRepository.findOne(wfParameter.getId());
+
+            if (orgWfParameter == null) {
+                // created
+                wfParameter.setParameterUuid(UUIDUtils.getUUID());
+                wfParameterRepository.save(wfParameter);
+            } else {
+                if (wfParameter.isDeleted()) {
+                    wfParameterRepository.delete(wfParameter);
+                } else {
+                    wfParameter.setInsertDate(orgWfParameter.getInsertDate());
+                    wfParameter.setInsertUuid(orgWfParameter.getInsertUuid());
+
+                    wfParameterRepository.save(wfParameter);
                 }
             }
         }

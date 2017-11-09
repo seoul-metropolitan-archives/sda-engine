@@ -9,7 +9,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH: function (caller, act, data) {
         axboot.ajax({
             type: "GET",
-            url: "/api/v1/wf003/01/list",
+            url: "/api/v1/wf003/p/01/list",
             data: $.extend({}, {pageSize: 1000}, this.formView.getData()),
             callback: function (res) {
                 fnObj.gridView01.setData(res.list);
@@ -31,7 +31,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH1: function (caller, act, data) {
         axboot.ajax({
             type: "GET",
-            url: "/api/v1/wf003/02/list",
+            url: "/api/v1/wf003/p/02/list",
             data: $.extend({}, {pageSize: 1000}, data),
             callback: function (res) {
                 fnObj.gridView02.setData(res.list);
@@ -43,22 +43,22 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         return false;
     },
     PAGE_SAVE: function (caller, act, data) {
-        var workflowist = [].concat(fnObj.gridView01.getData());
-        var workflowJobList = [].concat(fnObj.gridView02.getData());
+        var jobList = [].concat(fnObj.gridView01.getData());
+        var parameterList = [].concat(fnObj.gridView02.getData());
 
         axboot
             .call({
                 type: "PUT",
-                url: "/api/v1/wf003/01/save",
-                data: JSON.stringify(workflowist),
+                url: "/api/v1/wf003/p/01/save",
+                data: JSON.stringify(jobList),
                 callback: function (res) {
                     fnObj.gridView01.gridObj.commit();
                 }
             })
             .call({
                 type: "PUT",
-                url: "/api/v1/wf003/02/save",
-                data: JSON.stringify(workflowJobList),
+                url: "/api/v1/wf003/p/02/save",
+                data: JSON.stringify(parameterList),
                 callback: function (res) {
                     fnObj.gridView02.gridObj.commit();
                 }
@@ -84,7 +84,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     },
     MODAL_OPEN: function (caller, act, data) {
         axboot.modal.open({
-            modalType: "WORKFLOW_POPUP_01",
+            modalType: "COMMON_POPUP",
             param: "",
             sendData: function () {
                 return {
@@ -102,6 +102,20 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     CLOSE_TAB: function (caller, act, data) {
         ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
     },
+    PAGE_CLOSE: function (caller, act, data) {
+        if (parent) {
+            parent.axboot.modal.close();
+        }
+    },
+    PAGE_CHOICE: function (caller, act, data) {
+        var list = caller.gridView01.getData();
+        if (parent && parent.axboot && parent.axboot.modal) {
+            parent.axboot.modal.callback(list); // 부모창에 callback 호출
+        }
+        /*else {
+            alert("선택된 목록이 없습니다.");
+        }*/
+    },
     dispatch: function (caller, act, data) {
         var result = ACTIONS.exec(caller, act, data);
         if (result != "error") {
@@ -117,9 +131,13 @@ var ACTIONS = axboot.actionExtend(fnObj, {
 fnObj.pageStart = function () {
     var _this = this;
 
+    var parentsData = parent.axboot.modal.getData();
+    this.popupCode = parentsData["popupCode"];
+    //$("#searchField").val(parentsData["searchData"]);
+
     //TODO 추후에 삭제될 내용으로 /실제 Grid의 컬럼 정보는 DB에서 가져올 예정
     $.ajax({
-        url: "/assets/js/column_info/wf00301.js",
+        url: "/assets/js/column_info/wf00301_p01_01.js",
         dataType: "script",
         async: false,
         success: function () {
@@ -127,7 +145,7 @@ fnObj.pageStart = function () {
     });
 
     $.ajax({
-        url: "/assets/js/column_info/wf00302.js",
+        url: "/assets/js/column_info/wf00301_p01_02.js",
         dataType: "script",
         async: false,
         success: function () {
@@ -140,9 +158,6 @@ fnObj.pageStart = function () {
 
     // Data 조회
     ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
-
-    //TODO 개발하고 지워야함
-    axWarningToast.push("개발이 진행중인 화면입니다.");
 };
 
 fnObj.formView = axboot.viewExtend(axboot.formView, {
@@ -158,6 +173,14 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
     },
     initEvent: function () {
         var _this = this;
+
+        $("#okPopup").click(function(){
+            ACTIONS.dispatch(ACTIONS.PAGE_CHOICE);
+            ACTIONS.dispatch(ACTIONS.PAGE_CLOSE);
+        });
+        $("#closePopup").click(function(){
+            ACTIONS.dispatch(ACTIONS.PAGE_CLOSE);
+        });
     },
     getData: function () {
         var data = this.modelFormatter.getClearData(this.model.get()); // 모델의 값을 포멧팅 전 값으로 치환.
@@ -199,24 +222,19 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
         pageSize: 10000
     },
     tagId: "realgrid01",
-    primaryKey: "workflowUuid",
-    entityName: "Workflow",
+    primaryKey: "jobUuid",
+    entityName: "Job",
     initView: function () {
         this.initInstance();
         this.gridObj.setFixedOptions({
             colCount: 1
         });
-        this.setColumnInfo(wf00301.column_info);
+        this.setColumnInfo(wf00301_p01_01.column_info);
         this.makeGrid();
         this.gridObj.itemClick(this.itemClick);
-        //셀버튼 클릭 이벤트
-        this.gridObj.onCellButtonClicked = function (grid, itemIndex, column) {
-            alert("CellButton Clicked: itemIndex=" + itemIndex + ", fieldName=" + column.fieldName);
-        };
-
     },
     itemClick: function (data, index) {
-        if (data.workflowUuid != null && data.workflowUuid != "") {
+        if (data.jobUuid != null && data.jobUuid != "") {
             if (fnObj.gridView02.isChangeData() == true) {
                 axDialog.confirm({
                     msg: axboot.getCommonMessage("AA006")
@@ -230,8 +248,6 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
             } else {
                 ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, data);
             }
-        } else {
-            fnObj.gridView02.clearData();
         }
     }
 });
@@ -241,17 +257,42 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
         pageSize: 10000
     },
     tagId: "realgrid02",
-    entityName: "Job",
-    primaryKey: "workflow_job_Uuid",
-    parentsUuidFieldName: "workflowUuid",
+    entityName: "Parameter",
+    primaryKey: "parameterUuid",
+    parentsUuidFieldName: "jobUuid",
     parentsGrid: fnObj.gridView01,
     initView: function () {
         this.initInstance();
         this.gridObj.setFixedOptions({
             colCount: 1
         });
-        this.setColumnInfo(wf00302.column_info);
+        this.setColumnInfo(wf00301_p01_02.column_info);
         this.makeGrid();
+
+        var codes = axboot.commonCodeFilter("CD128").codeArr;
+        var names = axboot.commonCodeFilter("CD128").nameArr;
+        var enableList = new Array();
+        for (var i = 0; i < names.length; i++) {
+            if (names[i] == "팝업" || names[i] == "콤보") {
+                enableList.push(codes[i]);
+            }
+        }
+        var _this = this;
+        this.gridObj.onEditChange(function (grid, index, value) {
+            _this.gridObj.setCustomCellStyleRows("disable", function (row) {
+                var result = false;
+                for (var rowIndex = 0; rowIndex < enableList.length; rowIndex++) {
+                    if (row["inputMethodUuid"] == enableList[rowIndex]) {
+                        result = false;
+                        break;
+                    }
+                    else
+                        result = true;
+                }
+                return result;
+            }, ["inputCodeUuid"], false);
+
+        });
     }
 });
 

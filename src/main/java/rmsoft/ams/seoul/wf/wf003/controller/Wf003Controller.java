@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 import rmsoft.ams.seoul.common.controller.MessageBaseController;
 import rmsoft.ams.seoul.wf.wf003.service.Wf003Service;
 import rmsoft.ams.seoul.wf.wf003.vo.Wf00301VO;
+import rmsoft.ams.seoul.wf.wf003.vo.Wf00301_P0101VO;
+import rmsoft.ams.seoul.wf.wf003.vo.Wf00301_P0102VO;
 import rmsoft.ams.seoul.wf.wf003.vo.Wf00302VO;
 
 import java.util.List;
@@ -56,5 +58,30 @@ public class Wf003Controller extends MessageBaseController {
     @PostMapping
     public ApiResponse saveWorkfloeJob(@RequestBody List<Wf00302VO> requestParams) {
         return wf003Service.saveWorkfloeJob(requestParams);
+    }
+
+
+    /**********************************************************************************
+     *  POPUP
+     **********************************************************************************/
+
+    @GetMapping("/p/01/list")
+    public Responses.PageResponse findAllJob(Pageable pageable, RequestParams<Wf00301_P0101VO> requestParams) {
+        Page<Wf00301_P0101VO> pages = wf003Service.findAllJob(pageable, requestParams);
+
+        return Responses.PageResponse.of(pages.getContent(), pages);
+    }
+
+    @GetMapping("/p/02/list")
+    public Responses.PageResponse findParameter(Pageable pageable, RequestParams<Wf00301_P0102VO> requestParams) {
+        Page<Wf00301_P0102VO> pages = wf003Service.findParameter(pageable, requestParams);
+
+        return Responses.PageResponse.of(pages.getContent(), pages);
+    }
+
+    @PutMapping(value = "/p/02/save")
+    @PostMapping
+    public ApiResponse saveParameter(@RequestBody List<Wf00301_P0102VO> requestParams) {
+        return wf003Service.saveParameter(requestParams);
     }
 }
