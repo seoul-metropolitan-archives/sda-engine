@@ -47,7 +47,7 @@
               , AGGREGATION_CODE as code
               , TITLE as title
               , (SELECT CODE_NAME FROM AD_CODE_DETAIL WHERE CODE_DETAIL_UUID = Z1.TYPE_UUID) as "type"
-              , (SELECT LEVEL_NO FROM RC_LEVEL WHERE LEVEL_UUID = Z1.LEVEL_UUID) as "level"
+              , (SELECT LEVEL_NAME FROM RC_LEVEL WHERE LEVEL_UUID = Z1.LEVEL_UUID) as "level"
               , AUTHOR as author
               , DESCRIPTION_START_DATE as descStrDate
               , DESCRIPTION_END_DATE as descEdDate
