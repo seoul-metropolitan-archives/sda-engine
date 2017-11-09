@@ -102,7 +102,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             url: "/api/v1/cl001/05/updateClassificationSchemeConDetail",
             data: $.extend({},  {pageSize: 1000},fnObj.gridView01.getSelectedData() ,this.formView.getData()),
             callback: function (res) {
-                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+                // ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
             },
             options: {
                 onError: axboot.viewError
