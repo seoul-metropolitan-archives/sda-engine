@@ -1787,10 +1787,34 @@ axboot.modal = function () {
      */
     var open = function open(modalConfig) {
 
-        if ("COMMON_POPUP" == modalConfig.modalType && (undefined == modalConfig.preSearch || modalConfig.preSearch)) {
-            if (modalConfig.sendData) {
-                var list = null;
-                var reqData = modalConfig.sendData();
+        if ("COMMON_POPUP" == modalConfig.modalType && modalConfig["sendData"]) {
+            var list = null;
+            var reqData = modalConfig.sendData();
+            var width = 0;
+            axboot.ajax({
+                url: "/api/v1/common/popup/getPopupInfo",
+                dataType: "JSON",
+                type: "POST",
+                async: false,
+                data: JSON.stringify({
+                    popupCode: reqData["popupCode"],
+                    isTree: false
+                }),
+                callback: function (res) {
+                    console.log(res);
+                    for(var i = 0; i < res.map.columnInfo.length; i++)
+                    {
+                        if(parseInt(res.map.columnInfo[i]["width"]))
+                        {
+                            width  += res.map.columnInfo[i]["width"];
+                        }
+                    }
+                }
+            });
+
+
+            if((undefined == modalConfig.preSearch || modalConfig.preSearch))
+            {
                 axboot.ajax({
                     url: "/api/v1/common/popup/search",
                     dataType: "JSON",
@@ -1805,13 +1829,11 @@ axboot.modal = function () {
                         list = res.list;
                     }
                 });
+                if (list.length == 1) {
+                    modalConfig.callback(list[0]);
+                    return;
+                }
             }
-
-            if (list.length == 1) {
-                modalConfig.callback(list[0]);
-                return;
-            }
-
         }
 
         modalConfig = $.extend(true, {}, defaultOption, modalConfig);
@@ -1821,7 +1843,7 @@ axboot.modal = function () {
                 if (modalConfig.param) {
                     $.extend(true, modalConfig, {iframe: {param: modalConfig.param}});
                 }
-                modalConfig = $.extend(true, {}, modalConfig, axboot.def.MODAL[modalConfig.modalType]);
+                modalConfig = $.extend(true, {}, modalConfig, axboot.def.MODAL[modalConfig.modalType],{width : width+60});
             }
         }
 

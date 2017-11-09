@@ -43,7 +43,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         console.log(data);
         axboot.ajax({
             url: "/rc/rc001/getAllNodes",
-            data: data,
+            data: $.extend({},data,{isDisplayItem : true}),
             async: false,
             callback: function (res) {
                 fnObj.iconView.setData(res.list,data.uuid == "");
@@ -626,7 +626,7 @@ fnObj.iconView = axboot.viewExtend({
                     imgTag.prop("src",imgPath+"explorer_folder"+fullStr+"_v.png").prop("alt","folder");
                     break;
                 case "item":
-                    imgTag.prop("src",imgPath+"explorer_file.png").prop("alt","folder");
+                    imgTag.prop("src",imgPath+"explorer_file.png").prop("alt","item");
                     break;
             }
             cloneTag.find(".imageTag").append(imgTag);
@@ -878,7 +878,7 @@ fnObj.treeView01 = axboot.viewExtend(axboot.commonView, {
                 case "item":
                     iconObj =
                         {
-                            open:false, icon:"/assets/images/ams/icon/fl.png"
+                            open:false, icon:"/assets/images/ams/icon/fi.png"
                         };
                     break;
             }

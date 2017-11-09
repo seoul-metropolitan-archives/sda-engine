@@ -129,7 +129,7 @@
             },
             "COMMON_POPUP": {
                 width: 700,
-                height: 500,
+                height: 510,
                 iframe: {
                     url: "/common/common-popup"
                 },
