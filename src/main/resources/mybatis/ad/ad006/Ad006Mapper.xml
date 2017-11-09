@@ -47,7 +47,7 @@
 
     </select>
 
-    <select id="getEntityColumnList" resultType="Ad00602VO" parameterType="Ad00602VO" statementType="PREPARED">
+    <select id="getEntityColumnList" resultType="Ad00602VO" parameterType="Ad00601VO" statementType="PREPARED">
         <![CDATA[
       SELECT Z1.*
             , Z2.COMMENTS AS comments
@@ -58,9 +58,9 @@
             , BB.ENTITY_COLUMN_UUID             as  entityColumnUuid
             , BB.ENTITY_TYPE_UUID               as  entityTypeUuid
             , BB.GLOSSARY_UUID                  as  glossaryUuid
-            , CC.TERM_CODE                      as  termCode
-            , CC.TERM_NAME                      as  termName
-            , FC_AD_CODE_NM(CC.DATA_TYPE_UUID)  as  dataType1
+            , BB.TERM_CODE                      as  termCode
+            , BB.TERM_NAME                      as  termName
+            , FC_AD_CODE_NM(BB.DATA_TYPE_UUID)  as  dataType1
             , BB.AUDIT_YN                       as  auditYN
             , BB.DESCRIPTION                    as  description
             , BB.NOTES                          as  notes
@@ -73,20 +73,39 @@
         , <include refid="Common.UserName"><property name="userUuid" value="UPDATE_UUID"/></include> as updateUuid
         <![CDATA[
             , BB.UPDATE_DATE                    as  updateDate
-        FROM AD_ENTITY_TYPE AA
-            , AD_ENTITY_COLUMN BB
-            , AD_GLOSSARY CC
+        FROM AD_ENTITY_TYPE AA,
+            (
+       SELECT AAA.ENTITY_COLUMN_UUID,
+               AAA.ENTITY_TYPE_UUID,
+               AAA.GLOSSARY_UUID,
+               BBB.TERM_CODE,
+               BBB.TERM_NAME,
+               FC_AD_CODE_NM (BBB.DATA_TYPE_UUID) as DATA_TYPE_UUID,
+               AAA.AUDIT_YN,
+               AAA.DESCRIPTION,
+               AAA.NOTES,
+               AAA.USE_YN,
+               BBB.INSERT_UUID,
+               BBB.INSERT_DATE,
+               BBB.UPDATE_UUID,
+               BBB.UPDATE_DATE
+               FROM AD_ENTITY_COLUMN AAA, AD_GLOSSARY BBB
+            WHERE AAA.GLOSSARY_UUID = BBB.GLOSSARY_UUID(+)
+            ) BB
         WHERE
-            AA.ENTITY_TYPE_UUID = BB.ENTITY_TYPE_UUID
+            AA.ENTITY_TYPE_UUID = BB.ENTITY_TYPE_UUID(+)
             AND
-            BB.GLOSSARY_UUID = CC.GLOSSARY_UUID ) Z1
-            ,(SELECT A.TABLE_NAME, A.COLUMN_NAME, B.COMMENTS, A.DATA_TYPE, A.NULLABLE FROM ALL_TAB_COLUMNS A, ALL_COL_COMMENTS B WHERE A.TABLE_NAME = B.TABLE_NAME AND  A.COLUMN_NAME = B.COLUMN_NAME) Z2
+            AA.ENTITY_TYPE_CODE = #{entityType} ) Z1
+            ,(SELECT A.TABLE_NAME, A.COLUMN_NAME, B.COMMENTS, A.DATA_TYPE, A.NULLABLE
+                FROM ALL_TAB_COLUMNS A, ALL_COL_COMMENTS B
+               WHERE A.TABLE_NAME = B.TABLE_NAME
+               AND  A.COLUMN_NAME = B.COLUMN_NAME
+               AND  A.TABLE_NAME = #{entityType}) Z2
          WHERE
-            Z1.entityTypeCode = Z2.TABLE_NAME(+)
+            Z1.entityTypeCode(+) = Z2.TABLE_NAME
             AND
-            Z1.termCode = Z2.COLUMN_NAME(+)
-            AND
-            Z1.entityTypeUuid = #{entityTypeUuid}
+            Z1.termCode(+) = Z2.COLUMN_NAME
+
             ]]>
 
     </select>

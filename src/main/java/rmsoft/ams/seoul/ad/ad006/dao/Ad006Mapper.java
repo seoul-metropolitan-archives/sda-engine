@@ -12,7 +12,7 @@ import java.util.List;
 public interface Ad006Mapper extends MyBatisMapper
 {
     List<Ad00601VO> searchEntityType(Ad00601VO param);
-    List<Ad00602VO> getEntityColumnList(Ad00602VO param);
+    List<Ad00602VO> getEntityColumnList(Ad00601VO param);
 
     int checkEntityType(String param);
 
