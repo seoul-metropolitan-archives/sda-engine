@@ -137,6 +137,16 @@
                     title: "팝업"
                 }
             },
+            "WORKFLOW_POPUP_01": {
+                width: 1340,
+                height: 430,
+                iframe: {
+                    url: "/wf/wf003/wf003-p01"
+                },
+                header: {
+                    title: "Job Parameter"
+                }
+            }
         };
     }
 

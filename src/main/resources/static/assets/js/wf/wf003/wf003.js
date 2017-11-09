@@ -88,7 +88,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             param: "",
             sendData: function () {
                 return {
-                    //jisaCode: fnObj.formView02.getData().jisaCode
+                    "workflowUuid": data.workflowUuid
                 };
             },
             callback: function (data) {
@@ -217,6 +217,11 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     },
     itemClick: function (data, index) {
         if (data.workflowUuid != null && data.workflowUuid != "") {
+
+            if(index.fieldIndex == 5 && index.fieldName == "Run"){
+                ACTIONS.dispatch(ACTIONS.MODAL_OPEN, data);
+            }
+
             if (fnObj.gridView02.isChangeData() == true) {
                 axDialog.confirm({
                     msg: axboot.getCommonMessage("AA006")

@@ -8,6 +8,7 @@ import io.onsemiro.controller.BaseController;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import rmsoft.ams.seoul.utils.CommonCodeUtils;
 
 /**
@@ -27,9 +28,9 @@ public class Wf003ViewRouter extends BaseController {
         return "/wf/wf003/wf003";
     }
 
-    @GetMapping("/wf/wf003/wf003_p01")
+    @PostMapping("/wf/wf003/wf003-p01")
     public String viewPopup(ModelMap model) {
-        return "/wf/wf003/wf003_p01";
+        return "/wf/wf003/wf003-p01";
     }
 }
 

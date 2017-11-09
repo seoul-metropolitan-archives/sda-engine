@@ -9,8 +9,8 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH: function (caller, act, data) {
         axboot.ajax({
             type: "GET",
-            url: "/api/v1/wf003/p/01/list",
-            data: $.extend({}, {pageSize: 1000}, this.formView.getData()),
+            url: "/api/v1/wf003/02/list",
+            data: $.extend({}, {pageSize: 1000}, parent.axboot.modal.getData(), this.formView.getData()),
             callback: function (res) {
                 fnObj.gridView01.setData(res.list);
 

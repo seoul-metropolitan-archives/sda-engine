@@ -65,8 +65,8 @@ var wf00301 =
                 },
                 {
                     sortNo: 6,
-                    name: "",
-                    text: "",
+                    name: "Run",
+                    text: "Run",
                     width: 100,
                     editable: true,
                     renderer: {

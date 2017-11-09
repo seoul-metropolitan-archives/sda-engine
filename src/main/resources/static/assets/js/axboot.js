@@ -1802,19 +1802,16 @@ axboot.modal = function () {
                 }),
                 callback: function (res) {
                     console.log(res);
-                    for(var i = 0; i < res.map.columnInfo.length; i++)
-                    {
-                        if(parseInt(res.map.columnInfo[i]["width"]))
-                        {
-                            width  += res.map.columnInfo[i]["width"];
+                    for (var i = 0; i < res.map.columnInfo.length; i++) {
+                        if (parseInt(res.map.columnInfo[i]["width"])) {
+                            width += res.map.columnInfo[i]["width"];
                         }
                     }
                 }
             });
 
 
-            if((undefined == modalConfig.preSearch || modalConfig.preSearch))
-            {
+            if ((undefined == modalConfig.preSearch || modalConfig.preSearch)) {
                 axboot.ajax({
                     url: "/api/v1/common/popup/search",
                     dataType: "JSON",
@@ -1843,7 +1840,7 @@ axboot.modal = function () {
                 if (modalConfig.param) {
                     $.extend(true, modalConfig, {iframe: {param: modalConfig.param}});
                 }
-                modalConfig = $.extend(true, {}, modalConfig, axboot.def.MODAL[modalConfig.modalType],{width : width+60});
+                modalConfig = $.extend(true, {}, modalConfig, axboot.def.MODAL[modalConfig.modalType], {width: axboot.def.MODAL[modalConfig.modalType].width + 60});
             }
         }
 
@@ -2920,9 +2917,17 @@ axboot.commonCodeFilter = function (categoryCode) {
 }
 
 axboot.getCommonMessage = function (messageCode) {
-    var commonMessage = parent.COMMON_MESSAGE.filter(function (item) {
-        return item.messageCode === messageCode;
-    });
+    var commonMessage = "";
+
+    if (parent.COMMON_MESSAGE) {
+        commonMessage = parent.COMMON_MESSAGE.filter(function (item) {
+            return item.messageCode === messageCode;
+        });
+    } else if (parent.parent.COMMON_MESSAGE) {
+        commonMessage = parent.parent.COMMON_MESSAGE.filter(function (item) {
+            return item.messageCode === messageCode;
+        });
+    }
 
     if (commonMessage.length > 0) {
         return commonMessage[0].messageName;
