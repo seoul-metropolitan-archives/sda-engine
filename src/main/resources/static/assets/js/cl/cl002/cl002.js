@@ -197,6 +197,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     {
         axboot.modal.open({
             modalType: "COMMON_POPUP",
+            preSearch : data["preSearch"],
             sendData: function () {
                 return data;
             },
@@ -215,6 +216,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     {
         axboot.modal.open({
             modalType: "COMMON_POPUP",
+            preSearch : data["preSearch"],
             sendData: function () {
                 return data;
             },
@@ -288,14 +290,12 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
     initEvent: function () {
         var _this = this;
         $("input[data-ax-path='classificationCode']").parents().eq(1).find("a").click(function(){
-            if("" != $("input[data-ax-path='classificationCode']").val().trim())
-            {
                 var data = {
                     popupCode : "PU101",
-                    searchData : $("input[data-ax-path='classificationCode']").val().trim()
+                    searchData : $("input[data-ax-path='classificationCode']").val().trim(),
+                    preSearch : false
                 };
                 ACTIONS.dispatch(ACTIONS.SEARCH_CLASS_SCH,data);
-            }
         });
         $("input[data-ax-path='classificationCode']").focusout(function(){
 
@@ -309,14 +309,12 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
             }
         });
         $("input[data-ax-path='parentClassCode']").parents().eq(1).find("a").click(function(){
-            if("" != $("input[data-ax-path='parentClassCode']").val().trim())
-            {
                 var data = {
                     popupCode : "PU115",
-                    searchData : $("input[data-ax-path='parentClassCode']").val().trim()
+                    searchData : $("input[data-ax-path='parentClassCode']").val().trim(),
+                    preSearch : false
                 };
                 ACTIONS.dispatch(ACTIONS.SEARCH_CLASS_CCD,data);
-            }
         });
         $("input[data-ax-path='parentClassCode']").focusout(function(){
 
@@ -414,6 +412,27 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
             fitStyle:"evenFill"
         });
         this.gridObj.itemClick(this.itemClick);
+        this.bindEvent();
+    },
+    bindEvent : function()
+    {
+        var _this = this;
+        $(".open_close.expendAll").click(function(){
+            _this.gridObj.expandAll();
+        });
+        $(".open_close.collapseAll").click(function(){
+            _this.gridObj.collapseAll();
+        });
+        $("#leftMenuParam").keydown(function(event){
+            if(13 == event.keyCode)
+                $("#searchLeftMenu").click();
+        })
+        $("#searchLeftMenu").click(function(){
+            if("" != $("#leftMenuParam").val())
+            {
+                _this.gridObj.search(["classTreeName"],$("#leftMenuParam").val())
+            }
+        });
     },
     setData: function (list) {
         this.gridObj.setTreeDataForArray(list, "orderKey1");

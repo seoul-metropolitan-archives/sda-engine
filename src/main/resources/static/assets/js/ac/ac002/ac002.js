@@ -355,7 +355,28 @@ fnObj.leftMenuView = axboot.viewExtend({
                 }));
             }
         });
+        this.initEvent();
         //console.log(leftMenuItems);
+    },
+    initEvent : function()
+    {
+        var _this = this;
+        $(".open_close.expendAll").click(function(){
+            _this.gridObj.expandAll();
+        });
+        $(".open_close.collapseAll").click(function(){
+            _this.gridObj.collapseAll();
+        });
+        $("#leftMenuParam").keydown(function(event){
+            if(13 == event.keyCode)
+                $("#searchLeftMenu").click();        
+        })
+        $("#searchLeftMenu").click(function(){
+            if("" != $("#leftMenuParam").val())
+            {
+                _this.gridObj.search(["menuName"],$("#leftMenuParam").val())
+            }
+        });
     }
 });
 
