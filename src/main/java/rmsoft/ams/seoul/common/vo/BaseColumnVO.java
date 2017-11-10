@@ -1,15 +1,8 @@
 package rmsoft.ams.seoul.common.vo;
 
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Data
-@Setter
-@Getter
 public abstract class BaseColumnVO
 {
     private int sortNo = 0;
@@ -23,6 +16,6 @@ public abstract class BaseColumnVO
     private String textAlignment = "";
     private String defaultValue = "";
     private String treeRelationType = "";
-    private String treeColumnYN = "";
+    private String treeColumnYN = "N";
 
 }

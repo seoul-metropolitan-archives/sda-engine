@@ -15,26 +15,9 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 fnObj.gridView01.setData(res.list);
 
                 if (res.list.length > 0) {
-                    ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, res.list[0]);
-                } else {
-                    fnObj.gridView02.clearData();
+                    //ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, res.list[0]);
+                    fnObj.gridView02.initGrid(res.list[0]["jobUuid"]);
                 }
-
-            },
-            options: {
-                onError: axboot.viewError
-            }
-        });
-        return false;
-    },
-    // Parameter 조회
-    PAGE_SEARCH1: function (caller, act, data) {
-        axboot.ajax({
-            type: "GET",
-            url: "/api/v1/wf003/p/02/list",
-            data: $.extend({}, {pageSize: 1000}, data),
-            callback: function (res) {
-                fnObj.gridView02.setData(res.list);
             },
             options: {
                 onError: axboot.viewError
@@ -130,22 +113,12 @@ var ACTIONS = axboot.actionExtend(fnObj, {
 // fnObj 기본 함수 스타트와 리사이즈
 fnObj.pageStart = function () {
     var _this = this;
-
-    var parentsData = parent.axboot.modal.getData();
-    this.popupCode = parentsData["popupCode"];
+    this.parentsData = parent.axboot.modal.getData();
     //$("#searchField").val(parentsData["searchData"]);
 
     //TODO 추후에 삭제될 내용으로 /실제 Grid의 컬럼 정보는 DB에서 가져올 예정
     $.ajax({
         url: "/assets/js/column_info/wf00301_p01_01.js",
-        dataType: "script",
-        async: false,
-        success: function () {
-        }
-    });
-
-    $.ajax({
-        url: "/assets/js/column_info/wf00301_p01_02.js",
         dataType: "script",
         async: false,
         success: function () {
@@ -174,11 +147,11 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
     initEvent: function () {
         var _this = this;
 
-        $("#okPopup").click(function(){
+        $("#okPopup").click(function () {
             ACTIONS.dispatch(ACTIONS.PAGE_CHOICE);
             ACTIONS.dispatch(ACTIONS.PAGE_CLOSE);
         });
-        $("#closePopup").click(function(){
+        $("#closePopup").click(function () {
             ACTIONS.dispatch(ACTIONS.PAGE_CLOSE);
         });
     },
@@ -235,7 +208,9 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     },
     itemClick: function (data, index) {
         if (data.jobUuid != null && data.jobUuid != "") {
-            if (fnObj.gridView02.isChangeData() == true) {
+            fnObj.gridView02.initGrid(data["jobUuid"]);
+
+            /*if (fnObj.gridView02.isChangeData() == true) {
                 axDialog.confirm({
                     msg: axboot.getCommonMessage("AA006")
                 }, function () {
@@ -247,52 +222,54 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
                 });
             } else {
                 ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, data);
-            }
+            }*/
         }
     }
 });
+
+
 fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
-    page: {
-        pageNumber: 0,
-        pageSize: 10000
-    },
     tagId: "realgrid02",
-    entityName: "Parameter",
-    primaryKey: "parameterUuid",
-    parentsUuidFieldName: "jobUuid",
-    parentsGrid: fnObj.gridView01,
+    entityName: "",
     initView: function () {
-        this.initInstance();
-        this.gridObj.setFixedOptions({
-            colCount: 1
-        });
-        this.setColumnInfo(wf00301_p01_02.column_info);
-        this.makeGrid();
-
-        var codes = axboot.commonCodeFilter("CD128").codeArr;
-        var names = axboot.commonCodeFilter("CD128").nameArr;
-        var enableList = new Array();
-        for (var i = 0; i < names.length; i++) {
-            if (names[i] == "팝업" || names[i] == "콤보") {
-                enableList.push(codes[i]);
-            }
-        }
+    },
+    initGrid: function (jobUuid) {
         var _this = this;
-        this.gridObj.onEditChange(function (grid, index, value) {
-            _this.gridObj.setCustomCellStyleRows("disable", function (row) {
-                var result = false;
-                for (var rowIndex = 0; rowIndex < enableList.length; rowIndex++) {
-                    if (row["inputMethodUuid"] == enableList[rowIndex]) {
-                        result = false;
-                        break;
-                    }
-                    else
-                        result = true;
-                }
-                return result;
-            }, ["inputCodeUuid"], false);
+        axboot.ajax({
+            url: "/api/v1/wf003/p/02/getPopupInfo",
+            async: false,
+            data: {"jobUuid": jobUuid},
+            callback: function (res) {
+                res = eval(res.map);
 
+                fnObj.gridView02.gridObj = new GridWrapper(fnObj.gridView02.tagId, "/assets/js/libs/realgrid");
+                fnObj.gridView02.gridObj.setGridStyle("100%", "100%");
+                fnObj.gridView02.gridObj.setEntityName(fnObj.gridView02.entityName);
+                fnObj.gridView02.gridObj.setColumnInfo(res.columnInfo);
+                fnObj.gridView02.gridObj.makeGrid();
+                fnObj.gridView02.gridObj.addRow();
+
+                $("#realgrid02").fadeIn(100);
+            }
         });
+    },
+    initEvent: function () {
+        /*fnObj.gridView01.gridObj.onKeydown(function (grid, key, ctrl, shift, alt) {
+            switch (key) {
+                case 13:
+                    ACTIONS.dispatch(ACTIONS.PAGE_CHOICE);
+                    ACTIONS.dispatch(ACTIONS.PAGE_CLOSE);
+                    break;
+            }
+        });*/
+    },
+    setData: function (list) {
+        this.gridObj.setData("set", list);
+
+        $("#popupGrid01").fadeIn(100);
+    },
+    getData: function () {
+        return this.gridObj.getSelectedData();
     }
 });
 

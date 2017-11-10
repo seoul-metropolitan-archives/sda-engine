@@ -8,6 +8,15 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="rmsoft.ams.seoul.wf.wf003.dao.Wf003Mapper">
+    <resultMap id="columnInfoVO" type="rmsoft.ams.seoul.common.vo.BaseColumnVO">
+        <discriminator javaType="String" column="dataType">
+            <case resultType="rmsoft.ams.seoul.common.vo.TextColumnVO" value="text"></case>
+            <case resultType="rmsoft.ams.seoul.common.vo.ComboColumnVO" value="combo"></case>
+            <case resultType="rmsoft.ams.seoul.common.vo.DateColumnVO" value="date"></case>
+            <case resultType="rmsoft.ams.seoul.common.vo.PopupColumnVO" value="popup"></case>
+        </discriminator>
+    </resultMap>
+
     <select id="findAllWorkflow" resultType="Wf00301VO" parameterType="Wf00301VO" statementType="PREPARED">
         SELECT
             Z.WORKFLOW_UUID as workflowUuid,
@@ -169,5 +178,42 @@
                         WHERE
                             Z1.JOB_UUID = #{jobUuid}
                  ) ZZ1
+    </select>
+
+    <select id="getColumnInfo" resultMap="columnInfoVO" parameterType="String" statementType="PREPARED">
+        SELECT ZZ1.sortNo,
+               ZZ1.name,
+               ZZ1.textAlignment,
+               ZZ1.dataType,
+               CASE WHEN ZZ1.dataType = 'combo'
+                        THEN 'axboot.commonCodeFilter("'|| (SELECT CATEGORY_CODE FROM AD_CODE_HEADER WHERE CODE_HEADER_UUID = ZZ1.INPUT_CODE_UUID) ||'").codeArr'
+                    ELSE ''
+               END as "values",
+               CASE WHEN ZZ1.dataType = 'combo'
+                        THEN 'axboot.commonCodeFilter("'|| (SELECT CATEGORY_CODE FROM AD_CODE_HEADER WHERE CODE_HEADER_UUID = ZZ1.INPUT_CODE_UUID) ||'").nameArr'
+                    ELSE ''
+               END as "labels",
+               CASE WHEN ZZ1.dataType = 'popup'
+                        THEN (SELECT POPUP_CODE FROM AD_POPUP_HEADER WHERE POPUP_HEADER_UUID = ZZ1.INPUT_CODE_UUID)
+                    ELSE ''
+               END as "popupCode",
+               CASE WHEN ZZ1.dataType = 'popup'
+                        THEN '{UUID: "inputCodeUuid", NAME: "inputCodeName", CODE: "inputCode"}'
+                    ELSE ''
+               END as "sqlColumn",
+               ZZ1.defaultValue,
+               ZZ1.width
+          FROM (
+                SELECT rownum as sortNo,
+                       Z1.PARAMETER_NAME as name,
+                       'left' as textAlignment,
+                       (SELECT LOWER(CODE) FROM AD_CODE_DETAIL WHERE CODE_DETAIL_UUID = Z1.INPUT_METHOD_UUID) as dataType,
+                       Z1.DEFAULT_VALUE as defaultValue,
+                       210 as width,
+                       Z1.INPUT_CODE_UUID
+                  FROM
+                      WF_PARAMETER Z1
+                 WHERE Z1.JOB_UUID = #{jobUuid}
+         ) ZZ1
     </select>
 </mapper>

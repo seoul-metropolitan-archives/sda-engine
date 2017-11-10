@@ -29,7 +29,9 @@ import rmsoft.ams.seoul.wf.wf003.vo.Wf00301_P0102VO;
 import rmsoft.ams.seoul.wf.wf003.vo.Wf00302VO;
 
 import javax.inject.Inject;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * The type Ac 005 service.
@@ -217,5 +219,11 @@ public class Wf003Service extends BaseService {
             }
         }
         return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");
+    }
+
+    public Map<String, Object> getPopupInfo(RequestParams<Wf00301_P0102VO> requestParams) {
+        Map<String, Object> popupInfo = new HashMap<String, Object>();
+        popupInfo.put("columnInfo", wf003Mapper.getColumnInfo(requestParams.getString("jobUuid")));
+        return popupInfo;
     }
 }

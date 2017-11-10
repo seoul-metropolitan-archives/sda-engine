@@ -1,10 +1,10 @@
 package rmsoft.ams.seoul.common.vo;
 
-import java.util.ArrayList;
-import java.util.List;
+import lombok.Data;
 
-public class ComboColumnVO extends BaseColumnVO{
+@Data
+public class ComboColumnVO extends BaseColumnVO {
     private boolean lookupDisplay = true;
-    private List<String> values = new ArrayList<String>();
-    private List<String> labels = new ArrayList<String>();
+    private String values = "";
+    private String labels = "";
 }

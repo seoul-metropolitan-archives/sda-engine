@@ -84,4 +84,10 @@ public class Wf003Controller extends MessageBaseController {
     public ApiResponse saveParameter(@RequestBody List<Wf00301_P0102VO> requestParams) {
         return wf003Service.saveParameter(requestParams);
     }
+
+    @RequestMapping("/p/02/getPopupInfo")
+    public Responses.MapResponse getPopupInfo(RequestParams<Wf00301_P0102VO> requestParams) {
+
+        return Responses.MapResponse.of(wf003Service.getPopupInfo(requestParams));
+    }
 }

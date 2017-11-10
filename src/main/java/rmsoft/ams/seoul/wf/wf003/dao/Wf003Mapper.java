@@ -5,6 +5,7 @@
 package rmsoft.ams.seoul.wf.wf003.dao;
 
 import io.onsemiro.core.mybatis.MyBatisMapper;
+import rmsoft.ams.seoul.common.vo.BaseColumnVO;
 import rmsoft.ams.seoul.wf.wf003.vo.Wf00301VO;
 import rmsoft.ams.seoul.wf.wf003.vo.Wf00301_P0101VO;
 import rmsoft.ams.seoul.wf.wf003.vo.Wf00301_P0102VO;
@@ -27,4 +28,6 @@ public interface Wf003Mapper extends MyBatisMapper {
     List<Wf00301_P0101VO> findAllJob(Wf00301_P0101VO wf00301_p0101VO);
 
     List<Wf00301_P0102VO> findParameter(String jobUuid);
+
+    List<BaseColumnVO> getColumnInfo(String jobUuid);
 }
