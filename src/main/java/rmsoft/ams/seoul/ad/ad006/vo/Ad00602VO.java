@@ -15,6 +15,7 @@ public class Ad00602VO extends BaseVO
     private String glossaryUuid;
     private String termCode;
     private String termName;
+    private String columnName;
     private String dataType1;
     private String comments;
     private String dataType2;

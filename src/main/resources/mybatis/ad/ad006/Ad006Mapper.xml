@@ -49,62 +49,56 @@
 
     <select id="getEntityColumnList" resultType="Ad00602VO" parameterType="Ad00601VO" statementType="PREPARED">
         <![CDATA[
-      SELECT Z1.*
-            , Z2.COMMENTS AS comments
-            , Z2.DATA_TYPE AS dataType2
-            , Z2.NULLABLE AS nullable
-        FROM(
-      SELECT AA.ENTITY_TYPE_CODE               as  entityTypeCode
-            , BB.ENTITY_COLUMN_UUID             as  entityColumnUuid
-            , BB.ENTITY_TYPE_UUID               as  entityTypeUuid
-            , BB.GLOSSARY_UUID                  as  glossaryUuid
-            , BB.TERM_CODE                      as  termCode
-            , BB.TERM_NAME                      as  termName
-            , FC_AD_CODE_NM(BB.DATA_TYPE_UUID)  as  dataType1
-            , BB.AUDIT_YN                       as  auditYN
-            , BB.DESCRIPTION                    as  description
-            , BB.NOTES                          as  notes
-            , BB.USE_YN                         as  useYN
-            ]]>
-        , <include refid="Common.UserName"><property name="userUuid" value="INSERT_UUID"/></include> as insertUuid
-        <![CDATA[
-            , BB.INSERT_DATE                    as  insertDate
-            ]]>
-        , <include refid="Common.UserName"><property name="userUuid" value="UPDATE_UUID"/></include> as updateUuid
-        <![CDATA[
-            , BB.UPDATE_DATE                    as  updateDate
-        FROM AD_ENTITY_TYPE AA,
-            (
-       SELECT AAA.ENTITY_COLUMN_UUID,
-               AAA.ENTITY_TYPE_UUID,
-               AAA.GLOSSARY_UUID,
-               BBB.TERM_CODE,
-               BBB.TERM_NAME,
-               FC_AD_CODE_NM (BBB.DATA_TYPE_UUID) as DATA_TYPE_UUID,
-               AAA.AUDIT_YN,
-               AAA.DESCRIPTION,
-               AAA.NOTES,
-               AAA.USE_YN,
-               BBB.INSERT_UUID,
-               BBB.INSERT_DATE,
-               BBB.UPDATE_UUID,
-               BBB.UPDATE_DATE
-               FROM AD_ENTITY_COLUMN AAA, AD_GLOSSARY BBB
-            WHERE AAA.GLOSSARY_UUID = BBB.GLOSSARY_UUID(+)
-            ) BB
-        WHERE
-            AA.ENTITY_TYPE_UUID = BB.ENTITY_TYPE_UUID(+)
-            AND
-            AA.ENTITY_TYPE_CODE = #{entityType} ) Z1
-            ,(SELECT A.TABLE_NAME, A.COLUMN_NAME, B.COMMENTS, A.DATA_TYPE, A.NULLABLE
+      SELECT Z2.ENTITY_COLUMN_UUID AS entityColumnUuid,
+              Z2.ENTITY_TYPE_UUID AS entityTypeUuid,
+              Z2.GLOSSARY_UUID AS glossaryUuid,
+              Z2.TERM_CODE AS termCode,
+              Z2.TERM_NAME AS termName,
+              FC_AD_CODE_NM (Z2.DATA_TYPE_UUID) AS dataType1,
+              Z1.COLUMN_NAME AS columnName,
+              Z1.COMMENTS AS comments,
+              Z1.DATA_TYPE AS dataType2,
+              Z1.NULLABLE AS nullable,
+              Z2.AUDIT_YN AS auditYN,
+              Z2.DESCRIPTION AS description,
+              Z2.NOTES AS notes,
+              Z2.USE_YN AS useYN,
+              FC_AC_USER_NM (Z2.INSERT_UUID) AS insertUuid,
+              Z2.INSERT_DATE  AS insertDate,
+              FC_AC_USER_NM (Z2.UPDATE_UUID) AS updateUuid,
+              Z2.UPDATE_DATE AS updateDate
+        FROM (SELECT A.TABLE_NAME,
+                      A.COLUMN_NAME,
+                      B.COMMENTS,
+                      A.DATA_TYPE,
+                      A.NULLABLE,
+                      A.COLUMN_ID
                 FROM ALL_TAB_COLUMNS A, ALL_COL_COMMENTS B
-               WHERE A.TABLE_NAME = B.TABLE_NAME
-               AND  A.COLUMN_NAME = B.COLUMN_NAME
-               AND  A.TABLE_NAME = #{entityType}) Z2
-         WHERE
-            Z1.entityTypeCode(+) = Z2.TABLE_NAME
-            AND
-            Z1.termCode(+) = Z2.COLUMN_NAME
+               WHERE     A.TABLE_NAME = B.TABLE_NAME
+                     AND A.COLUMN_NAME = B.COLUMN_NAME
+                     AND A.TABLE_NAME = #{entityType}) Z1,
+         (SELECT A.ENTITY_TYPE_CODE,
+                  B.ENTITY_COLUMN_UUID,
+                  B.ENTITY_TYPE_UUID,
+                  B.GLOSSARY_UUID,
+                  C.TERM_CODE,
+                  C.TERM_NAME,
+                  C.DATA_TYPE_UUID,
+                  B.AUDIT_YN,
+                  B.DESCRIPTION,
+                  B.NOTES,
+                  B.USE_YN,
+                  B.INSERT_UUID,
+                  B.INSERT_DATE,
+                  B.UPDATE_UUID,
+                  B.UPDATE_DATE
+            FROM AD_ENTITY_TYPE A, AD_ENTITY_COLUMN B, AD_GLOSSARY C
+           WHERE     1 = 1
+                 AND A.ENTITY_TYPE_UUID = B.ENTITY_TYPE_UUID
+                 AND C.GLOSSARY_UUID = B.GLOSSARY_UUID
+                 AND A.ENTITY_TYPE_CODE = #{entityType}) Z2
+       WHERE Z1.COLUMN_NAME = Z2.TERM_CODE(+)
+       ORDER BY Z1.COLUMN_ID
 
             ]]>
 
