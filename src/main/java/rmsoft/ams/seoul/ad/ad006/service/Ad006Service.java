@@ -71,6 +71,13 @@ public class Ad006Service extends BaseService {
         AdEntityColumn orgAdEntityColumn = null;
 
         for (AdEntityColumn adEntityColumn : adEntityColumnList) {
+            if(adEntityColumn.isModified()){
+                if(adEntityColumn.getEntityColumnUuid()==null){
+                    adEntityColumn.set__created__(true);
+                    adEntityColumn.set__modified__(false);
+                }
+            }
+
             if (adEntityColumn.isCreated()) {
                 adEntityColumn.setEntityColumnUuid(UUIDUtils.getUUID());
                 adEntityColumnRepository.save(adEntityColumn);

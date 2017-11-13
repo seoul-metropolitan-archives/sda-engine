@@ -50,7 +50,7 @@
     <select id="getEntityColumnList" resultType="Ad00602VO" parameterType="Ad00601VO" statementType="PREPARED">
         <![CDATA[
       SELECT Z2.ENTITY_COLUMN_UUID AS entityColumnUuid,
-              Z2.ENTITY_TYPE_UUID AS entityTypeUuid,
+              NVL(Z2.ENTITY_TYPE_UUID,(SELECT ENTITY_TYPE_UUID FROM AD_ENTITY_TYPE WHERE ENTITY_TYPE_CODE = #{entityType})) AS entityTypeUuid,
               Z2.GLOSSARY_UUID AS glossaryUuid,
               Z2.TERM_CODE AS termCode,
               Z2.TERM_NAME AS termName,
@@ -59,10 +59,10 @@
               Z1.COMMENTS AS comments,
               Z1.DATA_TYPE AS dataType2,
               Z1.NULLABLE AS nullable,
-              Z2.AUDIT_YN AS auditYN,
+              NVL(Z2.AUDIT_YN,'N') AS auditYN,
               Z2.DESCRIPTION AS description,
               Z2.NOTES AS notes,
-              Z2.USE_YN AS useYN,
+              NVL(Z2.USE_YN,'N') AS useYN,
               FC_AC_USER_NM (Z2.INSERT_UUID) AS insertUuid,
               Z2.INSERT_DATE  AS insertDate,
               FC_AC_USER_NM (Z2.UPDATE_UUID) AS updateUuid,

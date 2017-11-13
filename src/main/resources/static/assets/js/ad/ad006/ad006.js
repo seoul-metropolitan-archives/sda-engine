@@ -242,6 +242,10 @@ fnObj.gridView_h = axboot.viewExtend(axboot.realGridView, {
                     {
                         ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
                     }
+                    else
+                    {
+                        ACTIONS.dispatch(ACTIONS.GET_ENTITY_DETAIL, data);
+                    }
                 });
             }
         });

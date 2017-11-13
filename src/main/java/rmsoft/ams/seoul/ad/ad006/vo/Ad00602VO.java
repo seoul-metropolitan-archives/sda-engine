@@ -20,7 +20,7 @@ public class Ad00602VO extends BaseVO
     private String comments;
     private String dataType2;
     private String nullable;
-    private String auditYN;
-    private String useYN;
+    private String auditYN = "N";
+    private String useYN = "N";
 
 }
