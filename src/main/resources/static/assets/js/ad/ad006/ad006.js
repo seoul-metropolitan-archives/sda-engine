@@ -287,6 +287,7 @@ fnObj.gridView_d = axboot.viewExtend(axboot.realGridView, {
         this.makeGrid();
         this.gridObj.addRowBeforeEvent(this.addRowBeforeEvent);
         this.gridObj.onRowsPasted(this.onRowsPasted);
+        this.gridObj.popupCallback(this.popupCallback);
     },
     clear : function () {
         this.setData([]);
@@ -304,6 +305,11 @@ fnObj.gridView_d = axboot.viewExtend(axboot.realGridView, {
         {
             fnObj.gridView_d.gridObj.setValue(items[i],1,fnObj.gridView_h.getEntityTypeHeaderUUID());
         }
+    },
+    popupCallback : function(gridWrapper)
+    {
+        var index = gridWrapper.getCurrent();
+        gridWrapper.setValue(index.dataRow, "useYN","Y");
     }
 });
 isDataChanged = function()

@@ -432,7 +432,7 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 	}
 	
 	var popCallback = undefined;
-	var popupCallback = function(_popCallback)
+	this.popupCallback = function(_popCallback)
 	{
 		popCallback = _popCallback;
 	}
@@ -503,13 +503,14 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
                 }
                 grid.commit(true);
                 doRequiredValidation = true;
+                if(popCallback)
+                    popCallback(_this, makeObj, grid,retData);
                 if(this.close)
                     this.close();
             }
         });
 
-        if(popCallback)
-            popCallback(retData);
+
 	}
     var doRequiredValidation = true;
 	var _onEditChange = undefined;
