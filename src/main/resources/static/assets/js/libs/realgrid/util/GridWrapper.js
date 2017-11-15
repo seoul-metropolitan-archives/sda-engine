@@ -1142,10 +1142,7 @@ GridWrapper.prototype.removeRow = function()
  */
 GridWrapper.prototype.setStyle = function(style,value)
 {
-    if(style instanceof Object)
-        this.defaultStyle.header = $.extend({},this.defaultStyle,style);
-    else
-        this.defaultStyle[style] = value;
+    this.defaultStyle[style] = value;
 };
 
 /**

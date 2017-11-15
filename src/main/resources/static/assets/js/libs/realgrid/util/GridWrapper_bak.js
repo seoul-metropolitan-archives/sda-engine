@@ -1377,10 +1377,7 @@ GridWrapper.prototype.setOption = function(_gridOption) {
  */
 GridWrapper.prototype.setStyle = function(style,value)
 {
-    if(style instanceof Object)
-        defaultStyle.header = $.extend({},defaultStyle,style);
-    else
-        defaultStyle[style] = value;
+    this.defaultStyle[style] = value;
 };
 
 /**

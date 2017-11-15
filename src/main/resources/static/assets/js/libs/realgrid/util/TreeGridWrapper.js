@@ -3,7 +3,7 @@ var TreeGridWrapper = function(p_id,p_rootContext)
     var _this = GridWrapper.call(this,p_id,p_rootContext);
     var _gridDefaultOption = this.option;
     init = function () {
-        _this.defaultStyle = $.extend({}, _this.defaultStyle, this.style);
+        _this.defaultStyle = $.extend({}, _this.defaultStyle, _this.style);
         RealGridJS.setTrace(false);
         RealGridJS.setRootContext(_this.rootContext);
         _this.gridView = new RealGridJS.TreeView(_this.i_id);
@@ -29,7 +29,7 @@ var TreeGridWrapper = function(p_id,p_rootContext)
 
 
         gridView.setDisplayOptions({fitStyle: "evenFill", focusBorderWidth: 1});
-        gridView.setStyles(this.style);
+        gridView.setStyles(_this.defaultStyle);
         gridView.setEditorOptions({
             applyCellFont: true
         });

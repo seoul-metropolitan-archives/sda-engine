@@ -341,7 +341,8 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
             indicator: {visible: false},
             stateBar: {visible: false}
         });
-        this.gridObj.setStyle("tree",{});
+        this.gridObj.setStyle("header",{});
+        this.gridObj.setStyle("body",{});
         this.gridObj.setColumnInfo(ac00702.column_info).setEntityName("Menu").makeGrid();
         this.gridObj.onDataCellClicked(function (grid, index) {
             grid.commit(true);
