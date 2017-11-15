@@ -154,7 +154,7 @@ TreeGridWrapper.prototype.search = function (fieldList, value) {
     }
 }
 //데이터  반환 함수
-GridWrapper.prototype.getData = function() {
+TreeGridWrapper.prototype.getData = function() {
     this.gridView.commit(true);
 
     var dataProvider = this.gridView.getDataProvider();
