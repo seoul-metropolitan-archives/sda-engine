@@ -40,6 +40,7 @@ var ad00401 =
                 required: false,
                 visible: true,
                 required: true,
+                lookupDisplay : true,
                 values: axboot.commonCodeFilter("CD006").codeArr,
                 labels: axboot.commonCodeFilter("CD006").nameArr,
                 editor: {

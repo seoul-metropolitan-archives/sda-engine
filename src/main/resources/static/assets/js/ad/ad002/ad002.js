@@ -20,6 +20,8 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             callback: function (res) {
                 console.log(res);
                 fnObj.gridView01.setData(res.list);
+                fnObj.gridView01.resetCurrent();
+                fnObj.gridView01.setFocus();
             },
             options: {
                 onError: axboot.viewError
@@ -29,10 +31,15 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SAVE: function (caller, act, data) {
         if(fnObj.gridView01.getData().length < 1)
             return ;
+        var list = fnObj.gridView01.getData();
+
+        if(list.length < 1)
+            return ;
 
         axboot.ajax({
             type: "POST",
             url: "/ad/ad002/save.do",
+            async : false,
             data: JSON.stringify(fnObj.gridView01.getData()),
             callback: function (res) {
                 axToast.push(axboot.getCommonMessage("AA007"));
@@ -126,21 +133,19 @@ fnObj.searchView = axboot.viewExtend(axboot.formView,{
 
 })
 
-fnObj.gridView01 = axboot.viewExtend(axboot.realGridView, {
+fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     tagId : "realgrid01",
     initView: function ()
     {
-        this.gridObj.setColumnInfo(ad00201.column_info);
-        this.gridObj.setEntityName($("#realgridName").text());
-        this.gridObj.makeGrid();
-        this.gridObj.itemClick(function(data){
-            console.log(data);
-        });
+        this.initInstance();
+        this.setColumnInfo(ad00201.column_info);
+        this.setEntityName($("#realgridName").text());
+        this.makeGrid();
         ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
     }
 });
 
 isDataChanged = function()
 {
-    return (fnObj.gridView01.isChangeData() == true) 
+    return (fnObj.gridView01.isChangeData() == true)
 }

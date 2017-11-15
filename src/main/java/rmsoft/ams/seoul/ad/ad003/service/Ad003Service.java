@@ -1,5 +1,6 @@
 package rmsoft.ams.seoul.ad.ad003.service;
 
+import com.querydsl.core.types.Predicate;
 import io.onsemiro.core.api.response.ApiResponse;
 import io.onsemiro.core.code.ApiStatus;
 import io.onsemiro.core.domain.BaseService;
@@ -14,6 +15,7 @@ import rmsoft.ams.seoul.ad.ad003.vo.Ad00302VO;
 import rmsoft.ams.seoul.ad.ad003.vo.Ad00303VO;
 import rmsoft.ams.seoul.common.domain.AdCodeDetail;
 import rmsoft.ams.seoul.common.domain.AdCodeHeader;
+import rmsoft.ams.seoul.common.domain.QAdCodeDetail;
 import rmsoft.ams.seoul.common.repository.AdCodeDetailRepository;
 import rmsoft.ams.seoul.common.repository.AdCodeHeaderRepository;
 
@@ -44,7 +46,9 @@ public class Ad003Service extends BaseService {
         List<AdCodeHeader> adCodeHeaderList = ModelMapperUtils.mapList(ad00301VOList, AdCodeHeader.class);
 
         AdCodeHeader orgAdCodeHeader = null;
-
+        AdCodeDetail adCodeDetail = null;
+        Ad00302VO ad00302VO = null;
+        List<AdCodeDetail> adCodeDetailList = null;
         for (AdCodeHeader adCodeHeader : adCodeHeaderList) {
             if (adCodeHeader.isCreated()) {
                 //adCodeHeader.setCodeHeaderUuid(UUIDUtils.getUUID());
@@ -55,6 +59,13 @@ public class Ad003Service extends BaseService {
                 adCodeHeader.setInsertDate(orgAdCodeHeader.getInsertDate());
                 adCodeHeaderRepository.save(adCodeHeader);
             } else if (adCodeHeader.isDeleted()) {
+                ad00302VO = new Ad00302VO();
+                ad00302VO.setCodeHeaderUuid(adCodeHeader.getCodeHeaderUuid());
+                adCodeDetailList = ModelMapperUtils.mapList(mapper.getCodeDetailList(ad00302VO),AdCodeDetail.class);
+
+                if(adCodeDetailList.size() > 0)
+                    adCodeDetailRepository.delete(adCodeDetailList);
+
                 adCodeHeaderRepository.delete(adCodeHeader);
             }
 

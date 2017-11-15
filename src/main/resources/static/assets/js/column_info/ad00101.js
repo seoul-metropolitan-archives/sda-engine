@@ -37,7 +37,7 @@ var ad00101 =
                 width: 130,
                 editable: true,
                 dataType: "combo",
-                required: false,
+                required: true,
                 visible: true,
                 values: axboot.commonCodeFilter("CD006").codeArr,
                 labels: axboot.commonCodeFilter("CD006").nameArr,
