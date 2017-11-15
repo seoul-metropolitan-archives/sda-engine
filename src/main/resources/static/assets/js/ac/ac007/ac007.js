@@ -333,8 +333,8 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
         pageSize: 10000
     },
     initView: function () {
-        this.gridObj = new GridWrapper("realgrid02", "/assets/js/libs/realgrid", true);
-        this.gridObj.setIsTree(true).setGridStyle("100%", "100%").setOption({
+        this.gridObj = new TreeGridWrapper("realgrid02", "/assets/js/libs/realgrid", true);
+        this.gridObj.setGridStyle("100%", "100%").setOption({
             footer: {visible: false},
             header: {visible: true},
             checkBar: {visible: false},

@@ -275,7 +275,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.realGridView, {
  * Grid 데이터 변경 여부를 체크하기 위한 함수
  * 모든 페이지에 넣기를 권고하며, 안넣은 경우 데이터 변경여부를 확인하지 않음
  * @returns {boolean}
- */
+
 isDataChanged = function () {
     if (fnObj.gridView01.isChangeData() == true) {
         return true;
@@ -283,3 +283,4 @@ isDataChanged = function () {
         return false;
     }
 }
+ */

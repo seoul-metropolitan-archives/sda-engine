@@ -312,11 +312,13 @@ fnObj.gridView_d = axboot.viewExtend(axboot.realGridView, {
         gridWrapper.setValue(index.dataRow, "useYN","Y");
     }
 });
+/*
 isDataChanged = function()
+
 {
     if (fnObj.gridView_h.isChangeData() == true || fnObj.gridView_d.isChangeData() == true) {
         return true;
     } else {
         return false;
     }
-}
+} */

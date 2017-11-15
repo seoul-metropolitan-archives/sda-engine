@@ -144,8 +144,9 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
         ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
     }
 });
-
+/*
 isDataChanged = function()
 {
     return (fnObj.gridView01.isChangeData() == true)
 }
+*/

@@ -46,14 +46,10 @@ var TreeGridWrapper = function(p_id,p_rootContext)
 }
 TreeGridWrapper.prototype = new GridWrapper();
 TreeGridWrapper.prototype.constructor = TreeGridWrapper;
-TreeGridWrapper.prototype.option = {
-    "summaryMode": "aggregate",
-    "stateBar": {
-        "visible": false
-    },
-    "header": {"visible": false},
-    "footer": {"visible": false}
-}
+TreeGridWrapper.prototype.option.summaryMode = "aggregate";
+TreeGridWrapper.prototype.option.stateBar = { "visible": false };
+TreeGridWrapper.prototype.option.header= {"visible": false};
+TreeGridWrapper.prototype.option.footer= {"visible": false};
 TreeGridWrapper.prototype.style.header = {
     background: "linear,#f2f2f2",
     fontSize: 12,

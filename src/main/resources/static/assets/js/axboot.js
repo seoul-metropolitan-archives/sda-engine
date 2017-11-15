@@ -2732,7 +2732,7 @@ axboot.realGridView = {
 
         if ("" == this.tagId) alert("그리드 tagID를 설정해주세요.");
 
-        this.gridObj = new GridWrapper(this.tagId, "/assets/js/libs/realgrid");
+        this.gridObj = new SimpleGridWrapper(this.tagId, "/assets/js/libs/realgrid");
         this.gridObj.setGridStyle("100%", "100%");
         this.gridObj.setEntityName(this.entityName);
     },

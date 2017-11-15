@@ -206,7 +206,7 @@ fnObj.gridView_h = axboot.viewExtend(axboot.realGridView, {
         fnObj.gridView_h.gridObj.setDefaultData(data);
     }
 });
-
+/*
 isDataChanged = function()
 {
     if (fnObj.gridView_h.isChangeData() == true) {
@@ -214,4 +214,4 @@ isDataChanged = function()
     } else {
         return false;
     }
-}
+}*/

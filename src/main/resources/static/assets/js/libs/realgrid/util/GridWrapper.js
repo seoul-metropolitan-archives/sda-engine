@@ -317,10 +317,10 @@ var GridWrapper = function(p_id,p_rootContext) {
     //==========================================================================================
     //          초기 컬럼 값 저장 영역
     //==========================================================================================
-    var defaultEditColumnProperties = new Array();
+    this.defaultEditColumnProperties = new Array();
     addDefaultEditColumnProperties = function(name,editable)
     {
-        defaultEditColumnProperties[name] = editable;
+        _this.defaultEditColumnProperties[name] = editable;
     }
 
     //==========================================================================================
@@ -1285,8 +1285,8 @@ GridWrapper.prototype.setCustomCellStyleRows = function(type, conditionFunc, col
         }
         else {
             //setting에 영향을 안받을 경우에는 기본값으로 복원
-            for (var column in defaultEditColumnProperties) {
-                grid.setColumnProperty(column, "editable", defaultEditColumnProperties[column]);
+            for (var column in this.defaultEditColumnProperties) {
+                grid.setColumnProperty(column, "editable", this.defaultEditColumnProperties[column]);
                 grid.setCellStyle(curr.dataRow, column, this.defaultStyles[column], true);
             }
         }

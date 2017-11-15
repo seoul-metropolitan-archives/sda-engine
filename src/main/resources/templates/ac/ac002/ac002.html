@@ -42,7 +42,7 @@
         var menuJson = convertJsonObj('[[${menuJson}]]');
         var commonCodeJson = convertJsonObj('[[${commonCodeJson}]]');
         var commonMessageJson = convertJsonObj('[[${commonMessageJson}]]');
-        var commonConfigJson = convertJsonObj('[[${commonConfigJson}]]');
+        //var commonConfigJson = convertJsonObj('[[${commonConfigJson}]]');
 
         var CONTEXT_PATH = 'http://[[${#httpServletRequest.serverName}]]:[[${#httpServletRequest.serverPort}]]';
         /*var CONTEXT_PATH   = 'http://[[@{${@environment.getProperty("server.url")}}]]:[[@{${@environment.getProperty("server.port")}}]]';*/
@@ -59,11 +59,11 @@
         var COMMON_MESSAGE = (function (json) {
             return json;
         })(commonMessageJson);
-
+        /*
         var COMMON_CONFIG = (function (json) {
             return json;
         })(commonConfigJson);
-
+        */
         function convertJsonObj(jsonStr) {
             return jsonStr == null || jsonStr == '' ? null : JSON.parse(jsonStr.replace(/&quot;/gi, '"').replace(/\r\n|\n/gi, "<br />"));
         }
