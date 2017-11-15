@@ -2936,6 +2936,27 @@ axboot.getCommonMessage = function (messageCode) {
     }
 }
 
+axboot.getConfigValue = function (configurationCode) {
+    var commonConfigValue = "";
+
+    if (parent.COMMON_CONFIG) {
+        commonConfigValue = parent.COMMON_CONFIG.filter(function (item) {
+            return item.configurationCode === configurationCode;
+        });
+    } else if (parent.parent.COMMON_CONFIG) {
+        commonConfigValue = parent.parent.COMMON_CONFIG.filter(function (item) {
+            return item.configurationCode === configurationCode;
+        });
+    }
+
+    if (commonConfigValue.length > 0) {
+        return commonConfigValue[0].configurationValue;
+    } else {
+        axWarningToast.push("환경설정 값이 없습니다.");
+    }
+}
+
+
 axboot.isUndefined = function (value) {
     if (typeof value === "undefined") {
         return true;
