@@ -260,8 +260,8 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
         });
     },
     getData: function () {
-        //var data = this.modelFormatter.getClearData(this.model.get()); // 모델의 값을 포멧팅 전 값으로 치환.
-        //console.log(data);
+        var data = this.modelFormatter.getClearData(this.model.get()); // 모델의 값을 포멧팅 전 값으로 치환.
+
         $("#formView01 input,#formView01 select").each(function(){
             if($(this).attr("data-ax-path"))
             {
@@ -271,6 +271,7 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
                     data[$(this).attr("data-ax-path")] = $(this).val();
             }
         });
+
         return $.extend({}, data);
     },
     setFormData: function (dataPath, value) {
