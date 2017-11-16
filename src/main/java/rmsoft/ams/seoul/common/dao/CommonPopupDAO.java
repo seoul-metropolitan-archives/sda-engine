@@ -27,6 +27,7 @@ public class CommonPopupDAO
         //param.get("searchField");\$([A-Z])*\$
 
         sql = sql.replaceAll("@([A-Za-z1-9_])*",null == param.get("searchField") ? "''" : "'"+param.get("searchField").toString()+"'");
+        sql = sql.replaceAll(";","");
         System.out.println("sql=>"+sql);
         return jdbcTemplate.queryForList(sql);
     }

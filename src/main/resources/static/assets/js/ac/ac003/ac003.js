@@ -13,9 +13,12 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 fnObj.gridView01.setFocus();
                 if (res.list.length > 0) {
                     fnObj.formView.setFormData("userNmHeader", res.list[0].userNm);
-
-                    ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, res.list[0]);
-                    ACTIONS.dispatch(ACTIONS.PAGE_SEARCH2, res.list[0]);
+                    /*
+                        2017.11.16
+                        이벤트 변경으로 인한 주석
+                    */
+                    //ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, res.list[0]);
+                    //ACTIONS.dispatch(ACTIONS.PAGE_SEARCH2, res.list[0]);
                 } else {
                     fnObj.gridView02.clearData();
                     fnObj.gridView03.clearData();

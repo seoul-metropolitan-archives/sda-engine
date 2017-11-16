@@ -38,7 +38,7 @@ var ad00402 =
                 width: 150,
                 editable: true,
                 dataType: "text",
-                required: true,
+                required: true
             },
             {
                 sortNo: 3,

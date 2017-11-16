@@ -38,7 +38,7 @@ fnObj.pageStart = function () {
 
     // TODO 추후에 삭제될 내용으로 /실제 Grid의 컬럼 정보는 DB에서 가져올 예정
     $.ajax({
-        url: "/assets/js/column_info/rc00501.js",
+        url: "/assets/js/column_info/rc00401.js",
         dataType: "script",
         async: false,
         success: function () {
@@ -103,7 +103,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     entityName: "item components",
     initView: function () {
         this.initInstance();
-        this.setColumnInfo(rc00501.column_info);
+        this.setColumnInfo(rc00401.column_info);
         this.gridObj.setOption({
             indicator: {visible: true}
         })

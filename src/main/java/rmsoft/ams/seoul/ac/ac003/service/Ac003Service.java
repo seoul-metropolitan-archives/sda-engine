@@ -22,10 +22,7 @@ import rmsoft.ams.seoul.ac.ac003.dao.Ac003Mapper;
 import rmsoft.ams.seoul.ac.ac003.vo.Ac00301VO;
 import rmsoft.ams.seoul.ac.ac003.vo.Ac00302VO;
 import rmsoft.ams.seoul.ac.ac003.vo.Ac00303VO;
-import rmsoft.ams.seoul.common.domain.AcAccessControl;
-import rmsoft.ams.seoul.common.domain.AcUser;
-import rmsoft.ams.seoul.common.domain.AcUserGroupUser;
-import rmsoft.ams.seoul.common.domain.QAcAccessControl;
+import rmsoft.ams.seoul.common.domain.*;
 import rmsoft.ams.seoul.common.repository.AcAccessControlRepository;
 import rmsoft.ams.seoul.common.repository.AcUserGroupUserRepository;
 import rmsoft.ams.seoul.common.repository.AcUserRepository;
@@ -106,8 +103,8 @@ public class Ac003Service extends BaseService {
                     acAccessControlRepository.delete(acAccessControlRepository.findAll(predicate));
 
                     // User가 삭제되므로, User Group User 도 모두 삭제
-                    QUserGroupUser qUserGroupUser = QUserGroupUser.userGroupUser;
-                    Predicate predicate1 = qUserGroupUser.userUuid.eq(acUser.getUserUuid());
+                    QAcUserGroupUser qAcUserGroupUser = QAcUserGroupUser.acUserGroupUser;
+                    Predicate predicate1 = qAcUserGroupUser.userUuid.eq(acUser.getUserUuid());
                     acUserGroupUserRepository.delete(acUserGroupUserRepository.findAll(predicate1));
 
                 } else {
