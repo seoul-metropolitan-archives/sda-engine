@@ -20,9 +20,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 public class Wf00402VO extends BaseVO {
-    private String workflowJobUuid;
+    private String jobResultUuid;
 
-    private String workflowUuid;
+    private String workflowResultUuid;
+
+    private String statusUuid;
 
     private long sequence;
 
@@ -32,9 +34,8 @@ public class Wf00402VO extends BaseVO {
 
     private String api;
 
-    private String skipYn;
+    private String startDate;
 
-    private String terminateYn;
+    private String endDate;
 
-    private String useYn;
 }

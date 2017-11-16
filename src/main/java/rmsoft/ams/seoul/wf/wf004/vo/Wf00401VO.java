@@ -20,11 +20,27 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 public class Wf00401VO extends BaseVO {
+    private String workflowResultUuid;
+
     private String workflowUuid;
+
+    private String statusUuid;
+
+    private String batchId;
 
     private String workflowName;
 
     private String serviceUuid;
 
-    private String useYn;
+    private String executerUuid;
+
+    private String munuName;
+
+    private String startDate;
+
+    private String executer;
+
+    private String menu;
+
+
 }

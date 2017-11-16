@@ -1,7 +1,7 @@
 var fnObj = {};
 
 var ACTIONS = axboot.actionExtend(fnObj, {
-    // User 정보 조회
+    // WorkflowResult 정보 조회
     PAGE_SEARCH: function (caller, act, data) {
         axboot.ajax({
             type: "GET",
@@ -24,7 +24,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         });
         return false;
     },
-    // User 그룹정보 조회
+    // JobResult 정보 조회
     PAGE_SEARCH1: function (caller, act, data) {
         axboot.ajax({
             type: "GET",
@@ -39,7 +39,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         });
         return false;
     },
-    // 퍼미션 조회
+    // ParameterResult 정보 조회
     PAGE_SEARCH2: function (caller, act, data) {
         axboot.ajax({
             type: "GET",
@@ -103,20 +103,40 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     },
     ITEM_CLICK: function (caller, act, data) {
     },
-    MODAL_OPEN: function (caller, act, data) {
+    SEARCH_POPUP_EXECUTER : function(caller, act, data)
+    {
         axboot.modal.open({
             modalType: "COMMON_POPUP",
-            param: "",
+            preSearch : data["preSearch"],
             sendData: function () {
-                return {
-                    //jisaCode: fnObj.formView02.getData().jisaCode
-                };
+                return data;
             },
             callback: function (data) {
-                //$("#calleeEmpName").val(data.empName);
-                //$("#calleeEmpTelno").val(data.empPhoneNo);
+                //fnObj.formView.setFormData("executer",data["USER_UUID"]);
+                $("input[data-ax-path='executer']").val(data["USER_NAME"])
+                $("input[data-ax-path='executer']").attr("executer",data["USER_UUID"])
 
-                this.close();
+                if(this.close)
+                    this.close();
+                //ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1,data);
+            }
+        });
+    },
+    SEARCH_POPUP_MENU : function(caller, act, data)
+    {
+        axboot.modal.open({
+            modalType: "COMMON_POPUP",
+            preSearch : data["preSearch"],
+            sendData: function () {
+                return data;
+            },
+            callback: function (data) {
+                $("input[data-ax-path='menu']").val(data["MENU_NAME"])
+                $("input[data-ax-path='menu']").attr("menu",data["MENU_UUID"])
+
+                if(this.close)
+                    this.close();
+                //ACTIONS.dispatch(ACTIONS.PAGE_SEARCH2);
             }
         });
     },
@@ -183,7 +203,7 @@ fnObj.pageStart = function () {
     _this.gridView03.initView();
 
     // Data 조회
-    ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+    ACTIONS.dispatch(ACTIONS.PAGE_SEARCH, this.formView.getData());
 
     //TODO 개발하고 지워야함
     axWarningToast.push("개발이 진행중인 화면입니다.");
@@ -191,21 +211,66 @@ fnObj.pageStart = function () {
 };
 
 fnObj.formView = axboot.viewExtend(axboot.formView, {
-    getDefaultData: function () {
-        return $.extend({}, axboot.formView.defaultData, {useYn: "Y"});
-    },
     initView: function () {
         this.target = $("#formView01");
         this.model = new ax5.ui.binder();
-        this.model.setModel(this.getDefaultData(), this.target);
+        this.model.setModel({}, this.target);
         this.modelFormatter = new axboot.modelFormatter(this.model); // 모델 포메터 시작
         this.initEvent();
     },
     initEvent: function () {
         var _this = this;
+        $("input[data-ax-path='executer']").parents().eq(1).find("a").click(function(){
+            var data = {
+                popupCode : "PU107",
+                searchData : $("input[data-ax-path='executer']").val().trim(),
+                preSearch : false
+            };
+            ACTIONS.dispatch(ACTIONS.SEARCH_POPUP_EXECUTER,data);
+        });
+        $("input[data-ax-path='executer']").focusout(function(){
+
+            if("" != $(this).val().trim())
+            {
+                var data = {
+                    popupCode : "PU107",
+                    searchData : $(this).val().trim()
+                };
+                ACTIONS.dispatch(ACTIONS.SEARCH_POPUP_EXECUTER,data);
+            }
+        });
+        $("input[data-ax-path='menu']").parents().eq(1).find("a").click(function(){
+            var data = {
+                popupCode : "PU126",
+                searchData : $("input[data-ax-path='menu']").val().trim(),
+                preSearch : false
+            };
+            ACTIONS.dispatch(ACTIONS.SEARCH_POPUP_MENU,data);
+        });
+        $("input[data-ax-path='menu']").focusout(function(){
+
+            if("" != $(this).val().trim())
+            {
+                var data = {
+                    popupCode : "PU126",
+                    searchData : $(this).val().trim()
+                };
+                ACTIONS.dispatch(ACTIONS.SEARCH_POPUP_MENU,data);
+            }
+        });
     },
     getData: function () {
-        var data = this.modelFormatter.getClearData(this.model.get()); // 모델의 값을 포멧팅 전 값으로 치환.
+        //var data = this.modelFormatter.getClearData(this.model.get()); // 모델의 값을 포멧팅 전 값으로 치환.
+        //console.log(data);
+        $("#formView01 input,#formView01 select").each(function(){
+            if($(this).attr("data-ax-path"))
+            {
+                if($(this).attr($(this).attr("data-ax-path")))
+                    data[$(this).attr("data-ax-path")] = $(this).attr($(this).attr("data-ax-path"));
+                else
+                    data[$(this).attr("data-ax-path")] = $(this).val();
+            }
+        });
         return $.extend({}, data);
     },
     setFormData: function (dataPath, value) {
@@ -237,26 +302,27 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
 });
 
 
-// AC003 User Group User GridView
 fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     page: {
         pageNumber: 0,
         pageSize: 10000
     },
     tagId: "realgrid01",
-    primaryKey: "userUuid",
-    entityName: "User",
     initView: function () {
         this.initInstance();
         this.gridObj.setFixedOptions({
             colCount: 1
         });
         this.setColumnInfo(wf00401.column_info);
+        this.gridObj.setOption({
+            checkBar: {visible: true},
+            indicator: {visible: true}
+        })
         this.makeGrid();
         this.gridObj.itemClick(this.itemClick);
     },
     itemClick: function (data, index) {
-        if (data.workflowUuid != null && data.workflowUuid != "") {
+        if (data.workflowResultUuid != null && data.workflowResultUuid != "") {
             if (fnObj.gridView02.isChangeData() == true) {
                 axDialog.confirm({
                     msg: axboot.getCommonMessage("AA006")
@@ -284,9 +350,6 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
         pageSize: 10000
     },
     tagId: "realgrid02",
-    entityName: "UserGroup",
-    primaryKey: "userGroupUserUuid",
-    parentsUuidFieldName: "userUuid",
     parentsGrid: fnObj.gridView01,
     initView: function () {
         this.initInstance();
@@ -298,7 +361,7 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
         this.gridObj.itemClick(this.itemClick);
     },
     itemClick: function (data, index) {
-        if (data.jobUuid != null && data.jobUuid != "") {
+        if (data.jobResultUuid != null && data.jobResultUuid != "") {
             if (fnObj.gridView03.isChangeData() == true) {
                 axDialog.confirm({
                     msg: axboot.getCommonMessage("AA006")
@@ -326,10 +389,7 @@ fnObj.gridView03 = axboot.viewExtend(axboot.gridView, {
         pageSize: 10000
     },
     tagId: "realgrid03",
-    entityName: "Role",
-    primaryKey: "accessControlUuid",
-    parentsUuidFieldName: "userUuid",
-    parentsGrid: fnObj.gridView01,
+    parentsGrid: fnObj.gridView02,
     initView: function () {
         this.initInstance();
         this.gridObj.setFixedOptions({

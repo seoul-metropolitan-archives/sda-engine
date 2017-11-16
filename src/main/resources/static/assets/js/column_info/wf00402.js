@@ -8,8 +8,8 @@ var wf00402 =
             [
                 {
                     sortNo: 1,
-                    name: "workflowJobUuid",
-                    text: "workflowJobUuid",
+                    name: "jobResultUuid",
+                    text: "jobResultUuid",
                     width: 120,
                     editable: true,
                     dataType: "code",
@@ -18,8 +18,8 @@ var wf00402 =
                 },
                 {
                     sortNo: 2,
-                    name: "workflowUuid",
-                    text: "workflowUuid",
+                    name: "workflowResultUuid",
+                    text: "workflowResultUuid",
                     width: 120,
                     editable: true,
                     dataType: "code",
@@ -27,7 +27,26 @@ var wf00402 =
                     visible: false
                 },
                 {
-                    sortNo: 2,
+                    sortNo: 3,
+                    name: "statusUuid",
+                    text: "Status",
+                    width: 100,
+                    editable: false,
+                    dataType: "combo",
+                    required: false,
+                    visible: true,
+                    values: axboot.commonCodeFilter("CD131").codeArr,
+                    labels: axboot.commonCodeFilter("CD131").nameArr,
+                    lookupDisplay: true,
+                    editor: {
+                        type: "dropDown",
+                        dropDownCount: 10,
+                        domainOnly: true, //domainOnly가 true이면 목록에 있는 값들만 선택할 수 있습니다.
+                        textReadOnly: false // true이면 키 입력이 안되며 선택만 할 수 있습니다.
+                    }
+                },
+                {
+                    sortNo: 4,
                     name: "jobUuid",
                     text: "jobUuid",
                     width: 120,
@@ -37,7 +56,7 @@ var wf00402 =
                     visible: false
                 },
                 {
-                    sortNo: 3,
+                    sortNo: 5,
                     autoincrement: true,
                     name: "sequence",
                     text: "Sequence",
@@ -48,7 +67,7 @@ var wf00402 =
                     visible: true
                 },
                 {
-                    sortNo: 3,
+                    sortNo: 7,
                     name: "jobName",
                     text: "Job Name",
                     width: 210,
@@ -58,7 +77,7 @@ var wf00402 =
                     visible: true
                 },
                 {
-                    sortNo: 4,
+                    sortNo: 8,
                     name: "api",
                     text: "API",
                     width: 200,
@@ -68,97 +87,34 @@ var wf00402 =
                     visible: true
                 },
                 {
-                    sortNo: 5,
-                    name: "skipYn",
-                    text: "Skip",
-                    width: 70,
+                    sortNo: 9,
+                    name: "startDate",
+                    text: "Start Date",
+                    width: 140,
                     editable: false,
-                    dataType: "check",
-                    textAlignment: "center",
-                    required: false
-                },
-                {
-                    sortNo: 6,
-                    name: "terminateYn",
-                    text: "Terminate",
-                    width: 70,
-                    editable: false,
-                    dataType: "check",
-                    textAlignment: "center",
-                    required: false
-                },
-                {
-                    sortNo: 7,
-                    name: "description",
-                    text: "Description",
-                    width: 250,
-                    editable: false,
-                    dataType: "richtext",
+                    dataType: "timestamp",
                     required: false,
-                },
-                {
-                    sortNo: 8,
-                    name: "notes",
-                    text: "Notes",
-                    width: 250,
-                    editable: false,
-                    dataType: "richtext",
-                    required: false
+                    visible: true
                 },
                 {
                     sortNo: 9,
-                    name: "useYn",
-                    text: "Use",
-                    width: 50,
-                    editable: true,
-                    dataType: "check",
-                    textAlignment: "center",
-                    required: true,
-                    visible: false
+                    name: "endDate",
+                    text: "End Date",
+                    width: 140,
+                    editable: false,
+                    dataType: "timestamp",
+                    required: false,
+                    visible: true
                 },
                 {
                     sortNo: 10,
-                    name: "insertUuid",
-                    text: "Created By",
-                    width: 80,
+                    name: "message",
+                    text: "Message",
+                    width: 100,
                     editable: false,
-                    disable: true,
                     dataType: "text",
                     required: false,
-                    visible: false
-                },
-                {
-                    sortNo: 11,
-                    name: "insertDate",
-                    text: "Date/Time Created",
-                    width: 140,
-                    editable: false,
-                    disable: true,
-                    dataType: "timestamp",
-                    required: false,
-                    visible: false
-                },
-                {
-                    sortNo: 12,
-                    name: "updateUuid",
-                    text: "Modifed By",
-                    width: 80,
-                    editable: false,
-                    disable: true,
-                    dataType: "text",
-                    required: false,
-                    visible: false
-                },
-                {
-                    sortNo: 13,
-                    name: "updateDate",
-                    text: "Date/Time Modified",
-                    width: 140,
-                    editable: false,
-                    disable: true,
-                    dataType: "timestamp",
-                    required: false,
-                    visible: false
+                    visible: true
                 }
             ]
     }

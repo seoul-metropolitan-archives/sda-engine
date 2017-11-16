@@ -22,6 +22,7 @@ public class Wf004ViewRouter extends BaseController {
 
     @GetMapping("/wf/wf004/wf004")
     public String view(ModelMap model) {
+        model.addAttribute("statusUuid", CommonCodeUtils.get("CD131"));
         model.addAttribute("serviceUuid", CommonCodeUtils.get("CD006"));
 
         return "/wf/wf004/wf004";

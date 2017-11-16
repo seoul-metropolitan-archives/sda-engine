@@ -34,22 +34,22 @@ public class Wf004Controller extends MessageBaseController {
     private Wf004Service wf004Service;
 
     @GetMapping("/01/list")
-    public Responses.PageResponse findAllWorkflow(Pageable pageable, RequestParams<Wf00401VO> requestParams) {
-        Page<Wf00401VO> pages = wf004Service.findAllWorkflow(pageable, requestParams);
+    public Responses.PageResponse findAllWorkflowResult(Pageable pageable, RequestParams<Wf00401VO> requestParams) {
+        Page<Wf00401VO> pages = wf004Service.findAllWorkflowResult(pageable, requestParams);
 
         return Responses.PageResponse.of(pages.getContent(), pages);
     }
 
     @GetMapping("/02/list")
-    public Responses.PageResponse findWorkflowJob(Pageable pageable, RequestParams<Wf00402VO> requestParams) {
-        Page<Wf00402VO> pages = wf004Service.findWorkflowJob(pageable, requestParams);
+    public Responses.PageResponse findWorkflowJobResult(Pageable pageable, RequestParams<Wf00402VO> requestParams) {
+        Page<Wf00402VO> pages = wf004Service.findWorkflowJobResult(pageable, requestParams);
 
         return Responses.PageResponse.of(pages.getContent(), pages);
     }
 
     @GetMapping("/03/list")
-    public Responses.PageResponse findParameter(Pageable pageable, RequestParams<Wf00403VO> requestParams) {
-        Page<Wf00403VO> pages = wf004Service.findParameter(pageable, requestParams);
+    public Responses.PageResponse findParameterResult(Pageable pageable, RequestParams<Wf00403VO> requestParams) {
+        Page<Wf00403VO> pages = wf004Service.findParameterResult(pageable, requestParams);
 
         return Responses.PageResponse.of(pages.getContent(), pages);
     }

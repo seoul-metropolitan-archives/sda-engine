@@ -32,10 +32,30 @@
                                         th:text="${item.codeName}"/>
                             </select>
                         </dd>
-                        <dt>Workflow Name</dt>
+                    </dl>
+                    <dl>
+                        <dt class="pdl_5">Workflow Status</dt>
+                        <dd>
+                            <select data-ax-path="statusUuid" style="width:135px;">
+                                <option value=""></option>
+                                <option th:each="item : ${statusUuid}" th:value="${item.codeDetailUUID}"
+                                        th:text="${item.codeName}"/>
+                            </select>
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt class="pdl_5">Batch ID</dt>
+                        <dd>
+                            <input type=text data-ax-path="batchId" style="width:135px">
+                        </dd>
+                        <th:block layout:insert="~{/fragments/page-buttons :: searchInput02 ('Executer','executer')}"/>
+                    </dl>
+                    <dl>
+                        <dt class="pdl_5">Workflow Name</dt>
                         <dd>
                             <input type=text data-ax-path="workflowName" style="width:135px">
                         </dd>
+                        <th:block layout:insert="~{/fragments/page-buttons :: searchInput02 ('Menu','menu')}"/>
                     </dl>
                 </div>
                 <div style="height:100%; width:100%" class="bgf7 div_tablerow">

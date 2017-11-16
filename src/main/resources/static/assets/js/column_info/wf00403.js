@@ -8,10 +8,10 @@ var wf00403 =
             [
                 {
                     sortNo: 1,
-                    name: "parameterUuid",
-                    text: "parameterUuid",
+                    name: "parameterResultUuid",
+                    text: "parameterResultUuid",
                     width: 120,
-                    editable: true,
+                    editable: false,
                     dataType: "code",
                     required: false,
                     visible: false
@@ -21,17 +21,17 @@ var wf00403 =
                     name: "inputCodeUuid",
                     text: "inputCodeUuid",
                     width: 120,
-                    editable: true,
+                    editable: false,
                     dataType: "code",
                     required: false,
                     visible: false
                 },
                 {
                     sortNo: 2,
-                    name: "jobUuid",
-                    text: "jobUuid",
+                    name: "jobResultUuid",
+                    text: "jobResultUuid",
                     width: 120,
-                    editable: true,
+                    editable: false,
                     dataType: "code",
                     required: false,
                     visible: false
@@ -41,9 +41,9 @@ var wf00403 =
                     name: "parameterName",
                     text: "Parameter Name",
                     width: 200,
-                    editable: true,
+                    editable: false,
                     dataType: "text",
-                    required: true,
+                    required: false,
                     visible: true
                 },
                 {
@@ -51,9 +51,9 @@ var wf00403 =
                     name: "inOutUuid",
                     text: "In/Out",
                     width: 100,
-                    editable: true,
+                    editable: false,
                     dataType: "combo",
-                    required: true,
+                    required: false,
                     visible: true,
                     values: axboot.commonCodeFilter("CD129").codeArr,
                     labels: axboot.commonCodeFilter("CD129").nameArr,
@@ -70,9 +70,9 @@ var wf00403 =
                     name: "inputMethodUuid",
                     text: "Input Method",
                     width: 100,
-                    editable: true,
+                    editable: false,
                     dataType: "combo",
-                    required: true,
+                    required: false,
                     visible: true,
                     values: axboot.commonCodeFilter("CD128").codeArr,
                     labels: axboot.commonCodeFilter("CD128").nameArr,
@@ -119,7 +119,6 @@ var wf00403 =
                     name: "inputCodeName",
                     text: "Input Name",
                     width: 200,
-                    disable: true,
                     editable: false,
                     dataType: "text",
                     required: false,
@@ -127,10 +126,10 @@ var wf00403 =
                 },
                 {
                     sortNo: 8,
-                    name: "defaultValue",
-                    text: "Defalut Value",
+                    name: "value",
+                    text: "Value",
                     width: 150,
-                    editable: true,
+                    editable: false,
                     dataType: "text",
                     required: false,
                     visible: true
@@ -140,48 +139,20 @@ var wf00403 =
                     name: "displayYn",
                     text: "Display",
                     width: 70,
-                    editable: true,
+                    editable: false,
                     dataType: "check",
                     textAlignment: "center",
-                    required: true
+                    required: false
                 },
                 {
                     sortNo: 10,
                     name: "requiredYn",
                     text: "Required",
                     width: 70,
-                    editable: true,
+                    editable: false,
                     dataType: "check",
                     textAlignment: "center",
-                    required: true
-                },
-                {
-                    sortNo: 11,
-                    name: "description",
-                    text: "Description",
-                    width: 250,
-                    editable: true,
-                    dataType: "richtext",
-                    required: false,
-                },
-                {
-                    sortNo: 12,
-                    name: "notes",
-                    text: "Notes",
-                    width: 250,
-                    editable: true,
-                    dataType: "richtext",
                     required: false
-                },
-                {
-                    sortNo: 13,
-                    name: "useYn",
-                    text: "Use",
-                    width: 50,
-                    editable: true,
-                    dataType: "check",
-                    textAlignment: "center",
-                    required: true
                 },
                 {
                     sortNo: 14,
@@ -189,9 +160,9 @@ var wf00403 =
                     text: "Created By",
                     width: 80,
                     editable: false,
-                    disable: true,
                     dataType: "text",
-                    required: false
+                    required: false,
+                    visible: false
                 },
                 {
                     sortNo: 15,
@@ -199,9 +170,9 @@ var wf00403 =
                     text: "Date/Time Created",
                     width: 140,
                     editable: false,
-                    disable: true,
                     dataType: "timestamp",
-                    required: false
+                    required: false,
+                    visible: false
                 },
                 {
                     sortNo: 16,
@@ -209,9 +180,9 @@ var wf00403 =
                     text: "Modifed By",
                     width: 80,
                     editable: false,
-                    disable: true,
                     dataType: "text",
-                    required: false
+                    required: false,
+                    visible: false
                 },
                 {
                     sortNo: 17,
@@ -219,9 +190,9 @@ var wf00403 =
                     text: "Date/Time Modified",
                     width: 140,
                     editable: false,
-                    disable: true,
                     dataType: "timestamp",
-                    required: false
+                    required: false,
+                    visible: false
                 }
             ]
     }

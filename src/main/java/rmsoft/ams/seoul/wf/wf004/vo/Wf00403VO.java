@@ -20,9 +20,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 public class Wf00403VO extends BaseVO {
-    private String parameterUuid;
+    private String parameterResultUuid;
 
-    private String jobUuid;
+    private String jobResultUuid;
 
     private String parameterName;
 
@@ -36,11 +36,10 @@ public class Wf00403VO extends BaseVO {
 
     private String inOutUuid;
 
-    private String defaultValue;
+    private String value;
 
     private String displayYn;
 
     private String requiredYn;
 
-    private String useYn;
 }

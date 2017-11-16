@@ -19,9 +19,9 @@ import java.util.List;
  * @since 2017-09-26 오후 3:44
  **/
 public interface Wf004Mapper extends MyBatisMapper {
-    List<Wf00401VO> findAllWorkflow(Wf00401VO wf00401VO);
+    List<Wf00401VO> findAllWorkflowResult(Wf00401VO wf00401VO);
 
-    List<Wf00402VO> findWorkflowJob(String workflowUuid);
+    List<Wf00402VO> findWorkflowJobResult(String workflowResultUuid);
 
-    List<Wf00403VO> findParameter(String jobUuid);
+    List<Wf00403VO> findParameterResult(String jobResultUuid);
 }

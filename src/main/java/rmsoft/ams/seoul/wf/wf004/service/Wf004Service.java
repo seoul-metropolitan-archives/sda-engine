@@ -61,14 +61,17 @@ public class Wf004Service extends BaseService {
      * @param requestParams the request params
      * @return page
      */
-    public Page<Wf00401VO> findAllWorkflow(Pageable pageable, RequestParams<Wf00401VO> requestParams) {
+    public Page<Wf00401VO> findAllWorkflowResult(Pageable pageable, RequestParams<Wf00401VO> requestParams) {
 
         Wf00401VO wf00401VO = new Wf00401VO();
-        wf00401VO.setWorkflowName(requestParams.getString("workflowName"));
         wf00401VO.setServiceUuid(requestParams.getString("serviceUuid"));
-        wf00401VO.setUseYn(requestParams.getString("useYn"));
+        wf00401VO.setStatusUuid(requestParams.getString("statusUuid"));
+        wf00401VO.setBatchId(requestParams.getString("batchId"));
+        wf00401VO.setWorkflowName(requestParams.getString("workflowName"));
+        wf00401VO.setExecuter(requestParams.getString("executer"));
+        wf00401VO.setMenu(requestParams.getString("menu"));
 
-        return filter(wf004Mapper.findAllWorkflow(wf00401VO), pageable, "", Wf00401VO.class);
+        return filter(wf004Mapper.findAllWorkflowResult(wf00401VO), pageable, "", Wf00401VO.class);
     }
 
     /**
@@ -116,10 +119,10 @@ public class Wf004Service extends BaseService {
      * @param requestParams the request params
      * @return page
      */
-    public Page<Wf00402VO> findWorkflowJob(Pageable pageable, RequestParams<Wf00402VO> requestParams) {
+    public Page<Wf00402VO> findWorkflowJobResult(Pageable pageable, RequestParams<Wf00402VO> requestParams) {
         String filter = requestParams.getString("filter", "");
 
-        return filter(wf004Mapper.findWorkflowJob(requestParams.getString("workflowUuid")), pageable, filter, Wf00402VO.class);
+        return filter(wf004Mapper.findWorkflowJobResult(requestParams.getString("workflowResultUuid")), pageable, filter, Wf00402VO.class);
     }
 
     /**
@@ -166,10 +169,10 @@ public class Wf004Service extends BaseService {
      * @param requestParams the request params
      * @return page
      */
-    public Page<Wf00403VO> findParameter(Pageable pageable, RequestParams<Wf00403VO> requestParams) {
+    public Page<Wf00403VO> findParameterResult(Pageable pageable, RequestParams<Wf00403VO> requestParams) {
         String filter = requestParams.getString("filter", "");
 
-        return filter(wf004Mapper.findParameter(requestParams.getString("jobUuid")), pageable, filter, Wf00403VO.class);
+        return filter(wf004Mapper.findParameterResult(requestParams.getString("jobResultUuid")), pageable, filter, Wf00403VO.class);
     }
 
     /**
