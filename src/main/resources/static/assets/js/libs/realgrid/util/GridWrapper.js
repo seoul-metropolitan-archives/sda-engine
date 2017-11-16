@@ -317,10 +317,10 @@ var GridWrapper = function(p_id,p_rootContext) {
     //==========================================================================================
     //          초기 컬럼 값 저장 영역
     //==========================================================================================
-    this.defaultEditColumnProperties = new Array();
+    var defaultEditColumnProperties = new Array();
     addDefaultEditColumnProperties = function(name,editable)
     {
-        _this.defaultEditColumnProperties[name] = editable;
+        defaultEditColumnProperties[name] = editable;
     }
 
     //==========================================================================================
@@ -553,7 +553,7 @@ GridWrapper.prototype.style = {
         },
         timestamp : {
             type : "datetime",
-            datetimeFormat : "yyyy-MM-dd HH:mm:ss.SSS",
+            datetimeFormat : "yyyy-MM-dd HH:mm:ss",
             mask : {
                 editMask:"9999-99-99 99:99:99"
                 ,placeHolder:"yyyy-MM-dd HH:mm:ss" //편집기에 표시될 형식
@@ -1142,7 +1142,10 @@ GridWrapper.prototype.removeRow = function()
  */
 GridWrapper.prototype.setStyle = function(style,value)
 {
-    this.defaultStyle[style] = value;
+    if(style instanceof Object)
+        this.defaultStyle.header = $.extend({},this.defaultStyle,style);
+    else
+        this.defaultStyle[style] = value;
 };
 
 /**
@@ -1282,8 +1285,8 @@ GridWrapper.prototype.setCustomCellStyleRows = function(type, conditionFunc, col
         }
         else {
             //setting에 영향을 안받을 경우에는 기본값으로 복원
-            for (var column in this.defaultEditColumnProperties) {
-                grid.setColumnProperty(column, "editable", this.defaultEditColumnProperties[column]);
+            for (var column in defaultEditColumnProperties) {
+                grid.setColumnProperty(column, "editable", defaultEditColumnProperties[column]);
                 grid.setCellStyle(curr.dataRow, column, this.defaultStyles[column], true);
             }
         }

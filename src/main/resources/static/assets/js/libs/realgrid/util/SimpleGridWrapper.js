@@ -27,6 +27,12 @@ var SimpleGridWrapper = function (p_id,p_rootContext) {
         gridView.setSortingOptions({
             style: "inclusive"
         });
+        gridView.setEditorOptions({
+            applyCellFont: true
+        });
+        gridView.setCheckBar({
+            width: 50
+        });
         gridView.setIndicator({
             visible: true,
             styles: {background: "linear,#f2f2f2", fontFamily: "nanum"}
