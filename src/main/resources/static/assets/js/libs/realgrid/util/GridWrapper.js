@@ -1003,7 +1003,7 @@ GridWrapper.prototype.setColumnInfo = function(list) {
                 obj.style = {textAlignment: "far"};
                 break;
             case "date":
-                obj.editor = dateEditorStyle;
+                obj.editor = this.style.data.date;
                 obj.styles = $.extend({}, this.defaultStyle.data.date, obj.styles );
                 obj.displayRegExp = "([0-9]{4})([0-9]{4})([0-9]{4})([0-9]{4})";
                 obj.displayReplace = "$1-$2-$3-$4";
