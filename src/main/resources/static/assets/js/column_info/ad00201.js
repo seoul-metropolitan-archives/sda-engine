@@ -16,7 +16,7 @@ var ad00201 =
                 sortNo: 2,
                 name: "messageCode",
                 text: "Message Code",
-                width: 150,
+                width: 120,
                 editable: true,
                 dataType: "text",
                 required: true
@@ -25,7 +25,7 @@ var ad00201 =
                 sortNo: 3,
                 name: "messageName",
                 text: "Message Name",
-                width: 200,
+                width: 400,
                 editable: true,
                 dataType: "text",
                 required: true
@@ -34,10 +34,10 @@ var ad00201 =
                 sortNo: 4,
                 name: "serviceUuid",
                 text: "Service",
-                width: 130,
+                width: 110,
                 editable: true,
                 dataType: "combo",
-                required: false,
+                required: true,
                 visible: true,
                 values: axboot.commonCodeFilter("CD006").codeArr,
                 labels: axboot.commonCodeFilter("CD006").nameArr,
@@ -80,13 +80,13 @@ var ad00201 =
             {
                 sortNo: 8,
                 name: "useYN",
-                text: "USE",
+                text: "Use",
                 width: 50,
                 editable: true,
                 dataType: "check",
                 textAlignment: "center",
                 defaultValue:"Y",
-                required: true
+                required: false
             },
             {
                 sortNo: 9,
@@ -97,10 +97,7 @@ var ad00201 =
                 dataType: "text",
                 visible: true,
                 disable : true,
-                required: false,
-                renderer : {
-                    showTooltip : true
-                }
+                required: false
             },
             {
                 sortNo: 11,
@@ -121,10 +118,7 @@ var ad00201 =
                 visible: true,
                 disable : true,
                 dataType: "text",
-                required: false,
-                renderer : {
-                    showTooltip : true
-                }
+                required: false
             },
             {
                 sortNo: 13,

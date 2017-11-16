@@ -75,7 +75,7 @@ var ac00601 =
                     dataType: "popup",
                     popupCode: "PU001",
                     sqlColumn: {PROGRAM_UUID: "pmsProgramUuid", PROGRAM_NAME: "programName"},
-                    required: false,
+                    required: true,
                     visible: true
                 },
                 {
@@ -138,7 +138,7 @@ var ac00601 =
                     editable: true,
                     dataType: "check",
                     textAlignment: "center",
-                    required: true
+                    required: false
                 },
                 {
                     sortNo: 13,

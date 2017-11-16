@@ -25,7 +25,7 @@ var ad00301 =
                 sortNo: 2,
                 name: "categoryName",
                 text: "Category Name",
-                width: 150,
+                width: 200,
                 editable: true,
                 dataType: "text",
                 required: true
@@ -34,7 +34,7 @@ var ad00301 =
                 sortNo: 3,
                 name: "serviceUuid",
                 text: "Service",
-                width: 130,
+                width: 110,
                 editable: true,
                 dataType: "combo",
                 required: true,
@@ -103,7 +103,7 @@ var ad00301 =
             {
                 sortNo: 8,
                 name: "useYN",
-                text: "USE",
+                text: "Use",
                 width: 50,
                 editable: true,
                 dataType: "check",
@@ -116,7 +116,7 @@ var ad00301 =
                     trueValues: "Y",
                     startEditOnClick: true,
                 },
-                required: true
+                required: false
             },
             {
                 sortNo: 11,
@@ -347,7 +347,7 @@ var ad00301 =
                 width: 140,
                 dataType: "timestamp",
                 required: false,
-                disable: true
+                disable: true,
             },
             {
                 sortNo: 92,

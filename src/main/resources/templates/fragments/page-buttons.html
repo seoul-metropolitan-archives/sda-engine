@@ -234,16 +234,34 @@
         <span th:text="${str}"></span>
     </li>
 </th:block>
+
+<!--Popup버튼 & Save 버튼 & Inquiry 버튼-->
+<th:block layout:fragment="popup-and-save-and-inquiry">
+    <li style="text-align:right; width:48%;">
+        <button class="btn_co" th:id="save">
+            <span class="btn_icon_co">&nbsp;</span>
+            <span class="btn_main_txt">Popup</span>
+        </button>
+        <button class="btn_s" th:id="save">
+            <span class="btn_icon">&nbsp;</span>
+            <span class="btn_main_txt">Save(S)</span>
+        </button>
+        <button class="btn_i" th:id="inquiry">
+            <span class="btn_icon">&nbsp;</span>
+            <span class="btn_main_txt">Inquiry(I)</span>
+        </button>
+    </li>
+</th:block>
 <!--북마크-->
 <th:block layout:fragment="bookmark">
-    <li style="width:30px;padding-top: 2px;">
+    <li style="width:30px; height: 30px">
         <div class="bookmark_star"><img src="/assets/images/ams/bookmark.png" alt="즐겨찾기"></div>
     </li>
     <li style="width:50%; text-align:left;" th:text="${pageName==null?'User':pageName}"></li>
 </th:block>
 
 <th:block layout:fragment="searchInputYellow (lb,dap)">
-    <dt class="pdl_5 w150" th:text="${lb}"></dt>
+    <dt class="mgl_5 w150" th:text="${lb}"></dt>
     <dd>
         <div class="src_box2" style="background-color: #fffdd6">
             <input th:attr="data-ax-path=${dap}"  type="text" style="background-color: #fffdd6">
@@ -254,7 +272,7 @@
 </th:block>
 
 <th:block layout:fragment="searchInput (lb,dap)">
-    <dt class="pdl_5 w150" th:text="${lb}"></dt>
+    <dt class="mgl_5 w150" th:text="${lb}"></dt>
     <dd>
         <div class="src_box2">
             <input th:attr="data-ax-path=${dap}"  type="text">
@@ -263,4 +281,29 @@
         </div>
     </dd>
 </th:block>
+
+<!--2017-11-14 배영란 추가-->
+<th:block layout:fragment="searchInput02 (lb,dap)">
+    <dt class="mgl_5" th:text="${lb}"></dt>
+    <dd>
+        <div class="src_box2">
+            <input th:attr="data-ax-path=${dap}"  type="text">
+            <a href="#" id="dialog-link">
+                <img th:src="@{/assets/images/ams/search_normal.png}" alt="find"></a>
+        </div>
+    </dd>
+</th:block>
+
+<!--2017-11-15 배영란 추가-->
+<th:block layout:fragment="searchInput03 (lb,dap)">
+    <dt class="w150" th:text="${lb}"></dt>
+    <dd>
+        <div class="src_box2">
+            <input th:attr="data-ax-path=${dap}"  type="text">
+            <a href="#" id="dialog-link">
+                <img th:src="@{/assets/images/ams/search_normal.png}" alt="find"></a>
+        </div>
+    </dd>
+</th:block>
+
 </html>

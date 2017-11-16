@@ -166,11 +166,15 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
         this.gridObj.setColumnInfo(ac00801.column_info).setEntityName("CONFIGURATION");
         this.gridObj.makeGrid();
         this.gridObj.itemClick(this.itemClick);
+        this.gridObj.setFixedOptions({
+            colCount: 2
+        });
     },
     setData: function (list) {
         this.gridObj.setData("set", list);
 
     },
+
     getData: function () {
         return this.gridObj.getData();
     },

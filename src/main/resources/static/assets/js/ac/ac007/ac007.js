@@ -338,12 +338,20 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
             footer: {visible: false},
             header: {visible: true},
             checkBar: {visible: false},
-            indicator: {visible: false},
+            indicator: {visible: true},
             stateBar: {visible: false}
         });
-        this.gridObj.setStyle("header",{});
-        this.gridObj.setStyle("body",{});
+        this.gridObj.setStyle("header",{background: "linear,#f2f2f2",textAlignment: "near",fontFamily: "nanum",fontSize : 12,borderRight: "#cccccc, 1",});
+        this.gridObj.setStyle("body",{background : "#ffffffff",fontSize : 12,fontFamily : "nanum"});
+        this.gridObj.setStyle("grid",{border: "#ffffffff,0"});
+        this.gridObj.setStyle("indicator",{background: "linear,#f2f2f2",fontFamily: "nanum"});
         this.gridObj.setColumnInfo(ac00702.column_info).setEntityName("Menu").makeGrid();
+        this.gridObj.setFixedOptions({
+            colCount: 1
+        });
+        this.gridObj.setDisplayOptions({
+            fitStyle: "none"
+        });
         this.gridObj.onDataCellClicked(function (grid, index) {
             grid.commit(true);
 

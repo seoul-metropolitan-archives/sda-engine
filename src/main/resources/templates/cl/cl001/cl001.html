@@ -20,7 +20,7 @@
                 </div>
                 <div class="bdb div_tablerow">
                     <dl>
-                        <dt class="pdl_5 w130">Status</dt>
+                        <dt class="mgl_5 w130">Status</dt>
                         <dd>
                             <select data-ax-path="statusUuid" style="width:135px;">
                                 <option value=""></option>
@@ -34,7 +34,7 @@
 
                     </dl>
                     <dl>
-                        <dt class="pdl_5 w130">Classification Type</dt>
+                        <dt class="mgl_5 w130">Classification Type</dt>
                         <dd>
                             <select data-ax-path="classificationTypeUuid" style="width:135px;">
                                 <option value=""></option>
@@ -69,8 +69,10 @@
                             <th:block layout:insert="~{/fragments/page-buttons :: dot('Classification Scheme Detail')}"/>
                         </ul>
                         <div style="height:100%; width:100%;" class="div_tablerow bdb">
-                            <div style="height: 100%; width: 100%; overflow-y: scroll; overflow-x: hidden; ">
-                                <div style="height: 100%; width: 98%; float: right" dataPath>
+                            <!--<div style="height: 100%; width: 100%; overflow-y: scroll; overflow-x: hidden; ">
+                                <div style="height: 100%; width: 98%; float: right" dataPath>-->
+                            <div class="detail_wrap">
+                                <div class="detail_conts" dataPath>
 
                                     <ul style="width: 100%; height: 30px; ">
                                         <li style="width: 35%;text-align: left">Classification Name</li>

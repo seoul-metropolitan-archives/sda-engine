@@ -20,7 +20,7 @@ var ac00401 =
                     sortNo: 2,
                     name: "userGroupName",
                     text: "User Group",
-                    width: 150,
+                    width: 200,
                     editable: true,
                     dataType: "text",
                     required: true
@@ -51,7 +51,7 @@ var ac00401 =
                     editable: true,
                     dataType: "check",
                     textAlignment: "center",
-                    required: true
+                    required: false
                 },
                 {
                     sortNo: 6,

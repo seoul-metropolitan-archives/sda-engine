@@ -25,7 +25,7 @@
                 <div class="bdb div_tablerow">
                     <dl>
                        <th:block layout:insert="~{/fragments/page-buttons :: searchInputYellow ('Classification Scheme','classificationCode')}"/>
-                       <th:block layout:insert="~{/fragments/page-buttons :: searchInput ('Parent Class Code','parentClassCode')}"/>
+                       <th:block layout:insert="~{/fragments/page-buttons :: searchInput03 ('Parent Class Code','parentClassCode')}"/>
 
                         <dt class="w150">Parent Class Name</dt>
                         <dd>
@@ -34,7 +34,7 @@
 
                     </dl>
                     <dl>
-                        <dt class="w150 pdl_5">Status</dt>
+                        <dt class="w150 mgl_5">Status</dt>
                         <dd>
                             <select data-ax-path="statusUuid" style="width:135px;">
                                 <option value=""></option>
@@ -55,7 +55,7 @@
 
                     </dl>
                     <dl>
-                        <dt class="pdl_5 w150">Class Level</dt>
+                        <dt class="mgl_5 w150">Class Level</dt>
                         <dd>
                             <select data-ax-path="classLevelUuid" style="width:135px;">
                                 <option value=""></option>
@@ -83,7 +83,7 @@
 
                         <ul class="bdb div_tablerow" style="height:25px;">
                             <li style="width:100%; text-align:left;">
-                                <input data-ax-path="classificationName" type=text class="yeongye" value="Classification Scheme Name" readonly style="width:99.3%">
+                                <input data-ax-path="classificationName" type=text class="yeongye" value="Classification Scheme Name" readonly style="width:99.5%; margin-left: 0.5%">
                             </li>
                         </ul>
 
@@ -113,7 +113,7 @@
                         </ul>
                         <ul class="bdb div_tablerow" style="height:25px;">
                             <li style="width:100%; text-align:left;">
-                                <input type=text class="yeongye" value="Class Name" readonly style="width:208px">
+                                <input type=text class="yeongye" value="Class Name" readonly style="width:180px">
                             </li>
                         </ul>
 
@@ -129,10 +129,12 @@
                             <th:block layout:insert="~{/fragments/page-buttons :: dot('Class Details')}"/>
                         </ul>
                         <div style="height:100%; width:100%;" class="div_tablerow bdb">
-                            <div style="height: 100%; width: 100%; overflow-y: scroll; overflow-x: hidden; ">
-                                <div style="height: 100%; width: 98%; float: right">
+                            <!--<div style="height: 100%; width: 100%; overflow-y: scroll; overflow-x: hidden; ">
+                                <div style="height: 100%; width: 98%; float: right">-->
+                            <div class="detail_wrap">
+                                <div class="detail_conts">
 
-                                    <ul style="width: 100%; height: 30px; ">
+                                <ul style="width: 100%; height: 30px; ">
                                         <li style="width: 25%;text-align: left">Class Name</li>
                                         <li style="width: 75%">
                                             <input data-ax-path="detailClassName" type=text style="width:97%" class="bgf7" readonly>
@@ -180,6 +182,10 @@
                                             <input data-ax-path="detailAddMetadata04" type=text style="width:97%" id="detailAddMetadata04">
                                         </li>
                                     </ul>
+
+
+
+
 
 
                                 </div>

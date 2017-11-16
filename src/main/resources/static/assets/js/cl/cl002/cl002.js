@@ -483,7 +483,7 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
         this.initInstance();
         this.setColumnInfo(cl00202.column_info);
         this.gridObj.setFixedOptions({
-            colCount: 4
+            colCount: 3
         });
         this.gridObj.setOption({
             checkBar: {visible: true},

@@ -227,6 +227,9 @@ fnObj.gridView_h = axboot.viewExtend(axboot.gridView, {
         this.makeGrid();
         this.gridObj.addRowBeforeEvent(this.addRowBeforeEvent);
         this.gridObj.addRowAfterEvent(this.addRowAfterEvent);
+        this.gridObj.setFixedOptions({
+            colCount : 2
+        })
 
         this.gridObj.itemClick(function(data){
             if(fnObj.gridView_d.getData().length < 1)
@@ -242,10 +245,6 @@ fnObj.gridView_h = axboot.viewExtend(axboot.gridView, {
                     if(this.key == "ok")
                     {
                         ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
-                    }
-                    else
-                    {
-                        ACTIONS.dispatch(ACTIONS.GET_ENTITY_DETAIL, data);
                     }
                 });
             }
@@ -289,7 +288,9 @@ fnObj.gridView_d = axboot.viewExtend(axboot.gridView, {
         this.makeGrid();
         this.gridObj.addRowBeforeEvent(this.addRowBeforeEvent);
         this.gridObj.onRowsPasted(this.onRowsPasted);
-        this.gridObj.popupCallback(this.popupCallback);
+        this.gridObj.setFixedOptions({
+            colCount : 1
+        })
     },
     clear : function () {
         this.setData([]);
@@ -307,20 +308,13 @@ fnObj.gridView_d = axboot.viewExtend(axboot.gridView, {
         {
             fnObj.gridView_d.gridObj.setValue(items[i],1,fnObj.gridView_h.getEntityTypeHeaderUUID());
         }
-    },
-    popupCallback : function(gridWrapper)
-    {
-        var index = gridWrapper.getCurrent();
-        gridWrapper.setValue(index.dataRow, "useYN","Y");
     }
 });
-/*
 isDataChanged = function()
-
 {
     if (fnObj.gridView_h.isChangeData() == true || fnObj.gridView_d.isChangeData() == true) {
         return true;
     } else {
         return false;
     }
-} */
+}
