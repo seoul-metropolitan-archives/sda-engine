@@ -32,6 +32,12 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             data: $.extend({}, {pageSize: 1000}, data),
             callback: function (res) {
                 fnObj.gridView02.setData(res.list);
+
+                if (res.list.length > 0) {
+                    ACTIONS.dispatch(ACTIONS.PAGE_SEARCH2, res.list[0]);
+                } else {
+                    fnObj.gridView03.clearData();
+                }
             },
             options: {
                 onError: axboot.viewError
