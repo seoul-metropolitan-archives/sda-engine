@@ -250,13 +250,13 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
         var names = axboot.commonCodeFilter("CD128").nameArr;
         var enableList = new Array();
         for (var i = 0; i < names.length; i++) {
-            if (names[i] == "팝업" || names[i] == "콤보") {
+            if (names[i] == "Popup" || names[i] == "Combo") {
                 enableList.push(codes[i]);
             }
         }
         var _this = this;
-        this.gridObj.onEditChange(function (grid, index, value) {
-            _this.gridObj.setCustomCellStyleRows("disable", function (row) {
+        this.gridObj.onEditChange(function (grid, index) {
+            _this.gridObj.setCustomCellStyleRow(grid, index.dataRow,"disable", function (gridWrapper, row) {
                 var result = false;
                 for (var rowIndex = 0; rowIndex < enableList.length; rowIndex++) {
                     if (row["inputMethodUuid"] == enableList[rowIndex]) {
@@ -267,7 +267,7 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
                         result = true;
                 }
                 return result;
-            }, ["inputCodeUuid"], false);
+            }, ["inputCodeUuid"], true);
 
         });
     }

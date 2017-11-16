@@ -117,6 +117,10 @@ var GridWrapper = function(p_id,p_rootContext) {
         _this.gridView.onKeyDown = function(grid, key, ctrl, shift, alt){
             _this.dispatch("onKeyDown",grid, key, ctrl, shift, alt);
         };
+        _this.gridView.onKeyUp = function(grid, key, ctrl, shift, alt){
+            _this.dispatch("onKeyUp",grid, key, ctrl, shift, alt);
+        };
+
         _this.gridView.onDataCellDblClicked = function(grid,index){ _this.dispatch("onDataCellDblClicked",grid,index); }
         _this.gridView.onEditChange = function(grid, index, value){ _this.dispatch("onEditChange",grid, index, value); }
         _this.gridView.onImageButtonClicked = function(grid, itemIndex, column, buttonIdex, name) { _this.dispatch("onImageButtonClicked",_this ,grid, itemIndex, column, buttonIdex, name); }
@@ -128,7 +132,7 @@ var GridWrapper = function(p_id,p_rootContext) {
             _this.dispatch("onBeforeAddRow",_this,_this.makeObj,grid, itemIndex);
             _this.dispatch("onAfterAddRow",_this,_this.makeObj,grid, itemIndex);
         };
-
+        _this.gridView.onSelectionChanged = function (grid) { _this.dispatch("onSelectionChanged",grid); };
         _this.gridView.onContextMenuItemClicked = function (grid, label, index) { _this.dispatch("onContextMenuItemClicked",grid, label, index); };
         _this.gridView.onDataCellClicked = function(grid, index)  { _this.dispatch("onDataCellClicked",grid, index); };
         _this.gridView.onCellEdited  = function(grid, itemIndex, dataRow, field)  { _this.dispatch("onCellEdited",grid, itemIndex, dataRow, field); }
@@ -638,9 +642,15 @@ GridWrapper.prototype.bind = function (eventName, func) {
         this.event[eventName] = new Array();
     this.event[eventName].push(func);
 }
+GridWrapper.prototype.unbind = function (eventName) {
+    if (this.event[eventName])
+        this.event[eventName] = new Array();
+}
 
 GridWrapper.prototype.onRowsPasted = function(_event) { this.bind("onRowsPasted",_event);}
 GridWrapper.prototype.onKeydown = function(_event) { this.bind("onKeyDown",_event);}
+GridWrapper.prototype.onKeyUp = function(_event) { this.bind("onKeyUp",_event);}
+GridWrapper.prototype.onEditCommit = function(_event) { this.bind("onEditCommit",_event);}
 /*GridWrapper.prototype.itemClick = function(_event)
 {
     this.bind("onDataCellClicked",function(grid,index){
@@ -653,13 +663,25 @@ GridWrapper.prototype.onKeydown = function(_event) { this.bind("onKeyDown",_even
 */
 GridWrapper.prototype.itemClick = function(_event)
 {
-    this.bind("onCurrentRowChanged",function(grid, oldRow, newRow){
+    this.bind("onDataCellClicked",function(grid){
         var index = grid.getCurrent();
         if(-1 == index.dataRow)
             return ;
 
         _event(grid.getDataProvider().getJsonRow(index.dataRow),index);
     })
+    this.bind("onKeyUp",function(grid, key, ctrl, shift, alt){
+        var index = grid.getCurrent();
+        if(-1 == index.dataRow)
+            return ;
+        console.log(key);
+        //키를 위로하거나 아래로 할때 조회를 itemClick에 대한 이벤트를 진행한다
+        if(key == 38 || key == 40)
+        {
+            _event(grid.getDataProvider().getJsonRow(index.dataRow),index);
+        }
+    })
+
 };
 GridWrapper.prototype.onDataCellClicked = function(_event) { this.bind("onDataCellClicked",_event); }
 GridWrapper.prototype.onEditChange = function(_event) { this.bind("onEditChange",_event); }
@@ -1278,6 +1300,46 @@ GridWrapper.prototype.makeGrid = function() {
 
 };
 
+GridWrapper.prototype.setCustomCellStyleRow = function(grid, row, type, conditionFunc, columnNames,doCommit) {
+    var styles = undefined;
+    var editable = false;
+    if (type == "disable") {
+        styles =  this.defaultStyle.column.disable;
+        editable = false;
+    }
+    else if (type == "required") {
+        styles =  this.defaultStyle.column.disable;
+        editable = true;
+    } else {
+        return;
+    }
+
+    if (undefined === doCommit || doCommit)
+        this.gridView.commit();
+
+    var rows = this.dataProvider.getJsonRows(0, -1);
+
+    var columnIndexList = new Array();
+
+    for (var i = 0; i < columnNames.length; i++) {
+        columnIndexList.push(this.dataProvider.getFieldIndex(columnNames[i]));
+    }
+    grid.addCellStyle("customStyle01", styles, true);
+    var applyData = {rows: new Array(), columns: columnNames}
+
+    if (conditionFunc(this, rows[row])) {
+        applyData.rows.push(i);
+        for (var j = 0; j < columnIndexList.length; j++) {
+            grid.setCellStyle(row, columnIndexList[j], type, true);
+        }
+    } else {
+        for (var j = 0; j < columnIndexList.length; j++) {
+            grid.setCellStyle(row, columnNames[j], this.defaultStyles[columnNames[j]], true);
+        }
+    }
+
+}
+
 GridWrapper.prototype.setCustomCellStyleRows = function(type, conditionFunc, columnNames,doCommit)
 {
     var styles = undefined;
@@ -1309,7 +1371,8 @@ GridWrapper.prototype.setCustomCellStyleRows = function(type, conditionFunc, col
             applyData.rows.push(i);
 
             for (var j = 0; j < columnIndexList.length; j++) {
-                this.gridView.setCellStyle(i, columnIndexList[j], type, true);
+                //this.gridView.setCellStyle(i, columnIndexList[j], type, true);
+                this.gridView.setCellStyles(i, columnNames, type, true);
             }
         } else {
             for (var j = 0; j < columnIndexList.length; j++) {
@@ -1319,6 +1382,7 @@ GridWrapper.prototype.setCustomCellStyleRows = function(type, conditionFunc, col
     }
 
     /*해당 그리드가 수정관련한 부분에 대해서 못하거나 할 수 있게 만들어주는 함수*/
+    this.unbind("onCurrentRowChanged");
     this.bind("onCurrentRowChanged", function (grid, oldRow, newRow) {
         var curr = grid.getCurrent();
         var doSetting = false;

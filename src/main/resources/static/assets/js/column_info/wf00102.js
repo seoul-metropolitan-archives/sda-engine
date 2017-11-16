@@ -98,11 +98,12 @@ var wf00102 =
                             for (var conditionIndex = 0; conditionIndex < conditionlist.length; conditionIndex++) {
 
                                 if (checkData == conditionlist[conditionIndex]) {
-                                    if ("콤보" == axboot.commonCodeFilter("CD128").nameArr[conditionIndex]) {
-                                        retData = "PU118";
+                                    //Input Method의 값에 따라서 동적으로 변경된다.
+                                    if ("Combo" == axboot.commonCodeFilter("CD128").nameArr[conditionIndex]) {
+                                        retData = "PU002";
                                         break;
-                                    } else if ("팝업" == axboot.commonCodeFilter("CD128").nameArr[conditionIndex]) {
-                                        retData = "PU119";
+                                    } else if ("Popup" == axboot.commonCodeFilter("CD128").nameArr[conditionIndex]) {
+                                        retData = "PU125";
                                         break;
                                     }
                                 }
