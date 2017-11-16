@@ -64,9 +64,11 @@ TreeGridWrapper.prototype.style.body = {
     line: "#ffaaaaaa,0px",
     fontSize: 12,
     fontFamily: GridWrapper.prototype.style.fontFamily,
-    grid: {
-        border: "#ffffffff,0"
-    }
+
+
+};
+TreeGridWrapper.prototype.style.grid = {
+    border: "#ffffffff,0"
 };
 TreeGridWrapper.prototype.defaultBind = function(){
     this.bind("onKeyDown",function(grid, key, ctrl, shift, alt){

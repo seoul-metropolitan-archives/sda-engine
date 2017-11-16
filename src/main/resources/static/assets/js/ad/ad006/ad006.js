@@ -210,13 +210,14 @@ fnObj.formView = axboot.viewExtend(axboot.formView,{
 });
 
 /*엔티티 헤더*/
-fnObj.gridView_h = axboot.viewExtend(axboot.realGridView, {
+fnObj.gridView_h = axboot.viewExtend(axboot.gridView, {
     tagId : "realgrid1",
     entityName : "ENTITY_HEADER",
     beforeRowIdx : undefined,
     initView  : function()
     {
         var _this = this;
+        this.initInstance();
         this.setColumnInfo(ad00601.column_info);
         /*
         this.gridObj.setOption({
@@ -278,11 +279,12 @@ fnObj.gridView_h = axboot.viewExtend(axboot.realGridView, {
     }
 });
 /*엔티티 디테일 ( Column )*/
-fnObj.gridView_d = axboot.viewExtend(axboot.realGridView, {
+fnObj.gridView_d = axboot.viewExtend(axboot.gridView, {
     tagId : "realgrid2",
     entityName : "ENTITY_DETAIL",
     initView: function ()
     {
+        this.initInstance();
         this.setColumnInfo(ad00602.column_info);
         this.makeGrid();
         this.gridObj.addRowBeforeEvent(this.addRowBeforeEvent);
