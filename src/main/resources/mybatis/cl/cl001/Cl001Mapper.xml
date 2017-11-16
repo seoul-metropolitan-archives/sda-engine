@@ -65,13 +65,13 @@
             SELECT
               COUNT(AGGREGATION_UUID)
             FROM
-              CL_CLASSIFIED_RECORDS
+              CL_CLASSIFY_RECORDS_RESULT
            ) as aggregationCnt,
           (
             SELECT
               COUNT(ITEM_UUID)
             FROM
-              CL_CLASSIFIED_RECORDS
+              CL_CLASSIFY_RECORDS_RESULT
           ) as itemCnt
         FROM
           CL_CLASSIFICATION_SCHEME Z1, CL_CLASSIFICATION_SCHEME_CON Z2
