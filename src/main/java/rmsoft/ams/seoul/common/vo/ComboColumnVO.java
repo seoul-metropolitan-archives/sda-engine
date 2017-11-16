@@ -7,5 +7,5 @@ public class ComboColumnVO extends BaseColumnVO {
     private boolean lookupDisplay = true;
     private String values = "";
     private String labels = "";
-    private boolean editable = false;
+    private boolean editable = true;
 }

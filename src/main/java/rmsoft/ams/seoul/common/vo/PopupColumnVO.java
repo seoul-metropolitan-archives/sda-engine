@@ -10,5 +10,5 @@ import lombok.Data;
 public class PopupColumnVO extends BaseColumnVO {
     private String popupCode = "";
     private String sqlColumn = "";
-    private boolean editable = false;
+    private boolean editable = true;
 }

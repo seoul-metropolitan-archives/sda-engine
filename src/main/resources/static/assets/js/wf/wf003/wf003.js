@@ -262,11 +262,6 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
         this.setColumnInfo(wf00301.column_info);
         this.makeGrid();
         this.gridObj.itemClick(this.itemClick);
-        //셀버튼 클릭 이벤트
-        this.gridObj.onCellButtonClicked = function (grid, itemIndex, column) {
-            alert("CellButton Clicked: itemIndex=" + itemIndex + ", fieldName=" + column.fieldName);
-        };
-
     },
     itemClick: function (data, index) {
         if (data.workflowUuid != null && data.workflowUuid != "") {
@@ -304,6 +299,7 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
             colCount: 1
         });
         this.setColumnInfo(wf00302.column_info);
+        this.gridObj.itemClick(this.itemClick);
         this.makeGrid();
     },
     itemClick: function (data, index) {
@@ -339,6 +335,8 @@ fnObj.gridView03 = axboot.viewExtend(axboot.gridView, {
                     fnObj.gridView03.gridObj.addRow();
 
                     fnObj.gridView03.gridObj.gridView.resetSize();
+                } else {
+                    $("#realgrid03").empty();
                 }
             }
         });
