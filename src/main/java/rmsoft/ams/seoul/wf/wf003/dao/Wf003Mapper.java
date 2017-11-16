@@ -30,4 +30,6 @@ public interface Wf003Mapper extends MyBatisMapper {
     List<Wf00301_P0102VO> findParameter(String jobUuid);
 
     List<BaseColumnVO> getColumnInfo(String jobUuid);
+
+    int getBatchId();
 }

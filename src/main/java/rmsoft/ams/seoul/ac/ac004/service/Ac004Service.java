@@ -4,9 +4,11 @@
 
 package rmsoft.ams.seoul.ac.ac004.service;
 
+import com.querydsl.core.types.Predicate;
 import io.onsemiro.core.api.response.ApiResponse;
 import io.onsemiro.core.code.ApiStatus;
 import io.onsemiro.core.domain.BaseService;
+import io.onsemiro.core.domain.user.QUserGroupUser;
 import io.onsemiro.core.parameter.RequestParams;
 import io.onsemiro.utils.ModelMapperUtils;
 import io.onsemiro.utils.UUIDUtils;
@@ -25,6 +27,7 @@ import rmsoft.ams.seoul.ac.ac004.vo.Ac00403VO;
 import rmsoft.ams.seoul.common.domain.AcAccessControl;
 import rmsoft.ams.seoul.common.domain.AcUserGroup;
 import rmsoft.ams.seoul.common.domain.AcUserGroupUser;
+import rmsoft.ams.seoul.common.domain.QAcAccessControl;
 import rmsoft.ams.seoul.common.repository.AcAccessControlRepository;
 import rmsoft.ams.seoul.common.repository.AcUserGroupRepository;
 import rmsoft.ams.seoul.common.repository.AcUserGroupUserRepository;
@@ -93,6 +96,17 @@ public class Ac004Service extends BaseService {
             } else {
                 if (acUserGroup.isDeleted()) {
                     acUserGroupRepository.delete(acUserGroup);
+
+                    // User Group이 삭제되므로, Access Control 도 모두 삭제
+                    QAcAccessControl qAcAccessControl = QAcAccessControl.acAccessControl;
+                    Predicate predicate = qAcAccessControl.userGroupUuid.eq(acUserGroup.getUserGroupUuid());
+                    acAccessControlRepository.delete(acAccessControlRepository.findAll(predicate));
+
+                    // User Group이, User Group User 도 모두 삭제
+                    QUserGroupUser qUserGroupUser = QUserGroupUser.userGroupUser;
+                    Predicate predicate1 = qUserGroupUser.userGroupUserUuid.eq(acUserGroup.getUserGroupUuid());
+                    acUserGroupUserRepository.delete(acUserGroupUserRepository.findAll(predicate1));
+
                 } else {
                     acUserGroup.setInsertDate(orgAcUserGroup.getInsertDate());
                     acUserGroup.setInsertUuid(orgAcUserGroup.getInsertUuid());

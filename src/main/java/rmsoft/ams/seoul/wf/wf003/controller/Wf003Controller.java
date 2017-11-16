@@ -13,10 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 import rmsoft.ams.seoul.common.controller.MessageBaseController;
 import rmsoft.ams.seoul.wf.wf003.service.Wf003Service;
-import rmsoft.ams.seoul.wf.wf003.vo.Wf00301VO;
-import rmsoft.ams.seoul.wf.wf003.vo.Wf00301_P0101VO;
-import rmsoft.ams.seoul.wf.wf003.vo.Wf00301_P0102VO;
-import rmsoft.ams.seoul.wf.wf003.vo.Wf00302VO;
+import rmsoft.ams.seoul.wf.wf003.vo.*;
 
 import java.util.List;
 
@@ -89,5 +86,19 @@ public class Wf003Controller extends MessageBaseController {
     public Responses.MapResponse getPopupInfo(RequestParams<Wf00301_P0102VO> requestParams) {
 
         return Responses.MapResponse.of(wf003Service.getPopupInfo(requestParams));
+    }
+
+    /**********************************************************************************
+     *  Run Process
+     **********************************************************************************/
+    @PutMapping("/01/run")
+    @PostMapping
+    public ApiResponse runProcess(@RequestBody Wf00303VO requestParams) {
+        return wf003Service.runProcess(requestParams);
+    }
+
+    @GetMapping("/01/stop")
+    public ApiResponse stopProcess(String batchId) {
+        return wf003Service.stopProcess(batchId);
     }
 }

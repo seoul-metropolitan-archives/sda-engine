@@ -4,6 +4,7 @@
 
 package rmsoft.ams.seoul.wf.wf001.service;
 
+import com.querydsl.core.types.Predicate;
 import io.onsemiro.core.api.response.ApiResponse;
 import io.onsemiro.core.code.ApiStatus;
 import io.onsemiro.core.domain.BaseService;
@@ -16,10 +17,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import rmsoft.ams.seoul.common.domain.QWfParameter;
+import rmsoft.ams.seoul.common.domain.QWfWorkflowJob;
 import rmsoft.ams.seoul.common.domain.WfJob;
 import rmsoft.ams.seoul.common.domain.WfParameter;
 import rmsoft.ams.seoul.common.repository.WfJobRepository;
 import rmsoft.ams.seoul.common.repository.WfParameterRepository;
+import rmsoft.ams.seoul.common.repository.WfWorkflowJobRepository;
 import rmsoft.ams.seoul.wf.wf001.dao.Wf001Mapper;
 import rmsoft.ams.seoul.wf.wf001.vo.Wf00101VO;
 import rmsoft.ams.seoul.wf.wf001.vo.Wf00102VO;
@@ -39,6 +43,9 @@ public class Wf001Service extends BaseService {
 
     @Autowired
     private WfParameterRepository wfParameterRepository;
+
+    @Autowired
+    private WfWorkflowJobRepository wfWorkflowJobRepository;
 
     @Inject
     private Wf001Mapper wf001Mapper;
@@ -86,6 +93,16 @@ public class Wf001Service extends BaseService {
             } else {
                 if (wfJob.isDeleted()) {
                     wfJobRepository.delete(wfJob);
+
+                    // job 이 삭제되면 관련 parameter 삭제
+                    QWfParameter qWfParameter = QWfParameter.wfParameter;
+                    Predicate predicate = qWfParameter.jobUuid.eq(wfJob.getJobUuid());
+                    wfParameterRepository.delete(wfParameterRepository.findAll(predicate));
+
+                    // job 이 삭제되면 관련 workflow job 삭제
+                    QWfWorkflowJob qWfWorkflowJob = QWfWorkflowJob.wfWorkflowJob;
+                    Predicate predicate1 = qWfWorkflowJob.jobUuid.eq(wfJob.getJobUuid());
+                    wfWorkflowJobRepository.delete(wfWorkflowJobRepository.findAll(predicate1));
                 } else {
                     wfJob.setInsertDate(orgWfJob.getInsertDate());
                     wfJob.setInsertUuid(orgWfJob.getInsertUuid());

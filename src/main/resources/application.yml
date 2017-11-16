@@ -69,6 +69,13 @@ msg.exchange.gateway.batch:
     ip: localhost
     port: 33001
 
+native.library.path: D:\02.DreamAntDev\git-workspaces\java\seoul-ams\out\production\resources\native-libs\
+
+taskExecutor:
+  core-pool-size: 3
+  max-pool-size: 10
+  queue-capacity: 20
+
 # ONSEMIRO
 onsemiro:
   # App Name

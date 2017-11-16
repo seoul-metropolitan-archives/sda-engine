@@ -51,9 +51,9 @@ public class WfWorkflowResult extends SimpleJpaModel<WfWorkflowResult.WfWorkflow
     @Comment(value = "Executer UUID")
     private String executerUuid;
 
-    @Column(name = "PROGRAM_UUID", length = 36, nullable = false)
+    @Column(name = "MENU_UUID", length = 36, nullable = false)
     @Comment(value = "Program UUID")
-    private String programUuid;
+    private String menuUuid;
 
     @Column(name = "START_DATE", nullable = false)
     @Comment(value = "Start Date")

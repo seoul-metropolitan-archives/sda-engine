@@ -75,9 +75,9 @@ public class WfJobResult extends SimpleJpaModel<WfJobResult.WfJobResultId> {
     @Comment(value = "End Date")
     protected Timestamp endDate;
 
-    @Column(name = "ERROR_MESSAGE", length = 500)
-    @Comment(value = "Error Message")
-    private String errorMessage;
+    @Column(name = "MESSAGE", length = 4000)
+    @Comment(value = "Message")
+    private String message;
 
     @Override
     public WfJobResultId getId() {

@@ -4,4 +4,5 @@ import lombok.Data;
 
 @Data
 public class CheckColumnVO extends BaseColumnVO {
+    private boolean editable = false;
 }

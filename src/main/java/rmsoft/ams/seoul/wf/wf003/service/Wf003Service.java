@@ -4,11 +4,14 @@
 
 package rmsoft.ams.seoul.wf.wf003.service;
 
+import com.querydsl.core.types.Predicate;
 import io.onsemiro.core.api.response.ApiResponse;
 import io.onsemiro.core.code.ApiStatus;
 import io.onsemiro.core.domain.BaseService;
 import io.onsemiro.core.parameter.RequestParams;
+import io.onsemiro.utils.DateUtils;
 import io.onsemiro.utils.ModelMapperUtils;
+import io.onsemiro.utils.SessionUtils;
 import io.onsemiro.utils.UUIDUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,17 +19,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import rmsoft.ams.seoul.common.domain.WfParameter;
-import rmsoft.ams.seoul.common.domain.WfWorkflow;
-import rmsoft.ams.seoul.common.domain.WfWorkflowJob;
-import rmsoft.ams.seoul.common.repository.WfParameterRepository;
-import rmsoft.ams.seoul.common.repository.WfWorkflowJobRepository;
-import rmsoft.ams.seoul.common.repository.WfWorkflowRepository;
+import rmsoft.ams.seoul.common.domain.*;
+import rmsoft.ams.seoul.common.repository.*;
+import rmsoft.ams.seoul.utils.CommonCodeUtils;
+import rmsoft.ams.seoul.utils.WorkflowManager;
 import rmsoft.ams.seoul.wf.wf003.dao.Wf003Mapper;
-import rmsoft.ams.seoul.wf.wf003.vo.Wf00301VO;
-import rmsoft.ams.seoul.wf.wf003.vo.Wf00301_P0101VO;
-import rmsoft.ams.seoul.wf.wf003.vo.Wf00301_P0102VO;
-import rmsoft.ams.seoul.wf.wf003.vo.Wf00302VO;
+import rmsoft.ams.seoul.wf.wf003.vo.*;
 
 import javax.inject.Inject;
 import java.util.HashMap;
@@ -44,13 +42,29 @@ public class Wf003Service extends BaseService {
     private WfWorkflowRepository wfWorkflowRepository;
 
     @Autowired
+    private WfWorkflowResultRepository wfWorkflowResultRepository;
+
+    @Autowired
     private WfWorkflowJobRepository wfWorkflowJobRepository;
+
+    @Autowired
+    private WfJobRepository wfJobRepository;
+
+    @Autowired
+    private WfJobResultRepository wfJobResultRepository;
 
     @Autowired
     private WfParameterRepository wfParameterRepository;
 
+    @Autowired
+    private WfParameterResultRepository wfParameterResultRepository;
+
     @Inject
     private Wf003Mapper wf003Mapper;
+
+    @Autowired
+    private WorkflowManager workflowManager;
+
 
     /**********************************************************************************************
      * JOB 관련 Service Methods
@@ -225,5 +239,99 @@ public class Wf003Service extends BaseService {
         Map<String, Object> popupInfo = new HashMap<String, Object>();
         popupInfo.put("columnInfo", wf003Mapper.getColumnInfo(requestParams.getString("jobUuid")));
         return popupInfo;
+    }
+
+    /**********************************************************************************
+     *  Run Process
+     **********************************************************************************/
+    @Transactional
+    public ApiResponse runProcess(Wf00303VO requestParams) {
+        // Workflow Result에 등록
+        WfWorkflowResult wfWorkflowResult = new WfWorkflowResult();
+        wfWorkflowResult.setWorkflowResultUuid(UUIDUtils.getUUID());
+        wfWorkflowResult.setWorkflowUuid(requestParams.getWorkflowUuid());
+        wfWorkflowResult.setWorkflowName(requestParams.getWorkflowName());
+        wfWorkflowResult.setBatchId(wf003Mapper.getBatchId());
+        wfWorkflowResult.setStatusUuid(getStatusUuid("CD131", "PENDING"));
+        wfWorkflowResult.setExecuterUuid(SessionUtils.getCurrentLoginUserUuid());
+        wfWorkflowResult.setMenuUuid(requestParams.getMenuUuid());
+        wfWorkflowResult.setStartDate(DateUtils.getTimestampNow());
+
+        wfWorkflowResultRepository.save(wfWorkflowResult);
+
+        // Job Result 에 등록
+        if (requestParams.getWorkflowJobList() != null && requestParams.getWorkflowJobList().size() > 0) {
+            requestParams.getWorkflowJobList().forEach(wfWorkflowJob -> {
+                // Job 정보 찾기
+                QWfJob qWfJob = QWfJob.wfJob;
+                Predicate predicate = qWfJob.jobUuid.eq(wfWorkflowJob.getJobUuid());
+                WfJob wfJobOne = wfJobRepository.findOne(predicate);
+
+                // Job Result 정보 생성
+                if (wfJobOne != null) {
+                    WfJobResult wfJobResult = new WfJobResult();
+                    wfJobResult.setJobResultUuid(UUIDUtils.getUUID());
+                    wfJobResult.setWorkflowResultUuid(wfWorkflowResult.getWorkflowResultUuid());
+                    wfJobResult.setSequence(wfWorkflowJob.getSequence());
+                    wfJobResult.setJobUuid(wfJobOne.getJobUuid());
+                    wfJobResult.setJobName(wfJobOne.getJobName());
+                    wfJobResult.setApi(wfJobOne.getApi());
+                    wfJobResult.setSkipYn(wfWorkflowJob.getSkipYn());
+                    wfJobResult.setTerminateYn(wfWorkflowJob.getTerminateYn());
+                    wfJobResult.setBatchId(wfWorkflowResult.getBatchId());
+                    wfJobResult.setStatusUuid(getStatusUuid("CD130", "PENDING"));
+                    wfJobResult.setStartDate(DateUtils.getTimestampNow());
+
+                    wfJobResultRepository.save(wfJobResult);
+
+                    final Map<String, Object> parameterMap = new HashMap<>();
+
+                    // Parameter 결과 등록
+                    if (wfWorkflowJob.getParameterList() != null && wfWorkflowJob.getParameterList().size() > 0) {
+
+                        wfWorkflowJob.getParameterList().forEach(wfParameter -> {
+                            QWfParameter qWfParameter = QWfParameter.wfParameter;
+                            Predicate predicate1 = qWfParameter.parameterUuid.eq(wfParameter.getParameterUuid());
+
+                            WfParameter wfParameterOne = wfParameterRepository.findOne(predicate1);
+
+                            if (wfParameterOne != null) {
+                                WfParameterResult wfParameterResult = new WfParameterResult();
+                                wfParameterResult.setParameterResultUuid(UUIDUtils.getUUID());
+                                wfParameterResult.setJobResultUuid(wfJobResult.getJobResultUuid());
+                                wfParameterResult.setParameterUuid(wfParameterOne.getParameterUuid());
+                                wfParameterResult.setParameterName(wfParameterOne.getParameterName());
+                                wfParameterResult.setBatchId(wfJobResult.getBatchId());
+                                wfParameterResult.setInputMethodUuid(wfParameterOne.getInputMethodUuid());
+                                wfParameterResult.setInputCodeUuid(wfParameterOne.getInputCodeUuid());
+                                wfParameterResult.setInOutUuid(wfParameterOne.getInOutUuid());
+                                wfParameterResult.setValue(wfParameter.getDefaultValue());
+                                wfParameterResult.setDisplayYn(wfParameterOne.getDisplayYn());
+                                wfParameterResult.setRequiredYn(wfParameterOne.getRequiredYn());
+
+                                wfParameterResultRepository.save(wfParameterResult);
+
+                                // Parameter Value 셋팅
+                                parameterMap.put(wfParameterResult.getParameterName(), wfParameterResult.getValue());
+                            }
+                        });
+                    }
+
+                    // Job Process 시작
+                    //workflowManager.invokeProcess(wfJobResult.getBatchId() + "", wfJobResult.getApi(), parameterMap);
+                }
+            });
+        }
+
+        return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");
+    }
+
+    public ApiResponse stopProcess(String batchId) {
+        workflowManager.stopProcess(batchId);
+        return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");
+    }
+
+    private String getStatusUuid(String codeGroup, String code) {
+        return CommonCodeUtils.getCodeDetailUuidByCode(codeGroup, code);
     }
 }

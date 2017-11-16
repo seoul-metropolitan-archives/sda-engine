@@ -20,15 +20,19 @@ import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.annotation.MapperScan;
 import org.mybatis.spring.transaction.SpringManagedTransactionFactory;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.*;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
+import org.springframework.core.task.TaskExecutor;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -49,9 +53,19 @@ import java.util.Properties;
 @EnableJpaRepositories(basePackages = {PackageManager.CORE_BASE, PackageNames.BASE}, entityManagerFactoryRef = "entityManagerFactory")
 @EnableAspectJAutoProxy(proxyTargetClass = true)
 @MapperScan(basePackages = {PackageManager.CORE_DOMAIN, PackageNames.BASE}, markerInterface = MyBatisMapper.class)
+@EnableAsync
 public class AppConfig implements ApplicationContextAware {
 
     private ApplicationContext context;
+
+    @Value("${taskExecutor.core-pool-size}")
+    private int corePoolSize;
+
+    @Value("${taskExecutor.max-pool-size}")
+    private int maxPoolSize;
+
+    @Value("${taskExecutor.queue-capacity}")
+    private int queueCapacity;
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
@@ -202,6 +216,23 @@ public class AppConfig implements ApplicationContextAware {
     public LocalValidatorFactoryBean validatorFactoryBean() {
         return new LocalValidatorFactoryBean();
     }
+
+
+    /**
+     * 여기 설정된 함수 이름이 Thread를 돌렸을때의 이름으로 보여짐
+     *
+     * @return
+     */
+    @Bean
+    public TaskExecutor taskExecutor() {
+        ThreadPoolTaskExecutor taskExecutor = new ThreadPoolTaskExecutor();
+        taskExecutor.setCorePoolSize(corePoolSize);
+        taskExecutor.setMaxPoolSize(maxPoolSize);
+        taskExecutor.setQueueCapacity(queueCapacity);
+        taskExecutor.setDaemon(true);
+        return taskExecutor;
+    }
+
 
     /*@Bean
     public AXBootLogbackAppender axBootLogbackAppender(AXBootErrorLogService axBootErrorLogService, AXBootContextConfig axBootContextConfig) throws Exception {

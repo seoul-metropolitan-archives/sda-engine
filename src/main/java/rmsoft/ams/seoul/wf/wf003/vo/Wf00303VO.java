@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 /**
- * Wf00302VO
+ * Wf00301VO
  *
  * @author james
  * @version 1.0.0
@@ -21,24 +21,16 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class Wf00302VO extends BaseVO {
-    private String workflowJobUuid;
-
+public class Wf00303VO extends BaseVO {
     private String workflowUuid;
 
-    private long sequence;
+    private String workflowName;
 
-    private String jobUuid;
+    private String serviceUuid;
 
-    private String jobName;
-
-    private String api;
-
-    private String skipYn;
-
-    private String terminateYn;
+    private String menuUuid;
 
     private String useYn;
 
-    private List<Wf00301_P0102VO> parameterList;
+    private List<Wf00302VO> workflowJobList;
 }

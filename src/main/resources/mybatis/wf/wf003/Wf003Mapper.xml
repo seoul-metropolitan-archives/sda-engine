@@ -216,4 +216,8 @@
                  WHERE Z1.JOB_UUID = #{jobUuid}
          ) ZZ1
     </select>
+
+    <select id="getBatchId" resultType="int" statementType="PREPARED">
+        SELECT IG_BATCHID_SQ.nextval as batchId FROM dual
+    </select>
 </mapper>

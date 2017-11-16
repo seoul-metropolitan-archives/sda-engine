@@ -39,7 +39,7 @@
                     </dl>
                 </div>
                 <div style="height:100%; width:100%" class="bgf7 div_tablerow">
-                    <div style="display:table; height:100%; width:48%; float:left" class="bdr">
+                    <div style="display:table; height:100%; width:50%; float:left" class="bdr">
                         <ul class="bdb bdt div_tablerow bgf7" style="height:30px;">
                             <th:block layout:insert="~{/fragments/page-buttons :: dot('Workflow')}"/>
                             <th:block layout:insert="~{/fragments/page-buttons :: add-and-delete}"/>
@@ -48,13 +48,22 @@
                             <div id="realgrid01" style="width:100%; height:100%"></div>
                         </div>
                     </div>
-                    <div style="display:table; height:100%; width:52%; float:right">
-                        <ul class="bdb bdt div_tablerow bgf7" style="height:30px;">
+                    <div style="display:table; height:60%; width:50%; float:left">
+                        <ul class="bdb bdt bgf7 div_tablerow" style="height:30px;">
                             <th:block layout:insert="~{/fragments/page-buttons :: dot('Job')}"/>
                             <th:block layout:insert="~{/fragments/page-buttons :: add-and-delete}"/>
                         </ul>
                         <div style="height:100%; width:100%" class="div_tablerow bdb">
                             <div id="realgrid02" style="width:100%; height:100%"></div>
+                        </div>
+                    </div>
+                    <div style="display:table; height:40%; width:50%; float:left">
+                        <ul class="bdb bdt bgf7 div_tablerow" style="height:30px;">
+                            <th:block layout:insert="~{/fragments/page-buttons :: dot('Parameter')}"/>
+                            <th:block layout:insert="~{/fragments/page-buttons :: add-and-delete}"/>
+                        </ul>
+                        <div style="height:100%; width:100%" class="div_tablerow bdb">
+                            <div id="realgrid03" style="width:100%; height:100%"></div>
                         </div>
                     </div>
                 </div>

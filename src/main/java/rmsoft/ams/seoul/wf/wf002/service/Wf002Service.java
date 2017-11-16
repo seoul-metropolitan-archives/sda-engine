@@ -4,6 +4,7 @@
 
 package rmsoft.ams.seoul.wf.wf002.service;
 
+import com.querydsl.core.types.Predicate;
 import io.onsemiro.core.api.response.ApiResponse;
 import io.onsemiro.core.code.ApiStatus;
 import io.onsemiro.core.domain.BaseService;
@@ -16,6 +17,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import rmsoft.ams.seoul.common.domain.QWfWorkflowJob;
 import rmsoft.ams.seoul.common.domain.WfWorkflow;
 import rmsoft.ams.seoul.common.domain.WfWorkflowJob;
 import rmsoft.ams.seoul.common.repository.WfWorkflowJobRepository;
@@ -86,6 +88,12 @@ public class Wf002Service extends BaseService {
             } else {
                 if (wfWorkflow.isDeleted()) {
                     wfWorkflowRepository.delete(wfWorkflow);
+
+                    // job 이 삭제되면 관련 workflow job 삭제
+                    QWfWorkflowJob qWfWorkflowJob = QWfWorkflowJob.wfWorkflowJob;
+                    Predicate predicate = qWfWorkflowJob.workflowUuid.eq(wfWorkflow.getWorkflowUuid());
+                    wfWorkflowJobRepository.delete(wfWorkflowJobRepository.findAll(predicate));
+
                 } else {
                     wfWorkflow.setInsertDate(orgWfWorkflow.getInsertDate());
                     wfWorkflow.setInsertUuid(orgWfWorkflow.getInsertUuid());

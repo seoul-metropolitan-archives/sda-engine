@@ -1,8 +1,10 @@
 package rmsoft.ams.seoul.ac.ac003.service;
 
+import com.querydsl.core.types.Predicate;
 import io.onsemiro.core.api.response.ApiResponse;
 import io.onsemiro.core.code.ApiStatus;
 import io.onsemiro.core.domain.BaseService;
+import io.onsemiro.core.domain.user.QUserGroupUser;
 import io.onsemiro.core.parameter.RequestParams;
 import io.onsemiro.utils.DateUtils;
 import io.onsemiro.utils.ModelMapperUtils;
@@ -23,6 +25,7 @@ import rmsoft.ams.seoul.ac.ac003.vo.Ac00303VO;
 import rmsoft.ams.seoul.common.domain.AcAccessControl;
 import rmsoft.ams.seoul.common.domain.AcUser;
 import rmsoft.ams.seoul.common.domain.AcUserGroupUser;
+import rmsoft.ams.seoul.common.domain.QAcAccessControl;
 import rmsoft.ams.seoul.common.repository.AcAccessControlRepository;
 import rmsoft.ams.seoul.common.repository.AcUserGroupUserRepository;
 import rmsoft.ams.seoul.common.repository.AcUserRepository;
@@ -96,6 +99,17 @@ public class Ac003Service extends BaseService {
             } else {
                 if (acUser.isDeleted()) {
                     acUserRepository.delete(acUser);
+
+                    // User가 삭제되므로, Access Control 도 모두 삭제
+                    QAcAccessControl qAcAccessControl = QAcAccessControl.acAccessControl;
+                    Predicate predicate = qAcAccessControl.userUuid.eq(acUser.getUserUuid());
+                    acAccessControlRepository.delete(acAccessControlRepository.findAll(predicate));
+
+                    // User가 삭제되므로, User Group User 도 모두 삭제
+                    QUserGroupUser qUserGroupUser = QUserGroupUser.userGroupUser;
+                    Predicate predicate1 = qUserGroupUser.userUuid.eq(acUser.getUserUuid());
+                    acUserGroupUserRepository.delete(acUserGroupUserRepository.findAll(predicate1));
+
                 } else {
                     if (!acUser.getUserPassword().equals(orgAcUser.getUserPassword())) {
                         // 비밀번호가 변경된 경우

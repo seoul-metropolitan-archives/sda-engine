@@ -91,7 +91,8 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         }
     },
     PAGE_CHOICE: function (caller, act, data) {
-        var list = caller.gridView01.getData();
+        var list = caller.gridView02.getData();
+
         if (parent && parent.axboot && parent.axboot.modal) {
             parent.axboot.modal.callback(list); // 부모창에 callback 호출
         }
@@ -269,7 +270,7 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
         $("#popupGrid01").fadeIn(100);
     },
     getData: function () {
-        return this.gridObj.getSelectedData();
+        return this.gridObj.getJsonRows();
     }
 });
 

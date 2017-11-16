@@ -78,6 +78,20 @@ public class CommonCodeUtils {
         return StringUtils.isEmpty(commonCode.getCodeDetailUUID()) ? "미등록코드" : commonCode.getCodeDetailUUID();
     }
 
+    public static String getCodeDetailUuidByCode(String groupCd, String code) {
+
+        if(commonCodeMap == null){
+            commonCodeMap =  getAllByMap();
+        }
+
+        List<Ad00303VO> commonCodes = commonCodeMap.get(groupCd);
+        Ad00303VO commonCode = commonCodes.stream()
+                .filter(e -> e.getCode().equals(code.trim()))
+                .findFirst().get();
+
+        return StringUtils.isEmpty(commonCode.getCodeDetailUUID()) ? "미등록코드" : commonCode.getCodeDetailUUID();
+    }
+
     public static String getDetailCode(String groupCd, String cdUuid) {
 
         if(commonCodeMap == null){

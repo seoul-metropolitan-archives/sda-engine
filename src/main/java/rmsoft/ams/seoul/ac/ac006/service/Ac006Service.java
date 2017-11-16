@@ -4,9 +4,11 @@
 
 package rmsoft.ams.seoul.ac.ac006.service;
 
+import com.querydsl.core.types.Predicate;
 import io.onsemiro.core.api.response.ApiResponse;
 import io.onsemiro.core.code.ApiStatus;
 import io.onsemiro.core.domain.BaseService;
+import io.onsemiro.core.domain.user.role.QRolePermission;
 import io.onsemiro.core.parameter.RequestParams;
 import io.onsemiro.utils.ModelMapperUtils;
 import io.onsemiro.utils.UUIDUtils;
@@ -20,6 +22,7 @@ import rmsoft.ams.seoul.ac.ac006.dao.Ac006Mapper;
 import rmsoft.ams.seoul.ac.ac006.vo.Ac00601VO;
 import rmsoft.ams.seoul.common.domain.AcPermission;
 import rmsoft.ams.seoul.common.repository.AcPermissionRepository;
+import rmsoft.ams.seoul.common.repository.AcRolePermissionRepository;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -33,6 +36,9 @@ public class Ac006Service extends BaseService {
 
     @Autowired
     private AcPermissionRepository acPermissionRepository;
+
+    @Autowired
+    private AcRolePermissionRepository acRolePermissionRepository;
 
     @Inject
     private Ac006Mapper ac006Mapper;
@@ -83,6 +89,12 @@ public class Ac006Service extends BaseService {
             } else {
                 if (acPermission.isDeleted()) {
                     acPermissionRepository.delete(acPermission);
+
+                    // Role 이 삭제 되었으므로, 관련 Role Permission 삭제
+                    QRolePermission qRolePermission = QRolePermission.rolePermission;
+                    Predicate predicate = qRolePermission.permissionUuid.eq(acPermission.getPermissionUuid());
+                    acRolePermissionRepository.delete(acRolePermissionRepository.findAll(predicate));
+
                 } else {
                     acPermission.setInsertDate(orgAcPermission.getInsertDate());
                     acPermission.setInsertUuid(orgAcPermission.getInsertUuid());
