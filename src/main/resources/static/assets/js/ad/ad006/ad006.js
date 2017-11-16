@@ -28,10 +28,10 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     },
     GET_ENTITY_DETAIL : function(caller, act, data)
     {
-
+        /*
         if(!data["entityTypeUuid"])
             return ;
-
+        */
         axboot.ajax({
             url : "/ad/ad006/ad006/getEntityColumnList"
             ,type : "POST"
