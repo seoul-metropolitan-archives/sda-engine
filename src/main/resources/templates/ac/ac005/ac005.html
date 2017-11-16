@@ -16,7 +16,7 @@
     <form name="formView01" id="formView01" method="post" onsubmit="return false">
         <div class="cssBody" style="top:80px">
             <div class="contents_wrap">
-                <div style=" height:31px; width:100%" class="bgf7 div_tablerow">
+                <div style=" height:30px; width:100%" class="bgf7 div_tablerow">
                     <ul class="bdb">
                         <th:block layout:insert="~{/fragments/page-buttons :: bookmark}"/>
                         <th:block layout:insert="~{/fragments/page-buttons :: save-and-inquiry}"/>
@@ -24,16 +24,16 @@
                 </div>
                 <div class="bdb div_tablerow">
                     <dl>
-                        <dt class="pdl_5">Role</dt>
+                        <dt class="mgl_5">Role</dt>
                         <dd>
                             <input type=text data-ax-path="roleName" style="width:135px">
                         </dd>
                         <dt class="none">Use</dt>
-                        <dd class="pdl_5 w_auto">
+                        <dd class="w_auto">
                             <div class="rdo_box">
                                 <span class="rdo_box_title">Use</span>
                                 <label>
-                                    <input type="radio" name="radio" checked="checked" data-ax-path="useYn"
+                                    <input type="radio" name="radio" data-ax-path="useYn"
                                            class="no_border" value="Y"
                                     >Yes
                                 </label>
@@ -41,7 +41,7 @@
                                     <input type="radio" name="radio" data-ax-path="useYn" class="no_border" value="N">No
                                 </label>
                                 <label>
-                                    <input type="radio" name="radio" data-ax-path="useYn" class="no_border" value="">All
+                                    <input type="radio" name="radio" checked="checked" data-ax-path="useYn" class="no_border" value="">All
                                 </label>
                             </div>
                         </dd>
@@ -49,16 +49,16 @@
                 </div>
                 <div data-ax5layout="ax1" data-config="{layout:'split-panel', orientation: 'vertical'}"
                      style="height:100%; width:100%" class="div_tablerow">
-                    <div data-split-panel="{width: '*'}">
-                        <ul class="bdb bdt div_tablerow" style="height:30px;">
+                    <div data-split-panel="{width: '43.5%'}">
+                        <ul class="bdb bdt div_tablerow bgf7" style="height:30px;">
                             <th:block layout:insert="~{/fragments/page-buttons :: dot('Role')}"/>
                             <th:block layout:insert="~{/fragments/page-buttons :: add-and-delete}"/>
                         </ul>
                         <div id="realgrid01"></div>
                     </div>
                     <div data-splitter="{}"></div>
-                    <div data-split-panel="{width: '*'}">
-                        <ul class="bdb bdt div_tablerow" style="height:30px;">
+                    <div data-split-panel="{width: '56.5%'}">
+                        <ul class="bdb bdt div_tablerow bgf7" style="height:30px;">
                             <th:block layout:insert="~{/fragments/page-buttons :: dot('Permission')}"/>
                             <th:block layout:insert="~{/fragments/page-buttons :: add-and-delete}"/>
                         </ul>

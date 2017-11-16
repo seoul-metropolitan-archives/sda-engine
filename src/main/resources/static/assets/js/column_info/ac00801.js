@@ -30,7 +30,7 @@ var ac00801 =
                     sortNo: 3,
                     name: "programName",
                     text: "Program Name",
-                    width: 150,
+                    width: 200,
                     editable: true,
                     dataType: "text",
                     required: true,
@@ -40,7 +40,7 @@ var ac00801 =
                     sortNo: 4,
                     name: "serviceUuid",
                     text: "Service",
-                    width: 130,
+                    width: 110,
                     editable: true,
                     dataType: "combo",
                     required: true,
@@ -91,7 +91,7 @@ var ac00801 =
                     editable: true,
                     dataType: "check",
                     textAlignment: "center",
-                    required: true
+                    required: false
                 },
                 {
                     sortNo: 9,

@@ -397,8 +397,8 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     uuidFieldName : "classificationSchemeUuid",
     entityName : "ClassName",
     initView: function () {
-        this.gridObj = new GridWrapper("realgrid01", "/assets/js/libs/realgrid", true);
-        this.gridObj.setIsTree(true).setGridStyle("100%", "100%")
+        this.gridObj = new TreeGridWrapper("realgrid01", "/assets/js/libs/realgrid", true);
+        this.gridObj.setGridStyle("100%", "100%")
             .setOption({
                 footer:{visible:false},
                 header: { visible: false },
@@ -483,7 +483,7 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
         this.initInstance();
         this.setColumnInfo(cl00202.column_info);
         this.gridObj.setFixedOptions({
-            colCount: 4
+            colCount: 3
         });
         this.gridObj.setOption({
             checkBar: {visible: true},

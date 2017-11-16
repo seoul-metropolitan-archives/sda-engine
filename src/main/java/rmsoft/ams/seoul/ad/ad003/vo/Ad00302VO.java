@@ -12,7 +12,7 @@ public class Ad00302VO extends BaseVO
     private String codeHeaderUuid;
     private String code;
     private String codeName;
-    private String defaultYN;
+    private String defaultYN = "N";
     private String orderNO;
     private String useYN;
     private String attribute01;

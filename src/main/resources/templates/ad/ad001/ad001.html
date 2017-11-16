@@ -12,7 +12,7 @@
     <form name="formView01" id="formView01" method="post" onsubmit="return false">
         <div class="cssBody" style="top:80px">
             <div class="contents_wrap" style="position:absolute">
-                <div style=" height:31px; width:100%" class="bgf7 div_tablerow">
+                <div style=" height:30px; width:100%;" class="bgf7 div_tablerow">
                     <ul class="bdb">
                         <th:block layout:insert="~{/fragments/page-buttons :: bookmark}"/>
                         <th:block layout:insert="~{/fragments/page-buttons :: save-and-inquiry}"/>
@@ -20,7 +20,7 @@
                 </div>
                 <div class="bdb div_tablerow">
                     <dl>
-                        <dt class="pdl_5 w150">Environment Code</dt>
+                        <dt class="mgl_5 w150">Environment Code</dt>
                         <dd>
                             <input type=text style="width:135px" data-ax-path="configurationCode">
                         </dd>
@@ -39,15 +39,15 @@
                     </dl>
                     <dl>
                         <dt class="none">USE</dt>
-                        <dd class="w_auto pdl_5">
+                        <dd class="w_auto mgl_5">
                             <div class="rdo_box">
                                 <span class="rdo_box_title">Use</span>
                                 <label>
-                                    <input type="radio" name="radio" data-ax-path="useYN" class="no_border">Yes</label>
+                                    <input type="radio" name="radio" data-ax-path="useYN" class="no_border" value="Y">Yes</label>
                                 <label>
-                                    <input type="radio" name="radio" data-ax-path="useYN" class="no_border">No</label>
+                                    <input type="radio" name="radio" data-ax-path="useYN" class="no_border" value="N">No</label>
                                 <label>
-                                    <input type="radio" name="radio" data-ax-path="useYN" class="no_border" checked>All</label>
+                                    <input type="radio" name="radio" data-ax-path="useYN" class="no_border" value="" checked>All</label>
                             </div>
                         </dd>
                     </dl>

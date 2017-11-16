@@ -39,7 +39,6 @@ var ad00402 =
                 editable: true,
                 dataType: "text",
                 required: true,
-                renderer : {showTooltip : true}
             },
             {
                 sortNo: 3,
@@ -136,11 +135,11 @@ var ad00402 =
                 name: "insertUuid",
                 text: "Created By",
                 width: 80,
-                editable: false,
                 dataType: "text",
+                editable: false,
                 visible: true,
                 required: false,
-                renderer : {showTooltip : true}
+                disable: true
             },
             {
                 sortNo: 11,
@@ -149,7 +148,8 @@ var ad00402 =
                 width: 140,
                 editable: false,
                 dataType: "timestamp",
-                required: false
+                required: false,
+                disable: true
             },
             {
                 sortNo: 12,
@@ -160,7 +160,7 @@ var ad00402 =
                 visible: true,
                 dataType: "text",
                 required: false,
-                renderer : {showTooltip : true}
+                disable: true
             },
             {
                 sortNo: 14,
@@ -169,7 +169,8 @@ var ad00402 =
                 width: 140,
                 editable: false,
                 dataType: "timestamp",
-                required: false
+                required: false,
+                disable: true
             }
         ]
 }

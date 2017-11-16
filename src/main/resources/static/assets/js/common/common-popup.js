@@ -152,9 +152,9 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
                 res = res.map;
                 fnObj.isTree = res["popupInfo"]["treeYN"];
                 if(fnObj.isTree == 'Y')
-                    fnObj.gridView01.gridObj = new GridWrapper(fnObj.gridView01.tagId, "/assets/js/libs/realgrid",true);
+                    fnObj.gridView01.gridObj = new TreeGridWrapper(fnObj.gridView01.tagId, "/assets/js/libs/realgrid");
                 else
-                    fnObj.gridView01.gridObj = new GridWrapper(fnObj.gridView01.tagId, "/assets/js/libs/realgrid");
+                    fnObj.gridView01.gridObj = new SimpleGridWrapper(fnObj.gridView01.tagId, "/assets/js/libs/realgrid");
 
                 fnObj.gridView01.gridObj.setGridStyle("100%", "100%");
                 fnObj.gridView01.gridObj.setEntityName(fnObj.gridView01.entityName);

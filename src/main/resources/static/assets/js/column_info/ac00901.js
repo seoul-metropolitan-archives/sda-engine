@@ -30,7 +30,7 @@ var ac00901 =
                     sortNo: 2,
                     name: "parentMenuCode",
                     text: "Parent Menu Code",
-                    width: 150,
+                    width: 120,
                     editable: true,
                     dataType: "text",
                     required: false,
@@ -72,7 +72,7 @@ var ac00901 =
                     sortNo: 6,
                     name: "programName",
                     text: "Program Name",
-                    width: 140,
+                    width: 180,
                     disable: true,
                     editable: false,
                     dataType: "text",
@@ -115,7 +115,7 @@ var ac00901 =
                     editable: true,
                     dataType: "check",
                     textAlignment: "center",
-                    required: true
+                    required: false
                 },
                 {
                     sortNo: 11,

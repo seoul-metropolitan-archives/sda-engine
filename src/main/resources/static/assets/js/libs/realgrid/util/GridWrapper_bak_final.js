@@ -553,7 +553,7 @@ GridWrapper.prototype.style = {
         },
         timestamp : {
             type : "datetime",
-            datetimeFormat : "yyyy-MM-dd HH:mm:ss",
+            datetimeFormat : "yyyy-MM-dd HH:mm:ss.SSS",
             mask : {
                 editMask:"9999-99-99 99:99:99"
                 ,placeHolder:"yyyy-MM-dd HH:mm:ss" //편집기에 표시될 형식
@@ -1003,7 +1003,7 @@ GridWrapper.prototype.setColumnInfo = function(list) {
                 obj.style = {textAlignment: "far"};
                 break;
             case "date":
-                obj.editor = this.style.data.date;
+                obj.editor = dateEditorStyle;
                 obj.styles = $.extend({}, this.defaultStyle.data.date, obj.styles );
                 obj.displayRegExp = "([0-9]{4})([0-9]{4})([0-9]{4})([0-9]{4})";
                 obj.displayReplace = "$1-$2-$3-$4";

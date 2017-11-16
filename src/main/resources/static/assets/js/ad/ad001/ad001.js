@@ -27,10 +27,20 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         });
     },
     PAGE_SAVE: function (caller, act, data) {
+
+        if(!fnObj.gridView01.validate())
+            return false;
+
+        var list = fnObj.gridView01.getData();
+
+        if(list.length < 1)
+            return true;
+
         axboot.ajax({
             type: "POST",
             url: "/ad/ad001/save.do",
-            data: JSON.stringify(fnObj.gridView01.getData()),
+            async : false,
+            data: JSON.stringify(list),
             callback: function (res) {
                 axToast.push(axboot.getCommonMessage("AA007"));
             },
@@ -38,6 +48,10 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 onError: axboot.viewError
             }
         });
+    },
+    CLOSE_TAB : function()
+    {
+        return ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
     },
     dispatch: function (caller, act, data) {
         var result = ACTIONS.exec(caller, act, data);
@@ -114,21 +128,14 @@ fnObj.searchView = axboot.viewExtend(axboot.formView,{
 
 })
 
-fnObj.gridView01 = axboot.viewExtend(axboot.realGridView, {
+fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     tagId : "realgrid01",
     initView: function ()
     {
-        this.gridObj.setColumnInfo(ad00101.column_info);
-        this.gridObj.setEntityName($("#realgridName").text());
-        this.gridObj.makeGrid();
-        this.gridObj.itemClick(function(data){
-            console.log(data);
-        });
+        this.initInstance();
+        this.setColumnInfo(ad00101.column_info);
+        this.setEntityName($("#realgridName").text());
+        this.makeGrid();
         ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
     }
 });
-
-isDataChanged = function()
-{
-    return (fnObj.gridView01.isChangeData() == true) 
-}

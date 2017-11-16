@@ -16,7 +16,7 @@ var ad00401 =
                 name: "popupCode",
                 text: "Popup Code",
                 editable: true,
-                width: 150,
+                width: 130,
                 dataType: "code",
                 required: true,
                 visible: true
@@ -25,7 +25,7 @@ var ad00401 =
                 sortNo: 2,
                 name: "popupName",
                 text: "Popup Name",
-                width: 150,
+                width: 200,
                 editable: true,
                 dataType: "text",
                 required: true
@@ -34,12 +34,13 @@ var ad00401 =
                 sortNo: 3,
                 name: "serviceUuid",
                 text: "Service",
-                width: 130,
+                width: 110,
                 editable: true,
                 dataType: "combo",
                 required: false,
                 visible: true,
                 required: true,
+                lookupDisplay : true,
                 values: axboot.commonCodeFilter("CD006").codeArr,
                 labels: axboot.commonCodeFilter("CD006").nameArr,
                 editor: {
@@ -57,7 +58,7 @@ var ad00401 =
                 width: 70,
                 editable: true,
                 dataType: "check",
-                required: true,
+                required: false,
                 defaultValue : "N",
             },
             {
@@ -68,7 +69,7 @@ var ad00401 =
                 defaultValue : "N",
                 editable: true,
                 dataType: "check",
-                required: true
+                required: false
             },
             {
                 sortNo: 6,
@@ -89,7 +90,7 @@ var ad00401 =
             {
                 sortNo: 8,
                 name: "useYN",
-                text: "USE",
+                text: "Use",
                 width: 50,
                 editable: true,
                 dataType: "check",
@@ -107,10 +108,7 @@ var ad00401 =
                 readonly : true,
                 visible: true,
                 required: false,
-                disable: true,
-                renderer : {
-                    showTooltip : true
-                }
+                disable: true
             },
             {
                 sortNo: 11,
@@ -129,10 +127,7 @@ var ad00401 =
                 visible: true,
                 dataType: "text",
                 required: false,
-                disable: true,
-                renderer : {
-                    showTooltip : true
-                }
+                disable: true
             },
             {
                 sortNo: 14,

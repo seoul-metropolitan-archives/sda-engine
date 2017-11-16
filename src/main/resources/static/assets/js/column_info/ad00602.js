@@ -35,7 +35,7 @@ var ad00602 =
                 text: "Term Code",
                 editable: true,
                 dataType: "popup",
-                popupCode : "PU998",
+                popupCode : "PU003",
                 sqlColumn : {GLOSSARY_UUID: "glossaryUuid",TERM_NAME: "termName",TERM_CODE:"termCode",DATATYPE:"dataType1"},
                 required: false,
                 visible: true

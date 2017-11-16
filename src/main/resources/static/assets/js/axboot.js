@@ -2196,7 +2196,7 @@ axboot.preparePlugin = function () {
         });
         /**
          *
-         * @var {ax5ui} axToast
+         * @var {ax5ui}
          * @example
          * ```js
          * toast.push('Toast message', function () {
@@ -2218,6 +2218,13 @@ axboot.preparePlugin = function () {
         window.axWarningToast = new ax5.ui.toast({
             theme: "danger",
             icon: '<i class="cqc-warning2"></i>',
+            containerPosition: "top-right",
+            onStateChanged: function onStateChanged() {
+            }
+        });
+        window.axErrorToast = new ax5.ui.toast({
+            theme: "danger",
+            icon: '<i class="cqc-cancel3"></i>',
             containerPosition: "top-right",
             onStateChanged: function onStateChanged() {
             }
@@ -2468,16 +2475,17 @@ axboot.baseView =
             ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
     }
         , inquiry: function () {
-        if (isDataChanged && isDataChanged()) {
+        if (axboot.isDataChanged && axboot.isDataChanged(axboot.getMenuId())) {
             axDialog.confirm({
                 msg: axboot.getCommonMessage("AA006")
             }, function () {
                 if (this.key == "ok") {
+                    var result = false;
                     if (ACTIONS && ACTIONS.PAGE_SAVE) {
-                        ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
+                        result = ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
                     }
 
-                    if (ACTIONS && ACTIONS.PAGE_SEARCH) {
+                    if (result && ACTIONS && ACTIONS.PAGE_SEARCH) {
                         ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
                     }
                 } else {
@@ -2532,6 +2540,7 @@ axboot.searchView = {
  * @Object {Object} axboot.gridView
  */
 axboot.gridView = {
+    name: "gridView",
     page: {
         pageNumber: 0,
         pageSize: 99999
@@ -2541,16 +2550,44 @@ axboot.gridView = {
     primaryKey: "",
     parentsUuidFieldName: "",
     parentsGrid: undefined,
+    /* 인스턴스 확인*/
+    initInstance: function () {
+        this.gridObj = new SimpleGridWrapper(this.tagId, "/assets/js/libs/realgrid");
+        this.gridObj.setGridStyle("100%", "100%");
+        this.gridObj.setMakeObj(this);
+    },
+    /* 그리드 생성 */
+    makeGrid: function () {
+        this.gridObj.makeGrid();
+        this.bindEvent();
+    },
+    /*이벤트 걸어주는 함수*/
+    bindEvent: function () {
+        if (this.parentsGrid)
+            this.gridObj.addRowBeforeEvent(this.addRowBeforeEventForChildGrid);
+        else
+            this.gridObj.addRowBeforeEvent(this.addRowBeforeEvent);
+        this.gridObj.onRowsPasted(this.onRowsPasted);
+    },
+    /*데이터 변경 초기화 함수*/
     initChangedData: function () {
         this.gridObj.commit();
     },
+    setEntityName: function (name) {
+        this.gridObj.setEntityName(name);
+    },
     isChangeData: function () {
-        if (this.getData().length > 0) {
+        return this.isDataChanged();
+    },
+    /*데이터 변동사항에 대한 체크 ㅎ마수*/
+    isDataChanged: function () {
+        if (this.gridObj.isDataChanged()) {
             return true;
         } else {
             return false;
         }
     },
+    /*현재 로우의 UUID 가져오는 함수*/
     getUUID: function () {
 
         var key = this.uuidFieldName;
@@ -2560,70 +2597,82 @@ axboot.gridView = {
 
         return this.gridObj.getSelectedData()[key];
     },
+    /*현위치 초기화.*/
+    resetCurrent: function () {
+        this.gridObj.resetCurrent();
+    },
+    /*데이터 표시*/
     setData: function setData(_data, _type) {
         if (!_type)
             _type = "set";
         this.gridObj.setData(_type, _data);
     },
+    /* 데이터 가져오기 */
     getData: function getData() {
-        return this.gridObj.getData();
-    },
-    initInstance: function () {
-        this.gridObj = new GridWrapper(this.tagId, "/assets/js/libs/realgrid");
-        this.gridObj.setGridStyle("100%", "100%");
-        this.gridObj.setMakeObj(this);
-    },
-    makeGrid: function () {
-        this.gridObj.makeGrid();
-        this.bindEvent();
-    },
-    bindEvent: function () {
-        if (this.parentsGrid)
-            this.gridObj.addRowBeforeEvent(this.addRowBeforeEventForChildGrid);
+        /*171113 검증 로직 추가로 인한 코드 추가*/
+        if (this.validate())
+            return this.gridObj.getData();
         else
-            this.gridObj.addRowBeforeEvent(this.addRowBeforeEvent);
-        this.gridObj.onRowsPasted(this.onRowsPasted);
+            return [];
     },
-    addRowBeforeEventForChildGrid: function (wrapperObj, _this) {
-
-        if (_this.parentsGrid) {
-            var data = wrapperObj.getDefaultData();
-            data[wrapperObj.getFieldIndex(_this.parentsUuidFieldName)] = _this.parentsGrid.getUUID();
-            console.log(data);
-            wrapperObj.setDefaultData(data);
-        }
+    /*틀 고정*/
+    setFixedOptions : function(options){
+        this.gridObj.setFixedOptions(options)
     },
+    /*현재 위치 반환 함수*/
     getCurrentData: function () {
         return this.gridObj.getSelectedData();
     },
+    /*데이터 검증 이벤트*/
+    validate: function () {
+        return this.gridObj.validate();
+    },
+    /*그리드 포커스 주기
+    * */
     setFocus: function () {
         this.gridObj.setFocus();
     },
+    /*줄 삭제*/
     delRow: function (_type) {
         return this.gridObj.removeRow();
     },
+    /*컬럼 정보 설정*/
     setColumnInfo: function (_columnInfo) {
         this.gridObj.setColumnInfo(_columnInfo);
     },
+    /*페이징 데이터 설정*/
     setPageData: function setPageData(_page) {
         this.page = $.extend(this.page, _page);
     },
+    /*페이징 데이터 가져오기*/
     getPageData: function getPageData() {
         return this.page;
     },
-    onRowsPasted: function (grid, items) {
+    /*그리드에 붙여넣기 시에 사용되는 함수*/
+    onRowsPasted: function (wrapperObj, _this, grid, items) {
         var data = undefined;
+        var uuid = undefined;
         for (var i = 0; i < items.length; i++) {
-            if (parentsGrid) {
-                this.gridObj.setValue(items[i], 1, parentsGrid.getUUID());
-                data[this.gridObj.getFieldIndex(this.parentsUuidFieldName)] = parentsGrid.getUUID();
+            if (_this.parentsGrid) {
+                _this.gridObj.setValue(items[i], 1, _this.parentsGrid.getUUID());
+                //data[this.gridObj.getFieldIndex(this.parentsUuidFieldName)] = this.parentsGrid.getUUID();
             }
-
+            else {
+                axboot.ajax({
+                    url: "/api/v1/common/getUUID",
+                    type: "POST",
+                    async: false,
+                    callback: function (res) {
+                        uuid = res.map.uuid;
+                    }
+                });
+                _this.gridObj.setValue(items[i], 0, uuid);
+            }
         }
     },
-    addRowBeforeEvent: function (wrapperObj) {
+    /*줄 추가 전에 호출되는 이벤트*/
+    addRowBeforeEvent: function (wrapperObj, _this) {
         var uuid = undefined;
-        var data = wrapperObj.getDefaultData();
         axboot.ajax({
             url: "/api/v1/common/getUUID",
             type: "POST",
@@ -2633,9 +2682,26 @@ axboot.gridView = {
             }
         });
 
-        data[0] = uuid;
-        wrapperObj.setDefaultData(data);
+        var key = _this.uuidFieldName;
+        if (undefined == key || "" == key) {
+            key = _this.primaryKey;
+        }
+        
+        var column = wrapperObj.columnByName(key);
+        column.defaultValue = uuid;
+        wrapperObj.setColumn(column);
     },
+    /*그리드 줄 추가 전 이벤트 (자식 그리드)*/
+    addRowBeforeEventForChildGrid: function (wrapperObj, _this) {
+        if (_this.parentsGrid) {
+            var key = _this.parentsUuidFieldName;
+
+            var column = wrapperObj.columnByName(key);
+            column.defaultValue = _this.parentsGrid.getUUID();
+            wrapperObj.setColumn(column);
+        }
+    },
+    /*화면 초기화*/
     clearData: function () {
         this.setData([]);
     }
@@ -2666,7 +2732,7 @@ axboot.realGridView = {
 
         if ("" == this.tagId) alert("그리드 tagID를 설정해주세요.");
 
-        this.gridObj = new GridWrapper(this.tagId, "/assets/js/libs/realgrid");
+        this.gridObj = new SimpleGridWrapper(this.tagId, "/assets/js/libs/realgrid");
         this.gridObj.setGridStyle("100%", "100%");
         this.gridObj.setEntityName(this.entityName);
     },
@@ -2727,7 +2793,10 @@ axboot.realGridView = {
     getPageData: function getPageData() {
         return this.page;
     },
-    isChangeData: function () {
+    setFixedOptions : function(options){
+        this.gridObj.setFixedOptions(options)
+    },
+    isDataChanged: function () {
         if (this.getData().length > 0) {
             return true;
         } else {
@@ -2791,6 +2860,17 @@ axboot.viewExtend = function (_obj1, _obj2) {
         var retView = $.extend({}, _obj1, _obj2)
         retView.init();
         return retView;
+    }
+    else if (_obj1.name && _obj1.name == "gridView") {
+        var menuId = axboot.getMenuId();
+        if (undefined == axboot.gridList) {
+            axboot.gridList = {};
+        }
+        if(!axboot.gridList[menuId])
+            axboot.gridList[menuId] = new Array();
+        var margeObj = $.extend({}, _obj1, _obj2);
+        axboot.gridList[menuId].push(margeObj);
+        return margeObj;
     }
     else {
         return $.extend({}, _obj1, _obj2);
@@ -2885,15 +2965,19 @@ axboot.actionExtend = function () {
 }();
 
 axboot.viewError = function (err) {
+    axErrorToast.push(err.message);
+    /*
     axToast.confirm({
         theme: "danger",
         width: 500,
         lang: {
             "ok": "Close"
         },
+        displayTime :1500,
         icon: '<i class="cqc-new"></i>',
         msg: err.message
     });
+    */
 }
 
 /**
@@ -2936,10 +3020,53 @@ axboot.getCommonMessage = function (messageCode) {
     }
 }
 
+axboot.getConfigValue = function (configurationCode) {
+    var commonConfigValue = "";
+
+    if (parent.COMMON_CONFIG) {
+        commonConfigValue = parent.COMMON_CONFIG.filter(function (item) {
+            return item.configurationCode === configurationCode;
+        });
+    } else if (parent.parent.COMMON_CONFIG) {
+        commonConfigValue = parent.parent.COMMON_CONFIG.filter(function (item) {
+            return item.configurationCode === configurationCode;
+        });
+    }
+
+    if (commonConfigValue.length > 0) {
+        return commonConfigValue[0].configurationValue;
+    } else {
+        axWarningToast.push("환경설정 값이 없습니다.");
+    }
+}
+
+
 axboot.isUndefined = function (value) {
     if (typeof value === "undefined") {
         return true;
     } else {
         return false;
     }
+}
+axboot.getMenuId = function(){
+    try {
+        return window.location.search.split("&menu")[0].split("?menuId=")[1];
+    }catch(exception)
+    {
+        return "";
+    }
+}
+axboot.isDataChanged = function (menuId) {
+    if (!axboot.gridList || !axboot.gridList[menuId])
+        return false;
+
+    var isChanged = false;
+
+    for (var i = 0; i < axboot.gridList[menuId].length; i++) {
+        if (axboot.gridList[menuId][i].isDataChanged()) {
+            isChanged = true;
+            break;
+        }
+    }
+    return isChanged;
 }

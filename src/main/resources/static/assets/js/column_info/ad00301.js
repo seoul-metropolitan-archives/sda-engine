@@ -25,7 +25,7 @@ var ad00301 =
                 sortNo: 2,
                 name: "categoryName",
                 text: "Category Name",
-                width: 150,
+                width: 200,
                 editable: true,
                 dataType: "text",
                 required: true
@@ -34,7 +34,7 @@ var ad00301 =
                 sortNo: 3,
                 name: "serviceUuid",
                 text: "Service",
-                width: 130,
+                width: 110,
                 editable: true,
                 dataType: "combo",
                 required: true,
@@ -103,7 +103,7 @@ var ad00301 =
             {
                 sortNo: 8,
                 name: "useYN",
-                text: "USE",
+                text: "Use",
                 width: 50,
                 editable: true,
                 dataType: "check",
@@ -116,24 +116,48 @@ var ad00301 =
                     trueValues: "Y",
                     startEditOnClick: true,
                 },
-                required: true
+                required: false
             },
             {
-            sortNo: 11,
-            name: "attribute01",
-            text: "Attribute1",
-            width: 110,
-            editable: true,
-            dataType: "popup",
-            required: false
-        },
+                sortNo: 11,
+                name: "attribute01",
+                text: "Attribute1",
+                width: 110,
+                editable: true,
+                dataType: "text",
+                required: false,
+                visible : false
+            },
+            {
+                sortNo: 11,
+                name: "attribute01Str",
+                text: "Attribute1",
+                width: 110,
+                editable: true,
+                dataType: "popup",
+                popupCode : "PU002",
+                sqlColumn : {CODE_HEADER_UUID : "attribute01",CATEGORY_NAME: "attribute01Str"},
+                required: false
+            },
             {
                 sortNo: 12,
                 name: "attribute02",
                 text: "Attribute2",
                 width: 110,
                 editable: true,
+                dataType: "text",
+                required: false,
+                visible : false
+            },
+            {
+                sortNo: 12,
+                name: "attribute02Str",
+                text: "Attribute2",
+                width: 110,
+                editable: true,
                 dataType: "popup",
+                popupCode : "PU002",
+                sqlColumn : {CODE_HEADER_UUID : "attribute02",CATEGORY_NAME: "attribute02Str"},
                 required: false
             },
             {
@@ -142,16 +166,40 @@ var ad00301 =
                 text: "Attribute3",
                 width: 110,
                 editable: true,
+                dataType: "text",
+                required: false,
+                visible : false
+            },
+            {
+                sortNo: 13,
+                name: "attribute03Str",
+                text: "Attribute3",
+                width: 110,
+                editable: true,
                 dataType: "popup",
+                popupCode : "PU002",
+                sqlColumn : {CODE_HEADER_UUID : "attribute03",CATEGORY_NAME: "attribute03Str"},
                 required: false
             },
             {
-                sortNo: 14,
+                sortNo: 13,
                 name: "attribute04",
                 text: "Attribute4",
                 width: 110,
                 editable: true,
+                dataType: "text",
+                required: false,
+                visible : false,
+            },
+            {
+                sortNo: 14,
+                name: "attribute04Str",
+                text: "Attribute4",
+                width: 110,
+                editable: true,
                 dataType: "popup",
+                popupCode : "PU002",
+                sqlColumn : {CODE_HEADER_UUID : "attribute04",CATEGORY_NAME: "attribute04Str"},
                 required: false
             },
             {
@@ -160,7 +208,19 @@ var ad00301 =
                 text: "Attribute5",
                 width: 110,
                 editable: true,
+                dataType: "text",
+                required: false,
+                visible : false
+            },
+            {
+                sortNo: 15,
+                name: "attribute05",
+                text: "Attribute5",
+                width: 110,
+                editable: true,
                 dataType: "popup",
+                popupCode : "PU002",
+                sqlColumn : {CODE_HEADER_UUID : "attribute05",CATEGORY_NAME: "attribute05Str"},
                 required: false
             },
             {
@@ -169,16 +229,40 @@ var ad00301 =
                 text: "Attribute6",
                 width: 110,
                 editable: true,
+                dataType: "text",
+                required: false,
+                visible : false
+            },
+            {
+                sortNo: 16,
+                name: "attribute06Str",
+                text: "Attribute6",
+                width: 110,
+                editable: true,
                 dataType: "popup",
+                popupCode : "PU002",
+                sqlColumn : {CODE_HEADER_UUID : "attribute06",CATEGORY_NAME: "attribute06Str"},
                 required: false
             },
             {
-                sortNo: 10,
+                sortNo: 17,
                 name: "attribute07",
                 text: "Attribute7",
                 width: 110,
                 editable: true,
+                dataType: "text",
+                required: false,
+                visible : false
+            },
+            {
+                sortNo: 17,
+                name: "attribute07Str",
+                text: "Attribute7",
+                width: 110,
+                editable: true,
                 dataType: "popup",
+                popupCode : "PU002",
+                sqlColumn : {CODE_HEADER_UUID : "attribute07",CATEGORY_NAME: "attribute07Str"},
                 required: false
             },
             {
@@ -187,7 +271,19 @@ var ad00301 =
                 text: "Attribute8",
                 width: 110,
                 editable: true,
+                dataType: "text",
+                required: false,
+                visible : false
+            },
+            {
+                sortNo: 18,
+                name: "attribute08Str",
+                text: "Attribute8",
+                width: 110,
+                editable: true,
                 dataType: "popup",
+                popupCode : "PU002",
+                sqlColumn : {CODE_HEADER_UUID : "attribute08",CATEGORY_NAME: "attribute08Str"},
                 required: false
             },
             {
@@ -196,16 +292,40 @@ var ad00301 =
                 text: "Attribute9",
                 width: 110,
                 editable: true,
+                dataType: "text",
+                required: false,
+                visible : false
+            },
+            {
+                sortNo: 19,
+                name: "attribute09Str",
+                text: "Attribute9",
+                width: 110,
+                editable: true,
                 dataType: "popup",
+                popupCode : "PU002",
+                sqlColumn : {CODE_HEADER_UUID : "attribute09",CATEGORY_NAME: "attribute09Str"},
                 required: false
             },
             {
-                sortNo: 20,
+                sortNo: 19,
                 name: "attribute10",
                 text: "Attribute10",
                 width: 110,
                 editable: true,
+                dataType: "text",
+                required: false,
+                visible : false
+            },
+            {
+                sortNo: 20,
+                name: "attribute10Str",
+                text: "Attribute10",
+                width: 110,
+                editable: true,
                 dataType: "popup",
+                popupCode : "PU002",
+                sqlColumn : {CODE_HEADER_UUID : "attribute10",CATEGORY_NAME: "attribute10Str"},
                 required: false
             },
             {
@@ -227,7 +347,7 @@ var ad00301 =
                 width: 140,
                 dataType: "timestamp",
                 required: false,
-                disable: true
+                disable: true,
             },
             {
                 sortNo: 92,

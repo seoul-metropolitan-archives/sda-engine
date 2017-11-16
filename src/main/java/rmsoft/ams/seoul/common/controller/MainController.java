@@ -14,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import rmsoft.ams.seoul.utils.CommonCodeUtils;
+import rmsoft.ams.seoul.utils.CommonConfigUtils;
 import rmsoft.ams.seoul.utils.CommonMessageUtils;
 
 /**
@@ -28,6 +29,7 @@ public class MainController {
 
     private String commonCodeJson;
     private String commonMessageJson;
+    private String commonConfigJson;
 
     @GetMapping("/")
     public String index() {
@@ -68,9 +70,11 @@ public class MainController {
 
         commonCodeJson = CommonCodeUtils.getAllByJson();
         commonMessageJson = CommonMessageUtils.getAllMessageByJson();
+        commonConfigJson = CommonConfigUtils.getAllConfigByJson();
 
         model.addAttribute("commonCodeJson", commonCodeJson);
         model.addAttribute("commonMessageJson", commonMessageJson);
+        model.addAttribute("commonConfigJson", commonConfigJson);
         model.addAttribute("isDevelopmentMode", PhaseUtils.isDevelopmentMode());
         model.addAttribute("axbody_class", "frame-set");
 

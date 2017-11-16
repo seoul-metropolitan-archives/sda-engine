@@ -24,6 +24,8 @@
     <script type="text/javascript" th:src="@{/assets/js/libs/realgrid/realgridjs-api.1.1.25.js}"></script>
     <script type="text/javascript" th:src="@{/assets/js/libs/realgrid/jszip.min.js}"></script>
     <script type="text/javascript" th:src="@{/assets/js/libs/realgrid/util/GridWrapper.js}"></script>
+    <script type="text/javascript" th:src="@{/assets/js/libs/realgrid/util/TreeGridWrapper.js}"></script>
+    <script type="text/javascript" th:src="@{/assets/js/libs/realgrid/util/SimpleGridWrapper.js}"></script>
 
 
     <script type="text/javascript" th:src="@{/assets/js/plugins.js}"></script>
@@ -40,6 +42,7 @@
         var menuJson = convertJsonObj('[[${menuJson}]]');
         var commonCodeJson = convertJsonObj('[[${commonCodeJson}]]');
         var commonMessageJson = convertJsonObj('[[${commonMessageJson}]]');
+        //var commonConfigJson = convertJsonObj('[[${commonConfigJson}]]');
 
         var CONTEXT_PATH = 'http://[[${#httpServletRequest.serverName}]]:[[${#httpServletRequest.serverPort}]]';
         /*var CONTEXT_PATH   = 'http://[[@{${@environment.getProperty("server.url")}}]]:[[@{${@environment.getProperty("server.port")}}]]';*/
@@ -56,7 +59,11 @@
         var COMMON_MESSAGE = (function (json) {
             return json;
         })(commonMessageJson);
-
+        /*
+        var COMMON_CONFIG = (function (json) {
+            return json;
+        })(commonConfigJson);
+        */
         function convertJsonObj(jsonStr) {
             return jsonStr == null || jsonStr == '' ? null : JSON.parse(jsonStr.replace(/&quot;/gi, '"').replace(/\r\n|\n/gi, "<br />"));
         }

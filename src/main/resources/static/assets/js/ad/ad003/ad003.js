@@ -16,12 +16,17 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             async : false,
             callback: function (res) {
                 fnObj.gridView01.setData(res.list);
+                fnObj.gridView01.resetCurrent();
+                fnObj.gridView01.setFocus();
+                fnObj.gridView02.clear();
+                setTimeout(function(){ACTIONS.dispatch(ACTIONS.GET_CODE_DETAIL,fnObj.gridView01.getCurrentData());},300);
+
             }
         });
     },
     GET_CODE_DETAIL : function(caller, act, data)
     {
-        if(!data["codeHeaderUuid"])
+        if(!data && !data["codeHeaderUuid"])
             return ;
         axboot.ajax({
             url : "/api/v1/ad/ad003/getCodeDetailList"
@@ -36,7 +41,6 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     },
     PAGE_SAVE : function(caller, act, data)
     {
-
             if (
                 ACTIONS.dispatch(ACTIONS.CODE_HEADER_PAGE_SAVE)
                 && ACTIONS.dispatch(ACTIONS.CODE_DETAIL_PAGE_SAVE)
@@ -47,12 +51,21 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         var _this = this;
 
         var result = false;
+
+        if(!fnObj.gridView01.validate())
+            return false;
+
+        var list = fnObj.gridView01.getData();
+
+        if(list.length < 1)
+            return true;
+
         console.log(fnObj.gridView01.getData());
         axboot.ajax({
             url: "/api/v1/ad/ad003/saveCodeHeader",
             type: "post",
             async: false,
-            data: JSON.stringify(fnObj.gridView01.getData()),
+            data: JSON.stringify(list),
             callback:  function (res)
             {
                 result = res;
@@ -74,12 +87,20 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     },
     CODE_DETAIL_PAGE_SAVE : function(data)
     {
+        if(!fnObj.gridView02.validate())
+            return false;
+
+        var list = fnObj.gridView02.getData();
+
+        if(list.length < 1)
+            return true;
+
         var result = false;
         axboot.ajax({
             url : "/api/v1/ad/ad003/saveCodeDetail",
             type : "post",
             async : false,
-            data : JSON.stringify(fnObj.gridView02.getData()),
+            data : JSON.stringify(list),
             callback : function(res)
             {
                 result = res;
@@ -134,7 +155,6 @@ fnObj = {
 
         ACTIONS.dispatch(ACTIONS.PAGE_SEARCH,this.formView.getData());
 
-        ACTIONS.dispatch(ACTIONS.GET_CODE_DETAIL,this.gridView01.getCurrentData());
 
     }
 };
@@ -195,25 +215,22 @@ fnObj.formView = axboot.viewExtend(axboot.formView,{
 });
 
 /*팝업 헤더*/
-fnObj.gridView01 = axboot.viewExtend(axboot.realGridView, {
+fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     tagId : "realgrid01",
+    primaryKey : "codeHeaderUuid",
     entityName : "CODE_HEADER",
-    beforeRowIdx : undefined,
     initView  : function()
     {
         var _this = this;
+        this.initInstance();
         this.setColumnInfo(ad00301.column_info);
-        /*
-        this.gridObj.setOption({
-            checkBar : {visible : true}
-        })
-        */
         this.makeGrid();
-        this.gridObj.addRowBeforeEvent(this.addRowBeforeEvent);
+        /*this.gridObj.addRowBeforeEvent(this.addRowBeforeEvent);*/
         this.gridObj.addRowAfterEvent(this.addRowAfterEvent);
-        this.gridObj.setFixedOptions({
+        this.gridObj.removeRowEvent(function(){fnObj.gridView02.clear();});
+        this.setFixedOptions({
             colCount : 2
-        })
+        });
         this.gridObj.itemClick(function(data){
             if(fnObj.gridView02.getData().length < 1)
             {
@@ -232,49 +249,56 @@ fnObj.gridView01 = axboot.viewExtend(axboot.realGridView, {
             }
         });
     },
-    addRowBeforeEvent : function()
-    {
-        var _this = this;
-        var uuid = undefined;
-        axboot.ajax({
-            url : "/api/v1/common/getUUID",
-            type : "POST",
-            async : false,
-            callback:function(res)
-            {
-                uuid = res.map.uuid;
-            }
-        });
-        var data = fnObj.gridView01.gridObj.getDefaultData();
-        data[0] = uuid;
-        fnObj.gridView01.gridObj.setDefaultData(data);
-    },
     addRowAfterEvent : function()
     {
         fnObj.gridView02.clear();
-    },
-    getCodeHeaderUUID : function()
-    {
-        return this.gridObj.getSelectedData()["codeHeaderUuid"];
     }
  });
 /*팝업 디테일 ( Column )*/
-fnObj.gridView02 = axboot.viewExtend(axboot.realGridView, {
+fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
     tagId : "realgrid02",
     entityName : "CODE_DETAIL",
+    primaryKey : "codeDetailUuid",
+    parentsUuidFieldName : "codeHeaderUuid",
+    parentsGrid : fnObj.gridView01,
     initView: function ()
     {
+        this.initInstance();
         this.setColumnInfo(ad00302.column_info);
         this.makeGrid();
-        this.gridObj.addRowBeforeEvent(this.addRowBeforeEvent);
+        /*this.gridObj.addRowBeforeEvent(this.addRowBeforeEvent);
         this.gridObj.onRowsPasted(this.onRowsPasted);
-        this.gridObj.setFixedOptions({
+        */
+        this.setFixedOptions({
             colCount : 2
         })
     },
     clear : function () {
         this.setData([]);
     },
+    setData : function(list)
+    {
+        var columnList = ["attribute01","attribute02","attribute03","attribute04","attribute05","attribute06","attribute07","attribute08","attribute09","attribute10"]
+        var data = fnObj.gridView01.getCurrentData();
+        var fieldIndexs = new Array();
+
+        for(var i = 0; i < columnList.length; i++)
+        {
+            fieldIndexs.push(fnObj.gridView01.gridObj.getFieldIndex(columnList[i]));
+        }
+
+
+        var getLabelNValue = function(code)
+        {
+            return {label : axboot.commonCodeFilter(code).nameArr,values :axboot.commonCodeFilter(code).codeArr}
+        }
+        /*
+        var column = this.gridObj.columnByName(key);
+        this.gridObj.gridView.setColumn(column);
+        */
+        this.gridObj.setData("set",list);
+    }
+    /*
     addRowBeforeEvent : function()
     {
         var data = fnObj.gridView02.gridObj.getDefaultData();
@@ -289,13 +313,5 @@ fnObj.gridView02 = axboot.viewExtend(axboot.realGridView, {
             fnObj.gridView02.gridObj.setValue(items[i],1,fnObj.gridView01.getCodeHeaderUUID());
         }
     }
-
+    */
 });
-isDataChanged = function()
-{
-    if (fnObj.gridView01.isChangeData() == true || fnObj.gridView02.isChangeData() == true) {
-        return true;
-    } else {
-        return false;
-    }
-}
