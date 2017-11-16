@@ -553,7 +553,7 @@ GridWrapper.prototype.style = {
         },
         timestamp : {
             type : "datetime",
-            datetimeFormat : "yyyy-MM-dd HH:mm:ss",
+            datetimeFormat : "yyyy-MM-dd HH:mm:ss.SSS",
             mask : {
                 editMask:"9999-99-99 99:99:99"
                 ,placeHolder:"yyyy-MM-dd HH:mm:ss" //편집기에 표시될 형식
@@ -670,7 +670,7 @@ GridWrapper.prototype.itemClick = function(_event)
     })
 };
 GridWrapper.prototype.onDataCellClicked = function(_event) { this.bind("onDataCellClicked",_event); }
-GridWrapper.prototype.onEditChange = function(p_onEditChange) { this.bind("onEditChange",_event); }
+GridWrapper.prototype.onEditChange = function(_event) { this.bind("onEditChange",_event); }
 GridWrapper.prototype.onDataCellDblClicked = function(_event) { this.bind("onDataCellDblClicked",_event); }
 //줄 추가 전에 호출되는 함수
 GridWrapper.prototype.addRowBeforeEvent = function(_event) { this.bind("onBeforeAddRow",_event); }
@@ -898,18 +898,9 @@ GridWrapper.prototype.setColumnInfo = function(list) {
         }
     });
 
-    var styles = {};
-    var obj = undefined;
-    var fieldObj = undefined;
-    for (var i = 0; i < list.length; i++) {
-        data = list[i];
-
-        // 필수여부 없으면 일반 모양에 수정 x
-        // 필수여부 Y 노란색 수정 가능
-        // 필수여부 N 일반 모양
-        // 활성여부 Y N 회색
-        fieldObj = {};
-        obj = {
+    var generateColumnInfo = function(_this, data)
+    {
+        var obj = {
             name : data.name,
             fieldName : data.name,
             width : data.width,
@@ -923,30 +914,27 @@ GridWrapper.prototype.setColumnInfo = function(list) {
             visible : data.visible === undefined ? true : data.visible,
             readOnly : !(data.editable === undefined ? true : data.editable)
         };
-
         addDefaultEditColumnProperties(obj.name,obj.editable);
-
         if (data.autoincrement)
             addAutoIncreament({index: i, name: data.name});
 
         // tab사용시 마지막 컬럼사용하기 때문에 세팅.
         if (data.editable) {
-            this.defaultStyles[data.name] = "editable";
+            _this.defaultStyles[data.name] = "editable";
         }
 
         // 필수여부 (비활성 여부 빠져있음.)
         if (data.disable) {
-            styles = this.defaultStyle.column.disable;
-            this.defaultStyles[data.name] = "disable";
+            styles = _this.defaultStyle.column.disable;
+            _this.defaultStyles[data.name] = "disable";
             obj.editable = false;
         } else if (data.required) {
-            styles = this.defaultStyle.column.required;
-            this.requiredColumnList[i] ={name : data.name, title : data.text};
-            //obj.requiredMessage = "["+data.text+"] "+axboot.getCommonMessage("AA008");
-            this.defaultStyles[data.name] = "required";
+            styles = _this.defaultStyle.column.required;
+            _this.requiredColumnList[i] ={name : data.name, title : data.text};
+            _this.defaultStyles[data.name] = "required";
         } else {
-            styles = this.defaultStyle._default;
-            this.defaultStyles[data.name] = "_default";
+            styles = _this.defaultStyle._default;
+            _this.defaultStyles[data.name] = "_default";
         }
 
         obj.styles = $.extend({},styles, {
@@ -961,11 +949,11 @@ GridWrapper.prototype.setColumnInfo = function(list) {
         switch (data.dataType) {
             case "popup":
                 obj.button = "image";
-                obj.imageButtons = $.extend({},this.defaultStyle.data.imageButtons,data.imageButtons);
-                this.popupIndex[i] = { popupCode : data.popupCode, sqlColumn : {}};
+                obj.imageButtons = $.extend({},_this.defaultStyle.data.imageButtons,data.imageButtons);
+                _this.popupIndex[i] = { popupCode : data.popupCode, sqlColumn : {}};
                 for(var key in data.sqlColumn)
                 {
-                    this.popupIndex[i]["sqlColumn"][key] = data.sqlColumn[key];
+                    _this.popupIndex[i]["sqlColumn"][key] = data.sqlColumn[key];
                 }
 
                 break;
@@ -978,7 +966,7 @@ GridWrapper.prototype.setColumnInfo = function(list) {
                 };
                 obj.displayRegExp = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/gi;
                 obj.displayReplace = "";
-                this.validateColumn[data.name] = function(value)
+                _this.validateColumn[data.name] = function(value)
                 {
                     var regexp = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/gi;
                     var result = regexp.test(value);
@@ -1003,8 +991,8 @@ GridWrapper.prototype.setColumnInfo = function(list) {
                 obj.style = {textAlignment: "far"};
                 break;
             case "date":
-                obj.editor = this.style.data.date;
-                obj.styles = $.extend({}, this.defaultStyle.data.date, obj.styles );
+                obj.editor = _this.style.data.date;
+                obj.styles = $.extend({}, _this.defaultStyle.data.date, obj.styles );
                 obj.displayRegExp = "([0-9]{4})([0-9]{4})([0-9]{4})([0-9]{4})";
                 obj.displayReplace = "$1-$2-$3-$4";
                 break;
@@ -1018,12 +1006,10 @@ GridWrapper.prototype.setColumnInfo = function(list) {
                 data.dataType = "datetime";
                 obj.type = "datetime";
                 obj.renderer = {type : "datetime"};
-                obj.editor = this.defaultStyle.data.timestamp;
-                obj.styles = $.extend({}, this.defaultStyle.data.timestamp, obj.styles);
+                obj.editor = _this.defaultStyle.data.timestamp;
+                obj.styles = $.extend({}, _this.defaultStyle.data.timestamp, obj.styles);
                 obj.displayRegExp = /\B(?=(\d{3})+(?!\d))/g;
                 obj.displayReplace = ",";
-
-                fieldObj.datetimeFormat = "iso"
                 break;
             case "richtext":
                 obj.type = "text";
@@ -1043,7 +1029,7 @@ GridWrapper.prototype.setColumnInfo = function(list) {
             case "text":
                 break;
             case "combo":
-                obj.editor = $.extend({},this.defaultStyle.data.combo,data.editor);
+                obj.editor = $.extend({},_this.defaultStyle.data.combo,data.editor);
                 obj.values = data.values;
                 obj.labels = data.labels;
                 obj.sortable = data.sortable === undefined ? false
@@ -1054,25 +1040,22 @@ GridWrapper.prototype.setColumnInfo = function(list) {
                 obj.lookupDisplay = data.lookupDisplay;
                 break;
             case "check":
-                obj.renderer = $.extend({},this.defaultStyle.data.check,data.renderer);
+                obj.renderer = $.extend({},_this.defaultStyle.data.check,data.renderer);
                 obj.editable = false;
 
                 if(!data.defaultValue)
                     data.defaultValue = "Y";
 
                 obj.defaultValue = data.defaultValue;
-                fieldObj.defaultValue = data.defaultValue;
                 break;
             case "button":
                 obj.button = "image";
-                obj.imageButtons = $.extend({},this.defaultStyle.data.imageButtons,data.imageButtons);
+                obj.imageButtons = $.extend({},_this.defaultStyle.data.imageButtons,data.imageButtons);
                 break;
             case "icon":
                 obj.renderer = {type : "icon",textVisible : false}
                 obj.dynamicStyles = data.dynamicStyles;
-                fieldObj.dynamicStyles = data.dynamicStyles;
                 obj.imageList = data.imageList;
-                fieldObj.imageList = data.imageList;
                 obj.values = data.values;
                 obj.labels = data.labels;
                 obj.lookupDisplay = true;
@@ -1083,6 +1066,79 @@ GridWrapper.prototype.setColumnInfo = function(list) {
             default:
                 break;
         }
+        return obj;
+    }
+    var generateFieldInfo = function(_this,data)
+    {
+        var fieldObj = {};
+        // 데이터 타입
+        switch (data.dataType) {
+            case "popup":
+                break;
+            case "code":
+                break;
+            case "number":
+                break;
+            case "commanumber":
+                break;
+            case "date":
+                break;
+            case "password":
+                break;
+            case "timestamp":
+                fieldObj.datetimeFormat = "iso";
+                break;
+            case "richtext":
+                break;
+            case "text":
+                break;
+            case "combo":
+                break;
+            case "check":
+                break;
+            case "button":
+                break;
+            case "icon":
+                fieldObj.dynamicStyles = data.dynamicStyles;
+                fieldObj.imageList = data.imageList;
+                break;
+            default:
+                break;
+        }
+        return fieldObj;
+    }
+
+    var styles = {};
+    var obj = undefined;
+    var fieldObj = undefined;
+    var columnNFieldInfo = undefined;
+    var innerColumnInfo = undefined;
+    for (var i = 0; i < list.length; i++) {
+        data = list[i];
+
+        // 필수여부 없으면 일반 모양에 수정 x
+        // 필수여부 Y 노란색 수정 가능
+        // 필수여부 N 일반 모양
+        // 활성여부 Y N 회색
+        fieldObj = {};
+
+
+        obj = generateColumnInfo(this, data);
+        fieldObj = generateFieldInfo(this, data);
+        if(data.columnList && data.columnList.length > 0)
+        {
+            innerColumnInfo = new Array();
+            for(var j = 0; j < data.columnList.length; j++)
+            {
+                innerColumnInfo.push(generateColumnInfo(this, data.columnList[i]));
+                fieldList.push($.extend(generateFieldInfo(this, data.columnList[i]),{
+                    fieldName : data.name,
+                    dataType : data.dataType
+                }));
+            }
+            obj.columns = innerColumnInfo;
+        }
+
         columnList.push(obj);
         fieldList.push($.extend(fieldObj,{
             fieldName : data.name,
@@ -1142,10 +1198,7 @@ GridWrapper.prototype.removeRow = function()
  */
 GridWrapper.prototype.setStyle = function(style,value)
 {
-    if(style instanceof Object)
-        this.defaultStyle.header = $.extend({},this.defaultStyle,style);
-    else
-        this.defaultStyle[style] = value;
+    this.defaultStyle[style] = value;
 };
 
 /**
