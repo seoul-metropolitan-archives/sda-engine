@@ -81,7 +81,7 @@ var ac00703 =
                     sortNo: 8,
                     name: "entityTypeName",
                     text: "Entity Type",
-                    width: 180,
+                    width: 150,
                     editable: false,
                     disable: true,
                     dataType: "text",
@@ -92,7 +92,7 @@ var ac00703 =
                     sortNo: 9,
                     name: "pmsFunctionUuid",
                     text: "Function",
-                    width: 120,
+                    width: 100,
                     disable: true,
                     editable: false,
                     dataType: "combo",
@@ -110,6 +110,16 @@ var ac00703 =
                 },
                 {
                     sortNo: 10,
+                    name: "useYn",
+                    text: "Use",
+                    width: 50,
+                    editable: true,
+                    dataType: "check",
+                    textAlignment: "center",
+                    required: false
+                },
+                {
+                    sortNo: 11,
                     name: "description",
                     text: "Description",
                     width: 250,
@@ -118,7 +128,7 @@ var ac00703 =
                     required: false,
                 },
                 {
-                    sortNo: 11,
+                    sortNo: 12,
                     name: "notes",
                     text: "Notes",
                     width: 250,
@@ -126,16 +136,7 @@ var ac00703 =
                     dataType: "richtext",
                     required: false
                 },
-                {
-                    sortNo: 12,
-                    name: "useYn",
-                    text: "Use",
-                    width: 50,
-                    editable: true,
-                    dataType: "check",
-                    textAlignment: "center",
-                    required: true
-                },
+
                 {
                     sortNo: 13,
                     name: "insertUuid",

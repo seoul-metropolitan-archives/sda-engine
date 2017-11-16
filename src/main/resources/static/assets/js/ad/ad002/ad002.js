@@ -31,15 +31,10 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SAVE: function (caller, act, data) {
         if(fnObj.gridView01.getData().length < 1)
             return ;
-        var list = fnObj.gridView01.getData();
-
-        if(list.length < 1)
-            return ;
 
         axboot.ajax({
             type: "POST",
             url: "/ad/ad002/save.do",
-            async : false,
             data: JSON.stringify(fnObj.gridView01.getData()),
             callback: function (res) {
                 axToast.push(axboot.getCommonMessage("AA007"));
@@ -141,12 +136,12 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
         this.setColumnInfo(ad00201.column_info);
         this.setEntityName($("#realgridName").text());
         this.makeGrid();
+        this.setFixedOptions({colCount : 2});
         ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
     }
 });
-/*
+
 isDataChanged = function()
 {
-    return (fnObj.gridView01.isChangeData() == true)
+    return (fnObj.gridView01.isChangeData() == true) 
 }
-*/

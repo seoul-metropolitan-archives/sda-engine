@@ -25,7 +25,7 @@ var ac00701 =
                     disable: true,
                     dataType: "text",
                     required: false,
-                    visible: true
+
                 },
                 {
                     sortNo: 3,
@@ -34,8 +34,10 @@ var ac00701 =
                     width: 250,
                     editable: false,
                     disable: true,
-                    dataType: "richtext",
+                    dataType: "text",
                     required: false,
+                    visible: true,
+                    renderer: {showTooltip : true}
                 },
                 {
                     sortNo: 4,
@@ -52,7 +54,7 @@ var ac00701 =
                     name: "useYn",
                     text: "Use",
                     width: 50,
-                    editable: true,
+                    editable: false,
                     disable: true,
                     dataType: "check",
                     textAlignment: "center",

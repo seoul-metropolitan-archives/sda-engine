@@ -33,7 +33,7 @@ var cl00202 =
                 },
                 {
                     sortNo: 2,
-                    width: 120,
+                    width: 90,
                     name: "statusUuid",
                     text: "Status",
                     editable: false,
@@ -45,29 +45,6 @@ var cl00202 =
                 },
                 {
                     sortNo: 3,
-                    width: 150,
-                    name: "parentClassCode",
-                    text: "Parent Class Code",
-                    editable: true,
-                    dataType: "popup",
-                    popupCode : "PU117",
-                    sqlColumn : {CLASS_CODE : "parentClassCode",CLASS_UUID: "parentClassUuid",CHILD_CLASS_LEVEL_UUID  : "classLevelUuid",CLASS_NAME: "parentClassName"},
-                    visible: true,
-                    required:false
-                },
-                {
-                    sortNo: 4,
-                    width: 150,
-                    name: "parentClassName",
-                    text: "Parent Class Name",
-                    editable: false,
-                    disable : true,
-                    dataType: "text",
-                    visible: true,
-                    required : false
-                },
-                {
-                    sortNo: 5,
                     name: "classCode",
                     text: "Class Code",
                     width: 150,
@@ -78,14 +55,39 @@ var cl00202 =
 
                 },
                 {
-                    sortNo: 6,
+                    sortNo: 4,
                     name: "className",
                     text: "Class Name",
                     width: 150,
                     dataType: "text",
-                    editable: true,
+                    editable: false,
                     required : true
                 },
+                {
+                    sortNo: 5,
+                    width: 150,
+                    name: "parentClassCode",
+                    text: "Parent Class Code",
+                    editable: true,
+                    dataType: "popup",
+                    popupCode : "PU117",
+                    sqlColumn : {CLASS_CODE : "parentClassCode",CLASS_UUID: "parentClassUuid",CHILD_CLASS_LEVEL_UUID  : "classLevelUuid",CLASS_NAME: "parentClassName"},
+                    disable : false,
+                    required:false,
+
+                },
+                {
+                    sortNo: 6,
+                    width: 150,
+                    name: "parentClassName",
+                    text: "Parent Class Name",
+                    editable: false,
+                    disable : true,
+                    dataType: "text",
+                    visible: true,
+                    required : false
+                },
+
                 {
                     sortNo: 7,
                     name: "classLevelUuid",
@@ -95,7 +97,8 @@ var cl00202 =
                     values: axboot.commonCodeFilter("CD114").codeArr,
                     labels: axboot.commonCodeFilter("CD114").nameArr,
                     dataType : "combo",
-                    required : true
+                    required : true,
+                    textAlignment: "far"
                 },
                 {
                     sortNo: 8,
@@ -104,13 +107,14 @@ var cl00202 =
                     width: 70,
                     editable: true,
                     sortable: true,
-                    datType: "number"
+                    datType: "number",
+                    textAlignment: "far"
                 },
                 {
                     sortNo: 9,
                     name: "description",
-                    text: "description",
-                    width: 120,
+                    text: "Description",
+                    width: 250,
                     editable: true,
                     dataType: "richtext",
                     required: false
@@ -118,8 +122,8 @@ var cl00202 =
                 {
                     sortNo: 10,
                     name: "notes",
-                    text: "NOTES",
-                    width: 120,
+                    text: "Notes",
+                    width: 250,
                     editable: true,
                     dataType: "richtext",
                     required: false
@@ -127,19 +131,19 @@ var cl00202 =
                 {
                     sortNo: 11,
                     name: "useYn",
-                    text: "USE",
-                    width: 120,
+                    text: "Use",
+                    width: 50,
                     editable: true,
                     dataType: "check",
                     defaultValue : "Y",
                     textAlignment: "center",
-                    required: true
+                    required: false
                 },
                 {
                     sortNo: 12,
                     name: "insertUuid",
                     text: "Created By",
-                    width: 120,
+                    width: 80,
                     editable: false,
                     disable: true,
                     dataType: "text",
@@ -149,7 +153,7 @@ var cl00202 =
                     sortNo: 13,
                     name: "insertDate",
                     text: "Date/Time Created",
-                    width: 120,
+                    width: 140,
                     editable: false,
                     disable: true,
                     dataType: "timestamp",
@@ -159,7 +163,7 @@ var cl00202 =
                     sortNo: 14,
                     name: "updateUuid",
                     text: "Modifed By",
-                    width: 120,
+                    width: 80,
                     editable: false,
                     disable: true,
                     dataType: "text",
@@ -169,7 +173,7 @@ var cl00202 =
                     sortNo: 15,
                     name: "updateDate",
                     text: "Date/Time Modified",
-                    width: 120,
+                    width: 140,
                     editable: false,
                     disable: true,
                     dataType: "timestamp",

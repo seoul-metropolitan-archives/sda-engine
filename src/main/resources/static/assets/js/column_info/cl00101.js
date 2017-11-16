@@ -68,7 +68,7 @@ var cl00101 =
                     name: "orderNo",
                     text: "Sort No",
                     width: 70,
-                    textAlignment: "right",
+                    textAlignment: "far",
                     dataType: "number",
                     required: false
                 },
@@ -83,7 +83,7 @@ var cl00101 =
                 {
                     sortNo: 7,
                     name: "notes",
-                    text: "NOTES",
+                    text: "Notes",
                     width: 250,
                     dataType: "richtext",
                     required: false
@@ -92,7 +92,7 @@ var cl00101 =
                     sortNo: 8,
                     name: "useYn",
                     text: "Use",
-                    width: 120,
+                    width: 50,
                     dataType: "check",
                     textAlignment: "center",
                     defaultValue : "Y",
@@ -103,14 +103,14 @@ var cl00101 =
                         trueValues: "Y",
                         startEditOnClick: true,
                     },
-                    required: true
+                    required: false
                 },
                 {
                     sortNo: 9,
                     name: "insertUuid",
                     text: "Created By",
                     width: 80,
-                    dataType: "timestamp",
+                    dataType: "text",
                     editable: false,
                     disable : true,
                     required: false
@@ -120,8 +120,9 @@ var cl00101 =
                     name: "insertDate",
                     text: "Date/Time Created",
                     width: 140,
-                    dataType: "text",
+                    dataType: "timestamp",
                     editable: false,
+                    disable : true,
                     required: false
                 },
                 {

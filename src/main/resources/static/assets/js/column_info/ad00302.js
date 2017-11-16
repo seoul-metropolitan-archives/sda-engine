@@ -34,7 +34,7 @@ var ad00302 =
                 sortNo: 3,
                 name: "codeName",
                 text: "Code Name",
-                width: 170,
+                width: 200,
                 editable: true,
                 dataType: "text",
                 required: true
@@ -47,7 +47,7 @@ var ad00302 =
                 editable: true,
                 dataType: "check",
                 defaultValue : "Y",
-                required: true
+                required: false
             },
             {
                 sortNo: 4,
@@ -66,25 +66,25 @@ var ad00302 =
             {
                 sortNo: 5,
                 name: "description",
-                text: "DESCRIPTION",
+                text: "Description",
                 width: 260,
                 editable: true,
                 dataType: "richtext",
                 required: false,
             },
             {
-                sortNo: 5,
+                sortNo: 6,
                 name: "notes",
-                text: "NOTES",
+                text: "Notes",
                 width: 260,
                 editable: true,
                 dataType: "richtext",
                 required: false
             },
             {
-                sortNo: 6,
+                sortNo: 7,
                 name: "useYN",
-                text: "USE",
+                text: "Use",
                 width: 50,
                 editable: true,
                 dataType: "check",

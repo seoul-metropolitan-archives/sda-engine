@@ -7220,7 +7220,8 @@ button.close {
     vertical-align: middle;
     text-align: center;
     color: #fff;
-    text-shadow: 0px 1px 0px #000
+    text-shadow: 0px 1px 0px #000;
+
 }
 
 .ax-mask .ax-mask-content * {
@@ -7869,8 +7870,9 @@ button.close {
     box-sizing: border-box;
     background-color: #fff;
     border: 1px solid #ddd;
-    border-radius: 3px;
-    box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.6);
+    /*border-radius: 3px;
+    box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.6);*/
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.2);
     z-index: 2000;
     position: fixed;
     left: 0px;
@@ -7885,7 +7887,7 @@ button.close {
     -ms-user-select: none;
     user-select: none;
     font-weight: 600;
-    padding: 10px 15px;
+    padding: 7px 15px;
     border-bottom: 1px solid transparent;
     cursor: move
 }
@@ -7894,17 +7896,35 @@ button.close {
     position: absolute;
     right: 0px;
     top: 0px;
-    padding: 10px 10px
+    /*padding: 10px 10px*/
+    padding: 0px;
+
 }
 
+
 .ax5modal .ax-modal-header .ax-modal-header-addon [data-modal-header-btn] {
-    border: 0;
-    padding: 0px 2px;
+    /*border: 0;
+    padding: 0px 5px;
     background: transparent;
     display: inline-block;
     text-align: center;
     cursor: pointer;
-    outline: 0
+    outline: 0;
+    */
+    border-left: 1px solid #aaaaaa`;
+    padding: 0px;
+    /*background: transparent;*/
+    background-color: #eeeeee ;
+    display: inline-block;
+    text-align: center;
+    cursor: pointer;
+    outline: 0;
+    color:#aaaaaa;
+    width: 34px;
+    height:34px;
+    line-height: 36px;
+    font-size:30px;
+    margin: 0;
 }
 
 .ax5modal .ax-modal-body {
@@ -7938,7 +7958,8 @@ button.close {
 
 .ax5modal .ax-modal-header {
     color: #333;
-    background: #f5f5f5
+    /*background: #f5f5f5*/
+    background: #e9e9e9
 }
 
 .ax5modal .ax-modal-header .ax-modal-header-addon a {
@@ -9869,9 +9890,9 @@ button.close {
     background-image: -webkit-linear-gradient(bottom, #eee);
     background-image: linear-gradient(to top, #eee);
     border: 1px solid;
-    border-color: #aaa;
-    border-radius: 5px;
-    box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.2);
+    border-color: #ddd;
+    border-radius: 0px;
+    /*box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.2);*/
     color: #333
 }
 
@@ -11924,10 +11945,12 @@ button.close {
     background-image: -webkit-linear-gradient(bottom, #fff);
     background-image: linear-gradient(to top, #fff);
     border: 1px solid;
-    border-color: #979797;
-    border-radius: 5px;
-    box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.2);
-    color: #2C2C2C
+    border-color: #aaaaaa;
+    border-radius: 0px;
+    /*box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.2);*/
+    /*color: #2C2C2C*/
+    color: #000000;
+    font-weight: bold;
 }
 
 .ax5-ui-menu.axboot .ax-menu-heading {
@@ -11960,7 +11983,7 @@ button.close {
     padding: 5px 0px;
     */
     background: #f7f7f7;
-    border: 1px solid silver;
+    border: 0px solid silver;
 }
 
 .ax5-ui-menu.axboot .ax-menu-body .ax-menu-item {
@@ -12036,7 +12059,8 @@ button.close {
 }
 
 .ax5-ui-menu.axboot .ax-menu-body .ax-menu-item .ax-menu-item-cell.ax-menu-item-label {
-    padding-right: 10px
+    /*padding-right: 10px*/
+    padding-right: 20px;
 }
 
 .ax5-ui-menu.axboot .ax-menu-body .ax-menu-item .ax-menu-item-cell.ax-menu-item-accelerator {
@@ -12097,8 +12121,10 @@ button.close {
 .ax5-ui-menu.axboot.direction-top {
     border-top-left-radius: 0;
     border-top-right-radius: 0;
-    border-bottom-left-radius: 5px;
-    border-bottom-right-radius: 5px
+    /*border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px*/
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px
 }
 
 .ax5-ui-menu.axboot.direction-top.with-arrow .ax-menu-arrow {
@@ -17710,7 +17736,8 @@ i {
 }
 
 .cqc-circle-with-cross:before {
-    content: ""
+    /*content: ""*/
+    content: "X"
 }
 
 .cqc-circle-with-minus:before {
@@ -23228,7 +23255,8 @@ a.big_close{
     position: absolute;
     top: 50px;    left: 220px;
     width: 100%;
-    height: 31px;
+    /*height: 31px;*/
+    height: 30px;
     background-color: #fff;
     border-bottom: 1px solid #dddddd;
 }
@@ -23260,17 +23288,14 @@ a.big_close{
     position: relative;
     display: table-cell;
     box-sizing: border-box;
-    height: 31px;
-    /*
-    2017.11.09
+    /*height: 31px;*/
     height: 30px;
-    */
     line-height: 29px;
     min-width: 120px;
     padding: 0 10px;
     padding-right: 22px;
     border-right: 1px solid #dddddd;
-    color: #000;
+    color: #999;
     /*font-size: 0.9em;*/
     font-weight: bold;
     font-size: 12px;
@@ -23302,6 +23327,7 @@ a.big_close{
     border-bottom:#f7f7f7;
     /*2017.11.08 요청에 의한 추가*/
     border-top: 2px solid #098b62;
+    color: #000;
     /*background-image: -webkit-linear-gradient(top, #3DACFC, #3DACFC);
     background-image: linear-gradient(to bottom, #3DACFC, #3DACFC);
     border-bottom: 1px solid #3DACFC;
@@ -25582,6 +25608,17 @@ a.big_close{
     width: 50px;
 }
 
+
+.cssBody dt.w120 {
+    float: left;
+    width: 119px;
+}
+
+.cssBody dt.w130 {
+    float: left;
+    width: 129px;
+}
+
 .cssBody dt.w150 {
     float: left;
     width: 149px;
@@ -26225,7 +26262,7 @@ img {
     border: none;
     position: absolute;
     right: 2px;
-    top: 2px;
+    top: 1px;
     width: 16px;
     height: 20px;
     overflow: hidden
@@ -26327,12 +26364,11 @@ img {
 }*/
 .rdo_box_title {
     border-right: 1px solid #ddd;
-    padding: 0 4px;
     display: block;
     float: left;
-    width : 50px;
     margin-right: 6px;
-    text-align: center
+    text-align: center;
+    width: 59px;
 }
 
 input[type="radio"] {
@@ -26485,7 +26521,7 @@ label {
 }
 
 .yeongye {
-    width: 160px;
+    width: 190px;
     background: #f2f2f2;
     height: 90%;
     border: 1;
@@ -26668,6 +26704,15 @@ div a.go_left:hover {
 .cssBody2 dt.w_50 {
     float: left;
     width: 50px;
+}
+.cssBody2 dt.w120 {
+    float: left;
+    width: 119px;
+}
+
+.cssBody2 dt.w130 {
+    float: left;w
+idth: 129px;
 }
 
 .cssBody2 dt.w150 {
@@ -27338,7 +27383,8 @@ div a.go_left:hover {
     background: #fff;
     box-sizing: border-box;
     border-right: 1px solid #ddd;
-    border-bottom: 1px solid #ddd
+    border-bottom: 1px solid #ddd;
+
 }
 
 .tab1 span {
@@ -27351,7 +27397,7 @@ div a.go_left:hover {
     line-height: 30px;
     margin: 0;
     box-sizing: border-box;
-    margin-bottom: 1px
+    margin-bottom: 1px;
 }
 
 .tab1 span.on {
@@ -27392,7 +27438,7 @@ a.small_open {
 }
 
 .contents_wrap dl {
-    width: 1000px;
+    width: 100%;
     display: flex;
     justify-content: left;
     align-items: center;
@@ -27769,3 +27815,9 @@ a.small_open {
 {
     display : list-item;
 }
+
+.detail_wrap{height: 100%; width: 100%; overflow-y: auto; overflow-x: hidden; position: relative}
+.detail_conts{height: 98.5%; width: 98%; float: right; position: absolute; margin-left: 1.5%; margin-top: 1.5%}
+.detail_conts ul{width: 100%}
+.detail_conts ul li.title{padding-left: 1%; background-color: #f7f7f7; text-align: left; border-bottom: 1px solid #ddd}
+.detail_conts ul li.conts{text-align: left;padding-left: 1%; border-bottom: 1px solid #ddd}

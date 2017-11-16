@@ -348,6 +348,10 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
         this.makeGrid();
         this.gridObj.addRowAfterEvent(this.addRowAfterEvent);
         this.gridObj.itemClick(this.itemClick);
+        this.gridObj.setFixedOptions({
+            colCount : 2
+        })
+
     },
     itemClick : function(data){
         if(fnObj.gridView02.gridObj.validate() && fnObj.gridView02.getData().legnth > 1)
@@ -397,6 +401,9 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
         this.setColumnInfo(ad00402.column_info);
         this.makeGrid();
         this.gridObj.addRowAfterEvent(this.addRowAfterEvent);
+        this.gridObj.setFixedOptions({
+            colCount : 2
+        })
     },
     dynamicSetSqlColumns : function(list)
     {

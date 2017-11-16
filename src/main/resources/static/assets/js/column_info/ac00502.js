@@ -142,7 +142,7 @@ var ac00502 =
                     editable: true,
                     dataType: "check",
                     textAlignment: "center",
-                    required: true
+                    required: false
                 },
                 {
                     sortNo: 13,

@@ -20,8 +20,6 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             callback: function (res) {
                 console.log(res);
                 fnObj.gridView01.setData(res.list);
-                fnObj.gridView01.resetCurrent();
-                fnObj.gridView01.setFocus();
             },
             options: {
                 onError: axboot.viewError

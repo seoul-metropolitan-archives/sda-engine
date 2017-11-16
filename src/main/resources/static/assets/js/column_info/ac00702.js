@@ -69,8 +69,8 @@ var ac00702 =
                 {
                     sortNo: 5,
                     name: "menuName",
-                    text: "Menu Name",
-                    width: 180,
+                    text: "Menu",
+                    width: 250,
                     editable: false,
                     disable: true,
                     dataType: "text",
@@ -125,7 +125,7 @@ var ac00702 =
                     editable: true,
                     dataType: "check",
                     textAlignment: "center",
-                    required: true
+                    required: false
                 },
                 {
                     sortNo: 11,
@@ -135,7 +135,7 @@ var ac00702 =
                     editable: true,
                     dataType: "check",
                     textAlignment: "center",
-                    required: true
+                    required: false
                 },
                 {
                     sortNo: 12,
@@ -145,7 +145,7 @@ var ac00702 =
                     editable: true,
                     dataType: "check",
                     textAlignment: "center",
-                    required: true
+                    required: false
                 },
                 {
                     sortNo: 13,
