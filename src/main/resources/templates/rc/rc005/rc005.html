@@ -5,7 +5,7 @@
 
 
 <!-- ===== [ script ] ===== -->
-<script layout:fragment="script" type="text/javascript" th:src="@{//assetss/js/rc/rc004/rc004.js}"></script>
+<script layout:fragment="script" type="text/javascript" th:src="@{/assets/js/rc/rc005/rc005.js}"></script>
 <!--realgrid -->
 
 <!-- ===== [ base-content ] ===== -->
@@ -19,20 +19,8 @@
                 <div class="contents_wrap">
                     <div style=" height:30px; width:100%" class="bgf7 div_tablerow">
                         <ul class="bdb">
-                            <li style="width:30px">
-                                <div class="bookmark_star"><img src="/assets/images/ams/bookmark.png" alt="bookmark"></div>
-                            </li>
-                            <li style="width:50%; text-align:left;">View Item</li>
-                            <li style="text-align:right; width:48%;">
-                                <button class="btn_s">
-                                    <span class="btn_icon">&nbsp;</span>
-                                    <span class="btn_main_txt">Save(S)</span>
-                                </button>
-                                <button class="btn_i">
-                                    <span class="btn_icon">&nbsp;</span>
-                                    <span class="btn_main_txt">Inquiry(I)</span>
-                                </button>
-                            </li>
+                            <th:block layout:insert="~{/fragments/page-buttons :: bookmark}"/>
+                            <th:block layout:insert="~{/fragments/page-buttons :: save-and-inquiry}"/>
                         </ul>
                     </div>
                     <div class="div_tablerow">
@@ -50,7 +38,7 @@
                     </div>
                     <div class="bdb div_tablerow cont_title">
                         <ul style="height: 30px; width: 100%">
-                            <li class="pdl_10">
+                            <li data-ax-path="itemTitle" class="pdl_10">
                                 Item - browser explorer detail 1-1
                         </ul>
                     </div>
@@ -59,12 +47,7 @@
 
                         <div style="display:table; height:100%; width:16%; float:left" class="bdr">
                             <ul class="bdb bdt div_tablerow bgf7" style="height:30px;">
-                                <li style="width:80%; text-align:left;">
-                                    <img src="/assets/images/ams/img_dot2.png" alt="dot">Record Hierarchy
-                                </li>
-                                <li style="text-align:right; width:18%;">
-
-                                </li>
+                                <th:block layout:insert="~{/fragments/page-buttons :: dot('Record Hierarchy')}"/>
                             </ul>
 
                             <ul class="bdb" style="height:30px;width:100%; float:left">
@@ -72,7 +55,7 @@
                                 <li><a href="#" class="open_close" id="rg_tree_allclose">Collapse</a></li>
                             </ul>
                             <div style="height:100%; width:100%" class="div_tablerow bdb">
-                                <div id="realgridT1" style="width:100%; height:100%"></div>
+                                <div data-z-tree="tree-view-01" data-fit-height-content="tree-view-01" style="height: 100%;width : 100%;overflow-x: auto; max-width: 271px;" class="ztree"></div>
                             </div>
                         </div>
                         <!--오늘쪽 내용에서 좌측 트리부분-->
@@ -80,27 +63,7 @@
                         <div style="display:table; height:100%; width:84%; float:left">
 
                             <ul class="bdb bdt div_tablerow bgf7" style="height:30px;">
-                                <li style="width:50%; text-align:left;">
-                                    <img src="/assets/images/ams/img_dot2.png" alt="dot">Item Details
-                                </li>
-                                <li style="text-align:right; width:48%;">
-                                    <!--<button class="btn_co">
-                                        <span class="btn_icon_co">&nbsp;</span>
-                                        <span class="btn_main_txt">Freeze</span>
-                                    </button>
-                                    <button class="btn_co">
-                                        <span class="btn_icon_co">&nbsp;</span>
-                                        <span class="btn_main_txt">Cancel</span>
-                                    </button>
-                                    <button class="btn_a">
-                                        <span class="btn_icon">&nbsp;</span>
-                                        <span class="btn_main_txt">Add</span>
-                                    </button>
-                                    <button class="btn_d">
-                                        <span class="btn_icon">&nbsp;</span>
-                                        <span class="btn_main_txt">Delete</span>
-                                    </button>-->
-                                </li>
+                                <th:block layout:insert="~{/fragments/page-buttons :: dot('Item Details')}"/>
                             </ul>
                             <div style="height:100%; width:100%;" class="div_tablerow">
                                 <div class="explorer_list">
@@ -146,35 +109,35 @@
                                                 <ul>
                                                     <li style="width: 33%;">
                                                         <b>Code </b>
-                                                        <div>wo0120</div>
+                                                        <div data-ax-path="code">wo0120</div>
                                                     </li>
                                                     <li style="width: 33%;">
                                                         <b>Type </b>
-                                                        <div>Normal</div>
+                                                        <div data-ax-path="type">Normal</div>
                                                     </li>
                                                     <li style="width: 34%;">
                                                         <b>Published Status </b>
-                                                        <div>Published</div>
+                                                        <div data-ax-path="publishedStatus">Published</div>
                                                     </li>
                                                 </ul>
 
                                                 <ul class="pdt_20">
                                                     <li style="width: 66%;">
                                                         <b>Title </b>
-                                                        <div>2017's Seoul Digital Archives Material design guideline
+                                                        <div data-ax-path="title">2017's Seoul Digital Archives Material design guideline
                                                         </div>
                                                     </li>
 
                                                     <li style="width: 34%;">
                                                         <b>Level </b>
-                                                        <div>Record Group</div>
+                                                        <div data-ax-path="level">Record Group</div>
                                                     </li>
                                                 </ul>
 
                                                 <ul style="padding-top: 32px">
                                                     <li style="width: 49%;">
                                                         <b>Description </b>
-                                                        <div>
+                                                        <div data-ax-path="description">
                                                             서울특별시는 1946년 서울시청으로 출범하여, 1949년 서울특별시청으로 승격되었다. 주요 업무는 정책 및
                                                             기획, 예산 및 조직 관리, 정보화 사업 추진, 청사 및 문서 관리, 사유재산 관리, 지역 산업정책 수립
                                                             집행, 종합방재계획 수립, 재난 및 복구, 민바우이, 교통정책 등의 업무를 수행한다. 또 주택계획 및
@@ -204,11 +167,11 @@
                                                 <ul class="pdt_20">
                                                     <li style="width: 33%;">
                                                         <b>Author </b>
-                                                        <div>김태형(1986~)</div>
+                                                        <div data-ax-path="author">김태형(1986~)</div>
                                                     </li>
                                                     <li style="width: 67%;">
                                                         <b>From </b>
-                                                        <div>Record Group : 2017's Seoul Digital Archives Material</div>
+                                                        <div data-ax-path="from">Record Group : 2017's Seoul Digital Archives Material</div>
                                                     </li>
 
                                                 </ul>
@@ -218,12 +181,12 @@
                                                         <b>Date of Description </b>
                                                         <div> 2017-01-01</div>
                                                     </li>
-                                                    <li style="width: 67%;">
-                                                        <b>Includes </b>
-                                                        <div>시리즈(140)을 포함하고 있습니다.
-                                                            <br> 파일(80)을 포함하고 있습니다.
-                                                        </div>
-                                                    </li>
+                                                    <!--<li style="width: 67%;">-->
+                                                        <!--<b>Includes </b>-->
+                                                        <!--<div>시리즈(140)을 포함하고 있습니다.-->
+                                                            <!--<br> 파일(80)을 포함하고 있습니다.-->
+                                                        <!--</div>-->
+                                                    <!--</li>-->
 
                                                 </ul>
 
@@ -241,11 +204,11 @@
                                                         <ol>
                                                             <li>
                                                                 <b>Provenance </b>
-                                                                <div>서울특별시 >> 행정국 >> 정보공개정책과 >> 기록문화팀</div>
+                                                                <div data-ax-path="provenance">서울특별시 >> 행정국 >> 정보공개정책과 >> 기록문화팀</div>
                                                             </li>
                                                             <li class="pdt_20">
                                                                 <b>Creator </b>
-                                                                <div>Whatomugh, Isaac Abraham(1996~2014)</div>
+                                                                <div data-ax-path="creator">Whatomugh, Isaac Abraham(1996~2014)</div>
                                                             </li>
                                                             <li class="pdt_20">
                                                                 <b>Date of Creation</b>
@@ -274,7 +237,7 @@
                                                             </li>
                                                             <li class="pdt_20">
                                                                 <b>Keyword </b>
-                                                                <div>
+                                                                <div data-ax-path="keyword">
                                                                     c7db746c-2344-4efc-f7ca3b483ecc<br>
                                                                     (구전자문서 시스템)<br>
                                                                     1331383-ZZ00007-2004-000001-002<br>
@@ -287,65 +250,65 @@
                                                 <ul class="pdt_20">
                                                     <li style="width: 49%;">
                                                         <b>Additional Metadata 01 </b>
-                                                        <div> Additional Metadata Contents 01</div>
+                                                        <div data-ax-path="addMetadata01"> Additional Metadata Contents 01</div>
                                                     </li>
                                                     <li style="width: 2%;">
                                                     </li>
                                                     <li style="width: 49%;">
                                                         <b>Additional Metadata 02 </b>
-                                                        <div>Additional Metadata Contents 02</div>
+                                                        <div data-ax-path="addMetadata02">Additional Metadata Contents 02</div>
                                                     </li>
                                                 </ul>
 
                                                 <ul class="pdt_20">
                                                     <li style="width: 49%;">
                                                         <b>Additional Metadata 03 </b>
-                                                        <div> Additional Metadata Contents 03</div>
+                                                        <div data-ax-path="addMetadata03"> Additional Metadata Contents 03</div>
                                                     </li>
                                                     <li style="width: 2%;">
                                                     </li>
                                                     <li style="width: 49%;">
                                                         <b>Additional Metadata 04 </b>
-                                                        <div>Additional Metadata Contents 04</div>
+                                                        <div data-ax-path="addMetadata04">Additional Metadata Contents 04</div>
                                                     </li>
                                                 </ul>
 
                                                 <ul class="pdt_20">
                                                     <li style="width: 49%;">
                                                         <b>Additional Metadata 05 </b>
-                                                        <div> Additional Metadata Contents 05</div>
+                                                        <div data-ax-path="addMetadata05"> Additional Metadata Contents 05</div>
                                                     </li>
                                                     <li style="width: 2%;">
                                                     </li>
                                                     <li style="width: 49%;">
                                                         <b>Additional Metadata 06 </b>
-                                                        <div>Additional Metadata Contents 06</div>
+                                                        <div data-ax-path="addMetadata06">Additional Metadata Contents 06</div>
                                                     </li>
                                                 </ul>
 
                                                 <ul class="pdt_20">
                                                     <li style="width: 49%;">
                                                         <b>Additional Metadata 07 </b>
-                                                        <div> Additional Metadata Contents 07</div>
+                                                        <div data-ax-path="addMetadata07"> Additional Metadata Contents 07</div>
                                                     </li>
                                                     <li style="width: 2%;">
                                                     </li>
                                                     <li style="width: 49%;">
                                                         <b>Additional Metadata 08 </b>
-                                                        <div>Additional Metadata Contents 08</div>
+                                                        <div data-ax-path="addMetadata08">Additional Metadata Contents 08</div>
                                                     </li>
                                                 </ul>
 
                                                 <ul class="pdt_20">
                                                     <li style="width: 49%;">
                                                         <b>Additional Metadata 09 </b>
-                                                        <div> Additional Metadata Contents 09</div>
+                                                        <div data-ax-path="addMetadata09"> Additional Metadata Contents 09</div>
                                                     </li>
                                                     <li style="width: 2%;">
                                                     </li>
                                                     <li style="width: 49%;">
                                                         <b>Additional Metadata 10 </b>
-                                                        <div>Additional Metadata Contents 11</div>
+                                                        <div data-ax-path="addMetadata10">Additional Metadata Contents 11</div>
                                                     </li>
                                                 </ul>
 
@@ -359,7 +322,7 @@
                                                 <div><b>Component List</b></div>
                                             </div>
                                             <div class="comp_list_wrap pdt_10">
-                                                <div id="realgrid"
+                                                <div id="realgrid01"
                                                      style="width:100%; height:100%; border: 1px solid #ccc"></div>
                                             </div>
                                             <!-- Component list -->

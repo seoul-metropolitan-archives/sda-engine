@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="rmsoft.ams.seoul.rc.rc003.dao.Rc003Mapper">
+    <select id="getRecordAggregationList" resultType="RC00301VO" statementType="PREPARED">
+        SELECT
+          Z1.AGGREGATION_UUID as aggregationUuid,
+          Z1.AGGREGATION_CODE as aggregationCode,
+          FC_AD_CODE_NM(Z1.PUBLISHED_STATUS_UUID) as publishedStatusUuid,
+          FC_RC_CODE(Z1.LEVEL_UUID) || ' - ' ||  TITLE as headTitle,
+          FC_AD_CODE_NM(Z1.TYPE_UUID) as typeUuid,
+          Z1.PARENT_AGGREGATION_UUID as parentAggregationUuid,
+          FC_RC_CODE(Z1.LEVEL_UUID) as levelUuid,
+          Z1.AUTHOR as author,
+          Z1.TITLE as name,
+          Z1.DESCRIPTION_START_DATE as descriptionStartDate,
+          Z1.DESCRIPTION as description,
+          Z1.NOTES as notes,
+          Z1.DESCRIPTION_END_DATE as descriptionEndDate,
+          Z2.PROVENANCE as provenance,
+          Z2.REFERENCE_CODE as referenceCode,
+          Z2.CREATOR as creator,
+          Z2.CREATION_START_DATE as creationAtartDate,
+          Z2.CREATION_END_DATE as creationEndDate,
+          Z2.ADD_METADATA01 as addMetadata01,
+          Z2.ADD_METADATA02 as addMetadata02,
+          Z2.ADD_METADATA03 as addMetadata03,
+          Z2.ADD_METADATA04 as addMetadata04,
+          Z2.ADD_METADATA05 as addMetadata05,
+          Z2.ADD_METADATA06 as addMetadata06,
+          Z2.ADD_METADATA07 as addMetadata07,
+          Z2.ADD_METADATA08 as addMetadata08,
+          Z2.ADD_METADATA09 as addMetadata09,
+          Z2.ADD_METADATA10 as addMetadata10,
+          <include refid="Common.UserName"><property name="userUuid" value="INSERT_UUID"/></include> as insertUuid,
+          Z1.INSERT_DATE as insertDate,
+          <include refid="Common.UserName"><property name="userUuid" value="UPDATE_UUID"/></include> as updateUuid,
+          Z1.UPDATE_DATE as updateDate
+        FROM
+        RC_AGGREGATION Z1,RC_AGGREGATION_CON Z2
+        WHERE
+        Z1.AGGREGATION_UUID = Z2.AGGREGATION_UUID
+        START WITH
+        <if test="aggregationUuid != null">
+            Z1.AGGREGATION_UUID = #{aggregationUuid}
+        </if>
+        CONNECT BY PRIOR Z1.PARENT_AGGREGATION_UUID = Z1.AGGREGATION_UUID
+    </select>
+</mapper>

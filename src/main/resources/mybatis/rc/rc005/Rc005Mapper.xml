@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="rmsoft.ams.seoul.rc.rc005.dao.Rc005Mapper">
+    <select id="getRecordItemList" resultType="RC00501VO" statementType="PREPARED">
+        SELECT
+        Z1.AGGREGATION_UUID as raAggregationUuid,
+        Z1.PUBLISHED_STATUS_UUID as raPublishedStatusUuid,
+        Z1.AGGREGATION_CODE as raAggregationCode,
+        Z1.TITLE as raTitle,
+        Z1.TYPE_UUID as raTypeUuid,
+        Z1.PARENT_AGGREGATION_UUID as raParentAggregationUuid,
+        Z1.LEVEL_UUID as raLevelUuid,
+        FC_AD_CODE_NM(Z1.LEVEL_UUID) as raLevelNm,
+        Z1.AUTHOR as raAuthor,
+        Z1.DESCRIPTION_START_DATE as raDescriptionStartDate,
+        Z1.DESCRIPTION_END_DATE as raDescriptionEndDate,
+        Z2.ITEM_UUID as riItemUuid,
+        Z2.PUBLISHED_STATUS_UUID as riPublishedStatusUuid,
+        FC_AD_CODE_NM(Z2.PUBLISHED_STATUS_UUID) as riPublishedStatusNm,
+        Z2.ITEM_CODE as riItemCode,
+        Z2.TITLE as name,
+        Z2.TYPE_UUID as riTypeUuid,
+        FC_AD_CODE_NM(Z2.TYPE_UUID) as riTypeNm,
+        Z2.AGGREGATION_UUID as riAggregationUuid,
+        Z2.AUTHOR as riAuthor,
+        Z2.DESCRIPTION_START_DATE as riDescriptionStartDate,
+        Z2.DESCRIPTION_END_DATE as riDescriptionEndDate,
+        Z2.DESCRIPTION as description,
+        Z3.PROVENANCE as provenance,
+        Z3.OPEN_STATUS_UUID as openStatusUuid,
+        Z3.KEYWORD as keyword,
+        Z3.REFERENCE_CODE as referenceCode,
+        Z3.CREATOR as creator,
+        Z3.CREATION_START_DATE as creationStartDate,
+        Z3.CREATION_END_DATE as creationEndDate,
+        Z3.ADD_METADATA01 as addMtadata01,
+        Z3.ADD_METADATA02 as addMetadata02,
+        Z3.ADD_METADATA03 as addMetadata03,
+        Z3.ADD_METADATA04 as addMetadata04,
+        Z3.ADD_METADATA05 as addMetadata05,
+        Z3.ADD_METADATA06 as addMetadata06,
+        Z3.ADD_METADATA07 as addMetadata07,
+        Z3.ADD_METADATA08 as addMetadata08,
+        Z3.ADD_METADATA09 as addMetadata09,
+        Z3.ADD_METADATA10 as addMetadata10,
+        <include refid="Common.UserName"><property name="userUuid" value="Z2.INSERT_UUID"/></include> as insertUuid,
+        Z2.INSERT_DATE as insertDate,
+        <include refid="Common.UserName"><property name="userUuid" value="Z2.UPDATE_UUID"/></include> as updateUuid,
+        Z2.UPDATE_DATE as updateDate
+        FROM
+          RC_AGGREGATION Z1, RC_ITEM Z2 ,RC_ITEM_CON Z3
+        WHERE
+          Z1.AGGREGATION_UUID = Z2.AGGREGATION_UUID
+        AND Z3.ITEM_UUID(+) = Z2.ITEM_UUID
+        START WITH
+        <if test="riAggregationUuid != null">
+            Z1.AGGREGATION_UUID = #{riAggregationUuid}
+        </if>
+        CONNECT BY PRIOR Z1.PARENT_AGGREGATION_UUID = Z1.AGGREGATION_UUID
+    </select>
+    <select id="getRecordComponentList" resultType="RC00502VO" statementType="PREPARED">
+        SELECT
+          Z2.ITEM_COMPONENT_UUID as itemComponentUuid,
+          Z2.ITEM_UUID as itemUuid,
+          Z2.COMPONENT_UUID as componentUuid,
+          Z3.PUBLICATION_STATUS_UUID as publicationStatusUuid,
+          FC_AD_CODE_NM(Z3.AREA_UUID) as areaNm,
+          Z3.TITLE as title,
+          FC_AD_CODE_NM(Z3.OPEN_STATUS_UUID) as openStatusNm,
+          Z3.ELECTRON_YN as electronYn,
+          Z3.SOURCE_SYSTEM_UUID as sourceSystemUuid,
+          Z3.CONTENTS_SIZE as contentsSize,
+          FC_AD_CODE_NM(Z3.TYPE_UUID) as typeNm,
+          Z3.FILE_FORMAT_UUID as fileFormatUuid,
+          Z3.THUMBNAIL as thumbnail,
+          Z3.CHECKSUM_TYPE_UUID as checksumTypeUuid,
+          Z3.CHECKSUM as checksum,
+        <include refid="Common.UserName"><property name="userUuid" value="INSERT_UUID"/></include> as insertUuid,
+          Z2.INSERT_DATE as insertDate,
+        <include refid="Common.UserName"><property name="userUuid" value="UPDATE_UUID"/></include> as updateUuid,
+          Z2.UPDATE_DATE as updateDate
+        FROM
+          RC_ITEM Z1, RC_ITEM_COMPONENT Z2, RC_COMPONENT Z3
+        WHERE
+          Z1.ITEM_UUID = Z2.ITEM_UUID
+          AND Z3.COMPONENT_UUID = Z2.COMPONENT_UUID
+        <if test="itemUuid != null">
+          AND Z1.ITEM_UUID = #{itemUuid}
+        </if>
+    </select>
+</mapper>
