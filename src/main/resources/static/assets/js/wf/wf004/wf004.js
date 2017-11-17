@@ -3,6 +3,8 @@ var fnObj = {};
 var ACTIONS = axboot.actionExtend(fnObj, {
     // WorkflowResult 정보 조회
     PAGE_SEARCH: function (caller, act, data) {
+        this.formView.checkPopup();
+
         axboot.ajax({
             type: "GET",
             url: "/api/v1/wf004/01/list",
@@ -118,13 +120,11 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 return data;
             },
             callback: function (data) {
-                //fnObj.formView.setFormData("executer",data["USER_UUID"]);
                 $("input[data-ax-path='executer']").val(data["USER_NAME"])
                 $("input[data-ax-path='executer']").attr("executer",data["USER_UUID"])
 
                 if(this.close)
                     this.close();
-                //ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1,data);
             }
         });
     },
@@ -133,6 +133,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         axboot.modal.open({
             modalType: "COMMON_POPUP",
             preSearch : data["preSearch"],
+            async : false,
             sendData: function () {
                 return data;
             },
@@ -142,7 +143,6 @@ var ACTIONS = axboot.actionExtend(fnObj, {
 
                 if(this.close)
                     this.close();
-                //ACTIONS.dispatch(ACTIONS.PAGE_SEARCH2);
             }
         });
     },
@@ -234,7 +234,7 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
             };
             ACTIONS.dispatch(ACTIONS.SEARCH_POPUP_EXECUTER,data);
         });
-        $("input[data-ax-path='executer']").focusout(function(){
+        /*$("input[data-ax-path='executer']").focusout(function(){
 
             if("" != $(this).val().trim())
             {
@@ -244,7 +244,9 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
                 };
                 ACTIONS.dispatch(ACTIONS.SEARCH_POPUP_EXECUTER,data);
             }
-        });
+            else
+                $("input[data-ax-path='executer']").attr("executer","")
+        });*/
         $("input[data-ax-path='menu']").parents().eq(1).find("a").click(function(){
             var data = {
                 popupCode : "PU126",
@@ -253,7 +255,7 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
             };
             ACTIONS.dispatch(ACTIONS.SEARCH_POPUP_MENU,data);
         });
-        $("input[data-ax-path='menu']").focusout(function(){
+        /*$("input[data-ax-path='menu']").focusout(function(){
 
             if("" != $(this).val().trim())
             {
@@ -263,7 +265,36 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
                 };
                 ACTIONS.dispatch(ACTIONS.SEARCH_POPUP_MENU,data);
             }
-        });
+            else
+                $("input[data-ax-path='menu']").attr("menu","")
+        });*/
+    },
+    checkPopup : function()
+    {
+        var checkData = $("input[data-ax-path='executer']").val();
+        var data = {};
+        if (checkData.trim() != "") {
+            data = {
+                popupCode: "PU107",
+                searchData: checkData.trim()
+            };
+            ACTIONS.dispatch(ACTIONS.SEARCH_POPUP_EXECUTER, data);
+        }
+        else{
+            $("input[data-ax-path='executer']").attr("executer", "")
+        }
+
+        var checkData = $("input[data-ax-path='menu']").val();
+        if (checkData.trim() != "") {
+            data = {
+                popupCode: "PU126",
+                searchData: checkData.trim()
+            };
+            ACTIONS.dispatch(ACTIONS.SEARCH_POPUP_MENU, data);
+        }
+        else{
+            $("input[data-ax-path='menu']").attr("menu", "")
+        }
     },
     getData: function () {
         var data = this.modelFormatter.getClearData(this.model.get()); // 모델의 값을 포멧팅 전 값으로 치환.
@@ -271,8 +302,9 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
         $("#formView01 input,#formView01 select").each(function(){
             if($(this).attr("data-ax-path"))
             {
-                if($(this).attr($(this).attr("data-ax-path")))
+                if($(this).attr($(this).attr("data-ax-path"))){
                     data[$(this).attr("data-ax-path")] = $(this).attr($(this).attr("data-ax-path"));
+                }
                 else
                     data[$(this).attr("data-ax-path")] = $(this).val();
             }
