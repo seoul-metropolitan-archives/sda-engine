@@ -29,7 +29,7 @@ var wf00201 =
                     sortNo: 3,
                     name: "serviceUuid",
                     text: "Service",
-                    width: 100,
+                    width: 150,
                     editable: true,
                     dataType: "combo",
                     required: true,
@@ -70,7 +70,7 @@ var wf00201 =
                     editable: true,
                     dataType: "check",
                     textAlignment: "center",
-                    required: true
+                    required: false
                 },
                 {
                     sortNo: 7,

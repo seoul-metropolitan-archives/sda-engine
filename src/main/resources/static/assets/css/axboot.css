@@ -3215,6 +3215,7 @@ select[multiple].input-lg,
     }
 }
 
+/*
 .btn {
     display: inline-block;
     margin-bottom: 0;
@@ -3235,6 +3236,8 @@ select[multiple].input-lg,
     -ms-user-select: none;
     user-select: none
 }
+*/
+
 
 .btn:focus,
 .btn.focus,
@@ -7145,7 +7148,8 @@ button.close {
 }
 
 .ax5-ui-dialog .ax-dialog-body .ax-dialog-buttons .btn {
-    padding: 5px 10px
+    padding: 5px 10px;
+    border: 1px solid #dddddd;
 }
 
 @-webkit-keyframes ax-mask {
@@ -7914,16 +7918,16 @@ button.close {
     border-left: 1px solid #aaaaaa`;
     padding: 0px;
     /*background: transparent;*/
-    background-color: #eeeeee ;
+    background-color: transparent ;
     display: inline-block;
     text-align: center;
     cursor: pointer;
     outline: 0;
-    color:#aaaaaa;
+    color:#000000;
     width: 34px;
     height:34px;
-    line-height: 36px;
-    font-size:30px;
+    line-height: 35px;
+    font-size:17px;
     margin: 0;
 }
 
@@ -21478,7 +21482,7 @@ h3 {
     padding: 3px 7px;
     font-size: 13px;
     line-height: 1.42857;
-    border-radius: 5px;
+    /*border-radius: 5px;*/
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
@@ -22257,7 +22261,8 @@ input[type="button"].btn-block {
 }
 
 [data-z-tree] {
-    border: 1px solid #D8D8D8;
+    /*border: 1px solid #D8D8D8;*/
+    border:0;
     background: #fff;
     overflow: auto
 }
@@ -22271,7 +22276,8 @@ input[type="button"].btn-block {
 .ztree,
 [data-z-tree] {
     margin: 0;
-    padding: 5px;
+    /*padding: 5px;*/
+    padding:0;
     color: #333
 }
 

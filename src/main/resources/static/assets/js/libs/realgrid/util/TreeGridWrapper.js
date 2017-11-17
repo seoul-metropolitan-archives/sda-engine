@@ -70,6 +70,9 @@ TreeGridWrapper.prototype.style.body = {
 TreeGridWrapper.prototype.style.grid = {
     border: "#ffffffff,0"
 };
+TreeGridWrapper.prototype.style.grid = {
+    border: "#ffffffff,0"
+};
 TreeGridWrapper.prototype.defaultBind = function(){
     this.bind("onKeyDown",function(grid, key, ctrl, shift, alt){
         if(key == 13)

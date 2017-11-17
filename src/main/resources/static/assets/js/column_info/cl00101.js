@@ -23,7 +23,7 @@ var cl00101 =
                 },
                 {
                     sortNo: 1,
-                    width:120,
+                    width:80,
                     name: "statusUuid",
                     text: "Status",
                     dataType: "combo",
@@ -66,7 +66,7 @@ var cl00101 =
                 {
                     sortNo: 5,
                     name: "orderNo",
-                    text: "Sort No",
+                    text: "Order No",
                     width: 70,
                     textAlignment: "far",
                     dataType: "number",

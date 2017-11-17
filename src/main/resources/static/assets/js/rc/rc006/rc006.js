@@ -160,6 +160,9 @@ fnObj.gridView_h = axboot.viewExtend(axboot.realGridView, {
     {
         var _this = this;
         this.setColumnInfo(rc00601.column_info);
+        this.gridObj.setFixedOptions({
+            colCount: 2
+        });
         /*
         this.gridObj.setOption({
             checkBar : {visible : true}

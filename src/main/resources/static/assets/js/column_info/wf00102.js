@@ -50,7 +50,7 @@ var wf00102 =
                     sortNo: 4,
                     name: "inOutUuid",
                     text: "In/Out",
-                    width: 100,
+                    width: 70,
                     editable: true,
                     dataType: "combo",
                     required: true,
@@ -119,7 +119,7 @@ var wf00102 =
                     sortNo: 7,
                     name: "inputCodeName",
                     text: "Input Name",
-                    width: 200,
+                    width: 170,
                     disable: true,
                     editable: false,
                     dataType: "text",
@@ -144,7 +144,7 @@ var wf00102 =
                     editable: true,
                     dataType: "check",
                     textAlignment: "center",
-                    required: true
+                    required: false
                 },
                 {
                     sortNo: 10,
@@ -154,7 +154,7 @@ var wf00102 =
                     editable: true,
                     dataType: "check",
                     textAlignment: "center",
-                    required: true
+                    required: false
                 },
                 {
                     sortNo: 11,
@@ -182,7 +182,7 @@ var wf00102 =
                     editable: true,
                     dataType: "check",
                     textAlignment: "center",
-                    required: true
+                    required: false
                 },
                 {
                     sortNo: 14,
