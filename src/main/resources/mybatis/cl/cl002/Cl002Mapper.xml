@@ -206,12 +206,13 @@
         AND ROWNUM = 1
         ORDER BY Z.CLASS_CODE DESC
     </select>
-    <update id="updateStatusConfirm"  parameterType="String" statementType="PREPARED">
+    <update id="updateStatusConfirm"  parameterType="Cl00201VO" statementType="PREPARED">
         UPDATE
           CL_CLASS
         SET
           STATUS_UUID = #{statusUuid},
-          UPDATE_UUID = #{updateUuid}
+          UPDATE_UUID = #{updateUuid},
+          UPDATE_DATE = to_timestamp(#{updateDate},'yyyy/mm/dd hh24:mi:ss.ff3')
         WHERE ORDER_KEY LIKE #{orderKey} || '%'
     </update>
 </mapper>

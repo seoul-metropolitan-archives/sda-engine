@@ -15,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import rmsoft.ams.seoul.cl.cl001.vo.Cl00101VO;
 import rmsoft.ams.seoul.cl.cl002.dao.Cl002Mapper;
 import rmsoft.ams.seoul.cl.cl002.vo.Cl00201VO;
@@ -95,7 +96,7 @@ public class Cl002Service extends BaseService {
         return cl002Mapper.getSelectedClassDetail(cl00201VO);
     }
 
-
+    @Transactional
     public void updateStatusConfirm(List<Cl00201VO> lists) {
         List<ClClass> clClassList = ModelMapperUtils.mapList(lists, ClClass.class);
         ClClass orgClClass = null;
@@ -116,6 +117,7 @@ public class Cl002Service extends BaseService {
         }
     }
 
+    @Transactional
     public ApiResponse updateStatusCancel(List<Cl00201VO> list) {
         List<ClClass> clClassList = ModelMapperUtils.mapList(list, ClClass.class);
         ClClass orgClClass = null;
@@ -134,6 +136,7 @@ public class Cl002Service extends BaseService {
         return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");
     }
 
+    @Transactional
     public ApiResponse updateClassList(List<Cl00201VO> list) {
         List<ClClass> clClassList = ModelMapperUtils.mapList(list, ClClass.class);
         ClClass orgClClass = null;
@@ -205,6 +208,7 @@ public class Cl002Service extends BaseService {
         return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");
     }
 
+    @Transactional
     public void updateClassCon(RequestParams<Cl00202VO> requestParams) {
         ClClassCon clClassCon = new ClClassCon();
         if(StringUtils.isEmpty(requestParams.getString("classUuid"))){

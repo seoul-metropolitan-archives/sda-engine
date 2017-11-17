@@ -105,7 +105,6 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
         this.initInstance();
         this.setColumnInfo(rc00501.column_info);
         this.gridObj.setOption({
-            checkBar: {visible: true},
             indicator: {visible: true}
         })
         this.makeGrid();

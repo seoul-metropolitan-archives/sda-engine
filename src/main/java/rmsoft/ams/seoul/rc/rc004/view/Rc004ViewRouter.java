@@ -12,8 +12,8 @@ public class Rc004ViewRouter extends BaseController {
     @GetMapping("/rc/rc004/rc004")
     public String view(ModelMap model) {
         model.addAttribute("typeUuid", CommonCodeUtils.get("CD136"));
-        model.addAttribute("publishedStatusUuid ", CommonCodeUtils.get("CD121"));
-        model.addAttribute("openStatusUuid ", CommonCodeUtils.get("CD123"));
+        model.addAttribute("publishedStatusUuid", CommonCodeUtils.get("CD121"));
+        model.addAttribute("openStatusUuid", CommonCodeUtils.get("CD123"));
         return "/rc/rc004/rc004";
     }
 }

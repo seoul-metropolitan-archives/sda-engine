@@ -75,6 +75,7 @@
                                                 <ul>
                                                     <li style="width: 33%;">
                                                         <b>Code </b><div data-ax-path="code">text readonly</div>
+                                                        <input type="hidden" data-ax-path="itemUuid">
                                                     </li>
                                                     <li style="width: 33%;">
                                                         <b>Type </b>
@@ -88,8 +89,7 @@
                                                     <li style="width: 34%;">
                                                         <b>Published Status</b>
                                                         <div>
-                                                            <select data-ax-path="publishedStatusUuid" style="width: 200px; background-color: #fffdd6">
-                                                                <option value=""></option>
+                                                            <select data-ax-path="publishedStatusUuid" style="width: 200px; background-color: #fffdd6" >
                                                                 <option th:each="item : ${publishedStatusUuid}" th:value="${item.codeDetailUUID}" th:text="${item.codeName}"/>
                                                             </select>
                                                         </div>
@@ -148,7 +148,8 @@
                                                         <b>From </b>
                                                         <div>
                                                             <div class="src_box2" style="width: 100%">
-                                                                <input data-ax-path="from" type=text style="width: 97%">
+                                                                <input data-ax-path="raAggregationUuid" type=hidden style="width: 97%">
+                                                                <input data-ax-path="raTitle" type=text style="width: 97%">
                                                                 <a href="#" style="top: 0">
                                                                     <!--<img src="http://localhost/@AMS/images/search_normal.png" alt="find"></a>-->
                                                             </div>
@@ -162,11 +163,11 @@
                                                         <b>Date of Description  </b>
                                                         <div>
                                                             <div class="cld_box">
-                                                                <input data-ax-path="riDescriptionStartDate" type=text id="datepicker1">
+                                                                <input data-ax-path="descriptionStartDate" type=text id="datepicker1">
                                                             </div>
                                                             ~
                                                             <div class="cld_box">
-                                                                <input data-ax-path="riDescriptionEndDate" type=text id="datepicker2">
+                                                                <input data-ax-path="descriptionEndDate" type=text id="datepicker2">
                                                             </div>
                                                         </div>
                                                     </li>
@@ -213,6 +214,7 @@
                                                             </li>
                                                             <li class="pdt_20">
                                                                 <b>Open Status</b>
+                                                                <input data-ax-path="openStatusUuid" type="hidden">
                                                                 <div>
                                                                     <select data-ax-path="openStatusUuid" style="width: 200px; background-color: #fffdd6">
                                                                         <option value=""></option>
@@ -229,7 +231,7 @@
                                                             <li>
                                                                 <b>Reference Code </b>
                                                                 <div>
-                                                                    <textarea class="txtar" style="height: 120px"></textarea>
+                                                                    <textarea data-ax-path="referenceCode" class="txtar" style="height: 120px"></textarea>
                                                                 </div>
                                                             </li>
                                                             <li class="pdt_20">

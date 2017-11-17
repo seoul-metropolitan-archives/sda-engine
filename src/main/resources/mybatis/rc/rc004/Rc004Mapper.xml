@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="rmsoft.ams.seoul.rc.rc004.dao.Rc004Mapper">
+    <update id="saveComponentList"  parameterType="Rc00402VO" statementType="PREPARED">
+        UPDATE
+        RC_COMPONENT
+        SET
+        TITLE = #{title},
+        OPEN_STATUS_UUID = #{openStatusUuid},
+        UPDATE_UUID = #{updateUuid},
+        UPDATE_DATE = to_timestamp(#{updateDate},'yyyy/mm/dd hh24:mi:ss.ff3')
+        WHERE COMPONENT_UUID = #{componentUuid}
+    </update>
+</mapper>

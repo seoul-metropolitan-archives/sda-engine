@@ -1,4 +1,4 @@
-package rmsoft.ams.seoul.rc.rc005.vo;
+package rmsoft.ams.seoul.rc.rc004.vo;
 
 import io.onsemiro.core.vo.BaseVO;
 import lombok.Data;
@@ -10,26 +10,21 @@ import java.sql.Blob;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class Rc00502VO extends BaseVO {
-    private String itemComponentUuid;
-
-    private String itemUuid;
+public class Rc00402VO extends BaseVO {
 
     private String componentUuid;
 
     private String publicationStatusUuid;
 
-    private String areaNm;
-
     private String areaUuid;
 
     private String title;
 
-    private String openStatusNm;
+    private String typeUuid;
 
     private String openStatusUuid;
 
-    private String electronYn;
+    private String electronYN;
 
     private String sourceSystemUuid;
 
@@ -39,11 +34,13 @@ public class Rc00502VO extends BaseVO {
 
     private Blob thumbnail;
 
-    private String typeNm;
-
-    private String typeUuid;
-
     private String checksumTypeUuid;
 
     private String checksum;
+
+    private String originalFileName;
+
+    private String fileName;
+
+    private String filePath;
 }
