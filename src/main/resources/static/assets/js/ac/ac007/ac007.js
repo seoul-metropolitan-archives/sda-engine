@@ -65,6 +65,10 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         var roleMenuList = [].concat(fnObj.gridView02.getData());
         var permissionList = [].concat(fnObj.gridView03.getData());
 
+        if(!fnObj.gridView02.validate()
+        || !fnObj.gridView03.validate()
+        )
+        return ;
         axboot
             .call({
                 type: "PUT",
@@ -294,7 +298,10 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     initView: function () {
         this.initInstance();
         this.setColumnInfo(ac00701.column_info);
+        this.gridObj.setRunAdd(false);
+        this.gridObj.setRunDel(false);
         this.makeGrid();
+
         this.gridObj.itemClick(this.itemClick);
     },
     itemClick: function (data, index) {
@@ -341,6 +348,8 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
             indicator: {visible: true},
             stateBar: {visible: false}
         });
+        this.gridObj.setRunAdd(false);
+        this.gridObj.setRunDel(false);
         this.gridObj.setStyle("header",{background: "linear,#f2f2f2",textAlignment: "near",fontFamily: "nanum",fontSize : 12,borderRight: "#cccccc, 1",});
         this.gridObj.setStyle("body",{background : "#ffffffff",fontSize : 12,fontFamily : "nanum"});
         this.gridObj.setStyle("grid",{border: "#ffffffff,0"});
@@ -411,6 +420,8 @@ fnObj.gridView03 = axboot.viewExtend(axboot.gridView, {
         this.gridObj.setFixedOptions({
             colCount: 1
         });
+        this.gridObj.setRunAdd(false);
+        this.gridObj.setRunDel(false);
         this.setColumnInfo(ac00703.column_info);
         this.makeGrid();
     }

@@ -81,6 +81,10 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     },
     TOP_GRID_SAVE: function (caller, act, data) {
         var result = false;
+
+        if(!this.gridView01.validate())
+            return false;
+
         axboot.call({
                 type: "PUT",
                 url: "/api/v1/cl001/03/updateClassificationSchemeList",
@@ -212,12 +216,14 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
 });
 
 /*팝업 헤더*/
-fnObj.gridView01 = axboot.viewExtend(axboot.realGridView, {
+fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     tagId: "realgrid01",
+    primaryKey : "classificationSchemeUuid",
     entityName: "Classification Scheme",
     initView: function () {
+        this.initInstance();
         this.setColumnInfo(cl00101.column_info);
-        this.gridObj.setFixedOptions({
+        this.setFixedOptions({
             colCount: 4
         });
         this.gridObj.setOption({

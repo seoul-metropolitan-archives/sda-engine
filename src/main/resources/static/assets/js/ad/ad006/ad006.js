@@ -6,70 +6,83 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH: function (caller, act, data) {
         var _this = this;
 
-        if(!data)
+        if (!data)
             data = fnObj.formView.getData();
 
         axboot.ajax({
             type: "POST",
-            url: "/ad/ad006/ad006/searchEntityType",
-            data : JSON.stringify(data),
-            async : false,
+            url: "/api/v1/ad/ad006/searchEntityType",
+            data: JSON.stringify(data),
+            async: false,
             callback: function (res) {
-                if (undefined === res.list || res.list.length < 1)
-                {
-                    fnObj.gridView_h.addRow();
-                }
-                else {
-                    fnObj.gridView_h.setData(res.list);
-
-                }
+                fnObj.gridView01.setData(res.list);
+                ACTIONS.dispatch(ACTIONS.GET_ENTITY_DETAIL, res.list[0]);
             }
         });
     },
-    GET_ENTITY_DETAIL : function(caller, act, data)
-    {
+    GET_ENTITY_DETAIL: function (caller, act, data) {
         /*
         if(!data["entityTypeUuid"])
             return ;
         */
         axboot.ajax({
-            url : "/ad/ad006/ad006/getEntityColumnList"
-            ,type : "POST"
-            ,dataType : "JSON"
-            ,data : JSON.stringify(data)
-            ,callback : function(res)
-            {
-                fnObj.gridView_d.setData(res.list);
+            url: "/api/v1/ad/ad006/getEntityColumnList"
+            , type: "POST"
+            , dataType: "JSON"
+            , data: JSON.stringify(data)
+            , callback: function (res) {
+                fnObj.gridView02.setData(res.list);
             }
         });
     },
-    PAGE_SAVE : function(caller, act, data)
-    {
+    PAGE_SAVE: function (caller, act, data) {
 
-        if (
-            ACTIONS.dispatch(ACTIONS.ENTITY_TYPE_PAGE_SAVE)
-            && ACTIONS.dispatch(ACTIONS.ENTITY_COLUMN_PAGE_SAVE)
+        if(
+            !fnObj.gridView01.validate()
+            || !fnObj.gridView02.validate()
         )
-        {
-            axToast.push(axboot.getCommonMessage("AA007"));
-        }
+            return ;
+
+        var entityTypeList = [].concat(fnObj.gridView01.getData());
+        var entityColumnList = [].concat(fnObj.gridView02.getData());
+
+        axboot
+            .call({
+                url: "/api/v1/ad/ad006/saveEntityType",
+                type: "post",
+                data: JSON.stringify(entityTypeList),
+                callback: function (res) {
+                    fnObj.gridView01.gridObj.commit();
+                }
+            })
+            .call({
+                url : "/api/v1/ad/ad006/entityColumnList",
+                type : "post",
+                data: JSON.stringify(popupDetailList),
+                callback: function (res) {
+                    fnObj.gridView02.gridObj.commit();
+                }
+            })
+            .done(function () {
+                axToast.push(axboot.getCommonMessage("AA007"));
+            });
     },
+    /*
     ENTITY_TYPE_PAGE_SAVE: function (caller, act, data) {
         var _this = this;
 
         var result = false;
-        console.log(fnObj.gridView_h.getData());
+        console.log(fnObj.gridView01.getData());
         axboot.ajax({
-            url: "/ad/ad006/ad006/saveEntityType",
+            url: "/api/v1/ad/ad006/saveEntityType",
             type: "post",
             async: false,
-            data: JSON.stringify(fnObj.gridView_h.getData()),
-            callback:  function (res)
-            {
+            data: JSON.stringify(fnObj.gridView01.getData()),
+            callback: function (res) {
                 result = res;
-                if(result) {
+                if (result) {
                     try {
-                        fnObj.gridView_h.gridObj.commit();
+                        fnObj.gridView01.gridObj.commit();
                     } catch (e) {
                         console.log("커밋 에러남");
                     }
@@ -81,25 +94,23 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 onError: axboot.viewError
             }
         });
-        if(!result)
-            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH,fnObj.formView.getData());
+        if (!result)
+            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH, fnObj.formView.getData());
 
         return result;
     },
-    ENTITY_COLUMN_PAGE_SAVE : function(data)
-    {
+    ENTITY_COLUMN_PAGE_SAVE: function (data) {
         var result = false;
         axboot.ajax({
-            url : "/ad/ad006/ad006/saveEntityColumn",
-            type : "post",
-            async : false,
-            data : JSON.stringify(fnObj.gridView_d.getData()),
-            callback : function(res)
-            {
+            url: "/api/v1/ad/ad006/saveEntityColumn",
+            type: "post",
+            async: false,
+            data: JSON.stringify(fnObj.gridView02.getData()),
+            callback: function (res) {
                 result = res;
                 try {
                     result = true;
-                    fnObj.gridView_d.gridObj.commit();
+                    fnObj.gridView02.gridObj.commit();
                 } catch (e) {
                     console.log("커밋 에러남");
                 }
@@ -108,17 +119,17 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 onError: axboot.viewError
             }
         });
-        if(!result){
-            ACTIONS.dispatch(ACTIONS.GET_ENTITY_DETAIL,fnObj.gridView_h.gridObj.getSelectedData());
-}
+        if (!result) {
+            ACTIONS.dispatch(ACTIONS.GET_ENTITY_DETAIL, fnObj.gridView01.gridObj.getSelectedData());
+        }
 
 
         return result;
     },
+    */
     FORM_CLEAR: function (caller, act, data) {
     },
-    CLOSE_TAB : function()
-    {
+    CLOSE_TAB: function () {
     },
     dispatch: function (caller, act, data) {
         var result = ACTIONS.exec(caller, act, data);
@@ -130,35 +141,37 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     }
 });
 fnObj = {
-    pageStart : function () {
+    pageStart: function () {
         var _this = this;
         $.ajax({
             url: "/assets/js/column_info/ad00601.js",
             dataType: "script",
-            async : false,
-            success: function(){}
+            async: false,
+            success: function () {
+            }
         });
         $.ajax({
             url: "/assets/js/column_info/ad00602.js",
             dataType: "script",
-            async : false,
-            success: function(){}
+            async: false,
+            success: function () {
+            }
         });
 
         _this.formView.initView();
-        _this.gridView_h.initView();
-        _this.gridView_d.initView();
+        _this.gridView01.initView();
+        _this.gridView02.initView();
 
-        ACTIONS.dispatch(ACTIONS.PAGE_SEARCH,this.formView.getData());
-        ACTIONS.dispatch(ACTIONS.GET_ENTITY_DETAIL, this.gridView_h.gridObj.getSelectedData());
+        ACTIONS.dispatch(ACTIONS.PAGE_SEARCH, this.formView.getData());
+
     }
 };
 /*검색 창*/
-fnObj.formView = axboot.viewExtend(axboot.formView,{
+fnObj.formView = axboot.viewExtend(axboot.formView, {
     getDefaultData: function () {
         return $.extend({}, axboot.formView.defaultData);
     },
-    initView : function(){
+    initView: function () {
         this.target = $("#formView01");
         this.model = new ax5.ui.binder();
         this.model.setModel(this.getDefaultData(), this.target);
@@ -166,12 +179,11 @@ fnObj.formView = axboot.viewExtend(axboot.formView,{
         this.initEvent();
     }
 
-    ,initEvent: function () {
-        $("input").keydown(function(event){
-            switch(event.keyCode)
-            {
+    , initEvent: function () {
+        $("input").keydown(function (event) {
+            switch (event.keyCode) {
                 case 40:
-                    fnObj.gridView_h.gridObj.setFocus();
+                    fnObj.gridView01.gridObj.setFocus();
                     break;
             }
         })
@@ -210,12 +222,11 @@ fnObj.formView = axboot.viewExtend(axboot.formView,{
 });
 
 /*엔티티 헤더*/
-fnObj.gridView_h = axboot.viewExtend(axboot.gridView, {
-    tagId : "realgrid1",
-    entityName : "ENTITY_HEADER",
-    beforeRowIdx : undefined,
-    initView  : function()
-    {
+fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
+    tagId: "realgrid1",
+    entityName: "ENTITY_HEADER",
+    primaryKey : "entityTypeUuid",
+    initView: function () {
         var _this = this;
         this.initInstance();
         this.setColumnInfo(ad00601.column_info);
@@ -225,94 +236,58 @@ fnObj.gridView_h = axboot.viewExtend(axboot.gridView, {
         })
         */
         this.makeGrid();
-        this.gridObj.addRowBeforeEvent(this.addRowBeforeEvent);
-        this.gridObj.addRowAfterEvent(this.addRowAfterEvent);
+        this.addRowAfterEvent(this.clearChild);
+        this.removeRowAfterEvent(this.clearChild);
         this.gridObj.setFixedOptions({
-            colCount : 2
+            colCount: 2
         })
 
-        this.gridObj.itemClick(function(data){
-            if(fnObj.gridView_d.getData().length < 1)
-            {
+        this.gridObj.itemClick(function (data) {
+            if (fnObj.gridView02.getData().length < 1) {
                 fnObj.formView.setFormData("entityTypeCode", data.entityType);
-                ACTIONS.dispatch(ACTIONS.GET_ENTITY_DETAIL,data);
+                ACTIONS.dispatch(ACTIONS.GET_ENTITY_DETAIL, data);
             }
-            else
-            {
+            else {
                 axDialog.confirm({
                     msg: "변경사항이 있습니다. 저장하시겠습니까?"
-                },function() {
-                    if(this.key == "ok")
-                    {
+                }, function () {
+                    if (this.key == "ok") {
                         ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
+                    }
+                    else {
+                        ACTIONS.dispatch(ACTIONS.GET_ENTITY_DETAIL, data);
                     }
                 });
             }
         });
     },
-
-    addRowBeforeEvent : function()
-    {
-        var _this = this;
-        var uuid = undefined;
-        axboot.ajax({
-            url : "/ad/ad006/ad006/getUUID",
-            type : "POST",
-            async : false,
-            callback:function(res)
-            {
-                uuid = res.map.uuid;
-            }
-        });
-        var data = fnObj.gridView_h.gridObj.getDefaultData();
-        data[0] = uuid;
-        fnObj.gridView_h.gridObj.setDefaultData(data);
+    clearChild: function () {
+        fnObj.gridView02.clearData();
     },
-    addRowAfterEvent : function()
-    {
-        fnObj.gridView_d.clear();
-    },
-    getEntityTypeHeaderUUID : function()
-    {
+    getEntityTypeHeaderUUID: function () {
         return this.gridObj.getSelectedData()["entityTypeUuid"];
     }
 });
 /*엔티티 디테일 ( Column )*/
-fnObj.gridView_d = axboot.viewExtend(axboot.gridView, {
-    tagId : "realgrid2",
-    entityName : "ENTITY_DETAIL",
-    initView: function ()
-    {
+fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
+    tagId: "realgrid2",
+    entityName: "ENTITY_DETAIL",
+    primaryKey : "entityColumnUuid",
+    parentsUuidFieldName : "entityTypeUuid",
+    parentsGrid : fnObj.gridView01,
+    initView: function () {
         this.initInstance();
         this.setColumnInfo(ad00602.column_info);
         this.makeGrid();
         this.gridObj.addRowBeforeEvent(this.addRowBeforeEvent);
         this.gridObj.onRowsPasted(this.onRowsPasted);
         this.gridObj.setFixedOptions({
-            colCount : 1
+            colCount: 1
         })
-    },
-    clear : function () {
-        this.setData([]);
-    },
-    addRowBeforeEvent : function()
-    {
-        var data = fnObj.gridView_d.gridObj.getDefaultData();
-        data[1] = fnObj.gridView_h.getEntityTypeHeaderUUID();
-        fnObj.gridView_d.gridObj.setDefaultData(data);
-    },
-    onRowsPasted : function(grid, items)
-    {
-        var data = undefined;
-        for(var i = 0; i < items.length; i++)
-        {
-            fnObj.gridView_d.gridObj.setValue(items[i],1,fnObj.gridView_h.getEntityTypeHeaderUUID());
-        }
     }
 });
-isDataChanged = function()
-{
-    if (fnObj.gridView_h.isChangeData() == true || fnObj.gridView_d.isChangeData() == true) {
+isDataChanged = function () {
+    if (fnObj.gridView01.isChangeData() == true || fnObj.gridView02.isChangeData() == true) {
         return true;
     } else {
         return false;

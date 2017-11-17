@@ -2609,11 +2609,7 @@ axboot.gridView = {
     },
     /* 데이터 가져오기 */
     getData: function getData() {
-        /*171113 검증 로직 추가로 인한 코드 추가*/
-        if (this.validate())
-            return this.gridObj.getData();
-        else
-            return [];
+        return this.gridObj.getData();
     },
     /*틀 고정*/
     setFixedOptions : function(options){
@@ -2690,6 +2686,13 @@ axboot.gridView = {
         var column = wrapperObj.columnByName(key);
         column.defaultValue = uuid;
         wrapperObj.setColumn(column);
+    },
+    addRowAfterEvent : function(_event){
+        this.gridObj.addRowAfterEvent(_event);
+    },
+    removeRowAfterEvent : function(_event)
+    {
+        this.gridObj.removeRowEvent(_event);
     },
     /*그리드 줄 추가 전 이벤트 (자식 그리드)*/
     addRowBeforeEventForChildGrid: function (wrapperObj, _this) {

@@ -109,7 +109,7 @@
         WHERE
             Z.CODE_HEADER_UUID = #{codeHeaderUuid}
         ORDER BY
-          Z.CODE
+          Z.ORDER_NO, Z.CODE ASC
         ]]>
     </select>
     <select id="getCode" resultType="Ad00303VO" parameterType="Ad00303VO" statementType="PREPARED">
@@ -127,6 +127,6 @@
         <if test="null != categoryCode">
             AND Z.CATEGORY_CODE = #{categoryCode}
         </if>
-
+        ORDER BY Z1.ORDER_NO, Z1.CODE ASC
     </select>
 </mapper>

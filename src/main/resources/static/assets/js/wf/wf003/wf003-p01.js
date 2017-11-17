@@ -14,10 +14,10 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             callback: function (res) {
                 fnObj.gridView01.setData(res.list);
 
-                if (res.list.length > 0) {
+                /*if (res.list.length > 0) {
                     //ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, res.list[0]);
                     fnObj.gridView02.initGrid(res.list[0]["jobUuid"]);
-                }
+                }*/
             },
             options: {
                 onError: axboot.viewError
@@ -243,14 +243,15 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
             callback: function (res) {
                 res = eval(res.map);
 
+                if(res.columnInfo.length <1)
+                    return ;
+
                 fnObj.gridView02.gridObj = new SimpleGridWrapper(fnObj.gridView02.tagId, "/assets/js/libs/realgrid");
                 fnObj.gridView02.gridObj.setGridStyle("100%", "100%");
                 fnObj.gridView02.gridObj.setEntityName(fnObj.gridView02.entityName);
                 fnObj.gridView02.gridObj.setColumnInfo(res.columnInfo);
                 fnObj.gridView02.gridObj.makeGrid();
                 fnObj.gridView02.gridObj.addRow();
-
-                $("#realgrid02").fadeIn(100);
             }
         });
     },

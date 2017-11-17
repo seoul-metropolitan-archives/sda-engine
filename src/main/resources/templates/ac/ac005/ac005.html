@@ -52,7 +52,7 @@
                     <div data-split-panel="{width: '43.5%'}">
                         <ul class="bdb bdt div_tablerow bgf7" style="height:30px;">
                             <th:block layout:insert="~{/fragments/page-buttons :: dot('Role')}"/>
-                            <th:block layout:insert="~{/fragments/page-buttons :: add-and-delete}"/>
+                            <th:block layout:insert="~{/fragments/page-buttons :: add-and-delete('addGrid1','delGrid1')}"/>
                         </ul>
                         <div id="realgrid01"></div>
                     </div>
@@ -60,7 +60,7 @@
                     <div data-split-panel="{width: '56.5%'}">
                         <ul class="bdb bdt div_tablerow bgf7" style="height:30px;">
                             <th:block layout:insert="~{/fragments/page-buttons :: dot('Permission')}"/>
-                            <th:block layout:insert="~{/fragments/page-buttons :: add-and-delete}"/>
+                            <th:block layout:insert="~{/fragments/page-buttons :: add-and-delete('addGrid2','delGrid2')}"/>
                         </ul>
                         <div id="realgrid02"></div>
                     </div>

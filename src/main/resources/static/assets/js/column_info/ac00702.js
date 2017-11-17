@@ -63,7 +63,7 @@ var ac00702 =
                     width: 120,
                     editable: true,
                     dataType: "text",
-                    required: true,
+                    required: false,
                     visible: false
                 },
                 {

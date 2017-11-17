@@ -327,6 +327,16 @@ fnObj.gridView03 = axboot.viewExtend(axboot.gridView, {
 
                 if (res.columnInfo.length > 0) {
 
+                    for(var i = 0; i < res.columnInfo.length; i++)
+                    {
+                        if(res.columnInfo[i]["dataType"] == "combo")
+                        {
+                            res.columnInfo[i]["dataType"]["labels"] = eval(res.columnInfo[i]["dataType"]["labels"]);
+                            res.columnInfo[i]["dataType"]["values"] = eval(res.columnInfo[i]["dataType"]["values"]);
+
+                        }
+                    }
+
                     fnObj.gridView03.gridObj = new SimpleGridWrapper(fnObj.gridView03.tagId, "/assets/js/libs/realgrid");
                     fnObj.gridView03.gridObj.setGridStyle("100%", "100%");
                     fnObj.gridView03.gridObj.setEntityName(fnObj.gridView03.entityName);

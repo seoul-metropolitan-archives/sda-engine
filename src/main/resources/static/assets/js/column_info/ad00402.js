@@ -95,12 +95,7 @@ var ad00402 =
                 dataType : "check",
                 editable: true,
                 sortable: true,
-                renderer: {
-                    falseValues: "N",
-                    trueValues: "Y",
-                    editable: "false",
-                    startEditOnClick: true
-                },
+                defaultValue : "N"
             },
             {
                 sortNo: 7,

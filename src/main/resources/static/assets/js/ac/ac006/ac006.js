@@ -28,6 +28,9 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SAVE: function (caller, act, data) {
         var permissionList = [].concat(fnObj.gridView01.getData());
 
+        if(!fnObj.gridView01.validate())
+            return ;
+
         axboot
             .call({
                 type: "PUT",
@@ -184,6 +187,8 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
         if (data.permissionUuid != null && data.permissionUuid != "") {
             ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, data);
         }
+    },clearChild : function()
+    {
     }
 });
 

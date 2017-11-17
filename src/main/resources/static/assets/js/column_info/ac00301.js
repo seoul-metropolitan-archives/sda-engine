@@ -70,13 +70,7 @@ var ac00301 =
                     visible: true,
                     values: axboot.commonCodeFilter("CD107").codeArr,
                     labels: axboot.commonCodeFilter("CD107").nameArr,
-                    lookupDisplay: true,
-                    editor: {
-                        type: "dropDown",
-                        dropDownCount: 10,
-                        domainOnly: true, //domainOnly가 true이면 목록에 있는 값들만 선택할 수 있습니다.
-                        textReadOnly: false, // true이면 키 입력이 안되며 선택만 할 수 있습니다.
-                    }
+                    lookupDisplay: true
                 },
                 {
                     sortNo: 7,
@@ -101,13 +95,7 @@ var ac00301 =
                     visible: true,
                     values: axboot.commonCodeFilter("CD109").codeArr,
                     labels: axboot.commonCodeFilter("CD109").nameArr,
-                    lookupDisplay: true,
-                    editor: {
-                        type: "dropDown",
-                        dropDownCount: 10,
-                        domainOnly: true, //domainOnly가 true이면 목록에 있는 값들만 선택할 수 있습니다.
-                        textReadOnly: false, // true이면 키 입력이 안되며 선택만 할 수 있습니다.
-                    }
+                    lookupDisplay: true
                 },
                 {
                     sortNo: 9,

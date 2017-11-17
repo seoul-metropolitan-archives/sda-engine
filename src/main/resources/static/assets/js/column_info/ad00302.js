@@ -46,7 +46,7 @@ var ad00302 =
                 width: 70,
                 editable: true,
                 dataType: "check",
-                defaultValue : "Y",
+                defaultValue : "N",
                 required: false
             },
             {

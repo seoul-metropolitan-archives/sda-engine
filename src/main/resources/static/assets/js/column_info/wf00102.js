@@ -121,7 +121,7 @@ var wf00102 =
                     text: "Input Name",
                     width: 170,
                     disable: true,
-                    editable: false,
+                    editable: true,
                     dataType: "text",
                     required: false,
                     visible: true

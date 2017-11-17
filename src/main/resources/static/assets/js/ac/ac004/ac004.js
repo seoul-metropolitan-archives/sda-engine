@@ -17,7 +17,8 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 fnObj.gridView01.setFocus();
                 if (res.list.length > 0) {
                     fnObj.formView.setFormData("userGroupHeader", res.list[0].userGroupName);
-
+                    fnObj.gridView01.resetCurrent();
+                    fnObj.gridView01.setFocus();
                     ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, res.list[0]);
                     ACTIONS.dispatch(ACTIONS.PAGE_SEARCH2, res.list[0]);
                 } else {
@@ -75,6 +76,13 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         var userList = [].concat(fnObj.gridView01.getData());
         var groupList = [].concat(fnObj.gridView02.getData());
         var roleList = [].concat(fnObj.gridView03.getData());
+
+        if(
+            !fnObj.gridView01.validate()
+            || !fnObj.gridView02.validate()
+            || !fnObj.gridView03.validate()
+        )
+            return ;
 
         axboot
             .call({
@@ -253,6 +261,9 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
         this.setColumnInfo(ac00401.column_info);
         this.makeGrid();
         this.gridObj.itemClick(this.itemClick);
+        this.addRowAfterEvent(this.clearChild);
+        this.removeRowAfterEvent(this.clearChild);
+
     },
     itemClick: function (data, index) {
         /* if (index.fieldIndex == 3) {
@@ -283,6 +294,12 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
             fnObj.gridView02.clearData();
             fnObj.gridView03.clearData();
         }
+    },
+    clearChild : function()
+    {
+        fnObj.gridView02.clearData();
+        fnObj.gridView03.clearData();
+
     }
 });
 fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {

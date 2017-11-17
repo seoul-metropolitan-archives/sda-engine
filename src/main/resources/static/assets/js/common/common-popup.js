@@ -88,12 +88,17 @@ fnObj.formView01 = axboot.viewExtend(axboot.formView, {
         });
 
         $("#searchField").focus();
-        
-        $("#okPopup").click(function(){
+
+        $("#clear").click(function(){
+            $("#searchField").val("");
+            $("#searchField").focus();
+        });
+
+        $(".okPopup").click(function(){
             ACTIONS.dispatch(ACTIONS.PAGE_CHOICE);
             ACTIONS.dispatch(ACTIONS.PAGE_CLOSE);
         });
-        $("#closePopup").click(function(){
+        $(".closePopup").click(function(){
             ACTIONS.dispatch(ACTIONS.PAGE_CLOSE);
         });
     },
@@ -163,6 +168,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
                     checkBar: {visible: res["popupInfo"]["multiselectYN"] == 'Y',exclusive: res["popupInfo"]["multiselectYN"] != 'Y' },
                     indicator: {visible: true}
                 });
+                var columnInfo = new Array();
                 if(res["popupInfo"]["treeYN"] == 'Y')
                 {
                     var treeData = undefined;
@@ -172,20 +178,33 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
                         if("Y" == treeData.treeColumnYN)
                         {
                             fnObj.treeColumn = treeData["name"];
+                            columnInfo.push(treeData);
                         }else if("parent" == treeData.treeRelationType)
                         {
                             fnObj.parent = treeData["name"];
+                            columnInfo.push(treeData);
                         }else if("child" == treeData.treeRelationType)
                         {
                             fnObj.child = treeData["name"];
+                            columnInfo.push(treeData);
                         }
 
                     }
+                    fnObj.gridView01.gridObj.setColumnInfo(columnInfo);
                 }
-                console.log(res.columnInfo);
-                fnObj.gridView01.gridObj.setColumnInfo(res.columnInfo);
+                else
+                {
+                    for(var i = 0; i < res.columnInfo.length; i++)
+                    {
+                        res.columnInfo[i]["editable"] = false;
+                    }
+                    fnObj.gridView01.gridObj.setColumnInfo(res.columnInfo);
+                }
+
+
                 fnObj.gridView01.gridObj.makeGrid();
-                $("#popupGrid01").fadeIn(100);
+                fnObj.gridView01.gridObj.setRunAdd(false);
+                fnObj.gridView01.gridObj.setRunDel(false);
                 //fnObj.gridView01.gridObj.setData("set",[{"USER_NAME" : "test",""}])
                 ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
                 fnObj.gridView01.initEvent();
@@ -216,8 +235,19 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
                     return a[fnObj.parent]| - b[fnObj.parent];
                 }
             });
-            console.log(list);
-
+            //console.log(list);
+            for(var i = 0; i < list.length; i++)
+            {
+                for( var key in list[i])
+                {
+                    if(
+                        key != fnObj.treeColumn
+                        && key != fnObj.parent
+                        && key != fnObj.child
+                    )
+                        delete(list[i][key]);
+                }
+            }
 
             var matchingData = function(key, list)
             {
@@ -253,7 +283,6 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
         else
             this.gridObj.setData("set", list);
 
-        $("#popupGrid01").fadeIn(100);
     },
     getData : function()
     {

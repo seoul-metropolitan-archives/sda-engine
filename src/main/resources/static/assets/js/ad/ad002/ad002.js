@@ -1,21 +1,13 @@
 var fnObj = {};
 var pageSize = 1000;
-var errorStatusList = {};
 var gridView = undefined;
 var serviceList = [];
-var handleResult = "";
-var handleFailReason = "";
-var cash10kEmptyStatus = "";
-var cash50kEmptyStatus = "";
-
-var selectedIndex = "";
-var selectedErrorItem = {};
 
 var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH: function (caller, act, data) {
         axboot.ajax({
             type: "POST",
-            url: "/ad/ad002/getMessageList.do",
+            url: "/api/v1/ad/ad002/getMessageList.do",
             data: JSON.stringify(fnObj.searchView.getData()),
             callback: function (res) {
                 console.log(res);
@@ -34,7 +26,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
 
         axboot.ajax({
             type: "POST",
-            url: "/ad/ad002/save.do",
+            url: "/api/v1/ad/ad002/save.do",
             data: JSON.stringify(fnObj.gridView01.getData()),
             callback: function (res) {
                 axToast.push(axboot.getCommonMessage("AA007"));
@@ -130,6 +122,7 @@ fnObj.searchView = axboot.viewExtend(axboot.formView,{
 
 fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     tagId : "realgrid01",
+    primaryKey : "messageUuid",
     initView: function ()
     {
         this.initInstance();

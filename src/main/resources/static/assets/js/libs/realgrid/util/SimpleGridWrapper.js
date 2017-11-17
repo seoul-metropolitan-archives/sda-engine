@@ -64,12 +64,12 @@ SimpleGridWrapper.prototype.defaultBind = function()
                 addRowAfterEventCallback(_this,makeObj);
         }
         else {
-            return msg;
+            return false
         }
 
     });
     this.bind("onImageButtonClicked",function(gridWrapper, grid, itemIndex, column, buttonIndex, name){
-        var popupData = gridWrapper.getPopupData(column.dataIndex);
+        var popupData = gridWrapper.getPopupData(column.fieldName);
         if(!popupData)
             return ;
         try {
@@ -96,21 +96,74 @@ SimpleGridWrapper.prototype.defaultBind = function()
                 break;
         }
     });
-    this.bind("onEditCommit", function (gridWrapper, grid, index, oldValue, newValue)
-    {
-        var popupData = gridWrapper.getPopupData(index.fieldIndex);
-        if(!popupData) {
-            return;
-        }
-        if(!newValue || "" == newValue)
+    //ctrl + alt + p 클릭 시 팝업
+    this.bind("onKeyDown",function(grid, key, ctrl, shift, alt,gridWrapper) {
+        if(key == 80 && ctrl && alt)
         {
-            return ;
-        }
-        if(-1 == index.itemIndex)
-            return ;
+            var index = grid.getCurrent();
+            var popupData = gridWrapper.getPopupData(index.fieldName);
 
-        gridWrapper.showPopup(grid, index.fieldName,newValue,index.itemIndex,popupData);
-        console.log(index.fieldName);
+            if(!popupData) {
+                return;
+            }
+            if(-1 == index.itemIndex)
+                return ;
+            grid.commit(true);
+            var newValue = gridWrapper.getSelectedData()[index.fieldName];
+
+            if(undefined == newValue||"" == newValue)
+            {
+                newValue = "";
+            }
+
+            gridWrapper.showPopup(grid, index.fieldName,newValue,index.itemIndex,popupData);
+            console.log(index.fieldName);
+        }
+
+
+    });
+    this.bind("onCellEdited", function (gridWrapper, grid, itemIndex, dataRow, field)
+    {
+        var index = grid.getCurrent();
+
+        var columnInfo = grid.columnByName(index.fieldName);
+        if(columnInfo.editor == "dropDown")
+        {
+            grid.commit(true);
+            var newValue = gridWrapper.getSelectedData()[index.fieldName];
+            var selectedData = "";
+            for(var i = 0; i < columnInfo.labels.length; i++)
+            {
+                if(newValue == columnInfo.labels[i] || newValue == columnInfo.values[i])
+                {
+                    selectedData = columnInfo.values[i];
+                    break;
+                }
+            }
+            grid.setValue(index.dataRow,index.fieldName, selectedData);
+
+        }else
+        {
+            var popupData = gridWrapper.getPopupData(index.fieldName);
+
+            if(!popupData) {
+                return;
+            }
+            if(-1 == index.itemIndex)
+                return ;
+            grid.commit(true);
+            var newValue = gridWrapper.getSelectedData()[index.fieldName];
+
+            if(undefined == newValue||"" == newValue)
+                return ;
+
+            gridWrapper.showPopup(grid, index.fieldName,newValue,index.itemIndex,popupData);
+            console.log(index.fieldName);
+        }
+
+
+
+
     });
 }
 /**
