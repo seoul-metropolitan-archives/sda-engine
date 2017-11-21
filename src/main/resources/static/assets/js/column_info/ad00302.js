@@ -47,6 +47,7 @@ var ad00302 =
                 editable: true,
                 dataType: "check",
                 defaultValue : "N",
+                selectType : "single",
                 required: false
             },
             {

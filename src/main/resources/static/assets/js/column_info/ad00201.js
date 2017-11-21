@@ -18,7 +18,7 @@ var ad00201 =
                 text: "Message Code",
                 width: 120,
                 editable: true,
-                dataType: "text",
+                dataType: "code",
                 required: true
             },
             {

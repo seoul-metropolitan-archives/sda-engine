@@ -213,6 +213,10 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     },
     initEvent : function()
     {
+        fnObj.gridView01.gridObj.onDataCellDblClicked(function(){
+            ACTIONS.dispatch(ACTIONS.PAGE_CHOICE);
+            ACTIONS.dispatch(ACTIONS.PAGE_CLOSE);
+        });
         fnObj.gridView01.gridObj.onKeydown(function(grid, key, ctrl, shift, alt){
             switch (key) {
                 case 13:

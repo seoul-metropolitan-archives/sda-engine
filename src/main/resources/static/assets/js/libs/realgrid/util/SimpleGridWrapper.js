@@ -100,6 +100,7 @@ SimpleGridWrapper.prototype.defaultBind = function()
     });
     //ctrl + alt + p 클릭 시 팝업
     this.bind("onKeyDown",function(grid, key, ctrl, shift, alt,gridWrapper) {
+        console.log("ctrl=>"+ctrl+",alt=>"+alt+",key=>"+key);
         if(key == 80 && ctrl && alt)
         {
             var index = grid.getCurrent();
@@ -129,14 +130,15 @@ SimpleGridWrapper.prototype.defaultBind = function()
         var index = grid.getCurrent();
 
         var columnInfo = grid.columnByName(index.fieldName);
-        if(columnInfo.editor == "dropDown")
+        var columnInfoData = gridWrapper.columnInfo[index.fieldIndex];
+        if(columnInfoData.dataType == "combo")
         {
             grid.commit(true);
             var newValue = gridWrapper.getSelectedData()[index.fieldName];
             var selectedData = "";
             for(var i = 0; i < columnInfo.labels.length; i++)
             {
-                if(newValue == columnInfo.labels[i] || newValue == columnInfo.values[i])
+                if(newValue == columnInfo.labels[i].toLowerCase() || newValue == columnInfo.values[i])
                 {
                     selectedData = columnInfo.values[i];
                     break;
@@ -144,7 +146,31 @@ SimpleGridWrapper.prototype.defaultBind = function()
             }
             grid.setValue(index.dataRow,index.fieldName, selectedData);
 
-        }else
+        }
+        else if(columnInfoData.dataType == "check")
+        {
+            var columnInfoData = gridWrapper.columnInfo[index.fieldIndex];
+            if(columnInfoData.selectType == "single")
+            {
+                gridWrapper.gridView.commit(true);
+                var newValue = gridWrapper.getSelectedData()[index.fieldName];
+
+                if("Y" == newValue)
+                {
+                    var dataLists = fnObj.gridView02.gridObj.getJsonRows();
+
+                    dataLists.forEach(function (changeData, idx) {
+                        if(idx != index.dataRow)
+                            changeData[index.fieldIndex] = "N";
+                    });
+                    gridWrapper.dataProvider.updateRows(0, dataLists, 0, -1);
+                    gridWrapper.gridView.commit(true);
+                }
+
+            }
+
+        }
+        else
         {
             var popupData = gridWrapper.getPopupData(index.fieldName);
 

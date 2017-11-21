@@ -85,6 +85,7 @@ public class Ac008Service extends BaseService {
         AdProgram orgAdProgram = null;
 
         for (AdProgram adProgram : adProgramList) {
+
             orgAdProgram = adProgramRepository.findOne(adProgram.getId());
 
             if (orgAdProgram == null) {

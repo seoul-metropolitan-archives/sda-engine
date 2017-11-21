@@ -75,6 +75,7 @@ TreeGridWrapper.prototype.style.grid = {
     border: "#ffffffff,0"
 };
 TreeGridWrapper.prototype.defaultBind = function(){
+    /*
     this.bind("onKeyDown",function(grid, key, ctrl, shift, alt){
         if(key == 13)
         {
@@ -85,6 +86,7 @@ TreeGridWrapper.prototype.defaultBind = function(){
                 _event(grid.getDataProvider().getJsonRow(index.dataRow),index);
         }
     });
+    */
 }
 //======================================================================
 //		Tree 영역

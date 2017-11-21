@@ -81,6 +81,8 @@ var GridWrapper = function(p_id,p_rootContext) {
     //event저장소
     this.event = {};
 
+    this.columnInfo = new Array();
+
     this.setDoAppendValidate = function(_doAppendValidate) {this.doAppendValidate = _doAppendValidate;}
     this.setAddBtnName = function(_name){this.addBtnName = _name;}
     this.setDelBtnName = function(_name){this.delBtnName = _name;}
@@ -101,6 +103,8 @@ var GridWrapper = function(p_id,p_rootContext) {
     {
         return defaultStyles;
     }
+
+
 
     //엑셀 추출
     this.exportExcel = function(grid,label)
@@ -183,10 +187,64 @@ var GridWrapper = function(p_id,p_rootContext) {
         });
         $("#"+_this.i_id).parents().eq(1).delegate(_this.delBtnName,"click",function(){
             if(_this.runDel) {
+                _this.gridView.commit(true);
                 _this.gridView.getDataProvider().removeRows(_this.gridView.getSelectedRows(), false);
                 _this.dispatch("onRemoveRow");
             }
         });
+
+        _this.bind("onRowsPasted",function(gridWrapper, _this, grid, item){
+            var index = grid.getCurrent();
+
+            var columnInfoData = gridWrapper.columnInfo[index.fieldIndex];
+            var rowData = undefined;
+            var colData = undefined;
+            var validateData = grid.getDataProvider().getJsonRows(item[0],item[item.length-1])
+            for(var row = 0; row < validateData.length; row++)
+            {
+                rowData = validateData[row];
+                for(var col = 0; col < gridWrapper.columnInfo.length; col++)
+                {
+                    colData = gridWrapper.columnInfo[col];
+                    if(colData.dataType == "combo")
+                    {
+                        var selectedData = "";
+                        for(var i = 0; i < colData.labels.length; i++)
+                        {
+                            if(rowData[colData.name].toLowerCase() == colData.labels[i].toLowerCase() || rowData[colData.name] == colData.values[i])
+                            {
+                                selectedData = colData.values[i];
+                                break;
+                            }
+                        }
+                        rowData[colData.name] = selectedData;
+                    }
+                    else
+                    {
+                        /*이건 프로세스 확인한ㄷㅏ
+                        var popupData = gridWrapper.getPopupData(colData.name);
+
+                        if(!popupData) {
+                            return;
+                        }
+                        grid.commit(true);
+                        var newValue = rowData[col];
+
+                        if(undefined == newValue||"" == newValue)
+                            return ;
+
+                        gridWrapper.showPopup(grid, index.fieldName,newValue,index.itemIndex,popupData);
+                        console.log(index.fieldName);
+                        */
+                    }
+                }
+
+            }
+            gridWrapper.dataProvider.updateRows(item[0], validateData, 0, -1);
+
+
+        })
+
     };
     this.registerStyle = function()
     {
@@ -335,8 +393,8 @@ var GridWrapper = function(p_id,p_rootContext) {
 
                     }
                 }
-                _this.dataProvider.updateRows(rows, retData);
-                //_this.gridView.setValues(rows, retData, true);
+                //_this.dataProvider.updateRows(rows, retData);
+                _this.gridView.setValues(rows, retData, true);
                 grid.commit(true);
                 if(this.close)
                     this.close();
@@ -444,7 +502,7 @@ GridWrapper.prototype.option = {
             commitWhenExitLast : false,	//tab/enter 키로 마지막 셀을 벗어날 때 행 commit 한다.
             crossWhenExitLast : true,	//tab/enter 키로 마지막 셀을 벗어날 때 다음 행으로 이동한다.
             useTabKey : true,			//true면 Tab 키로 셀 이동할 수 있다.
-            enterToNextRow : true,		//enter 입력시 다음 row로 이동
+            enterToNextRow : false,		//enter 입력시 다음 row로 이동
             enterToEdit: true,			//enter 시 텍스트 편집
             skipReadOnly : false,		//true이면 컬럼간 이동시 readOnly 셀은 건너뛰고 다음 컬럼 셀로 이동한다.
             skipReadOnlyCell : true, 	//true이면 한 컬럼에서 행간(Vertical 컬럼 그룹 행을 포함) 이동시 readOnly 셀은 건너뛰고 다음 행의 컬럼 셀로 이동한다.
@@ -455,8 +513,8 @@ GridWrapper.prototype.option = {
             revertable : false,			//dataProvider.softDeleting = true 인 경우 삭제 상태인 행들을 ctrl+shift+del 키 입력시 원래 상태로 되돌리겠는지의 여부를 설정한다.
             maxLengthToNextCell : false, //column.editor.maxLength에 지정한 자리수 만큼 입력되면 다음 셀로 이동된다.editFormat이 있는 경우 보여지는 글자를 기준으로 maxLength가 체크된다. (numberEditor, dateEditor)multiLine의 경우 \n과 같이 제어문자도 글자수에 포함된다.
             innerDraggable : true,		//Inner Drag & Drop기능 사용 여부를 지정한다
-            enterToTab : false,
-            forceAppend : true,
+            enterToTab : true,
+            forceAppend : false,
             exceptDataClickWhenButton : false //true인 경우 셀 버튼 클릭 후 발생하는 이벤트인 onCellButtonClicked, onImageButtonClicked 발생후에 onDataCellClicked이벤트가 발생하지 않는다. JS ver 1.1.26부터 지원된다.
         },
         sort : {
@@ -1086,7 +1144,7 @@ GridWrapper.prototype.setColumnInfo = function(list) {
             case "password":
                 obj.type = "text";
                 obj.renderer = {type : "text"};
-                obj.displayRegExp = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣|a-z|A-Z|0-9|\$|\/|\.]/gi;
+                obj.displayRegExp = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣|a-z|A-Z|0-9|\$|\/|\.|!|@|#|%|^|&|*|(|)|\-|=|+|_|{|}|[|\]|;|'|"|:|\?|>|<]/gi;
                 obj.displayReplace = "*";
                 break;
             case "timestamp":
@@ -1215,6 +1273,7 @@ GridWrapper.prototype.setColumnInfo = function(list) {
         dataType = data.dataType;
         fieldObj = generateFieldInfo(this, data, dataType);
         obj = generateColumnInfo(this, data, dataType);
+        this.columnInfo.push(data);
         if(data.columnList && data.columnList.length > 0)
         {
             innerColumnInfo = new Array();
@@ -1227,6 +1286,7 @@ GridWrapper.prototype.setColumnInfo = function(list) {
                     dataType : data.dataType
                 }));
             }
+
             obj.columns = innerColumnInfo;
         }
 

@@ -32,6 +32,8 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 fnObj.gridView01.setData(res.list);
                 if(res.list.length > 0)
                 {
+                    fnObj.gridView01.resetCurrent();
+                    fnObj.gridView01.setFocus();
                     fnObj.sqlView.setData(res.list[0]["popupSQL"]);
                     ACTIONS.dispatch(ACTIONS.GET_POPUP_DETAIL,res.list[0]);
                 }

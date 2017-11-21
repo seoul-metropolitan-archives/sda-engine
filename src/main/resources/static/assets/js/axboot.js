@@ -1826,7 +1826,7 @@ axboot.modal = function () {
                         list = res.list;
                     }
                 });
-                if (list.length == 1) {
+                if (list && list.length == 1) {
                     modalConfig.callback(list[0]);
                     return;
                 }
@@ -1840,7 +1840,10 @@ axboot.modal = function () {
                 if (modalConfig.param) {
                     $.extend(true, modalConfig, {iframe: {param: modalConfig.param}});
                 }
-                modalConfig = $.extend(true, {}, modalConfig, axboot.def.MODAL[modalConfig.modalType], {width: axboot.def.MODAL[modalConfig.modalType].width + 60});
+                var popupWidth = width;
+                if(popupWidth == 0)
+                    popupWidth = axboot.def.MODAL[modalConfig.modalType].width;
+                modalConfig = $.extend(true, {}, modalConfig, axboot.def.MODAL[modalConfig.modalType], {width: popupWidth + 60});
             }
         }
 
@@ -2459,10 +2462,16 @@ axboot.baseView =
             $(".bdb").delegate("#cancel", "click", function () {
                 _this.cancel();
             });
-            $(document).delegate(".ax-body", "keydown", function (e) {
+            $(document).delegate(".ax-body .div_tablerow input", "keydown", function (e) {
                 if (e.keyCode == 13)
-                    return;
-                if (e.ctrlKey && e.altKey && e.keyCode == 73) {
+                {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    _this.inquiry();
+                }
+                else if (e.ctrlKey && e.altKey && e.keyCode == 73) {
+                    e.preventDefault();
+                    e.stopPropagation();
                     _this.inquiry();
                 } else if (e.ctrlKey && e.altKey && e.keyCode == 83) {
                     _this.save();
@@ -2473,7 +2482,7 @@ axboot.baseView =
         , save: function () {
         if (ACTIONS && ACTIONS.PAGE_SAVE)
             ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
-    }
+        }
         , inquiry: function () {
         if (axboot.isDataChanged && axboot.isDataChanged(axboot.getMenuId())) {
             axDialog.confirm({
@@ -2489,8 +2498,11 @@ axboot.baseView =
                         ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
                     }
                 } else {
+                    /*
+                    요구사항으로 인한 주석
                     if (ACTIONS && ACTIONS.PAGE_SEARCH)
                         ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+                    */
                 }
             });
         } else {

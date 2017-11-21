@@ -18,7 +18,7 @@
     </resultMap>
     <select id="getColumnInfo" resultMap="columnInfoVO" parameterType="rmsoft.ams.seoul.common.domain.AdPopupHeader" statementType="PREPARED">
       SELECT
-        (SELECT LOWER(CODE) FROM AD_CODE_DETAIL WHERE CODE_DETAIL_UUID = ALIGN_UUID) as textAlignment,
+        (SELECT case LOWER(CODE) when 'left' then 'near' when 'center' then 'center' else 'far' END FROM AD_CODE_DETAIL WHERE CODE_DETAIL_UUID = ALIGN_UUID) as textAlignment,
         (SELECT LOWER(CODE) FROM AD_CODE_DETAIL WHERE CODE_DETAIL_UUID = INPUT_METHOD_UUID) as dataType,
         (SELECT LOWER(CODE)FROM AD_CODE_DETAIL WHERE CODE_DETAIL_UUID = TREE_RELATION_UUID) as treeRelationType,
         ORDER_NO as sortNo,

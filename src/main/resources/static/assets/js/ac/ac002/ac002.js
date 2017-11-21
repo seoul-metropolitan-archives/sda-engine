@@ -355,6 +355,19 @@ fnObj.leftMenuView = axboot.viewExtend({
                 }));
             }
         });
+        this.gridObj.onKeydown(function(grid, key, ctrl, shift, alt){
+            var index = grid.getCurrent();
+            if(key == 13)
+            {
+                var menu = _this.menus[grid.getDataProvider().getJsonRow(index.dataRow)["menuUuid"]];
+                if (menu["program"]) {
+                    ACTIONS.dispatch(ACTIONS.MENU_OPEN, $.extend({}, menu["program"], {
+                        menuId: menu["menuId"],
+                        menuNm: menu["menuNm"]
+                    }));
+                }
+            }
+        });
         this.initEvent();
         //console.log(leftMenuItems);
     },
@@ -439,11 +452,19 @@ fnObj.tabView = axboot.viewExtend({
                     break;
                 case "closeAll":
                     fnObj.tabView.list.forEach(function (_item, idx) {
-                        if (idx > 0) {
+                        /*
+                        2017.11.21 요구사항으로 인한 모든 화면 닫기
+                          if (idx > 0) {
+                         */
+
+                        if (idx > -1) {
                             fnObj.tabView.close(_item.menuId);
                         }
                     });
+                    /*
+                    2017.11.21 요구사항으로 인한 모든 화면 닫기
                     fnObj.tabView.open(fnObj.tabView.list[0]);
+                     */
                     break;
                 default:
                     return false;
@@ -458,7 +479,12 @@ fnObj.tabView = axboot.viewExtend({
     _getItem: function (item) {
         var po = [];
         po.push('<div class="tab-item ' + item.status + '" data-tab-id="' + item.menuId + '">');
-        po.push('<span data-toggle="tooltip" data-placement="bottom" title=\'' + item.progNm + '\'>', item.progNm, '</span>');
+        po.push('<span data-toggle="tooltip" data-placement="bottom" title=\'' + item.menuNm + '\'>', item.menuNm, '</span>');
+        /*
+        2017.11.
+        요구사항으로 인한 프로그램명을 메뉴명으로 변경
+         */
+        //po.push('<span data-toggle="tooltip" data-placement="bottom" title=\'' + item.progNm + '\'>', item.progNm, '</span>');
         po.push('<i class="cqc-cancel3" data-tab-close="true" data-tab-id="' + item.menuId + '"></i>');
         po.push('</div>');
         return po.join('');
