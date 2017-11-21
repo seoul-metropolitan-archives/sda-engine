@@ -30,8 +30,11 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             async : false,
             callback: function (res) {
                 fnObj.gridView01.setData(res.list);
-                fnObj.sqlView.setData(res.list[0]["popupSQL"]);
-                ACTIONS.dispatch(ACTIONS.GET_POPUP_DETAIL,res.list[0]);
+                if(res.list.length > 0)
+                {
+                    fnObj.sqlView.setData(res.list[0]["popupSQL"]);
+                    ACTIONS.dispatch(ACTIONS.GET_POPUP_DETAIL,res.list[0]);
+                }
             }
         });
     },
