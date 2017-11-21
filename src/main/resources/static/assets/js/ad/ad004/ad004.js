@@ -431,6 +431,8 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
     dynamicSetSqlColumns : function(list)
     {
         console.log(fnObj.gridView01.getUUID());
+        fnObj.gridView01.gridObj.setDoAppendValidate(false);
+
         var popupDetailTemplate = {
             popupDetailUuid : ""
             ,popupHeaderUuid: fnObj.gridView01.getUUID()
@@ -502,6 +504,7 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
             });
             dataProvider.removeRow(rowIndex);
         }
+        fnObj.gridView01.gridObj.setDoAppendValidate(true);
         //this.setData(detailList,"append");
     },
     clear : function () {
