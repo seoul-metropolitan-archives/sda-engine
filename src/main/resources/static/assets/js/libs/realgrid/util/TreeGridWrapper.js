@@ -1,6 +1,7 @@
 var TreeGridWrapper = function(p_id,p_rootContext)
 {
     var _this = GridWrapper.call(this,p_id,p_rootContext);
+    this.childrenProp = undefined;
     var _gridDefaultOption = this.option;
     init = function () {
         _this.defaultStyle = $.extend({}, _this.defaultStyle, _this.style);
@@ -126,7 +127,7 @@ TreeGridWrapper.prototype.setTreeDataForJSON = function (list, rowsProp, childre
  * @param _childrenProp
  */
 TreeGridWrapper.prototype.setTreeDataForArray = function (list, _childrenProp) {
-    childrenProp = _childrenProp;
+    this.childrenProp = _childrenProp;
     this.dataProvider.setRows(list, _childrenProp);
 };
 //==========================================================================================
@@ -164,7 +165,11 @@ TreeGridWrapper.prototype.getData = function() {
 
     var dataProvider = this.gridView.getDataProvider();
     var rows = undefined;
-    rows = dataProvider.getJsonRows(-1,true,childrenProp,"icon");
+
+    if(this.childrenProp)
+        return [];
+
+    rows = dataProvider.getJsonRows(-1,true,this.childrenProp,"icon");
 
     var rowState = dataProvider.getAllStateRows();
 
@@ -206,6 +211,6 @@ TreeGridWrapper.prototype.getData = function() {
  * @returns {undefined}
  */
 TreeGridWrapper.prototype.getJsonRows = function () {
-    return this.dataProvider.getJsonRows(-1, true, childrenProp, "icon");
+    return this.dataProvider.getJsonRows(-1, true, this.childrenProp, "icon");
 };
 
