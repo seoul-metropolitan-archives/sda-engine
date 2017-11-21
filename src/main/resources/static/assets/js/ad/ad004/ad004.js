@@ -404,8 +404,9 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     },
     setPopupSQL : function(sql)
     {
-        this.gridObj.commit();
+        this.gridObj.commit(true);
         this.gridObj.setValue(this.gridObj.getCurrent().dataRow,this.gridObj.getFieldIndex("popupSQL"), sql);
+        this.gridObj.dataProvider.setRowState(this.gridObj.getCurrent().dataRow, "updated", false)
     },
     getSQL : function()
     {
