@@ -39,7 +39,6 @@ var ad00301 =
                 dataType: "combo",
                 required: true,
                 visible: true,
-                defaultValue : axboot.commonCodeFilter("CD006").codeArr[0],
                 values: axboot.commonCodeFilter("CD006").codeArr,
                 labels: axboot.commonCodeFilter("CD006").nameArr,
                 editor: {
@@ -59,7 +58,6 @@ var ad00301 =
                 dataType: "combo",
                 required: true,
                 visible: true,
-                defaultValue : axboot.commonCodeFilter("CD001").codeArr[0],
                 values: axboot.commonCodeFilter("CD001").codeArr,
                 labels: axboot.commonCodeFilter("CD001").nameArr,
                 editor: {
@@ -78,7 +76,6 @@ var ad00301 =
                 editable: true,
                 dataType: "combo",
                 required: true,
-                defaultValue : axboot.commonCodeFilter("CD002").codeArr[0],
                 values: axboot.commonCodeFilter("CD002").codeArr,
                 labels: axboot.commonCodeFilter("CD002").nameArr,
             },

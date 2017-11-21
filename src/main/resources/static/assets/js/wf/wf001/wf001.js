@@ -46,6 +46,11 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         var jobList = [].concat(fnObj.gridView01.getData());
         var parameterList = [].concat(fnObj.gridView02.getData());
 
+        if( !fnObj.gridView01.validate()
+            ||!fnObj.gridView02.validate()
+        )
+            return ;
+
         axboot
             .call({
                 type: "PUT",
@@ -209,6 +214,8 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
         this.setColumnInfo(wf00101.column_info);
         this.makeGrid();
         this.gridObj.itemClick(this.itemClick);
+        this.addRowAfterEvent(this.clearChild);
+        this.removeRowAfterEvent(this.clearChild);
     },
     itemClick: function (data, index) {
         if (data.jobUuid != null && data.jobUuid != "") {
@@ -226,6 +233,9 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
                 ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, data);
             }
         }
+    },
+    clearChild : function(){
+        fnObj.gridView02.clearData();
     }
 });
 fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
@@ -255,8 +265,8 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
             }
         }
         var _this = this;
-        this.gridObj.onEditChange(function (grid, index) {
-            _this.gridObj.setCustomCellStyleRow(grid, index.dataRow,"disable", function (gridWrapper, row) {
+        this.gridObj.onEditRowChanged(function (gridWrapper, grid, itemIndex, dataRow, field, oldValue, newValue) {
+            _this.gridObj.setCustomCellStyleRow(gridWrapper, grid, dataRow,"disable", function (gridWrapper, row) {
                 var result = false;
                 for (var rowIndex = 0; rowIndex < enableList.length; rowIndex++) {
                     if (row["inputMethodUuid"] == enableList[rowIndex]) {

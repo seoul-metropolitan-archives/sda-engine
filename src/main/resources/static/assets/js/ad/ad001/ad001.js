@@ -1,21 +1,13 @@
 var fnObj = {};
 var pageSize = 1000;
-var errorStatusList = {};
 var gridView = undefined;
 var serviceList = [];
-var handleResult = "";
-var handleFailReason = "";
-var cash10kEmptyStatus = "";
-var cash50kEmptyStatus = "";
-
-var selectedIndex = "";
-var selectedErrorItem = {};
 
 var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH: function (caller, act, data) {
         axboot.ajax({
             type: "POST",
-            url: "/ad/ad001/getEnviromentList.do",
+            url: "/api/v1/ad/ad001/getEnviromentList.do",
             data: JSON.stringify(fnObj.searchView.getData()),
             callback: function (res) {
                 console.log(res);
@@ -28,18 +20,18 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     },
     PAGE_SAVE: function (caller, act, data) {
 
-        if(!fnObj.gridView01.validate())
+        if (!fnObj.gridView01.validate())
             return false;
 
         var list = fnObj.gridView01.getData();
 
-        if(list.length < 1)
+        if (list.length < 1)
             return true;
 
         axboot.ajax({
             type: "POST",
-            url: "/ad/ad001/save.do",
-            async : false,
+            url: "/api/v1/ad/ad001/save.do",
+            async: false,
             data: JSON.stringify(list),
             callback: function (res) {
                 axToast.push(axboot.getCommonMessage("AA007"));
@@ -49,8 +41,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             }
         });
     },
-    CLOSE_TAB : function()
-    {
+    CLOSE_TAB: function () {
         return ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
     },
     dispatch: function (caller, act, data) {
@@ -64,28 +55,27 @@ var ACTIONS = axboot.actionExtend(fnObj, {
 });
 
 
-
-
 var fnObj = {
-    pageStart : function () {
+    pageStart: function () {
         var _this = this;
         $.ajax({
             url: "/assets/js/column_info/ad00101.js",
             dataType: "script",
-            async : false,
-            success: function(){}
+            async: false,
+            success: function () {
+            }
         });
         _this.searchView.initView();
         _this.gridView01.initView();
+        ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
     }
 };
 
-fnObj.searchView = axboot.viewExtend(axboot.formView,{
+fnObj.searchView = axboot.viewExtend(axboot.formView, {
     getDefaultData: function () {
         return $.extend({}, axboot.formView.defaultData);
     },
-    initView : function()
-    {
+    initView: function () {
         this.target = $("#formView01");
         this.model = new ax5.ui.binder();
         this.model.setModel(this.getDefaultData(), this.target);
@@ -97,7 +87,7 @@ fnObj.searchView = axboot.viewExtend(axboot.formView,{
     getData: function () {
         var data = this.modelFormatter.getClearData(this.model.get()); // 모델의 값을 포멧팅 전 값으로 치환.
         console.log(data);
-        return $.extend({},data);
+        return $.extend({}, data);
     },
     setFormData: function (dataPath, value) {
         this.model.set(dataPath, value);
@@ -129,13 +119,13 @@ fnObj.searchView = axboot.viewExtend(axboot.formView,{
 })
 
 fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
-    tagId : "realgrid01",
-    initView: function ()
-    {
+    tagId: "realgrid01",
+    primaryKey : "configurationUuid",
+    initView: function () {
         this.initInstance();
         this.setColumnInfo(ad00101.column_info);
         this.setEntityName($("#realgridName").text());
         this.makeGrid();
-        ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+
     }
 });

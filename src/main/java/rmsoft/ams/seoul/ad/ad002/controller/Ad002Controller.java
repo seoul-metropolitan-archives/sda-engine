@@ -16,7 +16,7 @@ import rmsoft.ams.seoul.common.domain.AdMessage;
 import java.util.List;
 
 @RestController
-@RequestMapping("/ad/ad002")
+@RequestMapping("/api/v1/ad/ad002")
 public class Ad002Controller extends MessageBaseController
 {
 

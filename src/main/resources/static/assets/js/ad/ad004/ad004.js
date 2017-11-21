@@ -25,28 +25,53 @@ var ACTIONS = axboot.actionExtend(fnObj, {
 
         axboot.ajax({
             type: "POST",
-            url: "/ad/ad004/ad004/searchPopupHeader",
+            url: "/api/v1/ad/ad004/searchPopupHeader",
             data : JSON.stringify(data),
             async : false,
             callback: function (res) {
                 fnObj.gridView01.setData(res.list);
+                if(res.list.length > 0)
+                {
+                    fnObj.sqlView.setData(res.list[0]["popupSQL"]);
+                    ACTIONS.dispatch(ACTIONS.GET_POPUP_DETAIL,res.list[0]);
+                }
             }
         });
     },
     PAGE_SAVE : function(caller, act, data)
     {
-            if (
-                ACTIONS.dispatch(ACTIONS.POPUP_HEADER_PAGE_SAVE)
-                && ACTIONS.dispatch(ACTIONS.POPUP_DETAIL_PAGE_SAVE)
-            )
-            {
+        if(
+            !fnObj.gridView01.validate()
+            || !fnObj.gridView02.validate()
+        )
+            return ;
+
+        var popupHeaderList = [].concat(fnObj.gridView01.getData());
+        var popupDetailList = [].concat(fnObj.gridView02.getData());
+
+        axboot
+            .call({
+                url: "/api/v1/ad/ad004/savePopupHeader",
+                type: "post",
+                data: JSON.stringify(popupHeaderList),
+                callback: function (res) {
+                    fnObj.gridView01.gridObj.commit();
+                }
+            })
+            .call({
+                url : "/api/v1/ad/ad004/savePopupDetail",
+                type : "post",
+                data: JSON.stringify(popupDetailList),
+                callback: function (res) {
+                    fnObj.gridView02.gridObj.commit();
+                }
+            })
+            .done(function () {
                 axToast.push(axboot.getCommonMessage("AA007"));
-                return true;
-            }
-            else
-                return false;
+            });
+
     },
-    POPUP_HEADER_PAGE_SAVE: function (caller, act, data) {
+    /*POPUP_HEADER_PAGE_SAVE: function (caller, act, data) {
         var _this = this;
 
         var result = false;
@@ -60,7 +85,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             return true;
 
         axboot.ajax({
-            url: "/ad/ad004/ad004/savePopupHeader",
+            url: "/ad/ad004/savePopupHeader",
             type: "post",
             async: false,
             data: JSON.stringify(fnObj.gridView01.getData()),
@@ -94,7 +119,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             return true;
 
         axboot.ajax({
-            url : "/ad/ad004/ad004/savePopupDetail",
+            url : "/ad/ad004/savePopupDetail",
             type : "post",
             async : false,
             data : JSON.stringify(list),
@@ -111,29 +136,27 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         });
         return result;
     },
-    GET_POPUP_DETAIL : function(data)
+    */
+    GET_POPUP_DETAIL : function(caller, act, data)
     {
-        if(!fnObj.gridView02.gridObj.validate())
-            return ;
-
-        if(fnObj.gridView02.getData().length > 0)
+        var reqData = {}
+        try
         {
-            axDialog.confirm({
-                msg: axboot.getCommonMessage("AA006")
-            }, function () {
-                ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
-            });
-        }else {
-            fnObj.gridView02.gridObj.resetCurrent();
+            reqData["popupHeaderUuid"] = fnObj.gridView01.getUUID();
+        }
+        catch(exception)
+        {
+
         }
 
-        fnObj.sqlView.setData(fnObj.gridView01.getSQL());
-        console.log(fnObj.gridView01.getUUID());
+        if(!reqData["popupHeaderUuid"])
+            reqData = data
+
         axboot.ajax({
-            url : "/ad/ad004/ad004/getPopupDetail"
+            url : "/api/v1/ad/ad004/getPopupDetail"
             ,type : "POST"
             ,dataType : "JSON"
-            ,data : JSON.stringify({popupHeaderUuid : fnObj.gridView01.getUUID()})
+            ,data : JSON.stringify(reqData)
             ,callback : function(res)
             {
                 fnObj.gridView02.setData(res.list);
@@ -184,9 +207,7 @@ fnObj = {
         _this.sqlView.initView();
 
         ACTIONS.dispatch(ACTIONS.PAGE_SEARCH,this.formView.getData());
-        setTimeout(function(){
-            ACTIONS.dispatch(ACTIONS.GET_POPUP_DETAIL);    
-        },1000)
+
         
 
     }
@@ -206,13 +227,15 @@ fnObj.formView = axboot.viewExtend(axboot.formView,{
 
     ,initEvent: function () {
         var _this = this;
-        $("#check").click(function() {
+        $("#popup").click(function() {
+            var data = fnObj.gridView01.getCurrentData();
+            console.log(data);
             axboot.modal.open({
                 modalType: "COMMON_POPUP",
                 sendData: function () {
                     return {
-                        popupCode : "PU001",
-                        searchData : "사용자01"
+                        popupCode : data["popupCode"],
+                        searchData : ""
                     };
                 },
                 callback: function (data) {
@@ -226,7 +249,6 @@ fnObj.formView = axboot.viewExtend(axboot.formView,{
             event.preventDefault();
 
         });
-
     },
     getData: function () {
         var data = this.modelFormatter.getClearData(this.model.get()); // 모델의 값을 포멧팅 전 값으로 치환.
@@ -346,7 +368,8 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
         this.initInstance();
         this.setColumnInfo(ad00401.column_info);
         this.makeGrid();
-        this.gridObj.addRowAfterEvent(this.addRowAfterEvent);
+        this.addRowAfterEvent(this.clearChild);
+        this.removeRowAfterEvent(this.clearChild);
         this.gridObj.itemClick(this.itemClick);
         this.gridObj.setFixedOptions({
             colCount : 2
@@ -370,10 +393,11 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
         }
         else
         {
+            fnObj.sqlView.setData(data["popupSQL"]);
             ACTIONS.dispatch(ACTIONS.GET_POPUP_DETAIL,data);
         }
     },
-    addRowAfterEvent : function()
+    clearChild : function()
     {
         fnObj.gridView02.clear();
         fnObj.sqlView.clear();
@@ -400,7 +424,6 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
         this.initInstance();
         this.setColumnInfo(ad00402.column_info);
         this.makeGrid();
-        this.gridObj.addRowAfterEvent(this.addRowAfterEvent);
         this.gridObj.setFixedOptions({
             colCount : 2
         })

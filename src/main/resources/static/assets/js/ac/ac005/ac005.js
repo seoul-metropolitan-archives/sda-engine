@@ -46,6 +46,13 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         var roleList = [].concat(fnObj.gridView01.getData());
         var rolePermissionList = [].concat(fnObj.gridView02.getData());
 
+        if(
+            !fnObj.gridView01.validate()
+            || !fnObj.gridView02.validate()
+        )
+            return ;
+
+
         axboot
             .call({
                 type: "PUT",
@@ -219,9 +226,13 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
         this.gridObj.setFixedOptions({
             colCount: 1
         });
+        this.gridObj.setAddBtnName(".addGrid1");
+        this.gridObj.setDelBtnName(".delGrid1");
         this.setColumnInfo(ac00501.column_info);
         this.makeGrid();
         this.gridObj.itemClick(this.itemClick);
+        this.addRowAfterEvent(this.clearChild);
+        this.removeRowAfterEvent(this.clearChild);
     },
     itemClick: function (data, index) {
         if (data.roleUuid != null && data.roleUuid != "") {
@@ -241,6 +252,9 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
         }else{
             fnObj.gridView02.clearData();
         }
+    },clearChild : function()
+    {
+        fnObj.gridView02.clearData();
     }
 });
 fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
@@ -259,7 +273,10 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
             colCount: 1
         });
         this.setColumnInfo(ac00502.column_info);
+        this.gridObj.setAddBtnName(".addGrid2");
+        this.gridObj.setDelBtnName(".delGrid2");
         this.makeGrid();
+
     }
 });
 

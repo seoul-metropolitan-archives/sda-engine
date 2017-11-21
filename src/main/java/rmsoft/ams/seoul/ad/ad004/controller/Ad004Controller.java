@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/ad/ad004/ad004")
+@RequestMapping("/api/v1/ad/ad004")
 public class Ad004Controller extends BaseController {
 
     @Autowired

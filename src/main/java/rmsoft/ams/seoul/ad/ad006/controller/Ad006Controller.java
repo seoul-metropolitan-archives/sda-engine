@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/ad/ad006/ad006")
+@RequestMapping("/api/v1/ad/ad006")
 public class Ad006Controller extends MessageBaseController {
 
     @Autowired

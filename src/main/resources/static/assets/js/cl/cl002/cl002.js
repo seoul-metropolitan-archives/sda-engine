@@ -12,6 +12,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         axboot.ajax({
             type: "GET",
             url: "/api/v1/cl002/01/getClassificationScheme",
+            async : false,
             data: $.extend({}, {pageSize: 1000}, this.formView.getData()),
             callback: function (res) {
                 if(Object.keys(res).length < 1) return;
@@ -34,6 +35,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         axboot.ajax({ //트리 리스트
              type: "GET",
              url: "/api/v1/cl002/03/getClassHierarchyList",
+             async : false,
              data: $.extend({}, {pageSize: 1000}, {classificationSchemeUuid:classificationSchemeUuid}),
              callback: function (res) {
                 classList = ax5.util.deepCopy(res.list);

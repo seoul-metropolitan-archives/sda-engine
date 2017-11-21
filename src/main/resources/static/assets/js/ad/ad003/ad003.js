@@ -19,7 +19,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 fnObj.gridView01.resetCurrent();
                 fnObj.gridView01.setFocus();
                 fnObj.gridView02.clear();
-                setTimeout(function(){ACTIONS.dispatch(ACTIONS.GET_CODE_DETAIL,fnObj.gridView01.getCurrentData());},300);
+                ACTIONS.dispatch(ACTIONS.GET_CODE_DETAIL,res.list[0]);
 
             }
         });
@@ -41,82 +41,38 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     },
     PAGE_SAVE : function(caller, act, data)
     {
-            if (
-                ACTIONS.dispatch(ACTIONS.CODE_HEADER_PAGE_SAVE)
-                && ACTIONS.dispatch(ACTIONS.CODE_DETAIL_PAGE_SAVE)
-            )
+
+        if(
+            !fnObj.gridView01.validate()
+            || !fnObj.gridView02.validate()
+        )
+            return ;
+
+        var codeHeaderList = [].concat(fnObj.gridView01.getData());
+        var codeDetailList = [].concat(fnObj.gridView02.getData());
+
+        axboot
+            .call({
+                url: "/api/v1/ad/ad003/saveCodeHeader",
+                type: "post",
+                data: JSON.stringify(codeHeaderList),
+                callback: function (res) {
+                    fnObj.gridView01.gridObj.commit();
+                }
+            })
+            .call({
+                url : "/api/v1/ad/ad003/saveCodeDetail",
+                type : "post",
+                data: JSON.stringify(codeDetailList),
+                callback: function (res) {
+                    fnObj.gridView02.gridObj.commit();
+                }
+            })
+            .done(function () {
                 axToast.push(axboot.getCommonMessage("AA007"));
-    },
-    CODE_HEADER_PAGE_SAVE: function (caller, act, data) {
-        var _this = this;
+            });
 
-        var result = false;
 
-        if(!fnObj.gridView01.validate())
-            return false;
-
-        var list = fnObj.gridView01.getData();
-
-        if(list.length < 1)
-            return true;
-
-        console.log(fnObj.gridView01.getData());
-        axboot.ajax({
-            url: "/api/v1/ad/ad003/saveCodeHeader",
-            type: "post",
-            async: false,
-            data: JSON.stringify(list),
-            callback:  function (res)
-            {
-                result = res;
-                if(result)
-                {
-                    try
-                    {
-                        fnObj.gridView01.gridObj.commit();
-                    }catch(e)
-                    {
-                        console.log("커밋 에러남");
-                    }
-
-                }
-
-            }
-        });
-        return result;
-    },
-    CODE_DETAIL_PAGE_SAVE : function(data)
-    {
-        if(!fnObj.gridView02.validate())
-            return false;
-
-        var list = fnObj.gridView02.getData();
-
-        if(list.length < 1)
-            return true;
-
-        var result = false;
-        axboot.ajax({
-            url : "/api/v1/ad/ad003/saveCodeDetail",
-            type : "post",
-            async : false,
-            data : JSON.stringify(list),
-            callback : function(res)
-            {
-                result = res;
-                if(result)
-                {
-                    try
-                    {
-                        fnObj.gridView02.gridObj.commit();
-                    }catch(e)
-                    {
-                        console.log("커밋 에러남");
-                    }
-                }
-            }
-        });
-        return result;
     },
     FORM_CLEAR: function (caller, act, data) {
     },
@@ -226,8 +182,8 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
         this.setColumnInfo(ad00301.column_info);
         this.makeGrid();
         /*this.gridObj.addRowBeforeEvent(this.addRowBeforeEvent);*/
-        this.gridObj.addRowAfterEvent(this.addRowAfterEvent);
-        this.gridObj.removeRowEvent(function(){fnObj.gridView02.clear();});
+        this.addRowAfterEvent(this.clearChild);
+        this.removeRowAfterEvent(this.clearChild);
         this.setFixedOptions({
             colCount : 2
         });
@@ -244,12 +200,14 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
                     if(this.key == "ok")
                     {
                         ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
+                    }else {
+                        ACTIONS.dispatch(ACTIONS.GET_CODE_DETAIL,data);
                     }
                 });
             }
         });
     },
-    addRowAfterEvent : function()
+    clearChild : function()
     {
         fnObj.gridView02.clear();
     }

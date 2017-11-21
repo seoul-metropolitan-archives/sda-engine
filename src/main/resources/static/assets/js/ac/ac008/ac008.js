@@ -28,6 +28,9 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SAVE: function (caller, act, data) {
         var programList = [].concat(fnObj.gridView01.getData());
 
+        if(!fnObj.gridView01.validate())
+            return ;
+
         axboot
             .call({
                 type: "PUT",

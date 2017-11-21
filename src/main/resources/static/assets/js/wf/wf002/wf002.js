@@ -46,6 +46,11 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         var workflowist = [].concat(fnObj.gridView01.getData());
         var workflowJobList = [].concat(fnObj.gridView02.getData());
 
+        if( !fnObj.gridView01.validate()
+            ||!fnObj.gridView02.validate()
+        )
+            return ;
+
         axboot
             .call({
                 type: "PUT",
@@ -205,6 +210,8 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
         });
         this.setColumnInfo(wf00201.column_info);
         this.makeGrid();
+        this.addRowAfterEvent(this.clearChild);
+        this.removeRowAfterEvent(this.clearChild);
         this.gridObj.itemClick(this.itemClick);
     },
     itemClick: function (data, index) {
@@ -223,7 +230,11 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
                 ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, data);
             }
         }
+    },
+    clearChild : function(){
+        fnObj.gridView02.clearData();
     }
+
 });
 fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
     page: {

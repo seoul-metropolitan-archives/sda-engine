@@ -167,13 +167,13 @@
     </li>
 </th:block>
 <!--Add 버튼 & Delete 버튼-->
-<th:block layout:fragment="add-and-delete">
+<th:block layout:fragment="add-and-delete(str,str2)">
     <li style="text-align:right; width:68%;">
-        <button class="btn_a" th:id="add">
+        <button class="btn_a" th:classappend="${str}">
             <span class="btn_icon">&nbsp;</span>
             <span class="btn_main_txt">Add</span>
         </button>
-        <button class="btn_d" th:id="delete">
+        <button class="btn_d" th:classappend="${str2}">
             <span class="btn_icon">&nbsp;</span>
             <span class="btn_main_txt">Delete</span>
         </button>
@@ -238,7 +238,7 @@
 <!--Popup버튼 & Save 버튼 & Inquiry 버튼-->
 <th:block layout:fragment="popup-and-save-and-inquiry">
     <li style="text-align:right; width:48%;">
-        <button class="btn_co" th:id="save">
+        <button class="btn_co" th:id="popup">
             <span class="btn_icon_co">&nbsp;</span>
             <span class="btn_main_txt">Popup</span>
         </button>

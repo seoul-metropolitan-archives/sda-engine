@@ -46,6 +46,8 @@ var GridWrapper = function(p_id,p_rootContext) {
     this.callback = {
         context : undefined
     };
+    this.addBtnName = ".btn_a";
+    this.delBtnName = ".btn_d";
     //그리드 생성시 객체
     this.gridView;
     //데이터 프로바이더
@@ -73,8 +75,21 @@ var GridWrapper = function(p_id,p_rootContext) {
     this.rootContext = p_rootContext;
     this.searchStartIndex = -1;
     this.validateColumn = {};
+    this.runAdd = true;
+    this.runDel = true;
     //event저장소
     this.event = {};
+
+    this.setAddBtnName = function(_name){this.addBtnName = _name;}
+    this.setDelBtnName = function(_name){this.delBtnName = _name;}
+    this.setRunAdd = function(_runAdd)
+    {
+        _this.runAdd = _runAdd
+    }
+    this.setRunDel = function(_runDel)
+    {
+        _this.runDel = _runDel
+    }
 
     this.setDefaultStyles = function(name, value)
     {
@@ -115,35 +130,53 @@ var GridWrapper = function(p_id,p_rootContext) {
         _this.gridView.onRowsPasted = function(grid, item){ _this.dispatch("onRowsPasted",_this, _this.makeObj, grid, item); };
 
         _this.gridView.onKeyDown = function(grid, key, ctrl, shift, alt){
-            _this.dispatch("onKeyDown",grid, key, ctrl, shift, alt);
+            _this.dispatch("onKeyDown",grid, key, ctrl, shift, alt,_this);
         };
         _this.gridView.onKeyUp = function(grid, key, ctrl, shift, alt){
             _this.dispatch("onKeyUp",grid, key, ctrl, shift, alt);
         };
-
+        _this.gridView.onEditRowChanged= function(grid, itemIndex, dataRow, field, oldValue, newValue){ _this.dispatch("onEditRowChanged",_this,grid, itemIndex, dataRow, field, oldValue, newValue); }
         _this.gridView.onDataCellDblClicked = function(grid,index){ _this.dispatch("onDataCellDblClicked",grid,index); }
-        _this.gridView.onEditChange = function(grid, index, value){ _this.dispatch("onEditChange",grid, index, value); }
+        _this.gridView.onDataCellDblClicked = function(grid,index){ _this.dispatch("onDataCellDblClicked",grid,index); }
+        _this.gridView.onEditChange = function(grid, index, value){ _this.dispatch("onEditChange",_this, grid, index, value); }
         _this.gridView.onImageButtonClicked = function(grid, itemIndex, column, buttonIdex, name) { _this.dispatch("onImageButtonClicked",_this ,grid, itemIndex, column, buttonIdex, name); }
         _this.gridView.onCurrentChanged = function(grid,newIndex) { _this.dispatch("onCurrentChanged",grid, newIndex); }
         _this.gridView.onCurrentRowChanged = function(grid, oldRow, newRow) { _this.dispatch("onCurrentRowChanged",grid, oldRow, newRow); }
+
+
+        _this.dataProvider.onRowsDeleted = function(grid, rows){
+        }
+
         _this.gridView.onEditCommit = function(grid, index, oldValue, newValue){_this.dispatch("onEditCommit", _this, grid, index, oldValue, newValue);}
         //사용자가 Insert 키를 눌러 새로운 행을 삽입하거나, 마지막 행에서 아래 화살표를 눌러 행을 추가하려고 할 때 호출된다. 이 콜백에서 행 추가 불가 메시지를 리턴하면 행 추가가 금지된다.
         _this.gridView.onRowInserting = function (grid, itemIndex) {
+
+            if(!_this.runAdd)
+                return false;
+
+            if(!_this.validate())
+                return false;
+
             _this.dispatch("onBeforeAddRow",_this,_this.makeObj,grid, itemIndex);
             _this.dispatch("onAfterAddRow",_this,_this.makeObj,grid, itemIndex);
         };
         _this.gridView.onSelectionChanged = function (grid) { _this.dispatch("onSelectionChanged",grid); };
         _this.gridView.onContextMenuItemClicked = function (grid, label, index) { _this.dispatch("onContextMenuItemClicked",grid, label, index); };
         _this.gridView.onDataCellClicked = function(grid, index)  { _this.dispatch("onDataCellClicked",grid, index); };
-        _this.gridView.onCellEdited  = function(grid, itemIndex, dataRow, field)  { _this.dispatch("onCellEdited",grid, itemIndex, dataRow, field); }
+        _this.gridView.onCellEdited  = function(grid, itemIndex, dataRow, field)  { _this.dispatch("onCellEdited",_this, grid, itemIndex, dataRow, field); }
 
-        $("#"+_this.i_id).parents().eq(1).delegate(".btn_a","click",function(){
-            _this.gridView.beginAppendRow();
-            _this.gridView.setFocus();
+        $("#"+_this.i_id).parents().eq(1).delegate(_this.addBtnName,"click",function(){
+            if(_this.runAdd)
+            {
+                _this.gridView.beginAppendRow();
+                _this.gridView.setFocus();
+            }
         });
-        $("#"+_this.i_id).parents().eq(1).delegate(".btn_d","click",function(){
-            _this.gridView.getDataProvider().removeRows(_this.gridView.getSelectedRows(),false);
-            _this.dispatch("onRemoveRow");
+        $("#"+_this.i_id).parents().eq(1).delegate(_this.delBtnName,"click",function(){
+            if(_this.runDel) {
+                _this.gridView.getDataProvider().removeRows(_this.gridView.getSelectedRows(), false);
+                _this.dispatch("onRemoveRow");
+            }
         });
     };
     this.registerStyle = function()
@@ -230,12 +263,12 @@ var GridWrapper = function(p_id,p_rootContext) {
     //==========================================================================================
     //              Popup 관련 영역
     //==========================================================================================
-    this.getPopupData = function(position)
+    this.getPopupData = function(name)
     {
-        return this.popupIndex[position];
+        return this.popupNames[name];
     }
 
-    this.popupIndex = {};
+    this.popupNames = {};
     this.popCallback = undefined;
 
     this.showPopup = function(grid, currentField, searchData, rows, popupData,preSearch)
@@ -277,17 +310,23 @@ var GridWrapper = function(p_id,p_rootContext) {
                 retData = data;
                 grid.commit(true);
                 grid.setFocus();
+                var retData = {};
                 for(var key in data)
                 {
                     try {
                         if(popupData["sqlColumn"][key])
-                            _this.dataProvider.setValue(rows,popupData["sqlColumn"][key],data[key]);
+                        {
+                            //_this.dataProvider.setValue(rows,popupData["sqlColumn"][key],data[key]);
+                            retData[popupData["sqlColumn"][key]] = data[key];
+                        }
+
                     }
                     catch(exception)
                     {
 
                     }
                 }
+                _this.gridView.setValues(rows, retData, true);
                 grid.commit(true);
                 if(this.close)
                     this.close();
@@ -391,13 +430,14 @@ GridWrapper.prototype.option = {
             updatable : true,
             editable : true,
             deletable : true,
+            deleteRowsConfirm : false,
             commitWhenExitLast : false,	//tab/enter 키로 마지막 셀을 벗어날 때 행 commit 한다.
             crossWhenExitLast : true,	//tab/enter 키로 마지막 셀을 벗어날 때 다음 행으로 이동한다.
             useTabKey : true,			//true면 Tab 키로 셀 이동할 수 있다.
-            enterToNextRow : false,		//enter 입력시 다음 row로 이동
+            enterToNextRow : true,		//enter 입력시 다음 row로 이동
             enterToEdit: true,			//enter 시 텍스트 편집
             skipReadOnly : false,		//true이면 컬럼간 이동시 readOnly 셀은 건너뛰고 다음 컬럼 셀로 이동한다.
-            skipReadOnlyCell : false, 	//true이면 한 컬럼에서 행간(Vertical 컬럼 그룹 행을 포함) 이동시 readOnly 셀은 건너뛰고 다음 행의 컬럼 셀로 이동한다.
+            skipReadOnlyCell : true, 	//true이면 한 컬럼에서 행간(Vertical 컬럼 그룹 행을 포함) 이동시 readOnly 셀은 건너뛰고 다음 행의 컬럼 셀로 이동한다.
             appendWhenExitLast : true, 	//commitWhenExitLast 가 true 일 경우 enterb/tab 키로 마지막셀을 벗어날 경우 행이 추가된다.
             appendWhenInsertKey : false, //Insert 키 입력시 해당 위치에 행이 삽입되는 것이 아니라 가장 마지막행에 추가된다.
             editWhenFocused : false, 	//셀이 선택될때마다 에디터가 표시된다.
@@ -405,7 +445,9 @@ GridWrapper.prototype.option = {
             revertable : false,			//dataProvider.softDeleting = true 인 경우 삭제 상태인 행들을 ctrl+shift+del 키 입력시 원래 상태로 되돌리겠는지의 여부를 설정한다.
             maxLengthToNextCell : false, //column.editor.maxLength에 지정한 자리수 만큼 입력되면 다음 셀로 이동된다.editFormat이 있는 경우 보여지는 글자를 기준으로 maxLength가 체크된다. (numberEditor, dateEditor)multiLine의 경우 \n과 같이 제어문자도 글자수에 포함된다.
             innerDraggable : true,		//Inner Drag & Drop기능 사용 여부를 지정한다
-            enterToTab : false
+            enterToTab : false,
+            forceAppend : true,
+            exceptDataClickWhenButton : false //true인 경우 셀 버튼 클릭 후 발생하는 이벤트인 onCellButtonClicked, onImageButtonClicked 발생후에 onDataCellClicked이벤트가 발생하지 않는다. JS ver 1.1.26부터 지원된다.
         },
         sort : {
             enabled : true
@@ -549,7 +591,7 @@ GridWrapper.prototype.style = {
         },
         timestamp : {
             type : "datetime",
-            datetimeFormat : "yyyy-MM-dd HH:mm:ss.SSS",
+            datetimeFormat : "yyyy-MM-dd HH:mm:ss",
             mask : {
                 editMask:"9999-99-99 99:99:99"
                 ,placeHolder:"yyyy-MM-dd HH:mm:ss" //편집기에 표시될 형식
@@ -561,8 +603,8 @@ GridWrapper.prototype.style = {
         combo : {
             type : "dropDown",
             fontFamily : GridWrapper.prototype.style.fontFamily,
-            domainOnly : true,
-            textReadOnly : true,
+            domainOnly : false,
+            textReadOnly : false,
             fontSize : 12
         },
         check : {
@@ -651,6 +693,7 @@ GridWrapper.prototype.onRowsPasted = function(_event) { this.bind("onRowsPasted"
 GridWrapper.prototype.onKeydown = function(_event) { this.bind("onKeyDown",_event);}
 GridWrapper.prototype.onKeyUp = function(_event) { this.bind("onKeyUp",_event);}
 GridWrapper.prototype.onEditCommit = function(_event) { this.bind("onEditCommit",_event);}
+GridWrapper.prototype.onEditRowChanged = function(_event) { this.bind("onEditRowChanged",_event);}
 /*GridWrapper.prototype.itemClick = function(_event)
 {
     this.bind("onDataCellClicked",function(grid,index){
@@ -670,11 +713,20 @@ GridWrapper.prototype.itemClick = function(_event)
 
         _event(grid.getDataProvider().getJsonRow(index.dataRow),index);
     })
+    this.bind("onKeyDown",function(grid, key, ctrl, shift, alt) {
+        console.log(key);
+        if(key == 46 && ctrl)
+            this.dispatch("onRemoveRow");
+    });
+
+
+
     this.bind("onKeyUp",function(grid, key, ctrl, shift, alt){
+
         var index = grid.getCurrent();
         if(-1 == index.dataRow)
             return ;
-        console.log(key);
+
         //키를 위로하거나 아래로 할때 조회를 itemClick에 대한 이벤트를 진행한다
         if(key == 38 || key == 40)
         {
@@ -698,8 +750,11 @@ GridWrapper.prototype.removeRowEvent = function(_event) { this.bind("onRemoveRow
 //============================================================================================
 
 GridWrapper.prototype.addRow = function () {
-    this.gridView.beginAppendRow();
-    this.gridView.setFocus();
+    if(this.runAdd)
+    {
+        this.gridView.beginAppendRow();
+        this.gridView.setFocus();
+    }
 }
 /**
  * gridView 객체 반환함수
@@ -912,7 +967,7 @@ GridWrapper.prototype.setColumnInfo = function(list) {
         }
     });
 
-    var generateColumnInfo = function(_this, data)
+    var generateColumnInfo = function(_this, data, dataType)
     {
         var obj = {
             name : data.name,
@@ -968,14 +1023,14 @@ GridWrapper.prototype.setColumnInfo = function(list) {
 
 
         // 데이터 타입
-        switch (data.dataType) {
+        switch (dataType) {
             case "popup":
                 obj.button = "image";
                 obj.imageButtons = $.extend({},_this.defaultStyle.data.imageButtons,data.imageButtons);
-                _this.popupIndex[i] = { popupCode : data.popupCode, sqlColumn : {}};
+                _this.popupNames[data.name] = { popupCode : data.popupCode, sqlColumn : {}};
                 for(var key in data.sqlColumn)
                 {
-                    _this.popupIndex[i]["sqlColumn"][key] = data.sqlColumn[key];
+                    _this.popupNames[data.name]["sqlColumn"][key] = data.sqlColumn[key];
                 }
 
                 break;
@@ -1056,6 +1111,7 @@ GridWrapper.prototype.setColumnInfo = function(list) {
                 obj.labels = data.labels;
                 obj.sortable = data.sortable === undefined ? false
                     : data.sortable;
+
                 if(!data.lookupDisplay)
                     data.lookupDisplay = true;
 
@@ -1069,6 +1125,9 @@ GridWrapper.prototype.setColumnInfo = function(list) {
                     data.defaultValue = "Y";
 
                 obj.defaultValue = data.defaultValue;
+
+                obj.
+
                 break;
             case "button":
                 obj.button = "image";
@@ -1090,11 +1149,11 @@ GridWrapper.prototype.setColumnInfo = function(list) {
         }
         return obj;
     }
-    var generateFieldInfo = function(_this,data)
+    var generateFieldInfo = function(_this,data,dataType)
     {
         var fieldObj = {};
         // 데이터 타입
-        switch (data.dataType) {
+        switch (dataType) {
             case "popup":
                 break;
             case "code":
@@ -1135,6 +1194,7 @@ GridWrapper.prototype.setColumnInfo = function(list) {
     var fieldObj = undefined;
     var columnNFieldInfo = undefined;
     var innerColumnInfo = undefined;
+    var dataType = undefined;
     for (var i = 0; i < list.length; i++) {
         data = list[i];
 
@@ -1144,9 +1204,9 @@ GridWrapper.prototype.setColumnInfo = function(list) {
         // 활성여부 Y N 회색
         fieldObj = {};
 
-
-        obj = generateColumnInfo(this, data);
-        fieldObj = generateFieldInfo(this, data);
+        dataType = data.dataType;
+        fieldObj = generateFieldInfo(this, data, dataType);
+        obj = generateColumnInfo(this, data, dataType);
         if(data.columnList && data.columnList.length > 0)
         {
             innerColumnInfo = new Array();
@@ -1210,7 +1270,8 @@ GridWrapper.prototype.setAppendValiate = function(func) {
  */
 GridWrapper.prototype.removeRow = function()
 {
-    this.gridView.getDataProvider().removeRow(this.gridView.getCurrent().dataRow);
+    if(runDel)
+        thisÎ.gridView.getDataProvider().removeRow(this.gridView.getCurrent().dataRow);
 }
 
 /**
@@ -1296,11 +1357,9 @@ GridWrapper.prototype.makeGrid = function() {
 
     this.gridView.setContextMenu(this.contextMenu);
     this.gridView.setDataSource(this.dataProvider);
-    this.gridView.onDataCellClicked()
-
 };
 
-GridWrapper.prototype.setCustomCellStyleRow = function(grid, row, type, conditionFunc, columnNames,doCommit) {
+GridWrapper.prototype.setCustomCellStyleRow = function(gridWrapper, grid, row, type, conditionFunc, columnNames,doCommit) {
     var styles = undefined;
     var editable = false;
     if (type == "disable") {
@@ -1315,7 +1374,7 @@ GridWrapper.prototype.setCustomCellStyleRow = function(grid, row, type, conditio
     }
 
     if (undefined === doCommit || doCommit)
-        this.gridView.commit();
+        gridWrapper.gridView.commit();
 
     var rows = this.dataProvider.getJsonRows(0, -1);
 
@@ -1328,13 +1387,10 @@ GridWrapper.prototype.setCustomCellStyleRow = function(grid, row, type, conditio
     var applyData = {rows: new Array(), columns: columnNames}
 
     if (conditionFunc(this, rows[row])) {
-        applyData.rows.push(i);
-        for (var j = 0; j < columnIndexList.length; j++) {
-            grid.setCellStyle(row, columnIndexList[j], type, true);
-        }
+        gridWrapper.gridView.setCellStyles(row, columnNames, type, true);
     } else {
         for (var j = 0; j < columnIndexList.length; j++) {
-            grid.setCellStyle(row, columnNames[j], this.defaultStyles[columnNames[j]], true);
+            gridWrapper.gridView.setCellStyle(row, columnNames[j], this.defaultStyles[columnNames[j]], true);
         }
     }
 
