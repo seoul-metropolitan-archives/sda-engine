@@ -11,6 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import rmsoft.ams.seoul.cl.cl001.dao.Cl001Mapper;
 import rmsoft.ams.seoul.cl.cl001.vo.Cl00101VO;
@@ -26,6 +27,8 @@ import java.util.List;
 
 @Service
 public class Cl001Service extends BaseService {
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
 
     @Inject
     private Cl001Mapper cl001Mapper;
@@ -36,6 +39,7 @@ public class Cl001Service extends BaseService {
     @Autowired
     private ClClassificationSchemeRepository clClassificationSchemeRepository;
 
+    //Inquiry
     public Page<Cl00101VO> getClassificationSchemeList(Pageable pageable, RequestParams<Cl00101VO> requestParams) {
 
         Cl00101VO cl00101VO = new Cl00101VO();
@@ -48,12 +52,14 @@ public class Cl001Service extends BaseService {
         return filter(cl001Mapper.getClassificationSchemeList(cl00101VO), pageable, "", Cl00101VO.class);
     }
 
+    //Classification Scheme 상세 정보
     public Cl00102VO getClassificationSchemeDetail(RequestParams<Cl00101VO> requestParams) {
         Cl00102VO cl00102VO = new Cl00102VO();
         cl00102VO.setClassificationSchemeUuid(requestParams.getString("classificationSchemeUuid"));
         return  cl001Mapper.getClassificationSchemeDetail(cl00102VO);
     }
 
+    //저장(수정,삭제,생성)
     public ApiResponse updateClassificationSchemeList(List<Cl00101VO> list){
         List<ClClassificationScheme> clClassificationSchemeList = ModelMapperUtils.mapList(list,ClClassificationScheme.class);
         ClClassificationScheme orgClClassificationScheme = null;
@@ -62,11 +68,12 @@ public class Cl001Service extends BaseService {
         String detailCode = "";
         for (ClClassificationScheme clClassificationScheme : clClassificationSchemeList) {
 
-            if(StringUtil.isNullOrEmpty(clClassificationScheme.getClassificationSchemeUuid())){ //Insert
+            if(StringUtil.isNullOrEmpty(clClassificationScheme.getClassificationSchemeUuid())){ //ClassificationSchemeUuid가 없을때
                 clClassificationScheme.setClassificationSchemeUuid(UUIDUtils.getUUID()); //UUID 생성
                 detailCode = CommonCodeUtils.getDetailCode("CD112",clClassificationScheme.getClassificationTypeUuid());//해당분류타입의 분류코드
-                ctUuid = getMaxClassificationCode(clClassificationScheme.getClassificationTypeUuid());
-                if(StringUtils.isNotEmpty(ctUuid)){ //분류코드 조합
+                //테스트후 삭제
+                // ctUuid = getMaxClassificationCode(clClassificationScheme.getClassificationTypeUuid());
+                /*if(StringUtils.isNotEmpty(ctUuid)){ //분류코드 조합
                     ctUuid = StringUtils.trim(ctUuid).substring(3,6);
                     ctUuid = String.valueOf(Integer.parseInt(ctUuid) + 1);
 
@@ -79,7 +86,9 @@ public class Cl001Service extends BaseService {
                 }else{
                     detailCode += "-001";
 
-                }
+                }*/
+
+                ctUuid = jdbcTemplate.queryForObject("select AMS.FC_CL_CLS_SCHEME_CODE('" + detailCode + "') from dual", String.class);
                 clClassificationScheme.setClassificationCode(detailCode);
                 clClassificationScheme.setStatusUuid(CommonCodeUtils.getCodeDetailUuid("CD111","Draft"));
             }
@@ -153,12 +162,4 @@ public class Cl001Service extends BaseService {
         }
         clClassificationSchemeConRepository.save(clClassificationSchemeCon);
     }
-
-    /*public ClClassificationScheme findOneClClassificationScheme(Cl00101VO requestParam) {
-        QClClassificationScheme qClClassificationScheme = QClClassificationScheme.clClassificationScheme;
-
-        Predicate predicate = qClClassificationScheme.classificationSchemeUuid.eq(requestParam.getClassificationSchemeUuid());
-
-        return clClassificationSchemeRepository.findOne(predicate);
-    }*/
 }

@@ -282,7 +282,7 @@ fnObj.pageStart = function () {
 
 fnObj.formView = axboot.viewExtend(axboot.formView, {
     getDefaultData: function () {
-        return $.extend({}, axboot.formView.defaultData, {useYn: "Y"});
+        return $.extend({}, axboot.formView.defaultData, {useYn: ""});
     },
     initView: function () {
         this.target = $("#formView01");
@@ -332,18 +332,15 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
             }
         });
 
-        $("input[data-ax-path='detailAddMetadata01']").change(function(){
+        $("input[data-ax-path='detailAddMetadata01'],input[data-ax-path='detailAddMetadata02'],input[data-ax-path='detailAddMetadata03'],input[data-ax-path='detailAddMetadata04']").keyup(function(){
             isDetailChanged = true;
         });
-        $("input[data-ax-path='detailAddMetadata02']").change(function(){
-            isDetailChanged = true;
+
+        $("input[data-ax-path='parentClassName'],input[data-ax-path='classCode'],input[data-ax-path='className']").keyup(function(){
+            if(13 == event.keyCode)
+                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
         });
-        $("input[data-ax-path='detailAddMetadata03']").change(function(){
-            isDetailChanged = true;
-        });
-        $("input[data-ax-path='detailAddMetadata04']").change(function(){
-            isDetailChanged = true;
-        });
+
 
         $(".bdb").delegate("#rg_tree_allopen", "click", function () {
             _this.expandAll();

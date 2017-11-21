@@ -11,8 +11,8 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 msg: axboot.getCommonMessage("AA006")
             }, function () {
                 if (this.key == "ok") {
-                    ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
                     isDetailChanged = false;
+                    ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
                     return;
                 }
             });
@@ -111,8 +111,10 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 url: "/api/v1/cl001/03/updateClassificationSchemeList",
                 data: JSON.stringify(this.gridView01.getData()),
                 callback: function (res) {
-                    ACTIONS.dispatch(ACTIONS.TOP_GRID_DETAIL_PAGE_SAVE);
-
+                    if(isDetailChanged){
+                        isDetailChanged = false;
+                        ACTIONS.dispatch(ACTIONS.TOP_GRID_DETAIL_PAGE_SAVE);
+                    }
                     result = true;
                 }
             })
@@ -127,13 +129,13 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             url: "/api/v1/cl001/05/updateClassificationSchemeConDetail",
             data: $.extend({},  {pageSize: 1000},fnObj.gridView01.getSelectedData() ,this.formView.getData()),
             callback: function (res) {
+                isDetailChanged = false;
                 ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
             },
             options: {
                 onError: axboot.viewError
             }
         });
-        ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
     },
     CLOSE_TAB: function (caller, act, data) {
         ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
@@ -194,14 +196,13 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
     },
     initEvent: function () {
         var _this = this;
-        $("textarea[data-ax-path='basedOn']").change(function(){
+        $("textarea[data-ax-path='basedOn'],input[data-ax-path='manager'],input[data-ax-path='managerOrganization']").keyup(function(){
             isDetailChanged = true;
         });
-        $("input[data-ax-path='managerOrganization']").change(function(){
-            isDetailChanged = true;
-        });
-        $("input[data-ax-path='manager']").change(function(){
-            isDetailChanged = true;
+
+        $("input[data-ax-path='classificationCode'],input[data-ax-path='classificationName']").keyup(function(){
+            if(13 == event.keyCode)
+                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
         });
     },
     getData: function () {
@@ -285,7 +286,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
                     msg: axboot.getCommonMessage("AA006")
                 }, function () {
                     if (this.key == "ok") {
-                        ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
+                        ACTIONS.dispatch(ACTIONS.TOP_GRID_DETAIL_PAGE_SAVE);
                     } else {
                         ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, data);
                     }

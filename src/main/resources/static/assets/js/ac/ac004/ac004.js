@@ -199,7 +199,7 @@ fnObj.pageStart = function () {
 
 fnObj.formView = axboot.viewExtend(axboot.formView, {
     getDefaultData: function () {
-        return $.extend({}, axboot.formView.defaultData, {useYn: "Y"});
+        return $.extend({}, axboot.formView.defaultData, {useYn: ""});
     },
     initView: function () {
         this.target = $("#formView01");
