@@ -11,6 +11,9 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             url: "/api/v1/cl001/01/list",
             data: $.extend({}, {pageSize: 1000, sort: "classificationCode"}, this.formView.getData()),
             callback: function (res) {
+                if(res.list == null || res.list.length <= 0){
+                    return;
+                }
                 fnObj.gridView01.setData(res.list);
                 fnObj.gridView01.disabledColumn();
                 isDetailChanged = false;
@@ -31,7 +34,9 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 fnObj.formView.setFormData("managerOrganization",res.managerOrganization);
                 fnObj.formView.setFormData("manager",res.manager);
                 fnObj.formView.setFormData("basedOn",res.basedOn);
-                fnObj.formView.setFormData("classificationNameTxt", fnObj.gridView01.getSelectedData().classificationName);
+                if(fnObj.gridView01.getSelectedData().classificationName != "undefined"){
+                    fnObj.formView.setFormData("classificationNameTxt", fnObj.gridView01.getSelectedData().classificationName);
+                }
                 fnObj.formView.setFormData("useNo",res.useNo);
                 fnObj.formView.setFormData("useYes",res.useYes);
                 fnObj.formView.setFormData("aggregationCnt",res.aggregationCnt);
@@ -162,7 +167,7 @@ fnObj.pageStart = function () {
 
 fnObj.formView = axboot.viewExtend(axboot.formView, {
     getDefaultData: function () {
-        return $.extend({}, axboot.formView.defaultData, {useYn: "Y"});
+        return $.extend({}, axboot.formView.defaultData, {useYn: ""});
     },
     initView: function () {
         this.target = $("#formView01");
