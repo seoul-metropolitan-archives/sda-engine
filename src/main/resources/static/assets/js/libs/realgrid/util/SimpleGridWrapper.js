@@ -54,6 +54,8 @@ SimpleGridWrapper.prototype.defaultBind = function()
 {
     this.bind("onRowInserting",function (grid, itemIndex) {
 
+
+
         var msg = validateForMsg();
         if("" == msg)
         {
