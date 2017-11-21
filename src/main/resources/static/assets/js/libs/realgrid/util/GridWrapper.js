@@ -77,9 +77,11 @@ var GridWrapper = function(p_id,p_rootContext) {
     this.validateColumn = {};
     this.runAdd = true;
     this.runDel = true;
+    this.doAppendValidate = true;
     //event저장소
     this.event = {};
 
+    this.setDoAppendValidate = function(_doAppendValidate) {this.doAppendValidate = _doAppendValidate;}
     this.setAddBtnName = function(_name){this.addBtnName = _name;}
     this.setDelBtnName = function(_name){this.delBtnName = _name;}
     this.setRunAdd = function(_runAdd)
@@ -151,14 +153,21 @@ var GridWrapper = function(p_id,p_rootContext) {
         //사용자가 Insert 키를 눌러 새로운 행을 삽입하거나, 마지막 행에서 아래 화살표를 눌러 행을 추가하려고 할 때 호출된다. 이 콜백에서 행 추가 불가 메시지를 리턴하면 행 추가가 금지된다.
         _this.gridView.onRowInserting = function (grid, itemIndex) {
 
-            if(!_this.runAdd)
-                return false;
+            if(!this.doAppendValidate)
+            {
+                _this.dispatch("onBeforeAddRow",_this,_this.makeObj,grid, itemIndex);
+                _this.dispatch("onAfterAddRow",_this,_this.makeObj,grid, itemIndex);
+                return true;
+            }
+            else {
+                if(!_this.runAdd)
+                    return false;
 
-            if(!_this.validate())
-                return false;
-
-            _this.dispatch("onBeforeAddRow",_this,_this.makeObj,grid, itemIndex);
-            _this.dispatch("onAfterAddRow",_this,_this.makeObj,grid, itemIndex);
+                if(!_this.validate())
+                    return false;
+                _this.dispatch("onBeforeAddRow",_this,_this.makeObj,grid, itemIndex);
+                _this.dispatch("onAfterAddRow",_this,_this.makeObj,grid, itemIndex);
+            }
         };
         _this.gridView.onSelectionChanged = function (grid) { _this.dispatch("onSelectionChanged",grid); };
         _this.gridView.onContextMenuItemClicked = function (grid, label, index) { _this.dispatch("onContextMenuItemClicked",grid, label, index); };
@@ -530,7 +539,7 @@ GridWrapper.prototype.option = {
         rowFocusBackground: "#32f2fbff"
     },
     dataProvider : {
-        commitBeforeDataEdit : true, // 그리드가 편집중일때 grid.setValue,
+        commitBeforeDataEdit : false, // 그리드가 편집중일때 grid.setValue,
         // dataProvider.setValue를 하는 경우 편집 중인 행을
         // commit시킨다.
         softDeleting : true
