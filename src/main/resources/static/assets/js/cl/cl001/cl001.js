@@ -6,6 +6,17 @@ var isDetailChanged = false;
 
 var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH: function (caller, act, data) {
+        if (isDetailChanged) {
+            axDialog.confirm({
+                msg: axboot.getCommonMessage("AA006")
+            }, function () {
+                if (this.key == "ok") {
+                    ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
+                    isDetailChanged = false;
+                    return;
+                }
+            });
+        }
         axboot.ajax({
             type: "GET",
             url: "/api/v1/cl001/01/list",
@@ -256,7 +267,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
         }
         this.gridObj.setCustomCellStyleRows("disable",function(row){
 
-            if(row["inputMethodUuid"] == state)
+            if(row["statusUuid"] == state)
                 return true;
             else
                 return false;
@@ -264,7 +275,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     },
     itemClick: function (data) {
         if (data.classificationSchemeUuid != null && data.classificationSchemeUuid != "") {
-            if (isDataChanged() || isDetailChanged) {
+            if (isDetailChanged) {
                 axDialog.confirm({
                     msg: axboot.getCommonMessage("AA006")
                 }, function () {
