@@ -42,6 +42,11 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             url: "/api/v1/cl001/02/detail",
             data: $.extend({}, {pageSize: 1000}, fnObj.gridView01.getSelectedData()),
             callback: function (res) {
+                var selectedData = fnObj.gridView01.getSelectedData();
+
+                if(!selectedData)
+                    return ;
+
                 fnObj.formView.setFormData("managerOrganization",res.managerOrganization);
                 fnObj.formView.setFormData("manager",res.manager);
                 fnObj.formView.setFormData("basedOn",res.basedOn);

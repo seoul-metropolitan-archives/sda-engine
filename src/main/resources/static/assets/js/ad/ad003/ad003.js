@@ -57,7 +57,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 type: "post",
                 data: JSON.stringify(codeHeaderList),
                 callback: function (res) {
-                    fnObj.gridView01.gridObj.commit();
+                    fnObj.gridView01.commit();
                 }
             })
             .call({
@@ -65,7 +65,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 type : "post",
                 data: JSON.stringify(codeDetailList),
                 callback: function (res) {
-                    fnObj.gridView02.gridObj.commit();
+                    fnObj.gridView02.commit();
                 }
             })
             .done(function () {

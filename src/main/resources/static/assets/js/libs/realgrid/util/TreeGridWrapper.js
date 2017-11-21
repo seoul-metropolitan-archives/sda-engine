@@ -166,7 +166,7 @@ TreeGridWrapper.prototype.getData = function() {
     var dataProvider = this.gridView.getDataProvider();
     var rows = undefined;
 
-    if(this.childrenProp)
+    if(!this.childrenProp)
         return [];
 
     rows = dataProvider.getJsonRows(-1,true,this.childrenProp,"icon");

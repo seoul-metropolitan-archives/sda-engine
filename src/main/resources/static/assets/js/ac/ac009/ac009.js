@@ -37,7 +37,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 url: "/api/v1/ac009/01/save",
                 data: JSON.stringify(menuList),
                 callback: function (res) {
-                    fnObj.gridView01.gridObj.commit();
+                    fnObj.gridView01.commit();
                 }
             })
             .done(function () {
@@ -166,7 +166,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     initView: function () {
         this.gridObj = new SimpleGridWrapper("realgrid01", "/assets/js/libs/realgrid");
         this.gridObj.setGridStyle("100%", "100%");
-        this.gridObj.setColumnInfo(ac00901.column_info).setEntityName("CONFIGURATION");
+        this.gridObj.setColumnInfo(ac00901.column_info).setEntityName("MENU");
         this.gridObj.makeGrid();
         this.gridObj.itemClick(this.itemClick);
         this.gridObj.setFixedOptions({

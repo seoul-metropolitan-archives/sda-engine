@@ -2571,7 +2571,7 @@ axboot.gridView = {
     },
     /*데이터 변경 초기화 함수*/
     initChangedData: function () {
-        this.gridObj.commit();
+        this.gridObj.clearRowStates();
     },
     setEntityName: function (name) {
         this.gridObj.setEntityName(name);
@@ -2707,6 +2707,10 @@ axboot.gridView = {
     /*화면 초기화*/
     clearData: function () {
         this.setData([]);
+    },
+    commit : function()
+    {
+        this.gridObj.clearRowStates();
     }
 };
 

@@ -59,7 +59,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 url: "/api/v1/ac005/01/save",
                 data: JSON.stringify(roleList),
                 callback: function (res) {
-                    fnObj.gridView01.gridObj.commit();
+                    fnObj.gridView01.commit();
                 }
             })
             .call({
@@ -67,7 +67,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 url: "/api/v1/ac005/02/save",
                 data: JSON.stringify(rolePermissionList),
                 callback: function (res) {
-                    fnObj.gridView02.gridObj.commit();
+                    fnObj.gridView02.commit();
                 }
             })
             .done(function () {

@@ -335,7 +335,8 @@ var GridWrapper = function(p_id,p_rootContext) {
 
                     }
                 }
-                _this.gridView.setValues(rows, retData, true);
+                _this.dataProvider.updateRows(rows, retData);
+                //_this.gridView.setValues(rows, retData, true);
                 grid.commit(true);
                 if(this.close)
                     this.close();
@@ -362,7 +363,7 @@ var GridWrapper = function(p_id,p_rootContext) {
     //          초기 컬럼 값 저장 영역
     //==========================================================================================
     this.defaultEditColumnProperties = new Array();
-    addDefaultEditColumnProperties = function(name,editable)
+    this.addDefaultEditColumnProperties = function(name,editable)
     {
         _this.defaultEditColumnProperties[name] = editable;
     }
@@ -782,9 +783,11 @@ GridWrapper.prototype.resetCurrent = function () {
  * 그리드뷰 커밋 함수
  */
 GridWrapper.prototype.commit = function () {
+    this.gridView.commit(true);
+}
+GridWrapper.prototype.clearRowStates = function () {
     this.dataProvider.clearRowStates(true, false);
 }
-
 /**
  * 그리드 생성한 오브젝트 설정하는 함수
  * @param _makeObj
@@ -995,9 +998,7 @@ GridWrapper.prototype.setColumnInfo = function(list) {
             readOnly : !(data.editable === undefined ? true : data.editable)
         };
 
-
-
-        addDefaultEditColumnProperties(obj.name,obj.editable);
+        _this.addDefaultEditColumnProperties(obj.name,obj.editable);
         if (data.autoincrement)
             addAutoIncreament({index: i, name: data.name});
 
@@ -1135,8 +1136,6 @@ GridWrapper.prototype.setColumnInfo = function(list) {
 
                 obj.defaultValue = data.defaultValue;
 
-                obj.
-
                 break;
             case "button":
                 obj.button = "image";
@@ -1221,8 +1220,9 @@ GridWrapper.prototype.setColumnInfo = function(list) {
             innerColumnInfo = new Array();
             for(var j = 0; j < data.columnList.length; j++)
             {
-                innerColumnInfo.push(generateColumnInfo(this, data.columnList[j]));
-                fieldList.push($.extend(generateFieldInfo(this, data.columnList[j]),{
+                dataType = data.columnList[j].dataType;
+                innerColumnInfo.push(generateColumnInfo(this, data.columnList[j],dataType));
+                fieldList.push($.extend(generateFieldInfo(this, data.columnList[j],dataType),{
                     fieldName : data.name,
                     dataType : data.dataType
                 }));
@@ -1448,7 +1448,9 @@ GridWrapper.prototype.setCustomCellStyleRows = function(type, conditionFunc, col
 
     /*해당 그리드가 수정관련한 부분에 대해서 못하거나 할 수 있게 만들어주는 함수*/
     this.unbind("onCurrentRowChanged");
-    this.bind("onCurrentRowChanged", function (grid, oldRow, newRow) {
+
+    var changeColumnState= function(_this, grid, oldRow, newRow)
+    {
         var curr = grid.getCurrent();
         var doSetting = false;
         for (var i = 0; i < applyData.rows.length; i++) {
@@ -1462,17 +1464,22 @@ GridWrapper.prototype.setCustomCellStyleRows = function(type, conditionFunc, col
                 grid.setColumnProperty(applyData.columns[i], "editable", editable);
             }
             var sel = {startItem: 1, endItem: 1, style: "block"};
-            this.gridView.setSelection(sel);
-            this.gridView.resetCurrent();
+            _this.gridView.setSelection(sel);
+            _this.gridView.resetCurrent();
         }
         else {
             //setting에 영향을 안받을 경우에는 기본값으로 복원
-            for (var column in this.defaultEditColumnProperties) {
-                grid.setColumnProperty(column, "editable", this.defaultEditColumnProperties[column]);
-                grid.setCellStyle(curr.dataRow, column, this.defaultStyles[column], true);
+            for (var column in _this.defaultEditColumnProperties) {
+                grid.setColumnProperty(column, "editable", _this.defaultEditColumnProperties[column]);
+                grid.setCellStyle(curr.dataRow, column, _this.defaultStyles[column], true);
             }
         }
+    }
+
+    this.bind("onCurrentRowChanged", function (grid, oldRow, newRow) {
+        changeColumnState(this, grid,oldRow,newRow);
     });
+    changeColumnState(this, this.gridView);
 }
 
 /**
