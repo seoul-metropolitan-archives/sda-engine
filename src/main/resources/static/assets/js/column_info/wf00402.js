@@ -35,8 +35,8 @@ var wf00402 =
                     dataType: "combo",
                     required: false,
                     visible: true,
-                    values: axboot.commonCodeFilter("CD131").codeArr,
-                    labels: axboot.commonCodeFilter("CD131").nameArr,
+                    values: axboot.commonCodeFilter("CD130").codeArr,
+                    labels: axboot.commonCodeFilter("CD130").nameArr,
                     lookupDisplay: true,
                     editor: {
                         type: "dropDown",
