@@ -64,6 +64,14 @@
         //,"assets/images/bg_login03.jpg"
     ],{duration:3000, fade:1000});
 </script>
+<style>
+    * {
+        /* -webkit-box-sizing: border-box; */
+        -moz-box-sizing: content-box;
+        box-sizing: content-box;
+    }
+
+</style>
 <div id="wrap" >
     <div id="container" class="hc vc">
         <div id="header">
@@ -76,13 +84,13 @@
                 <div class="input_row">
                         <span class="input_box">
                             <label class="lbl">User ID</label>
-                            <input type="text" id="userId" name="userId" placeholder="User ID" class="int" maxlength="41" tabindex="1" required="required" autofocus="autofocus" >
+                            <input type="text" id="userId" name="userId" style="box-sizing: content-box;" placeholder="User ID" class="int" maxlength="41" tabindex="1" required="required" autofocus="autofocus" >
                         </span>
                 </div>
                 <div class="input_row">
                         <span class="input_box">
                             <label class="lbl">Password</label>
-                            <input type="password" name="userPassword" id="userPassword" placeholder="Password" class="int" maxlength="16" tabindex="2">
+                            <input type="password" name="userPassword" style="box-sizing: content-box;" id="userPassword" placeholder="Password" class="int" maxlength="16" tabindex="2">
                         </span>
                 </div>
                 <input type="submit" title="Sign In"  value="Sign In" class="btn_login" >
