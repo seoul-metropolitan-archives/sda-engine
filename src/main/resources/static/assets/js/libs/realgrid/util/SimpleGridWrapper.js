@@ -90,7 +90,7 @@ SimpleGridWrapper.prototype.defaultBind = function()
     this.bind("onContextMenuItemClicked",function (grid, label, index) {
         switch(label.label)
         {
-            case "ExcelExport":
+            case "Excel Export":
                 this.exportExcel(grid,label);
             default :
                 if(_callback)
