@@ -5,10 +5,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import rmsoft.ams.seoul.ad.ad000.service.Ad000Service;
+import rmsoft.ams.seoul.common.controller.MessageBaseController;
 
 @RestController
 @RequestMapping("/ad/ad000")
-public class AD000Controller
+public class AD000Controller extends MessageBaseController
 {
 
     @Autowired

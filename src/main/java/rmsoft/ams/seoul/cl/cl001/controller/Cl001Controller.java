@@ -13,13 +13,14 @@ import org.springframework.web.bind.annotation.*;
 import rmsoft.ams.seoul.cl.cl001.service.Cl001Service;
 import rmsoft.ams.seoul.cl.cl001.vo.Cl00101VO;
 import rmsoft.ams.seoul.cl.cl001.vo.Cl00102VO;
+import rmsoft.ams.seoul.common.controller.MessageBaseController;
 
 import java.util.List;
 
 
 @RestController
 @RequestMapping("/api/v1/cl001/")
-public class Cl001Controller extends BaseController {
+public class Cl001Controller extends MessageBaseController {
 
     @Autowired
     private Cl001Service cl001Service;

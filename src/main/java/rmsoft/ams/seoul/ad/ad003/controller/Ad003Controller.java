@@ -12,6 +12,7 @@ import rmsoft.ams.seoul.ad.ad003.service.Ad003Service;
 import rmsoft.ams.seoul.ad.ad003.vo.Ad00301VO;
 import rmsoft.ams.seoul.ad.ad003.vo.Ad00302VO;
 import rmsoft.ams.seoul.ad.ad003.vo.Ad00303VO;
+import rmsoft.ams.seoul.common.controller.MessageBaseController;
 import rmsoft.ams.seoul.utils.CommonCodeUtils;
 
 import java.util.HashMap;
@@ -20,7 +21,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/ad/ad003/")
-public class Ad003Controller {
+public class Ad003Controller extends MessageBaseController {
 
     @Autowired
     private Ad003Service ad003Service;

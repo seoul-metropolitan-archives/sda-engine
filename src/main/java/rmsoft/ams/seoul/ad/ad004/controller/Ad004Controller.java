@@ -1,13 +1,9 @@
 package rmsoft.ams.seoul.ad.ad004.controller;
 
-import io.onsemiro.controller.BaseController;
-import io.onsemiro.core.api.ApiException;
 import io.onsemiro.core.api.response.ApiResponse;
 import io.onsemiro.core.api.response.Responses;
-import io.onsemiro.core.code.ApiStatus;
 import io.onsemiro.utils.ModelMapperUtils;
 import io.onsemiro.utils.UUIDUtils;
-import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,18 +12,17 @@ import org.springframework.web.bind.annotation.RestController;
 import rmsoft.ams.seoul.ad.ad004.service.Ad004Service;
 import rmsoft.ams.seoul.ad.ad004.vo.Ad00401VO;
 import rmsoft.ams.seoul.ad.ad004.vo.Ad00402VO;
+import rmsoft.ams.seoul.common.controller.MessageBaseController;
 import rmsoft.ams.seoul.common.domain.AdPopupDetail;
 import rmsoft.ams.seoul.common.domain.AdPopupHeader;
 
-import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/ad/ad004")
-public class Ad004Controller extends BaseController {
+public class Ad004Controller extends MessageBaseController {
 
     @Autowired
     private Ad004Service service;

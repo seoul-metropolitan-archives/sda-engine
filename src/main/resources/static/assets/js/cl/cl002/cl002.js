@@ -190,6 +190,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             url: "/api/v1/cl002//09/updateClassCon",
             data: $.extend({},  {pageSize: 1000},selectedItem ,this.formView.getData()),
             callback: function (res) {
+                isDetailChanged = false;
                 // ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
             },
             options: {
