@@ -161,7 +161,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
                 else
                     fnObj.gridView01.gridObj = new SimpleGridWrapper(fnObj.gridView01.tagId, "/assets/js/libs/realgrid");
 
-                fnObj.gridView01.gridObj.setGridStyle("100%", "100%");
+                fnObj.gridView01.gridObj.setGridStyle("100%", "445px");
                 fnObj.gridView01.gridObj.setEntityName(fnObj.gridView01.entityName);
                 fnObj.isMultiselect = res["popupInfo"]["multiselectYN"] == 'Y';
                 fnObj.gridView01.gridObj.setOption({
