@@ -252,6 +252,20 @@
         </button>
     </li>
 </th:block>
+
+<!--Popup버튼 & Save 버튼 & Inquiry 버튼-->
+<th:block layout:fragment="terminate-and-inquiry">
+    <li style="text-align:right; width:48%;">
+        <button class="btn_co" th:id="terminate">
+            <span class="btn_icon_co">&nbsp;</span>
+            <span class="btn_main_txt">terminate</span>
+        </button>
+        <button class="btn_i" th:id="inquiry">
+            <span class="btn_icon">&nbsp;</span>
+            <span class="btn_main_txt">Inquiry(I)</span>
+        </button>
+    </li>
+</th:block>
 <!--북마크-->
 <th:block layout:fragment="bookmark">
     <li style="width:30px; height: 30px">
