@@ -3,6 +3,10 @@ var fnObj = {};
 var ACTIONS = axboot.actionExtend(fnObj, {
     // WorkflowResult 정보 조회
     PAGE_SEARCH: function (caller, act, data) {
+        //TODO 삭제바람
+        alert("startFromDate :" + $("#startFromDate").val() + " ,\n" + "startToDate :" + $("#startToDate").val() + " ,\n" + "endFromDate :" + $("#endFromDate").val() + " ,\n" + "endToDate :" + $("#endToDate").val());
+
+
         this.formView.checkPopup();
 
         axboot.ajax({
@@ -111,37 +115,35 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     },
     ITEM_CLICK: function (caller, act, data) {
     },
-    SEARCH_POPUP_EXECUTER : function(caller, act, data)
-    {
+    SEARCH_POPUP_EXECUTER: function (caller, act, data) {
         axboot.modal.open({
             modalType: "COMMON_POPUP",
-            preSearch : data["preSearch"],
+            preSearch: data["preSearch"],
             sendData: function () {
                 return data;
             },
             callback: function (data) {
                 $("input[data-ax-path='executer']").val(data["USER_NAME"])
-                $("input[data-ax-path='executer']").attr("executer",data["USER_UUID"])
+                $("input[data-ax-path='executer']").attr("executer", data["USER_UUID"])
 
-                if(this.close)
+                if (this.close)
                     this.close();
             }
         });
     },
-    SEARCH_POPUP_MENU : function(caller, act, data)
-    {
+    SEARCH_POPUP_MENU: function (caller, act, data) {
         axboot.modal.open({
             modalType: "COMMON_POPUP",
-            preSearch : data["preSearch"],
-            async : false,
+            preSearch: data["preSearch"],
+            async: false,
             sendData: function () {
                 return data;
             },
             callback: function (data) {
                 $("input[data-ax-path='menu']").val(data["MENU_NAME"])
-                $("input[data-ax-path='menu']").attr("menu",data["MENU_UUID"])
+                $("input[data-ax-path='menu']").attr("menu", data["MENU_UUID"])
 
-                if(this.close)
+                if (this.close)
                     this.close();
             }
         });
@@ -222,17 +224,25 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
         this.model = new ax5.ui.binder();
         this.model.setModel({}, this.target);
         this.modelFormatter = new axboot.modelFormatter(this.model); // 모델 포메터 시작
+
+        this.target.find('[data-ax5picker="date"]').ax5picker({
+            direction: "auto",
+            content: {
+                type: 'date'
+            }
+        });
+
         this.initEvent();
     },
     initEvent: function () {
         var _this = this;
-        $("input[data-ax-path='executer']").parents().eq(1).find("a").click(function(){
+        $("input[data-ax-path='executer']").parents().eq(1).find("a").click(function () {
             var data = {
-                popupCode : "PU107",
-                searchData : $("input[data-ax-path='executer']").val().trim(),
-                preSearch : false
+                popupCode: "PU107",
+                searchData: $("input[data-ax-path='executer']").val().trim(),
+                preSearch: false
             };
-            ACTIONS.dispatch(ACTIONS.SEARCH_POPUP_EXECUTER,data);
+            ACTIONS.dispatch(ACTIONS.SEARCH_POPUP_EXECUTER, data);
         });
         /*$("input[data-ax-path='executer']").focusout(function(){
 
@@ -247,13 +257,13 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
             else
                 $("input[data-ax-path='executer']").attr("executer","")
         });*/
-        $("input[data-ax-path='menu']").parents().eq(1).find("a").click(function(){
+        $("input[data-ax-path='menu']").parents().eq(1).find("a").click(function () {
             var data = {
-                popupCode : "PU126",
-                searchData : $("input[data-ax-path='menu']").val().trim(),
-                preSearch : false
+                popupCode: "PU126",
+                searchData: $("input[data-ax-path='menu']").val().trim(),
+                preSearch: false
             };
-            ACTIONS.dispatch(ACTIONS.SEARCH_POPUP_MENU,data);
+            ACTIONS.dispatch(ACTIONS.SEARCH_POPUP_MENU, data);
         });
         /*$("input[data-ax-path='menu']").focusout(function(){
 
@@ -269,8 +279,7 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
                 $("input[data-ax-path='menu']").attr("menu","")
         });*/
     },
-    checkPopup : function()
-    {
+    checkPopup: function () {
         var checkData = $("input[data-ax-path='executer']").val();
         var data = {};
         if (checkData.trim() != "") {
@@ -280,7 +289,7 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
             };
             ACTIONS.dispatch(ACTIONS.SEARCH_POPUP_EXECUTER, data);
         }
-        else{
+        else {
             $("input[data-ax-path='executer']").attr("executer", "")
         }
 
@@ -292,17 +301,16 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
             };
             ACTIONS.dispatch(ACTIONS.SEARCH_POPUP_MENU, data);
         }
-        else{
+        else {
             $("input[data-ax-path='menu']").attr("menu", "")
         }
     },
     getData: function () {
         var data = this.modelFormatter.getClearData(this.model.get()); // 모델의 값을 포멧팅 전 값으로 치환.
 
-        $("#formView01 input,#formView01 select").each(function(){
-            if($(this).attr("data-ax-path"))
-            {
-                if($(this).attr($(this).attr("data-ax-path"))){
+        $("#formView01 input,#formView01 select").each(function () {
+            if ($(this).attr("data-ax-path")) {
+                if ($(this).attr($(this).attr("data-ax-path"))) {
                     data[$(this).attr("data-ax-path")] = $(this).attr($(this).attr("data-ax-path"));
                 }
                 else
@@ -451,4 +459,22 @@ isDataChanged = function () {
     } else {
         return false;
     }
+}
+
+function getFormattedDate(date, isStart) {
+    var day;
+    var tempDate;
+    if (isStart) {
+        date.setDate(date.getDate() - 2);
+        tempDate = date.getDate();
+    } else {
+        tempDate = date.getDate();
+    }
+    day = tempDate.toString();
+
+    var year = date.getFullYear();
+    var month = (1 + date.getMonth()).toString();
+    month = month.length > 1 ? month : '0' + month;
+    day = day.length > 1 ? day : '0' + day;
+    return year + '-' + month + '-' + day;
 }
