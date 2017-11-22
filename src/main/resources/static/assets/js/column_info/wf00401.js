@@ -36,14 +36,7 @@ var wf00401 =
                     required: false,
                     visible: true,
                     values: axboot.commonCodeFilter("CD131").codeArr,
-                    labels: axboot.commonCodeFilter("CD131").nameArr,
-                    lookupDisplay: true,
-                    editor: {
-                        type: "dropDown",
-                        dropDownCount: 10,
-                        domainOnly: true, //domainOnly가 true이면 목록에 있는 값들만 선택할 수 있습니다.
-                        textReadOnly: false // true이면 키 입력이 안되며 선택만 할 수 있습니다.
-                    }
+                    labels: axboot.commonCodeFilter("CD131").nameArr
                 },
                 {
                     sortNo: 4,
@@ -73,14 +66,7 @@ var wf00401 =
                     required: false,
                     visible: true,
                     values: axboot.commonCodeFilter("CD006").codeArr,
-                    labels: axboot.commonCodeFilter("CD006").nameArr,
-                    lookupDisplay: true,
-                    editor: {
-                        type: "dropDown",
-                        dropDownCount: 10,
-                        domainOnly: true, //domainOnly가 true이면 목록에 있는 값들만 선택할 수 있습니다.
-                        textReadOnly: false, // true이면 키 입력이 안되며 선택만 할 수 있습니다.
-                    }
+                    labels: axboot.commonCodeFilter("CD006").nameArr
                 },
                 {
                     sortNo: 7,

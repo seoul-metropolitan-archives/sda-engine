@@ -36,14 +36,7 @@ var wf00402 =
                     required: false,
                     visible: true,
                     values: axboot.commonCodeFilter("CD130").codeArr,
-                    labels: axboot.commonCodeFilter("CD130").nameArr,
-                    lookupDisplay: true,
-                    editor: {
-                        type: "dropDown",
-                        dropDownCount: 10,
-                        domainOnly: true, //domainOnly가 true이면 목록에 있는 값들만 선택할 수 있습니다.
-                        textReadOnly: false // true이면 키 입력이 안되며 선택만 할 수 있습니다.
-                    }
+                    labels: axboot.commonCodeFilter("CD130").nameArr
                 },
                 {
                     sortNo: 4,
