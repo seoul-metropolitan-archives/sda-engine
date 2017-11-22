@@ -14819,7 +14819,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
          * console.log( ax5.info.weekNames[(new Date()).getDay()].label )
          * ```
          */
-        var weekNames = [{ label: "일" }, { label: "월" }, { label: "화" }, { label: "수" }, { label: "목" }, { label: "금" }, { label: "토" }];
+        var weekNames = [{label: "SUN"},{label: "MON"},{label: "TUE"},{label: "WED"},{label: "THU"},{label: "FRI"},{label: "SAT"}];
 
         /**
          * 사용자 브라우저 식별용 오브젝트
@@ -20112,7 +20112,7 @@ ax5.ui = function () {
                     yearHeading: "Choose the year",
                     monthHeading: "Choose the month",
                     yearTmpl: "%s",
-                    months: ax5.info.months || ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
+                    months: ax5.info.months || ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
                     dayTmpl: "%s"
                 },
                 multipleSelect: false,

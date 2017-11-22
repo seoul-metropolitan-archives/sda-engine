@@ -19,11 +19,27 @@
                 <div style=" height:30px; width:100%" class="bgf7 div_tablerow">
                     <ul class="bdb">
                         <th:block layout:insert="~{/fragments/page-buttons :: bookmark}"/>
-                        <th:block layout:insert="~{/fragments/page-buttons :: save-and-inquiry('none','show')}"/>
+                        <th:block layout:insert="~{/fragments/page-buttons :: terminate-and-inquiry}"/>
                     </ul>
                 </div>
                 <div class="bdb div_tablerow">
                     <dl>
+                        <dt class="mgl_5">Workflow Status</dt>
+                        <dd>
+                            <select data-ax-path="statusUuid" style="width:135px;">
+                                <option value=""></option>
+                                <option th:each="item : ${statusUuid}" th:value="${item.codeDetailUUID}"
+                                        th:text="${item.codeName}"/>
+                            </select>
+                        </dd>
+                        <dt class="pdl_5">Batch ID</dt>
+                        <dd>
+                            <input type=text data-ax-path="batchId" style="width:135px">
+                        </dd>
+                        <dt class="pdl_5">Workflow Name</dt>
+                        <dd>
+                            <input type=text data-ax-path="workflowName" style="width:135px">
+                        </dd>
                         <dt class="pdl_5">Service</dt>
                         <dd>
                             <select data-ax-path="serviceUuid" style="width:135px;">
@@ -34,28 +50,38 @@
                         </dd>
                     </dl>
                     <dl>
-                        <dt class="pdl_5">Workflow Status</dt>
-                        <dd>
-                            <select data-ax-path="statusUuid" style="width:135px;">
-                                <option value=""></option>
-                                <option th:each="item : ${statusUuid}" th:value="${item.codeDetailUUID}"
-                                        th:text="${item.codeName}"/>
-                            </select>
-                        </dd>
-                    </dl>
-                    <dl>
-                        <dt class="pdl_5">Batch ID</dt>
-                        <dd>
-                            <input type=text data-ax-path="batchId" style="width:135px">
-                        </dd>
                         <th:block layout:insert="~{/fragments/page-buttons :: searchInput02 ('Executer','executer')}"/>
+                        <dt class="pdl_5">Start Date</dt>
+                        <dd class="w_auto">
+                            <div class="input-group" data-ax5picker="date">
+                                <div class="cld_box" style="background-color: #fffdd6">
+                                    <input type=text id="startFromDate" placeholder="yyyy-mm-dd"
+                                           style="background-color: #fffdd6">
+                                </div>
+                                ~
+                                <div class="cld_box" style="background-color: #fffdd6">
+                                    <input type=text id="startToDate" placeholder="yyyy-mm-dd"
+                                           style="background-color: #fffdd6">
+                                </div>
+                            </div>
+                        </dd>
                     </dl>
                     <dl>
-                        <dt class="pdl_5">Workflow Name</dt>
-                        <dd>
-                            <input type=text data-ax-path="workflowName" style="width:135px">
-                        </dd>
                         <th:block layout:insert="~{/fragments/page-buttons :: searchInput02 ('Menu','menu')}"/>
+                        <dt class="pdl_5">End Date</dt>
+                        <dd class="w_auto">
+                            <div class="input-group" data-ax5picker="date">
+                                <div class="cld_box" style="background-color: #fffdd6">
+                                    <input type=text id="endFromDate" placeholder="yyyy-mm-dd"
+                                           style="background-color: #fffdd6">
+                                </div>
+                                ~
+                                <div class="cld_box" style="background-color: #fffdd6">
+                                    <input type=text id="endToDate" placeholder="yyyy-mm-dd"
+                                           style="background-color: #fffdd6">
+                                </div>
+                            </div>
+                        </dd>
                     </dl>
                 </div>
                 <div style="height:100%; width:100%" class="bgf7 div_tablerow">
