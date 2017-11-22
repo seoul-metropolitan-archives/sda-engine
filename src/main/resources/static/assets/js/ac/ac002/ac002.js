@@ -524,6 +524,9 @@ fnObj.tabView = axboot.viewExtend({
     open: function (item) {
         var _item;
 
+
+
+
         var findedIndex = ax5.util.search(this.list, function () {
             this.status = '';
             return this.menuId == item.menuId;
@@ -532,6 +535,12 @@ fnObj.tabView = axboot.viewExtend({
         this.frameTarget.find('.frame-item').removeClass("on");
 
         if (findedIndex < 0) {
+
+            if (this.list.length >= this.limitCount) {
+                axErrorToast.push(axboot.getCommonMessage("AA009"));
+                return ;
+            }
+
             this.list.push({
                 menuId: item.menuId,
                 id: item.id,
@@ -557,9 +566,9 @@ fnObj.tabView = axboot.viewExtend({
             //topMenu.setHighLightOriginID(_item.menuId || "");
         }
 
-        if (this.list.length > this.limitCount) {
+        /*if (this.list.length > this.limitCount) {
             this.close(this.list[1].menuId);
-        }
+        }*/
 
         this.bindEvent();
         this.resize();
