@@ -14,6 +14,8 @@
             color: black;
         }
     </style>
+
+    <link rel="stylesheet" type="text/css" href="/assets/css/axboot.css">
     <link rel="stylesheet" type="text/css" href="/assets/css/common.css">
     <script type="text/javascript">
         axboot.requireSession('[[@{${@environment.getProperty("config.sessionCookie")}}]]');
@@ -38,11 +40,12 @@
                     options: {
                         nomask: false, apiType: "login",
                         onError: function(err){
-                            axDialog.alert({
+                            axErrorToast.push(err.message);
+                            /*axDialog.alert({
                                 title: '로그인 실패',
                                 theme: "default",
                                 msg: err.message
-                            });
+                            });*/
                         }
                     }
                 });

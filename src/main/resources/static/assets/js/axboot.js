@@ -1847,7 +1847,7 @@ axboot.modal = function () {
                 {
                     popupWidth = 480;
                 }
-                modalConfig = $.extend(true, {}, modalConfig, axboot.def.MODAL[modalConfig.modalType], {width: popupWidth + 60});
+                modalConfig = $.extend(true, {}, modalConfig, axboot.def.MODAL[modalConfig.modalType], {width: popupWidth + 70});
             }
         }
 
