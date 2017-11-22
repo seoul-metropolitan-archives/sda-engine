@@ -69,7 +69,7 @@ public class Ad004Service extends BaseService {
     public ApiResponse savePopupDetail(List<AdPopupDetail> list) {
         for (AdPopupDetail data : list) {
             if (data.isCreated()) {
-                data.setPopupDetailUuid(UUIDUtils.getUUID());
+                //data.setPopupDetailUuid(UUIDUtils.getUUID());
                 popupDetailRepository.save(data);
             } else if (data.isModified()) {
                 popupDetailRepository.save(data);

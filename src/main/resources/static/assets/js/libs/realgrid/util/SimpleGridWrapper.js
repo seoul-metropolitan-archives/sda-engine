@@ -71,6 +71,12 @@ SimpleGridWrapper.prototype.defaultBind = function()
 
     });
     this.bind("onImageButtonClicked",function(gridWrapper, grid, itemIndex, column, buttonIndex, name){
+
+        var index = grid.getCurrent();
+        var editable = grid.getColumnProperty(index.fieldName,"editable");
+        if(false == editable)
+            return ;
+
         var popupData = gridWrapper.getPopupData(column.fieldName);
         if(!popupData)
             return ;

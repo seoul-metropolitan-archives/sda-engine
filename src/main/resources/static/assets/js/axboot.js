@@ -2466,7 +2466,7 @@ axboot.baseView =
             $(".bdb").delegate("#cancel", "click", function () {
                 _this.cancel();
             });
-            $(document).delegate(".ax-body .div_tablerow input", "keydown", function (e) {
+            $(document).delegate(".ax-body .searchFields input", "keydown", function (e) {
                 if (e.keyCode == 13)
                 {
                     e.preventDefault();
@@ -2576,10 +2576,10 @@ axboot.gridView = {
     },
     /*이벤트 걸어주는 함수*/
     bindEvent: function () {
+        this.gridObj.addRowBeforeEvent(this.addRowBeforeEvent);
         if (this.parentsGrid)
             this.gridObj.addRowBeforeEvent(this.addRowBeforeEventForChildGrid);
-        else
-            this.gridObj.addRowBeforeEvent(this.addRowBeforeEvent);
+
         this.gridObj.onRowsPasted(this.onRowsPasted);
     },
     /*데이터 변경 초기화 함수*/

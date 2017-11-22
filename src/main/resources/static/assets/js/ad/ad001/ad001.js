@@ -1,7 +1,4 @@
 var fnObj = {};
-var pageSize = 1000;
-var gridView = undefined;
-var serviceList = [];
 
 var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH: function (caller, act, data) {
@@ -34,8 +31,8 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             async: false,
             data: JSON.stringify(list),
             callback: function (res) {
-                axToast.push(axboot.getCommonMessage("AA007"));
                 fnObj.gridView01.commit();
+                axToast.push(axboot.getCommonMessage("AA007"));
             },
             options: {
                 onError: axboot.viewError
