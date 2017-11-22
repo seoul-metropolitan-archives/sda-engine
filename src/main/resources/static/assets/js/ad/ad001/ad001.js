@@ -35,6 +35,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             data: JSON.stringify(list),
             callback: function (res) {
                 axToast.push(axboot.getCommonMessage("AA007"));
+                fnObj.gridView01.commit();
             },
             options: {
                 onError: axboot.viewError

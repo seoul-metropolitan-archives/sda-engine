@@ -96,12 +96,14 @@ TreeGridWrapper.prototype.defaultBind = function(){
  */
 TreeGridWrapper.prototype.expandAll = function () {
     this.gridView.expandAll()
+    this.gridView.resetSize();
 };
 /**
  * 트리 모두 닫는 함수
  */
 TreeGridWrapper.prototype.collapseAll = function () {
     this.gridView.collapseAll();
+    this.gridView.resetSize();
 }
 /**
  * 트리데이터 설정하는 함수

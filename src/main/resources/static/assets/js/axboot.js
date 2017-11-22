@@ -2502,11 +2502,8 @@ axboot.baseView =
                         ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
                     }
                 } else {
-                    /*
-                    요구사항으로 인한 주석
                     if (ACTIONS && ACTIONS.PAGE_SEARCH)
                         ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
-                    */
                 }
             });
         } else {

@@ -25,8 +25,13 @@
                 <div class="bdb div_tablerow">
                     <dl>
                        <th:block layout:insert="~{/fragments/page-buttons :: searchInputYellow ('Classification Scheme','classificationCode')}"/>
-                       <th:block layout:insert="~{/fragments/page-buttons :: searchInput03 ('Parent Class Code','parentClassCode')}"/>
-
+                       <!--<th:block layout:insert="~{/fragments/page-buttons :: searchInput03 ('Parent Class Code','parentClassCode')}"/>-->
+                        <dt class="w150">Parent Class Code</dt>
+                        <dd>
+                            <div class="src_box2">
+                                <input data-ax-path='parentClassCode' type="text" style="width:133px">
+                            </div>
+                        </dd>
                         <dt class="w150">Parent Class Name</dt>
                         <dd>
                             <input data-ax-path="parentClassName" type=text style="width:135px">

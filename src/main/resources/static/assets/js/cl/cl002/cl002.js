@@ -313,6 +313,7 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
                 ACTIONS.dispatch(ACTIONS.SEARCH_CLASS_SCH,data);
             }
         });
+        /*
         $("input[data-ax-path='parentClassCode']").parents().eq(1).find("a").click(function(){
                 var data = {
                     popupCode : "PU115",
@@ -332,7 +333,7 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
                 ACTIONS.dispatch(ACTIONS.SEARCH_CLASS_CCD,data);
             }
         });
-
+        */
         $("input[data-ax-path='detailAddMetadata01'],input[data-ax-path='detailAddMetadata02'],input[data-ax-path='detailAddMetadata03'],input[data-ax-path='detailAddMetadata04']").keyup(function(){
             isDetailChanged = true;
         });

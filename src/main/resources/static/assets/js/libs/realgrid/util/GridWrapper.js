@@ -60,7 +60,7 @@ var GridWrapper = function(p_id,p_rootContext) {
     this.childrenProp = undefined;
     this.appendValidate = function() { return true; };
 
-    this.contextMenu = [{label : "ExcelExport"}];
+    this.contextMenu = [{label : "Excel Export"}];
     this.removeProperty = new Array();
     //================================================
     //lazy load시 사용 파라메터
@@ -199,6 +199,7 @@ var GridWrapper = function(p_id,p_rootContext) {
             var columnInfoData = gridWrapper.columnInfo[index.fieldIndex];
             var rowData = undefined;
             var colData = undefined;
+            grid.commit(true);
             var validateData = grid.getDataProvider().getJsonRows(item[0],item[item.length-1])
             for(var row = 0; row < validateData.length; row++)
             {

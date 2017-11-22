@@ -66,10 +66,7 @@ var ad00402 =
                 required: true,
                 visible: true,
                 values: axboot.commonCodeFilter("CD003").codeArr,
-                labels: axboot.commonCodeFilter("CD003").nameArr,
-                editor: {
-                    domainOnly: true
-                }
+                labels: axboot.commonCodeFilter("CD003").nameArr
             },
             {
                 sortNo: 5,
@@ -81,11 +78,7 @@ var ad00402 =
                 required: true,
                 lookupDisplay: true, //라벨로 표시
                 values: axboot.commonCodeFilter("CD004").codeArr,
-                labels: axboot.commonCodeFilter("CD004").nameArr,
-                editor: {
-                    domainOnly: true
-                }
-
+                labels: axboot.commonCodeFilter("CD004").nameArr
             },
             {
                 sortNo: 6,

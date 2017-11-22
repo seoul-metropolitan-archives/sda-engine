@@ -154,7 +154,7 @@
                 AND Z1.STATUS_UUID = #{statusUuid}
             </if>
             <if test="parentClassCode != null">
-                AND Z.CLASS_CODE = #{parentClassCode}
+                AND Z.CLASS_CODE LIKE '%' || #{parentClassCode} || '%'
             </if>
             AND Z.CLASS_UUID (+) = Z1.PARENT_CLASS_UUID
         </where>

@@ -148,6 +148,15 @@ fnObj.frameView = axboot.viewExtend({
             this.asideView.initView();
             this.asideView.print();
         }
+
+
+        $("#logout").click(function(){
+            axToast.push(axboot.getCommonMessage("AC002_04"));
+            setTimeout(function(){
+                window.location.href = "/api/logout";
+            },1000);
+        });
+
     },
     toggleAside: function () {
         this.target.toggleClass("show-aside");
