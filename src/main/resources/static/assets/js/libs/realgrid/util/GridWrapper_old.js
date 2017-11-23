@@ -1537,6 +1537,8 @@ var GridWrapper = function(p_id,p_rootContext,_isTree) {
 	};
     this.setTreeDataForArray = function(list, _childrenProp)
     {
+
+
         childrenProp = _childrenProp;
         dataProvider.setRows(list, _childrenProp);
     };

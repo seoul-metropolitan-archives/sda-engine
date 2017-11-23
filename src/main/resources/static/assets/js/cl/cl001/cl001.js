@@ -119,7 +119,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 }
             })
             .done(function () {
-                axToast.push("저장 작업이 완료되었습니다.");
+                axToast.push(axboot.getCommonMessage("AA007"));
             });
         return result;
     },

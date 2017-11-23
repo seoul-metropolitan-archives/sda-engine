@@ -82,7 +82,7 @@ public class Ad003Service extends BaseService {
 
         for (AdCodeDetail adCodeDetail : adCodeHeaderList) {
             if (adCodeDetail.isCreated()) {
-                adCodeDetail.setCodeDetailUuid(UUIDUtils.getUUID());
+                //adCodeDetail.setCodeDetailUuid(UUIDUtils.getUUID());
                 adCodeDetailRepository.save(adCodeDetail);
             } else if (adCodeDetail.isModified()) {
                 orgAdCodeDetail = adCodeDetailRepository.findOne(adCodeDetail.getId());

@@ -40,8 +40,7 @@ var ad00201 =
                 required: true,
                 visible: true,
                 values: axboot.commonCodeFilter("CD006").codeArr,
-                labels: axboot.commonCodeFilter("CD006").nameArr,
-                lookupDisplay : true
+                labels: axboot.commonCodeFilter("CD006").nameArr
             },
             {
                 sortNo: 5,

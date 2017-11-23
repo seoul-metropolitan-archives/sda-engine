@@ -202,31 +202,52 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
         axboot.buttonClick(this, "data-form-view-01-btn", {
             "select-all": function () {
                 var dataLists = fnObj.gridView02.gridObj.getJsonRows();
+                var remakeList = new Array();
+                dataLists.forEach(function (menuInfo, row) {
+                    //if (menuInfo.allYn == "Y") {
 
-                dataLists.forEach(function (menuInfo) {
-                    if (menuInfo.allYn == "Y") {
-                        menuInfo["useYn"] = "Y";
-                        menuInfo["saveYn"] = "Y";
-                        menuInfo["inquiryYn"] = "Y";
+                    remakeList.push(menuInfo);
+                    if(menuInfo["menuCode"] && menuInfo["menuCode"].length > 0)
+                    {
+                        menuInfo["menuCode"].forEach(function(menuInfo2){
+                            remakeList.push(menuInfo2);
+                        });
                     }
                 });
+                remakeList.forEach(function (menuInfo, row) {
+                    fnObj.gridView02.gridObj.setValue(row+1, "allYn","Y");
+                    fnObj.gridView02.gridObj.setValue(row+1, "useYn","Y");
+                    fnObj.gridView02.gridObj.setValue(row+1, "saveYn","Y");
+                    fnObj.gridView02.gridObj.setValue(row+1, "inquiryYn","Y");
+                });
 
-                fnObj.gridView02.gridObj.getDataProvider().updateRows(0, dataLists, 0, -1);
-                fnObj.gridView02.gridObj.commit(true);
+                //}
+
+
+                fnObj.gridView02.gridObj.gridView.commit(true);
             },
             "deselect-all": function () {
                 var dataLists = fnObj.gridView02.gridObj.getJsonRows();
+                var remakeList = new Array();
+                dataLists.forEach(function (menuInfo, row) {
+                    //if (menuInfo.allYn == "Y") {
 
-                dataLists.forEach(function (menuInfo) {
-                    if (menuInfo.allYn == "N") {
-                        menuInfo["useYn"] = "N";
-                        menuInfo["saveYn"] = "N";
-                        menuInfo["inquiryYn"] = "N";
+                    remakeList.push(menuInfo);
+                    if(menuInfo["menuCode"] && menuInfo["menuCode"].length > 0)
+                    {
+                        menuInfo["menuCode"].forEach(function(menuInfo2){
+                            remakeList.push(menuInfo2);
+                        });
                     }
                 });
-
-                fnObj.gridView02.gridObj.getDataProvider().updateRows(0, dataLists, 0, -1);
-                fnObj.gridView02.gridObj.commit(true);
+                remakeList.forEach(function (menuInfo, row) {
+                    fnObj.gridView02.gridObj.setValue(row+1, "allYn","N");
+                    fnObj.gridView02.gridObj.setValue(row+1, "useYn","N");
+                    fnObj.gridView02.gridObj.setValue(row+1, "saveYn","N");
+                    fnObj.gridView02.gridObj.setValue(row+1, "inquiryYn","N");
+                });
+                //fnObj.gridView02.gridObj.dataProvider.updateRows(0, dataLists, 0, -1);
+                fnObj.gridView02.gridObj.gridView.commit(true);
             }
         });
     },
