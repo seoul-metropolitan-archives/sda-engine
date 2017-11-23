@@ -70,6 +70,11 @@ public class Wf004Service extends BaseService {
         wf00401VO.setWorkflowName(requestParams.getString("workflowName"));
         wf00401VO.setExecuter(requestParams.getString("executer"));
         wf00401VO.setMenu(requestParams.getString("menu"));
+        wf00401VO.setStartFromDate(requestParams.getString("startFromDate"));
+        wf00401VO.setStartToDate(requestParams.getString("startToDate"));
+        wf00401VO.setEndFromDate(requestParams.getString("endFromDate"));
+        wf00401VO.setEndToDate(requestParams.getString("endToDate"));
+
 
         return filter(wf004Mapper.findAllWorkflowResult(wf00401VO), pageable, "", Wf00401VO.class);
     }

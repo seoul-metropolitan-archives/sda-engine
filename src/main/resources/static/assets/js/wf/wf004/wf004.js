@@ -4,8 +4,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     // WorkflowResult 정보 조회
     PAGE_SEARCH: function (caller, act, data) {
         //TODO 삭제바람
-        alert("startFromDate :" + $("#startFromDate").val() + " ,\n" + "startToDate :" + $("#startToDate").val() + " ,\n" + "endFromDate :" + $("#endFromDate").val() + " ,\n" + "endToDate :" + $("#endToDate").val());
-
+        //alert("startFromDate :" + $("#startFromDate").val() + " ,\n" + "startToDate :" + $("#startToDate").val() + " ,\n" + "endFromDate :" + $("#endFromDate").val() + " ,\n" + "endToDate :" + $("#endToDate").val());
 
         this.formView.checkPopup();
 
@@ -244,19 +243,7 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
             };
             ACTIONS.dispatch(ACTIONS.SEARCH_POPUP_EXECUTER, data);
         });
-        /*$("input[data-ax-path='executer']").focusout(function(){
 
-            if("" != $(this).val().trim())
-            {
-                var data = {
-                    popupCode : "PU107",
-                    searchData : $(this).val().trim()
-                };
-                ACTIONS.dispatch(ACTIONS.SEARCH_POPUP_EXECUTER,data);
-            }
-            else
-                $("input[data-ax-path='executer']").attr("executer","")
-        });*/
         $("input[data-ax-path='menu']").parents().eq(1).find("a").click(function () {
             var data = {
                 popupCode: "PU126",
@@ -265,19 +252,51 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
             };
             ACTIONS.dispatch(ACTIONS.SEARCH_POPUP_MENU, data);
         });
-        /*$("input[data-ax-path='menu']").focusout(function(){
 
-            if("" != $(this).val().trim())
-            {
-                var data = {
-                    popupCode : "PU126",
-                    searchData : $(this).val().trim()
-                };
-                ACTIONS.dispatch(ACTIONS.SEARCH_POPUP_MENU,data);
+        $("input[data-ax-path='startFromDate']").keyup(function(){
+            var date = this.value;
+            if (date.match(/^\d{4}$/) !== null) {
+                this.value = date + '-';
+            } else if (date.match(/^\d{4}\-\d{2}$/) !== null) {
+                this.value = date + '-';
             }
-            else
-                $("input[data-ax-path='menu']").attr("menu","")
-        });*/
+        });
+        $("input[data-ax-path='startFromDate']").keypress(function(){
+            if ((event.keyCode<48) || (event.keyCode>57)) event.returnValue=false;
+        });
+        $("input[data-ax-path='startToDate']").keyup(function(){
+            var date = this.value;
+            if (date.match(/^\d{4}$/) !== null) {
+                this.value = date + '-';
+            } else if (date.match(/^\d{4}\-\d{2}$/) !== null) {
+                this.value = date + '-';
+            }
+        });
+        $("input[data-ax-path='startToDate']").keypress(function(){
+            if ((event.keyCode<48) || (event.keyCode>57)) event.returnValue=false;
+        });
+        $("input[data-ax-path='endFromDate']").keyup(function(){
+            var date = this.value;
+            if (date.match(/^\d{4}$/) !== null) {
+                this.value = date + '-';
+            } else if (date.match(/^\d{4}\-\d{2}$/) !== null) {
+                this.value = date + '-';
+            }
+        });
+        $("input[data-ax-path='endFromDate']").keypress(function(){
+            if ((event.keyCode<48) || (event.keyCode>57)) event.returnValue=false;
+        });
+        $("input[data-ax-path='endToDate']").keyup(function(){
+            var date = this.value;
+            if (date.match(/^\d{4}$/) !== null) {
+                this.value = date + '-';
+            } else if (date.match(/^\d{4}\-\d{2}$/) !== null) {
+                this.value = date + '-';
+            }
+        });
+        $("input[data-ax-path='endToDate']").keypress(function(){
+            if ((event.keyCode<48) || (event.keyCode>57)) event.returnValue=false;
+        });
     },
     checkPopup: function () {
         var checkData = $("input[data-ax-path='executer']").val();
