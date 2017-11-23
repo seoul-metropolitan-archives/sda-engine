@@ -1791,6 +1791,7 @@ axboot.modal = function () {
             var list = null;
             var reqData = modalConfig.sendData();
             var width = 0;
+            var popupName = "";
             axboot.ajax({
                 url: "/api/v1/common/popup/getPopupInfo",
                 dataType: "JSON",
@@ -1807,6 +1808,7 @@ axboot.modal = function () {
                             width += res.map.columnInfo[i]["width"];
                         }
                     }
+                    popupName = res.map.popupInfo["popupName"];
                 }
             });
 
@@ -1847,7 +1849,7 @@ axboot.modal = function () {
                 {
                     popupWidth = 480;
                 }
-                modalConfig = $.extend(true, {}, modalConfig, axboot.def.MODAL[modalConfig.modalType], {width: popupWidth + 70});
+                modalConfig = $.extend(true, {}, modalConfig, axboot.def.MODAL[modalConfig.modalType], {width: popupWidth + 70},{header : {title : popupName}});
             }
         }
 
@@ -2465,6 +2467,16 @@ axboot.baseView =
             });
             $(".bdb").delegate("#cancel", "click", function () {
                 _this.cancel();
+            })
+            $(document).delegate(".ax-body .div_tablerow input", "keydown", function (e) {
+                if (e.ctrlKey && e.altKey && e.keyCode == 73) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    _this.inquiry();
+                } else if (e.ctrlKey && e.altKey && e.keyCode == 83) {
+                    _this.save();
+                }
+
             });
             $(document).delegate(".ax-body .searchFields input", "keydown", function (e) {
                 if (e.keyCode == 13)
@@ -3018,6 +3030,15 @@ axboot.commonCodeFilter = function (categoryCode) {
     });
 
     return $.extend({}, {nameArr: nameArr}, {codeArr: codeArr});
+}
+/**
+ * 공통코드를 Grid에서 사용하기 위해 label과 value를 분리해주는 함수
+ * @param array
+ * @param name
+ * @returns {Array}
+ */
+axboot.commonCodeVO = function (categoryCode) {
+    return parent.COMMON_CODE[categoryCode];
 }
 
 axboot.getCommonMessage = function (messageCode) {

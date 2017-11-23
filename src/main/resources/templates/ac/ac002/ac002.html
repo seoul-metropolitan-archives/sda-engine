@@ -19,18 +19,7 @@
     <link rel="stylesheet" type="text/css" href="/assets/css/common.css">
     <link rel="stylesheet" type="text/css" href="/assets/css/button.css">
     <link rel="stylesheet" type="text/css" href="/assets/css/ams_layout.css">
-    <script type="text/javascript" th:src="@{/assets/js/libs/realgrid/realgridjs-lic.js}"></script>
-    <script type="text/javascript" th:src="@{/assets/js/libs/realgrid/realgridjs_eval.1.1.25.min.js}"></script>
-    <script type="text/javascript" th:src="@{/assets/js/libs/realgrid/realgridjs-api.1.1.25.js}"></script>
-    <script type="text/javascript" th:src="@{/assets/js/libs/realgrid/jszip.min.js}"></script>
-    <script type="text/javascript" th:src="@{/assets/js/libs/realgrid/util/GridWrapper.js}"></script>
-    <script type="text/javascript" th:src="@{/assets/js/libs/realgrid/util/TreeGridWrapper.js}"></script>
-    <script type="text/javascript" th:src="@{/assets/js/libs/realgrid/util/SimpleGridWrapper.js}"></script>
 
-
-    <script type="text/javascript" th:src="@{/assets/js/plugins.js}"></script>
-    <script type="text/javascript" th:src="@{/assets/js/axboot.js}"></script>
-    <script type="text/javascript" th:src="@{/assets/js/jquery.backstretch.min.js}"></script>
 
     <script type="text/javascript">
         /* $(function() {
@@ -42,7 +31,7 @@
         var menuJson = convertJsonObj('[[${menuJson}]]');
         var commonCodeJson = convertJsonObj('[[${commonCodeJson}]]');
         var commonMessageJson = convertJsonObj('[[${commonMessageJson}]]');
-        //var commonConfigJson = convertJsonObj('[[${commonConfigJson}]]');
+        var commonConfigJson = convertJsonObj('[[${commonConfigJson}]]');
 
         var CONTEXT_PATH = 'http://[[${#httpServletRequest.serverName}]]:[[${#httpServletRequest.serverPort}]]';
         /*var CONTEXT_PATH   = 'http://[[@{${@environment.getProperty("server.url")}}]]:[[@{${@environment.getProperty("server.port")}}]]';*/
@@ -59,19 +48,58 @@
         var COMMON_MESSAGE = (function (json) {
             return json;
         })(commonMessageJson);
-        /*
+        /**/
         var COMMON_CONFIG = (function (json) {
             return json;
         })(commonConfigJson);
-        */
+
         function convertJsonObj(jsonStr) {
             return jsonStr == null || jsonStr == '' ? null : JSON.parse(jsonStr.replace(/&quot;/gi, '"').replace(/\r\n|\n/gi, "<br />"));
         }
+
+
     </script>
+    <script type="text/javascript" th:src="@{/assets/js/libs/realgrid/realgridjs-lic.js}"></script>
+    <script type="text/javascript" th:src="@{/assets/js/libs/realgrid/realgridjs_eval.1.1.25.min.js}"></script>
+    <script type="text/javascript" th:src="@{/assets/js/libs/realgrid/realgridjs-api.1.1.25.js}"></script>
+    <script type="text/javascript" th:src="@{/assets/js/libs/realgrid/jszip.min.js}"></script>
+    <script type="text/javascript" th:src="@{/assets/js/libs/realgrid/util/GridWrapper.js}"></script>
+    <script type="text/javascript" th:src="@{/assets/js/libs/realgrid/util/TreeGridWrapper.js}"></script>
+    <script type="text/javascript" th:src="@{/assets/js/libs/realgrid/util/SimpleGridWrapper.js}"></script>
+
+
+    <script type="text/javascript" th:src="@{/assets/js/plugins.js}"></script>
+    <script type="text/javascript" th:src="@{/assets/js/axboot.js}"></script>
+    <script type="text/javascript" th:src="@{/assets/js/jquery.backstretch.min.js}"></script>
+
+
     <script type="text/javascript" th:src="@{/axboot.config.js}"></script>
     <script layout:fragment="js"></script>
     <script layout:fragment="script"></script>
+    <script>
+        $("docuemnt").ready(function(){
+            var setupFontFamily = "";
+            for(var i = 0; i < parent.COMMON_CONFIG.length; i++)
+            {
+                if(
+                    "SYS_KO_FONT" == parent.COMMON_CONFIG[i]["configurationCode"]
+                    ||"SYS_EN_FONT" == parent.COMMON_CONFIG[i]["configurationCode"]
+                )
+                    setupFontFamily += parent.COMMON_CONFIG[i]["configurationValue"]+" ";
 
+            }
+            if(setupFontFamily != "")
+            {
+                $("#commonStyle").html("<style>*{font-family : "+setupFontFamily+" !important;</style>");
+            }
+        });
+
+
+
+    </script>
+    <style id="commonStyle">
+
+    </style>
     <style>
         @media screen and (max-width: 1279px) {
             .header {

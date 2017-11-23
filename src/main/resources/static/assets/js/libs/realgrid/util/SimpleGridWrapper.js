@@ -142,12 +142,15 @@ SimpleGridWrapper.prototype.defaultBind = function()
             grid.commit(true);
             var newValue = gridWrapper.getSelectedData()[index.fieldName];
             var selectedData = "";
-            for(var i = 0; i < columnInfo.labels.length; i++)
+            if(newValue)
             {
-                if(newValue == columnInfo.labels[i].toLowerCase() || newValue == columnInfo.values[i])
+                for(var i = 0; i < columnInfo.labels.length; i++)
                 {
-                    selectedData = columnInfo.values[i];
-                    break;
+                    if(newValue.toLowerCase() == columnInfo.labels[i].toLowerCase() || newValue.toLowerCase() == columnInfo.values[i])
+                    {
+                        selectedData = columnInfo.values[i];
+                        break;
+                    }
                 }
             }
             grid.setValue(index.dataRow,index.fieldName, selectedData);
