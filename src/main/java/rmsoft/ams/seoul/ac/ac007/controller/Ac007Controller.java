@@ -48,8 +48,8 @@ public class Ac007Controller extends MessageBaseController {
     }
 
     @GetMapping("/03/list")
-    public Responses.PageResponse findRolePermission(Pageable pageable, RequestParams<Ac00703VO> requestParams) {
-        Page<Ac00703VO> pages = ac007Service.findRolePermission(pageable, requestParams);
+    public Responses.PageResponse findPermission(Pageable pageable, RequestParams<Ac00702VO> requestParams) {
+        Page<Ac00703VO> pages = ac007Service.findPermission(pageable, requestParams);
 
         return Responses.PageResponse.of(pages.getContent(), pages);
     }

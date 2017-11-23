@@ -15,11 +15,11 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 fnObj.gridView01.setData(res.list);
                 fnObj.gridView01.resetCurrent();
                 fnObj.gridView01.setFocus();
+
                 if (res.list.length > 0) {
                     fnObj.formView.setFormData("roleNameHeader", res.list[0].roleName);
 
                     ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, res.list[0]);
-                    ACTIONS.dispatch(ACTIONS.PAGE_SEARCH2, res.list[0]);
                 } else {
                     fnObj.gridView02.clearData();
                     fnObj.gridView03.clearData();
@@ -66,10 +66,10 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         var roleMenuList = [].concat(fnObj.gridView02.getData());
         var permissionList = [].concat(fnObj.gridView03.getData());
 
-        if(!fnObj.gridView02.validate()
-        || !fnObj.gridView03.validate()
+        if (!fnObj.gridView02.validate()
+            || !fnObj.gridView03.validate()
         )
-        return ;
+            return;
         axboot
             .call({
                 type: "PUT",
@@ -207,18 +207,17 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
                     //if (menuInfo.allYn == "Y") {
 
                     remakeList.push(menuInfo);
-                    if(menuInfo["menuCode"] && menuInfo["menuCode"].length > 0)
-                    {
-                        menuInfo["menuCode"].forEach(function(menuInfo2){
+                    if (menuInfo["menuCode"] && menuInfo["menuCode"].length > 0) {
+                        menuInfo["menuCode"].forEach(function (menuInfo2) {
                             remakeList.push(menuInfo2);
                         });
                     }
                 });
                 remakeList.forEach(function (menuInfo, row) {
-                    fnObj.gridView02.gridObj.setValue(row+1, "allYn","Y");
-                    fnObj.gridView02.gridObj.setValue(row+1, "useYn","Y");
-                    fnObj.gridView02.gridObj.setValue(row+1, "saveYn","Y");
-                    fnObj.gridView02.gridObj.setValue(row+1, "inquiryYn","Y");
+                    fnObj.gridView02.gridObj.setValue(row + 1, "allYn", "Y");
+                    fnObj.gridView02.gridObj.setValue(row + 1, "useYn", "Y");
+                    fnObj.gridView02.gridObj.setValue(row + 1, "saveYn", "Y");
+                    fnObj.gridView02.gridObj.setValue(row + 1, "inquiryYn", "Y");
                 });
 
                 //}
@@ -233,18 +232,17 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
                     //if (menuInfo.allYn == "Y") {
 
                     remakeList.push(menuInfo);
-                    if(menuInfo["menuCode"] && menuInfo["menuCode"].length > 0)
-                    {
-                        menuInfo["menuCode"].forEach(function(menuInfo2){
+                    if (menuInfo["menuCode"] && menuInfo["menuCode"].length > 0) {
+                        menuInfo["menuCode"].forEach(function (menuInfo2) {
                             remakeList.push(menuInfo2);
                         });
                     }
                 });
                 remakeList.forEach(function (menuInfo, row) {
-                    fnObj.gridView02.gridObj.setValue(row+1, "allYn","N");
-                    fnObj.gridView02.gridObj.setValue(row+1, "useYn","N");
-                    fnObj.gridView02.gridObj.setValue(row+1, "saveYn","N");
-                    fnObj.gridView02.gridObj.setValue(row+1, "inquiryYn","N");
+                    fnObj.gridView02.gridObj.setValue(row + 1, "allYn", "N");
+                    fnObj.gridView02.gridObj.setValue(row + 1, "useYn", "N");
+                    fnObj.gridView02.gridObj.setValue(row + 1, "saveYn", "N");
+                    fnObj.gridView02.gridObj.setValue(row + 1, "inquiryYn", "N");
                 });
                 //fnObj.gridView02.gridObj.dataProvider.updateRows(0, dataLists, 0, -1);
                 fnObj.gridView02.gridObj.gridView.commit(true);
@@ -263,15 +261,14 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
                 ACTIONS.dispatch(ACTIONS.SEARCH_ROLE_POPUP, data);
             }
         });
-        $("input[data-ax-path='roleName']").focusout(function(){
+        $("input[data-ax-path='roleName']").focusout(function () {
 
-            if("" != $(this).val().trim())
-            {
+            if ("" != $(this).val().trim()) {
                 var data = {
-                    popupCode : "PU109",
-                    searchData : $(this).val().trim()
+                    popupCode: "PU109",
+                    searchData: $(this).val().trim()
                 };
-                ACTIONS.dispatch(ACTIONS.SEARCH_ROLE_POPUP,data);
+                ACTIONS.dispatch(ACTIONS.SEARCH_ROLE_POPUP, data);
             }
         });
     },
@@ -343,14 +340,11 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
                         fnObj.formView.setFormData("roleNameHeader", data.roleName);
 
                         ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, data);
-                        ACTIONS.dispatch(ACTIONS.PAGE_SEARCH2, data);
                     }
                 });
             } else {
                 fnObj.formView.setFormData("roleNameHeader", data.roleName);
-
                 ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, data);
-                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH2, data);
             }
         }
     }
@@ -372,10 +366,16 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
         });
         this.gridObj.setRunAdd(false);
         this.gridObj.setRunDel(false);
-        this.gridObj.setStyle("header",{background: "linear,#f2f2f2",textAlignment: "near",fontFamily: "nanum",fontSize : 12,borderRight: "#cccccc, 1",});
-        this.gridObj.setStyle("body",{background : "#ffffffff",fontSize : 12,fontFamily : "nanum"});
-        this.gridObj.setStyle("grid",{border: "#ffffffff,0"});
-        this.gridObj.setStyle("indicator",{background: "linear,#f2f2f2",fontFamily: "nanum"});
+        this.gridObj.setStyle("header", {
+            background: "linear,#f2f2f2",
+            textAlignment: "near",
+            fontFamily: "nanum",
+            fontSize: 12,
+            borderRight: "#cccccc, 1",
+        });
+        this.gridObj.setStyle("body", {background: "#ffffffff", fontSize: 12, fontFamily: "nanum"});
+        this.gridObj.setStyle("grid", {border: "#ffffffff,0"});
+        this.gridObj.setStyle("indicator", {background: "linear,#f2f2f2", fontFamily: "nanum"});
         this.gridObj.setColumnInfo(ac00702.column_info).setEntityName("Menu").makeGrid();
         this.gridObj.setFixedOptions({
             colCount: 1
@@ -386,28 +386,27 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
         this.gridObj.onDataCellClicked(function (grid, index) {
             grid.commit(true);
 
-            if (index.fieldName == "allYn") {
-                var menuInfo = grid.getDataProvider().getJsonRow(index.dataRow);
-                // Y 에서 N 으로 바꾸면 다른 값도 모두 N으로 세팅
-                if (menuInfo.allYn == "Y") {
-                    menuInfo["useYn"] = "N";
-                    menuInfo["saveYn"] = "N";
-                    menuInfo["inquiryYn"] = "N";
-                } else {
-                    menuInfo["useYn"] = "Y";
-                    menuInfo["saveYn"] = "Y";
-                    menuInfo["inquiryYn"] = "Y";
+            var selectedItem = grid.getDataProvider().getJsonRow(index.dataRow);
+
+            if (selectedItem) {
+                if (index.fieldName == "allYn") {
+
+                    // Y 에서 N 으로 바꾸면 다른 값도 모두 N으로 세팅
+                    if (selectedItem.allYn == "Y") {
+                        selectedItem["useYn"] = "N";
+                        selectedItem["saveYn"] = "N";
+                        selectedItem["inquiryYn"] = "N";
+                    } else {
+                        selectedItem["useYn"] = "Y";
+                        selectedItem["saveYn"] = "Y";
+                        selectedItem["inquiryYn"] = "Y";
+                    }
+                    grid.getDataProvider().updateRow(index.dataRow, selectedItem);
+                    grid.commit(true);
                 }
-                grid.getDataProvider().updateRow(index.dataRow, menuInfo);
-                grid.commit(true);
+
+                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH2, selectedItem);
             }
-            //var menu = _this.menus[grid.getDataProvider().getJsonRow(index.dataRow)["menuUuid"]];
-            //if (menu["program"]) {
-            /* ACTIONS.dispatch(ACTIONS.MENU_OPEN, $.extend({}, menu["program"], {
-                 menuId: menu["menuId"],
-                 menuNm: menu["menuNm"]
-             }));*/
-            //}
         });
 
         //this.gridObj.itemClick(this.itemClick);

@@ -23,5 +23,5 @@ public interface Ac007Mapper extends MyBatisMapper {
 
     List<Ac00702VO> findRoleMenu(String roleUuid);
 
-    List<Ac00703VO> findRolePermission(String roleUuid);
+    List<Ac00703VO> findPermission(String programUuid);
 }

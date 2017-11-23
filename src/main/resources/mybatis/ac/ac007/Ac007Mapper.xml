@@ -72,18 +72,16 @@
           AND Z1.ROLE_UUID(+) = #{roleUuid}
         ORDER BY Z2.MENU_CODE
     </select>
-    <select id="findRolePermission" resultType="Ac00703VO" parameterType="String"
+    <select id="findPermission" resultType="Ac00703VO" parameterType="String"
             statementType="PREPARED">
         SELECT
-            Z1.ROLE_PERMISSION_UUID as rolePermissionUuid,
-            Z1.ROLE_UUID as roleUuid,
             Z1.PERMISSION_UUID as permissionUuid,
-            Z2.PERMISSION_NAME as permissionName,
-            Z2.PMS_PROGRAM_UUID as pmsProgramUuid,
-            (SELECT PROGRAM_NAME FROM AD_PROGRAM WHERE PROGRAM_UUID = Z2.PMS_PROGRAM_UUID) as programName,
-            Z2.PMS_ENTITY_TYPE_UUID as pmsEntityTypeUuid,
-            (SELECT ENTITY_TYPE_NAME FROM AD_ENTITY_TYPE WHERE ENTITY_TYPE_UUID = Z2.PMS_ENTITY_TYPE_UUID) as entityTypeName,
-            Z2.PMS_FUNCTION_UUID as pmsFunctionUuid,
+            Z1.PERMISSION_NAME as permissionName,
+            Z1.PMS_PROGRAM_UUID as pmsProgramUuid,
+            (SELECT PROGRAM_NAME FROM AD_PROGRAM WHERE PROGRAM_UUID = Z1.PMS_PROGRAM_UUID) as programName,
+            Z1.PMS_ENTITY_TYPE_UUID as pmsEntityTypeUuid,
+            (SELECT ENTITY_TYPE_NAME FROM AD_ENTITY_TYPE WHERE ENTITY_TYPE_UUID = Z1.PMS_ENTITY_TYPE_UUID) as entityTypeName,
+            Z1.PMS_FUNCTION_UUID as pmsFunctionUuid,
             Z1.DESCRIPTION as description,
             Z1.NOTES as notes,
             Z1.USE_YN as useYn,
@@ -98,9 +96,7 @@
             as updateUuid,
             Z1.UPDATE_DATE updateDate
         FROM
-            AC_ROLE_PERMISSION Z1,
-            AC_PERMISSION Z2
-        WHERE Z1.PERMISSION_UUID = Z2.PERMISSION_UUID
-        AND Z1.ROLE_UUID = #{roleUuid}
+            AC_PERMISSION Z1
+        WHERE Z1.PMS_PROGRAM_UUID = #{programUuid}
     </select>
 </mapper>

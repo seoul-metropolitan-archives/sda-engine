@@ -123,16 +123,16 @@ public class Ac007Service extends BaseService {
      */
 
     /**
-     * 롤퍼미션 정보 조회
+     * 프로그램별 퍼미션 정보 조회
      *
      * @param pageable
      * @param requestParams
      * @return
      */
-    public Page<Ac00703VO> findRolePermission(Pageable pageable, RequestParams<Ac00703VO> requestParams) {
+    public Page<Ac00703VO> findPermission(Pageable pageable, RequestParams<Ac00702VO> requestParams) {
         String filter = requestParams.getString("filter", "");
 
-        return filter(ac007Mapper.findRolePermission(requestParams.getString("roleUuid")), pageable, filter, Ac00702VO.class);
+        return filter(ac007Mapper.findPermission(requestParams.getString("programUuid")), pageable, filter, Ac00703VO.class);
     }
 
 
