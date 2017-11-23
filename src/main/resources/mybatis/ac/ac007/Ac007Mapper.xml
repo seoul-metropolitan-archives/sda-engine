@@ -70,6 +70,7 @@
             AD_MENU Z2
         WHERE Z1.MENU_UUID(+) = Z2.MENU_UUID
           AND Z1.ROLE_UUID(+) = #{roleUuid}
+          AND Z2.USE_YN = 'Y'
         ORDER BY Z2.MENU_CODE
     </select>
     <select id="findPermission" resultType="Ac00703VO" parameterType="String"
