@@ -231,6 +231,9 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
             }
         });
 
+        $("input[data-ax-path='startFromDate']").val(getFormattedDate(new Date(),true));
+        $("input[data-ax-path='startToDate']").val(getFormattedDate(new Date()));
+
         this.initEvent();
     },
     initEvent: function () {
@@ -296,6 +299,31 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
         });
         $("input[data-ax-path='endToDate']").keypress(function(){
             if ((event.keyCode<48) || (event.keyCode>57)) event.returnValue=false;
+        });
+
+        $("input[data-ax-path='startFromDate']").focusout(function(){
+            if(!checkDate(this.value)){
+                this.value = "";
+                this.focus = true;
+            }
+        });
+        $("input[data-ax-path='startToDate']").focusout(function(){
+            if(!checkDate(this.value)){
+                this.value = "";
+                this.focus = true;
+            }
+        });
+        $("input[data-ax-path='endFromDate']").focusout(function(){
+            if(!checkDate(this.value)){
+                this.value = "";
+                this.focus = true;
+            }
+        });
+        $("input[data-ax-path='endToDate']").focusout(function(){
+            if(!checkDate(this.value)){
+                this.value = "";
+                this.focus = true;
+            }
         });
     },
     checkPopup: function () {
@@ -484,7 +512,7 @@ function getFormattedDate(date, isStart) {
     var day;
     var tempDate;
     if (isStart) {
-        date.setDate(date.getDate() - 2);
+        date.setDate(date.getDate() - 10);
         tempDate = date.getDate();
     } else {
         tempDate = date.getDate();
@@ -497,3 +525,24 @@ function getFormattedDate(date, isStart) {
     day = day.length > 1 ? day : '0' + day;
     return year + '-' + month + '-' + day;
 }
+
+function checkDate(date) {
+    var strValue  = date;
+    var chk1 = /^(19|20)\d{2}-([1-9]|1[012])-([1-9]|[12][0-9]|3[01])$/;
+    var chk2 = /^(19|20)\d{2}\/([0][1-9]|1[012])\/(0[1-9]|[12][0-9]|3[01])$/;
+    if (strValue == "")
+    { // 공백이면 무시
+        return true;
+    }
+//-------------------------------------------------------------------------------
+// 유효성 검사- 입력형식에 맞게 들왔는지 // 예) 2000-1-1, 2000-01-01 2가지 형태 지원
+//-------------------------------------------------------------------------------
+    if (chk1.test(strValue) == false && chk2.test(strValue) == false)
+    { // 유효성 검사에 둘다 성공하지 못했다면
+        //alert("1999-1-1 형식 또는 \r\n1999-01-01 형식으로 날자를 입력해주세요.");
+        axToast.push(axboot.getCommonMessage("AA011"));
+
+        return false;
+    }
+}
+
