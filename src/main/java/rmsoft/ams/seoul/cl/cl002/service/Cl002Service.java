@@ -78,6 +78,7 @@ public class Cl002Service extends BaseService {
         cl00201VO.setUseYn(requestParams.getString("useYn"));
         cl00201VO.setClassLevelUuid(requestParams.getString("classLevelUuid"));
         cl00201VO.setClassUuid(requestParams.getString("classUuid"));
+        cl00201VO.setOrderKey1(requestParams.getString("orderKey1"));
 
         return filter(cl002Mapper.getSelectedClassList(cl00201VO), pageable, "", Cl00201VO.class);
     }

@@ -93,74 +93,92 @@
     </select>
     <select id="getSelectedClassList" resultType="cl00201VO" parameterType="cl00201VO" statementType="PREPARED">
         SELECT
-        Z1.CLASS_UUID as classUuid,
-        Z1.CLASSIFICATION_SCHEME_UUID as classificationSchemeUuid,
-        Z1.STATUS_UUID as statusUuid,
-        Z1.PARENT_CLASS_UUID as parentClassUuid,
-        Z1.CLASS_CODE as classCode,
-        Z1.CLASS_NAME as className,
-        Z1.CLASS_LEVEL_UUID as classLevelUuid,
-        Z1.ORDER_NO as orderNo,
-        Z.CLASS_CODE as parentClassCode,
-        Z.CLASS_NAME as parentClassName,
-        Z1.DESCRIPTION as description,
-        Z1.NOTES as notes,
-        Z1.ORDER_KEY as orderKey,
-        Z1.USE_YN as useYn,
-        SUBSTR(SYS_CONNECT_BY_PATH('[' || FC_AD_CODE_NM(Z1.CLASS_LEVEL_UUID) || '] ' || Z1.CLASS_NAME,' >> '),4) path,
-        <include refid="Common.UserName"><property name="userUuid" value="INSERT_UUID"/></include> as insertUuid,
-        Z1.INSERT_DATE as insertDate,
-        <include refid="Common.UserName"><property name="userUuid" value="UPDATE_UUID"/></include> as updateUuid,
-        Z1.UPDATE_DATE as updateDate
+        classUuid,
+        classificationSchemeUuid,
+        statusUuid,
+        parentClassUuid,
+        classCode,
+        className,
+        classLevelUuid,
+        orderNo,
+        orderKey,
+        path,
+        orderKey1,
+        parentClassCode,
+        parentClassName,
+        useYn,
+        insertUuid,
+        insertDate,
+        updateUuid,
+        updateDate
         FROM
-        CL_CLASS Z, CL_CLASS Z1
+        (
+            SELECT
+            CLASS_UUID as classUuid,
+            CLASSIFICATION_SCHEME_UUID as classificationSchemeUuid,
+            STATUS_UUID as statusUuid,
+            PARENT_CLASS_UUID as parentClassUuid,
+            CLASS_CODE as classCode,
+            CLASS_NAME as className,
+            CLASS_LEVEL_UUID as classLevelUuid,
+            FC_CL_PARENT_CODE(PARENT_CLASS_UUID) as parentClassCode,
+            FC_CL_PARENT_NAME(PARENT_CLASS_UUID) as parentClassName,
+            ORDER_NO as orderNo,
+            ORDER_KEY as orderKey,
+            SUBSTR(SYS_CONNECT_BY_PATH('[' || FC_AD_CODE_NM(CLASS_LEVEL_UUID) || '] ' || CLASS_NAME,' >> '),4) path,
+            SUBSTR(SYS_CONNECT_BY_PATH(ROWNUM, '.'), 2 , length(SYS_CONNECT_BY_PATH(ROWNUM, '.'))) as orderKey1,
+            USE_YN as useYn,
+            <include refid="Common.UserName"><property name="userUuid" value="INSERT_UUID"/></include> as insertUuid,
+            INSERT_DATE as insertDate,
+            <include refid="Common.UserName"><property name="userUuid" value="UPDATE_UUID"/></include> as updateUuid,
+            UPDATE_DATE as updateDate
+            FROM
+            CL_CLASS
+            <where>
+                <if test="classificationSchemeUuid != null">
+                    CLASSIFICATION_SCHEME_UUID = #{classificationSchemeUuid}
+                </if>
+            </where>
+            START WITH PARENT_CLASS_UUID IS NULL
+            CONNECT BY PRIOR CLASS_UUID = PARENT_CLASS_UUID
+            ORDER SIBLINGS BY ORDER_NO
+        )
+
         <where>
-            <if test="classificationSchemeUuid != null">
-                Z1.CLASSIFICATION_SCHEME_UUID = #{classificationSchemeUuid}
+            <if test="orderKey1 != null">
+                orderKey1 LIKE  #{orderKey1} || '.' || '%'
+                OR orderKey1 =  #{orderKey1}
             </if>
             <if test="parentClassName != null and orderNo != null"    >
-                AND Z1.PARENT_CLASS_UUID IN (
-                                  SELECT
-                                          CLASS_UUID
-                                  FROM
-                                          CL_CLASS
-                                  WHERE
-                                          CLASS_NAME LIKE '%' || #{parentClassName} || '%'
-                                          AND ORDER_NO = #{orderNo}
+                AND parentClassUuid IN (
+                SELECT
+                CLASS_UUID
+                FROM
+                CL_CLASS
+                WHERE
+                CLASS_NAME LIKE '%' || #{parentClassName} || '%'
+                AND ORDER_NO = #{orderNo}
                 )
             </if>
-            <if test="orderKey != null">
-                AND Z1.ORDER_KEY LIKE  #{orderKey} || '%'
-            </if>
-            <if test="orderKey != null">
-                AND Z1.ORDER_KEY NOT LIKE #{orderKey}
-            </if>
             <if test="classCode != null">
-                AND Z1.CLASS_CODE LIKE '%' || #{classCode} || '%'
+                AND classCode LIKE '%' || #{classCode} || '%'
             </if>
             <if test="className != null">
-                AND Z1.CLASS_NAME LIKE '%' || #{className} || '%'
+                AND className LIKE '%' || #{className} || '%'
             </if>
             <if test="useYn != null">
-                AND Z1.USE_YN = #{useYn}
+                AND useYn = #{useYn}
             </if>
             <if test="classLevelUuid != null">
-                AND Z1.CLASS_LEVEL_UUID = #{classLevelUuid}
-            </if>
-            <if test="classUuid != null">
-                AND Z1.CLASS_UUID != #{classUuid}
+                AND classLevelUuid = #{classLevelUuid}
             </if>
             <if test="statusUuid != null">
-                AND Z1.STATUS_UUID = #{statusUuid}
+                AND statusUuid = #{statusUuid}
             </if>
-            <if test="parentClassCode != null">
-                AND Z.CLASS_CODE LIKE '%' || #{parentClassCode} || '%'
-            </if>
-            AND Z.CLASS_UUID (+) = Z1.PARENT_CLASS_UUID
+            <!--<if test="parentClassCode != null">-->
+                <!--AND FC_CL_PARENT_CODE(#{parentClassUuid}) LIKE '%' || #{parentClassCode} || '%'-->
+            <!--</if>-->
         </where>
-        START WITH Z1.PARENT_CLASS_UUID IS NULL
-        CONNECT BY PRIOR Z1.CLASS_UUID = Z1.PARENT_CLASS_UUID
-        ORDER SIBLINGS BY Z1.ORDER_NO
     </select>
     <select id="getSelectedClassDetail" resultType="cl00202VO" parameterType="cl00201VO" statementType="PREPARED">
         SELECT

@@ -44,7 +44,7 @@ public class AdProgram extends BaseJpaModel<AdProgram.AdProgramId> {
 
     @Column(name = "URL", length = 500, nullable = false)
     @Comment(value = "URL")
-    private String url;
+    private String url = "";
 
     @Column(name = "USE_YN", length = 1, nullable = false)
     @Comment(value = "사용여부")

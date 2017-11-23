@@ -10,6 +10,12 @@
           FC_AD_CODE_NM(Z1.PUBLISHED_STATUS_UUID) as publishedStatusUuid,
           FC_RC_CODE(Z1.LEVEL_UUID) || ' - ' ||  TITLE as headTitle,
           FC_AD_CODE_NM(Z1.TYPE_UUID) as typeUuid,
+          (SELECT
+            TITLE
+           FROM
+            RC_AGGREGATION
+           WHERE
+            AGGREGATION_UUID = Z1.PARENT_AGGREGATION_UUID)  as  parentAggregationName,
           Z1.PARENT_AGGREGATION_UUID as parentAggregationUuid,
           FC_RC_CODE(Z1.LEVEL_UUID) as levelUuid,
           Z1.AUTHOR as author,
@@ -40,7 +46,7 @@
         FROM
         RC_AGGREGATION Z1,RC_AGGREGATION_CON Z2
         WHERE
-        Z1.AGGREGATION_UUID = Z2.AGGREGATION_UUID
+        Z1.AGGREGATION_UUID = Z2.AGGREGATION_UUID(+)
         START WITH
         <if test="aggregationUuid != null">
             Z1.AGGREGATION_UUID = #{aggregationUuid}
