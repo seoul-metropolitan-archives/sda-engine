@@ -3,10 +3,13 @@ var fnObj = {};
 var ACTIONS = axboot.actionExtend(fnObj, {
     // WorkflowResult 정보 조회
     PAGE_SEARCH: function (caller, act, data) {
-        //TODO 삭제바람
-        //alert("startFromDate :" + $("#startFromDate").val() + " ,\n" + "startToDate :" + $("#startToDate").val() + " ,\n" + "endFromDate :" + $("#endFromDate").val() + " ,\n" + "endToDate :" + $("#endToDate").val());
 
         this.formView.checkPopup();
+
+        if($("input[data-ax-path='startFromDate']").val()==""||$("input[data-ax-path='startToDate']").val()==""){
+            axToast.push(axboot.getCommonMessage("AA010"));
+            return;
+        }
 
         axboot.ajax({
             type: "GET",
