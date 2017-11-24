@@ -85,12 +85,12 @@
                     "SYS_KO_FONT" == parent.COMMON_CONFIG[i]["configurationCode"]
                     ||"SYS_EN_FONT" == parent.COMMON_CONFIG[i]["configurationCode"]
                 )
-                    setupFontFamily += parent.COMMON_CONFIG[i]["configurationValue"]+" ";
+                    setupFontFamily += parent.COMMON_CONFIG[i]["configurationValue"]+",";
 
             }
             if(setupFontFamily != "")
             {
-                $("#commonStyle").html("<style>*{font-family : "+setupFontFamily+" !important;</style>");
+                $("#commonStyle").html("<style>*{font-family : "+setupFontFamily.substring(0,setupFontFamily.length-1)+" !important;</style>");
             }
         });
 

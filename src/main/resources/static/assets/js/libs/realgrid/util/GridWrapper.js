@@ -416,6 +416,7 @@ var GridWrapper = function(p_id,p_rootContext) {
                 grid.commit(true);
                 grid.setFocus();
                 var retData = {};
+                var index = grid.getCurrent();
                 for(var key in data)
                 {
                     try {
@@ -423,6 +424,7 @@ var GridWrapper = function(p_id,p_rootContext) {
                         {
                             //_this.dataProvider.setValue(rows,popupData["sqlColumn"][key],data[key]);
                             retData[popupData["sqlColumn"][key]] = data[key];
+                            _this.gridView.setValue(index.itemIndex, popupData["sqlColumn"][key], data[key]);
                         }
 
                     }
@@ -432,7 +434,8 @@ var GridWrapper = function(p_id,p_rootContext) {
                     }
                 }
                 //_this.dataProvider.updateRows(rows, retData);
-                _this.gridView.setValues(rows, retData, true);
+
+                //_this.gridView.setValues(index.itemIndex, retData, true);
                 grid.commit(true);
                 if(this.close)
                     this.close();
@@ -656,11 +659,11 @@ for(var i = 0; i < parent.COMMON_CONFIG.length; i++)
         "SYS_KO_FONT" == parent.COMMON_CONFIG[i]["configurationCode"]
         ||"SYS_EN_FONT" == parent.COMMON_CONFIG[i]["configurationCode"]
     )
-        gridFontFamily += parent.COMMON_CONFIG[i]["configurationValue"]+" ";
+        gridFontFamily += parent.COMMON_CONFIG[i]["configurationValue"]+",";
 
 }
 if(gridFontFamily != "")
-    GridWrapper.prototype.style.fontFamily = gridFontFamily;
+    GridWrapper.prototype.style.fontFamily = gridFontFamily.substring(0,gridFontFamily.length-1);
 else
     GridWrapper.prototype.style.fontFamily = "nanum";
 
@@ -1218,7 +1221,7 @@ GridWrapper.prototype.setColumnInfo = function(list) {
                     textAlignment : "near"
                     , background : "#ffffffff"
                     , fontSize : 12
-                    , fontFamily : "nanum"
+                    , fontFamily : GridWrapper.prototype.style.fontFamily
                     , fontBold : false
                 }
                 obj.renderer = {showTooltip : true};
@@ -1313,6 +1316,7 @@ GridWrapper.prototype.setColumnInfo = function(list) {
     var columnNFieldInfo = undefined;
     var innerColumnInfo = undefined;
     var dataType = undefined;
+    var childrenDatType = undefined;
     for (var i = 0; i < list.length; i++) {
         data = list[i];
 
@@ -1323,29 +1327,35 @@ GridWrapper.prototype.setColumnInfo = function(list) {
         fieldObj = {};
 
         dataType = data.dataType;
+
         fieldObj = generateFieldInfo(this, data, dataType);
         obj = generateColumnInfo(this, data, dataType);
-        this.columnInfo.push(data);
+
         if(data.columnList && data.columnList.length > 0)
         {
             innerColumnInfo = new Array();
             for(var j = 0; j < data.columnList.length; j++)
             {
-                dataType = data.columnList[j].dataType;
-                innerColumnInfo.push(generateColumnInfo(this, data.columnList[j],dataType));
-                fieldList.push($.extend(generateFieldInfo(this, data.columnList[j],dataType),{
+                childrenDatType = data.columnList[j].dataType;
+                innerColumnInfo.push(generateColumnInfo(this, data.columnList[j],childrenDatType));
+                fieldList.push($.extend(generateFieldInfo(this, data.columnList[j],childrenDatType),{
                     fieldName : data.name,
-                    dataType : data.dataType
+                    dataType : childrenDatType
                 }));
             }
 
             obj.columns = innerColumnInfo;
+            obj["type"] = "group";
+            obj["renderer"]["type"] = "group";
+            dataType = "group";
         }
+
+        this.columnInfo.push(data);
 
         columnList.push(obj);
         fieldList.push($.extend(fieldObj,{
             fieldName : data.name,
-            dataType : data.dataType
+            dataType : dataType
         }));
         data = undefined;
         styles = {};
