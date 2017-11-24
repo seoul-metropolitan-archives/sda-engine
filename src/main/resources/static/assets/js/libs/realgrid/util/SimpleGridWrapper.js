@@ -107,7 +107,22 @@ SimpleGridWrapper.prototype.defaultBind = function()
     //ctrl + alt + p 클릭 시 팝업
     this.bind("onKeyDown",function(grid, key, ctrl, shift, alt,gridWrapper) {
         console.log("ctrl=>"+ctrl+",alt=>"+alt+",key=>"+key);
-        if(key == 80 && ctrl && alt)
+        if(key == 73 && ctrl && alt)
+        {
+            if(ACTIONS && ACTIONS.dispatch&&ACTIONS.PAGE_SEARCH)
+            {
+                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+                console.log("grid꺼 실행")
+            }
+
+        }
+        else if(key == 83 && ctrl && alt){
+            if(ACTIONS && ACTIONS.dispatch&&ACTIONS.PAGE_SAVE)
+            {
+                ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
+                console.log("grid꺼 실행")
+            }
+        } else if(key == 80 && ctrl && alt)
         {
             var index = grid.getCurrent();
             var popupData = gridWrapper.getPopupData(index.fieldName);
