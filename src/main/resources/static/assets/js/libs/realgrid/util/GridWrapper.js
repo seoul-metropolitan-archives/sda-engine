@@ -1339,7 +1339,7 @@ GridWrapper.prototype.setColumnInfo = function(list) {
                 childrenDatType = data.columnList[j].dataType;
                 innerColumnInfo.push(generateColumnInfo(this, data.columnList[j],childrenDatType));
                 fieldList.push($.extend(generateFieldInfo(this, data.columnList[j],childrenDatType),{
-                    fieldName : data.name,
+                    fieldName : data.columnList[j].name,
                     dataType : childrenDatType
                 }));
             }
@@ -1353,10 +1353,14 @@ GridWrapper.prototype.setColumnInfo = function(list) {
         this.columnInfo.push(data);
 
         columnList.push(obj);
-        fieldList.push($.extend(fieldObj,{
-            fieldName : data.name,
-            dataType : dataType
-        }));
+        if(dataType != "group")
+        {
+            fieldList.push($.extend(fieldObj,{
+                fieldName : data.name,
+                dataType : dataType
+            }));
+        }
+
         data = undefined;
         styles = {};
     }
