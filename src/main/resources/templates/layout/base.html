@@ -40,15 +40,51 @@
 <script type="text/javascript" th:src="@{/assets/js/libs/zTree_v3-master/js/jquery.ztree.all.js}"></script>
 
 <script type="text/javascript">
-    var sessionJson    = convertJsonObj('[[${scriptSession}]]');
+    /* $(function() {
+         var images = ['bg_login02.jpg', 'bg_login01.jpg', 'bg_login03.jpg'];
+         $('.background').css({'background': 'url(assets/images/' + images[Math.floor(Math.random() * images.length)] + ')'});
+     });*/
 
-    var CONTEXT_PATH   = 'http://[[${#httpServletRequest.serverName}]]:[[${#httpServletRequest.serverPort}]]';
+    var sessionJson = convertJsonObj('[[${scriptSession}]]');
+
+    var CONTEXT_PATH = 'http://[[${#httpServletRequest.serverName}]]:[[${#httpServletRequest.serverPort}]]';
     /*var CONTEXT_PATH   = 'http://[[@{${@environment.getProperty("server.url")}}]]:[[@{${@environment.getProperty("server.port")}}]]';*/
-    var SCRIPT_SESSION = (function(json){return json;})(sessionJson);
+    var COMMON_CODE = window.parent.COMMON_CODE;
+
+    var COMMON_MESSAGE = window.parent.COMMON_MESSAGE;
+    /**/
+    var COMMON_CONFIG = window.parent.COMMON_CONFIG;
+
     function convertJsonObj(jsonStr) {
-        return jsonStr == null || jsonStr == '' ? null : JSON.parse(jsonStr.replace(/&quot;/gi, '"'));
+        return jsonStr == null || jsonStr == '' ? null : JSON.parse(jsonStr.replace(/&quot;/gi, '"').replace(/\r\n|\n/gi, "<br />"));
     }
+
+
 </script>
+<script>
+    $("docuemnt").ready(function(){
+        var setupFontFamily = "";
+        for(var i = 0; i < parent.COMMON_CONFIG.length; i++)
+        {
+            if(
+                "SYS_KO_FONT" == parent.COMMON_CONFIG[i]["configurationCode"]
+                ||"SYS_EN_FONT" == parent.COMMON_CONFIG[i]["configurationCode"]
+            )
+                setupFontFamily += parent.COMMON_CONFIG[i]["configurationValue"]+" ";
+
+        }
+        if(setupFontFamily != "")
+        {
+            $("#frameStyle").html("<style>*{font-family : "+setupFontFamily+" !important;</style>");
+        }
+    });
+
+
+
+</script>
+<style id="frameStyle">
+
+</style>
 <script type="text/javascript" th:src="@{/axboot.config.js}"></script>
 <script layout:fragment="js"></script>
 <script layout:fragment="script"></script>
