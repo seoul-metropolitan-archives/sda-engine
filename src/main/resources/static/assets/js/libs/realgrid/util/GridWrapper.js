@@ -1208,8 +1208,6 @@ GridWrapper.prototype.setColumnInfo = function(list) {
                 obj.renderer = {type : "datetime"};
                 obj.editor = _this.defaultStyle.data.timestamp;
                 obj.styles = $.extend({}, _this.defaultStyle.data.timestamp, obj.styles);
-                obj.displayRegExp = /\B(?=(\d{3})+(?!\d))/g;
-                obj.displayReplace = ",";
                 break;
             case "richtext":
                 obj.type = "text";

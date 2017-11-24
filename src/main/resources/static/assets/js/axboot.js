@@ -2468,33 +2468,32 @@ axboot.baseView =
             $(".bdb").delegate("#cancel", "click", function () {
                 _this.cancel();
             })
-            $(document).delegate(".ax-body .div_tablerow input", "keydown", function (e) {
+           /* $(document).delegate(".ax-body .div_tablerow:not(.searchFields) input", "keydown", function (e) {
                 if (e.ctrlKey && e.altKey && e.keyCode == 73) {
                     e.preventDefault();
                     e.stopPropagation();
-                    //_this.inquiry();
-                    $("#inquiry").focus();
-                    $("#inquiry").click();
+                    _this.inquiry();
 ;                } else if (e.ctrlKey && e.altKey && e.keyCode == 83) {
                     _this.save();
                 }
 
-            });
+            });*/
             $(document).delegate(".ax-body .searchFields input", "keydown", function (e) {
                 if (e.keyCode == 13)
                 {
                     e.preventDefault();
                     e.stopPropagation();
-                    //_this.inquiry();
                     $("#inquiry").focus();
                     $("#inquiry").click();
+                    //_this.inquiry();
                 }
                 else if (e.ctrlKey && e.altKey && e.keyCode == 73) {
                     e.preventDefault();
                     e.stopPropagation();
-                    //_this.inquiry();
+                    $("#inquiry").focus();
                     $("#inquiry").click();
                 } else if (e.ctrlKey && e.altKey && e.keyCode == 83) {
+
                     _this.save();
                 }
 
