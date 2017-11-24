@@ -13,8 +13,6 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             data: $.extend({}, {pageSize: 1000}, this.formView.getData()),
             callback: function (res) {
                 fnObj.gridView01.setData(res.list);
-                fnObj.gridView01.resetCurrent();
-                fnObj.gridView01.setFocus();
                 if (res.list.length > 0) {
                     ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, res.list[0]);
                 }
@@ -77,6 +75,40 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             }
         });
     },
+    SHOW_PROGRAM_POP : function(caller, act, data){
+        axboot.modal.open({
+            modalType: "COMMON_POPUP",
+            preSearch : data["preSearch"],
+            sendData: function () {
+                return data;
+            },
+            callback: function (data) {
+                console.log(data);
+                $("input[data-ax-path='pmsProgramUuid']").val(data["PROGRAM_NAME"])
+                $("input[data-ax-path='pmsProgramUuid']").attr("programUuid",data["PROGRAM_UUID"])
+                if(this.close)
+                    this.close();
+                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1,data);
+            }
+        });
+    },
+    SHOW_ENTITY_TYPE_POP : function(caller, act, data){
+        axboot.modal.open({
+            modalType: "COMMON_POPUP",
+            preSearch : data["preSearch"],
+            sendData: function () {
+                return data;
+            },
+            callback: function (data) {
+                console.log(data);
+                $("input[data-ax-path='pmsEntityTypeUuid']").val(data["ENTITY_TYPE_NAME"])
+                $("input[data-ax-path='pmsEntityTypeUuid']").attr("entityTypeUuid",data["ENTITY_TYPE_UUID"])
+                if(this.close)
+                    this.close();
+                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1,data);
+            }
+        });
+    },
     CLOSE_TAB: function (caller, act, data) {
         ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
     },
@@ -124,10 +156,54 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
     },
     initEvent: function () {
         var _this = this;
+        $("input[data-ax-path='pmsProgramUuid']").parents().eq(0).find("a").click(function(){
+            var data = {
+                popupCode : "PU001",
+                searchData : $("input[data-ax-path='pmsProgramUuid']").val().trim(),
+                preSearch : false
+            };
+            ACTIONS.dispatch(ACTIONS.SHOW_PROGRAM_POP,data);
+        });
+        $("input[data-ax-path='classificationCode']").focusout(function(){
+
+            if("" != $(this).val().trim())
+            {
+                var data = {
+                    popupCode : "PU001",
+                    searchData : $(this).val().trim()
+                };
+                ACTIONS.dispatch(ACTIONS.SHOW_PROGRAM_POP,data);
+            }
+
+        });
+        $("input[data-ax-path='pmsEntityTypeUuid']").parents().eq(0).find("a").click(function(){
+            var data = {
+                popupCode : "PU110",
+                searchData : $("input[data-ax-path='pmsEntityTypeUuid']").val().trim(),
+                preSearch : false
+            };
+            ACTIONS.dispatch(ACTIONS.SHOW_ENTITY_TYPE_POP,data);
+        });
+        $("input[data-ax-path='pmsEntityTypeUuid']").focusout(function(){
+
+            if("" != $(this).val().trim())
+            {
+                var data = {
+                    popupCode : "PU110",
+                    searchData : $(this).val().trim()
+                };
+                ACTIONS.dispatch(ACTIONS.SHOW_ENTITY_TYPE_POP,data);
+            }
+
+        });
     },
     getData: function () {
         var data = this.modelFormatter.getClearData(this.model.get()); // 모델의 값을 포멧팅 전 값으로 치환.
-        return $.extend({}, data);
+        return $.extend({}, data,
+            {
+                pmsProgramUuid : $("input[data-ax-path='pmsProgramUuid']").attr("programUuid")
+                , pmsEntityTypeUuid : $("input[data-ax-path='pmsEntityTypeUuid']").attr("entityTypeUuid")
+            });
     },
     setFormData: function (dataPath, value) {
         this.model.set(dataPath, value);
@@ -160,36 +236,22 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
 
 // AC006 User Group User GridView
 fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
-    page: {
-        pageNumber: 0,
-        pageSize: 10000
-    },
+    tagId : "realgrid01",
+    uuidFieldName : "permissionUuid",
+    entityName : "Permission",
     initView: function () {
-        this.gridObj = new SimpleGridWrapper("realgrid01", "/assets/js/libs/realgrid");
-        this.gridObj.setGridStyle("100%", "100%");
-        this.gridObj.setFixedOptions({
+        this.initInstance();
+        this.setFixedOptions({
             colCount: 1
         });
-        this.gridObj.setColumnInfo(ac00601.column_info).setEntityName("CONFIGURATION");
-        this.gridObj.makeGrid();
+        this.setColumnInfo(ac00601.column_info);
+        this.makeGrid();
         this.gridObj.itemClick(this.itemClick);
-    },
-    setData: function (list) {
-        this.gridObj.setData("set", list);
-
-    },
-    getData: function () {
-        return this.gridObj.getData();
-    },
-    addRow: function () {
-        this.gridObj.addRow();
     },
     itemClick: function (data, index) {
         if (data.permissionUuid != null && data.permissionUuid != "") {
             ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, data);
         }
-    },clearChild : function()
-    {
     }
 });
 

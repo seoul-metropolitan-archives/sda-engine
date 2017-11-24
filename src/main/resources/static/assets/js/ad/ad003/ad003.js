@@ -16,8 +16,6 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             async : false,
             callback: function (res) {
                 fnObj.gridView01.setData(res.list);
-                fnObj.gridView01.resetCurrent();
-                fnObj.gridView01.setFocus();
                 fnObj.gridView02.clear();
                 ACTIONS.dispatch(ACTIONS.GET_CODE_DETAIL,res.list[0]);
 

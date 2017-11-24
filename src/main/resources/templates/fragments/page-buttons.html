@@ -231,7 +231,7 @@
 <th:block layout:fragment="dot (str)">
     <li style="width:50%; text-align:left;">
         <img src="/assets/images/ams/img_dot2.png" alt="dot">
-        <span th:text="${str}"></span>
+        <span th:classappend="excelName" th:text="${str}"></span>
     </li>
 </th:block>
 

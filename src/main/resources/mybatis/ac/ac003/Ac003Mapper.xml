@@ -44,6 +44,7 @@
                 AND Z.USE_YN = #{useYn}
             </if>
         </where>
+        ORDER BY Z.USER_ID ASC
     </select>
 
     <select id="findUserGroupUserByUserUuid" resultType="Ac00302VO" parameterType="String" statementType="PREPARED">
@@ -70,6 +71,7 @@
             AC_USER_GROUP Z2
         WHERE Z1.USER_GROUP_UUID = Z2.USER_GROUP_UUID
         AND Z1.USER_UUID = #{userUuid}
+        ORDER BY Z2.USER_GROUP_NAME
     </select>
 
     <select id="findUserRole" resultType="Ac00303VO" parameterType="Ac00303VO" statementType="PREPARED">
@@ -101,5 +103,6 @@
                 AND Z1.USER_UUID = #{userUuid}
             </when>
         </choose>
+        ORDER BY Z2.ROLE_NAME
     </select>
 </mapper>

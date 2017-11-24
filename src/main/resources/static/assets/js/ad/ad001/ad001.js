@@ -7,7 +7,6 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             url: "/api/v1/ad/ad001/getEnviromentList.do",
             data: JSON.stringify(fnObj.searchView.getData()),
             callback: function (res) {
-                console.log(res);
                 fnObj.gridView01.setData(res.list);
             },
             options: {
@@ -122,7 +121,9 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     initView: function () {
         this.initInstance();
         this.setColumnInfo(ad00101.column_info);
-        this.setEntityName($("#realgridName").text());
+        this.setFixedOptions({
+            colCount : 2
+        })
         this.makeGrid();
 
     }

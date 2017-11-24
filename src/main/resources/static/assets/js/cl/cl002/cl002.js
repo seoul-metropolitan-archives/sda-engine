@@ -312,6 +312,7 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
                 };
                 ACTIONS.dispatch(ACTIONS.SEARCH_CLASS_SCH,data);
             }
+
         });
         /*
         $("input[data-ax-path='parentClassCode']").parents().eq(1).find("a").click(function(){
@@ -322,18 +323,23 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
                 };
                 ACTIONS.dispatch(ACTIONS.SEARCH_CLASS_CCD,data);
         });
+
+        */
         $("input[data-ax-path='parentClassCode']").focusout(function(){
 
-            if("" != $(this).val().trim())
+            if("" == $(this).val().trim())
             {
-                var data = {
-                    popupCode : "PU115",
-                    searchData : $(this).val().trim()
-                };
-                ACTIONS.dispatch(ACTIONS.SEARCH_CLASS_CCD,data);
+                $("input[data-ax-path='parentClassName']").val("");
             }
         });
-        */
+        $("input[data-ax-path='classCodeForm']").focusout(function(){
+
+            if("" == $(this).val().trim())
+            {
+                $("input[data-ax-path='className']").val("");
+            }
+        });
+
         $("input[data-ax-path='detailAddMetadata01'],input[data-ax-path='detailAddMetadata02'],input[data-ax-path='detailAddMetadata03'],input[data-ax-path='detailAddMetadata04']").keyup(function(){
             isDetailChanged = true;
         });
@@ -409,7 +415,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
                 indicator: {visible: false},
                 stateBar:{visible:false}
             })
-        this.gridObj.setColumnInfo(cl00201.column_info).setEntityName("ClassName").makeGrid();
+        this.gridObj.setColumnInfo(cl00201.column_info).makeGrid();
 
         this.gridObj.setDisplayOptions({
             fitStyle:"evenFill"

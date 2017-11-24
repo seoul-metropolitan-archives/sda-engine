@@ -91,7 +91,7 @@ public class Ac008Service extends BaseService {
             if (orgAdProgram == null) {
                 // created
                 adProgram.setProgramId(adProgram.getProgramId().toUpperCase());
-                adProgram.setProgramUuid(UUIDUtils.getUUID());
+                //adProgram.setProgramUuid(UUIDUtils.getUUID());
                 adProgramRepository.save(adProgram);
             } else {
                 if (adProgram.isDeleted()) {

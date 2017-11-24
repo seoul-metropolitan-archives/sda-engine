@@ -13,8 +13,6 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             data: $.extend({}, {pageSize: 1000}, this.formView.getData()),
             callback: function (res) {
                 fnObj.gridView01.setData(res.list);
-                fnObj.gridView01.resetCurrent();
-                fnObj.gridView01.setFocus();
                 if (res.list.length > 0) {
                     ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, res.list[0]);
                 }
@@ -167,7 +165,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     initView: function () {
         this.gridObj = new SimpleGridWrapper("realgrid01", "/assets/js/libs/realgrid");
         this.gridObj.setGridStyle("100%", "100%");
-        this.gridObj.setColumnInfo(ac00901.column_info).setEntityName("MENU");
+        this.gridObj.setColumnInfo(ac00901.column_info);
         this.gridObj.makeGrid();
         this.gridObj.itemClick(this.itemClick);
         this.gridObj.setFixedOptions({

@@ -114,7 +114,7 @@ var GridWrapper = function(p_id,p_rootContext) {
         grid.exportGrid({
             type: "excel",
             target: "local",
-            fileName: this.i_entity_name+"_"+new Date().format("yyyyMMdd")+".xlsx",
+            fileName: _this.i_entity_name+"_"+new Date().format("yyyyMMdd")+".xlsx",
             progressMessage: "Exporting Excel...",
             indicator : "default",
             header : "default",

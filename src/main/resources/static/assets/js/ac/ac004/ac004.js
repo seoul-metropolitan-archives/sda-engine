@@ -17,8 +17,6 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 fnObj.gridView01.setFocus();
                 if (res.list.length > 0) {
                     fnObj.formView.setFormData("userGroupHeader", res.list[0].userGroupName);
-                    fnObj.gridView01.resetCurrent();
-                    fnObj.gridView01.setFocus();
                     ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, res.list[0]);
                     ACTIONS.dispatch(ACTIONS.PAGE_SEARCH2, res.list[0]);
                 } else {

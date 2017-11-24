@@ -88,7 +88,7 @@ var ad00402 =
                 dataType : "check",
                 editable: true,
                 sortable: true,
-                required : true,
+                required : false,
                 defaultValue : "N"
             },
             {

@@ -350,7 +350,7 @@ fnObj.leftMenuView = axboot.viewExtend({
         }
         this.gridObj = new TreeGridWrapper("realgridM1", "/assets/js/libs/realgrid");
         this.gridObj.setGridStyle("100%", "100%")
-            .setColumnInfo(column_info).setEntityName("Menu")
+            .setColumnInfo(column_info)
             .makeGrid();
         console.log(leftMenuItems);
         this.gridObj.setTreeData(leftMenuItems, "menus", "", "icon");
@@ -414,6 +414,8 @@ fnObj.tabView = axboot.viewExtend({
         this.target = $("#ax-frame-header-tab-container");
         this.frameTarget = $("#content-frame-container");
         this.print();
+
+        this.limitCount = axboot.getConfigValue("SYS_TAB_MENU_MAX");
 
         var menu = new ax5.ui.menu({
             position: "absolute", // default position is "fixed"

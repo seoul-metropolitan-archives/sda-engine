@@ -248,7 +248,6 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
 
                 fnObj.gridView02.gridObj = new SimpleGridWrapper(fnObj.gridView02.tagId, "/assets/js/libs/realgrid");
                 fnObj.gridView02.gridObj.setGridStyle("100%", "100%");
-                fnObj.gridView02.gridObj.setEntityName(fnObj.gridView02.entityName);
                 fnObj.gridView02.gridObj.setColumnInfo(res.columnInfo);
                 fnObj.gridView02.gridObj.makeGrid();
                 fnObj.gridView02.gridObj.addRow();

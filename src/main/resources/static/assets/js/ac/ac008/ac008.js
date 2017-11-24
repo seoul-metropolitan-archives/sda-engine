@@ -1,3 +1,4 @@
+
 /*
  * Copyright (c) 2017. RMSoft Co.,Ltd. All rights reserved
  */
@@ -13,8 +14,6 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             data: $.extend({}, {pageSize: 1000}, this.formView.getData()),
             callback: function (res) {
                 fnObj.gridView01.setData(res.list);
-                fnObj.gridView01.resetCurrent();
-                fnObj.gridView01.setFocus();
                 if (res.list.length > 0) {
                     ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, res.list[0]);
                 }
@@ -160,30 +159,17 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
 
 // AC008 User Group User GridView
 fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
-    page: {
-        pageNumber: 0,
-        pageSize: 10000
-    },
+    primaryKey : "programUuid",
+    tagId : "realgrid01",
     initView: function () {
-        this.gridObj = new SimpleGridWrapper("realgrid01", "/assets/js/libs/realgrid");
-        this.gridObj.setGridStyle("100%", "100%");
-        this.gridObj.setColumnInfo(ac00801.column_info).setEntityName("CONFIGURATION");
-        this.gridObj.makeGrid();
-        this.gridObj.itemClick(this.itemClick);
-        this.gridObj.setFixedOptions({
+        this.initInstance();
+        this.setColumnInfo(ac00801.column_info);
+        this.setFixedOptions({
             colCount: 2
         });
-    },
-    setData: function (list) {
-        this.gridObj.setData("set", list);
+        this.makeGrid();
+        this.gridObj.itemClick(this.itemClick);
 
-    },
-
-    getData: function () {
-        return this.gridObj.getData();
-    },
-    addRow: function () {
-        this.gridObj.addRow();
     },
     itemClick: function (data, index) {
         if (data.permissionUuid != null && data.permissionUuid != "") {

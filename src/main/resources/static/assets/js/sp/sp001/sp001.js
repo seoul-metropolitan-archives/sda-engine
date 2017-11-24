@@ -191,24 +191,13 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
         pageSize: 10000
     },
     initView: function () {
-        this.gridObj = new SimpleGridWrapper("realgrid01", "/assets/js/libs/realgrid");
-        this.gridObj.setGridStyle("100%", "100%");
-        this.gridObj.setFixedOptions({
+        this.initInstance();
+        this.setFixedOptions({
             colCount: 1
         });
-        this.gridObj.setColumnInfo(sp00101.column_info).setEntityName("CONFIGURATION");
-        this.gridObj.makeGrid();
+        this.setColumnInfo(sp00101.column_info);
+        this.makeGrid();
         this.gridObj.itemClick(this.itemClick);
-    },
-    setData: function (list) {
-        this.gridObj.setData("set", list);
-
-    },
-    getData: function () {
-        return this.gridObj.getData();
-    },
-    addRow: function () {
-        this.gridObj.addRow();
     },
     itemClick: function (data, index) {
         if (data.roleUuid != null && data.roleUuid != "") {

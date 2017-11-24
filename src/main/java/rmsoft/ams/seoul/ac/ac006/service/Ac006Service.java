@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import rmsoft.ams.seoul.ac.ac006.dao.Ac006Mapper;
 import rmsoft.ams.seoul.ac.ac006.vo.Ac00601VO;
 import rmsoft.ams.seoul.common.domain.AcPermission;
+import rmsoft.ams.seoul.common.domain.QAcRolePermission;
 import rmsoft.ams.seoul.common.repository.AcPermissionRepository;
 import rmsoft.ams.seoul.common.repository.AcRolePermissionRepository;
 
@@ -84,15 +85,15 @@ public class Ac006Service extends BaseService {
 
             if (orgAcPermission == null) {
                 // created
-                acPermission.setPermissionUuid(UUIDUtils.getUUID());
+                //acPermission.setPermissionUuid(UUIDUtils.getUUID());
                 acPermissionRepository.save(acPermission);
             } else {
                 if (acPermission.isDeleted()) {
                     acPermissionRepository.delete(acPermission);
 
                     // Role 이 삭제 되었으므로, 관련 Role Permission 삭제
-                    QRolePermission qRolePermission = QRolePermission.rolePermission;
-                    Predicate predicate = qRolePermission.permissionUuid.eq(acPermission.getPermissionUuid());
+                    QAcRolePermission qAcRolePermission = QAcRolePermission.acRolePermission;
+                    Predicate predicate = qAcRolePermission.permissionUuid.eq(acPermission.getPermissionUuid());
                     acRolePermissionRepository.delete(acRolePermissionRepository.findAll(predicate));
 
                 } else {

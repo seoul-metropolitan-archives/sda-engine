@@ -75,6 +75,7 @@ var ac00601 =
                     dataType: "popup",
                     popupCode: "PU001",
                     sqlColumn: {PROGRAM_UUID: "pmsProgramUuid", PROGRAM_NAME: "programName"},
+                    pasteTarget : "pmsProgramUuid",
                     required: true,
                     visible: true
                 },
@@ -90,6 +91,7 @@ var ac00601 =
                         ENTITY_TYPE_UUID: "pmsEntityTypeUuid",
                         ENTITY_TYPE_NAME: "entityTypeName"
                     },
+                    pasteTarget : "pmsEntityTypeUuid",
                     required: true,
                     visible: true
                 },

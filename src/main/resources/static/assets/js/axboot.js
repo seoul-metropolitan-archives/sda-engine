@@ -2472,8 +2472,10 @@ axboot.baseView =
                 if (e.ctrlKey && e.altKey && e.keyCode == 73) {
                     e.preventDefault();
                     e.stopPropagation();
-                    _this.inquiry();
-                } else if (e.ctrlKey && e.altKey && e.keyCode == 83) {
+                    //_this.inquiry();
+                    $("#inquiry").focus();
+                    $("#inquiry").click();
+;                } else if (e.ctrlKey && e.altKey && e.keyCode == 83) {
                     _this.save();
                 }
 
@@ -2483,12 +2485,15 @@ axboot.baseView =
                 {
                     e.preventDefault();
                     e.stopPropagation();
-                    _this.inquiry();
+                    //_this.inquiry();
+                    $("#inquiry").focus();
+                    $("#inquiry").click();
                 }
                 else if (e.ctrlKey && e.altKey && e.keyCode == 73) {
                     e.preventDefault();
                     e.stopPropagation();
-                    _this.inquiry();
+                    //_this.inquiry();
+                    $("#inquiry").click();
                 } else if (e.ctrlKey && e.altKey && e.keyCode == 83) {
                     _this.save();
                 }
@@ -2579,6 +2584,7 @@ axboot.gridView = {
     initInstance: function () {
         this.gridObj = new SimpleGridWrapper(this.tagId, "/assets/js/libs/realgrid");
         this.gridObj.setGridStyle("100%", "100%");
+        this.setEntityName($("#"+this.tagId).parents().eq(1).find(".excelName").text())
         this.gridObj.setMakeObj(this);
     },
     /* 그리드 생성 */

@@ -12,8 +12,6 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             callback: function (res) {
                 console.log(res);
                 fnObj.gridView01.setData(res.list);
-                fnObj.gridView01.resetCurrent();
-                fnObj.gridView01.setFocus();
             },
             options: {
                 onError: axboot.viewError
@@ -127,7 +125,6 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     {
         this.initInstance();
         this.setColumnInfo(ad00201.column_info);
-        this.setEntityName($("#realgridName").text());
         this.makeGrid();
         this.setFixedOptions({colCount : 2});
         ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);

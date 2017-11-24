@@ -13,8 +13,6 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             data: $.extend({}, {pageSize: 1000}, this.formView.getData()),
             callback: function (res) {
                 fnObj.gridView01.setData(res.list);
-                fnObj.gridView01.resetCurrent();
-                fnObj.gridView01.setFocus();
 
                 if (res.list.length > 0) {
                     fnObj.formView.setFormData("roleNameHeader", res.list[0].roleName);
@@ -201,6 +199,7 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
 
         axboot.buttonClick(this, "data-form-view-01-btn", {
             "select-all": function () {
+                fnObj.gridView02.gridObj.gridView.commit(true);
                 var dataLists = fnObj.gridView02.gridObj.getJsonRows();
                 var remakeList = new Array();
                 dataLists.forEach(function (menuInfo, row) {
@@ -226,6 +225,7 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
                 fnObj.gridView02.gridObj.gridView.commit(true);
             },
             "deselect-all": function () {
+                fnObj.gridView02.gridObj.gridView.commit(true);
                 var dataLists = fnObj.gridView02.gridObj.getJsonRows();
                 var remakeList = new Array();
                 dataLists.forEach(function (menuInfo, row) {
@@ -376,7 +376,7 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
         this.gridObj.setStyle("body", {background: "#ffffffff", fontSize: 12, fontFamily: "nanum"});
         this.gridObj.setStyle("grid", {border: "#ffffffff,0"});
         this.gridObj.setStyle("indicator", {background: "linear,#f2f2f2", fontFamily: "nanum"});
-        this.gridObj.setColumnInfo(ac00702.column_info).setEntityName("Menu").makeGrid();
+        this.gridObj.setColumnInfo(ac00702.column_info).makeGrid();
         this.gridObj.setFixedOptions({
             colCount: 1
         });
