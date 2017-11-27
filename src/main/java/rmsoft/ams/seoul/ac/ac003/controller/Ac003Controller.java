@@ -67,4 +67,9 @@ public class Ac003Controller extends MessageBaseController {
     public ApiResponse saveUserRole(@RequestBody List<Ac00303VO> requestParams) {
         return ac003Service.saveUserRole(requestParams);
     }
+    @GetMapping(value = "/04/save")
+    @PostMapping
+    public ApiResponse changePassword(Pageable pageable, RequestParams<Ac00301VO> requestParams) {
+        return ac003Service.savePassword(requestParams);
+    }
 }

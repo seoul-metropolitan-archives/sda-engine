@@ -105,4 +105,12 @@
         </choose>
         ORDER BY Z2.ROLE_NAME
     </select>
+    <update id="savePassword"  parameterType="AC00301VO" statementType="PREPARED">
+        UPDATE
+          AC_USER
+        SET
+          PASSWORD = #{userPassword},
+          PASSWORD_UPDATE_DATE = to_timestamp(#{passwordUpdateDate},'yyyy/mm/dd hh24:mi:ss.ff3')
+        WHERE USER_UUID = #{userUuid}
+    </update>
 </mapper>
