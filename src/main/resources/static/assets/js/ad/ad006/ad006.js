@@ -56,9 +56,9 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 }
             })
             .call({
-                url : "/api/v1/ad/ad006/entityColumnList",
+                url : "/api/v1/ad/ad006/saveEntityColumn",
                 type : "post",
-                data: JSON.stringify(popupDetailList),
+                data: JSON.stringify(entityColumnList),
                 callback: function (res) {
                     fnObj.gridView02.gridObj.commit();
                 }
@@ -277,6 +277,7 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
     parentsGrid : fnObj.gridView01,
     initView: function () {
         this.initInstance();
+        console.log(ad00602.column_info);
         this.setColumnInfo(ad00602.column_info);
         this.makeGrid();
         this.gridObj.addRowBeforeEvent(this.addRowBeforeEvent);
