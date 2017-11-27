@@ -14,6 +14,21 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     TOGGLE_FULLSCREEN: function (caller, act, data) {
         caller.frameView.toggleFullScreen();
     },
+    PWD_CHANGE:function(caller, act, data){
+        axboot.ajax({
+            type: "GET",
+            url: "/api/v1/ac003/04/save",
+            async : false,
+            data: $.extend({}, {pageSize: 1000},{ crntPwd:$("#crntPwd").val(), newPwd:$("#newPwd").val(), userUuid:sessionJson.userUuid }),
+            callback: function (res) {
+                axToast.push(axboot.getCommonMessage("AC002_03"));
+                popupReset();
+            },
+            options: {
+                onError: axboot.viewError
+            }
+        });
+    },
 
     dispatch: function (caller, act, data) {
         var result = ACTIONS.exec(caller, act, data);
@@ -149,12 +164,34 @@ fnObj.frameView = axboot.viewExtend({
             this.asideView.print();
         }
 
+        $("#userNm").click(function (){
+            if($(".user_edit").css("display") == "block"){
+                $(".user_edit").css("display", "none");
+                $(".header_r a.txt").css("color", "");
+            }else if($(".user_edit").css("display") == "none"){
+                $(".user_edit").css("display", "block");
+                $(".header_r a.txt").css("color", "#ffda29");
+                popupReset();
+            }
+        });
 
-        $("#logout").click(function(){
-            axToast.push(axboot.getCommonMessage("AC002_04"));
-            setTimeout(function(){
-                window.location.href = "/api/logout";
-            },1000);
+        $("#btnCancel").click(function(){
+            if($(".user_edit").css("display") == "block") {
+                $(".user_edit").css("display", "none");
+                $(".header_r a.txt").css("color", "#ffda29");
+                popupReset();
+            }
+
+        });
+
+        $("#btnOk").click(function(){
+            $(".user_edit").css("display", "none");
+            $(".header_r a.txt").css("color", "#ffda29");
+            if(isValid() == true){
+                ACTIONS.dispatch(ACTIONS.PWD_CHANGE)
+            }else{
+                axToast.push(axboot.getCommonMessage("AC002_02"));
+            }
         });
 
     },
@@ -953,4 +990,30 @@ function smallView() {
     $("a.leftmenu_open").hide();
     $(".left_close_open_btn a").css("left", "");
     $(".left_close_open_btn a").css("margin-left", "");
+}
+function popupReset(){
+    $("#crntPwd").val("");
+    $("#newPwd").val("");
+    $("#reNewPwd").val("");
+
+}
+function popCtrl(){
+    if($(".user_edit").css("display") == "block"){
+        $(".user_edit").css("display", "none");
+        $(".header_r a.txt").css("color", "");
+    }else if($(".user_edit").css("display") == "none"){
+        $(".user_edit").css("display", "block");
+        $(".header_r a.txt").css("color", "#ffda29");
+    }
+}
+
+function isValid() {
+    var newPwd = $("#newPwd").val();
+    var reNewPwd = $("#reNewPwd").val();
+
+    if(newPwd ==  reNewPwd){
+        return true;
+    }else{
+        return false;
+    }
 }

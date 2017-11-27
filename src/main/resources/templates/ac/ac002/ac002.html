@@ -19,6 +19,7 @@
     <link rel="stylesheet" type="text/css" href="/assets/css/common.css">
     <link rel="stylesheet" type="text/css" href="/assets/css/button.css">
     <link rel="stylesheet" type="text/css" href="/assets/css/ams_layout.css">
+    <link rel="stylesheet" type="text/css" href="/assets/css/popup.css">
 
 
     <script type="text/javascript">
@@ -48,7 +49,7 @@
         var COMMON_MESSAGE = (function (json) {
             return json;
         })(commonMessageJson);
-        /**/
+
         var COMMON_CONFIG = (function (json) {
             return json;
         })(commonConfigJson);
@@ -169,7 +170,7 @@
             <div class="ax-split-panel text-align-right">
                 <div class="ax-split-col ax-frame-user-info">
                     <div class="ax-split-panel">
-                        <a href="#ax" onclick="viewDiv(1);">
+                        <a href="#ax" id="userNm">
                             <i class="ion-android-person"></i>
                             <span th:text="#{axboot.admin.login.status.message(${loginUser.userNm})}"></span>
                         </a>
@@ -270,6 +271,48 @@
             </div>
         </div>
     </div>
+</div>
+<!-- 사용자 설정 팝업창 시작 popup.css-->
+<div class="user_edit">
+    <table style="width:100%; height:100%">
+        <colgroup><col style="width:40%"><col style="width:60%"></colgroup>
+        <thead>
+        <tr>
+            <th class="right_title2 bdb" colspan="2" style="text-align:left;font-size:12px;">
+                <img src="/assets/images/ams/img_dot1.png" style="vertical-align: middle; margin-right:5px;" alt="">User
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td class="pdl_10">User ID</td>
+            <td><input type="text" class="onlyread" th:placeholder="#{axboot.admin.login.status.message(${loginUser.userId})}" readonly></td>
+        </tr>
+        <tr>
+            <td class="pdl_10">User Name</td>
+            <td><input type="text" class="onlyread" th:placeholder="#{axboot.admin.login.status.message(${loginUser.userNm})}" readonly></td>
+        </tr>
+        <tr>
+            <td class="pdl_10">Current Password</td><td>
+            <input id="crntPwd" type="password"></td>
+        </tr>
+        <tr>
+            <td class="pdl_10">New Password</td>
+            <td><input id="newPwd" type="password"></td>
+        </tr>
+        <tr>
+            <td class="pdl_10">Re-enter New Password</td>
+            <td><input id="reNewPwd" type="password"></td>
+        </tr>
+        </tbody>
+        <tfoot>
+        <tr>
+            <td colspan="2" class="userfoot">
+                <button id="btnOk" class="btn_3txt">Ok</button><button id="btnCancel" class="btn_3txt">Cancel</button>
+            </td>
+        </tr>
+        </tfoot>
+    </table>
 </div>
 <!-- 사용자 설정 팝업창 시작 popup.css-->
 <!-- 사용자 설정 팝업창 끝-->

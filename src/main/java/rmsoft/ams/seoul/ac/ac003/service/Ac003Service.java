@@ -1,6 +1,7 @@
 package rmsoft.ams.seoul.ac.ac003.service;
 
 import com.querydsl.core.types.Predicate;
+import io.onsemiro.core.api.ApiException;
 import io.onsemiro.core.api.response.ApiResponse;
 import io.onsemiro.core.code.ApiStatus;
 import io.onsemiro.core.domain.BaseService;
@@ -18,6 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestParam;
 import rmsoft.ams.seoul.ac.ac003.dao.Ac003Mapper;
 import rmsoft.ams.seoul.ac.ac003.vo.Ac00301VO;
 import rmsoft.ams.seoul.ac.ac003.vo.Ac00302VO;
@@ -28,6 +30,8 @@ import rmsoft.ams.seoul.common.repository.AcUserGroupUserRepository;
 import rmsoft.ams.seoul.common.repository.AcUserRepository;
 
 import javax.inject.Inject;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Slf4j
@@ -71,6 +75,37 @@ public class Ac003Service extends BaseService {
 
         return filter(ac003Mapper.findAllUser(ac00301VO), pageable, "", Ac00301VO.class);
     }
+
+    /**
+     * 사용자 암호변경
+     *
+     * @param ac00301VOList
+     * @return
+     */
+    @Transactional
+    public ApiResponse savePassword(RequestParams<Ac00301VO> requestParams) {
+        AcUser acUser = new AcUser();
+        acUser.setUserUuid(requestParams.getString("userUuid"));
+        AcUser orgAcUser = acUserRepository.findOne(acUser.getId());
+
+        if (orgAcUser == null) {
+            throw new ApiException(ApiStatus.SYSTEM_ERROR, "출동요청 전문응답코드가 99입니다.");
+        } else {
+            if (bCryptPasswordEncoder.matches(requestParams.getString("crntPwd"), orgAcUser.getUserPassword())) {//암호가 일치
+                //암호 변경
+                Ac00301VO ac00301VO = new Ac00301VO();
+                ac00301VO.setUserPassword(bCryptPasswordEncoder.encode(requestParams.getString("newPwd")));
+                ac00301VO.setUserUuid(requestParams.getString("userUuid"));
+                ac00301VO.setPasswordUpdateDate(Timestamp.valueOf(DateUtils.convertToString(LocalDateTime.now(), DateUtils.DATE_TIME_PATTERN)));
+                ac003Mapper.savePassword(ac00301VO);
+
+            } else {//암호 불일치
+                throw new ApiException("AC", "002_01");
+            }
+        }
+        return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");
+    }
+
 
     /**
      * 사용자 정보 저장
