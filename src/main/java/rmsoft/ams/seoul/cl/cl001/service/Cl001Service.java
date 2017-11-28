@@ -1,6 +1,7 @@
 package rmsoft.ams.seoul.cl.cl001.service;
 
 import io.netty.util.internal.StringUtil;
+import io.onsemiro.core.api.ApiException;
 import io.onsemiro.core.api.response.ApiResponse;
 import io.onsemiro.core.code.ApiStatus;
 import io.onsemiro.core.domain.BaseService;
@@ -68,28 +69,11 @@ public class Cl001Service extends BaseService {
         String detailCode = "";
         for (ClClassificationScheme clClassificationScheme : clClassificationSchemeList) {
 
-            if(StringUtil.isNullOrEmpty(clClassificationScheme.getClassificationSchemeUuid())){ //ClassificationSchemeUuid가 없을때
-                clClassificationScheme.setClassificationSchemeUuid(UUIDUtils.getUUID()); //UUID 생성
+            if(clClassificationScheme.isCreated()){ //ClassificationSchemeUuid가 없을때
+//                clClassificationScheme.setClassificationSchemeUuid(UUIDUtils.getUUID()); //UUID 생성
                 detailCode = CommonCodeUtils.getDetailCode("CD112",clClassificationScheme.getClassificationTypeUuid());//해당분류타입의 분류코드
-                //테스트후 삭제
-                // ctUuid = getMaxClassificationCode(clClassificationScheme.getClassificationTypeUuid());
-                /*if(StringUtils.isNotEmpty(ctUuid)){ //분류코드 조합
-                    ctUuid = StringUtils.trim(ctUuid).substring(3,6);
-                    ctUuid = String.valueOf(Integer.parseInt(ctUuid) + 1);
-
-                    if(ctUuid.length() == 1 ){
-                        ctUuid = "-00" + ctUuid;
-                    }else if(ctUuid.length() == 2 ){
-                        ctUuid = "-0" + ctUuid;
-                    }
-                    detailCode += ctUuid;
-                }else{
-                    detailCode += "-001";
-
-                }*/
-
                 ctUuid = jdbcTemplate.queryForObject("select AMS.FC_CL_CLS_SCHEME_CODE('" + detailCode + "') from dual", String.class);
-                clClassificationScheme.setClassificationCode(detailCode);
+                clClassificationScheme.setClassificationCode(ctUuid);
                 clClassificationScheme.setStatusUuid(CommonCodeUtils.getCodeDetailUuid("CD111","Draft"));
             }
 
@@ -106,6 +90,8 @@ public class Cl001Service extends BaseService {
                     clClassificationSchemeCon = new ClClassificationSchemeCon();
                     clClassificationSchemeCon.setClassificationSchemeUuid(clClassificationScheme.getClassificationSchemeUuid());
                     clClassificationSchemeConRepository.delete(clClassificationSchemeCon);
+                }else{
+                    throw new ApiException("CL", "001_01");
                 }
                 //연관 테이블 데이터 삭제 (상세)
             }

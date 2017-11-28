@@ -89,7 +89,7 @@
         </where>
         START WITH PARENT_CLASS_UUID IS NULL
         CONNECT BY PRIOR CLASS_UUID = PARENT_CLASS_UUID
-        ORDER SIBLINGS BY ORDER_NO
+        ORDER SIBLINGS BY ORDER_KEY
     </select>
     <select id="getSelectedClassList" resultType="cl00201VO" parameterType="cl00201VO" statementType="PREPARED">
         SELECT

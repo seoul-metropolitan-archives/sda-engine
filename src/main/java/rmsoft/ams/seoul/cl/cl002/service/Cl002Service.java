@@ -1,6 +1,7 @@
 package rmsoft.ams.seoul.cl.cl002.service;
 
 import io.netty.util.internal.StringUtil;
+import io.onsemiro.core.api.ApiException;
 import io.onsemiro.core.api.response.ApiResponse;
 import io.onsemiro.core.code.ApiStatus;
 import io.onsemiro.core.domain.BaseService;
@@ -149,9 +150,9 @@ public class Cl002Service extends BaseService {
         String orderKey = "";
 
         for (ClClass clClass : clClassList) {
-            if (StringUtil.isNullOrEmpty(clClass.getClassUuid())) { //Insert
+//            if (StringUtil.isNullOrEmpty(clClass.getClassUuid())) { //Insert
 
-                maxCode = getMaxClassCode(clClass.getClassificationSchemeUuid());
+                /*maxCode = getMaxClassCode(clClass.getClassificationSchemeUuid());
                 if (StringUtils.isNotEmpty(maxCode)) { //분류코드 조합
                     maxDefaultCode = StringUtils.trim(maxCode).substring(0, 7);
                     ctUuid = StringUtils.trim(maxCode).substring(7);
@@ -165,10 +166,12 @@ public class Cl002Service extends BaseService {
                         ctUuid = "0" + ctUuid;
                     }
                     detailCode = maxDefaultCode + ctUuid;
-                }
+                }*/
+            if (clClass.isCreated()){
+//                clClass.setClassUuid(UUIDUtils.getUUID()); //UUID 생성
+                ctUuid = jdbcTemplate.queryForObject("select AMS.FC_CL_CLS_CLASS_CODE('" + clClass.getClassificationSchemeUuid() + "') from dual", String.class);
+                clClass.setClassCode(ctUuid);
 
-                clClass.setClassUuid(UUIDUtils.getUUID()); //UUID 생성
-                clClass.setClassCode(detailCode);
 
                clClass.setClassLevelUuid(CommonCodeUtils.getCodeDetailUuid("CD114", clClass.getClassLevelUuid()));
 
@@ -202,6 +205,8 @@ public class Cl002Service extends BaseService {
             } else if (clClass.isDeleted()) {
                 if (getChildClass(clClass.getClassUuid()) == 0) {
                     clClassRepository.delete(clClass);
+                }else{
+                    throw new ApiException("CL", "002_01");
                 }
             }
         }

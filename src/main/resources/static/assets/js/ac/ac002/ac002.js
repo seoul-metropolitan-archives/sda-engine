@@ -436,6 +436,14 @@ fnObj.leftMenuView = axboot.viewExtend({
                 _this.gridObj.search(["menuName"],$("#leftMenuParam").val())
             }
         });
+        $("#crntPwd","#newPwd","#reNewPwd").on('keypress', function(event){
+            var char = String.fromCharCode(event.which)
+            var txt = $(this).val()
+            if (txt.match(/[ㄱ-힣]/)){
+                var changeTo = txt.replace(char, '')
+                $(this).val(changeTo).change();
+            }
+        });
     }
 });
 

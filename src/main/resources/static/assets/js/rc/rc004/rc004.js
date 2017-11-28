@@ -5,7 +5,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         axboot.ajax({
             type: "GET",
             url: "/api/v1/rc005/01/list",
-            data: $.extend({}, {pageSize: 1000}, {aggregationUuid :'CA397C0E-F9EF-482B-84AE-8458CE811409'}),
+            data: $.extend({}, {pageSize: 1000}, {aggregationUuid :'EBFA30FE-7147-4994-A549-DDEFB1550952'}),
             callback: function (res) {
                 if(res.list != "undefined" && res.list != null && res.list.length > 0){
                     rcList = ax5.util.deepCopy(res.list);
