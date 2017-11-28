@@ -86,7 +86,7 @@ public class Ac009Service extends BaseService {
 
             if (orgAdMenu == null) {
                 // created
-                adMenu.setMenuUuid(UUIDUtils.getUUID());
+                //adMenu.setMenuUuid(UUIDUtils.getUUID());
                 adMenuRepository.save(adMenu);
             } else {
                 if (adMenu.isDeleted()) {

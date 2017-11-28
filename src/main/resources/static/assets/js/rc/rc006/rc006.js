@@ -52,7 +52,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 {
                     try
                     {
-                        fnObj.gridView_h.gridObj.commit();
+                        fnObj.gridView_h.commit();
                     }catch(e)
                     {
                         console.log("커밋 에러남");
@@ -152,61 +152,20 @@ fnObj.formView = axboot.viewExtend(axboot.formView,{
 });
 
 /*Level Of Description*/
-fnObj.gridView_h = axboot.viewExtend(axboot.realGridView, {
+fnObj.gridView_h = axboot.viewExtend(axboot.gridView, {
     tagId : "realgrid",
-    entityName : "Level Of Description",
     beforeRowIdx : undefined,
+    primaryKey : "levelUuid",
     initView  : function()
     {
         var _this = this;
+        this.initInstance();
         this.setColumnInfo(rc00601.column_info);
-        this.gridObj.setFixedOptions({
+
+        this.setFixedOptions({
             colCount: 2
         });
-        /*
-        this.gridObj.setOption({
-            checkBar : {visible : true}
-        })
-        */
         this.makeGrid();
-        this.gridObj.addRowBeforeEvent(this.addRowBeforeEvent);
-        /*
-        this.gridObj.itemClick(function(data){
-            if(fnObj.gridView_d.getData().length < 1)
-            {
-                //fnObj.formView.setFormData("entityTypeCode", data.entityType);
-            }
-            else
-            {
-                axDialog.confirm({
-                    msg: "변경사항이 있습니다. 저장하시겠습니까?"
-                },function() {
-                    if(this.key == "ok")
-                    {
-                        ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
-                    }
-                });
-            }
-        });
-        */
-    },
-
-    addRowBeforeEvent : function()
-    {
-        var _this = this;
-        var uuid = undefined;
-        axboot.ajax({
-            url : "/rc/rc006/rc006/getUUID",
-            type : "POST",
-            async : false,
-            callback:function(res)
-            {
-                uuid = res.map.uuid;
-            }
-        });
-        var data = fnObj.gridView_h.gridObj.getDefaultData();
-        data[0] = uuid;
-        fnObj.gridView_h.gridObj.setDefaultData(data);
     }
 });
 /*

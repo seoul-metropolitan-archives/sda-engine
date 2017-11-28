@@ -161,7 +161,7 @@ SimpleGridWrapper.prototype.defaultBind = function()
             {
                 for(var i = 0; i < columnInfo.labels.length; i++)
                 {
-                    if(newValue.toLowerCase() == columnInfo.labels[i].toLowerCase() || newValue.toLowerCase() == columnInfo.values[i])
+                    if(newValue.toLowerCase() == columnInfo.labels[i].toLowerCase() || newValue.toLowerCase() == columnInfo.values[i].toLowerCase())
                     {
                         selectedData = columnInfo.values[i];
                         break;
@@ -207,7 +207,14 @@ SimpleGridWrapper.prototype.defaultBind = function()
             var newValue = gridWrapper.getSelectedData()[index.fieldName];
 
             if(undefined == newValue||"" == newValue)
+            {
+                var rows = index.dataRow;
+                for(var key in popupData["sqlColumn"])
+                {
+                    this.dataProvider.setValue(rows,popupData["sqlColumn"][key],"");
+                }
                 return ;
+            }
 
             gridWrapper.showPopup(grid, index.fieldName,newValue,index.itemIndex,popupData);
             console.log(index.fieldName);

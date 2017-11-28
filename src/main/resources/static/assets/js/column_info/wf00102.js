@@ -75,7 +75,7 @@ var wf00102 =
                     name: "inputCode",
                     text: "Input Code",
                     width: 100,
-                    editable: false,
+                    editable: true,
                     dataType: "popup",
                     popupCode: {
                         inputMethodUuid: function (checkData) {

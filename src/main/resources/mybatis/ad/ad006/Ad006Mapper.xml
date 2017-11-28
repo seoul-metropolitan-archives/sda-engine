@@ -44,7 +44,7 @@
             USE_YN = #{useYN}
           ]]>
         </if>
-
+        ORDER BY ENTITY_TYPE_CODE ASC
     </select>
 
     <select id="getEntityColumnList" resultType="Ad00602VO" parameterType="Ad00601VO" statementType="PREPARED">

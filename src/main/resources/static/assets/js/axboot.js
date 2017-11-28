@@ -2175,7 +2175,7 @@ axboot.preparePlugin = function () {
         window.axDialog = new ax5.ui.dialog({
             title: axboot.def.dialogTitle,
             lang: {
-                "ok": "Confirm", "cancel": "Cancel"
+                "ok": "Ok", "cancel": "Cancel"
             },
             onStateChanged: function onStateChanged() {
                 if (this.state === "open") {

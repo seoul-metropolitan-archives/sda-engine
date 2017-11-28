@@ -458,6 +458,11 @@ fnObj.tabView = axboot.viewExtend({
     initView: function () {
         this.target = $("#ax-frame-header-tab-container");
         this.frameTarget = $("#content-frame-container");
+
+        if(sessionJson.startProgramUuid && null != sessionJson.startProgramUuid)
+        {
+            this.getStartupProgram(sessionJson.startProgramUuid);
+        }
         this.print();
 
         this.limitCount = axboot.getConfigValue("SYS_TAB_MENU_MAX");
@@ -531,6 +536,30 @@ fnObj.tabView = axboot.viewExtend({
             menu.popup(e);
             ax5.util.stopEvent(e);
         });
+    },
+    getStartupProgram : function(startProgramUuid)
+    {
+        axboot.ajax({
+            type: "GET",
+            url: "/api/v1/ac002/01/getStartupProgram",
+            data: $.extend({}, {startProgramUuid : startProgramUuid}),
+            async : false,
+            callback: function (res) {
+                if(res)
+                {
+                    if(!fnObj.tabView.list)
+                    {
+                        fnObj.tabView.list = new Array();
+                    }
+                    fnObj.tabView.list.push(res);
+
+                }
+            },
+            options: {
+                onError: axboot.viewError
+            }
+        });
+        return false;
     },
     _getItem: function (item) {
         var po = [];
@@ -673,7 +702,8 @@ fnObj.tabView = axboot.viewExtend({
             //if (iframeObject.contentWindow.isDataChanged && iframeObject.contentWindow.isDataChanged()) {
             if (iframeObject.contentWindow.axboot.isDataChanged && iframeObject.contentWindow.axboot.isDataChanged(menuId)) {
                 axDialog.confirm({
-                    msg: axboot.getCommonMessage("AA006")
+                    msg: axboot.getCommonMessage("AA006"),
+                    title : "Confirm"
                 }, function () {
                     if (this.key == "ok") {
                         if (iframeObject.contentWindow.ACTIONS

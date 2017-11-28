@@ -190,6 +190,20 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
                         }
 
                     }
+
+                    columnInfo.sort(function(a,b){
+                        if(a.treeColumnYN && a.treeColumnYN == "Y")
+                            return -1;
+                        else
+                        {
+                            if(a.treeRelationType && a.treeRelationType == "parent")
+                                return -1;
+                            else
+                                return 1;
+                        }
+
+                    });
+
                     fnObj.gridView01.gridObj.setColumnInfo(columnInfo);
                 }
                 else

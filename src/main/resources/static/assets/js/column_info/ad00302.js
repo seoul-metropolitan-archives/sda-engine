@@ -97,7 +97,7 @@ var ad00302 =
                 text: "Value1",
                 width: 110,
                 editable: true,
-                dataType: "text",
+                dataType: "combo",
                 required: false
             },
             {
@@ -106,7 +106,7 @@ var ad00302 =
                 text: "Value2",
                 width: 110,
                 editable: true,
-                dataType: "text",
+                dataType: "combo",
                 required: false
             },
             {
@@ -115,7 +115,7 @@ var ad00302 =
                 text: "Value3",
                 width: 110,
                 editable: true,
-                dataType: "text",
+                dataType: "combo",
                 required: false
             },
             {
@@ -124,7 +124,7 @@ var ad00302 =
                 text: "Value4",
                 width: 110,
                 editable: true,
-                dataType: "text",
+                dataType: "combo",
                 required: false
             },
             {
@@ -133,7 +133,7 @@ var ad00302 =
                 text: "Value5",
                 width: 110,
                 editable: true,
-                dataType: "text",
+                dataType: "combo",
                 required: false
             },
             {
@@ -142,7 +142,7 @@ var ad00302 =
                 text: "Value6",
                 width: 110,
                 editable: true,
-                dataType: "text",
+                dataType: "combo",
                 required: false
             },
             {
@@ -151,7 +151,7 @@ var ad00302 =
                 text: "Value7",
                 width: 110,
                 editable: true,
-                dataType: "text",
+                dataType: "combo",
                 required: false
             },
             {
@@ -160,7 +160,7 @@ var ad00302 =
                 text: "Value8",
                 width: 110,
                 editable: true,
-                dataType: "text",
+                dataType: "combo",
                 required: false
             },
             {
@@ -169,7 +169,7 @@ var ad00302 =
                 text: "Value9",
                 width: 110,
                 editable: true,
-                dataType: "text",
+                dataType: "combo",
                 required: false
             },
             {
@@ -178,7 +178,7 @@ var ad00302 =
                 text: "Value10",
                 width: 110,
                 editable: true,
-                dataType: "text",
+                dataType: "combo",
                 required: false
             },
             {

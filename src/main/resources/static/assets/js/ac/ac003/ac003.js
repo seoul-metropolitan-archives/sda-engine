@@ -264,7 +264,9 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     },
     clearChild : function()
     {
+        fnObj.gridView02.gridObj.gridView.cancel();
         fnObj.gridView02.clearData();
+        fnObj.gridView03.gridObj.gridView.cancel();
         fnObj.gridView03.clearData();
     },
     itemClick: function (data, index) {

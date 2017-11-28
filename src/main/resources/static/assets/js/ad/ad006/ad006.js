@@ -262,6 +262,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
         });
     },
     clearChild: function () {
+        fnObj.gridView02.gridObj.gridView.cancel();
         fnObj.gridView02.clearData();
     },
     getEntityTypeHeaderUUID: function () {

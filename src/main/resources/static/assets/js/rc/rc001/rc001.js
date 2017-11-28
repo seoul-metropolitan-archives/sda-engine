@@ -79,8 +79,22 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             }
         });
     },
-    PAGE_SAVE: function (caller, act, data) {
+    PAGE_SAVE: function (caller, act, list) {
+        console.log(JSON.stringify(list));
+        axboot.ajax({
+            url: "/rc/rc001/save",
+            data: JSON.stringify(list),
+            dataType : "JSON",
+            type : "POST",
+            callback: function (res) {
+                axboot.getCommonMessage("AA007");
+            },
+            options: {
+                onError: axboot.viewError
+            }
+        });
     },
+
     dispatch: function (caller, act, data) {
         var result = ACTIONS.exec(caller, act, data);
         if (result != "error") {
@@ -793,6 +807,29 @@ fnObj.treeView01 = axboot.viewExtend(axboot.commonView, {
                             zTree.reAsyncChildNodes(treeNode, "refresh");
                         }
                     }
+                },
+                onDrop : function(event, treeId, treeNodes, targetNode, moveType, isCopy){
+                    console.log(event);
+                    console.log(treeId);
+                    console.log(targetNode);
+                    console.log(treeNodes);
+                    var reqList = new Array();
+                    //validate 로직 추가 ( item은 최상위 불가, Aggregation의 타입에 따라서 상위 이동 불가 )
+                    for(var i = 0; i < treeNodes.length; i++)
+                    {
+                        treeNodes[i].parentUuid = targetNode.uuid;
+                        reqList.push({
+                            uuid :treeNodes[i].uuid,
+                            parentUuid :treeNodes[i].parentUuid,
+                            nodeType :treeNodes[i].nodeType
+
+                        })
+                    }
+                    ACTIONS.dispatch(ACTIONS.PAGE_SAVE,reqList);
+                    //오른쪽 데이터 refresh 로직 추가
+
+                    console.log(treeNodes);
+                    console.log(isCopy);
                 },
                 //beforeAsync: function(treeId, treeNode){},
 

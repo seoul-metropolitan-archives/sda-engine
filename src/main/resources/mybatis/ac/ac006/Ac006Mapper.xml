@@ -50,5 +50,6 @@
                 AND Z1.PMS_FUNCTION_UUID = #{pmsFunctionUuid}
             </if>
         </where>
+        ORDER BY PERMISSION_NAME ASC
     </select>
 </mapper>

@@ -232,6 +232,7 @@ fnObj.formView = axboot.viewExtend(axboot.formView,{
             console.log(data);
             axboot.modal.open({
                 modalType: "COMMON_POPUP",
+                preSearch : false,
                 sendData: function () {
                     return {
                         popupCode : data["popupCode"],
@@ -399,7 +400,8 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     },
     clearChild : function()
     {
-        fnObj.gridView02.clear();
+        fnObj.gridView02.gridObj.gridView.cancel();
+        fnObj.gridView02.clearData();
         fnObj.sqlView.clear();
     },
     setPopupSQL : function(sql)

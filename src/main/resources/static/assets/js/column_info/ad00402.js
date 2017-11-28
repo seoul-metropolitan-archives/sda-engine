@@ -76,7 +76,6 @@ var ad00402 =
                 editable: true,
                 dataType: "combo",
                 required: true,
-                lookupDisplay: true, //라벨로 표시
                 values: axboot.commonCodeFilter("CD004").codeArr,
                 labels: axboot.commonCodeFilter("CD004").nameArr
             },
@@ -98,7 +97,6 @@ var ad00402 =
                 width: 100,
                 editable: true,
                 dataType: "combo",
-                lookupDisplay: true, //라벨로 표시
                 values: axboot.commonCodeFilter("CD005").codeArr,
                 labels: axboot.commonCodeFilter("CD005").nameArr,
                 required: false

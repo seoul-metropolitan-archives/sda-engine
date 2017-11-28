@@ -124,4 +124,25 @@
             WHERE
                 AGGREGATION_UUID = #{uuid}
     </select>
+
+    <update id="save" parameterType="java.util.Map" statementType="PREPARED">
+        <choose>
+            <when test="nodeType == 'item'">
+              UPDATE
+                  RC_ITEM
+              SET
+                AGGREGATION_UUID = #{parentUuid}
+              WHERE
+                ITEM_UUID = #{uuid}
+            </when>
+            <otherwise>
+                UPDATE
+                  RC_AGGREGATION
+                SET
+                  PARENT_AGGREGATION_UUID = #{parentUuid}
+                WHERE
+                  AGGREGATION_UUID = #{uuid}
+            </otherwise>
+        </choose>
+    </update>
 </mapper>

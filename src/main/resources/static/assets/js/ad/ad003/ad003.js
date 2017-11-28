@@ -204,10 +204,38 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
                 });
             }
         });
+        this.gridObj.onCellEdited(function(gridWrapper,grid)
+        {
+            grid.commit(true);
+            var parentData = fnObj.gridView01.gridObj.getSelectedData();
+
+            var index = grid.getCurrent();
+
+            if(index.fieldName.indexOf("attribute") > -1)
+            {
+                var parentColumnName = index.fieldName;
+                var cnt = fnObj.gridView02.gridObj.getRowCnt();
+                for(var rowIndex = 0; rowIndex < cnt.length; rowIndex++)
+                {
+                    fnObj.gridView02.gridObj.gridView.setValue(rowIndex,index.fieldName.replace("Str",""),"");
+                }
+                fnObj.gridView02.gridObj.commit(true);
+                if(!parentData[parentColumnName] || "" == parentColumnName[parentColumnName])
+                {
+                    var column = fnObj.gridView02.gridObj.gridView.columnByName(index.fieldName.replace("Str",""));
+                    column.labels = [];
+                    column.values = [];
+                    fnObj.gridView02.gridObj.gridView.setColumn(column);
+                }
+            }
+
+
+        });
     },
     clearChild : function()
     {
-        fnObj.gridView02.clear();
+        fnObj.gridView02.gridObj.gridView.cancel();
+        fnObj.gridView02.clearData();
     }
  });
 /*팝업 디테일 ( Column )*/
@@ -227,7 +255,37 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
         */
         this.setFixedOptions({
             colCount : 2
-        })
+        });
+
+        this.gridObj.onDataCellClicked(function(grid)
+        {
+            var parentData = fnObj.gridView01.gridObj.getSelectedData();
+
+
+            var index = grid.getCurrent();
+
+            if(index.fieldName.indexOf("attribute") > -1)
+            {
+                var parentColumnName = index.fieldName + "Code";
+
+                var column = grid.columnByName(index.fieldName);
+                if(parentData[parentColumnName] && "" != parentData[parentColumnName])
+                {
+                    column.labels = axboot.commonCodeFilter(parentData[parentColumnName]).nameArr;
+                    column.values = axboot.commonCodeFilter(parentData[parentColumnName]).codeArr;
+                }
+                else {
+                    column.labels = [];
+                    column.values = [];
+                }
+
+
+                grid.setColumn(column);
+            }
+
+
+        });
+
     },
     clear : function () {
         this.setData([]);

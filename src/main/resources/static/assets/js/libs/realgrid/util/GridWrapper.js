@@ -84,6 +84,8 @@ var GridWrapper = function(p_id,p_rootContext) {
     this.event = {};
 
     this.columnInfo = new Array();
+    this.comboFields = new Array();
+
 
     this.setDoAppendValidate = function(_doAppendValidate) {this.doAppendValidate = _doAppendValidate;}
     this.setAddBtnName = function(_name){this.addBtnName = _name;}
@@ -255,14 +257,27 @@ var GridWrapper = function(p_id,p_rootContext) {
                             var sqlColumnName = "";
                             for(var key in colData.sqlColumn)
                             {
-                                if(colData.sqlColumn[key] == colData.pasteTarget)
+                                gridWrapper.gridView.setValue(item[row], colData.sqlColumn[key], list[0][key]);
+                                /*
+                                if(colData.pasteTarget instanceof Array)
                                 {
-                                    sqlColumnName = key;
-                                    break;
+                                    for(var cnt = 0; cnt < colData.pasteTarget.length; cnt++)
+                                    {
+                                        if(colData.sqlColumn[key] == colData.pasteTarget[cnt]) {
+                                            gridWrapper.gridView.setValue(item[row], colData.pasteTarget[cnt], list[0][key]);
+                                        }
+                                    }
                                 }
+                                else {
+                                    if(colData.sqlColumn[key] == colData.pasteTarget)
+                                    {
+                                        gridWrapper.gridView.setValue(item[row], colData.pasteTarget, list[0][key]);
+                                        break;
+                                    }
+                                }
+                                */
                             }
 
-                            gridWrapper.gridView.setValue(item[row], colData.pasteTarget, list[0][sqlColumnName]);
                         }
                         else
                         {
@@ -867,6 +882,7 @@ GridWrapper.prototype.addRowBeforeEvent = function(_event) { this.bind("onBefore
 GridWrapper.prototype.addRowAfterEvent = function(_event) { this.bind("onAfterAddRow",_event); }
 //줄 지워지면 호출되는 함수
 GridWrapper.prototype.removeRowEvent = function(_event) { this.bind("onRemoveRow",_event); }
+GridWrapper.prototype.onCellEdited = function(_event) { this.bind("onCellEdited",_event); }
 
 //============================================================================================
 //			Grid 공통영역
@@ -1083,6 +1099,7 @@ GridWrapper.prototype.setColumnInfo = function(list) {
     var columnList = [];
     var fieldList = [];
     var data = undefined;
+
     // 정렬순서로 데이터 정렬
     list.sort(function(a, b) {
         if (undefined === a.sortNo) {
@@ -1237,6 +1254,7 @@ GridWrapper.prototype.setColumnInfo = function(list) {
                     data.lookupDisplay = true;
 
                 obj.lookupDisplay = data.lookupDisplay;
+                _this.comboFields.push(data.name);
                 break;
             case "check":
                 obj.renderer = $.extend({},_this.defaultStyle.data.check,data.renderer);
@@ -1364,6 +1382,8 @@ GridWrapper.prototype.setColumnInfo = function(list) {
     }
     this.dataProvider.setFields(fieldList);
     this.gridView.setColumns(columnList);
+
+
     return this;
 };
 
@@ -1490,6 +1510,11 @@ GridWrapper.prototype.makeGrid = function() {
 
     this.gridView.setContextMenu(this.contextMenu);
     this.gridView.setDataSource(this.dataProvider);
+    if(this.comboFields.length > 0)
+    {
+        this.sortType = ["ascending", "descending"];
+        //this.gridView.orderBy(this.comboFields, this.sortType);
+    }
 };
 
 GridWrapper.prototype.setCustomCellStyleRow = function(gridWrapper, grid, row, type, conditionFunc, columnNames,doCommit) {

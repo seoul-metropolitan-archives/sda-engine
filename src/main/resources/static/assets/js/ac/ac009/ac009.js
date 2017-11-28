@@ -158,29 +158,16 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
 
 // AC009 User Group User GridView
 fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
-    page: {
-        pageNumber: 0,
-        pageSize: 10000
-    },
+    tagId : "realgrid01",
+    primaryKey : "menuUuid",
     initView: function () {
-        this.gridObj = new SimpleGridWrapper("realgrid01", "/assets/js/libs/realgrid");
-        this.gridObj.setGridStyle("100%", "100%");
-        this.gridObj.setColumnInfo(ac00901.column_info);
-        this.gridObj.makeGrid();
-        this.gridObj.itemClick(this.itemClick);
-        this.gridObj.setFixedOptions({
+        this.initInstance()
+        this.setColumnInfo(ac00901.column_info);
+        this.makeGrid();
+        this.setFixedOptions({
             colCount: 3
         });
-    },
-    setData: function (list) {
-        this.gridObj.setData("set", list);
-
-    },
-    getData: function () {
-        return this.gridObj.getData();
-    },
-    addRow: function () {
-        this.gridObj.addRow();
+        this.gridObj.itemClick(this.itemClick);
     },
     itemClick: function (data, index) {
         if (data.permissionUuid != null && data.permissionUuid != "") {

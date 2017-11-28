@@ -265,7 +265,8 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
             }
         }
         var _this = this;
-        this.gridObj.onEditRowChanged(function (gridWrapper, grid, itemIndex, dataRow, field, oldValue, newValue) {
+        //this.gridObj.onEditRowChanged(function (gridWrapper, grid, itemIndex, dataRow, field, oldValue, newValue) {
+        this.gridObj.onCellEdited(function (gridWrapper, grid, itemIndex, dataRow, field) {
             _this.gridObj.setCustomCellStyleRow(gridWrapper, grid, dataRow,"disable", function (gridWrapper, row) {
                 var result = false;
                 for (var rowIndex = 0; rowIndex < enableList.length; rowIndex++) {

@@ -1,5 +1,7 @@
 package rmsoft.ams.seoul.rc.rc001.service;
 
+import io.onsemiro.core.api.response.ApiResponse;
+import io.onsemiro.core.code.ApiStatus;
 import io.onsemiro.core.domain.BaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,6 +12,7 @@ import rmsoft.ams.seoul.rc.rc001.vo.Rc00103VO;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service("Rc001Service")
 public class Rc001Service extends BaseService
@@ -48,6 +51,15 @@ public class Rc001Service extends BaseService
             gridData.addAll(rc001Mapper.getGridDataInItem(param));
 
         return gridData;
+    }
+
+    public ApiResponse save(List<Map<String,String>> list)
+    {
+        for (Map<String,String> data: list) {
+            rc001Mapper.save(data);
+        }
+
+        return ApiResponse.of(ApiStatus.SUCCESS,"SUCCESS");
     }
 
 
