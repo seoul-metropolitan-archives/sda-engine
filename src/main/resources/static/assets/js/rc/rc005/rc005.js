@@ -5,7 +5,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         axboot.ajax({
             type: "GET",
             url: "/api/v1/rc005/01/list",
-            data: $.extend({}, {pageSize: 1000, sort: "classificationCode"}, {aggregationUuid :'FD74F4BC-3309-421B-9DCD-BAD79E43DE73', itemUuid: 'A966CE7A-DD5F-4DDA-BC9F-52001AB8F449'}),
+            data: $.extend({}, {pageSize: 1000, sort: "classificationCode"}, {aggregationUuid :'C7AEAC56-D860-4ECE-8D98-90AD78F7798E', itemUuid: '40AD28EE-5E23-4808-9760-D16770CB3D49'}),
             callback: function (res) {
                 if(res.list != "undefined" && res.list != null && res.list.length > 0){
                     rcList = ax5.util.deepCopy(res.list);

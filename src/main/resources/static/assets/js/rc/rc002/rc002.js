@@ -5,7 +5,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         axboot.ajax({
             type: "GET",
             url: "/api/v1/rc005/01/list",
-            data: $.extend({}, {pageSize: 1000}, {aggregationUuid :'C7AEAC56-D860-4ECE-8D98-90AD78F7798E', itemUuid: '40AD28EE-5E23-4808-9760-D16770CB3D49'}),
+            data: $.extend({}, {pageSize: 1000}, {aggregationUuid :'FD74F4BC-3309-421B-9DCD-BAD79E43DE73',itemUuid:'A966CE7A-DD5F-4DDA-BC9F-52001AB8F449'}),
             callback: function (res) {
                 if(res.list != "undefined" && res.list != null && res.list.length > 0){
                     rcList = ax5.util.deepCopy(res.list);
@@ -101,15 +101,32 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
     initEvent: function () {
         var _this = this;
 
-        /*$("input[data-ax-path='descriptionStartDate'],input[data-ax-path='sdescriptionEndDate']").key (function(){
-            var date = _this.value;
-            if (date.match(/^\d{4}$/) !== null) {
-                _this.value = date + '-';
-            } else if (date.match(/^\d{4}\-\d{2}$/) !== null) {
-                _this.value = date + '-';
+        $('.togl01').click(function () {
+            $(".togl01_show").toggle();
+            if ($('#open_btn1').val() == '▼') {
+                $('#open_btn1').val('◀');
+            } else {
+                $('#open_btn1').val('▼');
             }
-        });*/
+        });
 
+        $('.togl02').click(function () {
+            $(".togl02_show").toggle();
+            if ($('#open_btn2').val() == '▼') {
+                $('#open_btn2').val('◀');
+            } else {
+                $('#open_btn2').val('▼');
+            }
+        });
+
+        $('.togl03').click(function () {
+            $(".togl03_show").toggle();
+            if ($('#open_btn3').val() == '▼') {
+                $('#open_btn3').val('◀');
+            } else {
+                $('#open_btn3').val('▼');
+            }
+        });
     },
     getData: function () {
         var data = this.modelFormatter.getClearData(this.model.get()); // 모델의 값을 포멧팅 전 값으로 치환.
