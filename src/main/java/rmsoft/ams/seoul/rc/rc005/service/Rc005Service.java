@@ -21,6 +21,7 @@ public class Rc005Service extends BaseService{
         Rc00501VO rc00501VO = new Rc00501VO();
         Rc00502VO rc00502VO;
         rc00501VO.setRiAggregationUuid(requestParams.getString("aggregationUuid"));
+        rc00501VO.setRiItemUuid(requestParams.getString("itemUuid"));
         List<Rc00501VO>  rc00501VOList =  rc005Mapper.getRecordItemList(rc00501VO);
         for (Rc00501VO rc00501VO1 : rc00501VOList){
             if(StringUtils.isNotEmpty(rc00501VO1.getRiAggregationUuid())){

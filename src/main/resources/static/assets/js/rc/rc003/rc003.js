@@ -61,6 +61,22 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
     },
     initEvent: function () {
         var _this = this;
+        $(".togl01").click(function(){
+            $(".togl01_show").toggle();
+            if ($('#open_btn1').val() == '▼') {
+                $('#open_btn1').val('◀');
+            } else {
+                $('#open_btn1').val('▼');
+            }
+        });
+        $(".togl02").click(function(){
+            $(".togl02_show").toggle();
+            if ($('#open_btn2').val() == '▼') {
+                $('#open_btn2').val('◀');
+            } else {
+                $('#open_btn2').val('▼');
+            }
+        });
     },
     getData: function () {
         var data = this.modelFormatter.getClearData(this.model.get()); // 모델의 값을 포멧팅 전 값으로 치환.

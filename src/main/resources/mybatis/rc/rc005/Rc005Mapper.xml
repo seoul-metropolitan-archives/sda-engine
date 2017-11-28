@@ -59,6 +59,9 @@
         <if test="riAggregationUuid != null">
             Z1.AGGREGATION_UUID = #{riAggregationUuid}
         </if>
+        <if test="riItemUuid != null">
+            AND Z2.ITEM_UUID = #{riItemUuid}
+        </if>
         CONNECT BY PRIOR Z1.PARENT_AGGREGATION_UUID = Z1.AGGREGATION_UUID
     </select>
     <select id="getRecordComponentList" resultType="RC00502VO" statementType="PREPARED">

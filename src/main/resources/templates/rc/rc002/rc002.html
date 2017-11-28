@@ -16,25 +16,13 @@
                 <div class="contents_wrap">
                     <div style=" height:30px; width:100%" class="bgf7 div_tablerow">
                         <ul class="bdb">
-                            <li style="width:30px">
-                                <div class="bookmark_star"><img src="images/bookmark.png" alt="bookmark"></div>
-                            </li>
-                            <li style="width:50%; text-align:left;">Add Aggregation</li>
-                            <li style="text-align:right; width:48%;">
-                                <button class="btn_s">
-                                    <span class="btn_icon">&nbsp;</span>
-                                    <span class="btn_main_txt">Save(S)</span>
-                                </button>
-                                <button class="btn_i">
-                                    <span class="btn_icon">&nbsp;</span>
-                                    <span class="btn_main_txt">Inquiry(I)</span>
-                                </button>
-                            </li>
+                            <th:block layout:insert="~{/fragments/page-buttons :: bookmark}"/>
+                            <th:block layout:insert="~{/fragments/page-buttons :: save-and-inquiry}"/>
                         </ul>
                     </div>
                     <div class="div_tablerow">
                         <ul style="height: 30px; width: 100%" class="bdb">
-                            <li style="width: 2%;"><img src="images/icon/fo.png" alt="folder"></li>
+                            <li style="width: 2%;"><img src="/assets/images/ams/icon/fo.png" alt="folder"></li>
                             <li style="width: 78%; text-align: left">Root > root2 > root3</li>
                             <li style="width: 19.5%; padding-right: 0.5%">
                                 <!--    <div class="src_box3" ><input type=text>
@@ -56,12 +44,7 @@
 
                         <div style="display:table; height:100%; width:16%; float:left" class="bdr">
                             <ul class="bdb bdt div_tablerow bgf7" style="height:30px;">
-                                <li style="width:80%; text-align:left;">
-                                    <img src="images/img_dot2.png" alt="dot">Record Hierarchy
-                                </li>
-                                <li style="text-align:right; width:18%;">
-
-                                </li>
+                                <th:block layout:insert="~{/fragments/page-buttons :: dot('Record Hierarchy')}"/>
                             </ul>
 
                             <ul class="bdb" style="height:30px;width:100%; float:left">
@@ -76,27 +59,7 @@
 
                         <div style="display:table; height:100%; width:84%; float:left">
                             <ul class="bdb bdt div_tablerow bgf7" style="height:30px;">
-                                <li style="width:50%; text-align:left;">
-                                    <img src="images/img_dot2.png" alt="dot">Aggregation Details
-                                </li>
-                                <li style="text-align:right; width:48%;">
-                                    <!--<button class="btn_co">
-                                        <span class="btn_icon_co">&nbsp;</span>
-                                        <span class="btn_main_txt">Freeze</span>
-                                    </button>
-                                    <button class="btn_co">
-                                        <span class="btn_icon_co">&nbsp;</span>
-                                        <span class="btn_main_txt">Cancel</span>
-                                    </button>
-                                    <button class="btn_a">
-                                        <span class="btn_icon">&nbsp;</span>
-                                        <span class="btn_main_txt">Add</span>
-                                    </button>
-                                    <button class="btn_d">
-                                        <span class="btn_icon">&nbsp;</span>
-                                        <span class="btn_main_txt">Delete</span>
-                                    </button>-->
-                                </li>
+                                <th:block layout:insert="~{/fragments/page-buttons :: dot('Aggregation Details')}"/>
                             </ul>
 
                             <div style="height:100%; width:100%;" class="div_tablerow">
@@ -270,98 +233,98 @@
                                                 </ul>
 
 
-                                                <ul class="pdt_20">
-                                                    <li style="width: 49%;">
-                                                        <b>Additional Metadata 01 </b>
-                                                        <div>
-                                                            <input type="text" style="width: 100%">
-                                                        </div>
-                                                    </li>
-                                                    <li style="width: 2%;">
-                                                    </li>
-                                                    <li style="width: 49%;">
-                                                        <b>Additional Metadata 02</b>
-                                                        <div>
-                                                            <div class="cld_box">
-                                                                <input type=text id="datepicker5">
-                                                            </div>
-                                                        </div>
-                                                    </li>
-                                                </ul>
 
-                                                <ul class="pdt_20">
-                                                    <li style="width: 49%;">
-                                                        <b>Additional Metadata 03 </b>
-                                                        <div>
-                                                            <input type="text" style="width: 100%">
-                                                        </div>
-                                                    </li>
-                                                    <li style="width: 2%;">
-                                                    </li>
-                                                    <li style="width: 49%;">
-                                                        <b>Additional Metadata 04</b>
-                                                        <div>
-                                                            <div class="cld_box">
-                                                                <input type=text id="datepicker6">
-                                                            </div>
-                                                        </div>
-                                                    </li>
-                                                </ul>
+                                                <!--<ul class="pdt_20">
+                                                                                                    <li style="width: 49%;">
+                                                                                                        <b>Additional Metadata 01 </b>
+                                                                                                        <div>
+                                                                                                            <input type="text" style="width: 100%">
+                                                                                                        </div>
+                                                                                                    </li>
+                                                                                                    <li style="width: 2%;">
+                                                                                                    </li>
+                                                                                                    <li style="width: 49%;">
+                                                                                                        <b>Additional Metadata 02</b>
+                                                                                                        <div>
+                                                                                                            <div class="cld_box">
+                                                                                                                <input type=text id="datepicker5">
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                    </li>
+                                                                                                </ul>
 
-                                                <ul class="pdt_20">
-                                                    <li style="width: 49%;">
-                                                        <b>Additional Metadata 05 </b>
-                                                        <div>
-                                                            <input type="text" style="width: 100%">
-                                                        </div>
-                                                    </li>
-                                                    <li style="width: 2%;">
-                                                    </li>
-                                                    <li style="width: 49%;">
-                                                        <b>Additional Metadata 06</b>
-                                                        <div>
-                                                            <div class="cld_box">
-                                                                <input type=text id="datepicker7">
-                                                            </div>
-                                                        </div>
-                                                    </li>
-                                                </ul>
+                                                                                                <ul class="pdt_20">
+                                                                                                    <li style="width: 49%;">
+                                                                                                        <b>Additional Metadata 03 </b>
+                                                                                                        <div>
+                                                                                                            <input type="text" style="width: 100%">
+                                                                                                        </div>
+                                                                                                    </li>
+                                                                                                    <li style="width: 2%;">
+                                                                                                    </li>
+                                                                                                    <li style="width: 49%;">
+                                                                                                        <b>Additional Metadata 04</b>
+                                                                                                        <div>
+                                                                                                            <div class="cld_box">
+                                                                                                                <input type=text id="datepicker6">
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                    </li>
+                                                                                                </ul>
 
-                                                <ul class="pdt_20">
-                                                    <li style="width: 49%;">
-                                                        <b>Additional Metadata 07 </b>
-                                                        <div>
-                                                            <input type="text" style="width: 100%">
-                                                        </div>
-                                                    </li>
-                                                    <li style="width: 2%;">
-                                                    </li>
-                                                    <li style="width: 49%;">
-                                                        <b>Additional Metadata 08</b>
-                                                        <div>
-                                                            <input type="text" style="width: 100%">
-                                                        </div>
-                                                    </li>
-                                                </ul>
+                                                                                                <ul class="pdt_20">
+                                                                                                    <li style="width: 49%;">
+                                                                                                        <b>Additional Metadata 05 </b>
+                                                                                                        <div>
+                                                                                                            <input type="text" style="width: 100%">
+                                                                                                        </div>
+                                                                                                    </li>
+                                                                                                    <li style="width: 2%;">
+                                                                                                    </li>
+                                                                                                    <li style="width: 49%;">
+                                                                                                        <b>Additional Metadata 06</b>
+                                                                                                        <div>
+                                                                                                            <div class="cld_box">
+                                                                                                                <input type=text id="datepicker7">
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                    </li>
+                                                                                                </ul>
 
-                                                <ul class="pdt_20">
-                                                    <li style="width: 49%;">
-                                                        <b>Additional Metadata 09</b>
-                                                        <div>
-                                                            <input type="text" style="width: 100%">
-                                                        </div>
-                                                    </li>
-                                                    <li style="width: 2%;">
-                                                    </li>
-                                                    <li style="width: 49%;">
-                                                        <b>Additional Metadata 10</b>
-                                                        <div>
-                                                            <input type="text" style="width: 100%">
-                                                        </div>
-                                                    </li>
-                                                </ul>
-                                            </div>
+                                                                                                <ul class="pdt_20">
+                                                                                                    <li style="width: 49%;">
+                                                                                                        <b>Additional Metadata 07 </b>
+                                                                                                        <div>
+                                                                                                            <input type="text" style="width: 100%">
+                                                                                                        </div>
+                                                                                                    </li>
+                                                                                                    <li style="width: 2%;">
+                                                                                                    </li>
+                                                                                                    <li style="width: 49%;">
+                                                                                                        <b>Additional Metadata 08</b>
+                                                                                                        <div>
+                                                                                                            <input type="text" style="width: 100%">
+                                                                                                        </div>
+                                                                                                    </li>
+                                                                                                </ul>
 
+                                                                                                <ul class="pdt_20">
+                                                                                                    <li style="width: 49%;">
+                                                                                                        <b>Additional Metadata 09</b>
+                                                                                                        <div>
+                                                                                                            <input type="text" style="width: 100%">
+                                                                                                        </div>
+                                                                                                    </li>
+                                                                                                    <li style="width: 2%;">
+                                                                                                    </li>
+                                                                                                    <li style="width: 49%;">
+                                                                                                        <b>Additional Metadata 10</b>
+                                                                                                        <div>
+                                                                                                            <input type="text" style="width: 100%">
+                                                                                                        </div>
+                                                                                                    </li>
+                                                                                                </ul>
+                                                                                            </div>-->
                                             <!-- Contextual Metadata -->
 
 

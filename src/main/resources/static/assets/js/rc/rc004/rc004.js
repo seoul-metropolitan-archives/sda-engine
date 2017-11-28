@@ -5,7 +5,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         axboot.ajax({
             type: "GET",
             url: "/api/v1/rc005/01/list",
-            data: $.extend({}, {pageSize: 1000}, {aggregationUuid :'EBFA30FE-7147-4994-A549-DDEFB1550952'}),
+            data: $.extend({}, {pageSize: 1000}, {aggregationUuid :'FD74F4BC-3309-421B-9DCD-BAD79E43DE73',itemUuid:'A966CE7A-DD5F-4DDA-BC9F-52001AB8F449'}),
             callback: function (res) {
                 if(res.list != "undefined" && res.list != null && res.list.length > 0){
                     rcList = ax5.util.deepCopy(res.list);
@@ -88,10 +88,28 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
         this.model = new ax5.ui.binder();
         this.model.setModel(this.getDefaultData(), this.target);
         this.modelFormatter = new axboot.modelFormatter(this.model); // 모델 포메터 시작
+
+        this.target.find('[data-ax5picker="date"]').ax5picker({
+            direction: "auto",
+            content: {
+                type: 'date'
+            }
+        });
+
         this.initEvent();
     },
     initEvent: function () {
         var _this = this;
+
+        /*$("input[data-ax-path='descriptionStartDate'],input[data-ax-path='sdescriptionEndDate']").key (function(){
+            var date = _this.value;
+            if (date.match(/^\d{4}$/) !== null) {
+                _this.value = date + '-';
+            } else if (date.match(/^\d{4}\-\d{2}$/) !== null) {
+                _this.value = date + '-';
+            }
+        });*/
+
     },
     getData: function () {
         var data = this.modelFormatter.getClearData(this.model.get()); // 모델의 값을 포멧팅 전 값으로 치환.
@@ -345,10 +363,15 @@ setFormData = function(data){
     fnObj.formView.setFormData("from",data.riTitle);
     fnObj.formView.setFormData("typeUuid",data.riTypeUuid);
     fnObj.formView.setFormData("referenceCode",data.referenceCode);
-    fnObj.formView.setFormData("descriptionStartDate",data.riDescriptionStartDate);
-    fnObj.formView.setFormData("descriptionEndDate",data.riDescriptionEndDate);
-    fnObj.formView.setFormData("creationStartDate",data.creationStartDate);
-    fnObj.formView.setFormData("creationEndDate",data.creationEndDate);
+
+    $("input[data-ax-path='descriptionStartDate']").val(getFormattedDate(data.creationStartDate));
+    $("input[data-ax-path='descriptionEndDate']").val(getFormattedDate(data.creationEndDate));
+
+  /*  $("input[data-ax-path='descriptionStartDate']").val();
+    $("input[data-ax-path='descriptionEndDate']").val();
+*/
+    // fnObj.formView.setFormData("creationStartDate",data.creationStartDate);
+    // fnObj.formView.setFormData("creationEndDate",data.creationEndDate);
 
 /*    fnObj.formView.setFormData("addMetadata01",data.addMetadata01);
     fnObj.formView.setFormData("addMetadata02",data.addMetadata02);
@@ -360,8 +383,13 @@ setFormData = function(data){
     fnObj.formView.setFormData("addMetadata08",data.addMetadata08);
     fnObj.formView.setFormData("addMetadata09",data.addMetadata09);
     fnObj.formView.setFormData("AddMetadata10",data.addMetadata10);*/
+}
 
-
-
-
+function getFormattedDate(str) {
+    if(str == "undefined" || str == null) return;
+    if(str.length == 8) {
+        return str.substr(0, 4) + "-" + str.substr(4, 2) + "-" + str.substr(6);
+    } else {
+        return str;
+    }
 }

@@ -4,7 +4,7 @@ var rc00501 =
             [
                 {
                     sortNo: 0,
-                    width:140,
+                    width:100,
                     name: "areaNm",
                     text: "Area",
                     editable: false,
@@ -13,7 +13,7 @@ var rc00501 =
                 },
                 {
                     sortNo: 1,
-                    width:140,
+                    width:120,
                     name: "typeNm",
                     text: "Type",
                     dataType: "code",
@@ -21,7 +21,7 @@ var rc00501 =
                 },
                 {
                     sortNo: 2,
-                    width:140,
+                    width:600,
                     name: "title",
                     text: "Title",
                     dataType: "code",
@@ -29,7 +29,7 @@ var rc00501 =
                 },
                 {
                     sortNo: 3,
-                    width:140,
+                    width:90,
                     name: "openStatusNm",
                     text: "Open Status",
                     dataType: "code",
@@ -37,7 +37,7 @@ var rc00501 =
                 },
                 {
                     sortNo: 4,
-                    width:140,
+                    width:80,
                     name: "contentsSize",
                     text: "Size(kb)",
                     disable : true,

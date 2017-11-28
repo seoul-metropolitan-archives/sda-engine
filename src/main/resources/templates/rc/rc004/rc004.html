@@ -162,12 +162,22 @@
                                                     <li style="width: 33%;">
                                                         <b>Date of Description  </b>
                                                         <div>
-                                                            <div class="cld_box">
-                                                                <input data-ax-path="descriptionStartDate" type=text id="datepicker1">
+                                                            <div class="cld_box" data-ax5picker="date">
+                                                                <!--<input data-ax-path="descriptionStartDate" type=text id="datepicker1">-->
+                                                                <div class="cld_box" style="background-color: #fffdd6">
+                                                                    <input type="text" data-ax-path="descriptionStartDate" style="background-color: #fffdd6;ime-mode:disabled;"
+                                                                           placeholder="YYYY-MM-DD" maxlength="10">
+                                                                    <img title="calendar" class="ui-datepicker-trigger" alt="..." src="/assets/images/ams/calendar.png" >
+                                                                </div>
                                                             </div>
                                                             ~
-                                                            <div class="cld_box">
-                                                                <input data-ax-path="descriptionEndDate" type=text id="datepicker2">
+                                                            <div class="cld_box" data-ax5picker="date">
+                                                                <!--<input data-ax-path="descriptionEndDate" type=text id="datepicker2">-->
+                                                                <div class="cld_box" style="background-color: #fffdd6">
+                                                                    <input type="text" data-ax-path="descriptionEndDate" style="background-color: #fffdd6;ime-mode:disabled;"
+                                                                           placeholder="YYYY-MM-DD" maxlength="10">
+                                                                    <img title="calendar" class="ui-datepicker-trigger" alt="..." src="/assets/images/ams/calendar.png" >
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </li>

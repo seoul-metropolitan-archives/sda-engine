@@ -5,7 +5,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         axboot.ajax({
             type: "GET",
             url: "/api/v1/rc005/01/list",
-            data: $.extend({}, {pageSize: 1000, sort: "classificationCode"}, {aggregationUuid :'CA397C0E-F9EF-482B-84AE-8458CE811409'}),
+            data: $.extend({}, {pageSize: 1000, sort: "classificationCode"}, {aggregationUuid :'FD74F4BC-3309-421B-9DCD-BAD79E43DE73', itemUuid: 'A966CE7A-DD5F-4DDA-BC9F-52001AB8F449'}),
             callback: function (res) {
                 if(res.list != "undefined" && res.list != null && res.list.length > 0){
                     rcList = ax5.util.deepCopy(res.list);
@@ -308,6 +308,8 @@ setFormData = function(data){
     fnObj.formView.setFormData("description",data.description);
     fnObj.formView.setFormData("author",data.riAuthor);
     fnObj.formView.setFormData("rcAggregationCode",data.aggregationCode);
+    fnObj.formView.setFormData("notes",data.notes);
+    fnObj.formView.setFormData("referenceCode",data.referenceCode);
     /*if(data.descriptionstartdate != "undefined" || data.descriptionstartdate != null) {
         if (data.descriptionstartdate == data.descriptionenddate) {
             fnobj.formview.setformdata("rcdateofdescription", data.descriptionstartdate);
