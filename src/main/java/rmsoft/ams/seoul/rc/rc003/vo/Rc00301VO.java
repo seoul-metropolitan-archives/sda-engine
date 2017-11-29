@@ -19,6 +19,7 @@ public class Rc00301VO extends BaseVO {
     private String descriptionEndDate;
     private String headTitle;
     private String typeUuid;
+    private String typeNm;
     private String provenance;
     private String referenceCode;
     private String creator;

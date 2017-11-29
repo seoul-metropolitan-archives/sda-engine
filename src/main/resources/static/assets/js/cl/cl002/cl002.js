@@ -344,7 +344,7 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
             isDetailChanged = true;
         });
 
-        $("input[data-ax-path='parentClassName'],input[data-ax-path='classCode'],input[data-ax-path='className']").keyup(function(){
+        $("input[data-ax-path='parentClassName'],input[data-ax-path='classCodeForm'],input[data-ax-path='className'] ,input[data-ax-path='parentClassCode']").keyup(function(){
             if(13 == event.keyCode)
                 ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
         });

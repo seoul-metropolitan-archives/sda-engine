@@ -146,25 +146,14 @@
 
         <where>
             <if test="orderKey1 != null">
-                orderKey1 LIKE  #{orderKey1} || '.' || '%'
-                OR orderKey1 =  #{orderKey1}
-            </if>
-            <if test="parentClassName != null and orderNo != null"    >
-                AND parentClassUuid IN (
-                SELECT
-                CLASS_UUID
-                FROM
-                CL_CLASS
-                WHERE
-                CLASS_NAME LIKE '%' || #{parentClassName} || '%'
-                AND ORDER_NO = #{orderNo}
-                )
+                (orderKey1 LIKE  #{orderKey1} || '.' || '%'
+                OR orderKey1 =  #{orderKey1})
             </if>
             <if test="classCode != null">
-                AND classCode LIKE '%' || #{classCode} || '%'
+                AND UPPER(classCode) LIKE '%' || #{classCode} || '%'
             </if>
             <if test="className != null">
-                AND className LIKE '%' || #{className} || '%'
+                AND UPPER(className) LIKE '%' || #{className} || '%'
             </if>
             <if test="useYn != null">
                 AND useYn = #{useYn}
@@ -175,9 +164,12 @@
             <if test="statusUuid != null">
                 AND statusUuid = #{statusUuid}
             </if>
-            <!--<if test="parentClassCode != null">-->
-                <!--AND FC_CL_PARENT_CODE(#{parentClassUuid}) LIKE '%' || #{parentClassCode} || '%'-->
-            <!--</if>-->
+            <if test="parentClassCode != null">
+                AND UPPER(parentClassCode) LIKE '%' || #{parentClassCode} || '%'
+            </if>
+            <if test="parentClassName != null">
+                AND UPPER(parentClassName) LIKE '%' || #{parentClassName} || '%'
+            </if>
         </where>
     </select>
     <select id="getSelectedClassDetail" resultType="cl00202VO" parameterType="cl00201VO" statementType="PREPARED">

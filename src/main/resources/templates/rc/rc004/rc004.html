@@ -80,7 +80,7 @@
                                                     <li style="width: 33%;">
                                                         <b>Type </b>
                                                         <div>
-                                                            <select data-ax-path="typeUuid" style="width: 200px; background-color: #fffdd6">
+                                                            <select data-ax-path="typeUuid" style="width: 200px;">
                                                                 <option value=""></option>
                                                                 <option th:each="item : ${typeUuid}" th:value="${item.codeDetailUUID}" th:text="${item.codeName}"/>
                                                             </select>
@@ -148,10 +148,11 @@
                                                         <b>From </b>
                                                         <div>
                                                             <div class="src_box2" style="width: 100%">
+                                                                <input data-ax-path="raAggregationCode" type=hidden style="width: 97%">
                                                                 <input data-ax-path="raAggregationUuid" type=hidden style="width: 97%">
-                                                                <input data-ax-path="raTitle" type=text style="width: 97%">
+                                                                <input data-ax-path="from" type=text style="width: 97%">
                                                                 <a href="#" style="top: 0">
-                                                                    <!--<img src="http://localhost/@AMS/images/search_normal.png" alt="find"></a>-->
+                                                                    <img src="/assets/images/ams/search_normal.png" alt="find"></a>
                                                             </div>
                                                         </div>
 
@@ -164,8 +165,8 @@
                                                         <div>
                                                             <div class="cld_box" data-ax5picker="date">
                                                                 <!--<input data-ax-path="descriptionStartDate" type=text id="datepicker1">-->
-                                                                <div class="cld_box" style="background-color: #fffdd6">
-                                                                    <input type="text" data-ax-path="descriptionStartDate" style="background-color: #fffdd6;ime-mode:disabled;"
+                                                                <div class="cld_box">
+                                                                    <input type="text" data-ax-path="descriptionStartDate" style="ime-mode:disabled;"
                                                                            placeholder="YYYY-MM-DD" maxlength="10">
                                                                     <img title="calendar" class="ui-datepicker-trigger" alt="..." src="/assets/images/ams/calendar.png" >
                                                                 </div>
@@ -173,8 +174,8 @@
                                                             ~
                                                             <div class="cld_box" data-ax5picker="date">
                                                                 <!--<input data-ax-path="descriptionEndDate" type=text id="datepicker2">-->
-                                                                <div class="cld_box" style="background-color: #fffdd6">
-                                                                    <input type="text" data-ax-path="descriptionEndDate" style="background-color: #fffdd6;ime-mode:disabled;"
+                                                                <div class="cld_box">
+                                                                    <input type="text" data-ax-path="descriptionEndDate" style="ime-mode:disabled;"
                                                                            placeholder="YYYY-MM-DD" maxlength="10">
                                                                     <img title="calendar" class="ui-datepicker-trigger" alt="..." src="/assets/images/ams/calendar.png" >
                                                                 </div>
@@ -213,12 +214,22 @@
                                                             <li class="pdt_20">
                                                                 <b>Date of Creation</b>
                                                                 <div>
-                                                                    <div class="cld_box">
-                                                                        <input data-ax-path="creationStartDate" type=text id="datepicker3">
+                                                                    <div class="cld_box" data-ax5picker="date">
+                                                                        <!--<input data-ax-path="descriptionStartDate" type=text id="datepicker1">-->
+                                                                        <div class="cld_box">
+                                                                            <input type="text" data-ax-path="creationStartDate" style="ime-mode:disabled;"
+                                                                                   placeholder="YYYY-MM-DD" maxlength="10">
+                                                                            <img title="calendar" class="ui-datepicker-trigger" alt="..." src="/assets/images/ams/calendar.png" >
+                                                                        </div>
                                                                     </div>
                                                                     ~
-                                                                    <div class="cld_box">
-                                                                        <input data-ax-path="creationEndDate"  type=text id="datepicker4">
+                                                                    <div class="cld_box" data-ax5picker="date">
+                                                                        <!--<input data-ax-path="descriptionEndDate" type=text id="datepicker2">-->
+                                                                        <div class="cld_box">
+                                                                            <input type="text" data-ax-path="creationEndDate" style="ime-mode:disabled;"
+                                                                                   placeholder="YYYY-MM-DD" maxlength="10">
+                                                                            <img title="calendar" class="ui-datepicker-trigger" alt="..." src="/assets/images/ams/calendar.png" >
+                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                             </li>
@@ -226,7 +237,7 @@
                                                                 <b>Open Status</b>
                                                                 <input data-ax-path="openStatusUuid" type="hidden">
                                                                 <div>
-                                                                    <select data-ax-path="openStatusUuid" style="width: 200px; background-color: #fffdd6">
+                                                                    <select data-ax-path="openStatusUuid" style="width: 200px;">
                                                                         <option value=""></option>
                                                                         <option th:each="item : ${openStatusUuid}" th:value="${item.codeDetailUUID}" th:text="${item.codeName}"/>
                                                                     </select>

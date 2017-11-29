@@ -25,7 +25,7 @@
                             <li style="width: 2%;"><img src="/assets/images/ams/icon/fo.png" alt="folder"></li>
                             <li style="width: 78%; text-align: left">Root > root2 > root3</li>
                             <li style="width: 19.5%; padding-right: 0.5%">
-                                <!--    <div class="src_box3" ><input type=text>
+                              <!--    <div class="src_box3" ><input type=text>
                               <a href="#" id="dialog-link5">
                               <img src="images/search_normal.png" alt="search"></a>
                               </div>-->
@@ -34,7 +34,7 @@
                     </div>
                     <div class="div_tablerow cont_title">
                         <ul style="height: 30px; width: 100%">
-                            <li class="pdl_10">
+                            <li class="pdl_10" data-ax-path="rcHeadTitle">
                                 Add new archival description - Untitled(draft)
                             </li>
                         </ul>
@@ -52,7 +52,7 @@
                                 <li><a href="#" class="open_close" id="rg_tree_allclose">Collapse</a></li>
                             </ul>
                             <div style="height:100%; width:100%" class="div_tablerow bdb">
-                                <div id="realgridT1" style="width:100%; height:100%"></div>
+                                <div data-z-tree="tree-view-01" data-fit-height-content="tree-view-01" style="height: 100%;width : 100%;overflow-x: auto; max-width: 271px;" class="ztree"></div>
                             </div>
                         </div>
                         <!--오늘쪽 내용에서 좌측 트리부분-->
@@ -76,7 +76,7 @@
                                                 <ul>
                                                     <li style="width: 33%;">
                                                         <b>Code </b>
-                                                        <div>text readonly</div>
+                                                        <div data-ax-path="rcAggregationCode">text readonly</div>
                                                     </li>
                                                     <li style="width: 33%;">
                                                         <b>Type </b>
@@ -102,7 +102,7 @@
                                                     <li style="width: 66%;">
                                                         <b>Title </b>
                                                         <div>
-                                                            <textarea class="txtar"
+                                                            <textarea class="txtar" data-ax-path="rcTitle"
                                                                       style="height: 35px; background-color: #fffdd6; width: 90%"></textarea>
                                                         </div>
                                                     </li>
@@ -110,9 +110,12 @@
                                                     <li style="width: 34%;">
                                                         <b>Level </b>
                                                         <div>
-                                                            <select data-ax-path="publishedStatusUuid" style="width: 200px; background-color: #fffdd6" >
-                                                                <option th:each="item : ${levelUuid}" th:value="${item.levelUuid}" th:text="${item.levelName}"/>
-                                                            </select>
+                                                            <div class="src_box2" style="width: 200px">
+                                                                <input type=text style="width: 200px;background-color: #fffdd6">
+                                                                <a href="#" style="top: 0">
+                                                                    <img src="/assets/images/ams/search_normal.png"
+                                                                         alt="find"></a>
+                                                            </div>
                                                         </div>
                                                     </li>
                                                 </ul>
@@ -121,7 +124,7 @@
                                                     <li style="width: 49%;">
                                                         <b>Description </b>
                                                         <div>
-                                                            <textarea class="txtar" style="height: 162px"></textarea>
+                                                            <textarea class="txtar" style="height: 162px" data-ax-path="rcDescription"></textarea>
                                                         </div>
                                                     </li>
                                                     <li style="width: 2%;">
@@ -129,7 +132,7 @@
                                                     <li style="width: 49%;">
                                                         <b>Notes </b>
                                                         <div>
-                                                            <textarea class="txtar" style="height: 162px"></textarea>
+                                                            <textarea class="txtar" style="height: 162px" data-ax-path="rcNotes"></textarea>
                                                         </div>
                                                     </li>
                                                 </ul>
@@ -139,7 +142,7 @@
                                                     <li style="width: 33%;">
                                                         <b>Author </b>
                                                         <div>
-                                                            <textarea class="txtar"
+                                                            <textarea class="txtar" data-ax-path="rcAuthor"
                                                                       style="height: 35px; width: 95%"></textarea>
                                                         </div>
                                                     </li>
@@ -148,7 +151,7 @@
                                                         <b>From </b>
                                                         <div>
                                                             <div class="src_box2" style="width: 100%">
-                                                                <input type=text style="width: 97%">
+                                                                <input type=text style="width: 97%" data-ax-path="rcFrom">
                                                                 <a href="#" style="top: 0">
                                                                     <img src="/assets/images/ams/search_normal.png"
                                                                          alt="find"></a>
@@ -162,18 +165,22 @@
                                                     <li style="width: 33%;">
                                                         <b>Date of Description </b>
                                                         <div>
-                                                            <div class="cld_box">
-                                                                <input type=text>
-                                                                <a href="#">
-                                                                    <img src="/assets/images/ams/calendar_normal.png"alt="find">
-                                                                </a>
+                                                            <div class="cld_box" data-ax5picker="date">
+                                                                <!--<input data-ax-path="descriptionStartDate" type=text id="datepicker1">-->
+                                                                <div class="cld_box">
+                                                                    <input type="text" data-ax-path="descriptionStartDate" style="ime-mode:disabled;"
+                                                                           placeholder="YYYY-MM-DD" maxlength="10">
+                                                                    <img title="calendar" class="ui-datepicker-trigger" alt="..." src="/assets/images/ams/calendar.png" >
+                                                                </div>
                                                             </div>
                                                             ~
-                                                            <div class="cld_box">
-                                                                <input type=text>
-                                                                <a href="#">
-                                                                    <img src="/assets/images/ams/calendar_normal.png"alt="find">
-                                                                </a>
+                                                            <div class="cld_box" data-ax5picker="date">
+                                                                <!--<input data-ax-path="descriptionEndDate" type=text id="datepicker2">-->
+                                                                <div class="cld_box">
+                                                                    <input type="text" data-ax-path="descriptionEndDate" style="ime-mode:disabled;"
+                                                                           placeholder="YYYY-MM-DD" maxlength="10">
+                                                                    <img title="calendar" class="ui-datepicker-trigger" alt="..." src="/assets/images/ams/calendar.png" >
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </li>
@@ -198,26 +205,36 @@
                                                             <li>
                                                                 <b>Provenance </b>
                                                                 <div>
-                                                                    <textarea class="txtar"
+                                                                    <textarea class="txtar" data-ax-path="rcProvenance"
                                                                               style="height: 35px"></textarea>
                                                                 </div>
                                                             </li>
                                                             <li class="pdt_20">
                                                                 <b>Creator </b>
                                                                 <div>
-                                                                    <textarea class="txtar"
+                                                                    <textarea class="txtar" data-ax-path="rcCreator"
                                                                               style="height: 35px"></textarea>
                                                                 </div>
                                                             </li>
                                                             <li class="pdt_20">
                                                                 <b>Date of Creation</b>
                                                                 <div>
-                                                                    <div class="cld_box">
-                                                                        <input type=text id="datepicker3">
+                                                                    <div class="cld_box" data-ax5picker="date">
+                                                                        <!--<input data-ax-path="descriptionStartDate" type=text id="datepicker1">-->
+                                                                        <div class="cld_box">
+                                                                            <input type="text" data-ax-path="creationStartDate" style="ime-mode:disabled;"
+                                                                                   placeholder="YYYY-MM-DD" maxlength="10">
+                                                                            <img title="calendar" class="ui-datepicker-trigger" alt="..." src="/assets/images/ams/calendar.png" >
+                                                                        </div>
                                                                     </div>
                                                                     ~
-                                                                    <div class="cld_box">
-                                                                        <input type=text id="datepicker4">
+                                                                    <div class="cld_box" data-ax5picker="date">
+                                                                        <!--<input data-ax-path="descriptionEndDate" type=text id="datepicker2">-->
+                                                                        <div class="cld_box">
+                                                                            <input type="text" data-ax-path="creationEndDate" style="ime-mode:disabled;"
+                                                                                   placeholder="YYYY-MM-DD" maxlength="10">
+                                                                            <img title="calendar" class="ui-datepicker-trigger" alt="..." src="/assets/images/ams/calendar.png" >
+                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                             </li>

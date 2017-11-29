@@ -304,7 +304,7 @@ setFormData = function(data){
     fnObj.formView.setFormData("rcLevel",data.levelUuid);
     fnObj.formView.setFormData("rcDescription",data.description);
     fnObj.formView.setFormData("rcNotes",data.notes);
-    fnObj.formView.setFormData("rcType",data.typeUuid);
+    fnObj.formView.setFormData("rcType",data.typeNm);
     fnObj.formView.setFormData("rcAuthor",data.author);
     fnObj.formView.setFormData("rcFrom",data.parentAggregationName);
     fnObj.formView.setFormData("rcAggregationCode",data.aggregationCode);

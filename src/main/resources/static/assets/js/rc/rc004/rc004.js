@@ -5,7 +5,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         axboot.ajax({
             type: "GET",
             url: "/api/v1/rc005/01/list",
-            data: $.extend({}, {pageSize: 1000}, {aggregationUuid :'C7AEAC56-D860-4ECE-8D98-90AD78F7798E', itemUuid: '40AD28EE-5E23-4808-9760-D16770CB3D49'}),
+            data: $.extend({}, {pageSize: 1000}, {aggregationUuid :'FD74F4BC-3309-421B-9DCD-BAD79E43DE73', itemUuid: '2ECBF7C3-6480-4C9E-BA5A-89EE533FA1AA'}),
             callback: function (res) {
                 if(res.list != "undefined" && res.list != null && res.list.length > 0){
                     rcList = ax5.util.deepCopy(res.list);
@@ -50,6 +50,24 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 axToast.push("저장 작업이 완료되었습니다.");
             });
         return result;
+    },
+    SEARCH_FROM_SCH : function(caller, act, data)
+    {
+
+        axboot.modal.open({
+            modalType: "COMMON_POPUP",
+            preSearch : data["preSearch"],
+            sendData: function () {
+                return data;
+            },
+            callback: function (data) {
+                $("input[data-ax-path='raAggregationCode']").val(data["AGGREGATION_CODE"]);
+                $("input[data-ax-path='raAggregationUuid']").val(data["AGGREGATION_UUID"]);
+                $("input[data-ax-path='from']").val(data["TITLE"])
+                if(this.close)
+                    this.close();
+            }
+        });
     },
     dispatch: function (caller, act, data) {
         var result = ACTIONS.exec(caller, act, data);
@@ -100,6 +118,25 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
     },
     initEvent: function () {
         var _this = this;
+
+        $("input[data-ax-path='from']").parents().eq(1).find("a").click(function(){
+            var data = {
+                popupCode : "PU123",
+                preSearch : false,
+                searchData : $("input[data-ax-path='from']").val().trim(),
+            };
+            ACTIONS.dispatch(ACTIONS.SEARCH_FROM_SCH,data);
+        });
+        $("input[data-ax-path='from']").focusout(function(){
+
+            if("" != $(this).val().trim())
+            {
+                var data = {
+                    popupCode : "PU123",
+                };
+                ACTIONS.dispatch(ACTIONS.SEARCH_FROM_SCH,data);
+            }
+        });
 
         /*$("input[data-ax-path='descriptionStartDate'],input[data-ax-path='sdescriptionEndDate']").key (function(){
             var date = _this.value;
@@ -363,10 +400,18 @@ setFormData = function(data){
     fnObj.formView.setFormData("from",data.riTitle);
     fnObj.formView.setFormData("typeUuid",data.riTypeUuid);
     fnObj.formView.setFormData("referenceCode",data.referenceCode);
+    fnObj.formView.setFormData("raAggregationCode",data.raAggregationCode);
+    fnObj.formView.setFormData("description",data.description);
 
-    $("input[data-ax-path='descriptionStartDate']").val(getFormattedDate(data.creationStartDate));
-    $("input[data-ax-path='descriptionEndDate']").val(getFormattedDate(data.creationEndDate));
+    $("input[data-ax-path='descriptionStartDate']").val(getFormattedDate(data.descriptionStartDate));
+    $("input[data-ax-path='descriptionEndDate']").val(getFormattedDate(data.descriptionEndDate));
 
+    $("input[data-ax-path='creationStartDate']").val(getFormattedDate(data.creationStartDate));
+    $("input[data-ax-path='creationEndDate']").val(getFormattedDate(data.creationEndDate));
+    ACTIONS.dispatch(ACTIONS.SEARCH_FROM_SCH,{
+        popupCode : "PU123",
+        searchData : data.raAggregationCode
+    })
   /*  $("input[data-ax-path='descriptionStartDate']").val();
     $("input[data-ax-path='descriptionEndDate']").val();
 */

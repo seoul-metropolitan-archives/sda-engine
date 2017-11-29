@@ -4,16 +4,13 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH: function (caller, act, data) {
         axboot.ajax({
             type: "GET",
-            url: "/api/v1/rc005/01/list",
-            data: $.extend({}, {pageSize: 1000}, {aggregationUuid :'FD74F4BC-3309-421B-9DCD-BAD79E43DE73',itemUuid:'A966CE7A-DD5F-4DDA-BC9F-52001AB8F449'}),
+            url: "/api/v1/rc003/01/list",
+            data: $.extend({}, {pageSize: 1000, sort: "classificationCode"}, {aggregationUuid :'A2EF15E7-BE58-41DD-945C-E99FB5DE60C1'}),
             callback: function (res) {
                 if(res.list != "undefined" && res.list != null && res.list.length > 0){
                     rcList = ax5.util.deepCopy(res.list);
                     fnObj.treeView01.setData({}, res.list, data);
                     setFormData(rcList[0]);
-                    if(rcList[0].rc00502VoList!= "undefined" && rcList[0].rc00502VoList != null && rcList[0].rc00502VoList.length > 0){
-                        fnObj.gridView01.setData(rcList[0].rc00502VoList);
-                    }
                 }
             },
             options: {
@@ -22,35 +19,8 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         });
         return false;
     },
-    PAGE_SAVE: function (caller, act, data) {
-        axboot.ajax({
-            type: "GET",
-            url: "/api/v1/rc004/01/saveItemDetails",
-            data: $.extend({},  {pageSize: 1000} ,this.formView.getData()),
-            callback: function (res) {
-                ACTIONS.dispatch(ACTIONS.TOP_GRID_SAVE);
-            },
-            options: {
-                onError: axboot.viewError
-            }
-        });
-    },
-    TOP_GRID_SAVE: function (caller, act, data) {
-        var result = false;
-        axboot.call({
-            type: "PUT",
-            url: "/api/v1/rc004/02/saveComponentList",
-            data: JSON.stringify(this.gridView01.getData()),
-            callback: function (res) {
-                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
-                result = true;
-            }
-        })
-            .done(function () {
-                axToast.push("저장 작업이 완료되었습니다.");
-            });
-        return result;
-    },
+    PAGE_SEARCH1: function (caller, act, data) {},
+    PAGE_SAVE: function (caller, act, data) {},
     dispatch: function (caller, act, data) {
         var result = ACTIONS.exec(caller, act, data);
         if (result != "error") {
@@ -65,7 +35,7 @@ fnObj.pageStart = function () {
 
     // TODO 추후에 삭제될 내용으로 /실제 Grid의 컬럼 정보는 DB에서 가져올 예정
     $.ajax({
-        url: "/assets/js/column_info/rc00401.js",
+        url: "/assets/js/column_info/rc00301.js",
         dataType: "script",
         async: false,
         success: function () {
@@ -74,7 +44,6 @@ fnObj.pageStart = function () {
 
     _this.formView.initView();
     _this.treeView01.initView();
-    _this.gridView01.initView();
     // Data 조회
     ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
 };
@@ -100,7 +69,6 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
     },
     initEvent: function () {
         var _this = this;
-
         $('.togl01').click(function () {
             $(".togl01_show").toggle();
             if ($('#open_btn1').val() == '▼') {
@@ -160,19 +128,6 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
     }
 });
 
-fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
-    tagId: "realgrid01",
-    entityName: "item components",
-    initView: function () {
-        this.initInstance();
-        this.setColumnInfo(rc00401.column_info);
-        this.gridObj.setOption({
-            indicator: {visible: true}
-        })
-        this.makeGrid();
-    }
-});
-
 /**
  * treeView
  */
@@ -216,8 +171,8 @@ fnObj.treeView01 = axboot.viewExtend(axboot.commonView, {
             data : {
                 simpleData: {
                     enable: true,
-                    idKey: "raAggregationUuid",
-                    pIdKey: "raParentAggregationUuid",
+                    idKey: "aggregationUuid",
+                    pIdKey: "parentAggregationUuid",
                     rootPId: 0
                 }
             },
@@ -273,9 +228,9 @@ fnObj.treeView01 = axboot.viewExtend(axboot.commonView, {
             var retList = new Array();
             for(var i = 0; i < list.length; i++)
             {
-                if( key == list[i]["raParentAggregationUuid"] )
+                if( key == list[i]["parentAggregationUuid"] )
                 {
-                    list[i].children =  matchingData(list[i]["raAggregationUuid"], list);
+                    list[i].children =  matchingData(list[i]["aggregationUuid"], list);
                     retList.push(list[i]);
                 }
             }
@@ -288,9 +243,9 @@ fnObj.treeView01 = axboot.viewExtend(axboot.commonView, {
         for(var i = 0; i < _tree.length; i++)
         {
             treeData = _tree[i];
-            if(treeData["raParentAggregationUuid"] == null)
+            if(treeData["parentAggregationUuid"] == null)
             {
-                treeData.children = matchingData(treeData["raAggregationUuid"],_tree);
+                treeData.children = matchingData(treeData["aggregationUuid"],_tree);
                 treeList.push(treeData);
             }
         }
@@ -361,45 +316,27 @@ fnObj.treeView01 = axboot.viewExtend(axboot.commonView, {
     }
 });
 setFormData = function(data){
-    fnObj.formView.setFormData("title",data.name);
-    fnObj.formView.setFormData("itemUuid",data.riItemUuid);
-    fnObj.formView.setFormData("code",data.riItemCode);
-    fnObj.formView.setFormData("typeUuid",data.riTypeUuid);
-    fnObj.formView.setFormData("publishedStatusUuid",data.riPublishedStatusUuid);
-    fnObj.formView.setFormData("level",data.raLevelNm);
-    fnObj.formView.setFormData("description",data.description);
-    fnObj.formView.setFormData("author",data.riAuthor);
+    fnObj.formView.setFormData("rcHeadTitle",data.headTitle);
+    fnObj.formView.setFormData("rcTitle",data.name);
+    fnObj.formView.setFormData("rcPublishedStatus",data.publishedStatusUuid);
+    fnObj.formView.setFormData("rcLevel",data.levelUuid);
+    fnObj.formView.setFormData("rcDescription",data.description);
+    fnObj.formView.setFormData("rcNotes",data.notes);
+    fnObj.formView.setFormData("typeUuid",data.typeUuid);
+    fnObj.formView.setFormData("rcAuthor",data.author);
+    fnObj.formView.setFormData("rcFrom",data.parentAggregationName);
     fnObj.formView.setFormData("rcAggregationCode",data.aggregationCode);
-    fnObj.formView.setFormData("openStatusUuid",data.openStatusUuid);
-    fnObj.formView.setFormData("raTitle",data.raTitle);
-    fnObj.formView.setFormData("raAggregationUuid",data.raAggregationUuid);
-    fnObj.formView.setFormData("notes",data.notes);
-    fnObj.formView.setFormData("provenance",data.provenance);
-    fnObj.formView.setFormData("creator",data.creator);
-    fnObj.formView.setFormData("keyword",data.keyword);
-    fnObj.formView.setFormData("from",data.riTitle);
-    fnObj.formView.setFormData("typeUuid",data.riTypeUuid);
-    fnObj.formView.setFormData("referenceCode",data.referenceCode);
 
-    $("input[data-ax-path='descriptionStartDate']").val(getFormattedDate(data.creationStartDate));
-    $("input[data-ax-path='descriptionEndDate']").val(getFormattedDate(data.creationEndDate));
+    $("input[data-ax-path='descriptionStartDate']").val(getFormattedDate(data.descriptionStartDate));
+    $("input[data-ax-path='descriptionEndDate']").val(getFormattedDate(data.descriptionEndDate));
 
-  /*  $("input[data-ax-path='descriptionStartDate']").val();
-    $("input[data-ax-path='descriptionEndDate']").val();
-*/
-    // fnObj.formView.setFormData("creationStartDate",data.creationStartDate);
-    // fnObj.formView.setFormData("creationEndDate",data.creationEndDate);
+    $("input[data-ax-path='creationStartDate']").val(getFormattedDate(data.creationStartDate));
+    $("input[data-ax-path='creationEndDate']").val(getFormattedDate(data.creationEndDate));
 
-/*    fnObj.formView.setFormData("addMetadata01",data.addMetadata01);
-    fnObj.formView.setFormData("addMetadata02",data.addMetadata02);
-    fnObj.formView.setFormData("addMetadata03",data.addMetadata03);
-    fnObj.formView.setFormData("addMetadata04",data.addMetadata04);
-    fnObj.formView.setFormData("addMetadata05",data.addMetadata05);
-    fnObj.formView.setFormData("addMetadata06",data.addMetadata06);
-    fnObj.formView.setFormData("addMetadata07",data.addMetadata07);
-    fnObj.formView.setFormData("addMetadata08",data.addMetadata08);
-    fnObj.formView.setFormData("addMetadata09",data.addMetadata09);
-    fnObj.formView.setFormData("AddMetadata10",data.addMetadata10);*/
+    fnObj.formView.setFormData("rcProvenance",data.provenance);
+    fnObj.formView.setFormData("rcReferenceCode",data.referenceCode);
+    fnObj.formView.setFormData("rcCreator",data.creator);
+
 }
 
 function getFormattedDate(str) {

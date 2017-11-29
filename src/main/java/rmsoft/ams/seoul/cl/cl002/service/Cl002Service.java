@@ -71,15 +71,16 @@ public class Cl002Service extends BaseService {
         cl00201VO.setClassificationSchemeUuid(requestParams.getString("classificationSchemeUuid"));
         cl00201VO.setOrderNo(requestParams.getString("orderNo"));
         cl00201VO.setOrderKey(requestParams.getString("orderKey"));
-        cl00201VO.setParentClassCode(requestParams.getString("parentClassCode"));
-        cl00201VO.setParentClassName(requestParams.getString("parentClassName"));
+        cl00201VO.setParentClassCode(StringUtils.upperCase(requestParams.getString("parentClassCode")));
+        cl00201VO.setParentClassName(StringUtils.upperCase(requestParams.getString("parentClassName")));
         cl00201VO.setStatusUuid(requestParams.getString("statusUuid"));
-        cl00201VO.setClassCode(requestParams.getString("classCodeForm"));
-        cl00201VO.setClassName(requestParams.getString("className"));
+        cl00201VO.setClassCode(StringUtils.upperCase(requestParams.getString("classCodeForm")));
+        cl00201VO.setClassName(StringUtils.upperCase(requestParams.getString("className")));
         cl00201VO.setUseYn(requestParams.getString("useYn"));
         cl00201VO.setClassLevelUuid(requestParams.getString("classLevelUuid"));
         cl00201VO.setClassUuid(requestParams.getString("classUuid"));
         cl00201VO.setOrderKey1(requestParams.getString("orderKey1"));
+
 
         return filter(cl002Mapper.getSelectedClassList(cl00201VO), pageable, "", Cl00201VO.class);
     }

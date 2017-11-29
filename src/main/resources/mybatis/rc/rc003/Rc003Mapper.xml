@@ -9,7 +9,8 @@
           Z1.AGGREGATION_CODE as aggregationCode,
           FC_AD_CODE_NM(Z1.PUBLISHED_STATUS_UUID) as publishedStatusUuid,
           FC_RC_CODE(Z1.LEVEL_UUID) || ' - ' ||  TITLE as headTitle,
-          FC_AD_CODE_NM(Z1.TYPE_UUID) as typeUuid,
+          FC_AD_CODE_NM(Z1.TYPE_UUID) as typeNm,
+          Z1.TYPE_UUID as typeUuid,
           (SELECT
             TITLE
            FROM

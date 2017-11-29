@@ -48,4 +48,8 @@ public class Rc00401VO extends BaseVO {
 
     private String riAggregationUuid;
 
+    private String notes;
+
+    private String description;
+
 }
