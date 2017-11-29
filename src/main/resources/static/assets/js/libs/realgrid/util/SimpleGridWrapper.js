@@ -194,7 +194,7 @@ SimpleGridWrapper.prototype.defaultBind = function()
             }
 
         }
-        else
+        else if(columnInfoData.dataType == "popup")
         {
             var popupData = gridWrapper.getPopupData(index.fieldName);
 

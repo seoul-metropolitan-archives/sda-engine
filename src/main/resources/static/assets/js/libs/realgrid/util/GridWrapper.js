@@ -196,7 +196,97 @@ var GridWrapper = function(p_id,p_rootContext) {
                 _this.dispatch("onRemoveRow");
             }
         });
+        _this.bind("onEditRowChanged",function(gridWrapper, grid, itemIndex, dataRow, field, oldValue, newValue){
+            grid.commit(true);
+            var colData = undefined;
+            var rowData = grid.getDataProvider().getJsonRows(itemIndex,itemIndex);
 
+            if(rowData.length > 0)
+                rowData = rowData[0];
+
+            for(var col = 0; col < gridWrapper.columnInfo.length; col++)
+            {
+                colData = gridWrapper.columnInfo[col];
+                if(colData.dataType == "combo")
+                {
+                    var selectedData = "";
+                    for(var i = 0; i < colData.labels.length; i++)
+                    {
+                        if(rowData[colData.name].toLowerCase() == colData.labels[i].toLowerCase() || rowData[colData.name] == colData.values[i])
+                        {
+                            selectedData = colData.values[i];
+                            break;
+                        }
+                    }
+                    //rowData[colData.name] = selectedData;
+                    gridWrapper.gridView.setValue(dataRow, colData.name, selectedData);
+                }
+                else if(colData.dataType == "popup"){
+                    var popupData = gridWrapper.getPopupData(colData.name);
+
+                    if (!popupData) {
+                        continue;
+                    }
+                    grid.commit(true);
+                    var newValue = rowData[colData.name];
+
+                    if (undefined == newValue || "" == newValue)
+                        continue;
+
+                    axboot.ajax({
+                        url: "/api/v1/common/popup/search",
+                        dataType: "JSON",
+                        type: "POST",
+                        async: false,
+                        data: JSON.stringify({
+                            popupCode: popupData["popupCode"],
+                            searchField: newValue,
+                            isTree: false
+                        }),
+                        callback: function (res) {
+                            list = res.list;
+                        }
+                    });
+                    if (list && list.length == 1) {
+                        //컬럼 살리기
+                        console.log(list[0]);
+                        console.log(list[0][colData.name]);
+                        var sqlColumnName = "";
+                        for(var key in colData.sqlColumn)
+                        {
+                            gridWrapper.gridView.setValue(dataRow, colData.sqlColumn[key], list[0][key]);
+                            /*
+                            if(colData.pasteTarget instanceof Array)
+                            {
+                                for(var cnt = 0; cnt < colData.pasteTarget.length; cnt++)
+                                {
+                                    if(colData.sqlColumn[key] == colData.pasteTarget[cnt]) {
+                                        gridWrapper.gridView.setValue(item[row], colData.pasteTarget[cnt], list[0][key]);
+                                    }
+                                }
+                            }
+                            else {
+                                if(colData.sqlColumn[key] == colData.pasteTarget)
+                                {
+                                    gridWrapper.gridView.setValue(item[row], colData.pasteTarget, list[0][key]);
+                                    break;
+                                }
+                            }
+                            */
+                        }
+
+                    }
+                    else
+                    {
+                        //지우기
+                        gridWrapper.gridView.setValue(dataRow, colData.name, "");
+                    }
+
+                    //gridWrapper.showPopup(grid, index.fieldName, newValue, index.itemIndex, popupData);
+                    console.log(index.fieldName);
+                }
+            }
+        });
         _this.bind("onRowsPasted",function(gridWrapper, _this, grid, item){
             var index = grid.getCurrent();
 
@@ -222,9 +312,10 @@ var GridWrapper = function(p_id,p_rootContext) {
                                 break;
                             }
                         }
-                        rowData[colData.name] = selectedData;
+                        //rowData[colData.name] = selectedData;
+                        gridWrapper.gridView.setValue(item[row], colData.name, selectedData);
                     }
-                    else {
+                    else if(colData.dataType == "popup"){
                         var popupData = gridWrapper.getPopupData(colData.name);
 
                         if (!popupData) {
