@@ -2597,7 +2597,7 @@ axboot.gridView = {
         if (this.parentsGrid)
             this.gridObj.addRowBeforeEvent(this.addRowBeforeEventForChildGrid);
 
-        this.gridObj.onRowsPasted(this.onRowsPasted);
+        this.gridObj.onEditRowPasted(this.onEditRowPasted);
     },
     /*데이터 변경 초기화 함수*/
     initChangedData: function () {
@@ -2675,12 +2675,19 @@ axboot.gridView = {
         return this.page;
     },
     /*그리드에 붙여넣기 시에 사용되는 함수*/
-    onRowsPasted: function (wrapperObj, _this, grid, items) {
+    onEditRowPasted: function (gridWrapper,_this, grid, itemIndex, dataRow, fields, oldValues, newValues) {
         var data = undefined;
         var uuid = undefined;
-        for (var i = 0; i < items.length; i++) {
+        var key = _this.uuidFieldName;
+        if (undefined == key || "" == key) {
+            key = _this.primaryKey;
+        }
+
+        var item = grid.getCurrent();
+        for(var i = 0; i < itemIndex.length; i++)
+        {
             if (_this.parentsGrid) {
-                _this.gridObj.setValue(items[i], 1, _this.parentsGrid.getUUID());
+                _this.gridObj.setValue(itemIndex[i], _this.parentsUuidFieldName, _this.parentsGrid.getUUID());
                 //data[this.gridObj.getFieldIndex(this.parentsUuidFieldName)] = this.parentsGrid.getUUID();
             }
             else {
@@ -2692,9 +2699,10 @@ axboot.gridView = {
                         uuid = res.map.uuid;
                     }
                 });
-                _this.gridObj.setValue(items[i], 0, uuid);
+                _this.gridObj.setValue(itemIndex[i], key, uuid);
             }
         }
+
     },
     /*줄 추가 전에 호출되는 이벤트*/
     addRowBeforeEvent: function (wrapperObj, _this) {

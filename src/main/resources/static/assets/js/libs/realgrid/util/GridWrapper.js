@@ -147,7 +147,7 @@ var GridWrapper = function(p_id,p_rootContext) {
         };
         _this.gridView.onEditRowChanged = function(grid, itemIndex, dataRow, field, oldValue, newValue){ _this.dispatch("onEditRowChanged",_this,grid, itemIndex, dataRow, field, oldValue, newValue); }
 
-        _this.gridView.onEditRowPasted= function(grid, itemIndex, dataRow, fields, oldValues, newValues){ _this.dispatch("onEditRowPasted",_this,grid, itemIndex, dataRow, fields, oldValues, newValues); }
+        _this.gridView.onEditRowPasted= function(grid, itemIndex, dataRow, fields, oldValues, newValues){ _this.dispatch("onEditRowPasted",_this,_this.makeObj,grid, itemIndex, dataRow, fields, oldValues, newValues); }
         _this.gridView.onDataCellDblClicked = function(grid,index){ _this.dispatch("onDataCellDblClicked",grid,index); }
         _this.gridView.onDataCellDblClicked = function(grid,index){ _this.dispatch("onDataCellDblClicked",grid,index); }
         _this.gridView.onEditChange = function(grid, index, value){ _this.dispatch("onEditChange",_this, grid, index, value); }
@@ -198,7 +198,7 @@ var GridWrapper = function(p_id,p_rootContext) {
                 _this.dispatch("onRemoveRow");
             }
         });
-        _this.bind("onEditRowPasted",function(gridWrapper, grid, itemIndex, dataRow, fields, oldValues, newValues){
+        _this.bind("onEditRowPasted",function(gridWrapper, _this, grid, itemIndex, dataRow, fields, oldValues, newValues){
             grid.commit(true);
             var colData = undefined;
             var rowData = grid.getDataProvider().getJsonRows(dataRow,dataRow);
@@ -924,7 +924,7 @@ GridWrapper.prototype.unbind = function (eventName) {
     if (this.event[eventName])
         this.event[eventName] = new Array();
 }
-
+GridWrapper.prototype.onEditRowPasted = function(_event) { this.bind("onRowsPasted",_event);}
 GridWrapper.prototype.onRowsPasted = function(_event) { this.bind("onRowsPasted",_event);}
 GridWrapper.prototype.onKeydown = function(_event) { this.bind("onKeyDown",_event);}
 GridWrapper.prototype.onKeyUp = function(_event) { this.bind("onKeyUp",_event);}
