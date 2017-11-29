@@ -242,17 +242,17 @@ div {
 
 /*메인 좌측 트리그리드 realgridM1*/
 
-.left_bottom1 {
-    position: absolute;
+/*.left_bottom1 {
+    position: absolute;*/
     /*top:    60px;*/
-    padding-top: 90px;
+/*    padding-top: 90px;
     bottom: 0px;
     width: 100%;
     left: 0;
     height: 100%;
     background-color: white;
     display: block;
-}
+}*/
 
 .left_bottom1 ul li:hover {
     background-color: #f1f1f1

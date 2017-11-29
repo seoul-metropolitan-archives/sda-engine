@@ -65,7 +65,7 @@
     background-color:#f7f7f7;
     border-top: 1px solid #ddd;
     padding-top:0px;
-    height:27px;
+    height:29px;
 }
 
 
@@ -102,7 +102,7 @@
 
 .user_edit{
     border: 1px solid #ddd;
-    width:270px; 
+    width:330px;
     height:200px; 
     top:30px; 
     right:50px;
@@ -116,7 +116,7 @@
     width: 90%;
 }
 .user_edit input.onlyread{
-    background-color:#ddd; 
+    background-color:#f2f2f2;
     color:#999;
     font-size:12px;
 }
