@@ -1,3 +1,4 @@
+
 /*
  * Copyright (c) 2017. RMSoft Co.,Ltd. All rights reserved
  */
@@ -233,6 +234,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     },
     clearChild : function(){
         fnObj.gridView02.clearData();
+        fnObj.gridView02.gridView.cancel();
     }
 
 });
@@ -243,7 +245,7 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
     },
     tagId: "realgrid02",
     entityName: "Job",
-    primaryKey: "workflow_job_Uuid",
+    primaryKey: "workflowJobUuid",
     parentsUuidFieldName: "workflowUuid",
     parentsGrid: fnObj.gridView01,
     initView: function () {
