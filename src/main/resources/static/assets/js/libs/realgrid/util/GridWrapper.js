@@ -145,7 +145,9 @@ var GridWrapper = function(p_id,p_rootContext) {
         _this.gridView.onKeyUp = function(grid, key, ctrl, shift, alt){
             _this.dispatch("onKeyUp",grid, key, ctrl, shift, alt);
         };
-        _this.gridView.onEditRowChanged= function(grid, itemIndex, dataRow, field, oldValue, newValue){ _this.dispatch("onEditRowChanged",_this,grid, itemIndex, dataRow, field, oldValue, newValue); }
+        _this.gridView.onEditRowChanged = function(grid, itemIndex, dataRow, field, oldValue, newValue){ _this.dispatch("onEditRowChanged",_this,grid, itemIndex, dataRow, field, oldValue, newValue); }
+
+        _this.gridView.onEditRowPasted= function(grid, itemIndex, dataRow, fields, oldValues, newValues){ _this.dispatch("onEditRowPasted",_this,grid, itemIndex, dataRow, fields, oldValues, newValues); }
         _this.gridView.onDataCellDblClicked = function(grid,index){ _this.dispatch("onDataCellDblClicked",grid,index); }
         _this.gridView.onDataCellDblClicked = function(grid,index){ _this.dispatch("onDataCellDblClicked",grid,index); }
         _this.gridView.onEditChange = function(grid, index, value){ _this.dispatch("onEditChange",_this, grid, index, value); }
@@ -196,13 +198,16 @@ var GridWrapper = function(p_id,p_rootContext) {
                 _this.dispatch("onRemoveRow");
             }
         });
-        _this.bind("onEditRowChanged",function(gridWrapper, grid, itemIndex, dataRow, field, oldValue, newValue){
+        _this.bind("onEditRowPasted",function(gridWrapper, grid, itemIndex, dataRow, fields, oldValues, newValues){
             grid.commit(true);
             var colData = undefined;
-            var rowData = grid.getDataProvider().getJsonRows(itemIndex,itemIndex);
+            var rowData = grid.getDataProvider().getJsonRows(dataRow,dataRow);
 
             if(rowData.length > 0)
-                rowData = rowData[0];
+                rowData = rowData[rowData.length-1];
+
+            if(dataRow == -1)
+                dataRow = itemIndex;
 
             for(var col = 0; col < gridWrapper.columnInfo.length; col++)
             {
@@ -281,13 +286,15 @@ var GridWrapper = function(p_id,p_rootContext) {
                         //지우기
                         gridWrapper.gridView.setValue(dataRow, colData.name, "");
                     }
-
                     //gridWrapper.showPopup(grid, index.fieldName, newValue, index.itemIndex, popupData);
-                    console.log(index.fieldName);
+                    //console.log(index.fieldName);
+
                 }
             }
+            gridWrapper.gridView.commit(true);
         });
         _this.bind("onRowsPasted",function(gridWrapper, _this, grid, item){
+            return ;
             var index = grid.getCurrent();
 
             var columnInfoData = gridWrapper.columnInfo[index.fieldIndex];
@@ -377,7 +384,7 @@ var GridWrapper = function(p_id,p_rootContext) {
                         }
 
                         //gridWrapper.showPopup(grid, index.fieldName, newValue, index.itemIndex, popupData);
-                        console.log(index.fieldName);
+                        //console.log(index.fieldName);
                     }
                 }
 
