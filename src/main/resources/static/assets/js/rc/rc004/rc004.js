@@ -387,13 +387,13 @@ setFormData = function(data){
     fnObj.formView.setFormData("typeUuid",data.riTypeUuid);
     fnObj.formView.setFormData("publishedStatusUuid",data.riPublishedStatusUuid);
     fnObj.formView.setFormData("level",data.raLevelNm);
-    fnObj.formView.setFormData("description",data.description);
+    fnObj.formView.setFormData("description",data.description1);
     fnObj.formView.setFormData("author",data.riAuthor);
     fnObj.formView.setFormData("rcAggregationCode",data.aggregationCode);
     fnObj.formView.setFormData("openStatusUuid",data.openStatusUuid);
     fnObj.formView.setFormData("raTitle",data.raTitle);
     fnObj.formView.setFormData("raAggregationUuid",data.raAggregationUuid);
-    fnObj.formView.setFormData("notes",data.notes);
+    fnObj.formView.setFormData("notes",data.notes1);
     fnObj.formView.setFormData("provenance",data.provenance);
     fnObj.formView.setFormData("creator",data.creator);
     fnObj.formView.setFormData("keyword",data.keyword);
@@ -401,7 +401,6 @@ setFormData = function(data){
     fnObj.formView.setFormData("typeUuid",data.riTypeUuid);
     fnObj.formView.setFormData("referenceCode",data.referenceCode);
     fnObj.formView.setFormData("raAggregationCode",data.raAggregationCode);
-    fnObj.formView.setFormData("description",data.description);
 
     $("input[data-ax-path='descriptionStartDate']").val(getFormattedDate(data.descriptionStartDate));
     $("input[data-ax-path='descriptionEndDate']").val(getFormattedDate(data.descriptionEndDate));

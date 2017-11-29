@@ -29,10 +29,10 @@
              AND CLASSIFICATION_TYPE_UUID = #{classificationTypeUuid}
             </if>
             <if test="classificationCode != null">
-                AND CLASSIFICATION_CODE  LIKE '%' || #{classificationCode} || '%'
+                AND UPPER(CLASSIFICATION_CODE)  LIKE '%' || #{classificationCode} || '%'
             </if>
             <if test="classificationName != null">
-                AND CLASSIFICATION_NAME  LIKE '%' || #{classificationName} || '%'
+                AND UPPER(CLASSIFICATION_NAME)  LIKE '%' || #{classificationName} || '%'
             </if>
             <if test="useYn != null">
                 AND USE_YN = #{useYn}

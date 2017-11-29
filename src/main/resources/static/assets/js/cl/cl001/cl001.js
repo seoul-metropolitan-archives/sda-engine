@@ -23,6 +23,8 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             data: $.extend({}, {pageSize: 1000, sort: "classificationCode"}, this.formView.getData()),
             callback: function (res) {
                 if(res.list == null || res.list.length <= 0){
+                    fnObj.gridView01.setData([]);
+                    fnObj.gridView01.disabledColumn();
                     return;
                 }
                 fnObj.gridView01.setData(res.list);

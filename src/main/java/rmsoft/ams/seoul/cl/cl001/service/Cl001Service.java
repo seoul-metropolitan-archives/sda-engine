@@ -46,8 +46,8 @@ public class Cl001Service extends BaseService {
         Cl00101VO cl00101VO = new Cl00101VO();
         cl00101VO.setStatusUuid(requestParams.getString("statusUuid"));
         cl00101VO.setClassificationTypeUuid(requestParams.getString("classificationTypeUuid"));
-        cl00101VO.setClassificationName(requestParams.getString("classificationName"));
-        cl00101VO.setClassificationCode(requestParams.getString("classificationCode"));
+        cl00101VO.setClassificationName(StringUtils.upperCase(requestParams.getString("classificationName")));
+        cl00101VO.setClassificationCode(StringUtils.upperCase(requestParams.getString("classificationCode")));
         cl00101VO.setUseYn(requestParams.getString("useYn"));
 
         return filter(cl001Mapper.getClassificationSchemeList(cl00101VO), pageable, "", Cl00101VO.class);
