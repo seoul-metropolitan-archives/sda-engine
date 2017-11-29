@@ -808,16 +808,69 @@ fnObj.treeView01 = axboot.viewExtend(axboot.commonView, {
                         }
                     }
                 },
+                beforeDrop : function(treeId, treeNodes, targetNode, moveType, isCopy){
+
+
+                    console.log(targetNode);
+                    console.log(treeNodes);
+                    var msgCode = "";
+                    var result = true;
+                    if(targetNode.nodeType == "item")
+                    {
+                        result = false;
+                        msgCode = "RC001_01";
+                    }
+                    else
+                    {
+                        for(var i = 0; i < treeNodes.length; i++)
+                        {
+
+                            if(treeNodes[i].nodeType != "item" && targetNode.nodeType != treeNodes[i].nodeType)
+                            {
+                                result = false;
+                                msgCode = "RC001_02";
+                                break;
+                            }
+                            else if(treeNodes[i].nodeType == "item" && targetNode == null )
+                            {
+                                result = false;
+                                msgCode = "RC001_03";
+                                break;
+                            }
+                        }
+                    }
+                    if(!result)
+                        axWarningToast.push(axboot.getCommonMessage(msgCode));
+
+
+                    return result;
+
+                },
                 onDrop : function(event, treeId, treeNodes, targetNode, moveType, isCopy){
+
+
+                    //
+
                     console.log(event);
                     console.log(treeId);
                     console.log(targetNode);
                     console.log(treeNodes);
+
+
                     var reqList = new Array();
+                    var validate = true;
                     //validate 로직 추가 ( item은 최상위 불가, Aggregation의 타입에 따라서 상위 이동 불가 )
                     for(var i = 0; i < treeNodes.length; i++)
                     {
-                        treeNodes[i].parentUuid = targetNode.uuid;
+                        if(treeNodes[i].nodeType == "item" && null == targetNode)
+                        {
+                            validate = false;
+                            break;
+                        }
+                        if(null == targetNode)
+                            treeNodes[i].parentUuid = null;
+                        else
+                            treeNodes[i].parentUuid = targetNode.uuid;
                         reqList.push({
                             uuid :treeNodes[i].uuid,
                             parentUuid :treeNodes[i].parentUuid,
@@ -825,11 +878,38 @@ fnObj.treeView01 = axboot.viewExtend(axboot.commonView, {
 
                         })
                     }
+
+                    if(!validate)
+                        return ;
+
                     ACTIONS.dispatch(ACTIONS.PAGE_SAVE,reqList);
                     //오른쪽 데이터 refresh 로직 추가
 
                     console.log(treeNodes);
                     console.log(isCopy);
+
+                    //요청
+                    var reqData = $.extend({},targetNode);
+                    var path = targetNode.getPath();
+                    for(var key in reqData)
+                    {
+                        if(key != "uuid")
+                            delete(reqData[key]);
+                    }
+
+                    //tree는 자기 어머니까지 다해서 한방에 셋해야된다.
+                    fnObj.naviView.clear();
+                    for(var i = 0; i < path.length; i++)
+                    {
+                        fnObj.naviView.setData(path[i]);
+                    }
+
+                    if($(".explorer_grid").css("display")=="none")
+                        ACTIONS.dispatch(ACTIONS.GET_SUBDATA,reqData);
+                    else
+                        ACTIONS.dispatch(ACTIONS.GET_GRID_DATA,reqData);
+
+
                 },
                 //beforeAsync: function(treeId, treeNode){},
 
