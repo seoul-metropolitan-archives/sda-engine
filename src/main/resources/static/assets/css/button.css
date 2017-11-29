@@ -282,3 +282,7 @@ button.btn_ii:hover{
 }
 
 
+.show_grid{width: 65px; font-weight: bold; text-align: center; border: 0px solid #ddd}
+.show_list{width: 65px; font-weight: bold; text-align: center; border: 0px solid #ddd}
+.show_grid:hover{background-color: #cae8ff; cursor: pointer}
+.show_list:hover{background-color: #cae8ff; cursor: pointer}

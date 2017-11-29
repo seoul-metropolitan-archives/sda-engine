@@ -1050,14 +1050,22 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView,{
     {
         var _this = this;
         this.initInstance();
+        this.gridObj.setFixedOptions({
+            colCount: 3
+        });
         this.setColumnInfo(rc00101.column_info);
 
         this.gridObj.onDataCellDblClicked(this.itemDbClick);
 
+        this.gridObj.setOption({
+            checkBar: {visible: true}
+        })
 
         this.makeGrid();
         this.gridObj.addRowAfterEvent(this.addRowAfterEvent);
         this.gridObj.itemClick(this.itemClick);
+
+
     },
     itemDbClick : function(grid,index)
     {

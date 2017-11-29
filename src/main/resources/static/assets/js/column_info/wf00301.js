@@ -59,9 +59,10 @@ var wf00301 =
                 {
                     sortNo: 6,
                     name: "Run",
-                    text: "Run",
+                    text: " ",
                     width: 100,
                     editable: true,
+                    textAlignment: "center",
                     renderer: {
                         type: "imageButton",
                         text: "Run",

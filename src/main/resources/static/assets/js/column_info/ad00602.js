@@ -33,43 +33,49 @@ var ad00602 =
                 sortNo: 3,
                 name: "glossary",
                 text: "Glossary",
-                editable: true,
+                editable: false,
                 width : 400,
+                dataType: "text",
                 header :{styles:{
                     background: "linear,#f2f2f2",
                     fontSize: 12,
+                    fontFamily: "nanum",
                     foreground: "#000000",
                     borderRight: "#cccccc, 1",
                     borderBottom: "#cccccc, 1",
                     fontBold: false
                 }},
-                columnList : [
-                    {
+                columnList : [{
                     sortNo: 3,
                     name: "termCode",
                     text: "Term Code",
+                    width : 150,
                     editable: true,
                     dataType: "popup",
                     popupCode : "PU003",
-                    sqlColumn : {GLOSSARY_UUID: "glossaryUuid",TERM_NAME: "termName",TERM_CODE:"termCode",DATA_TYPE:"dataType1"},
-                    required: false,
+                    sqlColumn : {GLOSSARY_UUID: "glossaryUuid",TERM_NAME: "termName",TERM_CODE:"termCode",DATATYPE:"dataType1"},
+                    required: true,
                     visible: true
-                    },
+                },
                     {
                         sortNo: 4,
                         name: "termName",
                         text: "Term Name",
-                        editable: true,
+                        width : 150,
+                        editable: false,
                         dataType: "text",
-                        visible: true
+                        visible: true,
+                        disable: true
                     },
                     {
                         sortNo: 5,
                         name: "dataType1",
                         text: "Data Type",
+                        width : 100,
                         editable: false,
                         dataType: "text",
-                        visible: true
+                        visible: true,
+                        disable: true
                     }]
             },
             {
@@ -78,7 +84,7 @@ var ad00602 =
                 text: "Table",
                 editable: false,
                 dataType: "text",
-                width : 400,
+                width : 310,
                 header :{styles:{
                     background: "linear,#f2f2f2",
                     fontSize: 12,
@@ -89,33 +95,50 @@ var ad00602 =
                     fontBold: false
                 }},
                 columnList: [
-                    {
+                   /* {
                         sortNo: 6,
                         name: "columnName",
                         text: "Columnname",
+                        width : 150,
                         editable: false,
                         dataType: "text",
-                        visible: true
-                    },
+                        visible: true,
+                        disable: true
+                    },*/
                     {
                         sortNo: 7,
                         name: "comments",
                         text: "Comments",
+                        width : 150,
                         editable: false,
                         dataType: "text",
-                        visible: true
+                        visible: true,
+                        disable: true
                     },
                     {
                         sortNo: 8,
                         name: "dataType2",
                         text: "Data Type",
+                        width : 100,
                         editable: false,
                         dataType: "text",
-                        visible: true
-                    }
+                        visible: true,
+                        disable: true
+                    },
+                    {
+                        sortNo: 9,
+                        name: "nullable",
+                        text: "Nullable",
+                        width: 60,
+                        editable: false,
+                        dataType: "check",
+                        textAlignment: "center",
+                        visible: true,
+                        disable: true
+                    },
                 ]
             },
-            {
+          /*  {
                 sortNo: 9,
                 name: "nullable",
                 text: "Nullable",
@@ -124,17 +147,18 @@ var ad00602 =
                 dataType: "check",
                 textAlignment: "center",
                 visible: true
-            },
+            },*/
             {
                 sortNo: 10,
                 name: "auditYN",
                 text: "Audit",
-                width: 70,
+                width: 50,
                 editable: false,
                 dataType: "check",
                 textAlignment: "center",
                 defaultValue : "N",
-                visible: true
+                visible: true,
+                disable: true
             },
             {
                 sortNo: 11,
@@ -161,13 +185,13 @@ var ad00602 =
                 dataType: "check",
                 textAlignment: "center",
                 defaultValue : "Y",
-                required: true
+                required: false
             },
             {
                 sortNo: 14,
                 name: "insertUuid",
                 text: "Created By",
-                width: 120,
+                width: 80,
                 dataType: "text",
                 editable : false,
                 readonly : true,
@@ -179,7 +203,7 @@ var ad00602 =
                 sortNo: 15,
                 name: "insertDate",
                 text: "Date/Time Created",
-                width: 120,
+                width: 140,
                 dataType: "timestamp",
                 required: false,
                 disable: true
@@ -188,7 +212,7 @@ var ad00602 =
                 sortNo: 16,
                 name: "updateUuid",
                 text: "Modifed By",
-                width: 120,
+                width: 80,
                 visible: true,
                 dataType: "text",
                 required: false,
@@ -198,7 +222,7 @@ var ad00602 =
                 sortNo: 17,
                 name: "updateDate",
                 text: "Date/Time Modified",
-                width: 120,
+                width: 140,
                 dataType: "timestamp",
                 required: false,
                 disable: true

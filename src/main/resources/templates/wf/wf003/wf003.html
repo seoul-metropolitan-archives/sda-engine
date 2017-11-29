@@ -19,14 +19,14 @@
                 <div style=" height:30px; width:100%" class="bgf7 div_tablerow">
                     <ul class="bdb">
                         <th:block layout:insert="~{/fragments/page-buttons :: bookmark}"/>
-                        <th:block layout:insert="~{/fragments/page-buttons :: save-and-inquiry('none','show')}"/>
+                        <th:block layout:insert="~{/fragments/page-buttons :: save-and-inquiry('show','show')}"/>
                     </ul>
                 </div>
                 <div class="bdb div_tablerow searchFields">
                     <dl>
-                        <dt class="pdl_5">Service</dt>
+                        <dt class="mgl_5">Service</dt>
                         <dd>
-                            <select data-ax-path="serviceUuid" style="width:135px;">
+                            <select data-ax-path="serviceUuid" style="width:135px; background-color: #fffdd6">
                                 <option value=""></option>
                                 <option th:each="item : ${serviceUuid}" th:value="${item.codeDetailUUID}"
                                         th:text="${item.codeName}"/>
@@ -39,7 +39,7 @@
                     </dl>
                 </div>
                 <div style="height:100%; width:100%" class="bgf7 div_tablerow">
-                    <div style="display:table; height:100%; width:50%; float:left" class="bdr">
+                    <div style="display:table; height:100%; width:48%; float:left" class="bdr">
                         <ul class="bdb bdt div_tablerow bgf7" style="height:30px;">
                             <th:block layout:insert="~{/fragments/page-buttons :: dot('Workflow')}"/>
                             <th:block layout:insert="~{/fragments/page-buttons :: add-and-delete}"/>
@@ -48,7 +48,7 @@
                             <div id="realgrid01" style="width:100%; height:100%"></div>
                         </div>
                     </div>
-                    <div style="display:table; height:60%; width:50%; float:left">
+                    <div style="display:table; height:60%; width:52%; float:left">
                         <ul class="bdb bdt bgf7 div_tablerow" style="height:30px;">
                             <th:block layout:insert="~{/fragments/page-buttons :: dot('Job')}"/>
                             <th:block layout:insert="~{/fragments/page-buttons :: add-and-delete}"/>
@@ -57,10 +57,10 @@
                             <div id="realgrid02" style="width:100%; height:100%"></div>
                         </div>
                     </div>
-                    <div style="display:table; height:40%; width:50%; float:left">
+                    <div style="display:table; height:40%; width:52%; float:left">
                         <ul class="bdb bdt bgf7 div_tablerow" style="height:30px;">
                             <th:block layout:insert="~{/fragments/page-buttons :: dot('Parameter')}"/>
-                            <th:block layout:insert="~{/fragments/page-buttons :: add-and-delete}"/>
+                            <!--<th:block layout:insert="~{/fragments/page-buttons :: add-and-delete}"/>-->
                         </ul>
                         <div style="height:100%; width:100%" class="div_tablerow bdb">
                             <div id="realgrid03" style="width:100%; height:100%"></div>

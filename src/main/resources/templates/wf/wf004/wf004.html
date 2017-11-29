@@ -19,12 +19,12 @@
                 <div style=" height:30px; width:100%" class="bgf7 div_tablerow">
                     <ul class="bdb">
                         <th:block layout:insert="~{/fragments/page-buttons :: bookmark}"/>
-                        <th:block layout:insert="~{/fragments/page-buttons :: terminate-and-inquiry}"/>
+                        <th:block layout:insert="~{/fragments/page-buttons :: terminate-and-save-and-inquiry}"/>
                     </ul>
                 </div>
                 <div class="bdb div_tablerow searchFields">
                     <dl>
-                        <dt class="mgl_5">Workflow Status</dt>
+                        <dt class="mgl_5">Status</dt>
                         <dd>
                             <select data-ax-path="statusUuid" style="width:135px;">
                                 <option value=""></option>
@@ -32,15 +32,15 @@
                                         th:text="${item.codeName}"/>
                             </select>
                         </dd>
-                        <dt class="pdl_5">Batch ID</dt>
+                        <dt>Batch ID</dt>
                         <dd>
                             <input type=text data-ax-path="batchId" style="width:135px">
                         </dd>
-                        <dt class="pdl_5">Workflow Name</dt>
+                        <dt>Workflow Name</dt>
                         <dd>
                             <input type=text data-ax-path="workflowName" style="width:135px">
                         </dd>
-                        <dt class="pdl_5">Service</dt>
+                        <dt>Service</dt>
                         <dd>
                             <select data-ax-path="serviceUuid" style="width:135px;">
                                 <option value=""></option>
@@ -51,7 +51,7 @@
                     </dl>
                     <dl>
                         <th:block layout:insert="~{/fragments/page-buttons :: searchInput02 ('Executer','executer')}"/>
-                        <dt class="pdl_5">Start Date</dt>
+                        <dt>Start Date</dt>
                         <dd class="w_auto">
                             <div class="input-group" data-ax5picker="date">
                                 <div class="cld_box" style="background-color: #fffdd6">
@@ -69,8 +69,8 @@
                         </dd>
                     </dl>
                     <dl>
-                        <th:block layout:insert="~{/fragments/page-buttons :: searchInput02 ('Menu','menu')}"/>
-                        <dt class="pdl_5">End Date</dt>
+                        <th:block layout:insert="~{/fragments/page-buttons :: searchInput02 ('Program','menu')}"/>
+                        <dt>End Date</dt>
                         <dd class="w_auto">
                             <div class="input-group" data-ax5picker="date">
                                 <div class="cld_box" >
@@ -87,7 +87,7 @@
                     </dl>
                 </div>
                 <div style="height:100%; width:100%" class="bgf7 div_tablerow">
-                    <div style="display:table; height:100%; width:50%; float:left" class="bdr">
+                    <div style="display:table; height:100%; width:60%; float:left" class="bdr">
                         <ul class="bdb bdt div_tablerow bgf7" style="height:30px;">
                             <th:block layout:insert="~{/fragments/page-buttons :: dot('Workflow')}"/>
                             <th:block layout:insert="~{/fragments/page-buttons :: add-and-delete}"/>
@@ -96,7 +96,7 @@
                             <div id="realgrid01" style="width:100%; height:100%"></div>
                         </div>
                     </div>
-                    <div style="display:table; height:40%; width:50%; float:left">
+                    <div style="display:table; height:40%; width:40%; float:left">
                         <ul class="bdb bdt bgf7 div_tablerow" style="height:30px;">
                             <th:block layout:insert="~{/fragments/page-buttons :: dot('Job')}"/>
                             <th:block layout:insert="~{/fragments/page-buttons :: add-and-delete}"/>
@@ -105,7 +105,7 @@
                             <div id="realgrid02" style="width:100%; height:100%"></div>
                         </div>
                     </div>
-                    <div style="display:table; height:40%; width:50%; float:left">
+                    <div style="display:table; height:40%; width:40%; float:left">
                         <ul class="bdb bdt bgf7 div_tablerow" style="height:30px;">
                             <th:block layout:insert="~{/fragments/page-buttons :: dot('Parameter')}"/>
                             <th:block layout:insert="~{/fragments/page-buttons :: add-and-delete}"/>
@@ -114,19 +114,20 @@
                             <div id="realgrid03" style="width:100%; height:100%"></div>
                         </div>
                     </div>
-                    <div style="display:table; height:20%; width:50%; float:left">
+                    <div style="display:table; height:20%; width:40%; float:left">
                         <ul class="bdb bdt bgf7 div_tablerow" style="height:30px;">
                             <th:block layout:insert="~{/fragments/page-buttons :: dot('Message')}"/>
                         </ul>
                         <div style="height:100%; width:100%;" class="div_tablerow bdb">
-                            <ul style="width: 100%; height: 100%;padding: 5px">
-                                <li style="width: 100%; height: 100%">
-                                    <textarea data-ax-path="jobMessage" rows="1" cols="1"
-                                              class="txtar"
-                                              style="width: 100%">
-                                    </textarea>
-                                </li>
-                            </ul>
+                            <div style="width:100%; height:100%; background-color:#ffffff">
+
+                                <div class="detail_wrap">
+                                    <div class="detail_conts" style="margin: 0.5%" data-ax-path="jobMessage">
+                                    </div>
+
+                                </div>
+
+                            </div>
                         </div>
                     </div>
                 </div>

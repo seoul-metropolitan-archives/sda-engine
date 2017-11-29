@@ -229,7 +229,7 @@
 </th:block>
 <!--Add 버튼 & Delete 버튼-->
 <th:block layout:fragment="dot (str)">
-    <li style="width:50%; text-align:left;">
+    <li style="width:32%; text-align:left;">
         <img src="/assets/images/ams/img_dot2.png" alt="dot">
         <span th:classappend="excelName" th:text="${str}"></span>
     </li>
@@ -253,12 +253,12 @@
     </li>
 </th:block>
 
-<!--Popup버튼 & Save 버튼 & Inquiry 버튼-->
+<!--terminate버튼 & Inquiry 버튼-->
 <th:block layout:fragment="terminate-and-inquiry">
     <li style="text-align:right; width:48%;">
         <button class="btn_co" th:id="terminate">
             <span class="btn_icon_co">&nbsp;</span>
-            <span class="btn_main_txt">terminate</span>
+            <span class="btn_main_txt">Terminate</span>
         </button>
         <button class="btn_i" th:id="inquiry">
             <span class="btn_icon">&nbsp;</span>
@@ -266,6 +266,24 @@
         </button>
     </li>
 </th:block>
+<!--terminate버튼 & Save 버튼 & Inquiry 버튼-->
+<th:block layout:fragment="terminate-and-save-and-inquiry">
+    <li style="text-align:right; width:48%;">
+        <button class="btn_co" th:id="terminate">
+            <span class="btn_icon_co">&nbsp;</span>
+            <span class="btn_main_txt">Terminate</span>
+        </button>
+        <button class="btn_s" th:id="save">
+            <span class="btn_icon">&nbsp;</span>
+            <span class="btn_main_txt">Save(S)</span>
+        </button>
+        <button class="btn_i" th:id="inquiry">
+            <span class="btn_icon">&nbsp;</span>
+            <span class="btn_main_txt">Inquiry(I)</span>
+        </button>
+    </li>
+</th:block>
+
 <!--북마크-->
 <th:block layout:fragment="bookmark">
     <li style="width:30px; height: 30px">

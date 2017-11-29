@@ -408,7 +408,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     initView: function () {
         this.initInstance();
         this.gridObj.setFixedOptions({
-            colCount: 1
+            colCount: 3
         });
         this.setColumnInfo(wf00401.column_info);
         this.gridObj.setOption({
@@ -451,7 +451,7 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
     initView: function () {
         this.initInstance();
         this.gridObj.setFixedOptions({
-            colCount: 1
+            colCount: 3
         });
         this.setColumnInfo(wf00402.column_info);
         this.makeGrid();

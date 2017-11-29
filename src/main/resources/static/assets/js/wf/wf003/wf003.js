@@ -296,7 +296,7 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
     initView: function () {
         this.initInstance();
         this.gridObj.setFixedOptions({
-            colCount: 1
+            colCount: 2
         });
         this.setColumnInfo(wf00302.column_info);
         this.gridObj.itemClick(this.itemClick);

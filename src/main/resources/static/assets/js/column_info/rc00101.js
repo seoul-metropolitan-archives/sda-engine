@@ -14,7 +14,7 @@ var rc00101 =
             {
                 sortNo: 1,
                 name: "iconType",
-                text: "ti",
+                text: " ",
                 width: 30,
                 imageList : "iconList1",
                 dynamicStyles : [
@@ -38,7 +38,7 @@ var rc00101 =
                 sortNo: 2,
                 name: "code",
                 text: "Code",
-                width: 110,
+                width: 130,
                 editable: false,
                 dataType: "text"
             },
@@ -62,7 +62,7 @@ var rc00101 =
                 sortNo: 5,
                 name: "type",
                 text: "Type",
-                width: 110,
+                width: 100,
                 editable: false,
                 dataType: "text"
             },
@@ -86,7 +86,7 @@ var rc00101 =
                 sortNo: 8,
                 name: "descStartDate",
                 text: "Start Date",
-                width: 90,
+                width: 140,
                 editable: false,
                 dataType: "date"
             },
@@ -94,7 +94,7 @@ var rc00101 =
                 sortNo: 9,
                 name: "descEndDate",
                 text: "End Date",
-                width: 90,
+                width: 140,
                 editable: false,
                 dataType: "date"
             },

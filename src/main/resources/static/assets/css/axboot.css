@@ -680,7 +680,7 @@ body {
     font-size: 13px;
     /*2017.11.08
     line-height: 1.42857;*/
-    color: #333;
+    color: #000;
     /*background-color: #ECF0F5*/
 }
 
@@ -26322,7 +26322,7 @@ img {
     width: 125px;
     height: 22px;
     border: 1px solid #dddddd;
-    line-height: 20px;
+    line-height: 17px;
     text-align: left;
     vertical-align: middle;
     box-sizing: border-box
@@ -26330,7 +26330,7 @@ img {
 
 /*.cld_box a {border:none;position:absolute;right:1px;top:1px}*/
 .cld_box input {
-    width: 83%;
+    width: 80%;
     height: 19px;
     border: none;
     text-indent: 2px;
@@ -27753,7 +27753,7 @@ a.small_open {
 
 .top_move {
     position: fixed;
-    width: 10%;
+    width: 11.3%;
     height: 40px;
     right: 0px;
     bottom: 5px;
@@ -27764,7 +27764,7 @@ a.small_open {
 .top_move a {
     display: block;
     width: 40px;
-    height: 35px;
+    height: 40px;
     background-color: cadetblue;
     color: #ffffff;
     padding-top: 5px
@@ -27772,11 +27772,11 @@ a.small_open {
 
 .btn_del {
     display: block;
-    width: 15px;
-    height: 15px;
+    width: 17px;
+    height: 17px;
     text-align: center;
     background-color: #fff;
-    line-height: 16px;
+    line-height: 1px;
     float: right;
     color: #333;
     font-weight: bold;
@@ -27822,6 +27822,10 @@ a.small_open {
 .ztree ul li
 {
     display : list-item;
+    text-align: left;
+/*    display: flex;
+    width: 100%;
+    overflow:hidden;*/
 }
 
 .detail_wrap{height: 100%; width: 100%; overflow-y: auto; overflow-x: hidden; position: relative}

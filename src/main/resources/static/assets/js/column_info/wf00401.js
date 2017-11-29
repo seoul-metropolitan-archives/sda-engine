@@ -30,7 +30,7 @@ var wf00401 =
                     sortNo: 3,
                     name: "statusUuid",
                     text: "Status",
-                    width: 100,
+                    width: 90,
                     editable: false,
                     dataType: "combo",
                     required: false,
@@ -42,7 +42,7 @@ var wf00401 =
                     sortNo: 4,
                     name: "batchId",
                     text: "Batch ID",
-                    width: 150,
+                    width: 80,
                     editable: false,
                     dataType: "text",
                     required: false
@@ -51,7 +51,7 @@ var wf00401 =
                     sortNo: 5,
                     name: "workflowName",
                     text: "Workflow Name",
-                    width: 150,
+                    width: 210,
                     editable: false,
                     dataType: "text",
                     required: false
@@ -60,7 +60,7 @@ var wf00401 =
                     sortNo: 6,
                     name: "serviceUuid",
                     text: "Service",
-                    width: 100,
+                    width: 110,
                     editable: false,
                     dataType: "combo",
                     required: false,
@@ -72,7 +72,7 @@ var wf00401 =
                     sortNo: 7,
                     name: "executerUuid",
                     text: "Excuter",
-                    width: 150,
+                    width: 95,
                     editable: false,
                     dataType: "text",
                     required: false
@@ -80,7 +80,7 @@ var wf00401 =
                 {
                     sortNo: 8,
                     name: "munuName",
-                    text: "Menu",
+                    text: "Program",
                     width: 150,
                     editable: false,
                     dataType: "text",
