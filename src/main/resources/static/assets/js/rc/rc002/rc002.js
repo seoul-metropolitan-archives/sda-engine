@@ -212,7 +212,7 @@ fnObj.referenceAggre = axboot.viewExtend({
 
         });
 
-        $(",.childReference").delegate(".btn_del","click",function(){
+        $(".childReference").delegate(".btn_del","click",function(){
             if("create" == $(this).parents().eq(2).attr("type"))
             {
                 $(this).parents().eq(2).remove();
