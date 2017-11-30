@@ -41,7 +41,8 @@ var cl00101 =
                     width: 140,
                     dataType: "text",
                     required: false,
-                    disable : true
+                    disable : true,
+                    editable : false
                 },
                 {
                     sortNo: 3,
