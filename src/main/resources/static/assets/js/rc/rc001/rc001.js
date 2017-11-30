@@ -337,7 +337,9 @@ var fnObj = {
                         if(selectedData.length == 1)
                             selectedData = selectedData[0];
                         var item = getMenu("add item");
-                        item.menuParams = $.extend({},{type: "create"},selectedData);
+                        item.menuParams = $.extend({},{type: "create"},{
+                            aggregationUuid : selectedData.uuid
+                        });
                         parentsObj.tabView.open(item);
                     }
                     break;
@@ -375,7 +377,10 @@ var fnObj = {
                         }
                         if(item != "")
                         {
-                            item.menuParams = $.extend({},{type: "update"},selectedData[0]);
+                            item.menuParams = $.extend({},{type: "update"},{
+                                aggregationUuid : selectedData[0].parentUuid,
+                                itemUuid : selectedData[0].uuid
+                            });
                             parentsObj.tabView.open(item);
                         }
                         console.log(selectedData);

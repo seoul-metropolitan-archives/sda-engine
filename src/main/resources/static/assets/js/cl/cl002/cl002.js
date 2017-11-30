@@ -97,7 +97,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 fnObj.formView.setFormData("detailClassName",selectedItem.className);
                 fnObj.formView.setFormData("detailPath",selectedItem.path);
                 if(selectedItem.classLevelUuid != "undefined"){
-                    fnObj.formView.setFormData("detailClassLevel",axboot.commonCodeFilter("CD114").nameArr[axboot.commonCodeFilter("CD114").codeArr.indexOf(selectedItem.classLevelUuid)] + '단계');
+                    fnObj.formView.setFormData("detailClassLevel",axboot.commonCodeFilter("CD114").nameArr[axboot.commonCodeFilter("CD114").codeArr.indexOf(selectedItem.classLevelUuid)]);
                 }
                 fnObj.formView.setFormData("detailAddMetadata01",res.addMetadata01);
                 fnObj.formView.setFormData("detailAddMetadata02",res.addMetadata02);

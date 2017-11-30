@@ -213,7 +213,7 @@ fnObj.treeView01 = axboot.viewExtend(axboot.commonView, {
             {
                 if( key == list[i]["raParentAggregationUuid"] )
                 {
-                    list[i].children =  matchingData(list[i]["raAggregationUuid"], list);
+                    list[i].children =  matchingData(list[i]["raAggregationUuid"] == undefined  ? list[i]["riItemUuid"] : list[i]["raAggregationUuid"], list);
                     retList.push(list[i]);
                 }
             }
@@ -310,6 +310,7 @@ setFormData = function(data){
     fnObj.formView.setFormData("rcAggregationCode",data.aggregationCode);
     fnObj.formView.setFormData("notes",data.notes);
     fnObj.formView.setFormData("referenceCode",data.referenceCode);
+
     /*if(data.descriptionstartdate != "undefined" || data.descriptionstartdate != null) {
         if (data.descriptionstartdate == data.descriptionenddate) {
             fnobj.formview.setformdata("rcdateofdescription", data.descriptionstartdate);

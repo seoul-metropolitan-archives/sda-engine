@@ -11,13 +11,13 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = false)
 public class Rc00501VO extends BaseVO {
 
+    private String raTitle;
+
     private String raAggregationUuid;
 
     private String raPublishedStatusUuid;
 
     private String raAggregationCode;
-
-    private String raTitle;
 
     private String raTypeUuid;
 

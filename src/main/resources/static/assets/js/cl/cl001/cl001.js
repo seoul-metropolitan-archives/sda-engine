@@ -99,15 +99,15 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         ACTIONS.dispatch(ACTIONS.STATUS_UPATE,CANCEL_STATUS);
     },
     PAGE_SAVE: function (caller, act, data) {
-        ACTIONS.dispatch(ACTIONS.TOP_GRID_SAVE);
+        if(!this.gridView01.gridObj.validate()){
+            return false;
+        }else{
+            ACTIONS.dispatch(ACTIONS.TOP_GRID_SAVE);
+        }
         // ACTIONS.dispatch(ACTIONS.TOP_GRID_DETAIL_PAGE_SAVE);
     },
     TOP_GRID_SAVE: function (caller, act, data) {
         var result = false;
-
-        if(!this.gridView01.validate())
-            return false;
-
         axboot.call({
                 type: "PUT",
                 url: "/api/v1/cl001/03/updateClassificationSchemeList",
@@ -126,6 +126,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         return result;
     },
     TOP_GRID_DETAIL_PAGE_SAVE :function () {
+
         axboot.ajax({
             type: "GET",
             url: "/api/v1/cl001/05/updateClassificationSchemeConDetail",

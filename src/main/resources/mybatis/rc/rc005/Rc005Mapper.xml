@@ -5,102 +5,155 @@
 <mapper namespace="rmsoft.ams.seoul.rc.rc005.dao.Rc005Mapper">
     <select id="getRecordItemList" resultType="RC00501VO" statementType="PREPARED">
         SELECT
-            ZZ1.LEVEL_VALUE,
-            ZZ1.TITLE as raTitle,
-            ZZ1.AGGREGATION_UUID as raAggregationUuid,
-            ZZ1.PUBLISHED_STATUS_UUID as raPublishedStatusUuid,
-            ZZ1.AGGREGATION_CODE as raAggregationCode,
-            ZZ1.TYPE_UUID as raTypeUuid,
-            ZZ1.PARENT_AGGREGATION_UUID as raParentAggregationUuid,
-            ZZ1.LEVEL_UUID as raLevelUuid,
-            ZZ1.AUTHOR as raAuthor,
-            ZZ1.DESCRIPTION_START_DATE as raDescriptionStartDate,
-            ZZ1.DESCRIPTION_END_DATE as raDescriptionEndDate,
-            ZZ1.DESCRIPTION as description,
-            ZZ1.NOTES as notes,
-            ZZ1.INSERT_UUID as insertUuid,
-            ZZ1.INSERT_DATE as insertDate,
-            ZZ1.UPDATE_UUID as updateUuid,
-            ZZ1.UPDATE_DATE as updateDate,
-            ZZ2.ITEM_UUID as riItemUuid,
-            ZZ2.PUBLISHED_STATUS_UUID as riPublishedStatusUuid,
-            ZZ2.ITEM_CODE as riItemCode,
-            NVL(ZZ2.TITLE ,ZZ1.TITLE) as name,
-            ZZ2.TYPE_UUID as riTypeUuid,
-            ZZ2.AGGREGATION_UUID as riAggregationUuid,
-            ZZ2.AUTHOR as riAuthor,
-            ZZ2.DESCRIPTION_START_DATE as riDescriptionStartDate,
-            ZZ2.DESCRIPTION_END_DATE as riDescriptionEndDate,
-            ZZ2.DESCRIPTION as description1,
-            ZZ2.NOTES as notes1,
-            ZZ2.INSERT_UUID as insertUuid1,
-            ZZ2.INSERT_DATE as insertDate1,
-            ZZ2.UPDATE_UUID as updateUuid1,
-            ZZ2.UPDATE_DATE as updateDate1,
-            ZZ2.OPEN_STATUS_UUID as openStatusUuid,
-            ZZ2.KEYWORD as keyword,
-            ZZ2.REFERENCE_CODE as referenceCode,
-            ZZ2.PROVENANCE as provenance,
-            ZZ2.CREATOR as creator ,
-            ZZ2.CREATION_START_DATE as creationStartDate,
-            ZZ2.CREATION_END_DATE as creationEndDate,
-            ZZ2.ADD_METADATA01 as addMetadata01,
-            ZZ2.ADD_METADATA02 as addMetadata02,
-            ZZ2.ADD_METADATA03 as addMetadata03,
-            ZZ2.ADD_METADATA04 as addMetadata04,
-            ZZ2.ADD_METADATA05 as addMetadata05,
-            ZZ2.ADD_METADATA06 as addMetadata06,
-            ZZ2.ADD_METADATA07 as addMetadata07,
-            ZZ2.ADD_METADATA08 as addMetadata08,
-            ZZ2.ADD_METADATA09 as addMetadata09,
-            ZZ2.ADD_METADATA10 as addMetadata10,
-            ZZ2.INSERT_UUID_Z02 as insertUuid2,
-            ZZ2.INSERT_DATE_Z02 as insertDate2,
-            ZZ2.UPDATE_UUID_Z02 as updateUuid2,
-            ZZ2.UPDATE_DATE_Z02 as updateDate2
-        FROM (
+        ZZ1.LEVEL_VALUE,
+        ZZ1.TITLE as raTitle,
+        ZZ1.AGGREGATION_UUID as raAggregationUuid,
+        ZZ1.PUBLISHED_STATUS_UUID as raPublishedStatusUuid,
+        ZZ1.AGGREGATION_CODE as raAggregationCode,
+        ZZ1.TYPE_UUID as raTypeUuid,
+        ZZ1.PARENT_AGGREGATION_UUID as raParentAggregationUuid,
+        ZZ1.LEVEL_UUID as raLevelUuid,
+        ZZ1.AUTHOR as raAuthor,
+        ZZ1.DESCRIPTION_START_DATE as raDescriptionStartDate,
+        ZZ1.DESCRIPTION_END_DATE as raDescriptionEndDate,
+        ZZ1.DESCRIPTION as description,
+        ZZ1.NOTES as notes,
+        ZZ1.INSERT_UUID as insertUuid,
+        ZZ1.INSERT_DATE as insertDate,
+        ZZ1.UPDATE_UUID as updateUuid,
+        ZZ1.UPDATE_DATE as updateDate,
+        ZZ1.ITEM_UUID as riItemUuid,
+        ZZ1.PUBLISHED_STATUS_UUID1 as riPublishedStatusUuid,
+        ZZ1.ITEM_CODE as riItemCode,
+        NVL(ZZ1.TITLE1 ,ZZ1.TITLE) as name,
+        ZZ1.TYPE_UUID1 as riTypeUuid,
+        ZZ1.AGGREGATION_UUID1 as riAggregationUuid,
+        ZZ1.AUTHOR1 as riAuthor,
+        ZZ1.DESCRIPTION_START_DATE1 as riDescriptionStartDate,
+        ZZ1.DESCRIPTION_END_DATE1 as riDescriptionEndDate,
+        ZZ1.DESCRIPTION1 as description1,
+        ZZ1.NOTES1 as notes1,
+        ZZ1.INSERT_UUID1 as insertUuid1,
+        ZZ1.INSERT_DATE1 as insertDate1,
+        ZZ1.UPDATE_UUID1 as updateUuid1,
+        ZZ1.UPDATE_DATE1 as updateDate1,
+        ZZ1.OPEN_STATUS_UUID as openStatusUuid,
+        ZZ1.KEYWORD as keyword,
+        ZZ1.REFERENCE_CODE as referenceCode,
+        ZZ1.PROVENANCE as provenance,
+        ZZ1.CREATOR as creator ,
+        ZZ1.CREATION_START_DATE as creationStartDate,
+        ZZ1.CREATION_END_DATE as creationEndDate,
+        ZZ1.ADD_METADATA01 as addMetadata01,
+        ZZ1.ADD_METADATA02 as addMetadata02,
+        ZZ1.ADD_METADATA03 as addMetadata03,
+        ZZ1.ADD_METADATA04 as addMetadata04,
+        ZZ1.ADD_METADATA05 as addMetadata05,
+        ZZ1.ADD_METADATA06 as addMetadata06,
+        ZZ1.ADD_METADATA07 as addMetadata07,
+        ZZ1.ADD_METADATA08 as addMetadata08,
+        ZZ1.ADD_METADATA09 as addMetadata09,
+        ZZ1.ADD_METADATA10 as addMetadata10,
+        ZZ1.INSERT_UUID2 as insertUuid2,
+        ZZ1.INSERT_DATE2 as insertDate2,
+        ZZ1.UPDATE_UUID2 as updateUuid2,
+        ZZ1.UPDATE_DATE2 as updateDate2
+        FROM
+         (  SELECT
+                LEVEL AS LEVEL_VALUE,
+                Z1.TITLE,
+                Z1.AGGREGATION_UUID,
+                Z1.PUBLISHED_STATUS_UUID,
+                Z1.AGGREGATION_CODE,
+                Z1.TYPE_UUID,
+                Z1.PARENT_AGGREGATION_UUID,
+                Z1.LEVEL_UUID,
+                Z1.AUTHOR,
+                Z1.DESCRIPTION_START_DATE,
+                Z1.DESCRIPTION_END_DATE,
+                Z1.DESCRIPTION,
+                Z1.NOTES,
+                Z1.INSERT_UUID,
+                Z1.INSERT_DATE,
+                Z1.UPDATE_UUID,
+                Z1.UPDATE_DATE,
+                '' as ITEM_UUID,
+                '' as PUBLISHED_STATUS_UUID1,
+                '' as ITEM_CODE,
+                '' as TITLE1,
+                '' as TYPE_UUID1,
+                '' as AGGREGATION_UUID1,
+                '' as AUTHOR1,
+                '' as DESCRIPTION_START_DATE1,
+                '' as DESCRIPTION_END_DATE1,
+                '' as DESCRIPTION1,
+                '' as NOTES1,
+                '' as INSERT_UUID1,
+                SYSDATE as INSERT_DATE1,
+                '' as UPDATE_UUID1,
+                SYSDATE as UPDATE_DATE1,
+                '' as OPEN_STATUS_UUID,
+                '' as KEYWORD,
+                '' as REFERENCE_CODE,
+                '' as PROVENANCE,
+                '' as CREATOR ,
+                '' as CREATION_START_DATE,
+                '' as CREATION_END_DATE,
+                '' as ADD_METADATA01,
+                '' as ADD_METADATA02,
+                '' as ADD_METADATA03,
+                '' as ADD_METADATA04,
+                '' as ADD_METADATA05,
+                '' as ADD_METADATA06,
+                '' as ADD_METADATA07,
+                '' as ADD_METADATA08,
+                '' as ADD_METADATA09,
+                '' as ADD_METADATA10,
+                '' as INSERT_UUID2,
+                SYSDATE as INSERT_DATE2,
+                '' as UPDATE_UUID2,
+                SYSDATE as UPDATE_DATE2
+        FROM
+            RC_AGGREGATION Z1 START WITH
+            <if test="riAggregationUuid != null">
+              Z1.AGGREGATION_UUID = #{riAggregationUuid}
+            </if>
+        CONNECT   BY
+            Z1.AGGREGATION_UUID= PRIOR Z1.PARENT_AGGREGATION_UUID
+        UNION
                 SELECT
-                    LEVEL AS LEVEL_VALUE,
-                    Z1.TITLE,
-                    Z1.AGGREGATION_UUID,
-                    Z1.PUBLISHED_STATUS_UUID,
-                    Z1.AGGREGATION_CODE,
-                    Z1.TYPE_UUID,
-                    Z1.PARENT_AGGREGATION_UUID,
-                    Z1.LEVEL_UUID,
-                    Z1.AUTHOR,
-                    Z1.DESCRIPTION_START_DATE,
-                    Z1.DESCRIPTION_END_DATE,
-                    Z1.DESCRIPTION,
-                    Z1.NOTES,
-                    Z1.INSERT_UUID,
-                    Z1.INSERT_DATE,
-                    Z1.UPDATE_UUID,
-                    Z1.UPDATE_DATE
-                FROM
-                  RC_AGGREGATION Z1
-                START WITH
-                <if test="riAggregationUuid != null">
-                  Z1.AGGREGATION_UUID = #{riAggregationUuid}<!--'C7AEAC56-D860-4ECE-8D98-90AD78F7797E'-->
-                </if>
-                CONNECT BY  Z1.AGGREGATION_UUID= PRIOR Z1.PARENT_AGGREGATION_UUID
-        ) ZZ1 , (
-                SELECT
+                    99 AS LEVEL_VALUE,
+                    '' as TITLE,
+                    '' as AGGREGATION_UUID,
+                    '' as PUBLISHED_STATUS_UUID,
+                    '' as AGGREGATION_CODE,
+                    '' as TYPE_UUID,
+                    Z01.AGGREGATION_UUID as PARENT_AGGREGATION_UUID,
+                    '' as LEVEL_UUID,
+                    '' as AUTHOR,
+                    '' as DESCRIPTION_START_DATE,
+                    '' as DESCRIPTION_END_DATE,
+                    '' as DESCRIPTION,
+                    '' as NOTES,
+                    '' as INSERT_UUID,
+                    SYSDATE as INSERT_DATE,
+                    '' as UPDATE_UUID,
+                    SYSDATE as UPDATE_DATE,
                     Z01.ITEM_UUID,
-                    Z01.PUBLISHED_STATUS_UUID,
+                    Z01.PUBLISHED_STATUS_UUID as PUBLISHED_STATUS_UUID1,
                     Z01.ITEM_CODE,
-                    Z01.TITLE,
-                    Z01.TYPE_UUID,
-                    Z01.AGGREGATION_UUID,
-                    Z01.AUTHOR,
-                    Z01.DESCRIPTION_START_DATE,
-                    Z01.DESCRIPTION_END_DATE,
-                    Z01.DESCRIPTION,
-                    Z01.NOTES,
-                    Z01.INSERT_UUID,
-                    Z01.INSERT_DATE,
-                    Z01.UPDATE_UUID,
-                    Z01.UPDATE_DATE,
+                    Z01.TITLE as TITLE1,
+                    Z01.TYPE_UUID as TYPE_UUID1 ,
+                    Z01.AGGREGATION_UUID as AGGREGATION_UUID1,
+                    Z01.AUTHOR as AUTHOR1,
+                    Z01.DESCRIPTION_START_DATE as DESCRIPTION_START_DATE1,
+                    Z01.DESCRIPTION_END_DATE as DESCRIPTION_END_DATE1,
+                    Z01.DESCRIPTION as DESCRIPTION1,
+                    Z01.NOTES as NOTES1,
+                    Z01.INSERT_UUID as INSERT_UUID1,
+                    Z01.INSERT_DATE as INSERT_DATE1,
+                    Z01.UPDATE_UUID as UPDATE_UUID1,
+                    Z01.UPDATE_DATE as UPDATE_DATE1,
                     Z02.OPEN_STATUS_UUID,
                     Z02.KEYWORD,
                     Z02.REFERENCE_CODE,
@@ -118,23 +171,24 @@
                     Z02.ADD_METADATA08,
                     Z02.ADD_METADATA09,
                     Z02.ADD_METADATA10,
-                    Z02.INSERT_UUID AS INSERT_UUID_Z02,
-                    Z02.INSERT_DATE AS INSERT_DATE_Z02,
-                    Z02.UPDATE_UUID AS UPDATE_UUID_Z02,
-                    Z02.UPDATE_DATE AS UPDATE_DATE_Z02
+                    Z02.INSERT_UUID AS INSERT_UUID2,
+                    Z02.INSERT_DATE AS INSERT_DATE2,
+                    Z02.UPDATE_UUID AS UPDATE_UUID2,
+                    Z02.UPDATE_DATE AS UPDATE_DATE2
                 FROM
-                  RC_ITEM Z01 , RC_ITEM_CON Z02
-                WHERE Z01.ITEM_UUID = Z02.ITEM_UUID
-              <if test="riItemUuid != null">
-                AND Z01.ITEM_UUID =  #{riItemUuid}<!--'40AD28EE-5E23-4808-9760-D16770CB3D49'-->
-              </if>
-              <if test="riAggregationUuid != null">
-                AND Z01.AGGREGATION_UUID = #{riAggregationUuid} <!--'C7AEAC56-D860-4ECE-8D98-90AD78F7798E'-->
-              </if>
-              ) ZZ2
-        WHERE
-            ZZ1.AGGREGATION_UUID = ZZ2.AGGREGATION_UUID(+)
-        ORDER BY ZZ1.LEVEL_VALUE DESC
+                    RC_ITEM Z01 ,
+                    RC_ITEM_CON Z02
+                    WHERE
+                        Z01.ITEM_UUID = Z02.ITEM_UUID
+                        <if test="riItemUuid != null">
+                          AND Z01.ITEM_UUID =  #{riItemUuid}
+                        </if>
+                        <if test="riAggregationUuid != null">
+                          AND Z01.AGGREGATION_UUID = #{riAggregationUuid}
+                        </if>
+                        ) ZZ1
+                    ORDER BY
+                    ZZ1.LEVEL_VALUE
     </select>
     <select id="getRecordComponentList" resultType="RC00502VO" statementType="PREPARED">
         SELECT

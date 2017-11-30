@@ -5,12 +5,12 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         axboot.ajax({
             type: "GET",
             url: "/api/v1/rc005/01/list",
-            data: $.extend({}, {pageSize: 1000}, {aggregationUuid :'FD74F4BC-3309-421B-9DCD-BAD79E43DE73', itemUuid: '2ECBF7C3-6480-4C9E-BA5A-89EE533FA1AA'}),
+            data: $.extend({}, {pageSize: 1000}, data),
             callback: function (res) {
                 if(res.list != "undefined" && res.list != null && res.list.length > 0){
                     rcList = ax5.util.deepCopy(res.list);
                     fnObj.treeView01.setData({}, res.list, data);
-                    setFormData(rcList[0]);
+                    setFormData(rcList[rcList.length-1]);
                     if(rcList[0].rc00502VoList!= "undefined" && rcList[0].rc00502VoList != null && rcList[0].rc00502VoList.length > 0){
                         fnObj.gridView01.setData(rcList[0].rc00502VoList);
                     }
@@ -94,7 +94,17 @@ fnObj.pageStart = function () {
     _this.treeView01.initView();
     _this.gridView01.initView();
     // Data 조회
-    ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+    var data = axboot.getMenuParams();
+
+    if(null == data || data.type == "create")
+    {
+        fnObj.formView.setFormData("raAggregationUuid",data.aggregationUuid);
+    }
+    else
+    {
+        ACTIONS.dispatch(ACTIONS.PAGE_SEARCH,{aggregationUuid : data.aggregationUuid, itemUuid : data.itemUuid});
+    }
+
 };
 
 fnObj.formView = axboot.viewExtend(axboot.formView, {
@@ -295,7 +305,7 @@ fnObj.treeView01 = axboot.viewExtend(axboot.commonView, {
             {
                 if( key == list[i]["raParentAggregationUuid"] )
                 {
-                    list[i].children =  matchingData(list[i]["raAggregationUuid"], list);
+                    list[i].children =  matchingData(list[i]["raAggregationUuid"] == undefined  ? list[i]["riItemUuid"] : list[i]["raAggregationUuid"], list);
                     retList.push(list[i]);
                 }
             }
@@ -407,10 +417,11 @@ setFormData = function(data){
 
     $("input[data-ax-path='creationStartDate']").val(getFormattedDate(data.creationStartDate));
     $("input[data-ax-path='creationEndDate']").val(getFormattedDate(data.creationEndDate));
+
     ACTIONS.dispatch(ACTIONS.SEARCH_FROM_SCH,{
         popupCode : "PU123",
         searchData : data.raAggregationCode
-    })
+    });
   /*  $("input[data-ax-path='descriptionStartDate']").val();
     $("input[data-ax-path='descriptionEndDate']").val();
 */
