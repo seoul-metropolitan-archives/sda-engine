@@ -3110,6 +3110,27 @@ axboot.getMenuId = function(){
         return "";
     }
 }
+axboot.getMenuParams = function(){
+    /*
+    try {
+        return window.location.search.split("&menu")[0].split("?menuParams=")[1];
+    }catch(exception)
+    {
+        return "";
+    }
+    */
+    var menuParams = {};
+    if(parent.window.fnObj.tabView)
+    {
+        parent.window.fnObj.tabView.list.forEach(function (_item, idx) {
+            if (_item.status == "on") {
+                menuParams = _item.menuParams;
+                return false;
+            }
+        });
+    }
+    return menuParams;
+}
 axboot.isDataChanged = function (menuId) {
     if (!axboot.gridList || !axboot.gridList[menuId])
         return false;

@@ -52,5 +52,12 @@ public class Rc001Controller extends MessageBaseController
         return rc001Service.save(list);
     }
 
+    @RequestMapping("/getMenuInfo")
+    @ResponseBody
+    public Object getMenu(@RequestBody Map<String,String> param)
+    {
+        return rc001Service.getMenu(param);
+    }
+
 
 }

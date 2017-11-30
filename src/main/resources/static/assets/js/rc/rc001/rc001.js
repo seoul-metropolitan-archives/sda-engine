@@ -272,7 +272,129 @@ var fnObj = {
             });
         });
 
-        /*context menu 테스트*/
+        $(".exp-menu a").click(function(event){
+            event.stopPropagation();
+            event.preventDefault();
+            var selectedData = undefined;
+
+            var parentsObj = parent.window.fnObj;
+            var menu = "";
+
+
+            //icon 실행
+            if($(".explorer_grid").css("display")=="none")
+            {
+                selectedData= fnObj.iconView.getSelectedData();
+            }
+            //grid 실행
+            else {
+                selectedData = fnObj.gridView01.getSelectedData();
+            }
+
+            //var selectedData = rightObj.getSelectedData();
+
+            var getMenu = function(searchData)
+            {
+                var menuObj = undefined;
+                axboot.ajax({
+                    url: "/rc/rc001/getMenuInfo",
+                    data: JSON.stringify({progNm : searchData}),
+                    type : "POST",
+                    dataType : "JSON",
+                    async : false,
+                    callback: function (res) {
+                        menuObj = res;
+                    },
+                    options: {
+                        onError: axboot.viewError
+                    }
+                });
+                return menuObj;
+            }
+
+            switch($(this).text())
+            {
+                //add
+                case "Aggregation":
+                    if(selectedData.length < 2)
+                    {
+                        if(selectedData.length == 1)
+                            selectedData = selectedData[0];
+                        var item = getMenu("add aggregation");
+                        /*
+                        var $iframe = this.frameTarget.find('[data-tab-id="' + menuId + '"]'), // iframe jQuery Object
+                            iframeObject = $iframe.get(0),
+                            idoc = (iframeObject.contentDocument) ? iframeObject.contentDocument : iframeObject.contentWindow.document;
+                        */
+
+                        item.menuParams = $.extend({},{type: "create"},selectedData);
+                        parentsObj.tabView.open(item);
+                    }
+                    break;
+                case "Item":
+                    if(selectedData.length < 2)
+                    {
+                        if(selectedData.length == 1)
+                            selectedData = selectedData[0];
+                        var item = getMenu("add item");
+                        item.menuParams = $.extend({},{type: "create"},selectedData);
+                        parentsObj.tabView.open(item);
+                    }
+                    break;
+                //view
+                case "Properties":
+                    if(selectedData.length == 1)
+                    {
+                        var item = "";
+                        if(selectedData[0].nodeType == "item")
+                        {
+                            item = getMenu("view item");
+                        }
+                        else
+                        {
+                            item = getMenu("view aggregation");
+                        }
+                        if(item != "")
+                        {
+                            item.menuParams = $.extend({},{type: "create"},selectedData[0]);
+                            parentsObj.tabView.open(item);
+                        }
+                    }
+                    break;
+                //do
+                case "Edit":
+                    if(selectedData.length == 1)
+                    {
+                        if(selectedData[0].nodeType == "item")
+                        {
+                            item = getMenu("add item");
+                        }
+                        else
+                        {
+                            item = getMenu("add aggregation");
+                        }
+                        if(item != "")
+                        {
+                            item.menuParams = $.extend({},{type: "update"},selectedData[0]);
+                            parentsObj.tabView.open(item);
+                        }
+                        console.log(selectedData);
+                    }
+                    break;
+                case "Move":
+                    break;
+                case "Update Status":
+                    break;
+                case "Delete":
+                    break;
+
+            }
+
+            console.log($(this).text());
+
+        });
+
+        /*/!*context menu 테스트*!/
         var menu = new ax5.ui.menu({
             position: "absolute", // default position is "fixed"
             icons: {
@@ -304,7 +426,7 @@ var fnObj = {
             menu.popup(e);
             ax5.util.stopEvent(e);
             // e || {left: 'Number', top: 'Number', direction: '', width: 'Number'}
-        });
+        });*/
         fnObj.treeView01.initView();
         fnObj.naviView.iintView();
         fnObj.iconView.initView();
@@ -487,6 +609,9 @@ fnObj.iconView = axboot.viewExtend({
                 $(this).removeClass("selected");
             });
         });
+
+
+
         $("#iconListArea").delegate("div","click",function(event){
 
             event.stopPropagation();
@@ -574,8 +699,10 @@ fnObj.iconView = axboot.viewExtend({
         var imgPath = "/assets/images/ams/";
         targetTag.empty();
         var fullStr = "";
+        this.list = list;
         if(list.length < 1)
             return ;
+
         var chooseList = new Array();
         if(isFirst)
         {
@@ -656,7 +783,29 @@ fnObj.iconView = axboot.viewExtend({
 
         }
 
+    },
+    getSelectedData : function()
+    {
+        var selectedData = new Array();
+        var retData = new Array();
+        $(".explorer_list .selected").each(function(item,index){
+            selectedData.push($(this).attr("uuid"));
+        });
+        for(var i = 0; i < this.list.length; i++)
+        {
+            for(var j = 0; j < selectedData.length; j++)
+            {
+                if(this.list[i].uuid == selectedData[j])
+                {
+                    retData.push(this.list[i]);
+                }
+            }
+
+        }
+
+        return retData;
     }
+
 });
 
 /**
@@ -1119,6 +1268,11 @@ fnObj.treeView01 = axboot.viewExtend(axboot.commonView, {
     },
     deselectNode: function () {
         ACTIONS.dispatch(ACTIONS.TREEITEM_DESELECTE);
+    },
+    getSelectedData : function()
+    {
+        var treeObj = $.fn.zTree.getZTreeObj("ztree");
+        return treeObj.getSelectedNodes();
     }
 });
 
@@ -1209,6 +1363,11 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView,{
         }
 
         this.gridObj.setData("set", list);
+    },
+    getSelectedData : function()
+    {
+
+        return this.gridObj.getSelectedData();
     }
 });
 

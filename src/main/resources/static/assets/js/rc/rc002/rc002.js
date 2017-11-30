@@ -5,7 +5,10 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         axboot.ajax({
             type: "GET",
             url: "/api/v1/rc003/01/list",
-            data: $.extend({}, {pageSize: 1000, sort: "classificationCode"}, {aggregationUuid :'A2EF15E7-BE58-41DD-945C-E99FB5DE60C1'}),
+            data: $.extend({}, {pageSize: 1000, sort: "classificationCode"}, data
+
+        //{aggregationUuid :'A2EF15E7-BE58-41DD-945C-E99FB5DE60C1'}
+        ),
             callback: function (res) {
                 if(res.list != "undefined" && res.list != null && res.list.length > 0){
                     rcList = ax5.util.deepCopy(res.list);
@@ -44,9 +47,24 @@ fnObj.pageStart = function () {
 
     _this.formView.initView();
     _this.treeView01.initView();
+    _this.childrenAggre.initView();
+    _this.referenceItem.initView();
+    _this.referenceAggre.initView();
     // Data 조회
-    ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+    var data = axboot.getMenuParams();
+    console.log(data);
+    if(null == data || data.type == "create")
+    {
+
+    }
+    else
+    {
+        ACTIONS.dispatch(ACTIONS.PAGE_SEARCH,{aggregationUuid : data.uuid});
+    }
 };
+//=================================================================
+//작업영역
+//=================================================================
 
 fnObj.formView = axboot.viewExtend(axboot.formView, {
     getDefaultData: function () {
@@ -69,6 +87,18 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
     },
     initEvent: function () {
         var _this = this;
+        //by the Aggregation type, to control the Reference Area
+        $("select[data-ax-path='type']").change(function(){
+            if($(this).find("option:selected").text()=="Virtual")
+            {
+                $("#referenceAggreArea,#referenceItemArea").show();
+            }
+            else
+            {
+                $("#referenceAggreArea,#referenceItemArea").hide();
+            }
+        });
+
         $('.togl01').click(function () {
             $(".togl01_show").toggle();
             if ($('#open_btn1').val() == '▼') {
@@ -128,6 +158,129 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
     }
 });
 
+fnObj.childrenAggre = axboot.viewExtend({
+    targetTag  : $("#childrenAggreArea"),
+    initView: function () {
+        this.initEvent();
+    },
+    initEvent: function () {
+        //add aggregation
+        $("#addAggregation").click(function(){
+            var cloneTag = $("#aggregationTemplate").clone();
+            cloneTag.attr("id","");
+            cloneTag.attr("type","create");
+            $(this).before(cloneTag);
+            cloneTag.show();
+        });
+
+
+        $(".childAggregation").delegate(".btn_del","click",function(){
+            if("create" == $(this).parents().eq(2).attr("type"))
+            {
+                $(this).parents().eq(2).remove();
+            }
+            else
+            {
+                $(this).parents().eq(2).hide();
+            }
+        });
+    },
+    getData : function(){
+
+    }
+});
+
+fnObj.referenceAggre = axboot.viewExtend({
+    targetTag  : $("#referenceAggreArea"),
+   initView: function () {
+       this.initEvent();
+   },
+    initEvent: function () {
+        //add aggregation
+
+        $("#addReference").click(function(){
+            var cloneTag = $("#referenceTemplate").clone();
+            cloneTag.attr("id","");
+            cloneTag.attr("type","create");
+            $(this).before(cloneTag);
+            cloneTag.show();
+        });
+
+
+        //Search Aggregation (Popup)
+        $(".childReference").delegate(".searchAggregation","click",function(){
+
+        });
+
+        $(",.childReference").delegate(".btn_del","click",function(){
+            if("create" == $(this).parents().eq(2).attr("type"))
+            {
+                $(this).parents().eq(2).remove();
+            }
+            else
+            {
+                $(this).parents().eq(2).hide();
+            }
+        });
+
+    },
+    getData : function(){
+        var retData = new Array();
+        var data = {};
+        if(targetTag.css("display") != "none")
+        {
+            $(targetTag).find(".childAggregation>ul").each(function(){
+                data = {};
+                $(this).children("li").find("input").each(function(){
+                    data[$(this).attr("data-ax-path")] = $(this).val();
+                });
+                $(this).children("li").find("select").each(function(){
+                    data[$(this).attr("data-ax-path")] = $(this).val();
+                });
+                data["type"] = $("").find("data-ax-path='type'").val();
+            });
+        }
+        return retData;
+    }
+});
+fnObj.referenceItem = axboot.viewExtend({
+    targetTag  : $("#referenceAggreArea"),
+    initView: function () {
+        this.initEvent();
+    },
+    initEvent: function () {
+        //add aggregation
+
+        $("#addReferenceItem").click(function(){
+            var cloneTag = $("#referenceItemTemplate").clone();
+            cloneTag.attr("id","");
+            cloneTag.attr("type","create");
+            $(this).before(cloneTag);
+            cloneTag.show();
+        });
+
+        $(".childReferenceItem").delegate(".searchReferenceItem","click",function(){
+
+        });
+
+        $(".childReferenceItem").delegate(".btn_del","click",function(){
+            if("create" == $(this).parents().eq(2).attr("type"))
+            {
+                $(this).parents().eq(2).remove();
+            }
+            else
+            {
+                $(this).parents().eq(2).hide();
+            }
+        });
+
+    },
+    getData : function(){
+
+    }
+});
+
+//=================================================================+
 /**
  * treeView
  */

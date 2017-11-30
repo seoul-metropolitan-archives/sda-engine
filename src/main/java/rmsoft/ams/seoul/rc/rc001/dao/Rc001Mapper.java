@@ -19,4 +19,5 @@ public interface Rc001Mapper extends MyBatisMapper {
 
     int save(Map<String,String> param);
 
+    Object getMenu(Map<String,String> param);
 }

@@ -145,4 +145,23 @@
             </otherwise>
         </choose>
     </update>
+    <select id="getMenu" parameterType="java.util.Map" resultType="Ac002VO">
+      SELECT
+          Z2."MENU_NAME" as "id",
+          Z2."MENU_UUID" as "menuId",
+          Z2."MENU_NAME" as "menuNm",
+          Z1."PROGRAM_NAME" as "progNm",
+          Z2."PARAMETER" as "menuParams",
+          Z1."URL" as "url",
+          Z1."URL" as "progPh"
+        FROM
+          AD_PROGRAM Z1,
+          AD_MENU Z2
+        WHERE
+          Z1.PROGRAM_UUID =Z2.PROGRAM_UUID
+          AND
+          ROWNUM = 1
+          AND
+          LOWER(Z1.PROGRAM_NAME) = #{progNm}
+    </select>
 </mapper>

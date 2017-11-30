@@ -20,6 +20,8 @@ public class Rc001Service extends BaseService
     @Autowired
     private Rc001Mapper rc001Mapper;
 
+
+
     public List<Rc00101VO> getAllNode(Rc00101VO param)
     {
         List<Rc00101VO> nodes = new ArrayList<Rc00101VO>();
@@ -62,5 +64,9 @@ public class Rc001Service extends BaseService
         return ApiResponse.of(ApiStatus.SUCCESS,"SUCCESS");
     }
 
+    public Object getMenu(Map<String,String> param)
+    {
+        return rc001Mapper.getMenu(param);
+    }
 
 }

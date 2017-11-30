@@ -81,17 +81,16 @@
                                                     <li style="width: 33%;">
                                                         <b>Type </b>
                                                         <div>
-                                                            <select data-ax-path="typeUuid" style="width: 200px; background-color: #fffdd6">
-                                                                <option value=""></option>
-                                                                <option th:each="item : ${typeUuid}" th:value="${item.codeDetailUUID}" th:text="${item.codeName}"/>
+                                                            <select data-ax-path="type" style="width: 200px; background-color: #fffdd6">
+                                                                <option th:each="item : ${typeList}" th:value="${item.codeDetailUUID}" th:text="${item.codeName}"/>
                                                             </select>
                                                         </div>
                                                     </li>
                                                     <li style="width: 34%;">
                                                         <b>Published Status</b>
                                                         <div>
-                                                            <select data-ax-path="publishedStatusUuid" style="width: 200px; background-color: #fffdd6" >
-                                                                <option th:each="item : ${publishedStatusUuid}" th:value="${item.codeDetailUUID}" th:text="${item.codeName}"/>
+                                                            <select data-ax-path="publishedStatus" style="width: 200px; background-color: #fffdd6" >
+                                                                <option th:each="item : ${publishedStatusList}" th:value="${item.codeDetailUUID}" th:text="${item.codeName}"/>
                                                             </select>
                                                         </div>
                                                     </li>
@@ -110,12 +109,10 @@
                                                     <li style="width: 34%;">
                                                         <b>Level </b>
                                                         <div>
-                                                            <div class="src_box2" style="width: 200px">
-                                                                <input type=text style="width: 200px;background-color: #fffdd6">
-                                                                <a href="#" style="top: 0">
-                                                                    <img src="/assets/images/ams/search_normal.png"
-                                                                         alt="find"></a>
-                                                            </div>
+                                                            <select style="width: 200px" data-ax-path="levelList" id="aggreLevel">
+                                                                <option value=""></option>
+                                                                <option th:each="item : ${levelList}" th:value="${item.levelUuid}" th:text="${item.levelName}"/>
+                                                            </select>
                                                         </div>
                                                     </li>
                                                 </ul>
@@ -345,230 +342,235 @@
                                 </div>-->
                                             <!-- Contextual Metadata -->
 
+                                            <div id="childrenAggreArea">
+                                                <!-- Child Aggregations -->
+                                                <div class="togl01 serv_title">
+                                                    <span><b>Child Aggregations</b></span>
+                                                    <input type="button" value="▼" id="open_btn1" class="open_btn">
+                                                </div>
+                                                    <div id="aggregationTemplate" style="display:none;">
+                                                        <ul class="pdb_10">
 
-                                            <!-- Child Aggregations -->
-                                            <div class="togl01 serv_title">
-                                                <span><b>Child Aggregations</b></span>
-                                                <input type="button" value="▼" id="open_btn1" class="open_btn">
-                                            </div>
-                                            <div class="togl01_show serv_cont">
+                                                            <li style="width: 11%;">
+                                                                <b>Aggregation Code</b>
+                                                                <div>
+                                                                    <input type="text" style="width: 135px;" class="bgf7" readonly>
+                                                                </div>
+                                                            </li>
+                                                            <li style="width: 75%; padding: 0 0.5%;">
+                                                                <b>Title </b>
+                                                                <div>
+                                                                    <input type="text" style="width: 100%;  background-color: #fffdd6; ">
+                                                                </div>
+                                                            </li>
+                                                            <li style="width: 11%;">
+                                                                <b>Level </b>
+                                                                <div>
+                                                                    <select data-ax-path="levelList" style="width: 135px" >
+                                                                        <option th:each="item : ${levelList}" th:value="${item.levelUuid}" th:text="${item.levelName}"/>
+                                                                    </select>
+                                                                </div>
+                                                            </li>
 
-                                                <ul class="pdb_10">
+                                                            <li style="width: 2%; text-align: center">
+                                                                <b>&nbsp; </b>
+                                                                <div><a href="#" class="btn_del" style="">X</a></div>
+                                                            </li>
 
-                                                    <li style="width: 11%;">
-                                                        <b>Aggregation Code</b>
-                                                        <div>
-                                                            <input type="text" style="width: 135px;" class="bgf7"
-                                                                   readonly>
-                                                        </div>
-                                                    </li>
-                                                    <li style="width: 75%; padding: 0 0.5%;">
-                                                        <b>Title </b>
-                                                        <div>
-                                                            <input type="text"
-                                                                   style="width: 100%;  background-color: #fffdd6; ">
-                                                        </div>
-                                                    </li>
-                                                    <li style="width: 11%;">
-                                                        <b>Level </b>
-                                                        <div>
-                                                            <select style="width: 135px">
-                                                                <option>Level</option>
-                                                                <option>Level</option>
-                                                                <option>Level</option>
-                                                            </select>
-                                                        </div>
-                                                    </li>
+                                                        </ul>
+                                                    </div>
+                                                <div class="togl01_show serv_cont childAggregation">
 
-                                                    <li style="width: 2%; text-align: center">
-                                                        <b>&nbsp; </b>
-                                                        <div><a href="#" class="btn_del" style="">X</a></div>
-                                                    </li>
+                                                    <ul class="pdb_10">
 
-                                                </ul>
-
-                                                <ul class="pdb_10">
-                                                    <li style="width: 11%;">
-                                                        <input type="text" style="width: 135px;" class="bgf7" readonly>
-                                                    </li>
-                                                    <li style="width: 75%; padding: 0 0.5%;">
-                                                        <input type="text"
-                                                               style="width: 100%;  background-color: #fffdd6; ">
-                                                    </li>
-                                                    <li style="width: 11%;">
-                                                        <select style="width: 135px">
-                                                            <option>Level</option>
-                                                            <option>Level</option>
-                                                            <option>Level</option>
-                                                        </select>
-                                                    </li>
-
-                                                    <li style="width: 2%; text-align: center">
-                                                        <a href="#" class="btn_del" style="">X</a>
-                                                    </li>
-                                                </ul>
-
-                                                <ul>
-                                                    <li style="width: 100%;">
-                                                        <a href="#"><b style="color: red">+ Add New</b></a>
-                                                    </li>
-                                                </ul>
-
-                                            </div>
-                                            <!-- Child Aggregations -->
-
-
-                                            <!-- Reference Aggregation -->
-                                            <div class="togl02 serv_title">
-                                                <span><b>Reference Aggregations</b></span>
-                                                <input type="button" value="▼" id="open_btn2" class="open_btn">
-                                            </div>
-                                            <div class="togl02_show serv_cont">
-
-                                                <ul class="pdb_10">
-                                                    <li style="width: 11%;">
-                                                        <b>Aggregation Code </b>
-                                                        <div>
-                                                            <div class="src_box2">
-                                                                <input type=text>
-                                                                <a href="#" style="top: 0">
-                                                                    <img src="http://localhost/@AMS/images/search_normal.png"
-                                                                         alt="find"></a>
+                                                        <li style="width: 11%;">
+                                                            <b>Aggregation Code</b>
+                                                            <div>
+                                                                <input type="text" style="width: 135px;" class="bgf7" data-ax-path="aggregationCode" readonly>
                                                             </div>
-                                                        </div>
-                                                    </li>
-                                                    <li style="width: 75%; padding: 0 0.5%;">
-                                                        <b>Title</b>
-                                                        <div>
-                                                            <input type="text" style="width: 100%" readonly
-                                                                   class="bgf7">
-                                                        </div>
-                                                    </li>
-                                                    <li style="width: 11%;">
-                                                        <b>Type </b>
-                                                        <div>
-                                                            <select data-ax-path="typeUuid" style="width: 200px; background-color: #fffdd6">
-                                                                <option value=""></option>
-                                                                <option th:each="item : ${typeUuid}" th:value="${item.codeDetailUUID}" th:text="${item.codeName}"/>
-                                                            </select>
-                                                        </div>
-                                                    </li>
+                                                        </li>
+                                                        <li style="width: 75%; padding: 0 0.5%;">
+                                                            <b>Title </b>
+                                                            <div>
+                                                                <input type="text" style="width: 100%;  background-color: #fffdd6; ">
+                                                            </div>
+                                                        </li>
+                                                        <li style="width: 11%;">
+                                                            <b>Level </b>
+                                                            <div>
+                                                                <select data-ax-path="levelList" style="width: 135px">
+                                                                    <option th:each="item : ${levelList}" th:value="${item.levelUuid}" th:text="${item.levelName}"/>
+                                                                </select>
+                                                            </div>
+                                                        </li>
 
-                                                    <li style="width: 2%; text-align: center">
-                                                        <b>&nbsp; </b>
-                                                        <div><a href="#" class="btn_del" style="">X</a></div>
-                                                    </li>
-                                                </ul>
+                                                        <li style="width: 2%; text-align: center">
+                                                            <b>&nbsp; </b>
+                                                            <div><a href="#" class="btn_del" style="">X</a></div>
+                                                        </li>
 
-                                                <ul class="pdb_10">
-                                                    <li style="width: 11%;">
+                                                    </ul>
 
-                                                        <div class="src_box2">
-                                                            <input type=text>
-                                                            <a href="#" style="top: 0">
-                                                                <img src="/assets/images/ams/search_normal.png"
-                                                                     alt="find"></a>
-                                                        </div>
+                                                    <ul id="addAggregation">
+                                                        <li style="width: 100%;">
+                                                            <a href="#"><b style="color: red">+ Add New</b></a>
+                                                        </li>
+                                                    </ul>
 
-                                                    </li>
-                                                    <li style="width: 75%; padding: 0 0.5%;">
-                                                        <input type="text" style="width: 100%" readonly class="bgf7">
-                                                    </li>
-                                                    <li style="width: 11%;">
-
-                                                        <input type="text" style="width: 135px; margin-right: 3px"
-                                                               readonly class="bgf7">
-
-                                                    </li>
-
-                                                    <li style="width: 2%; text-align: center">
-                                                        <a href="#" class="btn_del" style="">X</a>
-                                                    </li>
-                                                </ul>
-
-                                                <ul>
-                                                    <li style="width: 100%;">
-                                                        <a href="#"><b style="color: red">+ Add New</b></a>
-                                                    </li>
-                                                </ul>
-
+                                                </div>
+                                            <!-- Child Aggregations -->
                                             </div>
-                                            <!-- Reference Aggregation -->
+                                            <div id="referenceAggreArea" style="display:none;">
+                                                <!-- Reference Aggregation -->
+                                                <div class="togl02 serv_title">
+                                                    <span><b>Reference Aggregations</b></span>
+                                                    <input type="button" value="▼" id="open_btn2" class="open_btn">
+                                                </div>
+                                                    <div id="referenceTemplate" style="display:none;">
+                                                        <ul class="pdb_10">
+                                                            <li style="width: 11%;">
 
+                                                                <div class="src_box2">
+                                                                    <input type=text>
+                                                                    <a href="#" style="top: 0" class="searchAggregation">
+                                                                        <img src="/assets/images/ams/search_normal.png" alt="find"></a>
+                                                                </div>
 
-                                            <!-- Item -->
-                                            <div class="togl03 serv_title">
-                                                <span><b>Reference Items</b></span>
-                                                <input type="button" value="▼" id="open_btn3" class="open_btn">
-                                            </div>
-                                            <div class="togl03_show serv_cont">
-                                                <ul class="pdb_10">
-                                                    <li style="width: 11%;">
-                                                        <b>Item Code </b>
-                                                        <div>
+                                                            </li>
+                                                            <li style="width: 75%; padding: 0 0.5%;">
+                                                                <input type="text" style="width: 100%" readonly class="bgf7">
+                                                            </li>
+                                                            <li style="width: 11%;">
+
+                                                                <input type="text" style="width: 135px; margin-right: 3px"
+                                                                       readonly class="bgf7">
+
+                                                            </li>
+
+                                                            <li style="width: 2%; text-align: center">
+                                                                <a href="#" class="btn_del" style="">X</a>
+                                                            </li>
+                                                        </ul>
+
+                                                    </div>
+                                                <div class="togl02_show serv_cont childReference">
+
+                                                    <ul class="pdb_10">
+                                                        <li style="width: 11%;">
+
                                                             <div class="src_box2">
                                                                 <input type=text>
-                                                                <a href="#" style="top: 0">
+                                                                <a href="#" style="top: 0" class="searchAggregation">
                                                                     <img src="/assets/images/ams/search_normal.png"
                                                                          alt="find"></a>
                                                             </div>
-                                                        </div>
-                                                    </li>
-                                                    <li style="width: 75%; padding: 0 0.5%;">
-                                                        <b>Title</b>
-                                                        <div>
-                                                            <input type="text" style="width: 100%" readonly
-                                                                   class="bgf7">
-                                                        </div>
-                                                    </li>
-                                                    <li style="width: 11%;">
-                                                        <b>Type </b>
-                                                        <div>
-                                                            <input type="text" style="width: 135px; margin-right: 3px"
-                                                                   readonly class="bgf7">
-                                                        </div>
-                                                    </li>
 
-                                                    <li style="width: 2%; text-align: center">
-                                                        <b>&nbsp;</b>
-                                                        <div><a href="#" class="btn_del" style="">X</a></div>
-                                                    </li>
-                                                </ul>
-                                                <ul class="pdb_10">
-                                                    <li style="width: 11%;">
+                                                        </li>
+                                                        <li style="width: 75%; padding: 0 0.5%;">
+                                                            <input type="text" style="width: 100%" readonly class="bgf7">
+                                                        </li>
+                                                        <li style="width: 11%;">
+                                                            <input type="text" style="width: 135px; margin-right: 3px" readonly class="bgf7">
+                                                        </li>
 
-                                                        <div class="src_box2">
-                                                            <input type=text>
-                                                            <a href="#" style="top: 0">
-                                                                <img src="/assets/images/ams/search_normal.png"
-                                                                     alt="find"></a>
-                                                        </div>
+                                                        <li style="width: 2%; text-align: center">
+                                                            <a href="#" class="btn_del" style="">X</a>
+                                                        </li>
+                                                    </ul>
 
-                                                    </li>
-                                                    <li style="width: 75%; padding: 0 0.5%;">
-                                                        <input type="text" style="width: 100%" readonly class="bgf7">
-                                                    </li>
-                                                    <li style="width: 11%;">
+                                                    <ul id="addReference">
+                                                        <li style="width: 100%;" >
+                                                            <a href="#"><b style="color: red">+ Add New</b></a>
+                                                        </li>
+                                                    </ul>
 
-                                                        <input type="text" style="width: 135px; margin-right: 3px"
-                                                               readonly class="bgf7">
-
-                                                    </li>
-
-                                                    <li style="width: 2%; text-align: center">
-                                                        <a href="#" class="btn_del" style="">X</a>
-                                                    </li>
-                                                </ul>
-
-                                                <ul>
-                                                    <li style="width: 100%;">
-                                                        <a href="#"><b style="color: red">+ Add New</b></a>
-                                                    </li>
-                                                </ul>
-
+                                                </div>
+                                                <!-- Reference Aggregation -->
                                             </div>
-                                            <!-- Item -->
+                                            <div id="referenceItemArea" style="display:none;">
+                                                <!-- Item -->
+                                                <div class="togl03 serv_title">
+                                                    <span><b>Reference Items</b></span>
+                                                    <input type="button" value="▼" id="open_btn3" class="open_btn">
+                                                </div>
+                                                    <div id="referenceItemTemplate" style="display:none;">
+                                                        <ul class="pdb_10">
+                                                            <li style="width: 11%;">
+                                                                <b>Item Code </b>
+                                                                <div>
+                                                                    <div class="src_box2">
+                                                                        <input type=text>
+                                                                        <a href="#" style="top: 0" class="searchReferenceItem">
+                                                                            <img src="/assets/images/ams/search_normal.png"
+                                                                                 alt="find"></a>
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+                                                            <li style="width: 75%; padding: 0 0.5%;">
+                                                                <b>Title</b>
+                                                                <div>
+                                                                    <input type="text" style="width: 100%" readonly
+                                                                           class="bgf7">
+                                                                </div>
+                                                            </li>
+                                                            <li style="width: 11%;">
+                                                                <b>Type </b>
+                                                                <div>
+                                                                    <input type="text" style="width: 135px; margin-right: 3px"
+                                                                           readonly class="bgf7">
+                                                                </div>
+                                                            </li>
 
+                                                            <li style="width: 2%; text-align: center">
+                                                                <b>&nbsp;</b>
+                                                                <div><a href="#" class="btn_del" style="">X</a></div>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                <div class="togl03_show serv_cont childReferenceItem">
+                                                    <ul class="pdb_10">
+                                                        <li style="width: 11%;">
+                                                            <b>Item Code </b>
+                                                            <div>
+                                                                <div class="src_box2">
+                                                                    <input type=text>
+                                                                    <a href="#" style="top: 0" class="searchReferenceItem">
+                                                                        <img src="/assets/images/ams/search_normal.png"
+                                                                             alt="find"></a>
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                        <li style="width: 75%; padding: 0 0.5%;">
+                                                            <b>Title</b>
+                                                            <div>
+                                                                <input type="text" style="width: 100%" readonly
+                                                                       class="bgf7">
+                                                            </div>
+                                                        </li>
+                                                        <li style="width: 11%;">
+                                                            <b>Type </b>
+                                                            <div>
+                                                                <input type="text" style="width: 135px; margin-right: 3px"
+                                                                       readonly class="bgf7">
+                                                            </div>
+                                                        </li>
+
+                                                        <li style="width: 2%; text-align: center">
+                                                            <b>&nbsp;</b>
+                                                            <div><a href="#" class="btn_del" style="">X</a></div>
+                                                        </li>
+                                                    </ul>
+
+
+                                                    <ul id="addReferenceItem">
+                                                        <li style="width: 100%;">
+                                                            <a href="#"><b style="color: red">+ Add New</b></a>
+                                                        </li>
+                                                    </ul>
+
+                                                </div>
+                                                <!-- Item -->
+                                            </div>
 
                                             <!-- cancel save -->
                                             <!--<div class="bdb" style="padding: 5px;margin-bottom: 20px">
