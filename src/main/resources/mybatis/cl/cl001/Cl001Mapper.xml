@@ -38,6 +38,7 @@
                 AND USE_YN = #{useYn}
             </if>
         </where>
+        ORDER BY ORDER_NO, CLASSIFICATION_CODE
     </select>
     <select id="getClassificationSchemeDetail" resultType="Cl00102VO" parameterType="Cl00102VO" statementType="PREPARED">
         SELECT
