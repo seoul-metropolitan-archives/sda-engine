@@ -36,13 +36,13 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         });
     },
     PAGE_SAVE: function (caller, act, data) {
-
+/*필수값 체크오류로 주석처리
         if(
             !fnObj.gridView01.validate()
             || !fnObj.gridView02.validate()
         )
             return ;
-
+*/
         var entityTypeList = [].concat(fnObj.gridView01.getData());
         var entityColumnList = [].concat(fnObj.gridView02.getData());
 

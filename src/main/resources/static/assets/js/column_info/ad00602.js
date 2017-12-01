@@ -9,7 +9,7 @@ var ad00602 =
                 editable: false,
                 dataType: "code",
                 required: false,
-                visible: false
+                visible: true
             },
             {
                 sortNo: 1,
@@ -18,7 +18,7 @@ var ad00602 =
                 editable: false,
                 dataType: "code",
                 required: false,
-                visible: false
+                visible: true
             },
             {
                 sortNo: 2,
@@ -27,7 +27,7 @@ var ad00602 =
                 editable: false,
                 dataType: "code",
                 required: false,
-                visible: false
+                visible: true
             },
             {
                 sortNo: 3,
@@ -53,7 +53,7 @@ var ad00602 =
                     editable: true,
                     dataType: "popup",
                     popupCode : "PU003",
-                    sqlColumn : {GLOSSARY_UUID: "glossaryUuid",TERM_NAME: "termName",TERM_CODE:"termCode",DATATYPE:"dataType1"},
+                    sqlColumn : {GLOSSARY_UUID: "glossaryUuid",TERM_NAME: "termName",TERM_CODE:"termCode",DATA_TYPE:"dataType1"},
                     required: true,
                     visible: true
                 },
