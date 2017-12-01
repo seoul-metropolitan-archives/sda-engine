@@ -9,7 +9,7 @@ var ad00602 =
                 editable: false,
                 dataType: "code",
                 required: false,
-                visible: true
+                visible: false
             },
             {
                 sortNo: 1,
@@ -18,7 +18,7 @@ var ad00602 =
                 editable: false,
                 dataType: "code",
                 required: false,
-                visible: true
+                visible: false
             },
             {
                 sortNo: 2,
@@ -27,7 +27,7 @@ var ad00602 =
                 editable: false,
                 dataType: "code",
                 required: false,
-                visible: true
+                visible: false
             },
             {
                 sortNo: 3,
