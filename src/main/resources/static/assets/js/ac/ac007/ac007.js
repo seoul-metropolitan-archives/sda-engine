@@ -49,6 +49,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH2: function (caller, act, data) {
         if(data != null){
             if(data["programUuid"] == null || data["programUuid"] == undefined){
+                fnObj.gridView03.setData({})
                 return;
             }
         }

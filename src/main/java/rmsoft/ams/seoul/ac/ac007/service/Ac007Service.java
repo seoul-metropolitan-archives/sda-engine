@@ -22,11 +22,11 @@ import rmsoft.ams.seoul.ac.ac007.dao.Ac007Mapper;
 import rmsoft.ams.seoul.ac.ac007.vo.Ac00701VO;
 import rmsoft.ams.seoul.ac.ac007.vo.Ac00702VO;
 import rmsoft.ams.seoul.ac.ac007.vo.Ac00703VO;
+import rmsoft.ams.seoul.common.domain.AcPermission;
 import rmsoft.ams.seoul.common.domain.AcRoleMenu;
-import rmsoft.ams.seoul.common.domain.AcRolePermission;
 import rmsoft.ams.seoul.common.domain.AcUser;
+import rmsoft.ams.seoul.common.repository.AcPermissionRepository;
 import rmsoft.ams.seoul.common.repository.AcRoleMenuRepository;
-import rmsoft.ams.seoul.common.repository.AcRolePermissionRepository;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -39,7 +39,7 @@ public class Ac007Service extends BaseService {
     private AcRoleMenuRepository acRoleMenuRepository;
 
     @Autowired
-    private AcRolePermissionRepository acRolePermissionRepository;
+    private AcPermissionRepository acPermissionRepository;
 
     @Inject
     private Ac007Mapper ac007Mapper;
@@ -137,31 +137,31 @@ public class Ac007Service extends BaseService {
 
 
     /**
-     * 롤 퍼미션정보 저장
+     * 퍼미션정보 저장
      *
      * @param ac00703VOList
      * @return
      */
     @Transactional
-    public ApiResponse saveRolePermission(List<Ac00703VO> ac00703VOList) {
-        List<AcRolePermission> acRolePermissionList = ModelMapperUtils.mapList(ac00703VOList, AcRolePermission.class);
-        AcRolePermission orgAcAccessControl = null;
+    public ApiResponse savePermission(List<Ac00703VO> ac00703VOList) {
+        List<AcPermission> acPermissionList = ModelMapperUtils.mapList(ac00703VOList, AcPermission.class);
+        AcPermission orgAcPermission = null;
 
-        for (AcRolePermission acRolePermission : acRolePermissionList) {
-            orgAcAccessControl = acRolePermissionRepository.findOne(acRolePermission.getId());
+        for (AcPermission acPermission : acPermissionList) {
+            orgAcPermission = acPermissionRepository.findOne(acPermission.getId());
 
-            if (orgAcAccessControl == null) {
+            if (orgAcPermission == null) {
                 // created
-                acRolePermission.setRolePermissionUuid(UUIDUtils.getUUID());
-                acRolePermissionRepository.save(acRolePermission);
+                acPermission.setPermissionUuid(UUIDUtils.getUUID());
+                acPermissionRepository.save(acPermission);
             } else {
-                if (acRolePermission.isDeleted()) {
-                    acRolePermissionRepository.delete(acRolePermission);
+                if (acPermission.isDeleted()) {
+                    acPermissionRepository.delete(acPermission);
                 } else {
-                    acRolePermission.setInsertDate(orgAcAccessControl.getInsertDate());
-                    acRolePermission.setInsertUuid(orgAcAccessControl.getInsertUuid());
+                    acPermission.setInsertDate(orgAcPermission.getInsertDate());
+                    acPermission.setInsertUuid(orgAcPermission.getInsertUuid());
 
-                    acRolePermissionRepository.save(acRolePermission);
+                    acPermissionRepository.save(acPermission);
                 }
             }
         }

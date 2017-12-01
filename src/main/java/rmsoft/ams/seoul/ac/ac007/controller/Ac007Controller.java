@@ -62,7 +62,7 @@ public class Ac007Controller extends MessageBaseController {
 
     @PutMapping(value = "/03/save")
     @PostMapping
-    public ApiResponse saveRolePermission(@RequestBody List<Ac00703VO> requestParams) {
-        return ac007Service.saveRolePermission(requestParams);
+    public ApiResponse savePermission(@RequestBody List<Ac00703VO> requestParams) {
+        return ac007Service.savePermission(requestParams);
     }
 }

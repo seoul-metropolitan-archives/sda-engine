@@ -7,6 +7,7 @@ import io.onsemiro.core.parameter.RequestParams;
 import io.onsemiro.utils.DateUtils;
 import io.onsemiro.utils.ModelMapperUtils;
 import io.onsemiro.utils.SessionUtils;
+import io.onsemiro.utils.UUIDUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,14 +40,23 @@ public class Rc004Service extends BaseService{
     @Transactional
     public void saveItemDetails(RequestParams<Rc00501VO> requestParams){
         RcItem rcItem = new RcItem(); //RC_ITEM
+        RcItem oldRcItem = new RcItem(); //RC_ITEM
         RcItemCon rcItemCon = new RcItemCon(); //RC_ITEM_CON
+        RcItemCon oldRcItemCon = new RcItemCon(); //RC_ITEM_CON
 
         //RC_ITEM  업데이트
         if(StringUtils.isEmpty(requestParams.getString("itemUuid"))){
-            return;
+            rcItem.setItemUuid(UUIDUtils.getUUID());
+            String itemCode = jdbcTemplate.queryForObject("select AMS.fc_rc_item_code from dual", String.class);
+            rcItem.setItemCode(itemCode);
+
+        }else{
+            rcItem.setItemUuid(requestParams.getString("itemUuid"));
+            oldRcItem = rcItemRepository.findOne(rcItem.getId());
+            rcItem.setItemCode(requestParams.getString("itemCode"));
+            rcItem.setInsertDate(oldRcItem.getInsertDate());
+            rcItem.setInsertUuid(oldRcItem.getInsertUuid());
         }
-        rcItem.setItemUuid(requestParams.getString("itemUuid"));
-        rcItem = rcItemRepository.findOne(rcItem.getId());
 
         rcItem.setTypeUuid(requestParams.getString("typeUuid"));
         rcItem.setPublishedStatusUuid(requestParams.getString("publishedStatusUuid"));
@@ -54,25 +64,37 @@ public class Rc004Service extends BaseService{
         rcItem.setDescription(requestParams.getString("description"));
         rcItem.setNotes(requestParams.getString("notes"));
         rcItem.setAuthor(requestParams.getString("author"));
-//        rcItem.setAggregationUuid(requestParams.getString("rcAggregationCode"));
-        rcItem.setDescriptionStartDate(requestParams.getString("descriptionStartDate"));
-        rcItem.setDescriptionEndDate(requestParams.getString("descriptionEndDate"));
+        rcItem.setAggregationUuid(requestParams.getString("raAggregationUuid"));
+
+        if(requestParams.getString("descriptionStartDate") != null)
+            rcItem.setDescriptionStartDate(requestParams.getString("descriptionStartDate").replace("-",""));
+
+        if(requestParams.getString("descriptionEndDate") != null)
+            rcItem.setDescriptionEndDate(requestParams.getString("descriptionEndDate").replace("-",""));
+
         rcItemRepository.save(rcItem);
 
         //RC_ITEM  상세 업데이트
-        rcItemCon.setItemUuid(requestParams.getString("itemUuid"));
-        rcItemCon = rcItemConRepository.findOne(rcItemCon.getId());
+        rcItemCon.setItemUuid(rcItem.getItemUuid());
+        oldRcItemCon = rcItemConRepository.findOne(rcItemCon.getId());
 
-        if(rcItemCon == null){
-            rcItemCon.setItemUuid(requestParams.getString("itemUuid"));
+        if(oldRcItemCon != null){//create
+            rcItemCon.setInsertDate(oldRcItemCon.getInsertDate());
+            rcItemCon.setInsertUuid(oldRcItemCon.getInsertUuid());
         }
-        rcItemCon.setItemUuid(requestParams.getString("itemUuid"));
+
         rcItemCon.setOpenStatusUuid(requestParams.getString("openStatusUuid"));
         rcItemCon.setProvenance(requestParams.getString("provenance"));
         rcItemCon.setReferenceCode(requestParams.getString("referenceCode"));
         rcItemCon.setCreator(requestParams.getString("creator"));
-        rcItemCon.setCreationEndDate(requestParams.getString("creationStartDate"));
-        rcItemCon.setCreationStartDate(requestParams.getString("creationStartDate"));
+
+        if(requestParams.getString("creationStartDate") != null) {
+            rcItemCon.setCreationEndDate(requestParams.getString("creationStartDate").replace("-", ""));
+        }
+
+        if(requestParams.getString("creationEndDate") != null) {
+            rcItemCon.setCreationStartDate(requestParams.getString("creationEndDate").replace("-",""));
+        }
         rcItemCon.setKeyword(requestParams.getString("keyword"));
         rcItemConRepository.save(rcItemCon);
 

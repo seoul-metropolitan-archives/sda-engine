@@ -94,4 +94,26 @@ public class Rc00501VO extends BaseVO {
     private String notes1;
 
     private List<Rc00502VO> rc00502VoList;
+
+    public void setRaDescriptionStartDate(String raDescriptionStartDate) {
+        if(raDescriptionStartDate != null) {
+            this.raDescriptionStartDate = raDescriptionStartDate.replace("-", "");
+        }
+    }
+    public void setRaDescriptionEndDate(String raDescriptionEndDate) {
+        if(raDescriptionEndDate != null) {
+            this.raDescriptionEndDate = raDescriptionEndDate.replace("-", "");
+        }
+    }
+
+    public void setRiDescriptionStartDate(String riDescriptionStartDate) {
+        if(riDescriptionStartDate != null) {
+            this.riDescriptionStartDate = riDescriptionStartDate.replace("-", "");
+        }
+    }
+    public void setRiDescriptionEndDate(String riDescriptionEndDate) {
+        if(riDescriptionEndDate != null) {
+            this.riDescriptionEndDate = riDescriptionEndDate.replace("-", "");
+        }
+    }
 }

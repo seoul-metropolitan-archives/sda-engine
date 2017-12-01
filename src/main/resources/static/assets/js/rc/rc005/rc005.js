@@ -5,7 +5,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         axboot.ajax({
             type: "GET",
             url: "/api/v1/rc005/01/list",
-            data: $.extend({}, {pageSize: 1000, sort: "classificationCode"}, {aggregationUuid :'C7AEAC56-D860-4ECE-8D98-90AD78F7798E', itemUuid: '40AD28EE-5E23-4808-9760-D16770CB3D49'}),
+            data: $.extend({}, {pageSize: 1000, sort: "classificationCode"}, data),
             callback: function (res) {
                 if(res.list != "undefined" && res.list != null && res.list.length > 0){
                     rcList = ax5.util.deepCopy(res.list);
@@ -49,7 +49,16 @@ fnObj.pageStart = function () {
     _this.treeView01.initView();
     _this.gridView01.initView();
     // Data 조회
-    ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+
+    var data = axboot.getMenuParams();
+
+    if(null == data ){
+        return;
+    } else if(data.type == "create") {
+        fnObj.formView.setFormData("raAggregationUuid",data.aggregationUuid);
+    } else {
+        ACTIONS.dispatch(ACTIONS.PAGE_SEARCH,{aggregationUuid : data.aggregationUuid, itemUuid : data.itemUuid});
+    }
 };
 
 fnObj.formView = axboot.viewExtend(axboot.formView, {

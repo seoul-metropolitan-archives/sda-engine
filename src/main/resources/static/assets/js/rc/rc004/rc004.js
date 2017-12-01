@@ -1,5 +1,6 @@
 var fnObj = {};
 var selectedItem = {};
+var PAGE_MODE = "create";
 var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH: function (caller, act, data) {
         axboot.ajax({
@@ -20,7 +21,6 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 onError: axboot.viewError
             }
         });
-        return false;
     },
     PAGE_SAVE: function (caller, act, data) {
         axboot.ajax({
@@ -28,28 +28,14 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             url: "/api/v1/rc004/01/saveItemDetails",
             data: $.extend({},  {pageSize: 1000} ,this.formView.getData()),
             callback: function (res) {
-                ACTIONS.dispatch(ACTIONS.TOP_GRID_SAVE);
+                if(PAGE_MODE != 'create'){
+                    ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+                }
             },
             options: {
                 onError: axboot.viewError
             }
         });
-    },
-    TOP_GRID_SAVE: function (caller, act, data) {
-        var result = false;
-        axboot.call({
-            type: "PUT",
-            url: "/api/v1/rc004/02/saveComponentList",
-            data: JSON.stringify(this.gridView01.getData()),
-            callback: function (res) {
-                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
-                result = true;
-            }
-        })
-            .done(function () {
-                axToast.push("저장 작업이 완료되었습니다.");
-            });
-        return result;
     },
     SEARCH_FROM_SCH : function(caller, act, data)
     {
@@ -61,9 +47,9 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 return data;
             },
             callback: function (data) {
-                $("input[data-ax-path='raAggregationCode']").val(data["AGGREGATION_CODE"]);
-                $("input[data-ax-path='raAggregationUuid']").val(data["AGGREGATION_UUID"]);
-                $("input[data-ax-path='from']").val(data["TITLE"])
+                fnObj.formView.setFormData("raAggregationCode",data["AGGREGATION_CODE"]);
+                fnObj.formView.setFormData("raAggregationUuid",data["AGGREGATION_UUID"]);
+                fnObj.formView.setFormData("from",data["TITLE"]);
                 if(this.close)
                     this.close();
             }
@@ -95,16 +81,15 @@ fnObj.pageStart = function () {
     _this.gridView01.initView();
     // Data 조회
     var data = axboot.getMenuParams();
-
-    if(null == data || data.type == "create")
-    {
+    if(null == data ){
+        return;
+    } else if(PAGE_MODE == "create") {
         fnObj.formView.setFormData("raAggregationUuid",data.aggregationUuid);
-    }
-    else
-    {
+    } else {
         ACTIONS.dispatch(ACTIONS.PAGE_SEARCH,{aggregationUuid : data.aggregationUuid, itemUuid : data.itemUuid});
     }
 
+    PAGE_MODE = data.type;
 };
 
 fnObj.formView = axboot.viewExtend(axboot.formView, {
@@ -393,7 +378,7 @@ fnObj.treeView01 = axboot.viewExtend(axboot.commonView, {
 setFormData = function(data){
     fnObj.formView.setFormData("title",data.name);
     fnObj.formView.setFormData("itemUuid",data.riItemUuid);
-    fnObj.formView.setFormData("code",data.riItemCode);
+    fnObj.formView.setFormData("itemCode",data.riItemCode);
     fnObj.formView.setFormData("typeUuid",data.riTypeUuid);
     fnObj.formView.setFormData("publishedStatusUuid",data.riPublishedStatusUuid);
     fnObj.formView.setFormData("level",data.raLevelNm);

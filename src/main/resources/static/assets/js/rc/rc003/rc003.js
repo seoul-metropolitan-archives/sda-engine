@@ -5,7 +5,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         axboot.ajax({
             type: "GET",
             url: "/api/v1/rc003/01/list",
-            data: $.extend({}, {pageSize: 1000, sort: "classificationCode"}, {aggregationUuid :'A2EF15E7-BE58-41DD-945C-E99FB5DE60C1'}),
+            data: $.extend({}, {pageSize: 1000, sort: "classificationCode"}, data),
             callback: function (res) {
                 if(res.list != "undefined" && res.list != null && res.list.length > 0){
                     rcList = ax5.util.deepCopy(res.list);
@@ -45,7 +45,14 @@ fnObj.pageStart = function () {
     _this.formView.initView();
     _this.treeView01.initView();
     // Data 조회
-    ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+
+    var data = axboot.getMenuParams();
+
+    if(null == data ){
+        return;
+    }else {
+        ACTIONS.dispatch(ACTIONS.PAGE_SEARCH,{aggregationUuid : data.aggregationUuid});
+    }
 };
 
 fnObj.formView = axboot.viewExtend(axboot.formView, {
