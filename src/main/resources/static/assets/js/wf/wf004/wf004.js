@@ -215,8 +215,6 @@ fnObj.pageStart = function () {
     // Data 조회
     ACTIONS.dispatch(ACTIONS.PAGE_SEARCH, this.formView.getData());
 
-    //TODO 개발하고 지워야함
-    axWarningToast.push("개발이 진행중인 화면입니다.");
 
 };
 
