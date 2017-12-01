@@ -47,6 +47,11 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     },
     // 롤 퍼미션 조회
     PAGE_SEARCH2: function (caller, act, data) {
+        if(data != null){
+            if(data["programUuid"] == null || data["programUuid"] == undefined){
+                return;
+            }
+        }
         axboot.ajax({
             type: "GET",
             url: "/api/v1/ac007/03/list",
