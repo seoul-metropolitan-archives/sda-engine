@@ -8,7 +8,7 @@ var ad00101 =
                 text: "ConfigurationUuid",
                 width: 120,
                 editable: true,
-                dataType: "code",
+                dataType: "text",
                 required: false,
                 visible: false
             },
@@ -18,7 +18,7 @@ var ad00101 =
                 text: "Environment Code",
                 width: 210,
                 editable: true,
-                dataType: "text",
+                dataType: "code",
                 required: true
             },
             {

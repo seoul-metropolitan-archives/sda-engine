@@ -2478,13 +2478,15 @@ axboot.baseView =
                 }
 
             });*/
-            $(document).delegate(".ax-body .searchFields input", "keydown", function (e) {
+            $(document).delegate(".ax-body .searchFields input,.ax-body .searchFields select", "keydown", function (e) {
                 if (e.keyCode == 13)
                 {
                     e.preventDefault();
                     e.stopPropagation();
                     $("#inquiry").focus();
                     $("#inquiry").click();
+                    if(currentTag)
+                        $(currentTag).focus();
                     //_this.inquiry();
                 }
                 else if (e.ctrlKey && e.altKey && e.keyCode == 73) {
@@ -2492,6 +2494,8 @@ axboot.baseView =
                     e.stopPropagation();
                     $("#inquiry").focus();
                     $("#inquiry").click();
+                    if(currentTag)
+                        $(currentTag).focus();
                 } else if (e.ctrlKey && e.altKey && e.keyCode == 83) {
 
                     _this.save();
@@ -3145,3 +3149,8 @@ axboot.isDataChanged = function (menuId) {
     }
     return isChanged;
 }
+
+var currentTag = undefined;
+$(document).delegate(".ax-body .searchFields input,.ax-body .searchFields select","blur",function(){
+    currentTag = this;
+});

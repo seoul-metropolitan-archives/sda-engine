@@ -198,6 +198,37 @@ var GridWrapper = function(p_id,p_rootContext) {
                 _this.dispatch("onRemoveRow");
             }
         });
+        $("#"+_this.i_id).parents().eq(1).delegate(_this.delBtnName+","+_this.addBtnName,"keydown",function(key){
+            if (e.ctrlKey && e.altKey && e.keyCode == 73) {
+                e.preventDefault();
+                e.stopPropagation();
+                if (axboot.isDataChanged && axboot.isDataChanged(axboot.getMenuId())) {
+                    axDialog.confirm({
+                        msg: axboot.getCommonMessage("AA006")
+                    }, function () {
+                        if (this.key == "ok") {
+                            var result = false;
+                            if (ACTIONS && ACTIONS.PAGE_SAVE) {
+                                result = ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
+                            }
+
+                            if (result && ACTIONS && ACTIONS.PAGE_SEARCH) {
+                                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+                            }
+                        } else {
+                            if (ACTIONS && ACTIONS.PAGE_SEARCH)
+                                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+                        }
+                    });
+                } else {
+                    if (ACTIONS && ACTIONS.PAGE_SEARCH)
+                        ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+                }
+            } else if (e.ctrlKey && e.altKey && e.keyCode == 83) {
+                if (ACTIONS && ACTIONS.PAGE_SAVE)
+                    ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
+            }
+        });
         _this.bind("onEditRowPasted",function(gridWrapper, _this, grid, itemIndex, dataRow, fields, oldValues, newValues){
             grid.commit(true);
             var colData = undefined;
