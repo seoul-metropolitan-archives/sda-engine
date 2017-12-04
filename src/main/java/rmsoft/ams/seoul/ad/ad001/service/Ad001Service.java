@@ -36,7 +36,7 @@ public class Ad001Service extends BaseService {
 
         for (AdConfiguration adConfiguration : adConfigurationList) {
             if (adConfiguration.isCreated()) {
-                adConfiguration.setConfigurationUuid(UUIDUtils.getUUID());
+                //adConfiguration.setConfigurationUuid(UUIDUtils.getUUID());
 
                 adConfigurationRepository.save(adConfiguration);
             } else if (adConfiguration.isModified()) {
