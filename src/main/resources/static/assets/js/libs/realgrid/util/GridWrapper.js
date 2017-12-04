@@ -198,10 +198,10 @@ var GridWrapper = function(p_id,p_rootContext) {
                 _this.dispatch("onRemoveRow");
             }
         });
-        $("#"+_this.i_id).parents().eq(1).delegate(_this.delBtnName+","+_this.addBtnName,"keydown",function(key){
-            if (e.ctrlKey && e.altKey && e.keyCode == 73) {
-                e.preventDefault();
-                e.stopPropagation();
+        $("#"+_this.i_id).parents().eq(1).delegate(_this.delBtnName+","+_this.addBtnName,"keydown",function(event){
+            if (event.ctrlKey && event.altKey && event.keyCode == 73) {
+                event.preventDefault();
+                event.stopPropagation();
                 if (axboot.isDataChanged && axboot.isDataChanged(axboot.getMenuId())) {
                     axDialog.confirm({
                         msg: axboot.getCommonMessage("AA006")
@@ -224,11 +224,12 @@ var GridWrapper = function(p_id,p_rootContext) {
                     if (ACTIONS && ACTIONS.PAGE_SEARCH)
                         ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
                 }
-            } else if (e.ctrlKey && e.altKey && e.keyCode == 83) {
+            } else if (event.ctrlKey && event.altKey && event.keyCode == 83) {
                 if (ACTIONS && ACTIONS.PAGE_SAVE)
                     ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
             }
         });
+
         _this.bind("onEditRowPasted",function(gridWrapper, _this, grid, itemIndex, dataRow, fields, oldValues, newValues){
             grid.commit(true);
             var colData = undefined;
@@ -800,8 +801,7 @@ var gridFontFamily = "";
 for(var i = 0; i < parent.COMMON_CONFIG.length; i++)
 {
     if(
-        "SYS_KO_FONT" == parent.COMMON_CONFIG[i]["configurationCode"]
-        ||"SYS_EN_FONT" == parent.COMMON_CONFIG[i]["configurationCode"]
+        "SYS_GRID_FONT" == parent.COMMON_CONFIG[i]["configurationCode"]
     )
         gridFontFamily += parent.COMMON_CONFIG[i]["configurationValue"]+",";
 
