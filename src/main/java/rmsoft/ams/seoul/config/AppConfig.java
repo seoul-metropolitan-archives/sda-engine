@@ -229,7 +229,8 @@ public class AppConfig implements ApplicationContextAware {
         taskExecutor.setCorePoolSize(corePoolSize);
         taskExecutor.setMaxPoolSize(maxPoolSize);
         taskExecutor.setQueueCapacity(queueCapacity);
-        taskExecutor.setDaemon(true);
+        taskExecutor.setWaitForTasksToCompleteOnShutdown(true);
+        //taskExecutor.setDaemon(true);
         return taskExecutor;
     }
 
