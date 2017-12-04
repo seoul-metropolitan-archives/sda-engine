@@ -11,8 +11,9 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 if(res.list != "undefined" && res.list != null && res.list.length > 0){
                     rcList = ax5.util.deepCopy(res.list);
                     fnObj.treeView01.setData({}, res.list, data);
-                    setFormData(rcList[rcList.length-1]);
-                    if(rcList[0].rc00502VoList!= "undefined" && rcList[0].rc00502VoList != null && rcList[0].rc00502VoList.length > 0){
+                    var itemIndex = rcList.length - 1;
+                    setFormData(rcList[itemIndex]);
+                    if(rcList[itemIndex].rc00502VoList!= "undefined" && rcList[itemIndex].rc00502VoList != null && rcList[itemIndex].rc00502VoList.length > 0){
                         fnObj.gridView01.setData(rcList[0].rc00502VoList);
                     }
                 }
@@ -406,11 +407,11 @@ setFormData = function(data){
     fnObj.formView.setFormData("referenceCode",data.referenceCode);
     fnObj.formView.setFormData("raAggregationCode",data.raAggregationCode);
 
-    fnObj.formView.setFormData("descriptionStartDate",data.riDescriptionStartDate);
-    fnObj.formView.setFormData("descriptionEndDate",data.riDescriptionEndDate);
+    fnObj.formView.setFormData("descriptionStartDate",dateFormatter(data.riDescriptionStartDate));
+    fnObj.formView.setFormData("descriptionEndDate",dateFormatter(data.riDescriptionEndDate));
 
-    fnObj.formView.setFormData("creationStartDate",data.creationStartDate);
-    fnObj.formView.setFormData("creationEndDate",data.creationEndDate);
+    fnObj.formView.setFormData("creationStartDate",dateFormatter(data.creationStartDate));
+    fnObj.formView.setFormData("creationEndDate",dateFormatter(data.creationEndDate));
 
     ACTIONS.dispatch(ACTIONS.SEARCH_FROM_SCH,{
         popupCode : "PU123",
@@ -434,11 +435,10 @@ setFormData = function(data){
     fnObj.formView.setFormData("AddMetadata10",data.addMetadata10);*/
 }
 
-function getFormattedDate(str) {
-    if(str == "undefined" || str == null) return;
-    if(str.length == 8) {
-        return str.substr(0, 4) + "-" + str.substr(4, 2) + "-" + str.substr(6);
-    } else {
-        return str;
-    }
+function dateFormatter(orgDate){
+    var year = orgDate.substring(0, 4);
+    var month = orgDate.substring(4, 6);
+    var day = orgDate.substring(6, 8);
+
+    return year + '-' + month + '-' + day;
 }

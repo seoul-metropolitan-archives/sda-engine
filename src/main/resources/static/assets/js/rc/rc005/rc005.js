@@ -1,17 +1,21 @@
 var fnObj = {};
 var selectedItem = {};
+var from = "";
 var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH: function (caller, act, data) {
         axboot.ajax({
             type: "GET",
             url: "/api/v1/rc005/01/list",
-            data: $.extend({}, {pageSize: 1000, sort: "classificationCode"}, data),
+            data: $.extend({}, {pageSize: 1000}, data),
             callback: function (res) {
                 if(res.list != "undefined" && res.list != null && res.list.length > 0){
                     rcList = ax5.util.deepCopy(res.list);
                     fnObj.treeView01.setData({}, res.list, data);
-                    setFormData(rcList[0]);
-                    if(rcList[0].rc00502VoList!= "undefined" && rcList[0].rc00502VoList != null && rcList[0].rc00502VoList.length > 0){
+                    var itemIndex = rcList.length - 1;
+                    from = rcList[rcList.length - 2]["raTitle"];
+
+                    setFormData(rcList[itemIndex]);
+                    if(rcList[itemIndex].rc00502VoList!= "undefined" && rcList[itemIndex].rc00502VoList != null && rcList[itemIndex].rc00502VoList.length > 0){
                         fnObj.gridView01.setData(rcList[0].rc00502VoList);
                     }
                 }
@@ -54,10 +58,8 @@ fnObj.pageStart = function () {
 
     if(null == data ){
         return;
-    } else if(data.type == "create") {
-        fnObj.formView.setFormData("raAggregationUuid",data.aggregationUuid);
     } else {
-        ACTIONS.dispatch(ACTIONS.PAGE_SEARCH,{aggregationUuid : data.aggregationUuid, itemUuid : data.itemUuid});
+        ACTIONS.dispatch(ACTIONS.PAGE_SEARCH,{aggregationUuid : data.parentUuid, itemUuid : data.uuid});
     }
 };
 
@@ -314,23 +316,34 @@ setFormData = function(data){
     fnObj.formView.setFormData("type",data.riTypeNm);
     fnObj.formView.setFormData("publishedStatus",data.riPublishedStatusNm);
     fnObj.formView.setFormData("level",data.raLevelNm);
-    fnObj.formView.setFormData("description",data.description);
+    fnObj.formView.setFormData("description",data.description1);
     fnObj.formView.setFormData("author",data.riAuthor);
     fnObj.formView.setFormData("rcAggregationCode",data.aggregationCode);
-    fnObj.formView.setFormData("notes",data.notes);
+    fnObj.formView.setFormData("notes",data.notes1);
+    fnObj.formView.setFormData("from",from);
     fnObj.formView.setFormData("referenceCode",data.referenceCode);
 
-    /*if(data.descriptionstartdate != "undefined" || data.descriptionstartdate != null) {
-        if (data.descriptionstartdate == data.descriptionenddate) {
-            fnobj.formview.setformdata("rcdateofdescription", data.descriptionstartdate);
+    if(data.riDescriptionStartDate != "undefined" || data.riDescriptionStartDate != null) {
+        if (data.riDescriptionStartDate == data.riDescriptionEndDate) {
+            fnObj.formView.setFormData("rcDateoOfDescription", dateFormatter(data.riDescriptionStartDate));
         } else {
-            fnobj.formview.setformdata("rcdateofdescription", data.descriptionstartdate + ' ~ ' + data.descriptionenddate);
+            fnObj.formView.setFormData("rcDateoOfDescription", dateFormatter(data.riDescriptionStartDate) + ' ~ ' + dateFormatter(data.riDescriptionEndDate));
         }
-    }*/
+    }
+
+    if(data.creationStartDate != "undefined" || data.creationStartDate != null) {
+        if (data.creationEndDate == data.creationStartDate) {
+            fnObj.formView.setFormData("rcDateOfCreation", dateFormatter(data.creationEndDate));
+        } else {
+            fnObj.formView.setFormData("rcDateOfCreation", dateFormatter(data.creationStartDate) + ' ~ ' + dateFormatter(data.creationEndDate));
+        }
+    }
+
+
     fnObj.formView.setFormData("provenance",data.provenance);
     fnObj.formView.setFormData("creator",data.creator);
     fnObj.formView.setFormData("keyword",data.keyword);
-    fnObj.formView.setFormData("addMetadata01",data.addMetadata01);
+/*    fnObj.formView.setFormData("addMetadata01",data.addMetadata01);
     fnObj.formView.setFormData("addMetadata02",data.addMetadata02);
     fnObj.formView.setFormData("addMetadata03",data.addMetadata03);
     fnObj.formView.setFormData("addMetadata04",data.addMetadata04);
@@ -339,6 +352,14 @@ setFormData = function(data){
     fnObj.formView.setFormData("addMetadata07",data.addMetadata07);
     fnObj.formView.setFormData("addMetadata08",data.addMetadata08);
     fnObj.formView.setFormData("addMetadata09",data.addMetadata09);
-    fnObj.formView.setFormData("AddMetadata10",data.addMetadata10);
+    fnObj.formView.setFormData("AddMetadata10",data.addMetadata10);*/
 
+}
+
+function dateFormatter(orgDate){
+    var year = orgDate.substring(0, 4);
+    var month = orgDate.substring(4, 6);
+    var day = orgDate.substring(6, 8);
+
+    return year + '-' + month + '-' + day;
 }
