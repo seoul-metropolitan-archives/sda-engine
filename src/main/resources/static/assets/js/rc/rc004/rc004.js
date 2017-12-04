@@ -81,6 +81,8 @@ fnObj.pageStart = function () {
     _this.gridView01.initView();
     // Data 조회
     var data = axboot.getMenuParams();
+    PAGE_MODE = data.type;
+
     if(null == data ){
         return;
     } else if(PAGE_MODE == "create") {
@@ -88,8 +90,6 @@ fnObj.pageStart = function () {
     } else {
         ACTIONS.dispatch(ACTIONS.PAGE_SEARCH,{aggregationUuid : data.aggregationUuid, itemUuid : data.itemUuid});
     }
-
-    PAGE_MODE = data.type;
 };
 
 fnObj.formView = axboot.viewExtend(axboot.formView, {
