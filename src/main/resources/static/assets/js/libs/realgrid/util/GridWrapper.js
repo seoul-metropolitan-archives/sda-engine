@@ -1242,7 +1242,7 @@ GridWrapper.prototype.setColumnInfo = function(list) {
             obj.editable = false;
         } else if (data.required) {
             styles = _this.defaultStyle.column.required;
-            _this.requiredColumnList[i] ={name : data.name, title : data.text};
+            _this.requiredColumnList[data.name] ={name : data.name, title : data.text};
             _this.defaultStyles[data.name] = "required";
         } else {
             styles = _this.defaultStyle._default;

@@ -465,7 +465,11 @@ fnObj.tabView = axboot.viewExtend({
         }
         this.print();
 
-        this.limitCount = axboot.getConfigValue("SYS_TAB_MENU_MAX");
+        if(undefined != axboot.getConfigValue("SYS_TAB_MENU_MAX"))
+        {
+            this.limitCount = axboot.getConfigValue("SYS_TAB_MENU_MAX");
+        }
+
 
         var menu = new ax5.ui.menu({
             position: "absolute", // default position is "fixed"
