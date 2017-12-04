@@ -29,7 +29,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             data: $.extend({},  {pageSize: 1000} ,this.formView.getData()),
             callback: function (res) {
                 if(PAGE_MODE != 'create'){
-                    ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+                    ACTIONS.dispatch(ACTIONS.PAGE_SEARCH,{aggregationUuid : fnObj.formView.getData().raAggregationUuid, itemUuid : fnObj.formView.getData().itemUuid} );
                 }
             },
             options: {
@@ -81,6 +81,8 @@ fnObj.pageStart = function () {
     _this.gridView01.initView();
     // Data 조회
     var data = axboot.getMenuParams();
+    PAGE_MODE = data.type;
+
     if(null == data ){
         return;
     } else if(PAGE_MODE == "create") {
@@ -88,8 +90,6 @@ fnObj.pageStart = function () {
     } else {
         ACTIONS.dispatch(ACTIONS.PAGE_SEARCH,{aggregationUuid : data.aggregationUuid, itemUuid : data.itemUuid});
     }
-
-    PAGE_MODE = data.type;
 };
 
 fnObj.formView = axboot.viewExtend(axboot.formView, {
@@ -406,15 +406,15 @@ setFormData = function(data){
     fnObj.formView.setFormData("referenceCode",data.referenceCode);
     fnObj.formView.setFormData("raAggregationCode",data.raAggregationCode);
 
-    $("input[data-ax-path='descriptionStartDate']").val(getFormattedDate(data.descriptionStartDate));
-    $("input[data-ax-path='descriptionEndDate']").val(getFormattedDate(data.descriptionEndDate));
+    fnObj.formView.setFormData("descriptionStartDate",data.riDescriptionStartDate);
+    fnObj.formView.setFormData("descriptionEndDate",data.riDescriptionEndDate);
 
-    $("input[data-ax-path='creationStartDate']").val(getFormattedDate(data.creationStartDate));
-    $("input[data-ax-path='creationEndDate']").val(getFormattedDate(data.creationEndDate));
+    fnObj.formView.setFormData("creationStartDate",data.creationStartDate);
+    fnObj.formView.setFormData("creationEndDate",data.creationEndDate);
 
     ACTIONS.dispatch(ACTIONS.SEARCH_FROM_SCH,{
         popupCode : "PU123",
-        searchData : data.raAggregationCode
+        searchData : data.riAggregationUuid
     });
   /*  $("input[data-ax-path='descriptionStartDate']").val();
     $("input[data-ax-path='descriptionEndDate']").val();
