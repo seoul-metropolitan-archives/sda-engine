@@ -537,19 +537,21 @@ a.leftmenu7_close {
     text-align: center;
     font-size: 12px;
     font-weight: normal;
-    background-color: #f1f1f1;
+    /*background-color: #f1f1f1;*/
     /*padding:3px 0;*/
     /*z-index: 10000;*/
 }
 
 .left-all-menu {
-    background-color: #f1f1f1;
-    border-top: 2px solid #098b62;
+    /*background-color: #f1f1f1;*/
+    background-color: #ffffff;
+    border-top: 4px solid #098b62;
     font-weight: bold;
 }
 
 .left-my-menu {
-    background-color: #fff;
+    /*background-color: #fff;*/
+    background-color: #eaeaea;
     border-top: 0px;
     font-weight: normal;
 }

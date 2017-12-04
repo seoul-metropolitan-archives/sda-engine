@@ -4,7 +4,7 @@ var rc00401 =
             [
                 {
                     sortNo: 0,
-                    width:140,
+                    width:100,
                     name: "areaUuid",
                     text: "Area",
                     values: axboot.commonCodeFilter("CD125").codeArr,
@@ -14,7 +14,7 @@ var rc00401 =
                 },
                 {
                     sortNo: 1,
-                    width:140,
+                    width:120,
                     name: "typeUuid",
                     text: "Type",
                     values: axboot.commonCodeFilter("CD126").codeArr,
@@ -24,7 +24,7 @@ var rc00401 =
                 },
                 {
                     sortNo: 2,
-                    width:140,
+                    width:600,
                     name: "title",
                     text: "Title",
                     dataType: "code",
@@ -33,7 +33,7 @@ var rc00401 =
                 },
                 {
                     sortNo: 3,
-                    width:140,
+                    width:90,
                     name: "openStatusUuid",
                     text: "Open Status",
                     values: axboot.commonCodeFilter("CD123").codeArr,
@@ -44,18 +44,20 @@ var rc00401 =
                 },
                 {
                     sortNo: 4,
-                    width:140,
+                    width:80,
                     name: "contentsSize",
                     text: "Size(kb)",
                     disable : true,
-                    dataType:"commanumber"
+                    dataType:"commanumber",
+                    textAlignment: "far",
+
                 },
                 {
                     sortNo: 4,
                     width:140,
                     name: "componentUuid",
                     dataType:"text",
-                    visible:false
+                    visible:false,
                 }
             ]
     }
