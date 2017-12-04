@@ -58,6 +58,8 @@ public class Rc004Service extends BaseService{
             rcItem.setInsertUuid(oldRcItem.getInsertUuid());
         }
 
+        rcItem.setUpdateDate(Timestamp.valueOf(DateUtils.convertToString(LocalDateTime.now(), DateUtils.DATE_TIME_PATTERN)));
+        rcItem.setUpdateUuid(SessionUtils.getCurrentLoginUserUuid());
         rcItem.setTypeUuid(requestParams.getString("typeUuid"));
         rcItem.setPublishedStatusUuid(requestParams.getString("publishedStatusUuid"));
         rcItem.setTitle(requestParams.getString("title"));
@@ -75,7 +77,7 @@ public class Rc004Service extends BaseService{
         rcItemRepository.save(rcItem);
 
         //RC_ITEM  상세 업데이트
-        rcItemCon.setItemUuid(rcItem.getItemUuid());
+       /* rcItemCon.setItemUuid(rcItem.getItemUuid());
         oldRcItemCon = rcItemConRepository.findOne(rcItemCon.getId());
 
         if(oldRcItemCon != null){//create
@@ -89,14 +91,17 @@ public class Rc004Service extends BaseService{
         rcItemCon.setCreator(requestParams.getString("creator"));
 
         if(requestParams.getString("creationStartDate") != null) {
-            rcItemCon.setCreationEndDate(requestParams.getString("creationStartDate").replace("-", ""));
+            rcItemCon.setCreationStartDate(requestParams.getString("creationStartDate").replace("-", ""));
         }
 
         if(requestParams.getString("creationEndDate") != null) {
-            rcItemCon.setCreationStartDate(requestParams.getString("creationEndDate").replace("-",""));
+            rcItemCon.setCreationEndDate(requestParams.getString("creationEndDate").replace("-",""));
         }
         rcItemCon.setKeyword(requestParams.getString("keyword"));
-        rcItemConRepository.save(rcItemCon);
+        rcItemCon.setUpdateDate(Timestamp.valueOf(DateUtils.convertToString(LocalDateTime.now(), DateUtils.DATE_TIME_PATTERN)));
+        rcItemCon.setUpdateUuid(SessionUtils.getCurrentLoginUserUuid());
+
+        rcItemConRepository.save(rcItemCon);*/
 
     }
 
