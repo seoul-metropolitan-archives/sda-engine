@@ -22,8 +22,46 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         });
         return false;
     },
-    PAGE_SEARCH1: function (caller, act, data) {},
-    PAGE_SAVE: function (caller, act, data) {},
+    SEARCH_AGGREGATION: function (caller, act, data) {
+        var callback = data["callback"];
+        var reqData = ax5.util.deepCopy(data);
+        delete(reqData["callback"]);
+        axboot.modal.open({
+            modalType: "COMMON_POPUP",
+            preSearch : reqData["preSearch"],
+            sendData: function () {
+                return reqData;
+            },
+            callback: function (data) {
+                callback(data);
+            }
+        });
+    },
+    PAGE_SAVE: function (caller, act, data) {
+        var saveData  =
+            {
+                systemMeta : fnObj.systemMetaArea.getData(),
+                contextualMeta :fnObj.contextualMetaArea.getData(),
+                childrenAggregationList : fnObj.childrenAggre.getData(),
+                referenceAggregationList : fnObj.referenceAggre.getData(),
+                referenceItemList : fnObj.referenceItem.getData()
+            }
+        console.log();
+        console.log(saveData);
+        axboot.ajax({
+            url: "/api/v1/rc/rc002/save",
+            dataType : "JSON",
+            type : "POST",
+            data: JSON.stringify(saveData),
+            callback: function (res) {
+                axboot.getCommonMessage("AA007");
+            },
+            options: {
+                onError: axboot.viewError
+            }
+        });
+
+    },
     dispatch: function (caller, act, data) {
         var result = ACTIONS.exec(caller, act, data);
         if (result != "error") {
@@ -45,22 +83,27 @@ fnObj.pageStart = function () {
         }
     });
 
-    _this.formView.initView();
-    _this.treeView01.initView();
-    _this.childrenAggre.initView();
-    _this.referenceItem.initView();
-    _this.referenceAggre.initView();
+
     // Data 조회
     var data = axboot.getMenuParams();
     console.log(data);
+    var uuid = "";
     if(null == data || data.type == "create")
     {
 
     }
     else
     {
+        uuid = data.uuid;
         ACTIONS.dispatch(ACTIONS.PAGE_SEARCH,{aggregationUuid : data.uuid});
     }
+    _this.formView.initView();
+    _this.treeView01.initView();
+    _this.systemMetaArea.initView(uuid);
+    _this.contextualMetaArea.initView(uuid);
+    _this.childrenAggre.initView(uuid);
+    _this.referenceItem.initView(uuid);
+    _this.referenceAggre.initView(uuid);
 };
 //=================================================================
 //작업영역
@@ -88,16 +131,7 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
     initEvent: function () {
         var _this = this;
         //by the Aggregation type, to control the Reference Area
-        $("select[data-ax-path='type']").change(function(){
-            if($(this).find("option:selected").text()=="Virtual")
-            {
-                $("#referenceAggreArea,#referenceItemArea").show();
-            }
-            else
-            {
-                $("#referenceAggreArea,#referenceItemArea").hide();
-            }
-        });
+
 
         $('.togl01').click(function () {
             $(".togl01_show").toggle();
@@ -157,22 +191,159 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
         this.target.find('[data-ax-path="key"]').removeAttr("readonly");
     }
 });
+//System Meta Object
+fnObj.systemMetaArea = axboot.viewExtend({
+    targetTag : $("#systemMetaArea"),
+    aggregationUuid : "",
+    initView : function(aggregationUuid){
+        this.initEvent();
+        this.aggregationUuid = aggregationUuid;
+    },
+    initEvent : function(){
+        var _this = this;
+        $("select[data-ax-path='typeUuid']").change(function(){
+            if($(this).find("option:selected").text()=="Virtual")
+            {
+                $("#referenceAggreArea,#referenceItemArea").show();
+            }
+            else
+            {
+                $("#referenceAggreArea,#referenceItemArea").hide();
+            }
+        });
+        $("input[data-ax-path='parentsAggregationUuid']").blur(function(){
+            var _thisObj = this;
+            var data = {
+                popupCode : "PU123",
+                searchData : $(this).parents().eq(0).find("input[data-ax-path='parentsAggregationUuid']").val(),
+                callback : function(data){
+                    var target = $(_thisObj).parents().eq(0).find("input[data-ax-path='parentsAggregationUuid']");
+                    target.attr("parentsAggregationUuid",data["AGGREGATION_UUID"]);
+                    target.val(data["TITLE"]);
+                    console.log(data);
+                }
+            };
+            ACTIONS.dispatch(ACTIONS.SEARCH_AGGREGATION,data);
+        });
+        $("#fromAggregation").click(function(){
+            var _thisObj = this;
+            var data = {
+                popupCode : "PU123",
+                preSearch : false,
+                searchData : $(this).parents().eq(0).find("input[data-ax-path='parentsAggregationUuid']").val(),
+                callback : function(data){
+                    var target = $(_thisObj).parents().eq(0).find("input[data-ax-path='parentsAggregationUuid']");
+                    target.attr("parentsAggregationUuid",data["AGGREGATION_UUID"]);
+                    target.val(data["TITLE"]);
+                    console.log(data);
+                }
+            };
+            ACTIONS.dispatch(ACTIONS.SEARCH_AGGREGATION,data);
+        });
+
+
+    },
+    getData : function(){
+        var data = {};
+        if(this.targetTag.css("display") != "none")
+        {
+            data = {};
+            data["aggregationUuid"] = this.aggregationUuid;
+            $(this.targetTag).find("ul").each(function(){
+                $(this).children("li").find("input,select,textarea").each(function(){
+                    if($(this).attr("data-ax-path"))
+                    {
+                        if($(this).attr($(this).attr("data-ax-path")))
+                            data[$(this).attr("data-ax-path")] = $(this).attr($(this).attr("data-ax-path"));
+                        else
+                            data[$(this).attr("data-ax-path")] = $(this).val();
+                    }
+                });
+                /*
+                $(this).children("li").find("select").each(function(){
+                    if($(this).attr("data-ax-path"))
+                        data[$(this).attr("data-ax-path")] = $(this).val();
+                });
+                */
+            });
+        }
+        return data;
+    }
+});
+//Contextual Meta Object
+fnObj.contextualMetaArea = axboot.viewExtend({
+    targetTag : $("#contextualMetaArea"),
+    aggregationUuid : "",
+    initView : function(aggregationUuid){
+        this.initEvent();
+        this.aggregationUuid = aggregationUuid;
+    },
+    initEvent : function(){
+
+    },
+    getData : function(){
+        var retData = new Array();
+        var data = {};
+        if(this.targetTag.css("display") != "none")
+        {
+            data = {};
+            data["aggregationUuid"] = this.aggregationUuid;
+            $(this.targetTag).find("ul").each(function(){
+                $(this).children("li").find("input,select,textarea").each(function(){
+                    if($(this).attr("data-ax-path"))
+                    {
+                        if($(this).attr($(this).attr("data-ax-path")))
+                            data[$(this).attr("data-ax-path")] = $(this).attr($(this).attr("data-ax-path"));
+                        else
+                            data[$(this).attr("data-ax-path")] = $(this).val();
+                    }
+                });
+            });
+        }
+        return data;
+    }
+});
 
 fnObj.childrenAggre = axboot.viewExtend({
     targetTag  : $("#childrenAggreArea"),
-    initView: function () {
+    parentUuid : "",
+    template :
+    "                                                            <li style='width: 11%;'>" +
+    "                                                                <b>Aggregation Code</b>" +
+    "                                                                <div>" +
+    "                                                                    <input type='text' data-ax-path='aggregationCode' style='width: 135px;' class='bgf7' readonly>" +
+    "                                                                </div>" +
+    "                                                            </li>" +
+    "                                                            <li style='width: 75%; padding: 0 0.5%;'>" +
+    "                                                                <b>Title </b>" +
+    "                                                                <div>" +
+    "                                                                    <input type='text' data-ax-path='title' style='width: 100%;  background-color: #fffdd6; '>" +
+    "                                                                </div>" +
+    "                                                            </li>" +
+    "                                                            <li style='width: 11%;'>" +
+    "                                                                <b>Level </b>" +
+    "                                                                <div>" +
+    "                                                                    <select data-ax-path='levelUuid' style='width: 135px' >" +
+    "                                                                    </select>" +
+    "                                                                </div>" +
+    "                                                            </li>" +
+    "" +
+    "                                                            <li style='width: 2%; text-align: center'>" +
+    "                                                                <b>&nbsp; </b>" +
+    "                                                                <div><a href='#' class='btn_del' style=''>X</a></div>" +
+    "                                                            </li>",
+    initView: function (parentUuid) {
         this.initEvent();
+        this.parentUuid = parentUuid;
+        this.addChild($("#addAggregation"));
+
     },
     initEvent: function () {
+        var _this = this;
         //add aggregation
         $("#addAggregation").click(function(){
-            var cloneTag = $("#aggregationTemplate").clone();
-            cloneTag.attr("id","");
-            cloneTag.attr("type","create");
-            $(this).before(cloneTag);
-            cloneTag.show();
+            _this.addChild(this);
         });
-
 
         $(".childAggregation").delegate(".btn_del","click",function(){
             if("create" == $(this).parents().eq(2).attr("type"))
@@ -185,15 +356,47 @@ fnObj.childrenAggre = axboot.viewExtend({
             }
         });
     },
+    addChild : function(_this){
+        var cloneTag = $("<ul>").addClass("pdb_10").attr("data-ax-path","saveType").attr("saveType","create").html(this.template);
+        cloneTag.find("select[data-ax-path='levelUuid']").append($("#systemMetaArea").find("select[data-ax-path='levelUuid']>option"));
+        cloneTag.find("select[data-ax-path='levelUuid']>option").eq(0).attr("selected","selected");
+        $(_this).before(cloneTag);
+        cloneTag.show();
+    },
     getData : function(){
+        var retData = new Array();
+        var data = {};
+        if(this.targetTag.css("display") != "none")
+        {
+            $(this.targetTag).find(".childAggregation>ul:not(#addAggregation)").each(function(){
+                data = {};
+                data["saveType"] = $(this).attr("saveType");
+                $(this).children("li").find("input,select,textarea").each(function(){
 
+                    if($(this).attr("data-ax-path")) {
+                        if ($(this).attr($(this).attr("data-ax-path")))
+                            data[$(this).attr("data-ax-path")] = $(this).attr($(this).attr("data-ax-path"));
+                        else
+                            data[$(this).attr("data-ax-path")] = $(this).val();
+                    }
+
+                });
+                data["type"] = $("#systemMetaArea").find("select[data-ax-path='type']").val();
+
+                if(data["title"] && data["title"] != "")
+                    retData.push(data);
+            });
+        }
+        return retData;
     }
 });
 
 fnObj.referenceAggre = axboot.viewExtend({
     targetTag  : $("#referenceAggreArea"),
-   initView: function () {
+    parentUuid : "",
+   initView: function (parentUuid) {
        this.initEvent();
+       this.parentUuid = parentUuid;
    },
     initEvent: function () {
         //add aggregation
@@ -201,7 +404,7 @@ fnObj.referenceAggre = axboot.viewExtend({
         $("#addReference").click(function(){
             var cloneTag = $("#referenceTemplate").clone();
             cloneTag.attr("id","");
-            cloneTag.attr("type","create");
+            cloneTag.attr("saveType","create");
             $(this).before(cloneTag);
             cloneTag.show();
         });
@@ -227,17 +430,24 @@ fnObj.referenceAggre = axboot.viewExtend({
     getData : function(){
         var retData = new Array();
         var data = {};
-        if(targetTag.css("display") != "none")
+        if(this.targetTag.css("display") != "none")
         {
-            $(targetTag).find(".childAggregation>ul").each(function(){
+            $(this.targetTag).find(".childAggregation>ul:not(#addReference)").each(function(){
                 data = {};
-                $(this).children("li").find("input").each(function(){
-                    data[$(this).attr("data-ax-path")] = $(this).val();
+                data["saveType"] = $(this).attr("saveType");
+                $(this).children("li").find("input,select,textarea").each(function(){
+                    if($(this).attr("data-ax-path"))
+                    {
+                        if($(this).attr($(this).attr("data-ax-path")))
+                            data[$(this).attr("data-ax-path")] = $(this).attr($(this).attr("data-ax-path"));
+                        else
+                            data[$(this).attr("data-ax-path")] = $(this).val();
+                    }
                 });
-                $(this).children("li").find("select").each(function(){
-                    data[$(this).attr("data-ax-path")] = $(this).val();
-                });
-                data["type"] = $("").find("data-ax-path='type'").val();
+                data["typeUuid"] = $("#systemMetaArea").find("select[data-ax-path='type']").val();
+                data["parentAggregationUuid"] = this.aggregationUuid;
+                if(data["aggregationUuid"] && data["aggregationUuid"] != "")
+                    retData.push(data);
             });
         }
         return retData;
@@ -245,16 +455,17 @@ fnObj.referenceAggre = axboot.viewExtend({
 });
 fnObj.referenceItem = axboot.viewExtend({
     targetTag  : $("#referenceAggreArea"),
-    initView: function () {
+    parentUuid : "",
+    initView: function (parentUuid) {
         this.initEvent();
+        this.parentUuid = parentUuid;
     },
     initEvent: function () {
         //add aggregation
-
         $("#addReferenceItem").click(function(){
             var cloneTag = $("#referenceItemTemplate").clone();
             cloneTag.attr("id","");
-            cloneTag.attr("type","create");
+            cloneTag.attr("saveType","create");
             $(this).before(cloneTag);
             cloneTag.show();
         });
@@ -276,7 +487,29 @@ fnObj.referenceItem = axboot.viewExtend({
 
     },
     getData : function(){
-
+        var retData = new Array();
+        var data = {};
+        if(this.targetTag.css("display") != "none")
+        {
+            $(this.targetTag).find(".childAggregation>ul:not(#addReferenceItem)").each(function(){
+                data = {};
+                data["saveType"] = $(this).attr("saveType");
+                $(this).children("li").find("input,select,textarea").each(function(){
+                    if($(this).attr("data-ax-path"))
+                    {
+                        if($(this).attr($(this).attr("data-ax-path")))
+                            data[$(this).attr("data-ax-path")] = $(this).attr($(this).attr("data-ax-path"));
+                        else
+                            data[$(this).attr("data-ax-path")] = $(this).val();
+                    }
+                });
+                data["type"] = $("#systemMetaArea").find("select[data-ax-path='type']").val();
+                data["parentAggregationUuid"] = this.aggregationUuid;
+                if(data["itemUuid"] && data["itemUuid"] != "")
+                    retData.push(data);
+            });
+        }
+        return retData;
     }
 });
 

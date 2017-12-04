@@ -294,5 +294,5 @@ GridWrapper.prototype.getData = function() {
  * @returns {undefined}
  */
 SimpleGridWrapper.prototype.getJsonRows = function () {
-    return this.dataProvider.getRows();
+    return this.dataProvider.getJsonRows(-1,-1);
 };

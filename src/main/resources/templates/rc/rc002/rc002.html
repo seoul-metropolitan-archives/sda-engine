@@ -67,149 +67,149 @@
                                     <div class="explorer_list_cont" id="topmove">
 
                                         <div class="bdt cont_wrap01" style="width: 86%;">
-
-                                            <!-- system metadata -->
-                                            <div class="serv_title" style="border-top:0; margin-top: 0">
-                                                <span><b>System Metadata</b></span>
-                                            </div>
-                                            <div class="bdb" style="padding: 5px;">
-                                                <ul>
-                                                    <li style="width: 33%;">
-                                                        <b>Code </b>
-                                                        <div data-ax-path="rcAggregationCode">text readonly</div>
-                                                    </li>
-                                                    <li style="width: 33%;">
-                                                        <b>Type </b>
-                                                        <div>
-                                                            <select data-ax-path="type" style="width: 200px; background-color: #fffdd6">
-                                                                <option th:each="item : ${typeList}" th:value="${item.codeDetailUUID}" th:text="${item.codeName}"/>
-                                                            </select>
-                                                        </div>
-                                                    </li>
-                                                    <li style="width: 34%;">
-                                                        <b>Published Status</b>
-                                                        <div>
-                                                            <select data-ax-path="publishedStatus" style="width: 200px; background-color: #fffdd6" >
-                                                                <option th:each="item : ${publishedStatusList}" th:value="${item.codeDetailUUID}" th:text="${item.codeName}"/>
-                                                            </select>
-                                                        </div>
-                                                    </li>
-                                                </ul>
-
-
-                                                <ul style="padding-top: 16px">
-                                                    <li style="width: 66%;">
-                                                        <b>Title </b>
-                                                        <div>
-                                                            <textarea class="txtar" data-ax-path="rcTitle"
-                                                                      style="height: 35px; background-color: #fffdd6; width: 90%"></textarea>
-                                                        </div>
-                                                    </li>
-
-                                                    <li style="width: 34%;">
-                                                        <b>Level </b>
-                                                        <div>
-                                                            <select style="width: 200px" data-ax-path="levelList" id="aggreLevel">
-                                                                <option value=""></option>
-                                                                <option th:each="item : ${levelList}" th:value="${item.levelUuid}" th:text="${item.levelName}"/>
-                                                            </select>
-                                                        </div>
-                                                    </li>
-                                                </ul>
-
-                                                <ul class="pdt_15">
-                                                    <li style="width: 49%;">
-                                                        <b>Description </b>
-                                                        <div>
-                                                            <textarea class="txtar" style="height: 162px" data-ax-path="rcDescription"></textarea>
-                                                        </div>
-                                                    </li>
-                                                    <li style="width: 2%;">
-                                                    </li>
-                                                    <li style="width: 49%;">
-                                                        <b>Notes </b>
-                                                        <div>
-                                                            <textarea class="txtar" style="height: 162px" data-ax-path="rcNotes"></textarea>
-                                                        </div>
-                                                    </li>
-                                                </ul>
-
-
-                                                <ul class="pdt_20">
-                                                    <li style="width: 33%;">
-                                                        <b>Author </b>
-                                                        <div>
-                                                            <textarea class="txtar" data-ax-path="rcAuthor"
-                                                                      style="height: 35px; width: 95%"></textarea>
-                                                        </div>
-                                                    </li>
-
-                                                    <li style="width: 67%;">
-                                                        <b>From </b>
-                                                        <div>
-                                                            <div class="src_box2" style="width: 100%">
-                                                                <input type=text style="width: 97%" data-ax-path="rcFrom">
-                                                                <a href="#" style="top: 0">
-                                                                    <img src="/assets/images/ams/search_normal.png"
-                                                                         alt="find"></a>
+                                            <div id="systemMetaArea">
+                                                <!-- system metadata -->
+                                                <div class="serv_title" style="border-top:0; margin-top: 0">
+                                                    <span><b>System Metadata</b></span>
+                                                </div>
+                                                <div class="bdb" style="padding: 5px;">
+                                                    <ul>
+                                                        <li style="width: 33%;">
+                                                            <b>Code </b>
+                                                            <div data-ax-path="rcAggregationCode">text readonly</div>
+                                                        </li>
+                                                        <li style="width: 33%;">
+                                                            <b>Type </b>
+                                                            <div>
+                                                                <select data-ax-path="typeUuid" style="width: 200px; background-color: #fffdd6">
+                                                                    <option th:each="item : ${typeList}" th:value="${item.codeDetailUUID}" th:text="${item.codeName}"/>
+                                                                </select>
                                                             </div>
-                                                        </div>
+                                                        </li>
+                                                        <li style="width: 34%;">
+                                                            <b>Published Status</b>
+                                                            <div>
+                                                                <select data-ax-path="publishedStatusUuid" style="width: 200px; background-color: #fffdd6" >
+                                                                    <option th:each="item : ${publishedStatusList}" th:value="${item.codeDetailUUID}" th:text="${item.codeName}"/>
+                                                                </select>
+                                                            </div>
+                                                        </li>
+                                                    </ul>
 
-                                                    </li>
-                                                </ul>
 
-                                                <ul class="pdt_20">
-                                                    <li style="width: 33%;">
-                                                        <b>Date of Description </b>
-                                                        <div>
-                                                            <div class="cld_box" data-ax5picker="date">
-                                                                <!--<input data-ax-path="descriptionStartDate" type=text id="datepicker1">-->
-                                                                <div class="cld_box">
-                                                                    <input type="text" data-ax-path="descriptionStartDate" style="ime-mode:disabled;"
-                                                                           placeholder="YYYY-MM-DD" maxlength="10">
-                                                                    <img title="calendar" class="ui-datepicker-trigger" alt="..." src="/assets/images/ams/calendar.png" >
+                                                    <ul style="padding-top: 16px">
+                                                        <li style="width: 66%;">
+                                                            <b>Title </b>
+                                                            <div>
+                                                                <textarea class="txtar" data-ax-path="title"
+                                                                          style="height: 35px; background-color: #fffdd6; width: 90%"></textarea>
+                                                            </div>
+                                                        </li>
+
+                                                        <li style="width: 34%;">
+                                                            <b>Level </b>
+                                                            <div>
+                                                                <select style="width: 200px" data-ax-path="levelUuid" id="aggreLevel">
+                                                                    <option value=""></option>
+                                                                    <option th:each="item : ${levelList}" th:value="${item.levelUuid}" th:text="${item.levelName}"/>
+                                                                </select>
+                                                            </div>
+                                                        </li>
+                                                    </ul>
+
+                                                    <ul class="pdt_15">
+                                                        <li style="width: 49%;">
+                                                            <b>Description </b>
+                                                            <div>
+                                                                <textarea class="txtar" style="height: 162px" data-ax-path="description"></textarea>
+                                                            </div>
+                                                        </li>
+                                                        <li style="width: 2%;">
+                                                        </li>
+                                                        <li style="width: 49%;">
+                                                            <b>Notes </b>
+                                                            <div>
+                                                                <textarea class="txtar" style="height: 162px" data-ax-path="notes"></textarea>
+                                                            </div>
+                                                        </li>
+                                                    </ul>
+
+
+                                                    <ul class="pdt_20">
+                                                        <li style="width: 33%;">
+                                                            <b>Author </b>
+                                                            <div>
+                                                                <textarea class="txtar" data-ax-path="author"
+                                                                          style="height: 35px; width: 95%"></textarea>
+                                                            </div>
+                                                        </li>
+
+                                                        <li style="width: 67%;">
+                                                            <b>From </b>
+                                                            <div>
+                                                                <div class="src_box2" style="width: 100%">
+                                                                    <input type=text style="width: 97%" data-ax-path="parentsAggregationUuid" parentsAggregationUuid = "">
+                                                                    <a href="#" style="top: 0" id="fromAggregation">
+                                                                        <img src="/assets/images/ams/search_normal.png"
+                                                                             alt="find"></a>
                                                                 </div>
                                                             </div>
-                                                            ~
-                                                            <div class="cld_box" data-ax5picker="date">
-                                                                <!--<input data-ax-path="descriptionEndDate" type=text id="datepicker2">-->
-                                                                <div class="cld_box">
-                                                                    <input type="text" data-ax-path="descriptionEndDate" style="ime-mode:disabled;"
-                                                                           placeholder="YYYY-MM-DD" maxlength="10">
-                                                                    <img title="calendar" class="ui-datepicker-trigger" alt="..." src="/assets/images/ams/calendar.png" >
+
+                                                        </li>
+                                                    </ul>
+
+                                                    <ul class="pdt_20">
+                                                        <li style="width: 33%;">
+                                                            <b>Date of Description </b>
+                                                            <div>
+                                                                <div class="cld_box" data-ax5picker="date">
+                                                                    <!--<input data-ax-path="descriptionStartDate" type=text id="datepicker1">-->
+                                                                    <div class="cld_box">
+                                                                        <input type="text" data-ax-path="descriptionStartDate" style="ime-mode:disabled;"
+                                                                               placeholder="YYYY-MM-DD" maxlength="10">
+                                                                        <img title="calendar" class="ui-datepicker-trigger" alt="..." src="/assets/images/ams/calendar.png" >
+                                                                    </div>
+                                                                </div>
+                                                                ~
+                                                                <div class="cld_box" data-ax5picker="date">
+                                                                    <!--<input data-ax-path="descriptionEndDate" type=text id="datepicker2">-->
+                                                                    <div class="cld_box">
+                                                                        <input type="text" data-ax-path="descriptionEndDate" style="ime-mode:disabled;"
+                                                                               placeholder="YYYY-MM-DD" maxlength="10">
+                                                                        <img title="calendar" class="ui-datepicker-trigger" alt="..." src="/assets/images/ams/calendar.png" >
+                                                                    </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
-                                                    </li>
+                                                        </li>
 
-                                                    <li style="width: 67%;">
-                                                        &nbsp;
-                                                    </li>
-                                                </ul>
+                                                        <li style="width: 67%;">
+                                                            &nbsp;
+                                                        </li>
+                                                    </ul>
 
+                                                </div>
+                                                <!-- system metadata -->
                                             </div>
-                                            <!-- system metadata -->
-
-
+                                            <div id="contextualMetaArea">
                                             <!-- Contextual Metadata -->
-                                            <div class="serv_title">
-                                                <span><b>Contextual Metadata </b></span>
-                                            </div>
-                                            <div class="bdb" style="padding: 5px;">
+                                                <div class="serv_title">
+                                                    <span><b>Contextual Metadata </b></span>
+                                                </div>
+                                                <div class="bdb" style="padding: 5px;">
                                                 <ul>
                                                     <li style="width: 49%">
                                                         <ol>
                                                             <li>
                                                                 <b>Provenance </b>
                                                                 <div>
-                                                                    <textarea class="txtar" data-ax-path="rcProvenance"
+                                                                    <textarea class="txtar" data-ax-path="provenance"
                                                                               style="height: 35px"></textarea>
                                                                 </div>
                                                             </li>
                                                             <li class="pdt_20">
                                                                 <b>Creator </b>
                                                                 <div>
-                                                                    <textarea class="txtar" data-ax-path="rcCreator"
+                                                                    <textarea class="txtar" data-ax-path="creator"
                                                                               style="height: 35px"></textarea>
                                                                 </div>
                                                             </li>
@@ -242,8 +242,8 @@
                                                     <li style="width: 49%;">
                                                         <b>Reference Code </b>
                                                         <span>
-                                            <textarea class="txtar" style="height: 170px"></textarea>
-                                        </span>
+                                                            <textarea class="txtar" style="height: 170px" data-ax-path="referenceCode"></textarea>
+                                                        </span>
                                                     </li>
                                                 </ul>
 
@@ -338,8 +338,11 @@
                                                 <input type="text" style="width: 100%">
                                             </div>
                                         </li>
-                                    </ul>
-                                </div>-->
+                                    </ul>-->
+                                    </div>
+                                            </div>
+
+
                                             <!-- Contextual Metadata -->
 
                                             <div id="childrenAggreArea">
@@ -349,24 +352,23 @@
                                                     <input type="button" value="▼" id="open_btn1" class="open_btn">
                                                 </div>
                                                     <div id="aggregationTemplate" style="display:none;">
-                                                        <ul class="pdb_10">
-
+                                                        <ul class="pdb_10"  data-ax-path="saveType" saveType="create">
                                                             <li style="width: 11%;">
                                                                 <b>Aggregation Code</b>
                                                                 <div>
-                                                                    <input type="text" style="width: 135px;" class="bgf7" readonly>
+                                                                    <input type="text" data-ax-path="childaggregationCode" style="width: 135px;" class="bgf7" readonly>
                                                                 </div>
                                                             </li>
                                                             <li style="width: 75%; padding: 0 0.5%;">
                                                                 <b>Title </b>
                                                                 <div>
-                                                                    <input type="text" style="width: 100%;  background-color: #fffdd6; ">
+                                                                    <input type="text" data-ax-path="childtitle" style="width: 100%;  background-color: #fffdd6; ">
                                                                 </div>
                                                             </li>
                                                             <li style="width: 11%;">
                                                                 <b>Level </b>
                                                                 <div>
-                                                                    <select data-ax-path="levelList" style="width: 135px" >
+                                                                    <select data-ax-path="childlevelUuid" style="width: 135px" >
                                                                         <option th:each="item : ${levelList}" th:value="${item.levelUuid}" th:text="${item.levelName}"/>
                                                                     </select>
                                                                 </div>
@@ -376,40 +378,9 @@
                                                                 <b>&nbsp; </b>
                                                                 <div><a href="#" class="btn_del" style="">X</a></div>
                                                             </li>
-
                                                         </ul>
                                                     </div>
                                                 <div class="togl01_show serv_cont childAggregation">
-
-                                                    <ul class="pdb_10">
-
-                                                        <li style="width: 11%;">
-                                                            <b>Aggregation Code</b>
-                                                            <div>
-                                                                <input type="text" style="width: 135px;" class="bgf7" data-ax-path="aggregationCode" readonly>
-                                                            </div>
-                                                        </li>
-                                                        <li style="width: 75%; padding: 0 0.5%;">
-                                                            <b>Title </b>
-                                                            <div>
-                                                                <input type="text" style="width: 100%;  background-color: #fffdd6; ">
-                                                            </div>
-                                                        </li>
-                                                        <li style="width: 11%;">
-                                                            <b>Level </b>
-                                                            <div>
-                                                                <select data-ax-path="levelList" style="width: 135px">
-                                                                    <option th:each="item : ${levelList}" th:value="${item.levelUuid}" th:text="${item.levelName}"/>
-                                                                </select>
-                                                            </div>
-                                                        </li>
-
-                                                        <li style="width: 2%; text-align: center">
-                                                            <b>&nbsp; </b>
-                                                            <div><a href="#" class="btn_del" style="">X</a></div>
-                                                        </li>
-
-                                                    </ul>
 
                                                     <ul id="addAggregation">
                                                         <li style="width: 100%;">
@@ -420,19 +391,19 @@
                                                 </div>
                                             <!-- Child Aggregations -->
                                             </div>
-                                            <div id="referenceAggreArea" style="display:none;">
+                                            <div id="referenceAggreArea">
                                                 <!-- Reference Aggregation -->
                                                 <div class="togl02 serv_cont">
                                                     <span><b>Reference Aggregations</b></span>
                                                     <input type="button" value="▼" id="open_btn2" class="open_btn">
                                                 </div>
-                                                    <div id="referenceTemplate" style="display:none;">
-                                                        <ul class="pdb_10">
+                                                    <div  style="display:none;">
+                                                        <ul class="pdb_10"  data-ax-path="saveType" saveType="create" id="referenceTemplate">
                                                             <li style="width: 11%;">
 
                                                                 <div class="src_box2">
                                                                     <input type=text>
-                                                                    <a href="#" style="top: 0" class="searchAggregation">
+                                                                    <a href="#" style="top: 0" class="searchAggregation" data-ax-path="aggregationUuid" aggregationUuid="">
                                                                         <img src="/assets/images/ams/search_normal.png" alt="find"></a>
                                                                 </div>
 
@@ -455,14 +426,12 @@
                                                     </div>
                                                 <div class="togl02_show serv_cont childReference">
 
-                                                    <ul class="pdb_10">
+                                                    <ul class="pdb_10" data-ax-path="saveType" saveType="create">
                                                         <li style="width: 11%;">
 
                                                             <div class="src_box2">
                                                                 <input type=text>
-                                                                <a href="#" style="top: 0" class="searchAggregation">
-                                                                    <img src="/assets/images/ams/search_normal.png"
-                                                                         alt="find"></a>
+                                                                <a href="#" style="top: 0" class="searchAggregation " data-ax-path="aggregationUuid"><img src="/assets/images/ams/search_normal.png" alt="find"></a>
                                                             </div>
 
                                                         </li>
@@ -487,20 +456,20 @@
                                                 </div>
                                                 <!-- Reference Aggregation -->
                                             </div>
-                                            <div id="referenceItemArea" style="display:none;">
+                                            <div id="referenceItemArea" >
                                                 <!-- Item -->
                                                 <div class="togl03 serv_title">
                                                     <span><b>Reference Items</b></span>
                                                     <input type="button" value="▼" id="open_btn3" class="open_btn">
                                                 </div>
-                                                    <div id="referenceItemTemplate" style="display:none;">
-                                                        <ul class="pdb_10">
+                                                    <div style="display:none;">
+                                                        <ul class="pdb_10" data-ax-path="saveType" saveType="create" id="referenceItemTemplate">
                                                             <li style="width: 11%;">
                                                                 <b>Item Code </b>
                                                                 <div>
                                                                     <div class="src_box2">
                                                                         <input type=text>
-                                                                        <a href="#" style="top: 0" class="searchReferenceItem">
+                                                                        <a href="#" style="top: 0" class="searchReferenceItem" data-ax-path="itemUuid" itemUuid="">
                                                                             <img src="/assets/images/ams/search_normal.png"
                                                                                  alt="find"></a>
                                                                     </div>
@@ -528,13 +497,13 @@
                                                         </ul>
                                                     </div>
                                                 <div class="togl03_show serv_cont childReferenceItem">
-                                                    <ul class="pdb_10">
+                                                    <ul class="pdb_10" data-ax-path="saveType" saveType="create">
                                                         <li style="width: 11%;">
                                                             <b>Item Code </b>
                                                             <div>
                                                                 <div class="src_box2">
                                                                     <input type=text>
-                                                                    <a href="#" style="top: 0" class="searchReferenceItem">
+                                                                    <a href="#" style="top: 0" class="searchReferenceItem" data-ax-path="itemUuid">
                                                                         <img src="/assets/images/ams/search_normal.png"
                                                                              alt="find"></a>
                                                                 </div>
