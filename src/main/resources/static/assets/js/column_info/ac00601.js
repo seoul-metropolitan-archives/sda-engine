@@ -60,7 +60,7 @@ var ac00601 =
                     sortNo: 6,
                     name: "permissionName",
                     text: "Permission",
-                    width: 150,
+                    width: 300,
                     editable: true,
                     dataType: "text",
                     required: true,

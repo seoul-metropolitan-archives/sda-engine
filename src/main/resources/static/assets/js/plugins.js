@@ -21253,7 +21253,7 @@ ax5.ui = function () {
                 };
 
                 return function (queIdx) {
-                    var item = this.queue[queIdx],
+                    var item = this.queue[queIdx], img,
                         input;
 
                     if (!item.content) {
@@ -21262,6 +21262,7 @@ ax5.ui = function () {
                     }
 
                     input = item.$target.get(0).tagName.toUpperCase() == "INPUT" ? item.$target : item.$target.find('input[type]');
+                    img = item.$target.get(0).tagName.toUpperCase() == "IMG" ? item.$target : item.$target.find('img');
 
                     // 함수타입
                     if (U.isFunction(item.content)) {
@@ -21276,14 +21277,14 @@ ax5.ui = function () {
                     }
 
                     input.unbind('focus.ax5picker').unbind('click.ax5picker').bind('focus.ax5picker', pickerEvent.focus.bind(this, queIdx)).bind('click.ax5picker', pickerEvent.click.bind(this, queIdx));
-
+                    img.unbind('focus.ax5picker').unbind('click.ax5picker').bind('focus.ax5picker', pickerEvent.focus.bind(this, queIdx)).bind('click.ax5picker', pickerEvent.click.bind(this, queIdx));
                     item.$target.find('.input-group-addon').unbind('click.ax5picker').bind('click.ax5picker', pickerEvent.click.bind(this, queIdx));
 
                     if (item.content.formatter && ax5.ui.formatter) {
                         input.ax5formatter(item.content.formatter);
                     }
 
-                    input = null;
+                    // input = null;
                     item = null;
                     queIdx = null;
                     return this;

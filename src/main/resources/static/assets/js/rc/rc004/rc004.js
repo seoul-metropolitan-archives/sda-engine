@@ -104,9 +104,18 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
 
         this.target.find('[data-ax5picker="date"]').ax5picker({
             direction: "auto",
+            config: {
+              pattern: 'data'
+            },
             content: {
-                type: 'date'
-            }
+                type: 'date',
+                formatter: {
+                    pattern: 'number'
+                }
+            },
+
+
+
         });
 
         this.initEvent();
