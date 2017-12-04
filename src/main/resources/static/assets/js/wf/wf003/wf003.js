@@ -3,10 +3,13 @@
  */
 
 var fnObj = {};
+var savedParameter = [];
 
 var ACTIONS = axboot.actionExtend(fnObj, {
-    // JOB 조회
+    // 워크플로우 조회
     PAGE_SEARCH: function (caller, act, data) {
+        clearSavedParameter();
+
         axboot.ajax({
             type: "GET",
             url: "/api/v1/wf003/01/list",
@@ -27,8 +30,10 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         });
         return false;
     },
-    // Parameter 조회
+    // Job 조회
     PAGE_SEARCH1: function (caller, act, data) {
+        clearSavedParameter();
+
         axboot.ajax({
             type: "GET",
             url: "/api/v1/wf003/02/list",
@@ -43,6 +48,8 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         return false;
     },
     PAGE_SAVE: function (caller, act, data) {
+        clearSavedParameter();
+
         var workflowist = [].concat(fnObj.gridView01.getData());
         var workflowJobList = [].concat(fnObj.gridView02.getData());
 
@@ -108,7 +115,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
     },
     PROCESS_RUN: function (caller, act, data) {
-        var workflowData = {
+        /*var workflowData = {
             workflowUuid: "5AE01C7A-3393-4651-96C8-D9CCFD0AC566",
             workflowName: "Starndard Ingest",
             serviceUuid: "DF737BDE-42C1-48C4-85A2-07B505EEA911",
@@ -127,14 +134,15 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                     defaultValue: "Test125"
                 }]
             }]
-        }
+        }*/
 
         axboot.ajax({
             type: "PUT",
             url: "/api/v1/wf003/01/run",
             dataType: "json",
-            data: JSON.stringify(workflowData),
+            data: JSON.stringify(data),
             callback: function (res) {
+                clearSavedParameter();
                 axWarningToast.push("호출 완료");
             },
             options: {
@@ -150,6 +158,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             async: true,
             data: $.extend({}, {pageSize: 1000}, this.formView.getData()),
             callback: function (res) {
+                clearSavedParameter();
                 axWarningToast.push("호출 완료");
             },
             options: {
@@ -271,11 +280,26 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
                     msg: axboot.getCommonMessage("WF003_02")
                 }, function () {
                     if (this.key == "ok") {
-                        ACTIONS.dispatch(ACTIONS.PROCESS_RUN);
+                        saveCurrentParameter();
+
+                        if (data) {
+                            data.menuUuid = axboot.getMenuId();
+
+                            var jobList = fnObj.gridView02.gridObj.dataProvider.getJsonRows(-1, -1);
+
+                            jobList.forEach(function (job) {
+                                job.parameterList = getSavedParameter(job.jobUuid);
+                            });
+
+                            data.workflowJobList = jobList;
+                        }
+
+                        ACTIONS.dispatch(ACTIONS.PROCESS_RUN, data);
                     }
                 });
             } else {
                 ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, data);
+                fnObj.gridView03.clearData();
             }
         } else {
             fnObj.gridView02.clearData();
@@ -303,6 +327,11 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
         this.makeGrid();
     },
     itemClick: function (data, index) {
+
+        if (fnObj.gridView03.gridObj) {
+            saveCurrentParameter();
+        }
+
         if (data.jobUuid != null && data.jobUuid != "") {
             fnObj.gridView03.initGrid(data.jobUuid);
         } else {
@@ -318,6 +347,9 @@ fnObj.gridView03 = axboot.viewExtend(axboot.gridView, {
     },
     initGrid: function (jobUuid) {
         var _this = this;
+
+        this.clearData();
+
         axboot.ajax({
             url: "/api/v1/wf003/p/02/getPopupInfo",
             async: false,
@@ -327,10 +359,8 @@ fnObj.gridView03 = axboot.viewExtend(axboot.gridView, {
 
                 if (res.columnInfo.length > 0) {
 
-                    for(var i = 0; i < res.columnInfo.length; i++)
-                    {
-                        if(res.columnInfo[i]["dataType"] == "combo")
-                        {
+                    for (var i = 0; i < res.columnInfo.length; i++) {
+                        if (res.columnInfo[i]["dataType"] == "combo") {
                             res.columnInfo[i]["dataType"]["labels"] = eval(res.columnInfo[i]["dataType"]["labels"]);
                             res.columnInfo[i]["dataType"]["values"] = eval(res.columnInfo[i]["dataType"]["values"]);
 
@@ -367,8 +397,46 @@ fnObj.gridView03 = axboot.viewExtend(axboot.gridView, {
     },
     getData: function () {
         return this.gridObj.getJsonRows();
+    },
+    clearData: function () {
+        $("#realgrid03").empty();
     }
 });
+
+
+saveCurrentParameter = function () {
+    fnObj.gridView03.gridObj.gridView.commit(true);
+
+    // 현재 파라미터의 값들을 항상 저장
+    var parameterObj = {};
+    parameterObj.jobUuid = fnObj.gridView02.getCurrentData().jobUuid;
+    parameterObj.parameterList = fnObj.gridView03.getData();
+
+    if (savedParameter.length > 0) {
+        for (var i = 0; i < savedParameter.length; i++) {
+            if (savedParameter[i].jobUuid == parameterObj.jobUuid) {
+                savedParameter[i] = parameterObj;
+            } else {
+                savedParameter.push(parameterObj);
+            }
+        }
+    } else {
+        savedParameter.push(parameterObj);
+    }
+}
+
+clearSavedParameter = function () {
+    savedParameter = [];
+}
+
+getSavedParameter = function (jobUuid) {
+    savedParameter.forEach(function (job) {
+        if (job.jobUuid === jobUuid) {
+            return job;
+        }
+    });
+}
+
 
 /**
  * [필수]
@@ -383,3 +451,5 @@ isDataChanged = function () {
         return false;
     }
 }
+
+

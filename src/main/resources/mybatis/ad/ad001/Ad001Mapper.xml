@@ -52,6 +52,7 @@
             Z.USE_YN = #{useYN}
             ]]>
         </if>
+        ORDER BY Z.CONFIGURATION_CODE ASC
     </select>
 
 </mapper>

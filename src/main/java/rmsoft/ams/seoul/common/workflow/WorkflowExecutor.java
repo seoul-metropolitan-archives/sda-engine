@@ -2,14 +2,13 @@
  * Copyright (c) 2017. RMSoft Co.,Ltd. All rights reserved
  */
 
-package rmsoft.ams.seoul.utils;
+package rmsoft.ams.seoul.common.workflow;
 
-import io.onsemiro.core.context.AppContextManager;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Component;
+import rmsoft.ams.seoul.wf.wf003.vo.Wf00302VO;
 
-import javax.annotation.PreDestroy;
 import java.io.File;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
@@ -20,16 +19,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @Component
-public class WorkflowManager extends ClassLoader {
+public class WorkflowExecutor extends ClassLoader {
     @Value("${native.library.path}")
     private String nativeLibrary;
 
-    private final static Map<String, Runnable> threadStopMap = new HashMap<>();
+    private Map<String, Object> parameterMap = null;
 
-    public void invokeProcess(String batchId, String classBinName, Map<String, Object> parameterMap) {
-        ThreadPoolTaskExecutor threadPoolTaskExecutor = AppContextManager.getBean(ThreadPoolTaskExecutor.class);
-
+    public void invokeJobProcess(Wf00302VO wf00302VO) {
         try {
 
             File[] jarFiles = new File(nativeLibrary).listFiles(
@@ -46,12 +44,15 @@ public class WorkflowManager extends ClassLoader {
             }
 
             URLClassLoader urlClassLoader = new URLClassLoader(classLoaderUrls);
-            Class loadedMyClass = urlClassLoader.loadClass(classBinName);
+            Class loadedMyClass = urlClassLoader.loadClass(wf00302VO.getApi());
 
             System.out.println("Loaded class name: " + loadedMyClass.getName());
 
             Constructor constructor = loadedMyClass.getConstructor();
-            Runnable myClassObject = (Runnable) constructor.newInstance();
+            Object myClassObject = constructor.newInstance();
+
+            // 파라미터 추출
+            parameterMap = getParameterMap(wf00302VO);
 
             // 키 추출
             List<String> keys = new ArrayList(parameterMap.keySet());
@@ -64,58 +65,39 @@ public class WorkflowManager extends ClassLoader {
                     method = loadedMyClass.getMethod("set" + makeMethodName(keys.get(j)), new Class[]{String.class});
                 } else if (parameterObject instanceof Integer) {
                     method = loadedMyClass.getMethod("set" + makeMethodName(keys.get(j)), new Class[]{Integer.class});
+                } else if (parameterObject instanceof Boolean) {
+                    method = loadedMyClass.getMethod("set" + makeMethodName(keys.get(j)), new Class[]{Boolean.class});
+                } else if (parameterObject instanceof List) {
+                    method = loadedMyClass.getMethod("set" + makeMethodName(keys.get(j)), new Class[]{List.class});
                 }
 
                 method.invoke(myClassObject, parameterObject);
                 System.out.println("Invoked method name: " + method.getName());
             }
 
-            // BatchID 셋팅
-            Method setBatchIdMethod = loadedMyClass.getMethod("setBatchId", new Class[]{String.class});
-            setBatchIdMethod.invoke(myClassObject, batchId);
-
-            // 쓰레드 저장
-            threadStopMap.put(batchId, myClassObject);
-
-            // 쓰레드 생성
-            Thread thread = new Thread(myClassObject);
-            threadPoolTaskExecutor.execute(thread);
-
-
-
-            /*Method runMethod = loadedMyClass.getMethod("runProcess");
+            Method runMethod = loadedMyClass.getMethod("runProcess");
             System.out.println("Invoked Run Process method");
 
-            runMethod.invoke(myClassObject);*/
-
-          /*  Method threadNameMethod = loadedMyClass.getMethod("getThreadName");
-            String threadName = (String) threadNameMethod.invoke(myClassObject);
-            System.out.println("Invoked Run Thread Name :  " + threadName);*/
-
+            runMethod.invoke(myClassObject);
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            log.error("Workflow Process Executor Error", e);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Workflow Process Service Error", e);
         }
     }
 
-    public void stopProcess(String batchId) {
-        Runnable runningThread = (Runnable) threadStopMap.get(batchId);
+    private Map<String, Object> getParameterMap(Wf00302VO wf00302VO) {
+        Map<String, Object> parameterMap = new HashMap<>();
 
-        if (runningThread != null) {
-            Class threadClass = runningThread.getClass();
-
-            try {
-                Method method = threadClass.getMethod("stopProcess", new Class[]{String.class});
-                method.invoke(runningThread, batchId);
-
-                // 성공시에만 삭제
-                threadStopMap.remove(batchId);
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        // Parameter 결과 등록
+        if (wf00302VO.getParameterList() != null && wf00302VO.getParameterList().size() > 0) {
+            wf00302VO.getParameterList().forEach(wfParameter -> {
+                // Parameter Value 셋팅
+                parameterMap.put(wfParameter.getParameterName(), wfParameter.getDefaultValue());
+            });
         }
+
+        return parameterMap;
     }
 
     public String makeMethodName(String methodName) {
@@ -125,13 +107,5 @@ public class WorkflowManager extends ClassLoader {
         tmpName = tmpName.substring(0, 1).toUpperCase() + tmpName.substring(1, tmpName.length());
 
         return tmpName;
-    }
-
-    @PreDestroy
-    public void shutdownAllThread() {
-        ThreadPoolTaskExecutor threadPoolTaskExecutor = AppContextManager.getBean(ThreadPoolTaskExecutor.class);
-        threadPoolTaskExecutor.shutdown();
-
-        System.out.println("All Thread are shutdown before System terminated");
     }
 }

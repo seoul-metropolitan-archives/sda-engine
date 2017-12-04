@@ -21,8 +21,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import rmsoft.ams.seoul.common.domain.*;
 import rmsoft.ams.seoul.common.repository.*;
+import rmsoft.ams.seoul.common.workflow.WorkflowManager;
 import rmsoft.ams.seoul.utils.CommonCodeUtils;
-import rmsoft.ams.seoul.utils.WorkflowManager;
 import rmsoft.ams.seoul.wf.wf003.dao.Wf003Mapper;
 import rmsoft.ams.seoul.wf.wf003.vo.*;
 
@@ -316,12 +316,12 @@ public class Wf003Service extends BaseService {
                             }
                         });
                     }
-
-                    // Job Process 시작
-                    //workflowManager.invokeProcess(wfJobResult.getBatchId() + "", wfJobResult.getApi(), parameterMap);
                 }
             });
         }
+
+        // Job Process 시작
+        workflowManager.invokeProcess(wfWorkflowResult.getBatchId() + "", requestParams);
 
         return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");
     }
