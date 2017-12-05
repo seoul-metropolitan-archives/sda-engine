@@ -56,9 +56,16 @@ public class WorkflowProcess implements Runnable {
             }
 
             // Workflow Running Status Update
-            updateWorkflowResult(wf00303VO, getStatusUuid("CD131", WorkflowResultStatus.실행.getCode()));
+            updateWorkflowResult(wf00303VO, getStatusUuid("CD131", WorkflowResultStatus.실행.getCode()), false);
 
             workflowJobList = wf00303VO.getWorkflowJobList();
+
+            /*Collections.sort(workflowJobList, new Comparator<Wf00302VO>() {
+                @Override
+                public int compare(Wf00302VO o1, Wf00302VO o2) {
+                    return (int) o1.getSequence() - (int) o2.getSequence();
+                }
+            });*/
 
             log.info("Thread with [{}] : {}", runThread.getId(), runThread.getName());
 
@@ -70,7 +77,7 @@ public class WorkflowProcess implements Runnable {
 
                 if (!currentJob.getSkipYn().equals("Y")) {
                     // Workflow Running Status Update
-                    updateJobResult(currentJob, getStatusUuid("CD130", JobResultStatus.실행.getCode()), "");
+                    updateJobResult(currentJob, getStatusUuid("CD130", JobResultStatus.실행.getCode()), "", false);
 
                     log.info("JobUuid : [{}] , JobName : [{}] is started", currentJob.getJobUuid(), currentJob.getJobName());
                     WorkflowResponse callResult = workflowExecutor.invokeJobProcess(workflowJobList.get(i));
@@ -79,13 +86,13 @@ public class WorkflowProcess implements Runnable {
                         failCnt++;
 
                         // 결과 등록
-                        updateJobResult(currentJob, getStatusUuid("CD130", JobResultStatus.에러.getCode()), callResult.getMessage());
+                        updateJobResult(currentJob, getStatusUuid("CD130", JobResultStatus.에러.getCode()), callResult.getMessage(), true);
                         break;
                     } else {
                         successCnt++;
 
                         // 결과 등록
-                        updateJobResult(currentJob, getStatusUuid("CD130", JobResultStatus.성공.getCode()), callResult.getMessage());
+                        updateJobResult(currentJob, getStatusUuid("CD130", JobResultStatus.성공.getCode()), callResult.getMessage(), true);
                     }
 
                 } else {
@@ -97,12 +104,12 @@ public class WorkflowProcess implements Runnable {
             if (failCnt > 0) {
                 // 에러가 1개라도 있되, Job 1 1개이면 error, 1개 이상이면 partial
                 if (workflowJobList.size() > 1) {
-                    updateWorkflowResult(wf00303VO, getStatusUuid("CD131", WorkflowResultStatus.부분에러.getCode()));
+                    updateWorkflowResult(wf00303VO, getStatusUuid("CD131", WorkflowResultStatus.부분에러.getCode()), true);
                 } else {
-                    updateWorkflowResult(wf00303VO, getStatusUuid("CD131", WorkflowResultStatus.에러.getCode()));
+                    updateWorkflowResult(wf00303VO, getStatusUuid("CD131", WorkflowResultStatus.에러.getCode()), true);
                 }
             } else {
-                updateWorkflowResult(wf00303VO, getStatusUuid("CD131", WorkflowResultStatus.성공.getCode()));
+                updateWorkflowResult(wf00303VO, getStatusUuid("CD131", WorkflowResultStatus.성공.getCode()), true);
             }
 
         } catch (Exception e) {
@@ -112,7 +119,7 @@ public class WorkflowProcess implements Runnable {
         }
     }
 
-    private void updateWorkflowResult(Wf00303VO wf00303VO, String workflowResultStatus) {
+    private void updateWorkflowResult(Wf00303VO wf00303VO, String workflowResultStatus, boolean isEnd) {
         // Workflow Result 찾기
         QWfWorkflowResult qWfWorkflowResult = QWfWorkflowResult.wfWorkflowResult;
         Predicate predicate = qWfWorkflowResult.workflowResultUuid.eq(wf00303VO.getWorkflowResultUuid());
@@ -120,22 +127,34 @@ public class WorkflowProcess implements Runnable {
 
         if (wfWorkflowResult != null) {
             wfWorkflowResult.setStatusUuid(workflowResultStatus);
-            wfWorkflowResult.setEndDate(DateUtils.getTimestampNow());
             wfWorkflowResult.setUpdateUuid(wfWorkflowResult.getInsertUuid());
+
+            if (isEnd) {
+                wfWorkflowResult.setEndDate(DateUtils.getTimestampNow());
+            } else {
+                wfWorkflowResult.setStartDate(DateUtils.getTimestampNow());
+            }
+
             wfWorkflowResultRepository.save(wfWorkflowResult);
         }
     }
 
-    private void updateJobResult(Wf00302VO wf00302VO, String jobResultStatus, String message) {
+    private void updateJobResult(Wf00302VO wf00302VO, String jobResultStatus, String message, boolean isEnd) {
         QWfJobResult qWfJobResult = QWfJobResult.wfJobResult;
         Predicate predicate = qWfJobResult.jobResultUuid.eq(wf00302VO.getJobResultUuid());
         WfJobResult wfJobResult = wfJobResultRepository.findOne(predicate);
 
         if (wfJobResult != null) {
             wfJobResult.setStatusUuid(jobResultStatus);
-            wfJobResult.setEndDate(DateUtils.getTimestampNow());
             wfJobResult.setUpdateUuid(wfJobResult.getInsertUuid());
             wfJobResult.setMessage(message);
+
+            if (isEnd) {
+                wfJobResult.setEndDate(DateUtils.getTimestampNow());
+            } else {
+                wfJobResult.setStartDate(DateUtils.getTimestampNow());
+            }
+
             wfJobResultRepository.save(wfJobResult);
         }
     }

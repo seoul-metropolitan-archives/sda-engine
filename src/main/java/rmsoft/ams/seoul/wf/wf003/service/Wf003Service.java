@@ -9,7 +9,6 @@ import io.onsemiro.core.api.response.ApiResponse;
 import io.onsemiro.core.code.ApiStatus;
 import io.onsemiro.core.domain.BaseService;
 import io.onsemiro.core.parameter.RequestParams;
-import io.onsemiro.utils.DateUtils;
 import io.onsemiro.utils.ModelMapperUtils;
 import io.onsemiro.utils.SessionUtils;
 import io.onsemiro.utils.UUIDUtils;
@@ -263,7 +262,6 @@ public class Wf003Service extends BaseService {
         wfWorkflowResult.setStatusUuid(getStatusUuid("CD131", WorkflowResultStatus.초기상태.getCode()));
         wfWorkflowResult.setExecuterUuid(SessionUtils.getCurrentLoginUserUuid());
         wfWorkflowResult.setMenuUuid(requestParams.getMenuUuid());
-        wfWorkflowResult.setStartDate(DateUtils.getTimestampNow());
 
         // 결과 처리를 위한 uuid 저장
         requestParams.setWorkflowResultUuid(wfWorkflowResult.getWorkflowResultUuid());
@@ -291,7 +289,6 @@ public class Wf003Service extends BaseService {
                     wfJobResult.setTerminateYn(wfWorkflowJob.getTerminateYn());
                     wfJobResult.setBatchId(wfWorkflowResult.getBatchId());
                     wfJobResult.setStatusUuid(getStatusUuid("CD130", JobResultStatus.초기상태.getCode()));
-                    wfJobResult.setStartDate(DateUtils.getTimestampNow());
 
                     // 결과 처리를 위한 uuid 저장
                     wfWorkflowJob.setJobResultUuid(wfJobResult.getJobResultUuid());
