@@ -8,6 +8,7 @@ import io.onsemiro.core.vo.BaseVO;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+
 import java.sql.Timestamp;
 
 /**
@@ -34,6 +35,8 @@ public class Wf00402VO extends BaseVO {
     private String jobName;
 
     private String api;
+
+    private String message;
 
     private Timestamp startDate;
 

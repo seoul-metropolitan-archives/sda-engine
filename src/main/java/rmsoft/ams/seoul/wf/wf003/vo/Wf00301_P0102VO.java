@@ -43,4 +43,6 @@ public class Wf00301_P0102VO extends BaseVO {
     private String requiredYn;
 
     private String useYn;
+
+    private String parameterResultUuid;
 }

@@ -6,7 +6,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
 
         this.formView.checkPopup();
 
-        if($("input[data-ax-path='startFromDate']").val()==""||$("input[data-ax-path='startToDate']").val()==""){
+        if ($("input[data-ax-path='startFromDate']").val() == "" || $("input[data-ax-path='startToDate']").val() == "") {
             axToast.push(axboot.getCommonMessage("AA010"));
             return;
         }
@@ -232,7 +232,7 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
             }
         });
 
-        $("input[data-ax-path='startFromDate']").val(getFormattedDate(new Date(),true));
+        $("input[data-ax-path='startFromDate']").val(getFormattedDate(new Date(), true));
         $("input[data-ax-path='startToDate']").val(getFormattedDate(new Date()));
 
         this.initEvent();
@@ -257,7 +257,7 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
             ACTIONS.dispatch(ACTIONS.SEARCH_POPUP_MENU, data);
         });
 
-        $("input[data-ax-path='startFromDate']").keyup(function(){
+        $("input[data-ax-path='startFromDate']").keyup(function () {
             var date = this.value;
             if (date.match(/^\d{4}$/) !== null) {
                 this.value = date + '-';
@@ -265,10 +265,10 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
                 this.value = date + '-';
             }
         });
-        $("input[data-ax-path='startFromDate']").keypress(function(){
-            if ((event.keyCode<48) || (event.keyCode>57)) event.returnValue=false;
+        $("input[data-ax-path='startFromDate']").keypress(function () {
+            if ((event.keyCode < 48) || (event.keyCode > 57)) event.returnValue = false;
         });
-        $("input[data-ax-path='startToDate']").keyup(function(){
+        $("input[data-ax-path='startToDate']").keyup(function () {
             var date = this.value;
             if (date.match(/^\d{4}$/) !== null) {
                 this.value = date + '-';
@@ -276,10 +276,10 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
                 this.value = date + '-';
             }
         });
-        $("input[data-ax-path='startToDate']").keypress(function(){
-            if ((event.keyCode<48) || (event.keyCode>57)) event.returnValue=false;
+        $("input[data-ax-path='startToDate']").keypress(function () {
+            if ((event.keyCode < 48) || (event.keyCode > 57)) event.returnValue = false;
         });
-        $("input[data-ax-path='endFromDate']").keyup(function(){
+        $("input[data-ax-path='endFromDate']").keyup(function () {
             var date = this.value;
             if (date.match(/^\d{4}$/) !== null) {
                 this.value = date + '-';
@@ -287,10 +287,10 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
                 this.value = date + '-';
             }
         });
-        $("input[data-ax-path='endFromDate']").keypress(function(){
-            if ((event.keyCode<48) || (event.keyCode>57)) event.returnValue=false;
+        $("input[data-ax-path='endFromDate']").keypress(function () {
+            if ((event.keyCode < 48) || (event.keyCode > 57)) event.returnValue = false;
         });
-        $("input[data-ax-path='endToDate']").keyup(function(){
+        $("input[data-ax-path='endToDate']").keyup(function () {
             var date = this.value;
             if (date.match(/^\d{4}$/) !== null) {
                 this.value = date + '-';
@@ -298,30 +298,30 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
                 this.value = date + '-';
             }
         });
-        $("input[data-ax-path='endToDate']").keypress(function(){
-            if ((event.keyCode<48) || (event.keyCode>57)) event.returnValue=false;
+        $("input[data-ax-path='endToDate']").keypress(function () {
+            if ((event.keyCode < 48) || (event.keyCode > 57)) event.returnValue = false;
         });
 
-        $("input[data-ax-path='startFromDate']").focusout(function(){
-            if(!checkDate(this.value)){
+        $("input[data-ax-path='startFromDate']").focusout(function () {
+            if (!checkDate(this.value)) {
                 this.value = "";
                 this.focus = true;
             }
         });
-        $("input[data-ax-path='startToDate']").focusout(function(){
-            if(!checkDate(this.value)){
+        $("input[data-ax-path='startToDate']").focusout(function () {
+            if (!checkDate(this.value)) {
                 this.value = "";
                 this.focus = true;
             }
         });
-        $("input[data-ax-path='endFromDate']").focusout(function(){
-            if(!checkDate(this.value)){
+        $("input[data-ax-path='endFromDate']").focusout(function () {
+            if (!checkDate(this.value)) {
                 this.value = "";
                 this.focus = true;
             }
         });
-        $("input[data-ax-path='endToDate']").focusout(function(){
-            if(!checkDate(this.value)){
+        $("input[data-ax-path='endToDate']").focusout(function () {
+            if (!checkDate(this.value)) {
                 this.value = "";
                 this.focus = true;
             }
@@ -457,6 +457,8 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
     },
     itemClick: function (data, index) {
         if (data.jobResultUuid != null && data.jobResultUuid != "") {
+            fnObj.formView.setFormData("jobMessage", data.message);
+
             if (fnObj.gridView03.isChangeData() == true) {
                 axDialog.confirm({
                     msg: axboot.getCommonMessage("AA006")
@@ -528,18 +530,16 @@ function getFormattedDate(date, isStart) {
 }
 
 function checkDate(date) {
-    var strValue  = date;
+    var strValue = date;
     var chk1 = /^(19|20)\d{2}-([1-9]|1[012])-([1-9]|[12][0-9]|3[01])$/;
     var chk2 = /^(19|20)\d{2}\/([0][1-9]|1[012])\/(0[1-9]|[12][0-9]|3[01])$/;
-    if (strValue == "")
-    { // 공백이면 무시
+    if (strValue == "") { // 공백이면 무시
         return true;
     }
 //-------------------------------------------------------------------------------
 // 유효성 검사- 입력형식에 맞게 들왔는지 // 예) 2000-1-1, 2000-01-01 2가지 형태 지원
 //-------------------------------------------------------------------------------
-    if (chk1.test(strValue) == false && chk2.test(strValue) == false)
-    { // 유효성 검사에 둘다 성공하지 못했다면
+    if (chk1.test(strValue) == false && chk2.test(strValue) == false) { // 유효성 검사에 둘다 성공하지 못했다면
         //alert("1999-1-1 형식 또는 \r\n1999-01-01 형식으로 날자를 입력해주세요.");
         axToast.push(axboot.getCommonMessage("AA011"));
 

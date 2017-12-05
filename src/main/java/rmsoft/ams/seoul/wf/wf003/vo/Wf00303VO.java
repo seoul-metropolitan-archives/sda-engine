@@ -32,5 +32,7 @@ public class Wf00303VO extends BaseVO {
 
     private String useYn;
 
+    private String workflowResultUuid;
+
     private List<Wf00302VO> workflowJobList;
 }

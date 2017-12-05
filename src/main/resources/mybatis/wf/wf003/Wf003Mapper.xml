@@ -202,7 +202,11 @@
                     ELSE ''
                END as "sqlColumn",
                ZZ1.defaultValue,
-               ZZ1.width
+               ZZ1.width,
+               CASE WHEN ZZ1.REQUIRED_YN ='Y'
+                        THEN 'true'
+                     ELSE 'false'
+                END as "required"
           FROM (
                 SELECT rownum as sortNo,
                        Z1.PARAMETER_NAME as name,
@@ -210,7 +214,8 @@
                        (SELECT LOWER(CODE) FROM AD_CODE_DETAIL WHERE CODE_DETAIL_UUID = Z1.INPUT_METHOD_UUID) as dataType,
                        Z1.DEFAULT_VALUE as defaultValue,
                        210 as width,
-                       Z1.INPUT_CODE_UUID
+                       Z1.INPUT_CODE_UUID,
+                       Z1.REQUIRED_YN
                   FROM
                       WF_PARAMETER Z1
                  WHERE Z1.JOB_UUID = #{jobUuid}

@@ -5,15 +5,14 @@
 package rmsoft.ams.seoul.rms.ingest;
 
 
-import io.onsemiro.core.context.AppContextManager;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.LineIterator;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.stereotype.Service;
+import rmsoft.ams.seoul.common.workflow.WorkflowResult;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,7 +25,6 @@ import java.util.List;
 @Slf4j
 @Service
 public class ProcessIngest {
-    @Autowired
     private JdbcTemplate jdbcTemplate;
 
     private static String sqlFilePath = "D:\\02.DreamAntDev\\git-workspaces\\java\\seoul-ams\\rms-ingest\\tmp";
@@ -62,23 +60,19 @@ public class ProcessIngest {
         this.truncateList = truncateList;
     }
 
-    public void setTruncateTableYn(boolean truncateTableYn) {
-        this.truncateTableYn = truncateTableYn;
+    public void setTruncateTableYn(Boolean truncateTableYn) {
+        this.truncateTableYn = truncateTableYn.booleanValue();
     }
 
-    public void setSqlBatchSize(int sqlBatchSize) {
-        this.sqlBatchSize = sqlBatchSize;
+    public void setSqlBatchSize(Integer sqlBatchSize) {
+        this.sqlBatchSize = sqlBatchSize.intValue();
     }
 
     /******************************************************
      * Main Threads
      *******************************************************/
-    public boolean runProcess() {
-        boolean isSuccess = false;
-
-        //List<AcUser> acUserList = acUserRepository.findAll();
-        //ThreadPoolTaskExecutor threadPoolTaskExecutor = AppContextManager.getBean(ThreadPoolTaskExecutor.class);
-
+    public WorkflowResult runProcess() {
+        WorkflowResult workflowResult = new WorkflowResult();
 
         //TODO 삭제 및 수정 예정
         truncateList = new ArrayList<>();
@@ -91,9 +85,11 @@ public class ProcessIngest {
         }
 
         try {
-            if (this.jdbcTemplate == null) {
+            /*if (this.jdbcTemplate == null) {
                 this.jdbcTemplate = AppContextManager.getBean(JdbcTemplate.class);
-            }
+            }*/
+
+            this.jdbcTemplate = new JdbcTemplate(getDataSource());
 
             if (truncateTableYn) {
                 if (truncateList == null || truncateList.size() == 0) {
@@ -113,13 +109,14 @@ public class ProcessIngest {
             // Move file to backup directory
             copyFileList(getSqlFileList(sqlFilePath), sqlFilePath + File.separator + "backup", true);
 
-            isSuccess = true;
+            workflowResult.setSuccess(true);
         } catch (Exception e) {
             log.error("Process Injest service Error", e);
-            isSuccess = false;
+            workflowResult.setSuccess(false);
+            workflowResult.setMessage(e.getMessage());
         } finally {
             log.error("Process Injest service Terminated");
-            return isSuccess;
+            return workflowResult;
         }
     }
 
