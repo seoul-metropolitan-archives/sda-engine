@@ -185,7 +185,7 @@ SimpleGridWrapper.prototype.defaultBind = function()
 
                     dataLists.forEach(function (changeData, idx) {
                         if(idx != index.dataRow)
-                            changeData[index.fieldIndex] = "N";
+                            changeData[index.fieldName] = "N";
                     });
                     gridWrapper.dataProvider.updateRows(0, dataLists, 0, -1);
                     gridWrapper.gridView.commit(true);

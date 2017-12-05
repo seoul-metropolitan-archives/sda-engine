@@ -20,6 +20,7 @@ import java.io.Serializable;
 @Alias("Ad003_D")
 @Table(name = "AD_CODE_DETAIL")
 public class AdCodeDetail extends BaseJpaModel<AdCodeDetail.AdCodeDetailId> {
+
     @Id
     @Column(name = "CODE_DETAIL_UUID")
     @Comment(value = "코드 디테일 UUID")

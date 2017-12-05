@@ -7,6 +7,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             url: "/api/v1/ad/ad001/getEnviromentList.do",
             data: JSON.stringify(fnObj.searchView.getData()),
             callback: function (res) {
+                fnObj.gridView01.resetCurrent();
                 fnObj.gridView01.setData(res.list);
             },
             options: {

@@ -8,108 +8,205 @@
     <select id="searchCodeHeader" resultType="Ad00301VO" parameterType="Ad00301VO" statementType="PREPARED">
         <![CDATA[
         SELECT
-          CODE_HEADER_UUID as codeHeaderUuid,
-          CATEGORY_CODE as categoryCode,
-          CATEGORY_NAME as categoryName,
-          CODE_TYPE_UUID as codeTypeUuid,
-          ORDER_METHOD_UUID as orderMethodUuid,
-          SERVICE_UUID as serviceUuid,
-          DESCRIPTION as description,
-          NOTES as notes,
-          USE_YN as useYN,
-          ATTRIBUTE01 as attribute01,
-          ATTRIBUTE02 as attribute02,
-          ATTRIBUTE03 as attribute03,
-          ATTRIBUTE04 as attribute04,
-          ATTRIBUTE05 as attribute05,
-          ATTRIBUTE06 as attribute06,
-          ATTRIBUTE07 as attribute07,
-          ATTRIBUTE08 as attribute08,
-          ATTRIBUTE09 as attribute09,
-          ATTRIBUTE10 as attribute10,
+          Z1.CODE_HEADER_UUID as codeHeaderUuid,
+          Z1.CATEGORY_CODE as categoryCode,
+          Z1.CATEGORY_NAME as categoryName,
+          Z1.CODE_TYPE_UUID as codeTypeUuid,
+          Z1.ORDER_METHOD_UUID as orderMethodUuid,
+          Z1.SERVICE_UUID as serviceUuid,
+          Z1.DESCRIPTION as description,
+          Z1.NOTES as notes,
+          Z1.USE_YN as useYN,
+          Z2.CATEGORY_CODE as attribute01Code,
+          Z2.CATEGORY_NAME as attribute01Str,
+          Z2.CODE_HEADER_UUID as attribute01,
+          Z3.CATEGORY_CODE as attribute02Code,
+          Z3.CATEGORY_NAME as attribute02Str,
+          Z3.CODE_HEADER_UUID as attribute02,
+          Z4.CATEGORY_CODE as attribute03Code,
+          Z4.CATEGORY_NAME as attribute03Str,
+          Z4.CODE_HEADER_UUID as attribute03,
+          Z5.CATEGORY_CODE as attribute04Code,
+          Z5.CATEGORY_NAME as attribute04Str,
+          Z5.CODE_HEADER_UUID as attribute04,
+          Z6.CATEGORY_CODE as attribute05Code,
+          Z6.CATEGORY_NAME as attribute05Str,
+          Z6.CODE_HEADER_UUID as attribute05,
+          Z7.CATEGORY_CODE as attribute06Code,
+          Z7.CATEGORY_NAME as attribute06Str,
+          Z7.CODE_HEADER_UUID as attribute06,
+          Z8.CATEGORY_CODE as attribute07Code,
+          Z8.CATEGORY_NAME as attribute07Str,
+          Z8.CODE_HEADER_UUID as attribute07,
+          Z9.CATEGORY_CODE as attribute08Code,
+          Z9.CATEGORY_NAME as attribute08Str,
+          Z9.CODE_HEADER_UUID as attribute08,
+          Z10.CATEGORY_CODE as attribute09Code,
+          Z10.CATEGORY_NAME as attribute09Str,
+          Z10.CODE_HEADER_UUID as attribute09,
+          Z11.CATEGORY_CODE as attribute10Code,
+          Z11.CATEGORY_NAME as attribute10Str,
+          Z11.CODE_HEADER_UUID as attribute10,
           ]]>
-        <include refid="Common.UserName"> <property name="userUuid" value="Z.INSERT_UUID"/> </include> as insertUuid,
+        <include refid="Common.UserName"> <property name="userUuid" value="Z1.INSERT_UUID"/> </include> as insertUuid,
         <![CDATA[
-               Z.INSERT_DATE as insertDate,
+               Z1.INSERT_DATE as insertDate,
                ]]>
-        <include refid="Common.UserName"> <property name="userUuid" value="Z.UPDATE_UUID"/></include> as updateUuid,
+        <include refid="Common.UserName"> <property name="userUuid" value="Z1.UPDATE_UUID"/></include> as updateUuid,
         <![CDATA[
-               Z.UPDATE_DATE as updateDate
+               Z1.UPDATE_DATE as updateDate
         FROM
-            AD_CODE_HEADER Z
+            AD_CODE_HEADER Z1,
+            AD_CODE_HEADER Z2,
+            AD_CODE_HEADER Z3,
+            AD_CODE_HEADER Z4,
+            AD_CODE_HEADER Z5,
+            AD_CODE_HEADER Z6,
+            AD_CODE_HEADER Z7,
+            AD_CODE_HEADER Z8,
+            AD_CODE_HEADER Z9,
+            AD_CODE_HEADER Z10,
+            AD_CODE_HEADER Z11
         ]]>
         <where>
-            1=1
+            Z1.ATTRIBUTE01 = Z2.CODE_HEADER_UUID(+)
+            AND
+            Z1.ATTRIBUTE02 = Z3.CODE_HEADER_UUID(+)
+            AND
+            Z1.ATTRIBUTE03 = Z4.CODE_HEADER_UUID(+)
+            AND
+            Z1.ATTRIBUTE04 = Z5.CODE_HEADER_UUID(+)
+            AND
+            Z1.ATTRIBUTE05 = Z6.CODE_HEADER_UUID(+)
+            AND
+            Z1.ATTRIBUTE06 = Z7.CODE_HEADER_UUID(+)
+            AND
+            Z1.ATTRIBUTE07 = Z8.CODE_HEADER_UUID(+)
+            AND
+            Z1.ATTRIBUTE08 = Z9.CODE_HEADER_UUID(+)
+            AND
+            Z1.ATTRIBUTE09 = Z10.CODE_HEADER_UUID(+)
+            AND
+            Z1.ATTRIBUTE10 = Z11.CODE_HEADER_UUID(+)
             <if test="null != categoryCode and '' != categoryCode">
                 <![CDATA[
                 AND
-                Z.CATEGORY_CODE LIKE '%'|| #{categoryCode} || '%'
+                Z1.CATEGORY_CODE LIKE '%'|| #{categoryCode} || '%'
                 ]]>
             </if>
             <if test="null != categoryName and '' != categoryName">
                 <![CDATA[
                 AND
-                Z.CATEGORY_NAME  LIKE '%'|| #{categoryName} || '%'
+                Z1.CATEGORY_NAME  LIKE '%'|| #{categoryName} || '%'
                 ]]>
             </if>
             <if test="null != serviceUuid and '' != serviceUuid">
                 <![CDATA[
                 AND
-                Z.SERVICE_UUID = #{serviceUuid}
+                Z1.SERVICE_UUID = #{serviceUuid}
                 ]]>
             </if>
             <if test="null != codeTypeUuid and '' != codeTypeUuid">
                 <![CDATA[
                 AND
-                Z.CODE_TYPE_UUID = #{codeTypeUuid}
+                Z1.CODE_TYPE_UUID = #{codeTypeUuid}
                 ]]>
             </if>
             <if test="null != useYN and '' != useYN">
                 <![CDATA[
                 AND
-                Z.USE_YN = #{useYN}
+                Z1.USE_YN = #{useYN}
                 ]]>
             </if>
         </where>
         ORDER BY
-        Z.CATEGORY_CODE
+        Z1.CATEGORY_CODE
     </select>
     <select id="getCodeDetailList" resultType="Ad00302VO" parameterType="Ad00302VO" statementType="PREPARED">
         <![CDATA[
         SELECT
-          Z.CODE_DETAIL_UUID as codeDetailUuid,
-          Z.CODE as code,
-          Z.CODE_NAME as codeName,
-          Z.DEFAULT_YN as defaultYN,
-          Z.ORDER_NO as orderNo,
-          Z.CODE_HEADER_UUID as codeHeaderUuid,
-          Z.DESCRIPTION as description,
-          Z.NOTES as notes,
-          Z.USE_YN as useYN,
-          Z.ATTRIBUTE01 as attribute01,
-          Z.ATTRIBUTE02 as attribute02,
-          Z.ATTRIBUTE03 as attribute03,
-          Z.ATTRIBUTE04 as attribute04,
-          Z.ATTRIBUTE05 as attribute05,
-          Z.ATTRIBUTE06 as attribute06,
-          Z.ATTRIBUTE07 as attribute07,
-          Z.ATTRIBUTE08 as attribute08,
-          Z.ATTRIBUTE09 as attribute09,
-          Z.ATTRIBUTE10 as attribute10,
+          Z1.CODE_DETAIL_UUID as codeDetailUuid,
+          Z1.CODE as code,
+          Z1.CODE_NAME as codeName,
+          Z1.DEFAULT_YN as defaultYN,
+          Z1.ORDER_NO as orderNo,
+          Z1.CODE_HEADER_UUID as codeHeaderUuid,
+          Z1.DESCRIPTION as description,
+          Z1.NOTES as notes,
+          Z1.USE_YN as useYN,
+          Z2.CODE_DETAIL_UUID as attribute01,
+          Z2.CODE_NAME as attribute01Str,
+          Z2."CODE" as attribute01Code,
+          Z3.CODE_DETAIL_UUID as attribute02,
+          Z3.CODE_NAME as attribute02Str,
+          Z3."CODE" as attribute02Code,
+          Z4.CODE_DETAIL_UUID as attribute03,
+          Z4.CODE_NAME as attribute03Str,
+          Z4."CODE" as attribute03Code,
+          Z5.CODE_DETAIL_UUID as attribute04,
+          Z5.CODE_NAME as attribute04Str,
+          Z5."CODE" as attribute04Code,
+          Z6.CODE_DETAIL_UUID as attribute05,
+          Z6.CODE_NAME as attribute05Str,
+          Z6."CODE" as attribute05Code,
+          Z7.CODE_DETAIL_UUID as attribute06,
+          Z7.CODE_NAME as attribute06Str,
+          Z7."CODE" as attribute06Code,
+          Z8.CODE_DETAIL_UUID as attribute07,
+          Z8.CODE_NAME as attribute07Str,
+          Z8."CODE" as attribute07Code,
+          Z9.CODE_DETAIL_UUID as attribute08,
+          Z9.CODE_NAME as attribute08Str,
+          Z9."CODE" as attribute08Code,
+          Z10.CODE_DETAIL_UUID as attribute09,
+          Z10.CODE_NAME as attribute09Str,
+          Z10."CODE" as attribute09Code,
+          Z11.CODE_DETAIL_UUID as attribute10,
+          Z11.CODE_NAME as attribute10Str,
+          Z11."CODE" as attribute10Code,
         ]]>
-        <include refid="Common.UserName"> <property name="userUuid" value="Z.INSERT_UUID"/> </include> as insertUuid,
-        <![CDATA[
-               Z.INSERT_DATE as insertDate,
+        <include refid="Common.UserName"> <property name="userUuid" value="Z1.INSERT_UUID"/> </include> as insertUuid,        <![CDATA[
+               Z1.INSERT_DATE as insertDate,
           ]]>
-        <include refid="Common.UserName"><property name="userUuid" value="Z.UPDATE_UUID"/></include>as updateUuid,
+        <include refid="Common.UserName"><property name="userUuid" value="Z1.UPDATE_UUID"/></include>as updateUuid,
         <![CDATA[
-               Z.UPDATE_DATE as updateDate
+               Z1.UPDATE_DATE as updateDate
         FROM
-            AD_CODE_DETAIL Z
+            AD_CODE_DETAIL Z1,
+            AD_CODE_DETAIL Z2,
+            AD_CODE_DETAIL Z3,
+            AD_CODE_DETAIL Z4,
+            AD_CODE_DETAIL Z5,
+            AD_CODE_DETAIL Z6,
+            AD_CODE_DETAIL Z7,
+            AD_CODE_DETAIL Z8,
+            AD_CODE_DETAIL Z9,
+            AD_CODE_DETAIL Z10,
+            AD_CODE_DETAIL Z11
         WHERE
-            Z.CODE_HEADER_UUID = #{codeHeaderUuid}
+            Z1.CODE_HEADER_UUID = #{codeHeaderUuid}
+            AND
+            Z1.ATTRIBUTE01 = Z2.CODE_DETAIL_UUID(+)
+            AND
+            Z1.ATTRIBUTE02 = Z3.CODE_DETAIL_UUID(+)
+            AND
+            Z1.ATTRIBUTE03 = Z4.CODE_DETAIL_UUID(+)
+            AND
+            Z1.ATTRIBUTE04 = Z5.CODE_DETAIL_UUID(+)
+            AND
+            Z1.ATTRIBUTE05 = Z6.CODE_DETAIL_UUID(+)
+            AND
+            Z1.ATTRIBUTE06 = Z7.CODE_DETAIL_UUID(+)
+            AND
+            Z1.ATTRIBUTE07 = Z8.CODE_DETAIL_UUID(+)
+            AND
+            Z1.ATTRIBUTE08 = Z9.CODE_DETAIL_UUID(+)
+            AND
+            Z1.ATTRIBUTE09 = Z10.CODE_DETAIL_UUID(+)
+            AND
+            Z1.ATTRIBUTE10 = Z11.CODE_DETAIL_UUID(+)
         ORDER BY
-          Z.ORDER_NO, Z.CODE ASC
+          Z1.ORDER_NO, Z1.CODE ASC
         ]]>
     </select>
     <select id="getCode" resultType="Ad00303VO" parameterType="Ad00303VO" statementType="PREPARED">

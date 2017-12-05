@@ -130,6 +130,7 @@ var ad00301 =
                 editable: true,
                 dataType: "popup",
                 popupCode : "PU002",
+                popupCallback : fnObj.gridView01.popupCallback,
                 sqlColumn : {UUID : "attribute01",NAME: "attribute01Str",CODE:"attribute01Code"},
                 required: false
             },
@@ -161,6 +162,7 @@ var ad00301 =
                 editable: true,
                 dataType: "popup",
                 popupCode : "PU002",
+                popupCallback : fnObj.gridView01.popupCallback,
                 sqlColumn : {UUID : "attribute02",NAME: "attribute02Str",CODE:"attribute02Code"},
                 required: false
             },
@@ -192,6 +194,7 @@ var ad00301 =
                 editable: true,
                 dataType: "popup",
                 popupCode : "PU002",
+                popupCallback : fnObj.gridView01.popupCallback,
                 sqlColumn : {UUID : "attribute03",NAME: "attribute03Str",CODE:"attribute03Code"},
                 required: false
             },
@@ -223,6 +226,7 @@ var ad00301 =
                 editable: true,
                 dataType: "popup",
                 popupCode : "PU002",
+                popupCallback : fnObj.gridView01.popupCallback,
                 sqlColumn : {UUID : "attribute04",NAME: "attribute04Str",CODE:"attribute04Code"},
                 required: false
             },
@@ -254,6 +258,7 @@ var ad00301 =
                 editable: true,
                 dataType: "popup",
                 popupCode : "PU002",
+                popupCallback : fnObj.gridView01.popupCallback,
                 sqlColumn : {UUID : "attribute05",NAME: "attribute05Str",CODE:"attribute05Code"},
                 required: false
             },
@@ -285,6 +290,7 @@ var ad00301 =
                 editable: true,
                 dataType: "popup",
                 popupCode : "PU002",
+                popupCallback : fnObj.gridView01.popupCallback,
                 sqlColumn : {UUID : "attribute06",NAME: "attribute06Str",CODE:"attribute06Code"},
                 required: false
             },
@@ -316,6 +322,7 @@ var ad00301 =
                 editable: true,
                 dataType: "popup",
                 popupCode : "PU002",
+                popupCallback : fnObj.gridView01.popupCallback,
                 sqlColumn : {UUID : "attribute07",NAME: "attribute07Str",CODE:"attribute07Code"},
                 required: false
             },
@@ -347,6 +354,7 @@ var ad00301 =
                 editable: true,
                 dataType: "popup",
                 popupCode : "PU002",
+                popupCallback : fnObj.gridView01.popupCallback,
                 sqlColumn : {UUID : "attribute08",NAME: "attribute08Str",CODE:"attribute08Code"},
                 required: false
             },
@@ -378,6 +386,7 @@ var ad00301 =
                 editable: true,
                 dataType: "popup",
                 popupCode : "PU002",
+                popupCallback : fnObj.gridView01.popupCallback,
                 sqlColumn : {UUID : "attribute09",NAME: "attribute09Str",CODE:"attribute09Code"},
                 required: false
             },
@@ -409,6 +418,7 @@ var ad00301 =
                 editable: true,
                 dataType: "popup",
                 popupCode : "PU002",
+                popupCallback : fnObj.gridView01.popupCallback,
                 sqlColumn : {UUID : "attribute10",NAME: "attribute10Str",CODE:"attribute10Code"},
                 required: false
             },

@@ -154,7 +154,7 @@ var GridWrapper = function(p_id,p_rootContext) {
         _this.gridView.onImageButtonClicked = function(grid, itemIndex, column, buttonIdex, name) { _this.dispatch("onImageButtonClicked",_this ,grid, itemIndex, column, buttonIdex, name); }
         _this.gridView.onCurrentChanged = function(grid,newIndex) { _this.dispatch("onCurrentChanged",grid, newIndex); }
         _this.gridView.onCurrentRowChanged = function(grid, oldRow, newRow) { _this.dispatch("onCurrentRowChanged",grid, oldRow, newRow); }
-
+        _this.gridView.onInnerDrop = function(grid, dropIndex, dragCells) { _this.dispatch("onInnerDrop",_this, grid, dropIndex, dragCells);}
 
         _this.dataProvider.onRowsDeleted = function(grid, rows){
         }
@@ -233,7 +233,7 @@ var GridWrapper = function(p_id,p_rootContext) {
         _this.bind("onEditRowPasted",function(gridWrapper, _this, grid, itemIndex, dataRow, fields, oldValues, newValues){
             grid.commit(true);
             var colData = undefined;
-            var rowData = grid.getDataProvider().getJsonRows(dataRow,dataRow);
+            var rowData = grid.getDataProvider().getJsonRows(itemIndex,itemIndex);
 
             if(rowData.length > 0)
                 rowData = rowData[rowData.length-1];
@@ -241,12 +241,38 @@ var GridWrapper = function(p_id,p_rootContext) {
             if(dataRow == -1)
                 dataRow = itemIndex;
 
+            var columns = grid.getColumns();
+
+            var getColumnLabelsNValues = function(columnList, columnName)
+            {
+                var retData = undefined;
+                for(var i  = 0 ; i < columnList.length; i++)
+                {
+                    if(columnList[i].fieldName == columnName)
+                    {
+                        retData = {
+                            labels : columnList.labels,
+                            values : columnList.values,
+                        }
+                        break;
+                    }
+                }
+                return retData;
+            }
+
+
+
+
             for(var col = 0; col < gridWrapper.columnInfo.length; col++)
             {
                 colData = gridWrapper.columnInfo[col];
+                getColumnLabelsNValues(colData.name)
+
                 if(colData.dataType == "combo")
                 {
                     var selectedData = "";
+                    if(!colData.labels)
+                        continue;
                     for(var i = 0; i < colData.labels.length; i++)
                     {
                         if(rowData[colData.name].toLowerCase() == colData.labels[i].toLowerCase() || rowData[colData.name] == colData.values[i])
@@ -427,6 +453,11 @@ var GridWrapper = function(p_id,p_rootContext) {
 
         })
 
+
+        _this.bind("onInnerDrop",function(gridWrapper, grid){
+            grid.setFocus();
+        })
+
     };
     this.registerStyle = function()
     {
@@ -524,9 +555,11 @@ var GridWrapper = function(p_id,p_rootContext) {
     this.showPopup = function(grid, currentField, searchData, rows, popupData,preSearch)
     {
         var popupCode = "";
+        var callback = undefined;
         if(typeof popupData["popupCode"] == "string")
         {
             popupCode = popupData["popupCode"];
+            callback = popupData["popupCallback"];
         }else if(typeof popupData["popupCode"] == "object")
         {
             var fieldname = Object.keys(popupData["popupCode"])[0];
@@ -578,6 +611,9 @@ var GridWrapper = function(p_id,p_rootContext) {
 
                     }
                 }
+                if(callback)
+                    callback(grid, data);
+
                 //_this.dataProvider.updateRows(rows, retData);
 
                 //_this.gridView.setValues(index.itemIndex, retData, true);
@@ -961,6 +997,8 @@ GridWrapper.prototype.onKeydown = function(_event) { this.bind("onKeyDown",_even
 GridWrapper.prototype.onKeyUp = function(_event) { this.bind("onKeyUp",_event);}
 GridWrapper.prototype.onEditCommit = function(_event) { this.bind("onEditCommit",_event);}
 GridWrapper.prototype.onEditRowChanged = function(_event) { this.bind("onEditRowChanged",_event);}
+GridWrapper.prototype.onCurrentChanged = function(_event) { this.bind("onCurrentChanged",_event);}
+GridWrapper.prototype.onInnerDrop = function(_event) { this.bind("onInnerDrop",_event);}
 /*GridWrapper.prototype.itemClick = function(_event)
 {
     this.bind("onDataCellClicked",function(grid,index){
@@ -1296,7 +1334,7 @@ GridWrapper.prototype.setColumnInfo = function(list) {
             case "popup":
                 obj.button = "image";
                 obj.imageButtons = $.extend({},_this.defaultStyle.data.imageButtons,data.imageButtons);
-                _this.popupNames[data.name] = { popupCode : data.popupCode, sqlColumn : {}};
+                _this.popupNames[data.name] = { popupCode : data.popupCode, sqlColumn : {},popupCallback : data.popupCallback};
                 for(var key in data.sqlColumn)
                 {
                     _this.popupNames[data.name]["sqlColumn"][key] = data.sqlColumn[key];
@@ -1355,7 +1393,7 @@ GridWrapper.prototype.setColumnInfo = function(list) {
                 obj.editor = _this.defaultStyle.data.timestamp;
                 obj.styles = $.extend({}, _this.defaultStyle.data.timestamp, obj.styles);
                 break;
-            case "richtext":
+            case "richtext2":
                 obj.type = "text";
                 obj.editor = {
                     type: "multiline",
@@ -1370,7 +1408,7 @@ GridWrapper.prototype.setColumnInfo = function(list) {
                 }
                 obj.renderer = {showTooltip : true};
                 break;
-            case "text":
+            case "text":case "richtext":
                 break;
             case "combo":
                 obj.editor = $.extend({},_this.defaultStyle.data.combo,data.editor);
@@ -1433,7 +1471,10 @@ GridWrapper.prototype.setColumnInfo = function(list) {
             case "password":
                 break;
             case "timestamp":
+                //fieldObj.datetimeFormat = "iso";
+                fieldObj.dataType = "datetime";
                 fieldObj.datetimeFormat = "iso";
+                console.log(fieldObj);
                 break;
             case "richtext":
                 break;
@@ -1501,8 +1542,7 @@ GridWrapper.prototype.setColumnInfo = function(list) {
         if(dataType != "group")
         {
             fieldList.push($.extend(fieldObj,{
-                fieldName : data.name,
-                dataType : dataType
+                fieldName : data.name
             }));
         }
 

@@ -24,7 +24,7 @@ var axboot = {};
 axboot.def = {
     "pageFunctionName": "fnObj",
     "iframeLoadingMsg": '<i class="cqc-chequer ax-loading-icon lg"></i>',
-    "dialogTitle": "Confirm Dialog"
+    "dialogTitle": "Confirm"
 };
 
 /**
@@ -2688,13 +2688,33 @@ axboot.gridView = {
         }
 
         var item = grid.getCurrent();
+        var generateUuid = false;
+        var currentData = undefined;
         for(var i = 0; i < itemIndex.length; i++)
         {
             if (_this.parentsGrid) {
                 _this.gridObj.setValue(itemIndex[i], _this.parentsUuidFieldName, _this.parentsGrid.getUUID());
+                currentData = _this.gridObj.dataProvider.getJsonRows(itemIndex[i],itemIndex[i]);
+                if(currentData[0][key])
+                {
+                    generateUuid = false;
+                }
+                else
+                    generateUuid = true;
                 //data[this.gridObj.getFieldIndex(this.parentsUuidFieldName)] = this.parentsGrid.getUUID();
             }
             else {
+                currentData = _this.gridObj.dataProvider.getJsonRows(itemIndex[i],itemIndex[i]);
+                if(currentData[0][key])
+                {
+                    generateUuid = false;
+                }
+                else
+                    generateUuid = true;
+            }
+
+            if(generateUuid)
+            {
                 axboot.ajax({
                     url: "/api/v1/common/getUUID",
                     type: "POST",
@@ -2705,6 +2725,7 @@ axboot.gridView = {
                 });
                 _this.gridObj.setValue(itemIndex[i], key, uuid);
             }
+            generateUuid = false;
         }
 
     },

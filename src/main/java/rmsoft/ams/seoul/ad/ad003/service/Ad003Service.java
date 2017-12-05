@@ -4,7 +4,9 @@ import com.querydsl.core.types.Predicate;
 import io.onsemiro.core.api.response.ApiResponse;
 import io.onsemiro.core.code.ApiStatus;
 import io.onsemiro.core.domain.BaseService;
+import io.onsemiro.utils.DateUtils;
 import io.onsemiro.utils.ModelMapperUtils;
+import io.onsemiro.utils.SessionUtils;
 import io.onsemiro.utils.UUIDUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,6 +21,8 @@ import rmsoft.ams.seoul.common.domain.QAdCodeDetail;
 import rmsoft.ams.seoul.common.repository.AdCodeDetailRepository;
 import rmsoft.ams.seoul.common.repository.AdCodeHeaderRepository;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -83,11 +87,18 @@ public class Ad003Service extends BaseService {
         for (AdCodeDetail adCodeDetail : adCodeHeaderList) {
             if (adCodeDetail.isCreated()) {
                 //adCodeDetail.setCodeDetailUuid(UUIDUtils.getUUID());
+                adCodeDetail.setInsertUuid(SessionUtils.getCurrentLoginUserUuid());
+                adCodeDetail.setUpdateUuid(SessionUtils.getCurrentLoginUserUuid());
+                adCodeDetail.setInsertDate(Timestamp.valueOf(DateUtils.convertToString(LocalDateTime.now(), DateUtils.DATE_TIME_PATTERN)));
+                adCodeDetail.setUpdateDate(adCodeDetail.getInsertDate());
                 adCodeDetailRepository.save(adCodeDetail);
             } else if (adCodeDetail.isModified()) {
                 orgAdCodeDetail = adCodeDetailRepository.findOne(adCodeDetail.getId());
                 adCodeDetail.setInsertUuid(orgAdCodeDetail.getInsertUuid());
                 adCodeDetail.setInsertDate(orgAdCodeDetail.getInsertDate());
+                adCodeDetail.setUpdateUuid(SessionUtils.getCurrentLoginUserUuid());
+                adCodeDetail.setUpdateDate(Timestamp.valueOf(DateUtils.convertToString(LocalDateTime.now(), DateUtils.DATE_TIME_PATTERN)));
+
                 adCodeDetailRepository.save(adCodeDetail);
             } else if (adCodeDetail.isDeleted()) {
                 adCodeDetailRepository.delete(adCodeDetail);
