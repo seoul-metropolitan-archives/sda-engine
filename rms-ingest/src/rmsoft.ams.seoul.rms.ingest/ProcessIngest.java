@@ -12,7 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.stereotype.Service;
-import rmsoft.ams.seoul.common.workflow.WorkflowResult;
+import rmsoft.ams.seoul.common.workflow.WorkflowResponse;
 
 import java.io.File;
 import java.io.IOException;
@@ -71,8 +71,8 @@ public class ProcessIngest {
     /******************************************************
      * Main Threads
      *******************************************************/
-    public WorkflowResult runProcess() {
-        WorkflowResult workflowResult = new WorkflowResult();
+    public WorkflowResponse runProcess() {
+        WorkflowResponse workflowResult = new WorkflowResponse();
 
         //TODO 삭제 및 수정 예정
         truncateList = new ArrayList<>();
@@ -110,6 +110,7 @@ public class ProcessIngest {
             copyFileList(getSqlFileList(sqlFilePath), sqlFilePath + File.separator + "backup", true);
 
             workflowResult.setSuccess(true);
+            workflowResult.setMessage("Success");
         } catch (Exception e) {
             log.error("Process Injest service Error", e);
             workflowResult.setSuccess(false);

@@ -121,8 +121,8 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             dataType: "json",
             data: JSON.stringify(data),
             callback: function (res) {
-                clearSavedParameter();
-                axWarningToast.push("호출 완료");
+                //clearSavedParameter();
+                axWarningToast.push("워크플로우를 실행하였습니다.\n진행상황은 Workflow Result 화면에서 확인가능합니다.");
             },
             options: {
                 onError: axboot.viewError

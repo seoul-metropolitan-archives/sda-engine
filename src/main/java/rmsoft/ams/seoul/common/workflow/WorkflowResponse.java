@@ -7,7 +7,7 @@ package rmsoft.ams.seoul.common.workflow;
 import lombok.Data;
 
 @Data
-public class WorkflowResult {
+public class WorkflowResponse {
     private boolean isSuccess = false;
     private String message = "";
 }

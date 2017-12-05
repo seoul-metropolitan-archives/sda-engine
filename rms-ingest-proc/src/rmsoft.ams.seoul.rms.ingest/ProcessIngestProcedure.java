@@ -10,7 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.stereotype.Service;
-import rmsoft.ams.seoul.common.workflow.WorkflowResult;
+import rmsoft.ams.seoul.common.workflow.WorkflowResponse;
 
 @Slf4j
 @Service
@@ -31,8 +31,8 @@ public class ProcessIngestProcedure {
         this.procedureName = procedureName;
     }
 
-    public WorkflowResult runProcess() {
-        WorkflowResult workflowResult = new WorkflowResult();
+    public WorkflowResponse runProcess() {
+        WorkflowResponse workflowResult = new WorkflowResponse();
 
         try {
            /*if (this.jdbcTemplate == null) {
@@ -49,6 +49,7 @@ public class ProcessIngestProcedure {
             callProcedure(procedureName);
 
             workflowResult.setSuccess(true);
+            workflowResult.setMessage("Success");
 
         } catch (Exception e) {
             log.error("Process Injest Procedure service Error", e);

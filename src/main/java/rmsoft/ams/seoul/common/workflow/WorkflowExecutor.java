@@ -27,8 +27,8 @@ public class WorkflowExecutor extends ClassLoader {
 
     private Map<String, Object> parameterMap = null;
 
-    public WorkflowResult invokeJobProcess(Wf00302VO wf00302VO) {
-        WorkflowResult callResult = new WorkflowResult();
+    public WorkflowResponse invokeJobProcess(Wf00302VO wf00302VO) {
+        WorkflowResponse callResult = new WorkflowResponse();
 
         try {
 
@@ -89,7 +89,7 @@ public class WorkflowExecutor extends ClassLoader {
             System.out.println("Invoked Run Process method");
 
             Object resultObject = runMethod.invoke(myClassObject);
-            callResult = (WorkflowResult) resultObject;
+            callResult = (WorkflowResponse) resultObject;
 
         } catch (ClassNotFoundException e) {
             log.error("Workflow Process Executor Error", e);

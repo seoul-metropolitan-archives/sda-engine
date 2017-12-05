@@ -36,6 +36,10 @@ public class Wf00402VO extends BaseVO {
 
     private String api;
 
+    private String skipYn;
+
+    private String terminateYn;
+
     private String message;
 
     private Timestamp startDate;

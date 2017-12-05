@@ -81,6 +81,26 @@ var wf00402 =
                 },
                 {
                     sortNo: 9,
+                    name: "skipYn",
+                    text: "Skip",
+                    width: 50,
+                    editable: false,
+                    dataType: "check",
+                    textAlignment: "center",
+                    required: false
+                },
+                {
+                    sortNo: 10,
+                    name: "terminateYn",
+                    text: "Terminate",
+                    width: 50,
+                    editable: false,
+                    dataType: "check",
+                    textAlignment: "center",
+                    required: false
+                },
+                {
+                    sortNo: 11,
                     name: "startDate",
                     text: "Start Date",
                     width: 140,
@@ -90,7 +110,7 @@ var wf00402 =
                     visible: true
                 },
                 {
-                    sortNo: 9,
+                    sortNo: 12,
                     name: "endDate",
                     text: "End Date",
                     width: 140,
@@ -100,7 +120,7 @@ var wf00402 =
                     visible: true
                 },
                 {
-                    sortNo: 10,
+                    sortNo: 13,
                     name: "message",
                     text: "Message",
                     width: 250,

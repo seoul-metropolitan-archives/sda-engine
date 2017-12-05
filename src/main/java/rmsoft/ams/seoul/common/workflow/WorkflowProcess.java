@@ -5,6 +5,7 @@
 package rmsoft.ams.seoul.common.workflow;
 
 import com.querydsl.core.types.Predicate;
+import io.onsemiro.utils.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -24,7 +25,7 @@ import java.util.List;
 @Component
 public class WorkflowProcess implements Runnable {
     @Autowired
-    WorkflowExecutor workflowExecutor;
+    private WorkflowExecutor workflowExecutor;
 
     @Autowired
     private WfWorkflowResultRepository wfWorkflowResultRepository;
@@ -72,7 +73,7 @@ public class WorkflowProcess implements Runnable {
                     updateJobResult(currentJob, getStatusUuid("CD130", JobResultStatus.실행.getCode()), "");
 
                     log.info("JobUuid : [{}] , JobName : [{}] is started", currentJob.getJobUuid(), currentJob.getJobName());
-                    WorkflowResult callResult = workflowExecutor.invokeJobProcess(workflowJobList.get(i));
+                    WorkflowResponse callResult = workflowExecutor.invokeJobProcess(workflowJobList.get(i));
 
                     if (!callResult.isSuccess()) {
                         failCnt++;
@@ -119,6 +120,8 @@ public class WorkflowProcess implements Runnable {
 
         if (wfWorkflowResult != null) {
             wfWorkflowResult.setStatusUuid(workflowResultStatus);
+            wfWorkflowResult.setEndDate(DateUtils.getTimestampNow());
+            wfWorkflowResult.setUpdateUuid(wfWorkflowResult.getInsertUuid());
             wfWorkflowResultRepository.save(wfWorkflowResult);
         }
     }
@@ -130,6 +133,8 @@ public class WorkflowProcess implements Runnable {
 
         if (wfJobResult != null) {
             wfJobResult.setStatusUuid(jobResultStatus);
+            wfJobResult.setEndDate(DateUtils.getTimestampNow());
+            wfJobResult.setUpdateUuid(wfJobResult.getInsertUuid());
             wfJobResult.setMessage(message);
             wfJobResultRepository.save(wfJobResult);
         }
