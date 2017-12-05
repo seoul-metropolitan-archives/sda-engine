@@ -3,8 +3,7 @@ package rmsoft.ams.seoul.common.vo;
 import lombok.Data;
 
 @Data
-public abstract class BaseColumnVO
-{
+public abstract class BaseColumnVO {
     private int sortNo = 0;
     private String dataType = "";
     private String name = "";
@@ -18,4 +17,7 @@ public abstract class BaseColumnVO
     private String treeRelationType = "";
     private String treeColumnYN = "N";
 
+    public void setRequired(String required) {
+        this.required = Boolean.parseBoolean(required);
+    }
 }

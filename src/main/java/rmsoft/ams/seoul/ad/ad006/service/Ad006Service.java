@@ -3,14 +3,15 @@ package rmsoft.ams.seoul.ad.ad006.service;
 import io.onsemiro.core.api.response.ApiResponse;
 import io.onsemiro.core.code.ApiStatus;
 import io.onsemiro.core.domain.BaseService;
+import io.onsemiro.core.parameter.RequestParams;
 import io.onsemiro.utils.ModelMapperUtils;
 import io.onsemiro.utils.UUIDUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import rmsoft.ams.seoul.ad.ad006.dao.Ad006Mapper;
 import rmsoft.ams.seoul.ad.ad006.vo.Ad00601VO;
 import rmsoft.ams.seoul.ad.ad006.vo.Ad00602VO;
-import rmsoft.ams.seoul.ad.ad006.dao.Ad006Mapper;
 import rmsoft.ams.seoul.common.domain.AdEntityColumn;
 import rmsoft.ams.seoul.common.domain.AdEntityType;
 import rmsoft.ams.seoul.common.repository.AdEntityColumnRepository;
@@ -31,10 +32,23 @@ public class Ad006Service extends BaseService {
     @Autowired
     private AdEntityColumnRepository adEntityColumnRepository;
 
-    public List<Ad00601VO> searchEntityType(Ad00601VO param) {
-        return mapper.searchEntityType(param);
+    public List<Ad00601VO> searchEntityType(RequestParams<Ad00601VO> param) {
+        Ad00601VO ad00601VO = new Ad00601VO();
+
+        ad00601VO.setEntityType(param.getString("entityType"));
+        ad00601VO.setEntityName(param.getString("entityName"));
+        ad00601VO.setUseYN(param.getString("useYN"));
+
+        return mapper.searchEntityType(ad00601VO);
     }
-    public List<Ad00602VO> getEntityColumnList(Ad00601VO param) { return mapper.getEntityColumnList(param); }
+
+    public List<Ad00602VO> getEntityColumnList(RequestParams<Ad00601VO> param) {
+        Ad00601VO ad00601VO = new Ad00601VO();
+
+        ad00601VO.setEntityType(param.getString("entityType"));
+
+        return mapper.getEntityColumnList(ad00601VO);
+    }
 
     @Transactional
     public ApiResponse saveEntityType(List<Ad00601VO> ad00601VOList) {
@@ -52,7 +66,7 @@ public class Ad006Service extends BaseService {
                 adEntityType.setInsertDate(orgAdEntityType.getInsertDate());
                 adEntityTypeRepository.save(adEntityType);
             } else if (adEntityType.isDeleted()) {
-                if(mapper.checkEntityType(adEntityType.getEntityType())>0){
+                if (mapper.checkEntityType(adEntityType.getEntityType()) > 0) {
                     return ApiResponse.error(ApiStatus.SYSTEM_ERROR, CommonMessageUtils.getMessage("AD010_01"));
                 } else {
                     adEntityTypeRepository.delete(adEntityType);
@@ -71,8 +85,8 @@ public class Ad006Service extends BaseService {
         AdEntityColumn orgAdEntityColumn = null;
 
         for (AdEntityColumn adEntityColumn : adEntityColumnList) {
-            if(adEntityColumn.isModified()){
-                if(adEntityColumn.getEntityColumnUuid()==null){
+            if (adEntityColumn.isModified()) {
+                if (adEntityColumn.getEntityColumnUuid() == null) {
                     adEntityColumn.set__created__(true);
                     adEntityColumn.set__modified__(false);
                 }
@@ -87,7 +101,7 @@ public class Ad006Service extends BaseService {
                 adEntityColumn.setInsertDate(orgAdEntityColumn.getInsertDate());
                 adEntityColumnRepository.save(adEntityColumn);
             } else if (adEntityColumn.isDeleted()) {
-                if(mapper.checkEntityColumn(adEntityColumn)>0){
+                if (mapper.checkEntityColumn(adEntityColumn) > 0) {
                     return ApiResponse.error(ApiStatus.SYSTEM_ERROR, CommonMessageUtils.getMessage("AD010_02"));
                 } else {
                     adEntityColumnRepository.delete(adEntityColumn);
