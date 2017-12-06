@@ -59,7 +59,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             url: "/rc/rc001/getAggregationInfo",
             data: data,
             callback: function (res) {
-                fnObj.detailView.setData(res);
+                //fnObj.detailView.setData(res);
             },
             options: {
                 onError: axboot.viewError
@@ -321,11 +321,6 @@ var fnObj = {
                         if(selectedData.length == 1)
                             selectedData = selectedData[0];
                         var item = getMenu("add aggregation");
-                        /*
-                        var $iframe = this.frameTarget.find('[data-tab-id="' + menuId + '"]'), // iframe jQuery Object
-                            iframeObject = $iframe.get(0),
-                            idoc = (iframeObject.contentDocument) ? iframeObject.contentDocument : iframeObject.contentWindow.document;
-                        */
 
                         item.menuParams = $.extend({},{type: "create"},selectedData);
                         parentsObj.tabView.open(item);
@@ -399,39 +394,6 @@ var fnObj = {
 
         });
 
-        /*/!*context menu 테스트*!/
-        var menu = new ax5.ui.menu({
-            position: "absolute", // default position is "fixed"
-            icons: {
-                'arrow': '<i class="fa fa-caret-right"></i>'
-            },
-            items: [
-                {
-                    icon: '<i class="fa fa-comment"></i>',
-                    label: "Menu A",
-                    items: [
-                        {icon: '<i class="fa fa-hand-peace-o"></i>', label: "Menu A-0"},
-                        {icon: '<i class="fa fa-hand-rock-o"></i>',label: "Menu A-1"},
-                        {icon: '<i class="fa fa-hand-stop-o"></i>',label: "Menu A-2"}
-                    ]
-                },
-                {
-                    icon: '<i class="fa fa-comments"></i>',
-                    label: "Menu B",
-                    items: [
-                        {icon: '<i class="fa fa-pencil-square"></i>', label: "Menu B-0"},
-                        {icon: '<i class="fa fa-phone-square"></i>', label: "Menu B-1"},
-                        {icon: '<i class="fa fa-plus-square"></i>', label: "Menu B-2"}
-                    ]
-                }
-            ]
-        });
-
-        $("div.explorer_list>div>div").bind("contextmenu", function (e) {
-            menu.popup(e);
-            ax5.util.stopEvent(e);
-            // e || {left: 'Number', top: 'Number', direction: '', width: 'Number'}
-        });*/
         fnObj.treeView01.initView();
         fnObj.naviView.iintView();
         fnObj.iconView.initView();
@@ -440,74 +402,7 @@ var fnObj = {
         ACTIONS.dispatch(ACTIONS.GET_SUBDATA,{uuid : ""});
     }
 };
-/*
-fnObj.searchView = axboot.viewExtend(axboot.formView,{
-    getDefaultData: function () {
-        return $.extend({}, axboot.formView.defaultData);
-    },
-    initView : function()
-    {
-        this.target = $("#formView01");
-        this.model = new ax5.ui.binder();
-        this.model.setModel(this.getDefaultData(), this.target);
-        this.modelFormatter = new axboot.modelFormatter(this.model); // 모델 포메터 시작
-        this.initEvent();
-    },
-    initEvent: function () {
-    },
-    getData: function () {
-        var data = this.modelFormatter.getClearData(this.model.get()); // 모델의 값을 포멧팅 전 값으로 치환.
-        console.log(data);
-        return $.extend({},data);
-    },
-    setFormData: function (dataPath, value) {
-        this.model.set(dataPath, value);
-    },
-    setData: function (data) {
 
-        if (typeof data === "undefined") data = this.getDefaultData();
-        data = $.extend({}, data);
-
-        this.target.find('[data-ax-path="key"]').attr("readonly", "readonly");
-
-        this.model.setModel(data);
-        this.modelFormatter.formatting(); // 입력된 값을 포메팅 된 값으로 변경
-    },
-    validate: function () {
-        var rs = this.model.validate();
-        if (rs.error) {
-            alert(rs.error[0].jquery.attr("title") + '을(를) 입력해주세요.');
-            rs.error[0].jquery.focus();
-            return false;
-        }
-        return true;
-    },
-    clear: function () {
-        this.model.setModel(this.getDefaultData());
-        this.target.find('[data-ax-path="key"]').removeAttr("readonly");
-    }
-
-})
-
-fnObj.gridView01 = axboot.viewExtend(axboot.realGridView, {
-    tagId : "realgrid01",
-    initView: function ()
-    {
-        this.gridObj.setColumnInfo(ad00101.column_info);
-        this.gridObj.setEntityName($("#realgridName").text());
-        this.gridObj.makeGrid();
-        this.gridObj.itemClick(function(data){
-            console.log(data);
-        });
-        ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
-    }
-});
-
-isDataChanged = function()
-{
-    return (fnObj.gridView01.isChangeData() == true) 
-}
-*/
 fnObj.naviView = axboot.viewExtend({
     iintView : function()
     {
@@ -559,6 +454,8 @@ fnObj.naviView = axboot.viewExtend({
     }
 
 });
+
+/*
 fnObj.detailView = axboot.viewExtend({
     initView : function(){
 
@@ -590,6 +487,7 @@ fnObj.detailView = axboot.viewExtend({
         $("#aggregationInfoArea").empty().append(cloneTag.children());
     }
 });
+*/
 fnObj.iconView = axboot.viewExtend({
     pressedCtrl : false,
     isdbClk : false,
@@ -659,8 +557,8 @@ fnObj.iconView = axboot.viewExtend({
                 if(fnObj.iconView.isdbClk) {  return ;}
                 if(imgSrc.indexOf("file")>-1)
                     ACTIONS.dispatch(ACTIONS.GET_ITEM_INFO,reqData);
-                else
-                    ACTIONS.dispatch(ACTIONS.GET_AGGREGATION_INFO,reqData);
+                //else
+                    //ACTIONS.dispatch(ACTIONS.GET_AGGREGATION_INFO,reqData);
 
             },250);
 
@@ -687,7 +585,7 @@ fnObj.iconView = axboot.viewExtend({
 
             fnObj.naviView.setData({uuid : $(this).parents().eq(index).attr("uuid"),name : $(this).parents().eq(index).find(".titleTag").children().eq(0).text()});
             ACTIONS.dispatch(ACTIONS.GET_SUBDATA,{uuid:$(this).parents().eq(index).attr("uuid")});
-            fnObj.detailView.setData({});
+            //fnObj.detailView.setData({});
             setTimeout(function(){
                 fnObj.iconView.isdbClk = false;
             },300);

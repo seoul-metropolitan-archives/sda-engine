@@ -86,6 +86,7 @@ axboot.init = function () {
         } else {
             parent.COMMON_CODE = axboot.convertCode(parent.COMMON_CODE);
             axboot.pageStart();
+
         }
 
         var debounceFn = ax5.util.debounce(function (val) {
@@ -117,6 +118,8 @@ axboot.pageStart = function () {
             top.fnObj.activityTimerView.update();
         }
         window[axboot.def.pageFunctionName].pageStart();
+        window.initTag();
+
     }
 };
 /**
@@ -2692,6 +2695,7 @@ axboot.gridView = {
         var item = grid.getCurrent();
         var generateUuid = false;
         var currentData = undefined;
+        var beforeData = undefined;
         for(var i = 0; i < itemIndex.length; i++)
         {
             if (_this.parentsGrid) {
@@ -2707,12 +2711,30 @@ axboot.gridView = {
             }
             else {
                 currentData = _this.gridObj.dataProvider.getJsonRows(itemIndex[i],itemIndex[i]);
-                if(currentData[0][key])
+                if(itemIndex.length > 1 && i > 0)
                 {
-                    generateUuid = false;
+                    //초기 데이터의 UUID 와 비교해서 같으면 새로 생성하게 수정 ( DEFAULT value로 인하여 같은 값이 들어가게 되어있다Append 기능 및 여러가지 기능이 혼합해서 경우의 가지수가 너무 많다 )
+                    beforeData = _this.gridObj.dataProvider.getJsonRows(itemIndex[0],itemIndex[0])
+
+                    if(beforeData[0][key] == currentData[0][key])
+                    {
+                        generateUuid = true;
+                    }
+                    else
+                    {
+                        generateUuid = false;
+                    }
+                    beforeData = undefined;
                 }
-                else
-                    generateUuid = true;
+                else {
+                    if(currentData[0][key])
+                    {
+                        generateUuid = false;
+                    }
+                    else
+                        generateUuid = true;
+                }
+
             }
 
             if(generateUuid)
@@ -2757,6 +2779,8 @@ axboot.gridView = {
 
     },
     addRowAfterEvent : function(_event){
+
+
         this.gridObj.addRowAfterEvent(_event);
     },
     removeRowAfterEvent : function(_event)
@@ -2887,10 +2911,7 @@ axboot.realGridView = {
  */
 axboot.formView = {
     name: "formView",
-    initTag : function()
-    {
 
-    },
     clear: function clear() {
         this.model.setModel(this.getDefaultData());
         $('[data-ax5formatter]').ax5formatter("formatting");
@@ -3185,3 +3206,7 @@ var currentTag = undefined;
 $(document).delegate(".ax-body .searchFields input,.ax-body .searchFields select","blur",function(){
     currentTag = this;
 });
+
+window.initTag = function(){
+    $("select>option[defaultYN='Y']").prop("selected","selected");
+}

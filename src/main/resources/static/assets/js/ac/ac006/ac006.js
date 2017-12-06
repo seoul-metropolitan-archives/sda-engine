@@ -132,7 +132,12 @@ fnObj.pageStart = function () {
         url: "/assets/js/column_info/ac00601.js",
         dataType: "script",
         async: false,
-        success: function () {
+        success: function (test) {
+            console.log(test)
+        },error : function(a,b,c){
+            console.log(a);
+            console.log(b);
+            console.log(c);
         }
     });
 
