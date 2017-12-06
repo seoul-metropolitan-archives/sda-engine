@@ -33,16 +33,22 @@
                             <dd>
                                 <select data-ax-path="serviceUuid" style="width:135px;" id="serviceList">
                                     <option value=""></option>
-                                    <option th:each="item : ${serviceList}" th:value="${item.codeDetailUUID}"
-                                            th:text="${item.codeName}"/>
+                                    <option th:each="item : ${serviceList}"
+                                            th:value="${item.codeDetailUUID}"
+                                            th:text="${item.codeName}"
+                                            th:attr="defaultYN =  ${item.defaultYN}"
+                                    />
                                 </select>
                             </dd>
                             <dt>Code Type</dt>
                             <dd>
                                 <select data-ax-path="codeTypeUuid" style="width:135px;" id="codeList">
                                     <option value=""></option>
-                                    <option th:each="item : ${codeList}" th:value="${item.codeDetailUUID}"
-                                            th:text="${item.codeName}"/>
+                                    <option th:each="item : ${codeList}"
+                                            th:value="${item.codeDetailUUID}"
+                                            th:text="${item.codeName}"
+                                            th:attr="defaultYN =  ${item.defaultYN}"
+                                    />
                                 </select>
                             </dd>
                         </dl>
