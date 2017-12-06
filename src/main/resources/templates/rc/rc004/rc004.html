@@ -36,8 +36,8 @@
                     </div>
                     <div class="div_tablerow cont_title">
                         <ul style="height: 30px; width: 100%">
-                            <li class="pdl_10">
-                                Add new archival description - Untitled(draft)</li>
+                            <li class="pdl_10" data-ax-path="headTitle">
+                                </li>
                         </ul>
                     </div>
 
@@ -249,8 +249,8 @@
                                                                         <option value=""></option>
                                                                         <option th:each="item : ${openStatusUuid}"
                                                                                 th:value="${item.codeDetailUUID}"
-                                                                                th:text="${item.codeName}"
-                                                                                th:attr="defaultYN =  ${item.defaultYN}"
+                                                                                th:text="${item.codeName}"th:attr="defaultYN =  ${item.defaultYN}"
+
                                                                         />
                                                                     </select>
                                                                 </div>

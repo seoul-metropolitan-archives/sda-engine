@@ -205,7 +205,7 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
 
         axboot.buttonClick(this, "data-form-view-01-btn", {
             "select-all": function () {
-                fnObj.gridView02.gridObj.gridView.commit(true);
+                // fnObj.gridView02.gridObj.gridView.commit(true);
                 var dataLists = fnObj.gridView02.gridObj.getJsonRows();
                 var remakeList = new Array();
                 dataLists.forEach(function (menuInfo, row) {
