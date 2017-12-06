@@ -82,7 +82,11 @@
                                                             <b>Type </b>
                                                             <div>
                                                                 <select data-ax-path="typeUuid" style="width: 200px; background-color: #fffdd6">
-                                                                    <option th:each="item : ${typeList}" th:value="${item.codeDetailUUID}" th:text="${item.codeName}"/>
+                                                                    <option th:each="item : ${typeList}"
+                                                                            th:value="${item.codeDetailUUID}"
+                                                                            th:text="${item.codeName}"
+                                                                            th:attr="defaultYN =  ${item.defaultYN}"
+                                                                    />
                                                                 </select>
                                                             </div>
                                                         </li>
@@ -90,7 +94,11 @@
                                                             <b>Published Status</b>
                                                             <div>
                                                                 <select data-ax-path="publishedStatusUuid" style="width: 200px; background-color: #fffdd6" >
-                                                                    <option th:each="item : ${publishedStatusList}" th:value="${item.codeDetailUUID}" th:text="${item.codeName}"/>
+                                                                    <option th:each="item : ${publishedStatusList}"
+                                                                            th:value="${item.codeDetailUUID}"
+                                                                            th:text="${item.codeName}"
+                                                                            th:attr="defaultYN =  ${item.defaultYN}"
+                                                                    />
                                                                 </select>
                                                             </div>
                                                         </li>
@@ -111,7 +119,11 @@
                                                             <div>
                                                                 <select style="width: 200px" data-ax-path="levelUuid" id="aggreLevel">
                                                                     <option value=""></option>
-                                                                    <option th:each="item : ${levelList}" th:value="${item.levelUuid}" th:text="${item.levelName}"/>
+                                                                    <option th:each="item : ${levelList}"
+                                                                            th:value="${item.levelUuid}"
+                                                                            th:text="${item.levelName}"
+                                                                            th:attr="defaultYN =  ${item.defaultYN}"
+                                                                    />
                                                                 </select>
                                                             </div>
                                                         </li>
@@ -369,7 +381,11 @@
                                                                 <b>Level </b>
                                                                 <div>
                                                                     <select data-ax-path="childlevelUuid" style="width: 135px" >
-                                                                        <option th:each="item : ${levelList}" th:value="${item.levelUuid}" th:text="${item.levelName}"/>
+                                                                        <option th:each="item : ${levelList}"
+                                                                                th:value="${item.levelUuid}"
+                                                                                th:text="${item.levelName}"
+                                                                                th:attr="defaultYN =  ${item.defaultYN}"
+                                                                        />
                                                                     </select>
                                                                 </div>
                                                             </li>

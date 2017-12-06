@@ -43,8 +43,11 @@
                         <dd>
                             <select data-ax-path="statusUuid" style="width:135px;">
                                 <option value="" ></option>
-                                <option th:each="item : ${statusUuid}" th:value="${item.codeDetailUUID}"
-                                        th:text="${item.codeName}"/>
+                                <option th:each="item : ${statusUuid}"
+                                        th:value="${item.codeDetailUUID}"
+                                        th:text="${item.codeName}"
+                                        th:attr="defaultYN =  ${item.defaultYN}"
+                                />
                             </select>
                         </dd>
 
@@ -64,8 +67,11 @@
                         <dd>
                             <select data-ax-path="classLevelUuid" style="width:135px;">
                                 <option value=""></option>
-                                <option th:each="item : ${classLevel}" th:value="${item.codeDetailUUID}"
-                                        th:text="${item.codeName}"/>
+                                <option th:each="item : ${classLevel}"
+                                        th:value="${item.codeDetailUUID}"
+                                        th:text="${item.codeName}"
+                                        th:attr="defaultYN =  ${item.defaultYN}"
+                                />
                             </select>
                         </dd>
                         <dd class="w_auto">

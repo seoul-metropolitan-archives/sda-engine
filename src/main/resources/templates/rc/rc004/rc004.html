@@ -80,9 +80,9 @@
                                                     <li style="width: 33%;">
                                                         <b>Type </b>
                                                         <div>
-                                                            <select id="typeUuid" data-ax-path="typeUuid111" data-option-selected="" style="width: 200px;">
+                                                            <select data-ax-path="typeUuid" data-option-selected="" style="width: 200px;">
                                                                 <option></option>
-                                                                <option th:selected="${item.defaultYN} == 'Y' ? true : false"
+                                                                <option th:attr="defaultYN =  ${item.defaultYN}"
                                                                         th:each="item : ${typeUuid}"
                                                                         th:value="${item.codeDetailUUID}"
                                                                         th:text="${item.codeName}" />
@@ -93,7 +93,11 @@
                                                         <b>Published Status</b>
                                                         <div>
                                                             <select data-ax-path="publishedStatusUuid" style="width: 200px; background-color: #fffdd6" >
-                                                                <option th:each="item : ${publishedStatusUuid}" th:value="${item.codeDetailUUID}" th:text="${item.codeName}"/>
+                                                                <option th:each="item : ${publishedStatusUuid}"
+                                                                        th:value="${item.codeDetailUUID}"
+                                                                        th:text="${item.codeName}"
+                                                                        th:attr="defaultYN =  ${item.defaultYN}"
+                                                                />
                                                             </select>
                                                         </div>
                                                     </li>
@@ -243,7 +247,11 @@
                                                                 <div>
                                                                     <select data-ax-path="openStatusUuid" style="width: 200px;">
                                                                         <option value=""></option>
-                                                                        <option th:each="item : ${openStatusUuid}" th:value="${item.codeDetailUUID}" th:text="${item.codeName}"/>
+                                                                        <option th:each="item : ${openStatusUuid}"
+                                                                                th:value="${item.codeDetailUUID}"
+                                                                                th:text="${item.codeName}"
+                                                                                th:attr="defaultYN =  ${item.defaultYN}"
+                                                                        />
                                                                     </select>
                                                                 </div>
                                                             </li>
