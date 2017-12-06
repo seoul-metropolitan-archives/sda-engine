@@ -2456,6 +2456,7 @@ axboot.baseView =
         name: "baseView",
         init: function () {
             var _this = this;
+            
             $(".bdb").delegate("#confirm", "click", function () {
                 _this.confirm();
             });
@@ -2860,6 +2861,10 @@ axboot.realGridView = {
  */
 axboot.formView = {
     name: "formView",
+    initTag : function()
+    {
+
+    },
     clear: function clear() {
         this.model.setModel(this.getDefaultData());
         $('[data-ax5formatter]').ax5formatter("formatting");

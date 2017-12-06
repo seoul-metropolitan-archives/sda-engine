@@ -357,6 +357,8 @@ setFormData = function(data){
 }
 
 function dateFormatter(orgDate){
+    if(orgDate == undefined) return ' ';
+
     var year = orgDate.substring(0, 4);
     var month = orgDate.substring(4, 6);
     var day = orgDate.substring(6, 8);

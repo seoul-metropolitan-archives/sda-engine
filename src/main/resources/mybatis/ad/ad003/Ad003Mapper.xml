@@ -118,6 +118,7 @@
             Z1.CODE_DETAIL_UUID as codeDetailUUID,
             Z.CATEGORY_CODE categoryCode,
             Z1.CODE as code,
+            Z1.DEFAULT_YN as defaultYn,
             Z1.CODE_NAME as codeName
         FROM
             AD_CODE_HEADER Z,

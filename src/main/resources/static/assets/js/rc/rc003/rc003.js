@@ -5,7 +5,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         axboot.ajax({
             type: "GET",
             url: "/api/v1/rc003/01/list",
-            data: $.extend({}, {pageSize: 1000, sort: "classificationCode"}, data),
+            data: $.extend({}, {pageSize: 1000, sort: "classificationCode" }, data),
             callback: function (res) {
                 if(res.list != "undefined" && res.list != null && res.list.length > 0){
                     rcList = ax5.util.deepCopy(res.list);
@@ -51,7 +51,7 @@ fnObj.pageStart = function () {
     if(null == data ){
         return;
     }else {
-        ACTIONS.dispatch(ACTIONS.PAGE_SEARCH,{aggregationUuid : data.aggregationUuid});
+        ACTIONS.dispatch(ACTIONS.PAGE_SEARCH,{aggregationUuid : data.uuid});
     }
 };
 
@@ -317,9 +317,9 @@ setFormData = function(data){
     fnObj.formView.setFormData("rcAggregationCode",data.aggregationCode);
     if(data.descriptionStartDate != "undefined" || data.descriptionStartDate != null) {
         if (data.descriptionStartDate == data.descriptionEndDate || data.descriptionEndDate == "undefined" || data.descriptionEndDate == null) {
-            fnObj.formView.setFormData("rcDateOfDescription", data.descriptionStartDate);
+            fnObj.formView.setFormData("rcDateOfDescription", dateFormatter(data.descriptionStartDate));
         } else {
-            fnObj.formView.setFormData("rcDateOfDescription", data.descriptionStartDate + ' ~ ' + data.descriptionEndDate);
+            fnObj.formView.setFormData("rcDateOfDescription", dateFormatter(data.descriptionStartDate) + ' ~ ' + dateFormatter(data.descriptionEndDate));
         }
     }
     fnObj.formView.setFormData("rcProvenance",data.provenance);
@@ -337,4 +337,14 @@ setFormData = function(data){
     fnObj.formView.setFormData("rcAddMetadata09",data.addMetadata09);
     fnObj.formView.setFormData("rcAddMetadata10",data.addMetadata10);
 
+}
+
+function dateFormatter(orgDate){
+    if(orgDate == undefined || orgDate == null) return ' ';
+
+    var year = orgDate.substring(0, 4);
+    var month = orgDate.substring(4, 6);
+    var day = orgDate.substring(6, 8);
+
+    return year + '-' + month + '-' + day;
 }

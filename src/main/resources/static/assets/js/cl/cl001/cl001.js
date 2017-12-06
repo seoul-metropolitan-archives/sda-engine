@@ -14,6 +14,8 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                     isDetailChanged = false;
                     ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
                     return;
+                }else{
+                    isDetailChanged = false;
                 }
             });
         }
@@ -29,7 +31,6 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 }
                 fnObj.gridView01.setData(res.list);
                 fnObj.gridView01.disabledColumn();
-                isDetailChanged = false;
                 ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1);
             },
             options: {
@@ -121,6 +122,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 }
             })
             .done(function () {
+                fnObj.gridView01.commit();
                 axToast.push(axboot.getCommonMessage("AA007"));
             });
         return result;
@@ -193,7 +195,7 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
     initView: function () {
         this.target = $("#formView01");
         this.model = new ax5.ui.binder();
-        this.model.setModel(this.getDefaultData(), this.target);
+        //this.model.setModel(this.getDefaultData(), this.target);
         this.modelFormatter = new axboot.modelFormatter(this.model); // 모델 포메터 시작
         this.initEvent();
     },
@@ -291,6 +293,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
                     if (this.key == "ok") {
                         ACTIONS.dispatch(ACTIONS.TOP_GRID_DETAIL_PAGE_SAVE);
                     } else {
+                        isDetailChanged = false;
                         ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, data);
                     }
                 });

@@ -173,6 +173,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             data: JSON.stringify(this.gridView02.getData()),
             callback: function (res) {
                 if(isDetailChanged){
+                    fnObj.gridView02.commit();
                     ACTIONS.dispatch(ACTIONS.TOP_GRID_DETAIL_PAGE_SAVE);
                 }else{
                     // ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);

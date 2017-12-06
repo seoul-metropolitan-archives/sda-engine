@@ -82,14 +82,17 @@ fnObj.pageStart = function () {
     _this.gridView01.initView();
     // Data 조회
     var data = axboot.getMenuParams();
-    PAGE_MODE = data.type;
+
 
     if(null == data ){
         return;
-    } else if(PAGE_MODE == "create") {
-        fnObj.formView.setFormData("raAggregationUuid",data.aggregationUuid);
-    } else {
-        ACTIONS.dispatch(ACTIONS.PAGE_SEARCH,{aggregationUuid : data.aggregationUuid, itemUuid : data.itemUuid});
+    }else{
+        PAGE_MODE = data.type;
+        if(PAGE_MODE == "create") {
+            fnObj.formView.setFormData("raAggregationUuid",data.aggregationUuid);
+        } else {
+            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH,{aggregationUuid : data.aggregationUuid, itemUuid : data.itemUuid});
+        }
     }
 };
 
@@ -403,7 +406,6 @@ setFormData = function(data){
     fnObj.formView.setFormData("creator",data.creator);
     fnObj.formView.setFormData("keyword",data.keyword);
     fnObj.formView.setFormData("from",data.riTitle);
-    fnObj.formView.setFormData("typeUuid",data.riTypeUuid);
     fnObj.formView.setFormData("referenceCode",data.referenceCode);
     fnObj.formView.setFormData("raAggregationCode",data.raAggregationCode);
 
@@ -436,6 +438,7 @@ setFormData = function(data){
 }
 
 function dateFormatter(orgDate){
+    if(orgDate == undefined || orgDate == null) return ' ';
     var year = orgDate.substring(0, 4);
     var month = orgDate.substring(4, 6);
     var day = orgDate.substring(6, 8);
