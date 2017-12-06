@@ -6,11 +6,15 @@
     <select class="form-control W150" th:name="${id}" th:id="${id}" th:attr="data-ax-path=${dataPath}">
         <th:block th:if="${codeType == 'USER_STATUS'}">
             <option value="">-</option>
-            <option th:each="item : ${userStatus}" th:value="${item.code}" th:text="${item.name}"/>
+            <option th:each="item : ${userStatus}"
+                    th:value="${item.code}"
+                    th:text="${item.name}"/>
         </th:block>
         <th:block th:if="${codeType == 'MENU_GROUP'}">
             <option value="">-</option>
-            <option th:each="item : ${menuGroup}" th:value="${item.code}" th:text="${item.name}"/>
+            <option th:each="item : ${menuGroup}"
+                    th:value="${item.code}"
+                    th:text="${item.name}"/>
         </th:block>
     </select>
 </th:block>

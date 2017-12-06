@@ -35,9 +35,7 @@
                                     <option value=""></option>
                                     <option th:each="item : ${serviceList}"
                                             th:value="${item.codeDetailUUID}"
-                                            th:text="${item.codeName}"
-                                            th:attr="defaultYN =  ${item.defaultYN}"
-                                    />
+                                            th:text="${item.codeName}"/>
                                 </select>
                             </dd>
                             <dt>Code Type</dt>
@@ -46,9 +44,7 @@
                                     <option value=""></option>
                                     <option th:each="item : ${codeList}"
                                             th:value="${item.codeDetailUUID}"
-                                            th:text="${item.codeName}"
-                                            th:attr="defaultYN =  ${item.defaultYN}"
-                                    />
+                                            th:text="${item.codeName}"/>
                                 </select>
                             </dd>
                         </dl>

@@ -21,7 +21,9 @@
         <div layout:fragment="wrap-1">
             <select class="form-control" name="jisaCode" id="jisaCode">
                 <option value="">전체</option>
-                <option th:each="item : ${jisaCodeGroup}" th:value="${item.code}" th:text="${item.name}"/>
+                <option th:each="item : ${jisaCodeGroup}"
+                        th:value="${item.code}"
+                        th:text="${item.name}"/>
             </select>
         </div>
     </th:block>
@@ -75,7 +77,9 @@
                             <div layout:fragment="wrap">
                                 <select class="form-control W150" name="deptNo" id="deptNo" data-ax-path="deptNo">
                                     <option value="">-</option>
-                                    <option th:each="item : ${deptNoGroup}" th:value="${item.code}" th:text="${item.name}"/>
+                                    <option th:each="item : ${deptNoGroup}"
+                                            th:value="${item.code}"
+                                            th:text="${item.name}"/>
                                 </select>
                             </div>
                         </th:block>
@@ -83,7 +87,9 @@
                             <div layout:fragment="wrap">
                                 <select class="form-control W150" name="jisaCode" id="jisaCode" data-ax-path="jisaCode">
                                     <option value="">-</option>
-                                    <option th:each="item : ${jisaCodeGroup}" th:value="${item.code}" th:text="${item.name}"/>
+                                    <option th:each="item : ${jisaCodeGroup}"
+                                            th:value="${item.code}"
+                                            th:text="${item.name}"/>
                                 </select>
                             </div>
                         </th:block>

@@ -33,7 +33,6 @@
                                 <option th:each="item : ${serviceList}"
                                         th:value="${item.codeDetailUUID}"
                                         th:text="${item.codeName}"
-                                        th:attr="defaultYN =  ${item.defaultYN}"
                                 />
                             </select>
                         </dd>

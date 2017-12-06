@@ -34,9 +34,7 @@
                                 <option value=""></option>
                                 <option th:each="item : ${userTypeUuid}"
                                         th:value="${item.codeDetailUUID}"
-                                        th:text="${item.codeName}"
-                                        th:attr="defaultYN =  ${item.defaultYN}"
-                                />
+                                        th:text="${item.codeName}"/>
                             </select>
                         </dd>
                     </dl>

@@ -37,7 +37,6 @@
                                 <option th:each="item : ${pmsFunctionUuid}"
                                         th:value="${item.codeDetailUUID}"
                                         th:text="${item.codeName}"
-                                        th:attr="defaultYN =  ${item.defaultYN}"
                                 />
                             </select>
                         </dd>
