@@ -321,6 +321,13 @@ fnObj.topMenuView = axboot.viewExtend({
                 //console.log(this.self.getCheckValue());
             }
         };
+        $("#logout").click(function(){
+            axToast.push(axboot.getCommonMessage("AC002_04"));
+            setTimeout(function(){
+                window.location.href = "/api/logout";
+            },1500)
+
+        })
     }
 });
 

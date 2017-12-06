@@ -12,16 +12,17 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     // 워크플로우 조회
     PAGE_SEARCH: function (caller, act, data) {
         clearSavedParameter();
-
         axboot.ajax({
             type: "GET",
             url: "/api/v1/wf003/01/list",
             data: $.extend({}, {pageSize: 1000}, this.formView.getData()),
             callback: function (res) {
                 fnObj.gridView01.setData(res.list);
+                fnObj.gridView01.resetCurrent();
                 fnObj.gridView02.clearData();
                 fnObj.gridView03.clearData();
-                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, res.list[0]);
+                if(res.list.length > 0)
+                    ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, res.list[0]);
             },
             options: {
                 onError: axboot.viewError
@@ -219,13 +220,14 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
         this.modelFormatter.formatting(); // 입력된 값을 포메팅 된 값으로 변경
     },
     validate: function () {
-        var rs = this.model.validate();
-        if (rs.error) {
-            alert(rs.error[0].jquery.attr("title") + '을(를) 입력해주세요.');
-            rs.error[0].jquery.focus();
+        if($("select[data-ax-path='serviceUuid']").val() == "") {
+            axToast.push(axboot.getCommonMessage("AA011"));
             return false;
         }
-        return true;
+        else {
+            return true;
+        }
+
     },
     clear: function () {
         this.model.setModel(this.getDefaultData());

@@ -30,6 +30,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             async : false,
             callback: function (res) {
                 fnObj.gridView01.setData(res.list);
+                fnObj.gridView01.setFocus();
                 if(res.list.length > 0)
                 {
                     fnObj.sqlView.setData(res.list[0]["popupSQL"]);
@@ -378,14 +379,16 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
 
     },
     itemClick : function(data){
-        if(fnObj.gridView02.gridObj.validate() && fnObj.gridView02.getData().legnth > 1)
+        if(fnObj.gridView02.gridObj.validate() && fnObj.gridView02.getData().length > 0)
         {
             axDialog.confirm({
-                msg: axboot.commonCodeFilter("AA006")
+                msg: axboot.getCommonMessage("AA006")
             },function() {
                 if(this.key == "ok")
                 {
                     ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
+                    fnObj.sqlView.setData(data["popupSQL"]);
+                    ACTIONS.dispatch(ACTIONS.GET_POPUP_DETAIL,data);
                 }
                 else {
                     ACTIONS.dispatch(ACTIONS.GET_POPUP_DETAIL);
@@ -495,7 +498,12 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
                 this.gridObj.setColumn(column);
                 this.gridObj.addRow();
                 this.gridObj.gridView.commit(true);
+                column = this.gridObj.columnByName("sqlColumn");
+                column.defaultValue = "";
+                this.gridObj.setColumn(column);
+                this.gridObj.gridView.commit(true);
             }
+
         }
 
         for(var i = 0; i < compList.length;i ++)
@@ -514,3 +522,4 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
         this.setData([]);
     }
 });
+ㄷㄹ

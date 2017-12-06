@@ -13,6 +13,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             data: $.extend({}, {pageSize: 1000}, this.formView.getData()),
             callback: function (res) {
                 fnObj.gridView01.setData(res.list);
+                fnObj.gridView01.resetCurrent();
                 if (res.list.length > 0) {
                     ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, res.list[0]);
                 }else{
@@ -241,9 +242,8 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
                 }, function () {
                     if (this.key == "ok") {
                         ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
-                    } else {
-                        ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, data);
                     }
+                    ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, data);
                 });
             } else {
                 ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, data);

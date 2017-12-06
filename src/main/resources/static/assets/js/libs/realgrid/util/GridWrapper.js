@@ -60,7 +60,6 @@ var GridWrapper = function(p_id,p_rootContext) {
 
     //트리 생성시 사용되는 프로퍼티
     this.childrenProp = undefined;
-    this.appendValidate = function() { return true; };
 
     this.contextMenu = [{label : "Excel Export"}];
     this.removeProperty = new Array();
@@ -79,7 +78,7 @@ var GridWrapper = function(p_id,p_rootContext) {
     this.validateColumn = {};
     this.runAdd = true;
     this.runDel = true;
-    this.doAppendValidate = true;
+    doAppendValidate = true;
     //event저장소
     this.event = {};
 
@@ -87,7 +86,7 @@ var GridWrapper = function(p_id,p_rootContext) {
     this.comboFields = new Array();
 
 
-    this.setDoAppendValidate = function(_doAppendValidate) {this.doAppendValidate = _doAppendValidate;}
+
     this.setAddBtnName = function(_name){this.addBtnName = _name;}
     this.setDelBtnName = function(_name){this.delBtnName = _name;}
     this.setRunAdd = function(_runAdd)
@@ -165,8 +164,8 @@ var GridWrapper = function(p_id,p_rootContext) {
 
             if(!_this.runAdd)
                 return false;
-
-            if(false == this.doAppendValidate)
+            var validate = _this.getDoAppendValidate();
+            if(false == validate)
             {
                 _this.dispatch("onBeforeAddRow",_this,_this.makeObj,grid, itemIndex);
                 _this.dispatch("onAfterAddRow",_this,_this.makeObj,grid, itemIndex);
@@ -260,12 +259,23 @@ var GridWrapper = function(p_id,p_rootContext) {
                 return retData;
             }
 
-
-
-
-            for(var col = 0; col < gridWrapper.columnInfo.length; col++)
+            var columnList = new Array();
+            for(var i = 0; i < gridWrapper.columnInfo.length; i++)
             {
-                colData = gridWrapper.columnInfo[col];
+                columnList.push(gridWrapper.columnInfo[i]);
+
+                if(gridWrapper.columnInfo[i].columnList && gridWrapper.columnInfo[i].columnList.length > 0){
+                    for(var j = 0; j < gridWrapper.columnInfo[i].columnList.length; j++)
+                    {
+                        columnList.push(gridWrapper.columnInfo[i].columnList[j]);
+                    }
+                }
+
+            }
+
+            for(var col = 0; col < columnList.length; col++)
+            {
+                colData = columnList[col];
                 getColumnLabelsNValues(colData.name)
 
                 if(colData.dataType == "combo")
@@ -351,6 +361,7 @@ var GridWrapper = function(p_id,p_rootContext) {
             }
             gridWrapper.gridView.commit(true);
         });
+        /*
         _this.bind("onRowsPasted",function(gridWrapper, _this, grid, item){
             return ;
             var index = grid.getCurrent();
@@ -431,7 +442,6 @@ var GridWrapper = function(p_id,p_rootContext) {
                                         break;
                                     }
                                 }
-                                */
                             }
 
                         }
@@ -452,7 +462,7 @@ var GridWrapper = function(p_id,p_rootContext) {
 
 
         })
-
+        */
 
         _this.bind("onInnerDrop",function(gridWrapper, grid){
             grid.setFocus();
@@ -1876,3 +1886,9 @@ GridWrapper.prototype.getSelectedData = function () {
 
     }
 };
+
+GridWrapper.prototype.setDoAppendValidate = function(_doValidate) { doAppendValidate = _doValidate;}
+GridWrapper.prototype.getDoAppendValidate = function(){
+    var validate = doAppendValidate == undefined ? true :  doAppendValidate;
+    return validate;
+}

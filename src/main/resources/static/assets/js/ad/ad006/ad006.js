@@ -10,7 +10,9 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             data: $.extend({}, {pageSize: 1000}, fnObj.formView.getData()),
             callback: function (res) {
                 fnObj.gridView01.setData(res.list);
-                ACTIONS.dispatch(ACTIONS.GET_ENTITY_DETAIL, res.list[0]);
+                fnObj.gridView01.clearChild();
+                if(res.list.length > 0)
+                    ACTIONS.dispatch(ACTIONS.GET_ENTITY_DETAIL, res.list[0]);
             },
             options: {
                 onError: axboot.viewError
@@ -56,7 +58,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 type: "post",
                 data: JSON.stringify(entityColumnList),
                 callback: function (res) {
-                    fnObj.gridView02.gridObj.commit();
+                    fnObj.gridView02.commit();
                 }
             })
             .done(function () {
@@ -250,9 +252,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
                     if (this.key == "ok") {
                         ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
                     }
-                    else {
-                        ACTIONS.dispatch(ACTIONS.GET_ENTITY_DETAIL, data);
-                    }
+                    ACTIONS.dispatch(ACTIONS.GET_ENTITY_DETAIL, data);
                 });
             }
         });
@@ -278,16 +278,8 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
         this.setColumnInfo(ad00602.column_info);
         this.makeGrid();
         this.gridObj.addRowBeforeEvent(this.addRowBeforeEvent);
-        this.gridObj.onRowsPasted(this.onRowsPasted);
         this.gridObj.setFixedOptions({
             colCount: 1
         })
     }
 });
-isDataChanged = function () {
-    if (fnObj.gridView01.isChangeData() == true || fnObj.gridView02.isChangeData() == true) {
-        return true;
-    } else {
-        return false;
-    }
-}

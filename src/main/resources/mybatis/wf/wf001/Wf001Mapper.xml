@@ -39,6 +39,7 @@
                 AND Z.USE_YN = #{useYn}
             </if>
         </where>
+        ORDER BY Z.JOB_NAME
     </select>
 
     <select id="findParameter" resultType="Wf00102VO" parameterType="String"

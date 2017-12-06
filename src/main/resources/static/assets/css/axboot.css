@@ -8180,7 +8180,7 @@ button.close {
 .ax5-ui-calendar .calendar-control .date-display [data-calendar-display] {
     margin: 0px 10px;
     cursor: pointer;
-    text-decoration: underline
+    text-decoration: blink;
 }
 
 .ax5-ui-calendar .calendar-control a {

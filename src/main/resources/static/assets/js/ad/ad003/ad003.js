@@ -187,11 +187,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
             colCount : 2
         });
         this.gridObj.itemClick(function(data){
-            if(fnObj.gridView02.getData().length < 1)
-            {
-                ACTIONS.dispatch(ACTIONS.GET_CODE_DETAIL,data);
-            }
-            else
+            if(fnObj.gridView02.getData().length > 0)
             {
                 axDialog.confirm({
                     msg: axboot.getCommonMessage("AA006")
@@ -204,6 +200,10 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
                         ACTIONS.dispatch(ACTIONS.GET_CODE_DETAIL,data);
                     }
                 });
+            }
+            else
+            {
+                ACTIONS.dispatch(ACTIONS.GET_CODE_DETAIL,data);
             }
         });
         /**
@@ -261,6 +261,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
                 column.values = [];
                 fnObj.gridView02.gridObj.gridView.setColumn(column);
             }
+            fnObj.gridView02.commit();
         }
     },
     clearChild : function()

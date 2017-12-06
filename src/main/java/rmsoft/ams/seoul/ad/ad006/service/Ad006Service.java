@@ -93,12 +93,22 @@ public class Ad006Service extends BaseService {
             }
 
             if (adEntityColumn.isCreated()) {
-                adEntityColumn.setEntityColumnUuid(UUIDUtils.getUUID());
+                //adEntityColumn.setEntityColumnUuid(UUIDUtils.getUUID());
+                if(null == adEntityColumn.getGlossaryUuid())
+                    continue;
                 adEntityColumnRepository.save(adEntityColumn);
             } else if (adEntityColumn.isModified()) {
+                if(null == adEntityColumn.getGlossaryUuid())
+                    continue;
+
                 orgAdEntityColumn = adEntityColumnRepository.findOne(adEntityColumn.getId());
-                adEntityColumn.setInsertUuid(orgAdEntityColumn.getInsertUuid());
-                adEntityColumn.setInsertDate(orgAdEntityColumn.getInsertDate());
+                if(null != orgAdEntityColumn)
+                {
+                    adEntityColumn.setInsertUuid(orgAdEntityColumn.getInsertUuid());
+                    adEntityColumn.setInsertDate(orgAdEntityColumn.getInsertDate());
+                }
+
+
                 adEntityColumnRepository.save(adEntityColumn);
             } else if (adEntityColumn.isDeleted()) {
                 if (mapper.checkEntityColumn(adEntityColumn) > 0) {

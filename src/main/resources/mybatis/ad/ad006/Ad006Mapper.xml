@@ -10,8 +10,8 @@
       SELECT ENTITY_TYPE_UUID  as  entityTypeUuid
             , ENTITY_TYPE_CODE  as  entityType
             , ENTITY_TYPE_NAME  as  entityName
-            , DESCRIPTION       as  description
-            , NOTES             as  netes
+            , DESCRIPTION       as  "description"
+            , NOTES             as  "notes"
             , USE_YN            as  useYN
             , AUDIT_YN          as  auditYN
             ]]>
@@ -37,13 +37,13 @@
         <if test="null != entityType and '' != entityType">
             <![CDATA[
             AND
-            ENTITY_TYPE_CODE = LIKE '%'||#{entityType} ||'%'
+            ENTITY_TYPE_CODE LIKE '%' || #{entityType} || '%'
           ]]>
         </if>
         <if test="null != entityName and '' != entityName">
             <![CDATA[
             AND
-            ENTITY_TYPE_NAME LIKE '%'||#{entityName} ||'%'
+            ENTITY_TYPE_NAME LIKE '%' || #{entityName} || '%'
           ]]>
         </if>
         <if test="null != useYN and '' != useYN">

@@ -17,7 +17,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             data: $.extend({}, {pageSize: 1000}, this.formView.getData()),
             callback: function (res) {
                 fnObj.gridView01.setData(res.list);
-
+                fnObj.gridView01.resetCurrent();
                 if (res.list.length > 0) {
                     ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, res.list[0]);
                 } else {
@@ -530,11 +530,12 @@ function getFormattedDate(date, isStart) {
 }
 
 function checkDate(date) {
+    var result = true;
     var strValue = date;
     var chk1 = /^(19|20)\d{2}-([1-9]|1[012])-([1-9]|[12][0-9]|3[01])$/;
     var chk2 = /^(19|20)\d{2}\/([0][1-9]|1[012])\/(0[1-9]|[12][0-9]|3[01])$/;
     if (strValue == "") { // 공백이면 무시
-        return true;
+        return result;
     }
 //-------------------------------------------------------------------------------
 // 유효성 검사- 입력형식에 맞게 들왔는지 // 예) 2000-1-1, 2000-01-01 2가지 형태 지원
@@ -542,8 +543,9 @@ function checkDate(date) {
     if (chk1.test(strValue) == false && chk2.test(strValue) == false) { // 유효성 검사에 둘다 성공하지 못했다면
         //alert("1999-1-1 형식 또는 \r\n1999-01-01 형식으로 날자를 입력해주세요.");
         axToast.push(axboot.getCommonMessage("AA011"));
+        result = false;
 
-        return false;
     }
+    return result;
 }
 

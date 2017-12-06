@@ -39,6 +39,7 @@
                 AND Z.USE_YN = #{useYn}
             </if>
         </where>
+        ORDER BY Z.WORKFLOW_NAME
     </select>
 
     <select id="findWorkflowJob" resultType="Wf00202VO" parameterType="String"

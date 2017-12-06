@@ -28,6 +28,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                     return;
                 }
                 fnObj.gridView01.setData(res.list);
+                fnObj.gridView01.resetCurrent();
                 fnObj.gridView01.disabledColumn();
                 isDetailChanged = false;
                 ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1);
@@ -116,6 +117,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                     if(isDetailChanged){
                         isDetailChanged = false;
                         ACTIONS.dispatch(ACTIONS.TOP_GRID_DETAIL_PAGE_SAVE);
+                        fnObj.gridView01.commit();
                     }
                     result = true;
                 }

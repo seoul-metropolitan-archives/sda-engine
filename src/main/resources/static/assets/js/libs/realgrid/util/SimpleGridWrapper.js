@@ -1,4 +1,5 @@
 var SimpleGridWrapper = function (p_id,p_rootContext) {
+
     var _this = GridWrapper.call(this,p_id,p_rootContext);
     var _gridDefaultOption = this.option;
     var init = function () {
@@ -155,7 +156,8 @@ SimpleGridWrapper.prototype.defaultBind = function()
         if(columnInfoData.dataType == "combo")
         {
             grid.commit(true);
-            var newValue = gridWrapper.getSelectedData()[index.fieldName];
+            var selectData = gridWrapper.getSelectedData();
+            var newValue = selectData[index.fieldName];
             var selectedData = "";
             if(newValue)
             {
@@ -168,7 +170,9 @@ SimpleGridWrapper.prototype.defaultBind = function()
                     }
                 }
             }
-            grid.setValue(index.dataRow,index.fieldName, selectedData);
+            selectData[index.fieldName] = selectedData;
+            grid.setValue(index.itemIndex,index.fieldName, selectedData);
+            grid.commit(true);
 
         }
         else if(columnInfoData.dataType == "check")

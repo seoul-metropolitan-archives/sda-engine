@@ -95,16 +95,17 @@ var ad00602 =
                     fontBold: false
                 }},
                 columnList: [
-                   /* {
+                    {
                         sortNo: 6,
                         name: "columnName",
-                        text: "Columnname",
+                        text: "Column Name",
                         width : 150,
                         editable: false,
                         dataType: "text",
                         visible: true,
                         disable: true
-                    },*/
+                    },
+                    /*
                     {
                         sortNo: 7,
                         name: "comments",
@@ -115,6 +116,7 @@ var ad00602 =
                         visible: true,
                         disable: true
                     },
+                    */
                     {
                         sortNo: 8,
                         name: "dataType2",

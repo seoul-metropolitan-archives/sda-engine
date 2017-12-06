@@ -14,7 +14,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             data: $.extend({}, {pageSize: 1000}, this.formView.getData()),
             callback: function (res) {
                 fnObj.gridView01.setData(res.list);
-
+                fnObj.gridView01.resetCurrent();
                 if (res.list.length > 0) {
                     ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, res.list[0]);
                 } else {
@@ -58,7 +58,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 url: "/api/v1/wf002/01/save",
                 data: JSON.stringify(workflowist),
                 callback: function (res) {
-                    fnObj.gridView01.gridObj.commit();
+                    fnObj.gridView01.commit();
                 }
             })
             .call({
@@ -66,7 +66,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 url: "/api/v1/wf002/02/save",
                 data: JSON.stringify(workflowJobList),
                 callback: function (res) {
-                    fnObj.gridView02.gridObj.commit();
+                    fnObj.gridView02.commit();
                 }
             })
             .done(function () {
@@ -233,8 +233,8 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
         }
     },
     clearChild : function(){
+        fnObj.gridView02.gridObj.gridView.cancel();
         fnObj.gridView02.clearData();
-        fnObj.gridView02.gridView.cancel();
     }
 
 });
