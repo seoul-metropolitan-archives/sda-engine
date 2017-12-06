@@ -24,7 +24,7 @@ var axboot = {};
 axboot.def = {
     "pageFunctionName": "fnObj",
     "iframeLoadingMsg": '<i class="cqc-chequer ax-loading-icon lg"></i>',
-    "dialogTitle": "Confirm Dialog"
+    "dialogTitle": "Confirm"
 };
 
 /**
@@ -2463,8 +2463,8 @@ axboot.baseView =
             $(".bdb").delegate("#inquiry", "click", function () {
                 _this.inquiry();
             });
-            $(".bdb").delegate("#save", "click", function () {
-                _this.save();
+            $(".bdb").delegate("#save", "click", function (e) {
+                _this.save(e);
             });
             $(".bdb").delegate("#cancel", "click", function () {
                 _this.cancel();
@@ -2499,12 +2499,12 @@ axboot.baseView =
                         $(currentTag).focus();
                 } else if (e.ctrlKey && e.altKey && e.keyCode == 83) {
 
-                    _this.save();
+                    _this.save(e);
                 }
 
             });
         }
-        , save: function () {
+        , save: function (event) {
         if (ACTIONS && ACTIONS.PAGE_SAVE)
             ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
         }
@@ -2599,6 +2599,7 @@ axboot.gridView = {
     /*이벤트 걸어주는 함수*/
     bindEvent: function () {
         this.gridObj.addRowBeforeEvent(this.addRowBeforeEvent);
+
         if (this.parentsGrid)
             this.gridObj.addRowBeforeEvent(this.addRowBeforeEventForChildGrid);
 
@@ -2616,7 +2617,7 @@ axboot.gridView = {
     },
     /*데이터 변동사항에 대한 체크 ㅎ마수*/
     isDataChanged: function () {
-        if (this.gridObj.isDataChanged()) {
+        if (this.gridObj && this.gridObj.isDataChanged()) {
             return true;
         } else {
             return false;
@@ -2689,13 +2690,33 @@ axboot.gridView = {
         }
 
         var item = grid.getCurrent();
+        var generateUuid = false;
+        var currentData = undefined;
         for(var i = 0; i < itemIndex.length; i++)
         {
             if (_this.parentsGrid) {
                 _this.gridObj.setValue(itemIndex[i], _this.parentsUuidFieldName, _this.parentsGrid.getUUID());
+                currentData = _this.gridObj.dataProvider.getJsonRows(itemIndex[i],itemIndex[i]);
+                if(currentData[0][key])
+                {
+                    generateUuid = false;
+                }
+                else
+                    generateUuid = true;
                 //data[this.gridObj.getFieldIndex(this.parentsUuidFieldName)] = this.parentsGrid.getUUID();
             }
             else {
+                currentData = _this.gridObj.dataProvider.getJsonRows(itemIndex[i],itemIndex[i]);
+                if(currentData[0][key])
+                {
+                    generateUuid = false;
+                }
+                else
+                    generateUuid = true;
+            }
+
+            if(generateUuid)
+            {
                 axboot.ajax({
                     url: "/api/v1/common/getUUID",
                     type: "POST",
@@ -2706,6 +2727,7 @@ axboot.gridView = {
                 });
                 _this.gridObj.setValue(itemIndex[i], key, uuid);
             }
+            generateUuid = false;
         }
 
     },
@@ -2729,6 +2751,10 @@ axboot.gridView = {
         var column = wrapperObj.columnByName(key);
         column.defaultValue = uuid;
         wrapperObj.setColumn(column);
+    },
+    customAddRowBeforeEvent : function()
+    {
+
     },
     addRowAfterEvent : function(_event){
         this.gridObj.addRowAfterEvent(_event);

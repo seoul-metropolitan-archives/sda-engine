@@ -11,6 +11,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             data: JSON.stringify(fnObj.searchView.getData()),
             callback: function (res) {
                 console.log(res);
+                fnObj.gridView01.resetCurrent();
                 fnObj.gridView01.setData(res.list);
             },
             options: {

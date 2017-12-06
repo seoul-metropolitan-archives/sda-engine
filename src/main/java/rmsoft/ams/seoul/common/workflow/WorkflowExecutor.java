@@ -27,7 +27,9 @@ public class WorkflowExecutor extends ClassLoader {
 
     private Map<String, Object> parameterMap = null;
 
-    public void invokeJobProcess(Wf00302VO wf00302VO) {
+    public WorkflowResponse invokeJobProcess(Wf00302VO wf00302VO) {
+        WorkflowResponse callResult = new WorkflowResponse();
+
         try {
 
             File[] jarFiles = new File(nativeLibrary).listFiles(
@@ -62,7 +64,15 @@ public class WorkflowExecutor extends ClassLoader {
                 Object parameterObject = parameterMap.get(keys.get(j));
 
                 if (parameterObject instanceof String) {
-                    method = loadedMyClass.getMethod("set" + makeMethodName(keys.get(j)), new Class[]{String.class});
+                    if (parameterObject.equals("true") || parameterObject.equals("false")) {
+                        parameterObject = Boolean.parseBoolean(parameterObject.toString());
+                        method = loadedMyClass.getMethod("set" + makeMethodName(keys.get(j)), new Class[]{Boolean.class});
+                    } else if (isNumber(parameterObject.toString())) {
+                        parameterObject = Integer.parseInt(parameterObject.toString());
+                        method = loadedMyClass.getMethod("set" + makeMethodName(keys.get(j)), new Class[]{Integer.class});
+                    } else {
+                        method = loadedMyClass.getMethod("set" + makeMethodName(keys.get(j)), new Class[]{String.class});
+                    }
                 } else if (parameterObject instanceof Integer) {
                     method = loadedMyClass.getMethod("set" + makeMethodName(keys.get(j)), new Class[]{Integer.class});
                 } else if (parameterObject instanceof Boolean) {
@@ -78,12 +88,19 @@ public class WorkflowExecutor extends ClassLoader {
             Method runMethod = loadedMyClass.getMethod("runProcess");
             System.out.println("Invoked Run Process method");
 
-            runMethod.invoke(myClassObject);
+            Object resultObject = runMethod.invoke(myClassObject);
+            callResult = (WorkflowResponse) resultObject;
+
         } catch (ClassNotFoundException e) {
             log.error("Workflow Process Executor Error", e);
+            callResult.setSuccess(false);
+            callResult.setMessage(e.getMessage());
         } catch (Exception e) {
             log.error("Workflow Process Service Error", e);
+            callResult.setMessage(e.getMessage());
         }
+
+        return callResult;
     }
 
     private Map<String, Object> getParameterMap(Wf00302VO wf00302VO) {
@@ -103,9 +120,19 @@ public class WorkflowExecutor extends ClassLoader {
     public String makeMethodName(String methodName) {
         String tmpName = "";
 
-        tmpName = methodName.toLowerCase();
-        tmpName = tmpName.substring(0, 1).toUpperCase() + tmpName.substring(1, tmpName.length());
+        tmpName = methodName.substring(0, 1).toUpperCase() + methodName.substring(1, methodName.length());
 
         return tmpName;
+    }
+
+    public boolean isNumber(String str) {
+        boolean result = false;
+        try {
+            Double.parseDouble(str);
+            result = true;
+        } catch (Exception e) {
+
+        }
+        return result;
     }
 }

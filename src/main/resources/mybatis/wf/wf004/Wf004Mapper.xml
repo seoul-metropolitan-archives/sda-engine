@@ -66,6 +66,8 @@
             Z1.JOB_UUID AS jobUuid,
             Z1.JOB_NAME AS jobName,
             Z1.API AS api,
+            Z1.SKIP_YN AS skipYn,
+            Z1.TERMINATE_YN AS terminateYn,
             Z1.START_DATE AS startDate,
             Z1.END_DATE AS endDate,
             Z1.MESSAGE AS message

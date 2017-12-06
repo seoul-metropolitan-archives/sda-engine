@@ -15,6 +15,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             data : JSON.stringify(data),
             async : false,
             callback: function (res) {
+                fnObj.gridView01.resetCurrent();
                 fnObj.gridView01.setData(res.list);
                 fnObj.gridView02.clear();
                 ACTIONS.dispatch(ACTIONS.GET_CODE_DETAIL,res.list[0]);
@@ -24,7 +25,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     },
     GET_CODE_DETAIL : function(caller, act, data)
     {
-        if(!data && !data["codeHeaderUuid"])
+        if(!data || !data["codeHeaderUuid"])
             return ;
         axboot.ajax({
             url : "/api/v1/ad/ad003/getCodeDetailList"
@@ -186,24 +187,29 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
             colCount : 2
         });
         this.gridObj.itemClick(function(data){
-            if(fnObj.gridView02.getData().length < 1)
-            {
-                ACTIONS.dispatch(ACTIONS.GET_CODE_DETAIL,data);
-            }
-            else
+            if(fnObj.gridView02.getData().length > 0)
             {
                 axDialog.confirm({
-                    msg: "변경사항이 있습니다. 저장하시겠습니까?"
+                    msg: axboot.getCommonMessage("AA006")
                 },function() {
                     if(this.key == "ok")
                     {
                         ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
+                        ACTIONS.dispatch(ACTIONS.GET_CODE_DETAIL,data);
                     }else {
                         ACTIONS.dispatch(ACTIONS.GET_CODE_DETAIL,data);
                     }
                 });
             }
+            else
+            {
+                ACTIONS.dispatch(ACTIONS.GET_CODE_DETAIL,data);
+            }
         });
+        /**
+         *
+         * Single Pasted시 데이터에 대한 영향이 간다
+         */
         this.gridObj.onCellEdited(function(gridWrapper,grid)
         {
             grid.commit(true);
@@ -232,6 +238,32 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
 
         });
     },
+    popupCallback : function(grid,data)
+    {
+        grid.commit(true);
+        var parentData = fnObj.gridView01.gridObj.getSelectedData();
+
+        var index = grid.getCurrent();
+
+        if(index.fieldName.indexOf("attribute") > -1)
+        {
+            var parentColumnName = index.fieldName;
+            var cnt = fnObj.gridView02.gridObj.getRowCnt();
+            for(var rowIndex = 0; rowIndex < cnt.length; rowIndex++)
+            {
+                fnObj.gridView02.gridObj.gridView.setValue(rowIndex,index.fieldName.replace("Str",""),"");
+            }
+            fnObj.gridView02.gridObj.commit(true);
+            if(!parentData[parentColumnName] || "" == parentColumnName[parentColumnName])
+            {
+                var column = fnObj.gridView02.gridObj.gridView.columnByName(index.fieldName.replace("Str",""));
+                column.labels = [];
+                column.values = [];
+                fnObj.gridView02.gridObj.gridView.setColumn(column);
+            }
+            fnObj.gridView02.commit();
+        }
+    },
     clearChild : function()
     {
         fnObj.gridView02.gridObj.gridView.cancel();
@@ -257,60 +289,73 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
             colCount : 2
         });
 
-        this.gridObj.onDataCellClicked(function(grid)
+        this.gridObj.onDataCellClicked(this.setAttribute);
+    },
+    setAttribute : function(grid)
+    {
+        var parentData = fnObj.gridView01.gridObj.getSelectedData();
+
+
+        var index = grid.getCurrent();
+
+        if(index.fieldName.indexOf("attribute") > -1)
         {
-            var parentData = fnObj.gridView01.gridObj.getSelectedData();
+            var parentColumnName = index.fieldName + "Code";
 
-
-            var index = grid.getCurrent();
-
-            if(index.fieldName.indexOf("attribute") > -1)
+            var column = grid.columnByName(index.fieldName);
+            if(parentData[parentColumnName] && "" != parentData[parentColumnName])
             {
-                var parentColumnName = index.fieldName + "Code";
-
-                var column = grid.columnByName(index.fieldName);
-                if(parentData[parentColumnName] && "" != parentData[parentColumnName])
-                {
-                    column.labels = axboot.commonCodeFilter(parentData[parentColumnName]).nameArr;
-                    column.values = axboot.commonCodeFilter(parentData[parentColumnName]).codeArr;
-                }
-                else {
-                    column.labels = [];
-                    column.values = [];
-                }
-
-
-                grid.setColumn(column);
+                column.labels = axboot.commonCodeFilter(parentData[parentColumnName]).nameArr;
+                column.values = axboot.commonCodeFilter(parentData[parentColumnName]).codeArr;
+            }
+            else {
+                column.labels = [];
+                column.values = [];
             }
 
-
-        });
-
+            grid.setColumn(column);
+        }
     },
     clear : function () {
-        this.setData([]);
+        this.gridObj.setData("set",[]);
     },
     setData : function(list)
     {
-        var columnList = ["attribute01","attribute02","attribute03","attribute04","attribute05","attribute06","attribute07","attribute08","attribute09","attribute10"]
+        var columnList = ["attribute01Code","attribute02Code","attribute03Code","attribute04Code","attribute05Code","attribute06Code","attribute07Code","attribute08Code","attribute09Code","attribute10Code"]
         var data = fnObj.gridView01.getCurrentData();
-        var fieldIndexs = new Array();
 
-        for(var i = 0; i < columnList.length; i++)
-        {
-            fieldIndexs.push(fnObj.gridView01.gridObj.getFieldIndex(columnList[i]));
-        }
-
+        if(!data)
+            return ;
 
         var getLabelNValue = function(code)
         {
             return {label : axboot.commonCodeFilter(code).nameArr,values :axboot.commonCodeFilter(code).codeArr}
         }
+
+        var column = undefined;
+        var attrData = undefined;
+        for(var i = 0; i < columnList.length ;i++)
+        {
+            if(data[columnList[i]] && "" != data[columnList[i]])
+            {
+                try
+                {
+                    attrData = getLabelNValue(data[columnList[i]]);
+                    column = this.gridObj.gridView.columnByName(columnList[i].replace("Code",""));
+                    column.labels = attrData.label;
+                    column.values = attrData.values;
+                    this.gridObj.gridView.setColumn(column);
+                }catch(exception)
+                {
+
+                }
+            }
+        }
+        this.gridObj.setData("set",list);
         /*
         var column = this.gridObj.columnByName(key);
-        this.gridObj.gridView.setColumn(column);
+
         */
-        this.gridObj.setData("set",list);
     }
     /*
     addRowBeforeEvent : function()

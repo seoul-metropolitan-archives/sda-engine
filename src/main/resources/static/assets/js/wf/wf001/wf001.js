@@ -13,7 +13,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             data: $.extend({}, {pageSize: 1000}, this.formView.getData()),
             callback: function (res) {
                 fnObj.gridView01.setData(res.list);
-
+                fnObj.gridView01.resetCurrent();
                 if (res.list.length > 0) {
                     ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, res.list[0]);
                 } else {
@@ -57,7 +57,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 url: "/api/v1/wf001/01/save",
                 data: JSON.stringify(jobList),
                 callback: function (res) {
-                    fnObj.gridView01.gridObj.commit();
+                    fnObj.gridView01.commit();
                 }
             })
             .call({
@@ -65,7 +65,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 url: "/api/v1/wf001/02/save",
                 data: JSON.stringify(parameterList),
                 callback: function (res) {
-                    fnObj.gridView02.gridObj.commit();
+                    fnObj.gridView02.commit();
                 }
             })
             .done(function () {
@@ -225,9 +225,8 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
                 }, function () {
                     if (this.key == "ok") {
                         ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
-                    } else {
-                        ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, data);
                     }
+                    ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, data);
                 });
             } else {
                 ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, data);
@@ -269,6 +268,9 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
         this.gridObj.onCellEdited(function (gridWrapper, grid, itemIndex, dataRow, field) {
             _this.gridObj.setCustomCellStyleRow(gridWrapper, grid, dataRow,"disable", function (gridWrapper, row) {
                 var result = false;
+                if(!row)
+                    return true;
+
                 for (var rowIndex = 0; rowIndex < enableList.length; rowIndex++) {
                     if (row["inputMethodUuid"] == enableList[rowIndex]) {
                         result = false;

@@ -5,18 +5,16 @@
 package rmsoft.ams.seoul.rms.ingest;
 
 
-import io.onsemiro.core.context.AppContextManager;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.stereotype.Service;
+import rmsoft.ams.seoul.common.workflow.WorkflowResponse;
 
 @Slf4j
 @Service
 public class ProcessIngestProcedure {
-    @Autowired
     private JdbcTemplate jdbcTemplate;
 
     private static String procedureName = "AD_SEOUL_ARCHIVE_CONV_T.main";
@@ -33,13 +31,15 @@ public class ProcessIngestProcedure {
         this.procedureName = procedureName;
     }
 
-    public boolean runProcess() {
-        boolean isSuccess = false;
+    public WorkflowResponse runProcess() {
+        WorkflowResponse workflowResult = new WorkflowResponse();
 
         try {
-            if (this.jdbcTemplate == null) {
+           /*if (this.jdbcTemplate == null) {
                 this.jdbcTemplate = AppContextManager.getBean(JdbcTemplate.class);
-            }
+            }*/
+
+            this.jdbcTemplate = new JdbcTemplate(getDataSource());
 
             if (StringUtils.isEmpty(procedureName)) {
                 throw new NullPointerException("procedure name is null");
@@ -48,15 +48,16 @@ public class ProcessIngestProcedure {
             // Call Procedure
             callProcedure(procedureName);
 
-            isSuccess = true;
+            workflowResult.setSuccess(true);
+            workflowResult.setMessage("Success");
 
         } catch (Exception e) {
             log.error("Process Injest Procedure service Error", e);
-            isSuccess = false;
-
+            workflowResult.setSuccess(false);
+            workflowResult.setMessage(e.getMessage());
         } finally {
-            log.error("Process Injest Procedure service Terminated");
-            return isSuccess;
+            log.info("Process Injest Procedure service Terminated");
+            return workflowResult;
         }
     }
 

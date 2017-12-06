@@ -9,7 +9,6 @@ import io.onsemiro.core.api.response.ApiResponse;
 import io.onsemiro.core.code.ApiStatus;
 import io.onsemiro.core.domain.BaseService;
 import io.onsemiro.core.parameter.RequestParams;
-import io.onsemiro.utils.DateUtils;
 import io.onsemiro.utils.ModelMapperUtils;
 import io.onsemiro.utils.SessionUtils;
 import io.onsemiro.utils.UUIDUtils;
@@ -21,7 +20,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import rmsoft.ams.seoul.common.domain.*;
 import rmsoft.ams.seoul.common.repository.*;
+import rmsoft.ams.seoul.common.workflow.JobResultStatus;
 import rmsoft.ams.seoul.common.workflow.WorkflowManager;
+import rmsoft.ams.seoul.common.workflow.WorkflowResultStatus;
 import rmsoft.ams.seoul.utils.CommonCodeUtils;
 import rmsoft.ams.seoul.wf.wf003.dao.Wf003Mapper;
 import rmsoft.ams.seoul.wf.wf003.vo.*;
@@ -136,7 +137,14 @@ public class Wf003Service extends BaseService {
     public Page<Wf00302VO> findWorkflowJob(Pageable pageable, RequestParams<Wf00302VO> requestParams) {
         String filter = requestParams.getString("filter", "");
 
-        return filter(wf003Mapper.findWorkflowJob(requestParams.getString("workflowUuid")), pageable, filter, Wf00302VO.class);
+        List<Wf00302VO> wf00302VOList = wf003Mapper.findWorkflowJob(requestParams.getString("workflowUuid"));
+
+        wf00302VOList.forEach(job -> {
+            job.setParameterList(wf003Mapper.findParameter(job.getJobUuid()));
+        });
+
+
+        return filter(wf00302VOList, pageable, filter, Wf00302VO.class);
     }
 
     /**
@@ -244,7 +252,6 @@ public class Wf003Service extends BaseService {
     /**********************************************************************************
      *  Run Process
      **********************************************************************************/
-    @Transactional
     public ApiResponse runProcess(Wf00303VO requestParams) {
         // Workflow Result에 등록
         WfWorkflowResult wfWorkflowResult = new WfWorkflowResult();
@@ -252,10 +259,12 @@ public class Wf003Service extends BaseService {
         wfWorkflowResult.setWorkflowUuid(requestParams.getWorkflowUuid());
         wfWorkflowResult.setWorkflowName(requestParams.getWorkflowName());
         wfWorkflowResult.setBatchId(wf003Mapper.getBatchId());
-        wfWorkflowResult.setStatusUuid(getStatusUuid("CD131", "PENDING"));
+        wfWorkflowResult.setStatusUuid(getStatusUuid("CD131", WorkflowResultStatus.초기상태.getCode()));
         wfWorkflowResult.setExecuterUuid(SessionUtils.getCurrentLoginUserUuid());
         wfWorkflowResult.setMenuUuid(requestParams.getMenuUuid());
-        wfWorkflowResult.setStartDate(DateUtils.getTimestampNow());
+
+        // 결과 처리를 위한 uuid 저장
+        requestParams.setWorkflowResultUuid(wfWorkflowResult.getWorkflowResultUuid());
 
         wfWorkflowResultRepository.save(wfWorkflowResult);
 
@@ -279,8 +288,10 @@ public class Wf003Service extends BaseService {
                     wfJobResult.setSkipYn(wfWorkflowJob.getSkipYn());
                     wfJobResult.setTerminateYn(wfWorkflowJob.getTerminateYn());
                     wfJobResult.setBatchId(wfWorkflowResult.getBatchId());
-                    wfJobResult.setStatusUuid(getStatusUuid("CD130", "PENDING"));
-                    wfJobResult.setStartDate(DateUtils.getTimestampNow());
+                    wfJobResult.setStatusUuid(getStatusUuid("CD130", JobResultStatus.초기상태.getCode()));
+
+                    // 결과 처리를 위한 uuid 저장
+                    wfWorkflowJob.setJobResultUuid(wfJobResult.getJobResultUuid());
 
                     wfJobResultRepository.save(wfJobResult);
 
@@ -310,6 +321,9 @@ public class Wf003Service extends BaseService {
                                 wfParameterResult.setRequiredYn(wfParameterOne.getRequiredYn());
 
                                 wfParameterResultRepository.save(wfParameterResult);
+
+                                // 결과 처리를 위한 uuid 저장
+                                wfParameter.setParameterResultUuid(wfParameterResult.getParameterResultUuid());
 
                                 // Parameter Value 셋팅
                                 parameterMap.put(wfParameterResult.getParameterName(), wfParameterResult.getValue());

@@ -33,13 +33,13 @@ public class Ad002Service extends BaseService{
         AdMessage orgAdMessage = null;
         for (AdMessage adMessage : adMessageList) {
             if (adMessage.isCreated()) {
-                adMessage.setMessageUuid(UUIDUtils.getUUID());
+                //adMessage.setMessageUuid(UUIDUtils.getUUID());
                 adMessageRepository.save(adMessage);
             } else if (adMessage.isModified()) {
                 orgAdMessage = findOneMessage(adMessage);
                 adMessage.setInsertUuid(orgAdMessage.getInsertUuid());
                 adMessage.setInsertDate(orgAdMessage.getInsertDate());
-                adMessageRepository.save(adMessage);
+                adMessageRepository.save(adMessage) ;
             } else if (adMessage.isDeleted()) {
                 adMessageRepository.delete(adMessage);
             }

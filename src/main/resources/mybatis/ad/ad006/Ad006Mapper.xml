@@ -6,40 +6,48 @@
 <mapper namespace="rmsoft.ams.seoul.ad.ad006.dao.Ad006Mapper">
 
     <select id="searchEntityType" resultType="Ad00601VO" parameterType="Ad00601VO" statementType="PREPARED">
-    <![CDATA[
+        <![CDATA[
       SELECT ENTITY_TYPE_UUID  as  entityTypeUuid
             , ENTITY_TYPE_CODE  as  entityType
             , ENTITY_TYPE_NAME  as  entityName
-            , DESCRIPTION       as  description
-            , NOTES             as  netes
+            , DESCRIPTION       as  "description"
+            , NOTES             as  "notes"
             , USE_YN            as  useYN
             , AUDIT_YN          as  auditYN
             ]]>
-            , <include refid="Common.UserName"><property name="userUuid" value="INSERT_UUID"/></include> as insertUuid
-    <![CDATA[
+        ,
+        <include refid="Common.UserName">
+            <property name="userUuid" value="INSERT_UUID"/>
+        </include>
+        as insertUuid
+        <![CDATA[
             , INSERT_DATE       as  insertDate
             ]]>
-            , <include refid="Common.UserName"><property name="userUuid" value="UPDATE_UUID"/></include> as updateUuid
-    <![CDATA[
+        ,
+        <include refid="Common.UserName">
+            <property name="userUuid" value="UPDATE_UUID"/>
+        </include>
+        as updateUuid
+        <![CDATA[
             , UPDATE_DATE       as  updateDate
             FROM AD_ENTITY_TYPE
         WHERE
         1=1
             ]]>
         <if test="null != entityType and '' != entityType">
-    <![CDATA[
+            <![CDATA[
             AND
-            ENTITY_TYPE_CODE = #{entityType}
+            ENTITY_TYPE_CODE LIKE '%' || #{entityType} || '%'
           ]]>
         </if>
         <if test="null != entityName and '' != entityName">
-    <![CDATA[
+            <![CDATA[
             AND
-            ENTITY_TYPE_NAME = #{entityName}
+            ENTITY_TYPE_NAME LIKE '%' || #{entityName} || '%'
           ]]>
         </if>
         <if test="null != useYN and '' != useYN">
-    <![CDATA[
+            <![CDATA[
             AND
             USE_YN = #{useYN}
           ]]>
@@ -49,6 +57,9 @@
 
     <select id="getEntityColumnList" resultType="Ad00602VO" parameterType="Ad00601VO" statementType="PREPARED">
         <![CDATA[
+
+
+
       SELECT Z2.ENTITY_COLUMN_UUID AS entityColumnUuid,
               NVL(Z2.ENTITY_TYPE_UUID,(SELECT ENTITY_TYPE_UUID FROM AD_ENTITY_TYPE WHERE ENTITY_TYPE_CODE = #{entityType})) AS entityTypeUuid,
               Z2.GLOSSARY_UUID AS glossaryUuid,
@@ -100,18 +111,30 @@
        WHERE Z1.COLUMN_NAME = Z2.TERM_CODE(+)
        ORDER BY Z1.COLUMN_ID
 
-            ]]>
+
+
+
+        ]]>
 
     </select>
 
     <select id="checkEntityType" resultType="int" parameterType="String" statementType="PREPARED">
         <![CDATA[
+
+
+
           SELECT COUNT(DISTINCT TABLE_NAME) FROM  ALL_TAB_COLUMNS WHERE TABLE_NAME = #{entityType}
-                ]]>
+
+
+
+        ]]>
     </select>
 
     <select id="checkEntityColumn" resultType="int" parameterType="AdEntityColumn" statementType="PREPARED">
         <![CDATA[
+
+
+
           SELECT COUNT(1)
             FROM
             ALL_TAB_COLUMNS Z1, AD_ENTITY_TYPE Z2, AD_GLOSSARY Z3
@@ -123,7 +146,10 @@
             Z2.ENTITY_TYPE_UUID = #{entityTypeUuid}
             AND
             Z3.GLOSSARY_UUID = #{glossaryUuid}
-                ]]>
+
+
+
+        ]]>
     </select>
 
 </mapper>

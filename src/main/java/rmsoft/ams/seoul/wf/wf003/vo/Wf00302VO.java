@@ -10,6 +10,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Wf00302VO
@@ -40,5 +41,11 @@ public class Wf00302VO extends BaseVO {
 
     private String useYn;
 
+    private String jobResultUuid;
+
+    private boolean checkParameter = false;
+
     private List<Wf00301_P0102VO> parameterList;
+
+    private Map<String, String> parameterMap;
 }

@@ -63,20 +63,24 @@
 </script>
 <script>
     $("docuemnt").ready(function(){
-        var setupFontFamily = "";
-        for(var i = 0; i < parent.COMMON_CONFIG.length; i++)
-        {
-            if(
-                "SYS_KO_FONT" == parent.COMMON_CONFIG[i]["configurationCode"]
-                ||"SYS_EN_FONT" == parent.COMMON_CONFIG[i]["configurationCode"]
-            )
-                setupFontFamily += parent.COMMON_CONFIG[i]["configurationValue"]+",";
+        $("docuemnt").ready(function(){
+            var setupFontFamily = "";
+            for(var i = 0; i < parent.COMMON_CONFIG.length; i++)
+            {
+                if(
+                    "SYS_FORM_FONT" == parent.COMMON_CONFIG[i]["configurationCode"]
+                )
+                    setupFontFamily += parent.COMMON_CONFIG[i]["configurationValue"]+",";
 
-        }
-        if(setupFontFamily != "")
-        {
-            $("#frameStyle").html("<style>*{font-family : "+setupFontFamily.substring(0,setupFontFamily.length-1)+" !important;</style>");
-        }
+            }
+            if(setupFontFamily != "")
+            {
+                $("#frameStyle")
+                    .html(
+                        "<style>*,body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, code, form, fieldset, legend, textarea, p, blockquote, th, td, input, select, textarea, button, table td{font-family : "+setupFontFamily.substring(0,setupFontFamily.length-1)+" !important;</style>"
+                    );
+            }
+        });
     });
 
 

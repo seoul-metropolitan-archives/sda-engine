@@ -4,45 +4,43 @@ var gridView = undefined;
 
 var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH: function (caller, act, data) {
-        var _this = this;
-
-        if (!data)
-            data = fnObj.formView.getData();
-
         axboot.ajax({
-            type: "POST",
+            type: "GET",
             url: "/api/v1/ad/ad006/searchEntityType",
-            data: JSON.stringify(data),
-            async: false,
+            data: $.extend({}, {pageSize: 1000}, fnObj.formView.getData()),
             callback: function (res) {
                 fnObj.gridView01.setData(res.list);
-                ACTIONS.dispatch(ACTIONS.GET_ENTITY_DETAIL, res.list[0]);
+                fnObj.gridView01.clearChild();
+                if(res.list.length > 0)
+                    ACTIONS.dispatch(ACTIONS.GET_ENTITY_DETAIL, res.list[0]);
+            },
+            options: {
+                onError: axboot.viewError
             }
         });
     },
     GET_ENTITY_DETAIL: function (caller, act, data) {
-        /*
-        if(!data["entityTypeUuid"])
-            return ;
-        */
         axboot.ajax({
-            url: "/api/v1/ad/ad006/getEntityColumnList"
-            , type: "POST"
-            , dataType: "JSON"
-            , data: JSON.stringify(data)
-            , callback: function (res) {
+            type: "GET",
+            url: "/api/v1/ad/ad006/getEntityColumnList",
+            data: $.extend({}, {pageSize: 1000}, data),
+            callback: function (res) {
                 fnObj.gridView02.setData(res.list);
+            },
+            options: {
+                onError: axboot.viewError
             }
         });
+        return false;
     },
     PAGE_SAVE: function (caller, act, data) {
-/*필수값 체크오류로 주석처리
-        if(
-            !fnObj.gridView01.validate()
-            || !fnObj.gridView02.validate()
-        )
-            return ;
-*/
+        /*필수값 체크오류로 주석처리
+                if(
+                    !fnObj.gridView01.validate()
+                    || !fnObj.gridView02.validate()
+                )
+                    return ;
+        */
         var entityTypeList = [].concat(fnObj.gridView01.getData());
         var entityColumnList = [].concat(fnObj.gridView02.getData());
 
@@ -56,11 +54,11 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 }
             })
             .call({
-                url : "/api/v1/ad/ad006/saveEntityColumn",
-                type : "post",
+                url: "/api/v1/ad/ad006/saveEntityColumn",
+                type: "post",
                 data: JSON.stringify(entityColumnList),
                 callback: function (res) {
-                    fnObj.gridView02.gridObj.commit();
+                    fnObj.gridView02.commit();
                 }
             })
             .done(function () {
@@ -225,7 +223,7 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
 fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     tagId: "realgrid1",
     entityName: "ENTITY_HEADER",
-    primaryKey : "entityTypeUuid",
+    primaryKey: "entityTypeUuid",
     initView: function () {
         var _this = this;
         this.initInstance();
@@ -254,9 +252,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
                     if (this.key == "ok") {
                         ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
                     }
-                    else {
-                        ACTIONS.dispatch(ACTIONS.GET_ENTITY_DETAIL, data);
-                    }
+                    ACTIONS.dispatch(ACTIONS.GET_ENTITY_DETAIL, data);
                 });
             }
         });
@@ -273,25 +269,17 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
 fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
     tagId: "realgrid2",
     entityName: "ENTITY_DETAIL",
-    primaryKey : "entityColumnUuid",
-    parentsUuidFieldName : "entityTypeUuid",
-    parentsGrid : fnObj.gridView01,
+    primaryKey: "entityColumnUuid",
+    parentsUuidFieldName: "entityTypeUuid",
+    parentsGrid: fnObj.gridView01,
     initView: function () {
         this.initInstance();
         console.log(ad00602.column_info);
         this.setColumnInfo(ad00602.column_info);
         this.makeGrid();
         this.gridObj.addRowBeforeEvent(this.addRowBeforeEvent);
-        this.gridObj.onRowsPasted(this.onRowsPasted);
         this.gridObj.setFixedOptions({
             colCount: 1
         })
     }
 });
-isDataChanged = function () {
-    if (fnObj.gridView01.isChangeData() == true || fnObj.gridView02.isChangeData() == true) {
-        return true;
-    } else {
-        return false;
-    }
-}

@@ -5,11 +5,11 @@
 package rmsoft.ams.seoul.common.domain;
 
 import io.onsemiro.core.annotations.Comment;
-import io.onsemiro.core.domain.SimpleJpaModel;
 import lombok.*;
 import org.apache.ibatis.type.Alias;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+import rmsoft.ams.seoul.common.workflow.WorkflowJpaModel;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -24,7 +24,7 @@ import java.sql.Timestamp;
 @Table(name = "WF_JOB_Result")
 @IdClass(WfJobResult.WfJobResultId.class)
 @Alias("WfJobResult")
-public class WfJobResult extends SimpleJpaModel<WfJobResult.WfJobResultId> {
+public class WfJobResult extends WorkflowJpaModel<WfJobResult.WfJobResultId> {
 
     @Id
     @Column(name = "JOB_RESULT_UUID", length = 36, nullable = false)
