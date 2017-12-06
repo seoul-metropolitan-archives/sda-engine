@@ -197,7 +197,7 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
     initView: function () {
         this.target = $("#formView01");
         this.model = new ax5.ui.binder();
-        //this.model.setModel(this.getDefaultData(), this.target);
+        this.model.setModel(this.getDefaultData(), this.target);
         this.modelFormatter = new axboot.modelFormatter(this.model); // 모델 포메터 시작
         this.initEvent();
     },
