@@ -7,6 +7,7 @@ package rmsoft.ams.seoul.common.workflow;
 import com.querydsl.core.types.Predicate;
 import io.onsemiro.utils.DateUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import rmsoft.ams.seoul.common.domain.QWfJobResult;
@@ -113,6 +114,7 @@ public class WorkflowProcess implements Runnable {
             }
 
         } catch (Exception e) {
+            errorLogging(e);
             log.error("Workflow Process Service Error", e);
         } finally {
             log.info("Thread with [{}] : {} is Terminated.", runThread.getId(), runThread.getName());
@@ -165,5 +167,22 @@ public class WorkflowProcess implements Runnable {
 
     public void stopProcess() {
         runThread.interrupt();
+    }
+
+    protected void errorLogging(Throwable throwable) {
+
+        if (log.isErrorEnabled()) {
+            Throwable rootCause = ExceptionUtils.getRootCause(throwable);
+
+            if (rootCause != null) {
+                throwable = rootCause;
+            }
+
+            if (throwable.getMessage() != null) {
+                log.error(throwable.getMessage(), throwable);
+            } else {
+                log.error("ERROR", throwable);
+            }
+        }
     }
 }

@@ -2,7 +2,6 @@ package rmsoft.ams.seoul.common.domain;
 
 import io.onsemiro.core.annotations.Comment;
 import io.onsemiro.core.domain.BaseJpaModel;
-import io.onsemiro.core.domain.SimpleJpaModel;
 import lombok.*;
 import org.apache.ibatis.type.Alias;
 import org.hibernate.annotations.DynamicInsert;
@@ -90,7 +89,9 @@ public class RcComponent extends BaseJpaModel<RcComponent.RcComponentId> {
     private String filePath;
 
     @Override
-    public RcComponentId getId() { return RcComponentId.of(componentUuid); }
+    public RcComponentId getId() {
+        return RcComponentId.of(componentUuid);
+    }
 
     @Embeddable
     @Data

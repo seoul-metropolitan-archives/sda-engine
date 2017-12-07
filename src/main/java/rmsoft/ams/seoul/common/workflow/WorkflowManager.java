@@ -5,6 +5,8 @@
 package rmsoft.ams.seoul.common.workflow;
 
 import io.onsemiro.core.context.AppContextManager;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Component;
 import rmsoft.ams.seoul.wf.wf003.vo.Wf00303VO;
@@ -12,6 +14,7 @@ import rmsoft.ams.seoul.wf.wf003.vo.Wf00303VO;
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 @Component
 public class WorkflowManager {
     private final static Map<String, Runnable> threadStopMap = new HashMap<>();
@@ -26,7 +29,8 @@ public class WorkflowManager {
             threadStopMap.put(batchId, workflowProcess);
             threadPoolTaskExecutor.execute(workflowProcess);
         } catch (Exception e) {
-            e.printStackTrace();
+            errorLogging(e);
+            log.error("WorkflowManager invokeProcess Error", e);
         }
     }
 
@@ -41,7 +45,25 @@ public class WorkflowManager {
                 threadStopMap.remove(batchId);
 
             } catch (Exception e) {
-                e.printStackTrace();
+                errorLogging(e);
+                log.error("WorkflowManager stopProcess Error", e);
+            }
+        }
+    }
+
+    protected void errorLogging(Throwable throwable) {
+
+        if (log.isErrorEnabled()) {
+            Throwable rootCause = ExceptionUtils.getRootCause(throwable);
+
+            if (rootCause != null) {
+                throwable = rootCause;
+            }
+
+            if (throwable.getMessage() != null) {
+                log.error(throwable.getMessage(), throwable);
+            } else {
+                log.error("ERROR", throwable);
             }
         }
     }

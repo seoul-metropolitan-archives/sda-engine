@@ -5,6 +5,7 @@
 package rmsoft.ams.seoul.common.workflow;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import rmsoft.ams.seoul.wf.wf003.vo.Wf00302VO;
@@ -92,10 +93,14 @@ public class WorkflowExecutor extends ClassLoader {
             callResult = (WorkflowResponse) resultObject;
 
         } catch (ClassNotFoundException e) {
+            errorLogging(e);
+
             log.error("Workflow Process Executor Error", e);
             callResult.setSuccess(false);
             callResult.setMessage(e.getMessage());
         } catch (Exception e) {
+            errorLogging(e);
+
             log.error("Workflow Process Service Error", e);
             callResult.setMessage(e.getMessage());
         }
@@ -134,5 +139,22 @@ public class WorkflowExecutor extends ClassLoader {
 
         }
         return result;
+    }
+
+    protected void errorLogging(Throwable throwable) {
+
+        if (log.isErrorEnabled()) {
+            Throwable rootCause = ExceptionUtils.getRootCause(throwable);
+
+            if (rootCause != null) {
+                throwable = rootCause;
+            }
+
+            if (throwable.getMessage() != null) {
+                log.error(throwable.getMessage(), throwable);
+            } else {
+                log.error("ERROR", throwable);
+            }
+        }
     }
 }

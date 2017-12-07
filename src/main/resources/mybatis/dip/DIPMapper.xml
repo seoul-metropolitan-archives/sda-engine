@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  ~ Copyright (c) 2017. RMSoft Co.,Ltd. All rights reserved
+  -->
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="rmsoft.ams.seoul.dip.DIPMapper">
+    <select id="findAllEntityType" resultType="java.util.HashMap" parameterType="String" statementType="PREPARED">
+        SELECT  Z2.ENTITY_TYPE_CODE as "tableName",
+                MAX(Z1.ENTITY_TYPE_UUID) as "entityTypeUuid"
+        FROM EX_EXPORT_HISTORY Z1,
+             AD_ENTITY_TYPE Z2
+        WHERE Z1.ENTITY_TYPE_UUID = Z2.ENTITY_TYPE_UUID
+          AND Z1.EXPORT_YN = 'N'
+          AND Z1.PK_COLUMN_CODE IS NOT NULL
+        GROUP BY Z2.ENTITY_TYPE_CODE , Z1.ENTITY_TYPE_UUID
+        ORDER BY Z2.ENTITY_TYPE_CODE
+    </select>
+    <select id="findAllEntityTypeData" resultType="java.util.HashMap" parameterType="String" statementType="PREPARED">
+        SELECT Z2.ENTITY_TYPE_CODE as "tableName",
+                Z1.KEY_UUID as "keyUuid",
+                Z1.PK_COLUMN_CODE as "pkColumnCode"
+        FROM EX_EXPORT_HISTORY Z1,
+             AD_ENTITY_TYPE Z2
+        WHERE Z1.ENTITY_TYPE_UUID = Z2.ENTITY_TYPE_UUID
+          AND Z1.ENTITY_TYPE_UUID = #{entityTypeUuid}
+          AND Z1.EXPORT_YN = 'N'
+          AND Z1.PK_COLUMN_CODE IS NOT NULL
+        ORDER BY Z2.ENTITY_TYPE_CODE
+    </select>
+    <select id="updateSendHistory" statementType="PREPARED">
+        UPDATE EX_EXPORT_HISTORY
+           SET EXPORT_YN = 'Y'
+    </select>
+
+</mapper>
