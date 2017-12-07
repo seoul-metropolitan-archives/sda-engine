@@ -97,6 +97,15 @@ fnObj.pageStart = function () {
         uuid = data.uuid;
         ACTIONS.dispatch(ACTIONS.PAGE_SEARCH,{aggregationUuid : data.uuid});
     }
+    if(data["navi"])
+    {
+        $("#navigatorArea").text(data["navi"]);
+    }
+    if(data["title"])
+    {
+        $("#title").text(data["title"]);
+    }
+
     _this.formView.initView();
     _this.treeView01.initView();
     _this.systemMetaArea.initView(uuid);
@@ -113,7 +122,7 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
     getDefaultData: function () {
         return $.extend({}, axboot.formView.defaultData, {useYn: ""});
     },
-    initView: function () {
+    initView: function (data) {
         this.target = $("#formView01");
         this.model = new ax5.ui.binder();
         this.model.setModel(this.getDefaultData(), this.target);
@@ -702,27 +711,26 @@ fnObj.treeView01 = axboot.viewExtend(axboot.commonView, {
     }
 });
 setFormData = function(data){
-    fnObj.formView.setFormData("rcHeadTitle",data.headTitle);
-    fnObj.formView.setFormData("rcTitle",data.name);
-    fnObj.formView.setFormData("rcPublishedStatus",data.publishedStatusUuid);
-    fnObj.formView.setFormData("rcLevel",data.levelUuid);
-    fnObj.formView.setFormData("rcDescription",data.description);
-    fnObj.formView.setFormData("rcNotes",data.notes);
-    fnObj.formView.setFormData("typeUuid",data.typeUuid);
-    fnObj.formView.setFormData("rcAuthor",data.author);
-    fnObj.formView.setFormData("rcFrom",data.parentAggregationName);
-    fnObj.formView.setFormData("rcAggregationCode",data.aggregationCode);
 
-    $("input[data-ax-path='descriptionStartDate']").val(getFormattedDate(data.descriptionStartDate));
-    $("input[data-ax-path='descriptionEndDate']").val(getFormattedDate(data.descriptionEndDate));
-
-    $("input[data-ax-path='creationStartDate']").val(getFormattedDate(data.creationStartDate));
-    $("input[data-ax-path='creationEndDate']").val(getFormattedDate(data.creationEndDate));
-
-    fnObj.formView.setFormData("rcProvenance",data.provenance);
-    fnObj.formView.setFormData("rcReferenceCode",data.referenceCode);
-    fnObj.formView.setFormData("rcCreator",data.creator);
-
+    console.log(data);
+    for(var columnName in data)
+    {
+        switch(columnName)
+        {
+            case "name":
+                fnObj.formView.setFormData("title",data[columnName]);
+                break;
+            case "descriptionStartDate":
+            case "descriptionEndDate":
+            case "creationStartDate":
+            case "creationEndDate":
+                $("input[data-ax-path='"+columnName+"']").val(getFormattedDate(data[columnName]));
+                break;
+            default:
+                fnObj.formView.setFormData(columnName,data[columnName]);
+                break;
+        }
+    }
 }
 
 function getFormattedDate(str) {

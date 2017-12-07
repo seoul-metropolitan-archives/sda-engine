@@ -23,7 +23,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     {
         axboot.ajax({
             url: "/rc/rc001/getGridData",
-            data: data,
+            data: $.extend({},data,fnObj.pageView.getPageInfo()),
             callback: function (res) {
                 console.log(res.list);
                 fnObj.gridView01.setData(res.list,true);
@@ -42,11 +42,16 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     {
         console.log(data);
         axboot.ajax({
-            url: "/rc/rc001/getAllNodes",
-            data: $.extend({},data,{isDisplayItem : true}),
+            url: "/rc/rc001/getAllNodeForPaging",
+            data: $.extend({},data,
+                {isDisplayItem : true}
+                ,
+                fnObj.pageView.getPageInfo()
+                ),
             async: false,
             callback: function (res) {
                 fnObj.iconView.setData(res.list,data.uuid == "");
+                fnObj.pageView.setPage(res);
             },
             options: {
                 onError: axboot.viewError
@@ -204,14 +209,14 @@ function smallView() {
 function exp_listView() {
     $(".explorer_list").css("display", "");
     $(".explorer_grid").css("display", "none");
-    $(".exp_detail").css("display", "");
+    //$(".exp_detail").css("display", "");
     ACTIONS.dispatch(ACTIONS.GET_SUBDATA,fnObj.naviView.getCurrent());
 }
 
 function exp_gridView() {
     $(".explorer_list").css("display", "none");
     $(".explorer_grid").css("display", "block");
-    $(".exp_detail").css("display", "none");
+    //$(".exp_detail").css("display", "none");
     ACTIONS.dispatch(ACTIONS.GET_GRID_DATA,fnObj.naviView.getCurrent());
 
 }
@@ -322,7 +327,7 @@ var fnObj = {
                             selectedData = selectedData[0];
                         var item = getMenu("add aggregation");
 
-                        item.menuParams = $.extend({},{type: "create"},selectedData);
+                        item.menuParams = $.extend({},{type: "create"},{navi : fnObj.naviView.getPathString()+" > "+selectedData["name"]},{title : ""},selectedData);
                         parentsObj.tabView.open(item);
                     }
                     break;
@@ -332,7 +337,7 @@ var fnObj = {
                         if(selectedData.length == 1)
                             selectedData = selectedData[0];
                         var item = getMenu("add item");
-                        item.menuParams = $.extend({},{type: "create"},{
+                        item.menuParams = $.extend({},{type: "create"},{navi : fnObj.naviView.getPathString()+" > "+selectedData["name"]},{title : ""},{
                             aggregationUuid : selectedData.uuid
                         });
                         parentsObj.tabView.open(item);
@@ -353,7 +358,7 @@ var fnObj = {
                         }
                         if(item != "")
                         {
-                            item.menuParams = $.extend({},{type: "create"},selectedData[0]);
+                            item.menuParams = $.extend({},{type: "create"},{navi : fnObj.naviView.getPathString()},{title : selectedData["name"]},selectedData[0]);
                             parentsObj.tabView.open(item);
                         }
                     }
@@ -372,7 +377,15 @@ var fnObj = {
                         }
                         if(item != "")
                         {
-                            item.menuParams = $.extend({},{type: "update"},{
+                            item.menuParams = $.extend({},{type: "update"},{navi : fnObj.naviView.getPathString()},{title : selectedData[0]["name"]},{
+                                parentUuid : selectedData[0].parentUuid,
+                                uuid : selectedData[0].uuid
+                            });
+                            parentsObj.tabView.open(item);
+                        }
+                        else
+                        {
+                            item.menuParams = $.extend({},{type: "update"},{navi : fnObj.naviView.getPathString()},{title : selectedData[0]["name"]},{
                                 aggregationUuid : selectedData[0].parentUuid,
                                 itemUuid : selectedData[0].uuid
                             });
@@ -398,6 +411,7 @@ var fnObj = {
         fnObj.naviView.iintView();
         fnObj.iconView.initView();
         fnObj.gridView01.initView();
+        fnObj.pageView.initView();
         ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
         ACTIONS.dispatch(ACTIONS.GET_SUBDATA,{uuid : ""});
     }
@@ -441,6 +455,13 @@ fnObj.naviView = axboot.viewExtend({
     {
         return {uuid : $(".navigator:first").attr("uuid")};
     },
+    getPathString : function(){
+        var pathStr = "";
+        $("#navigatorArea>span").each(function(idx){
+            pathStr += $(this).text();
+        });
+        return pathStr;
+    },
     clear : function()
     {
         $("#navigatorArea .navigator").each(function(idx)
@@ -454,6 +475,92 @@ fnObj.naviView = axboot.viewExtend({
     }
 
 });
+fnObj.pageView = axboot.viewExtend({
+    page : {
+        pageNumber:0,
+        pageSize:108
+    },
+    initView : function()
+    {
+        this.initEvent();
+    },
+    initEvent : function(){
+        var _this = this;
+        $(".page_no").delegate("a:not(.page_start,.page_prev,.page_next,.page_end)","click",function(){
+            _this.page.pageNumber = parseInt($(this).text())-1;
+            $(".page_no>a:not(.page_start,.page_prev,.page_next,.page_end)").removeClass("selec");
+            $(".page_no>a[pageNo='"+$(this).text()+"']").addClass("selec");
+            ACTIONS.dispatch(ACTIONS.GET_SUBDATA,fnObj.naviView.getCurrent());
+        });
+        $(".page_no>a.page_start,.page_no>a.page_prev,.page_no>a.page_next,.page_no>a.page_end").click(function(){
+            switch($(this).attr("class"))
+            {
+                case "page_start":
+                    _this.page.pageNumber = 0;
+                    break;
+                case "page_prev":
+                    if(_this.page.pageNumber < 10)
+                        _this.page.pageNumber = 0;
+                    else
+                        _this.page.pageNumber = _this.page.pageNumber - (_this.page.pageNumber % 10)  - 1;
+                    break;
+                case "page_next":
+                    if(_this.page.totalPages < 10)
+                        _this.page.pageNumber = _this.page.totalPages - 2;
+                    else
+                    _this.page.pageNumber = _this.page.pageNumber + 10 - (_this.page.pageNumber % 10);
+                    break;
+                case "page_end":
+                    _this.page.pageNumber = _this.page.totalPages - 1;
+                    break;
+            }
+            ACTIONS.dispatch(ACTIONS.GET_SUBDATA,fnObj.naviView.getCurrent());
+
+        });
+    },
+    resetPage : function()
+    {
+        this.page.pageNumber = 0;
+    },
+    setPage : function(page)
+    {
+
+        this.page = page;
+
+        var startPage = parseInt(page.pageNumber/10)*10 + 1;
+        var maxPage = startPage+10;
+        maxPage = page.totalPages < maxPage ? page.totalPages : maxPage;
+        if(maxPage > 10 && maxPage%10 != 1)
+            maxPage ++;
+        $(".page_no a:not(.page_start,.page_prev,.page_next,.page_end)").remove();
+        for(var i = startPage; i < maxPage; i++)
+        {
+            $(".page_no .page_next").before($("<a>").attr("pageNo",i).attr("href","#").text(i));
+        }
+        $(".page_no>a").each(function(){
+            if((page.pageNumber + 1) == $(this).text())
+                $(this).addClass("selec");
+            else
+                $(this).removeClass("selec");
+
+        });
+
+
+
+        /*
+        currentPage:0
+        pageSize:108
+        totalElements:10100
+        totalPages:94
+        */
+    },
+    getPageInfo : function(){
+        return {
+            pageNumber: this.page.pageNumber,
+            pageSize: this.page.pageSize
+        }
+    }
+})
 
 /*
 fnObj.detailView = axboot.viewExtend({
@@ -553,14 +660,14 @@ fnObj.iconView = axboot.viewExtend({
             $("#archiveType").prop("src",imgSrc);
 
             var reqData = {uuid : uuid};
-            setTimeout(function(){
+            //setTimeout(function(){
                 if(fnObj.iconView.isdbClk) {  return ;}
                 if(imgSrc.indexOf("file")>-1)
                     ACTIONS.dispatch(ACTIONS.GET_ITEM_INFO,reqData);
                 //else
                     //ACTIONS.dispatch(ACTIONS.GET_AGGREGATION_INFO,reqData);
 
-            },250);
+            //},250);
 
         });
         $("#iconListArea").delegate("div","dblclick",function(event){
@@ -586,9 +693,9 @@ fnObj.iconView = axboot.viewExtend({
             fnObj.naviView.setData({uuid : $(this).parents().eq(index).attr("uuid"),name : $(this).parents().eq(index).find(".titleTag").children().eq(0).text()});
             ACTIONS.dispatch(ACTIONS.GET_SUBDATA,{uuid:$(this).parents().eq(index).attr("uuid")});
             //fnObj.detailView.setData({});
-            setTimeout(function(){
+            //setTimeout(function(){
                 fnObj.iconView.isdbClk = false;
-            },300);
+            //},300);
 
         });
     },
@@ -805,7 +912,7 @@ fnObj.treeView01 = axboot.viewExtend(axboot.commonView, {
                     {
                         fnObj.naviView.setData(path[i]);
                     }
-
+                    fnObj.pageView.resetPage();
                     if($(".explorer_grid").css("display")=="none")
                         ACTIONS.dispatch(ACTIONS.GET_SUBDATA,reqData);
                     else

@@ -40,6 +40,80 @@
             AGGREGATION_UUID = #{uuid}
         </if>
     </select>
+
+
+    <sql id="iconSQL">
+        <![CDATA[
+            SELECT
+              Z1.AGGREGATION_UUID as uuid
+              , 1 as orderNo
+              , Z1.PARENT_AGGREGATION_UUID as parentUuid
+              , Z1.TITLE as name
+              , (SELECT LOWER (CODE_NAME) FROM AD_CODE_DETAIL WHERE CODE_DETAIL_UUID = Z1.TYPE_UUID) as nodeType
+              , (SELECT LEVEL_NO FROM RC_LEVEL WHERE LEVEL_UUID = Z1.LEVEL_UUID) as "level"
+              , (
+                (SELECT COUNT(*) FROM RC_AGGREGATION WHERE PARENT_AGGREGATION_UUID = Z1.AGGREGATION_UUID)
+                +(SELECT COUNT(*) FROM RC_ITEM WHERE AGGREGATION_UUID = Z1.AGGREGATION_UUID)
+                )as childCnt
+            FROM
+              RC_AGGREGATION Z1
+        ]]>
+        <choose>
+            <when test="null == uuid or '' == uuid">
+                WHERE
+                PARENT_AGGREGATION_UUID IS NULL
+            </when>
+            <otherwise>
+                WHERE
+                PARENT_AGGREGATION_UUID = #{uuid}
+            </otherwise>
+        </choose>
+        <if test=" null != isDisplayItem and 'true' == isDisplayItem">
+            UNION ALL
+            <![CDATA[
+                SELECT
+                  ITEM_UUID as uuid
+                  , 2 as orderNo
+                  , AGGREGATION_UUID as parentUuid
+                  , TITLE as name
+                  , 'item' as nodeType
+                  , -1 as "level"
+                  , 0 as childCnt
+                FROM
+                    RC_ITEM
+            ]]>
+            <choose>
+                <when test="null == uuid or '' == uuid">
+                    WHERE
+                    AGGREGATION_UUID IS NULL
+                </when>
+                <otherwise>
+                    WHERE
+                    AGGREGATION_UUID = #{uuid}
+                </otherwise>
+            </choose>
+
+        </if>
+    </sql>
+    <select id="getTotalIconCnt" resultType="long" parameterType="Rc00104VO" statementType="PREPARED">
+        SELECT COUNT(*) FROM (
+        <include refid="iconSQL"></include>
+        )
+    </select>
+    <select id="getIconList" resultType="Rc00101VO" parameterType="Rc00104VO" statementType="PREPARED">
+        SELECT * FROM (
+            SELECT
+            ZZ.*
+            ,ROW_NUMBER() OVER(ORDER BY orderNo ASC) AS NUM
+            FROM (
+            <include refid="iconSQL"></include>
+            ) ZZ
+        ) Z1
+        WHERE
+          NUM <![CDATA[ >= ]]> (#{start} + 1)
+        AND
+          NUM <![CDATA[ <= ]]> #{end}
+    </select>
     <select id="getAggregationInfo" resultType="Rc00102VO" parameterType="Rc00101VO" statementType="PREPARED">
       <![CDATA[
             SELECT

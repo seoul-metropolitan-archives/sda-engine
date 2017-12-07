@@ -3,12 +3,17 @@ package rmsoft.ams.seoul.rc.rc001.service;
 import io.onsemiro.core.api.response.ApiResponse;
 import io.onsemiro.core.code.ApiStatus;
 import io.onsemiro.core.domain.BaseService;
+import io.onsemiro.utils.ModelMapperUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import rmsoft.ams.seoul.common.vo.ResponseForPaging;
 import rmsoft.ams.seoul.rc.rc001.dao.Rc001Mapper;
 import rmsoft.ams.seoul.rc.rc001.vo.Rc00101VO;
 import rmsoft.ams.seoul.rc.rc001.vo.Rc00102VO;
 import rmsoft.ams.seoul.rc.rc001.vo.Rc00103VO;
+import rmsoft.ams.seoul.rc.rc001.vo.Rc00104VO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,11 +25,9 @@ public class Rc001Service extends BaseService
     @Autowired
     private Rc001Mapper rc001Mapper;
 
-
-
     public List<Rc00101VO> getAllNode(Rc00101VO param)
     {
-        List<Rc00101VO> nodes = new ArrayList<Rc00101VO>();
+        ArrayList<Rc00101VO> nodes = new ArrayList<Rc00101VO>();
         nodes.addAll(rc001Mapper.getAggregationNode(param));
 
         //
@@ -34,6 +37,16 @@ public class Rc001Service extends BaseService
             nodes.addAll(rc001Mapper.getItemNode(param));
 
         return nodes;
+    }
+    public ResponseForPaging<Rc00101VO> getAllNode(Rc00104VO param)
+    {
+        ResponseForPaging pageData = ModelMapperUtils.map(param,ResponseForPaging.class);
+
+        pageData.setLimit(rc001Mapper.getTotalIconCnt(param));
+        param.setLimit(pageData.getLimit());
+        pageData.setList(rc001Mapper.getIconList(param));
+
+        return pageData;
     }
     public Rc00102VO getAggregationInfo(Rc00101VO param)
     {

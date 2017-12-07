@@ -23,7 +23,10 @@
                     <div class="div_tablerow">
                         <ul style="height: 30px; width: 100%" class="bdb">
                             <li style="width: 2%;"><img src="/assets/images/ams/icon/fo.png" alt="folder"></li>
-                            <li style="width: 78%; text-align: left">Root > root2 > root3</li>
+                            <li style="width: 78%; text-align: left" id="navigatorArea"></li>
+                            <li style="width: 78%; text-align: left" id="navigatorArea"></li>
+                            <li style="width: 78%; text-align: left" id="navigatorArea"></li>
+                            <li style="width: 78%; text-align: left" id="navigatorArea"></li>
                             <li style="width: 19.5%; padding-right: 0.5%">
                               <!--    <div class="src_box3" ><input type=text>
                               <a href="#" id="dialog-link5">
@@ -34,8 +37,7 @@
                     </div>
                     <div class="div_tablerow cont_title">
                         <ul style="height: 30px; width: 100%">
-                            <li class="pdl_10" data-ax-path="rcHeadTitle">
-                                Add new archival description - Untitled(draft)
+                            <li class="pdl_10" id="title">
                             </li>
                         </ul>
                     </div>
@@ -76,7 +78,7 @@
                                                     <ul>
                                                         <li style="width: 33%;">
                                                             <b>Code </b>
-                                                            <div data-ax-path="rcAggregationCode">text readonly</div>
+                                                            <div data-ax-path="aggregationCode">text readonly</div>
                                                         </li>
                                                         <li style="width: 33%;">
                                                             <b>Type </b>
@@ -122,7 +124,6 @@
                                                                     <option th:each="item : ${levelList}"
                                                                             th:value="${item.levelUuid}"
                                                                             th:text="${item.levelName}"
-                                                                            th:attr="defaultYN =  ${item.defaultYN}"
                                                                     />
                                                                 </select>
                                                             </div>
@@ -384,7 +385,6 @@
                                                                         <option th:each="item : ${levelList}"
                                                                                 th:value="${item.levelUuid}"
                                                                                 th:text="${item.levelName}"
-                                                                                th:attr="defaultYN =  ${item.defaultYN}"
                                                                         />
                                                                     </select>
                                                                 </div>

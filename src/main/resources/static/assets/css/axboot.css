@@ -27662,9 +27662,10 @@ a.small_open {
 }
 
 .exp_detail {
-    height: 97px;
+    height: 50px;
     width: 100%;
-    display: block
+    display: block;
+    background-color: #f7f7f7;
 }
 
 .exp_detail span {
@@ -27839,3 +27840,31 @@ a.small_open {
 .detail_conts ul{width: 100%}
 .detail_conts ul li.title{padding-left: 1%; background-color: #f7f7f7; text-align: left; border-bottom: 1px solid #ddd}
 .detail_conts ul li.conts{text-align: left;padding-left: 1%; border-bottom: 1px solid #ddd}
+
+.page_no {
+    width: 100%;
+    border-top: 1px solid #ddd;
+    padding-top: 10px;
+    text-align: center;
+    position: relative;
+}
+.page_no a {
+    padding: 3px 6px;
+    margin: 0px 3px;
+    display: inline-block;
+}
+.page_no a.page_start, .page_no a.page_end {
+    padding: 3px 10px;
+    margin: 0px 3px;
+    display: inline-block;
+}
+.page_no a.page_next, .page_no a.page_prev {
+    padding: 3px 8px;
+    margin: 0px 3px;
+    display: inline-block;
+}
+.page_no a.selec {
+    font-weight: bold;
+    color: #fff;
+    background-color: #777;
+}

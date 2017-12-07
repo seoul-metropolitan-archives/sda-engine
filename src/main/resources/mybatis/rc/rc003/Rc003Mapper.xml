@@ -7,7 +7,8 @@
         SELECT
           Z1.AGGREGATION_UUID as aggregationUuid,
           Z1.AGGREGATION_CODE as aggregationCode,
-          FC_AD_CODE_NM(Z1.PUBLISHED_STATUS_UUID) as publishedStatusUuid,
+          FC_AD_CODE_NM(Z1.PUBLISHED_STATUS_UUID) as publishedStatusName,
+          Z1.PUBLISHED_STATUS_UUID as publishedStatusUuid,
           FC_RC_CODE(Z1.LEVEL_UUID) || ' - ' ||  TITLE as headTitle,
           FC_AD_CODE_NM(Z1.TYPE_UUID) as typeNm,
           Z1.TYPE_UUID as typeUuid,
@@ -18,7 +19,8 @@
            WHERE
             AGGREGATION_UUID = Z1.PARENT_AGGREGATION_UUID)  as  parentAggregationName,
           Z1.PARENT_AGGREGATION_UUID as parentAggregationUuid,
-          FC_RC_CODE(Z1.LEVEL_UUID) as levelUuid,
+          FC_RC_CODE(Z1.LEVEL_UUID) as levelCode,
+          Z1.LEVEL_UUID as levelUuid,
           Z1.AUTHOR as author,
           Z1.TITLE as name,
           Z1.DESCRIPTION_START_DATE as descriptionStartDate,
