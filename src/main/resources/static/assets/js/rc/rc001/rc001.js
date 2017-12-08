@@ -551,7 +551,7 @@ var fnObj = {
                         }
                     }
 
-                    if(canMove)
+                    if(!canMove)
                     {
                         axWarningToast.push(axboot.getCommonMessage(errorMsg));
                         return ;
