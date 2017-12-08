@@ -1987,7 +1987,31 @@ GridWrapper.prototype.getSelectedData = function() {
 
     }
 };
+/**
+ * 선택된 로우의 데이터를 반환하는 함수
+ * @returns {*}
+ */
+GridWrapper.prototype.getSelectionData = function() {
+    var index = gridView.getSelectedRows();
+    if (index.itemIndex == -1) {
+        return undefined;
+    } else {
 
+        if(index.dataRow == -1)
+            gridView.commit(true);
+
+        if(isTree)
+        {
+            return gridView.getDataProvider().getJsonRow(
+                gridView.getCurrent().dataRow);
+        }
+        else {
+            return gridView.getDataProvider().getJsonRow(
+                gridView.getCurrent().dataRow);
+        }
+
+    }
+};
 /**
  * 현재의 위치를 반환해주는 함수
  * @returns {*|{uuid}}

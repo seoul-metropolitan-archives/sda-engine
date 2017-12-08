@@ -22,12 +22,15 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     GET_GRID_DATA : function(caller, act, data)
     {
         axboot.ajax({
-            url: "/rc/rc001/getGridData",
+            //url: "/rc/rc001/getGridData",
+            url: "/rc/rc001/getGridDataForPaging",
             data: $.extend({},data,fnObj.pageView.getPageInfo()),
             callback: function (res) {
                 console.log(res.list);
                 fnObj.gridView01.setData(res.list,true);
+                fnObj.pageView.setPage(res);
                 fnObj.gridView01.gridObj.getGridView().resetSize();
+                ACTIONS.dispatch(ACTIONS.GET_NAVI_DATA,data);
                 /*if (res.list.length > 0) {
                     ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, res.list[0]);
                 }*/
@@ -52,6 +55,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             callback: function (res) {
                 fnObj.iconView.setData(res.list,data.uuid == "");
                 fnObj.pageView.setPage(res);
+                ACTIONS.dispatch(ACTIONS.GET_NAVI_DATA,data);
             },
             options: {
                 onError: axboot.viewError
@@ -78,6 +82,44 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             data: data,
             callback: function (res) {
                 fnObj.detailView.setData(res);
+            },
+            options: {
+                onError: axboot.viewError
+            }
+        });
+    },
+    GET_NAVI_DATA : function(caller, act, data)
+    {
+        axboot.ajax({
+            url: "/rc/rc001/getNaviData",
+            data: data,
+            callback: function (res) {
+                fnObj.naviView.setList(res.list);
+            },
+            options: {
+                onError: axboot.viewError
+            }
+        });
+    },
+    DELETE_AGGREGATION : function(caller, act, list){
+
+        axboot.ajax({
+            url: "/rc/rc001/deleteAggregation",
+            data: JSON.stringify(list),
+            dataType : "JSON",
+            type : "POST",
+            callback: function (res) {
+                if(res.status == -500)
+                    axWarningToast.push(axboot.getCommonMessage(res.message));
+                else
+                {
+                    axToast.push(axboot.getCommonMessage(res.message));
+                    ACTIONS.dispatch(ACTIONS.PAGE_SEARCH,fnObj.naviView.getRoot());
+                    if($(".explorer_grid").css("display")=="none")
+                        ACTIONS.dispatch(ACTIONS.GET_SUBDATA,fnObj.naviView.getCurrent());
+                    else
+                        ACTIONS.dispatch(ACTIONS.GET_GRID_DATA,fnObj.naviView.getCurrent());
+                }
             },
             options: {
                 onError: axboot.viewError
@@ -210,6 +252,8 @@ function exp_listView() {
     $(".explorer_list").css("display", "");
     $(".explorer_grid").css("display", "none");
     //$(".exp_detail").css("display", "");
+    fnObj.pageView.resetPage();
+    fnObj.pageView.setPageSize(126);
     ACTIONS.dispatch(ACTIONS.GET_SUBDATA,fnObj.naviView.getCurrent());
 }
 
@@ -217,6 +261,8 @@ function exp_gridView() {
     $(".explorer_list").css("display", "none");
     $(".explorer_grid").css("display", "block");
     //$(".exp_detail").css("display", "none");
+    fnObj.pageView.resetPage();
+    fnObj.pageView.setPageSize(100);
     ACTIONS.dispatch(ACTIONS.GET_GRID_DATA,fnObj.naviView.getCurrent());
 
 }
@@ -277,6 +323,49 @@ var fnObj = {
             });
         });
 
+        $(".exp-menu").hover(function(){
+            //icon 실행
+            if($(".explorer_grid").css("display")=="none")
+            {
+                selectedData= fnObj.iconView.getSelectedData();
+            }
+            //grid 실행
+            else {
+                selectedData = fnObj.gridView01.getSelectedData();
+            }
+
+            switch(selectedData.length)
+            {
+                case 1:
+                    $(".exp-menu>li>ul>li>a").removeClass("inactive");
+                    break;
+                case 0:
+                    $(".exp-menu>li>ul>li>a").each(function(){
+                        switch($(this).text())
+                        {
+                            case "Properties":case "Edit":case "Move":case "Delete":
+                            $(this).addClass("inactive");
+                                break;
+                            default :
+                                $(this).removeClass("inactive");
+                        }
+                    });
+                    break;
+                default :
+                    $(".exp-menu>li>ul>li>a").each(function(){
+                        switch($(this).text())
+                        {
+                            case "Aggregation" :case "Item":case "Properties":case "Edit":
+                            $(this).addClass("inactive");
+                            break;
+                            default :
+                                $(this).removeClass("inactive");
+                        }
+                    });
+                    break;
+            }
+        });
+
         $(".exp-menu a").click(function(event){
             event.stopPropagation();
             event.preventDefault();
@@ -317,6 +406,10 @@ var fnObj = {
                 return menuObj;
             }
 
+
+            if(selectedData.length > 0 && !selectedData[0]["name"])
+                selectedData[0]["name"] = selectedData[0]["title"];
+
             switch($(this).text())
             {
                 //add
@@ -325,9 +418,18 @@ var fnObj = {
                     {
                         if(selectedData.length == 1)
                             selectedData = selectedData[0];
-                        var item = getMenu("add aggregation");
+                        else
+                        {
+                            selectedData = fnObj.naviView.getCurrent();
+                        }
 
-                        item.menuParams = $.extend({},{type: "create"},{navi : fnObj.naviView.getPathString()+" > "+selectedData["name"]},{title : ""},selectedData);
+                        var item = getMenu("add aggregation");
+                        var naviStr = undefined == selectedData["name"]? "" : " > "+selectedData["name"]
+                        item.menuParams = $.extend({},
+                            selectedData
+                            ,{type: "create"}
+                            ,{navi : fnObj.naviView.getPathString()+naviStr},{title : ""}
+                            );
                         parentsObj.tabView.open(item);
                     }
                     break;
@@ -336,10 +438,16 @@ var fnObj = {
                     {
                         if(selectedData.length == 1)
                             selectedData = selectedData[0];
+                        else
+                        {
+                            selectedData = fnObj.naviView.getCurrent();
+                        }
                         var item = getMenu("add item");
-                        item.menuParams = $.extend({},{type: "create"},{navi : fnObj.naviView.getPathString()+" > "+selectedData["name"]},{title : ""},{
+                        var naviStr = undefined == selectedData["name"]? "" : " > "+selectedData["name"]
+                        item.menuParams = $.extend({},{
                             aggregationUuid : selectedData.uuid
-                        });
+                        },{type: "create"},{navi : fnObj.naviView.getPathString()+naviStr},{title : ""}
+                        );
                         parentsObj.tabView.open(item);
                     }
                     break;
@@ -358,7 +466,7 @@ var fnObj = {
                         }
                         if(item != "")
                         {
-                            item.menuParams = $.extend({},{type: "create"},{navi : fnObj.naviView.getPathString()},{title : selectedData["name"]},selectedData[0]);
+                            item.menuParams = $.extend({},selectedData[0],{type: "create"},{navi : fnObj.naviView.getPathString()},{title : selectedData["name"]});
                             parentsObj.tabView.open(item);
                         }
                     }
@@ -377,28 +485,125 @@ var fnObj = {
                         }
                         if(item != "")
                         {
-                            item.menuParams = $.extend({},{type: "update"},{navi : fnObj.naviView.getPathString()},{title : selectedData[0]["name"]},{
+                            item.menuParams = $.extend({},{
                                 parentUuid : selectedData[0].parentUuid,
                                 uuid : selectedData[0].uuid
-                            });
+                            },{type: "update"},{navi : fnObj.naviView.getPathString()},{title : selectedData[0]["name"]});
                             parentsObj.tabView.open(item);
                         }
                         else
                         {
-                            item.menuParams = $.extend({},{type: "update"},{navi : fnObj.naviView.getPathString()},{title : selectedData[0]["name"]},{
+                            item.menuParams = $.extend({},{
                                 aggregationUuid : selectedData[0].parentUuid,
                                 itemUuid : selectedData[0].uuid
-                            });
+                            },{type: "update"},{navi : fnObj.naviView.getPathString()},{title : selectedData[0]["name"]});
                             parentsObj.tabView.open(item);
                         }
                         console.log(selectedData);
                     }
                     break;
                 case "Move":
+
+                    var selectType = "";
+                    /*
+                    aggregation type을 기준으로 이동할 수 있는 경우의 수가 달라진다.
+                    aggregation Type :
+
+                    Aggregation
+                    Normal : Normal
+                    Tempolary : Temporary
+                    Virtual   : Virtual
+
+                    Iteam
+                    Normal    : Normal, Tempolary
+                    Tempolary : Normal, Tempolary
+                    Virtual   : X
+                    */
+                    var compAggregation = "";
+                    var aggregationType = "";
+                    var reqType = "";
+                    var canMove = true;
+                    var errorMsg = "";
+                    selectedData.sort(function(a,b){
+                        var typeName = undefined == a["nodeType"] ? "nodeType" : "type";
+
+                        return a[typeName]-b[typeName];
+                    });
+
+                    for(var i = 0; i < selectedData.length; i++)
+                    {
+                        aggregationType = undefined === selectedData[i]["nodeType"] ? selectedData[i]["type"] : selectedData[i]["nodeType"];
+                        if(i == 0)
+                            reqType = compAggregation = aggregationType;
+
+                        if(aggregationType == "" && reqType.toLowerCase().indexOf("virtual") > -1)
+                        {
+                            canMove = false;
+                            errorMsg = "RC001_06";
+                            break;
+                        }
+
+                        if("" != aggregationType && compAggregation != aggregationType)
+                        {
+                            canMove = false;
+                            errorMsg = "RC001_02";
+                            break;
+                        }
+                    }
+
+                    if(canMove)
+                    {
+                        axWarningToast.push(axboot.getCommonMessage(errorMsg));
+                        return ;
+                    }
+                    return ;
+                    axboot.modal.open({
+                        modalType: "MOVE_AGGREGATION",
+                        param: "",
+                        sendData: function () {
+                            return {
+                                selectType  :  selectType,
+                                "selectedList": selectedData
+                            };
+                        },
+                        callback: function (data) {
+
+                            axToast.push(axboot.getCommonMessage("AA007"));
+                            if($(".explorer_grid").css("display")=="none")
+                                ACTIONS.dispatch(ACTIONS.GET_SUBDATA,fnObj.naviView.getCurrent());
+                            else
+                                ACTIONS.dispatch(ACTIONS.GET_GRID_DATA,fnObj.naviView.getCurrent());
+
+
+                        }
+                    });
                     break;
                 case "Update Status":
+
+
+
+                    axboot.modal.open({
+                        modalType: "UPDATE_STATE_AGGREGATION_N_ITEM",
+                        param: "",
+                        sendData: function () {
+                            return {
+                                "selectedList": selectedData
+                            };
+                        },
+                        callback: function (data) {
+                            axToast.push(axboot.getCommonMessage("AA007"));
+                            if($(".explorer_grid").css("display")=="none")
+                                ACTIONS.dispatch(ACTIONS.GET_SUBDATA,fnObj.naviView.getCurrent());
+                            else
+                                ACTIONS.dispatch(ACTIONS.GET_GRID_DATA,fnObj.naviView.getCurrent());
+                        }
+                    });
+
+
                     break;
                 case "Delete":
+
+                    ACTIONS.dispatch(ACTIONS.DELETE_AGGREGATION,selectedData);
                     break;
 
             }
@@ -447,9 +652,23 @@ fnObj.naviView = axboot.viewExtend({
         $("#navigatorArea").append($("<span>").attr("splitLevel",$("#navigatorArea span.split").size()+1).addClass("split").text(" > "));
         $("#navigatorArea").append($("<span>").addClass("navigator").attr("level",$("#navigatorArea span.navigator").size()).attr("uuid",data["uuid"]).text(data["name"]));
     },
+    setList : function(list)
+    {
+        fnObj.naviView.clear();
+        var data = undefined;
+        for(var i = 0; i < list.length; i++)
+        {
+            data = list[i];
+            $("#navigatorArea").append($("<span>").attr("splitLevel",$("#navigatorArea span.split").size()+1).addClass("split").text(" > "));
+            $("#navigatorArea").append($("<span>").addClass("navigator").attr("level",$("#navigatorArea span.navigator").size()).attr("nodeType",data["nodeType"]).attr("uuid",data["uuid"]).text(data["name"]));
+        }
+    },
     getCurrent : function()
     {
-        return {uuid : $(".navigator:last").attr("uuid")};
+        return {
+            uuid : $(".navigator:last").attr("uuid"),
+            nodeType : $(".navigator:last").attr("nodeType")
+        };
     },
     getRoot : function()
     {
@@ -478,7 +697,7 @@ fnObj.naviView = axboot.viewExtend({
 fnObj.pageView = axboot.viewExtend({
     page : {
         pageNumber:0,
-        pageSize:108
+        pageSize: 126
     },
     initView : function()
     {
@@ -490,7 +709,13 @@ fnObj.pageView = axboot.viewExtend({
             _this.page.pageNumber = parseInt($(this).text())-1;
             $(".page_no>a:not(.page_start,.page_prev,.page_next,.page_end)").removeClass("selec");
             $(".page_no>a[pageNo='"+$(this).text()+"']").addClass("selec");
-            ACTIONS.dispatch(ACTIONS.GET_SUBDATA,fnObj.naviView.getCurrent());
+
+
+            if($(".explorer_grid").css("display")=="none")
+                ACTIONS.dispatch(ACTIONS.GET_SUBDATA,fnObj.naviView.getCurrent());
+            else
+                ACTIONS.dispatch(ACTIONS.GET_GRID_DATA,fnObj.naviView.getCurrent());
+
         });
         $(".page_no>a.page_start,.page_no>a.page_prev,.page_no>a.page_next,.page_no>a.page_end").click(function(){
             switch($(this).attr("class"))
@@ -553,6 +778,9 @@ fnObj.pageView = axboot.viewExtend({
         totalElements:10100
         totalPages:94
         */
+    },
+    setPageSize : function(_pageSize){
+        this.page.pageSize = _pageSize;
     },
     getPageInfo : function(){
         return {
@@ -631,10 +859,13 @@ fnObj.iconView = axboot.viewExtend({
 
             if(undefined != $(this).attr("uuid")) {
                 uuid = $(this).attr("uuid")
-                imgSrc = $(this).find(".imageTag").find("img").prop("src");
+                //imgSrc = $(this).find(".imageTag").find("img").prop("src");
                 if(fnObj.iconView.pressedCtrl)
                 {
-                    $(this).addClass("selected")
+                    if($(this).attr("class").indexOf("selected")>-1)
+                        $(this).removeClass("selected")
+                    else
+                        $(this).addClass("selected")
                 }
             }else if(undefined == $(this).parents().eq(index).attr("uuid")){
                 index++;
@@ -642,11 +873,17 @@ fnObj.iconView = axboot.viewExtend({
             if("" == uuid)
             {
                 uuid = $(this).parents().eq(index).attr("uuid")
-                imgSrc = $(this).parents().eq(index).find(".imageTag").find("img").prop("src")
+                //imgSrc = $(this).parents().eq(index).find(".imageTag").find("img").prop("src")
                 //컨트롤 누르고 클릭 시 해당 아이템들이 다중으로 선택되어야된다
                 if(fnObj.iconView.pressedCtrl)
                 {
-                    $(this).parents().eq(index).addClass("selected")
+                    //$(this).parents().eq(index).addClass("selected")
+                    if($(this).parents().eq(index).attr("class").indexOf("selected")>-1)
+                    {
+                        $(this).parents().eq(index).removeClass("selected")
+                    }
+                    else
+                        $(this).parents().eq(index).addClass("selected")
                 }
                 else {
                     //컨트롤 누르지 않고 클릭 시 해당 아이템만 선택되어야된다
@@ -657,13 +894,13 @@ fnObj.iconView = axboot.viewExtend({
                 }
             }
 
-            $("#archiveType").prop("src",imgSrc);
+            //$("#archiveType").prop("src",imgSrc);
 
             var reqData = {uuid : uuid};
             //setTimeout(function(){
-                if(fnObj.iconView.isdbClk) {  return ;}
-                if(imgSrc.indexOf("file")>-1)
-                    ACTIONS.dispatch(ACTIONS.GET_ITEM_INFO,reqData);
+                //if(fnObj.iconView.isdbClk) {  return ;}
+                //if(imgSrc.indexOf("file")>-1)
+                //    ACTIONS.dispatch(ACTIONS.GET_ITEM_INFO,reqData);
                 //else
                     //ACTIONS.dispatch(ACTIONS.GET_AGGREGATION_INFO,reqData);
 
@@ -691,7 +928,10 @@ fnObj.iconView = axboot.viewExtend({
                 return ;
 
             fnObj.naviView.setData({uuid : $(this).parents().eq(index).attr("uuid"),name : $(this).parents().eq(index).find(".titleTag").children().eq(0).text()});
-            ACTIONS.dispatch(ACTIONS.GET_SUBDATA,{uuid:$(this).parents().eq(index).attr("uuid")});
+            ACTIONS.dispatch(ACTIONS.GET_SUBDATA,{
+                    uuid:$(this).parents().eq(index).attr("uuid"),
+                    nodeType : $(this).parents().eq(index).attr("nodeType")}
+                );
             //fnObj.detailView.setData({});
             //setTimeout(function(){
                 fnObj.iconView.isdbClk = false;
@@ -731,7 +971,8 @@ fnObj.iconView = axboot.viewExtend({
             data = list[i];
             cloneTag = template.clone();
             imgTag = $("<img>");
-            cloneTag.attr("uuid",data["uuid"])
+            cloneTag.attr("uuid",data["uuid"]);
+            cloneTag.attr("nodeType",data["nodeType"]);
             /*
             Aggregation
             class : explorer_folder_empty or explorer_folder_full
@@ -902,7 +1143,7 @@ fnObj.treeView01 = axboot.viewExtend(axboot.commonView, {
                     var path = treeNode.getPath();
                     for(var key in reqData)
                     {
-                        if(key != "uuid")
+                        if( !(key == "uuid" || key == "nodeType") )
                             delete(reqData[key]);
                     }
 
@@ -1301,10 +1542,6 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView,{
 
         this.gridObj.onDataCellDblClicked(this.itemDbClick);
 
-        this.gridObj.setOption({
-            checkBar: {visible: true}
-        })
-
         this.makeGrid();
         this.gridObj.addRowAfterEvent(this.addRowAfterEvent);
         this.gridObj.itemClick(this.itemClick);
@@ -1314,17 +1551,17 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView,{
     itemDbClick : function(grid,index)
     {
         var reqData = fnObj.gridView01.gridObj.getSelectedData();
-        fnObj.naviView.setData({uuid : reqData["uuid"],name : reqData["title"]});
+        fnObj.naviView.setData({uuid : reqData["uuid"],name : reqData["title"],nodeType : reqData["type"]});
         if(reqData["iconType"] == "file")
         {
             //차후에 뷰어 붙여야된다
             return;
         }
 
-
+        reqData["nodeType"] = reqData["type"].toLowerCase();
         for(var key in reqData)
         {
-            if("uuid" != key)
+            if( !("uuid" == key ||"nodeType" == key) )
                 delete(reqData[key]);
         }
         ACTIONS.dispatch(ACTIONS.GET_GRID_DATA,reqData);
@@ -1366,6 +1603,9 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView,{
                 case "item":
                     iconType = "file";
                     break;
+                default:
+                    iconType = "file";
+                    break;
             }
             isOpen = false;
             data["iconType"] = iconType;
@@ -1376,8 +1616,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView,{
     },
     getSelectedData : function()
     {
-
-        return this.gridObj.getSelectedData();
+        return this.gridObj.getSelectionData();
     }
 });
 

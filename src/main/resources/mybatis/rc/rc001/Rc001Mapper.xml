@@ -92,7 +92,49 @@
                     AGGREGATION_UUID = #{uuid}
                 </otherwise>
             </choose>
-
+        </if>
+        <if test="nodeType == 'virtual'">
+            UNION ALL
+            <![CDATA[
+            SELECT
+              Z3.AGGREGATION_UUID as uuid
+              , 1 as orderNo
+              , Z3.PARENT_AGGREGATION_UUID as parentUuid
+              , Z3.TITLE as name
+              , (SELECT LOWER (CODE_NAME) FROM AD_CODE_DETAIL WHERE CODE_DETAIL_UUID = Z3.TYPE_UUID) as nodeType
+              , (SELECT LEVEL_NO FROM RC_LEVEL WHERE LEVEL_UUID = Z3.LEVEL_UUID) as "level"
+              , (
+                (SELECT COUNT(*) FROM RC_AGGREGATION WHERE PARENT_AGGREGATION_UUID = Z3.AGGREGATION_UUID)
+                +(SELECT COUNT(*) FROM RC_ITEM WHERE AGGREGATION_UUID = Z3.AGGREGATION_UUID)
+                )as childCnt
+            FROM
+              RC_AGGREGATION Z3,
+              RC_RECORD_REFERENCE Z4
+        ]]>
+            WHERE
+              Z3.AGGREGATION_UUID = Z4.AGGREGATION_UUID
+              AND
+              Z4.VIRTUAL_AGGREGATION_UUID = #{uuid}
+        </if>
+        <if test="nodeType == 'virtual'">
+            UNION ALL
+            <![CDATA[
+                SELECT
+                  Z5.ITEM_UUID as uuid
+                  , 2 as orderNo
+                  , Z5.AGGREGATION_UUID as parentUuid
+                  , Z5.TITLE as name
+                  , 'item' as nodeType
+                  , -1 as "level"
+                  , 0 as childCnt
+                FROM
+                    RC_ITEM Z5,
+                    RC_RECORD_REFERENCE Z6
+            ]]>
+            WHERE
+            Z6.VIRTUAL_AGGREGATION_UUID = #{uuid}
+            AND
+            Z5.ITEM_UUID = Z6.ITEM_UUID
         </if>
     </sql>
     <select id="getTotalIconCnt" resultType="long" parameterType="Rc00104VO" statementType="PREPARED">
@@ -151,6 +193,131 @@
                 ITEM_UUID = #{uuid}
         ]]>
     </select>
+    <sql id="gridSQL">
+        SELECT
+            AGGREGATION_UUID as uuid
+            , 1 as orderNo
+            ,(SELECT CODE_NAME FROM AD_CODE_DETAIL WHERE CODE_DETAIL_UUID = Z1.PUBLISHED_STATUS_UUID) as publishedStatus
+            , AGGREGATION_CODE as code
+            , TITLE as title
+            , (SELECT CODE_NAME FROM AD_CODE_DETAIL WHERE CODE_DETAIL_UUID = Z1.TYPE_UUID) as "type"
+            , (SELECT TO_CHAR(LEVEL_NO) FROM RC_LEVEL WHERE LEVEL_UUID = Z1.LEVEL_UUID) as "level"
+            , AUTHOR as author
+            , DESCRIPTION_START_DATE as descStrDate
+            , DESCRIPTION_END_DATE as descEdDate
+            , DESCRIPTION as description
+            , NOTES as notes
+            , (
+            (SELECT COUNT(*) FROM RC_AGGREGATION WHERE PARENT_AGGREGATION_UUID = Z1.AGGREGATION_UUID)
+            +(SELECT COUNT(*) FROM RC_ITEM WHERE AGGREGATION_UUID = Z1.AGGREGATION_UUID)
+            )as childCnt
+        FROM
+          RC_AGGREGATION Z1
+        <if test="nodeType == 'virtual'">
+        </if>
+        <if test=" null == uuid or '' == uuid">
+        WHERE
+            PARENT_AGGREGATION_UUID IS NULL
+        </if>
+        <if test=" null != uuid and '' != uuid">
+        WHERE
+            PARENT_AGGREGATION_UUID = #{uuid}
+        </if>
+        <if test=" null != uuid and '' != uuid">
+            UNION ALL
+            SELECT
+            ITEM_UUID as uuid
+            , 2 as orderNo
+            ,(SELECT CODE_NAME FROM AD_CODE_DETAIL WHERE CODE_DETAIL_UUID = Z1.PUBLISHED_STATUS_UUID) as publishedStatus
+            , ITEM_CODE as code
+            , TITLE as title
+            , (SELECT CODE_NAME FROM AD_CODE_DETAIL WHERE CODE_DETAIL_UUID = Z1.TYPE_UUID) as "type"
+            , '' as "level"
+            , AUTHOR as author
+            , DESCRIPTION_START_DATE as descStrDate
+            , DESCRIPTION_END_DATE as descEdDate
+            , DESCRIPTION as description
+            , NOTES as notes
+            , 0 as childCnt
+            FROM
+            RC_ITEM Z1
+            WHERE
+            AGGREGATION_UUID = #{uuid}
+        </if>
+        <if test="nodeType == 'virtual'">
+            UNION ALL
+            SELECT
+                Z3.AGGREGATION_UUID as uuid
+                , 1 as orderNo
+                ,(SELECT CODE_NAME FROM AD_CODE_DETAIL WHERE CODE_DETAIL_UUID = Z3.PUBLISHED_STATUS_UUID) as publishedStatus
+                , Z3.AGGREGATION_CODE as code
+                , Z3.TITLE as title
+                , (SELECT CODE_NAME FROM AD_CODE_DETAIL WHERE CODE_DETAIL_UUID = Z3.TYPE_UUID) as "type"
+                , (SELECT TO_CHAR(LEVEL_NO) FROM RC_LEVEL WHERE LEVEL_UUID = Z3.LEVEL_UUID) as "level"
+                , Z3.AUTHOR as author
+                , Z3.DESCRIPTION_START_DATE as descStrDate
+                , Z3.DESCRIPTION_END_DATE as descEdDate
+                , Z3.DESCRIPTION as description
+                , Z3.NOTES as notes
+                , (
+                (SELECT COUNT(*) FROM RC_AGGREGATION WHERE PARENT_AGGREGATION_UUID = Z3.AGGREGATION_UUID)
+                +(SELECT COUNT(*) FROM RC_ITEM WHERE AGGREGATION_UUID = Z3.AGGREGATION_UUID)
+                )as childCnt
+            FROM
+                RC_AGGREGATION Z3,
+                RC_RECORD_REFERENCE Z4
+            WHERE
+              Z4.VIRTUAL_AGGREGATION_UUID = #{uuid}
+            AND
+              Z4.AGGREGATION_UUID = Z3.AGGREGATION_UUID
+
+        </if>
+        <if test="nodeType == 'virtual'">
+            UNION ALL
+            SELECT
+            Z5.ITEM_UUID as uuid
+            , 2 as orderNo
+            ,(SELECT CODE_NAME FROM AD_CODE_DETAIL WHERE CODE_DETAIL_UUID = Z5.PUBLISHED_STATUS_UUID) as publishedStatus
+            , Z5.ITEM_CODE as code
+            , Z5.TITLE as title
+            , (SELECT CODE_NAME FROM AD_CODE_DETAIL WHERE CODE_DETAIL_UUID = Z5.TYPE_UUID) as "type"
+            , '' as "level"
+            , Z5.AUTHOR as author
+            , Z5.DESCRIPTION_START_DATE as descStrDate
+            , Z5.DESCRIPTION_END_DATE as descEdDate
+            , Z5.DESCRIPTION as description
+            , Z5.NOTES as notes
+            , 0 as childCnt
+            FROM
+                RC_ITEM Z5,
+                RC_RECORD_REFERENCE Z6
+            WHERE
+                Z6.VIRTUAL_AGGREGATION_UUID = #{uuid}
+                AND
+                Z6.ITEM_UUID = Z5.ITEM_UUID
+        </if>
+    </sql>
+    <select id="getTotalGridCnt" resultType="long" parameterType="Rc00104VO" statementType="PREPARED">
+        SELECT COUNT(*) FROM (
+        <include refid="gridSQL"></include>
+        )
+    </select>
+
+    <select id="getGridList" resultType="Rc00103VO" parameterType="Rc00104VO" statementType="PREPARED">
+        SELECT * FROM (
+        SELECT
+        ZZ.*
+        ,ROW_NUMBER() OVER(ORDER BY orderNo ASC) AS NUM
+        FROM (
+        <include refid="gridSQL"></include>
+          ) ZZ
+        ) Z1
+        WHERE
+        NUM <![CDATA[ >= ]]> (#{start} + 1)
+        AND
+        NUM <![CDATA[ <= ]]> #{end}
+    </select>
+
     <select id="getGridDataInAggregation" resultType="Rc00103VO" parameterType="Rc00101VO" statementType="PREPARED">
             SELECT
               AGGREGATION_UUID as uuid
@@ -178,6 +345,7 @@
                 WHERE
                 PARENT_AGGREGATION_UUID = #{uuid}
             </if>
+
     </select>
     <select id="getGridDataInItem" resultType="Rc00103VO" parameterType="Rc00101VO" statementType="PREPARED">
           SELECT
@@ -238,4 +406,95 @@
           AND
           LOWER(Z1.PROGRAM_NAME) = #{progNm}
     </select>
+
+
+    <select id="getNaviData" resultType="Rc00101VO" parameterType="Rc00101VO" statementType="PREPARED">
+        SELECT
+          Z1.AGGREGATION_UUID uuid
+          , Z1.PARENT_AGGREGATION_UUID parentUuid
+          , Z1.TITLE name
+          , LOWER (Z2.CODE) nodeType
+        FROM
+          RC_AGGREGATION Z1,
+          AD_CODE_DETAIL Z2,
+          RC_LEVEL Z3
+        WHERE
+            Z1.TYPE_UUID = Z2.CODE_DETAIL_UUID
+            AND
+            Z1.LEVEL_UUID = Z3.LEVEL_UUID
+        <choose>
+            <when test="null == uuid or '' == uuid">
+                AND
+              Z1.PARENT_AGGREGATION_UUID = '-1'
+            </when>
+          <otherwise>
+              START WITH          Z1.AGGREGATION_UUID  = #{uuid}
+              CONNECT BY PRIOR    Z1.PARENT_AGGREGATION_UUID = Z1.AGGREGATION_UUID
+              ORDER BY Z3.LEVEL_NO ASC
+          </otherwise>
+        </choose>
+    </select>
+    <select id="checkPublished" resultType="int" parameterType="Rc00101VO" statementType="PREPARED">
+        SELECT
+        COUNT(*)
+        FROM
+        (SELECT * FROM RC_AGGREGATION ZZ1, AD_CODE_DETAIL ZZ2 WHERE ZZ1.PUBLISHED_STATUS_UUID = ZZ2.CODE_DETAIL_UUID AND LOWER (ZZ2.CODE) = 'published' ) Z1
+        WHERE
+        Z1.AGGREGATION_UUID = #{uuid}
+    </select>
+    <select id="getChildrenCnt" resultType="long" parameterType="Rc00101VO" statementType="PREPARED">
+      SELECT
+      (
+                (SELECT COUNT(*) FROM RC_AGGREGATION WHERE PARENT_AGGREGATION_UUID = Z1.AGGREGATION_UUID)
+                +(SELECT COUNT(*) FROM RC_ITEM WHERE AGGREGATION_UUID = Z1.AGGREGATION_UUID)
+                )as childCnt
+      FROM
+          RC_AGGREGATION Z1
+      WHERE
+        Z1.AGGREGATION_UUID = #{uuid}
+    </select>
+    <delete id="deleteAggregation" parameterType="Rc00101VO" statementType="PREPARED">
+    {call
+      BEGIN
+
+      DELETE FROM RC_COMPONENT_CON WHERE COMPONENT_UUID IN (SELECT COMPONENT_UUID FROM RC_ITEM_COMPONENT WHERE ITEM_UUID  = #{uuid});
+      DELETE FROM RC_COMPONENT WHERE COMPONENT_UUID IN (SELECT COMPONENT_UUID FROM RC_ITEM_COMPONENT WHERE ITEM_UUID  = #{uuid});
+      DELETE FROM RC_ITEM_COMPONENT WHERE ITEM_UUID  = #{uuid}
+
+      DELETE FROM RC_ITEM_CON WHERE ITEM_UUID  = #{uuid};
+      DELETE FROM RC_ITEM WHERE ITEM_UUID  = #{uuid};
+
+      DELETE FROM RC_AGGREGATION_CON WHERE AGGREGATION_UUID  = #{uuid};
+      DELETE FROM RC_AGGREGATION WHERE AGGREGATION_UUID  = #{uuid};
+
+      DELETE FROM RC_RECORD_REFERENCE WHERE AGGREGATION_UUID  = #{uuid} OR ITEM_UUID  = #{uuid};
+      commit;
+      END
+    }
+    </delete>
+
+    <update id="updateState" parameterType="RcAggregation" statementType="PREPARED">
+    {call
+    BEGIN
+    UPDATE
+        RC_AGGREGATION
+      SET
+        PUBLISHED_STATUS_UUID = #{publishedStatusUuid}
+        , UPDATE_DATE = CURRENT_TIMESTAMP
+        , UPDATE_UUID = #{updateUuid}
+      WHERE
+        AGGREGATION_UUID = #{aggregationUuid};
+      UPDATE
+        RC_ITEM
+      SET
+        PUBLISHED_STATUS_UUID = #{publishedStatusUuid}
+        , UPDATE_DATE = CURRENT_TIMESTAMP
+        , UPDATE_UUID = #{updateUuid}
+      WHERE
+        ITEM_UUID = #{aggregationUuid};
+        commit;
+    END
+    }
+
+    </update>
 </mapper>

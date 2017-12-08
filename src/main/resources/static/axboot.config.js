@@ -146,6 +146,26 @@
                 header: {
                     title: "Job Parameter"
                 }
+            },
+            "MOVE_AGGREGATION": {
+                width: 600,
+                height: 515,
+                iframe: {
+                    url: "/rc/rc001/p_rc00101"
+                },
+                header: {
+                    title: "Move"
+                }
+            },
+            "UPDATE_STATE_AGGREGATION_N_ITEM": {
+                width: 360,
+                height: 120,
+                iframe: {
+                    url: "/rc/rc001/p_rc00102"
+                },
+                header: {
+                    title: "Update State"
+                }
             }
         };
     }

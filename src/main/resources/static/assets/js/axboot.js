@@ -1789,11 +1789,10 @@ axboot.modal = function () {
      * ```
      */
     var open = function open(modalConfig) {
-
+        var width = 0;
         if ("COMMON_POPUP" == modalConfig.modalType && modalConfig["sendData"]) {
             var list = null;
             var reqData = modalConfig.sendData();
-            var width = 0;
             var popupName = "";
             axboot.ajax({
                 url: "/api/v1/common/popup/getPopupInfo",

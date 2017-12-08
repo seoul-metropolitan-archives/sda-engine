@@ -4,10 +4,14 @@ import io.onsemiro.core.api.response.ApiResponse;
 import io.onsemiro.core.code.ApiStatus;
 import io.onsemiro.core.domain.BaseService;
 import io.onsemiro.utils.ModelMapperUtils;
+import io.onsemiro.utils.SessionUtils;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import rmsoft.ams.seoul.common.domain.RcAggregation;
 import rmsoft.ams.seoul.common.vo.ResponseForPaging;
 import rmsoft.ams.seoul.rc.rc001.dao.Rc001Mapper;
 import rmsoft.ams.seoul.rc.rc001.vo.Rc00101VO;
@@ -56,6 +60,18 @@ public class Rc001Service extends BaseService
     {
         return rc001Mapper.getItemInfo(param);
     }
+
+    public ResponseForPaging<Rc00103VO> getGridDataForPaging(Rc00104VO param)
+    {
+        ResponseForPaging pageData = ModelMapperUtils.map(param,ResponseForPaging.class);
+
+        pageData.setLimit(rc001Mapper.getTotalGridCnt(param));
+        param.setLimit(pageData.getLimit());
+        pageData.setList(rc001Mapper.getGridList(param));
+
+        return pageData;
+    }
+
     public List<Rc00103VO> getGridData(Rc00101VO param)
     {
         List<Rc00103VO> gridData = new ArrayList<Rc00103VO>();
@@ -80,6 +96,48 @@ public class Rc001Service extends BaseService
     public Object getMenu(Map<String,String> param)
     {
         return rc001Mapper.getMenu(param);
+    }
+
+    @Transactional
+    public ApiResponse updateState(List<Map<String,String>> list) {
+        List<RcAggregation> updateList = ModelMapperUtils.mapList(list,RcAggregation.class);
+        for(RcAggregation data : updateList)
+        {
+            data.setUpdateUuid(SessionUtils.getCurrentLoginUserUuid());
+            rc001Mapper.updateState(data);
+        }
+        return ApiResponse.of(ApiStatus.SUCCESS,"AA007");
+    }
+    @Transactional
+    public ApiResponse deleteAggregation(List<Rc00101VO> list) {
+        boolean error = false;
+        String msg = "";
+            for(Rc00101VO data : list)
+            {
+                if(rc001Mapper.checkPublished(data) > 0)
+                {
+                    error = true;
+                    msg = "RC001_05";
+                    break;
+                }
+                if(rc001Mapper.getChildrenCnt(data) > 0)
+                {
+                    error = true;
+                    msg = "RC001_04";
+                    break;
+                }
+                else
+                    rc001Mapper.deleteAggregation(data);
+            }
+        if(error)
+            return ApiResponse.of(ApiStatus.SYSTEM_ERROR,msg);
+        else
+            return ApiResponse.of(ApiStatus.SUCCESS,"AA007");
+    }
+
+    public List<Rc00101VO> getNaviData(Rc00101VO param)
+    {
+        return rc001Mapper.getNaviData(param);
     }
 
 }

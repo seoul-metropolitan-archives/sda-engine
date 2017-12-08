@@ -4,6 +4,7 @@ import io.onsemiro.controller.BaseController;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import rmsoft.ams.seoul.utils.CommonCodeUtils;
 
 @Controller
@@ -13,6 +14,16 @@ public class Rc001ViewRouter extends BaseController {
     public String view(ModelMap model) {
         //model.addAttribute("serviceList", CommonCodeUtils.get("CD006"));
         return "/rc/rc001/rc001";
+    }
+    @PostMapping("/rc/rc001/p_rc00101")
+    public String movePopupView(ModelMap model) {
+        //model.addAttribute("serviceList", CommonCodeUtils.get("CD006"));
+        return "/rc/rc001/p_rc00101";
+    }
+    @PostMapping("/rc/rc001/p_rc00102")
+    public String updateStatePopupView(ModelMap model) {
+        model.addAttribute("updateStateList", CommonCodeUtils.get("CD121"));
+        return "/rc/rc001/p_rc00102";
     }
 }
 

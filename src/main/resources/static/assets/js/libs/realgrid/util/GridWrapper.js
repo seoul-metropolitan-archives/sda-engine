@@ -1882,10 +1882,34 @@ GridWrapper.prototype.getSelectedData = function () {
             this.gridView.commit(true);
 
         return this.gridView.getDataProvider().getJsonRow(
-            this.gridView.getCurrent().dataRow);
+            this.gridView.getCurrent().itemIndex);
 
     }
 };
+
+//셀렉트 된 행 데이터 가져오는 함수
+GridWrapper.prototype.getSelectionData = function () {
+    if (this.gridView.getCurrent().itemIndex == -1) {
+        return undefined;
+    } else {
+        if (this.gridView.getCurrent().dataRow == -1)
+            this.gridView.commit(true);
+
+
+        var selectionData = this.gridView.getSelectedRows();
+        var retList = new Array();
+        for(var i = 0; i < selectionData.length;i++)
+        {
+            retList.push(
+            this.gridView.getDataProvider().getJsonRow(selectionData[i])
+            );
+        }
+
+        return retList;
+
+    }
+};
+
 
 GridWrapper.prototype.setDoAppendValidate = function(_doValidate) { doAppendValidate = _doValidate;}
 GridWrapper.prototype.getDoAppendValidate = function(){

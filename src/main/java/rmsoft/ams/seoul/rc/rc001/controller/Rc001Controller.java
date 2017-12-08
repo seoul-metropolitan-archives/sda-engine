@@ -55,6 +55,13 @@ public class Rc001Controller extends MessageBaseController
         return Responses.ListResponse.of(rc001Service.getGridData(param));
     }
 
+    @RequestMapping("/getGridDataForPaging")
+    @ResponseBody
+    public Object getGridDataForPaging(Rc00104VO param)
+    {
+        return rc001Service.getGridDataForPaging(param);
+    }
+
     @RequestMapping("/save")
     public ApiResponse save(@RequestBody List<Map<String,String>> list)
     {
@@ -68,5 +75,22 @@ public class Rc001Controller extends MessageBaseController
         return rc001Service.getMenu(param);
     }
 
+    @RequestMapping("/getNaviData")
+    @ResponseBody
+    public Responses.ListResponse getNaviData(Rc00101VO param)
+    {
+        return Responses.ListResponse.of(rc001Service.getNaviData(param));
+    }
+    @RequestMapping("/updateState")
+    public ApiResponse updateState(@RequestBody List<Map<String,String>> list)
+    {
+        return rc001Service.updateState(list);
+    }
 
+
+    @RequestMapping("/deleteAggregation")
+    public ApiResponse deleteAggregation(@RequestBody List<Rc00101VO> list)
+    {
+        return rc001Service.deleteAggregation(list);
+    }
 }
