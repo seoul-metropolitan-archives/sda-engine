@@ -1,13 +1,11 @@
 package rmsoft.ams.seoul.cl.cl001.service;
 
-import io.netty.util.internal.StringUtil;
 import io.onsemiro.core.api.ApiException;
 import io.onsemiro.core.api.response.ApiResponse;
 import io.onsemiro.core.code.ApiStatus;
 import io.onsemiro.core.domain.BaseService;
 import io.onsemiro.core.parameter.RequestParams;
 import io.onsemiro.utils.ModelMapperUtils;
-import io.onsemiro.utils.UUIDUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -26,6 +24,9 @@ import rmsoft.ams.seoul.utils.CommonCodeUtils;
 import javax.inject.Inject;
 import java.util.List;
 
+/**
+ * The type Cl 001 service.
+ */
 @Service
 public class Cl001Service extends BaseService {
     @Autowired
@@ -40,7 +41,14 @@ public class Cl001Service extends BaseService {
     @Autowired
     private ClClassificationSchemeRepository clClassificationSchemeRepository;
 
-    //Inquiry
+    /**
+     * Gets classification scheme list.
+     *
+     * @param pageable      the pageable
+     * @param requestParams the request params
+     * @return the classification scheme list
+     */
+//Inquiry
     public Page<Cl00101VO> getClassificationSchemeList(Pageable pageable, RequestParams<Cl00101VO> requestParams) {
 
         Cl00101VO cl00101VO = new Cl00101VO();
@@ -53,14 +61,26 @@ public class Cl001Service extends BaseService {
         return filter(cl001Mapper.getClassificationSchemeList(cl00101VO), pageable, "", Cl00101VO.class);
     }
 
-    //Classification Scheme 상세 정보
+    /**
+     * Gets classification scheme detail.
+     *
+     * @param requestParams the request params
+     * @return the classification scheme detail
+     */
+//Classification Scheme 상세 정보
     public Cl00102VO getClassificationSchemeDetail(RequestParams<Cl00101VO> requestParams) {
         Cl00102VO cl00102VO = new Cl00102VO();
         cl00102VO.setClassificationSchemeUuid(requestParams.getString("classificationSchemeUuid"));
         return  cl001Mapper.getClassificationSchemeDetail(cl00102VO);
     }
 
-    //저장(수정,삭제,생성)
+    /**
+     * Update classification scheme list api response.
+     *
+     * @param list the list
+     * @return the api response
+     */
+//저장(수정,삭제,생성)
     public ApiResponse updateClassificationSchemeList(List<Cl00101VO> list){
         List<ClClassificationScheme> clClassificationSchemeList = ModelMapperUtils.mapList(list,ClClassificationScheme.class);
         ClClassificationScheme orgClClassificationScheme = null;
@@ -100,6 +120,12 @@ public class Cl001Service extends BaseService {
         return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");
     }
 
+    /**
+     * Update status api response.
+     *
+     * @param list the list
+     * @return the api response
+     */
     public ApiResponse updateStatus(List<Cl00101VO> list){
         List<ClClassificationScheme> clClassificationSchemeList = ModelMapperUtils.mapList(list,ClClassificationScheme.class);
         ClClassificationScheme orgClClassificationScheme = null;
@@ -116,16 +142,35 @@ public class Cl001Service extends BaseService {
         }
         return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");
     }
+
+    /**
+     * Get max classification code string.
+     *
+     * @param classificationTypeUuid the classification type uuid
+     * @return the string
+     */
     public String getMaxClassificationCode(String classificationTypeUuid){
         Cl00101VO cl00101VO = new Cl00101VO();
         cl00101VO.setClassificationTypeUuid(classificationTypeUuid);
 
         return  cl001Mapper.getMaxClassificationCode(cl00101VO);
     }
+
+    /**
+     * Get child class int.
+     *
+     * @param classificationSchemeUuid the classification scheme uuid
+     * @return the int
+     */
     public int getChildClass(String classificationSchemeUuid){
         return  cl001Mapper.getChildClass(classificationSchemeUuid);
     }
 
+    /**
+     * Update classification scheme con detail.
+     *
+     * @param requestParams the request params
+     */
     public void updateClassificationSchemeConDetail(RequestParams<Cl00102VO> requestParams) {
         ClClassificationSchemeCon clClassificationSchemeCon = new ClClassificationSchemeCon();
 

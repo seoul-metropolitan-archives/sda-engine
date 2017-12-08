@@ -13,8 +13,10 @@ import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.sql.Timestamp;
 
+/**
+ * The type Ad entity type.
+ */
 @Setter
 @Getter
 @DynamicInsert
@@ -52,6 +54,9 @@ public class AdEntityType extends BaseJpaModel<AdEntityType.AdEntityTypeId> {
         return AdEntityTypeId.of(entityTypeUuid);
     }
 
+    /**
+     * The type Ad entity type id.
+     */
     @Embeddable
     @Data
     @NoArgsConstructor

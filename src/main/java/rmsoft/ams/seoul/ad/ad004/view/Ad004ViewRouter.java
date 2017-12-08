@@ -7,9 +7,18 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import rmsoft.ams.seoul.utils.CommonCodeUtils;
 
+/**
+ * The type Ad 004 view router.
+ */
 @Controller
 public class Ad004ViewRouter extends BaseController {
 
+    /**
+     * View string.
+     *
+     * @param model the model
+     * @return the string
+     */
     @GetMapping("/ad/ad004/ad004")
     public String view(ModelMap model) {
         model.addAttribute("serviceList", CommonCodeUtils.get("CD006"));
@@ -26,6 +35,13 @@ public class Ad004ViewRouter extends BaseController {
         */
         return "/ad/ad004/ad004";
     }
+
+    /**
+     * View 3 string.
+     *
+     * @param model the model
+     * @return the string
+     */
     @PostMapping("/ad/ad004/ad0041")
     public String view3(ModelMap model) {
         model.addAttribute("serviceList", CommonCodeUtils.get("CD006"));
@@ -42,6 +58,13 @@ public class Ad004ViewRouter extends BaseController {
         */
         return "/ad/ad004/ad004";
     }
+
+    /**
+     * View 2 string.
+     *
+     * @param model the model
+     * @return the string
+     */
     @GetMapping("/ad/ad004/ad00401")
     @PostMapping("/ad/ad004/ad00401")
     public String view2(ModelMap model) {

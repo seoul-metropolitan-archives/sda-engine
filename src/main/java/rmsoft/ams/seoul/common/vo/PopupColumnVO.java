@@ -6,6 +6,9 @@ package rmsoft.ams.seoul.common.vo;
 
 import lombok.Data;
 
+/**
+ * The type Popup column vo.
+ */
 @Data
 public class PopupColumnVO extends BaseColumnVO {
     private String popupCode = "";

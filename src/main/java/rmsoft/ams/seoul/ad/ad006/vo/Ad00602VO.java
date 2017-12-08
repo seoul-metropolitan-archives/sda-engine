@@ -3,8 +3,10 @@ package rmsoft.ams.seoul.ad.ad006.vo;
 import io.onsemiro.core.vo.BaseVO;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
 
+/**
+ * The type Ad 00602 vo.
+ */
 @Data
 @EqualsAndHashCode(callSuper = false)
 public class Ad00602VO extends BaseVO

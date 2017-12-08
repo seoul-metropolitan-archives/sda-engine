@@ -21,8 +21,8 @@ import static java.util.stream.Collectors.toList;
  *
  * @author james
  * @version 1.0.0
- * @since 2017-10-23 오후 2:06
- **/
+ * @since 2017 -10-23 오후 2:06
+ */
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
@@ -37,6 +37,12 @@ public class Ac00402VO extends BaseVO {
 
     private String useYn;
 
+    /**
+     * Of ac 00402 vo.
+     *
+     * @param acUserGroupUser the ac user group user
+     * @return the ac 00402 vo
+     */
     public static Ac00402VO of(AcUserGroupUser acUserGroupUser) {
         // Custom Mapper
         /*BoundMapperFacade<AcUser, Ac00401VO> mapper =
@@ -45,10 +51,22 @@ public class Ac00402VO extends BaseVO {
         return ModelMapperUtils.map(acUserGroupUser, Ac00402VO.class);
     }
 
+    /**
+     * Of list.
+     *
+     * @param acUserGroupUserList the ac user group user list
+     * @return the list
+     */
     public static List<Ac00402VO> of(List<AcUserGroupUser> acUserGroupUserList) {
         return acUserGroupUserList.stream().map(acUserGroupUser -> of(acUserGroupUser)).collect(toList());
     }
 
+    /**
+     * Of list.
+     *
+     * @param acUserGroupUserPage the ac user group user page
+     * @return the list
+     */
     public static List<Ac00402VO> of(Page<AcUserGroupUser> acUserGroupUserPage) {
         return acUserGroupUserPage.getContent().stream().map(acUserGroupUser -> of(acUserGroupUser)).collect(toList());
     }

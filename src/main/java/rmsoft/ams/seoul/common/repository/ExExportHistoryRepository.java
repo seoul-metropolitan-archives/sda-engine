@@ -8,6 +8,9 @@ import io.onsemiro.core.domain.base.AXBootJPAQueryDSLRepository;
 import org.springframework.stereotype.Repository;
 import rmsoft.ams.seoul.common.domain.ExExportHistory;
 
+/**
+ * The interface Ex export history repository.
+ */
 @Repository
 public interface ExExportHistoryRepository extends AXBootJPAQueryDSLRepository<ExExportHistory, ExExportHistory.ExExportHistoryId> {
 

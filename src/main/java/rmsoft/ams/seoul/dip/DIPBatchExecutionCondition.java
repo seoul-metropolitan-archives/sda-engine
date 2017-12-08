@@ -14,8 +14,8 @@ import org.springframework.core.type.AnnotatedTypeMetadata;
  *
  * @author james
  * @version 1.0.0
- * @since 2017-12-06 오전 11:17
- **/
+ * @since 2017 -12-06 오전 11:17
+ */
 public class DIPBatchExecutionCondition implements Condition {
 
     @Override

@@ -4,8 +4,12 @@ import io.onsemiro.core.vo.BaseVO;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+
 import java.util.List;
 
+/**
+ * The type Rc 00501 vo.
+ */
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
@@ -95,22 +99,44 @@ public class Rc00501VO extends BaseVO {
 
     private List<Rc00502VO> rc00502VoList;
 
+    /**
+     * Sets ra description start date.
+     *
+     * @param raDescriptionStartDate the ra description start date
+     */
     public void setRaDescriptionStartDate(String raDescriptionStartDate) {
         if(raDescriptionStartDate != null) {
             this.raDescriptionStartDate = raDescriptionStartDate.replace("-", "");
         }
     }
+
+    /**
+     * Sets ra description end date.
+     *
+     * @param raDescriptionEndDate the ra description end date
+     */
     public void setRaDescriptionEndDate(String raDescriptionEndDate) {
         if(raDescriptionEndDate != null) {
             this.raDescriptionEndDate = raDescriptionEndDate.replace("-", "");
         }
     }
 
+    /**
+     * Sets ri description start date.
+     *
+     * @param riDescriptionStartDate the ri description start date
+     */
     public void setRiDescriptionStartDate(String riDescriptionStartDate) {
         if(riDescriptionStartDate != null) {
             this.riDescriptionStartDate = riDescriptionStartDate.replace("-", "");
         }
     }
+
+    /**
+     * Sets ri description end date.
+     *
+     * @param riDescriptionEndDate the ri description end date
+     */
     public void setRiDescriptionEndDate(String riDescriptionEndDate) {
         if(riDescriptionEndDate != null) {
             this.riDescriptionEndDate = riDescriptionEndDate.replace("-", "");

@@ -32,6 +32,9 @@ import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The type Ac 007 service.
+ */
 @Slf4j
 @Service
 public class Ac007Service extends BaseService {
@@ -52,9 +55,9 @@ public class Ac007Service extends BaseService {
     /**
      * 모든 ROLE 조회
      *
-     * @param pageable
-     * @param requestParams
-     * @return
+     * @param pageable      the pageable
+     * @param requestParams the request params
+     * @return page
      */
     public Page<Ac00701VO> findAllRole(Pageable pageable, RequestParams<Ac00701VO> requestParams) {
 
@@ -73,9 +76,9 @@ public class Ac007Service extends BaseService {
     /**
      * 롤 메뉴 조회
      *
-     * @param pageable
-     * @param requestParams
-     * @return
+     * @param pageable      the pageable
+     * @param requestParams the request params
+     * @return page
      */
     public Page<Ac00702VO> findRoleMenu(Pageable pageable, RequestParams<Ac00702VO> requestParams) {
         String filter = requestParams.getString("filter", "");
@@ -86,8 +89,8 @@ public class Ac007Service extends BaseService {
     /**
      * 롤 메뉴 정보 저장
      *
-     * @param ac00702VOList
-     * @return
+     * @param ac00702VOList the ac 00702 vo list
+     * @return api response
      */
     @Transactional
     public ApiResponse saveRoleMenu(List<Ac00702VO> ac00702VOList) {
@@ -125,9 +128,9 @@ public class Ac007Service extends BaseService {
     /**
      * 프로그램별 퍼미션 정보 조회
      *
-     * @param pageable
-     * @param requestParams
-     * @return
+     * @param pageable      the pageable
+     * @param requestParams the request params
+     * @return page
      */
     public Page<Ac00703VO> findPermission(Pageable pageable, RequestParams<Ac00702VO> requestParams) {
         String filter = requestParams.getString("filter", "");
@@ -139,8 +142,8 @@ public class Ac007Service extends BaseService {
     /**
      * 퍼미션정보 저장
      *
-     * @param ac00703VOList
-     * @return
+     * @param ac00703VOList the ac 00703 vo list
+     * @return api response
      */
     @Transactional
     public ApiResponse savePermission(List<Ac00703VO> ac00703VOList) {
@@ -168,6 +171,12 @@ public class Ac007Service extends BaseService {
         return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");
     }
 
+    /**
+     * Gets menu list.
+     *
+     * @param menuList the menu list
+     * @return the menu list
+     */
     public List<Ac00702VO> getMenuList(List<Ac00702VO> menuList) {
 
         List<Ac00702VO> hierarchyList = new ArrayList<>();
@@ -188,6 +197,13 @@ public class Ac007Service extends BaseService {
         return filterList;
     }
 
+    /**
+     * Gets parent.
+     *
+     * @param menus the menus
+     * @param menu  the menu
+     * @return the parent
+     */
     public Ac00702VO getParent(List<Ac00702VO> menus, Ac00702VO menu) {
         Ac00702VO parent = menus.stream().filter(m -> m.getMenuCode().equals(menu.getParentMenuCode())).findAny().orElse(null);
 

@@ -9,10 +9,16 @@ import lombok.EqualsAndHashCode;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
+/**
+ * The type Ad 00402 vo.
+ */
 @Data
 @EqualsAndHashCode(callSuper = false)
 public class Ad00402VO extends BaseVO
 {
+    /**
+     * Instantiates a new Ad 00402 vo.
+     */
     public Ad00402VO()
     {
         this.insertUuid = this.updateUuid = SessionUtils.getCurrentUser().getUserUuid();

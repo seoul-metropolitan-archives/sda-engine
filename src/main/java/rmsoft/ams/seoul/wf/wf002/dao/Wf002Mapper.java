@@ -15,10 +15,22 @@ import java.util.List;
  *
  * @author james
  * @version 1.0.0
- * @since 2017-09-26 오후 3:44
- **/
+ * @since 2017 -09-26 오후 3:44
+ */
 public interface Wf002Mapper extends MyBatisMapper {
+    /**
+     * Find all workflow list.
+     *
+     * @param wf00201VO the wf 00201 vo
+     * @return the list
+     */
     List<Wf00201VO> findAllWorkflow(Wf00201VO wf00201VO);
 
+    /**
+     * Find workflow job list.
+     *
+     * @param workflowUuid the workflow uuid
+     * @return the list
+     */
     List<Wf00202VO> findWorkflowJob(String workflowUuid);
 }

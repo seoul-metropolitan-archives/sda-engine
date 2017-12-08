@@ -18,6 +18,11 @@ public class SocketMsgUtils {
         return baseDir.toString();
     }
 
+    /**
+     * Gets test resources dir.
+     *
+     * @return the test resources dir
+     */
     public static String getTestResourcesDir() {
 
         StringBuilder jsonDir = new StringBuilder();
@@ -28,6 +33,11 @@ public class SocketMsgUtils {
         return getBaseDir() + jsonDir.toString();
     }
 
+    /**
+     * Gets db dateset dir.
+     *
+     * @return the db dateset dir
+     */
     public static String getDbDatesetDir() {
 
         StringBuilder dir = new StringBuilder();
@@ -36,6 +46,11 @@ public class SocketMsgUtils {
         return getTestResourcesDir() + dir.toString();
     }
 
+    /**
+     * Gets template json dir.
+     *
+     * @return the template json dir
+     */
     public static String getTemplateJsonDir() {
 
         StringBuilder jsonDir = new StringBuilder();
@@ -47,6 +62,11 @@ public class SocketMsgUtils {
         return getBaseDir() + jsonDir.toString();
     }
 
+    /**
+     * Gets template excel dir.
+     *
+     * @return the template excel dir
+     */
     public static String getTemplateExcelDir() {
 
         StringBuilder jsonDir = new StringBuilder();
@@ -58,6 +78,12 @@ public class SocketMsgUtils {
         return getBaseDir() + jsonDir.toString();
     }
 
+    /**
+     * Gets output dir.
+     *
+     * @param packageName the package name
+     * @return the output dir
+     */
     public static String getOutputDir(String packageName) {
 
         packageName = packageName.replace(".", SEPARATOR);

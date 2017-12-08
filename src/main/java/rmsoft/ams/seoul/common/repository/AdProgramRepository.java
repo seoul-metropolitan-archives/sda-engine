@@ -13,8 +13,8 @@ import rmsoft.ams.seoul.common.domain.AdProgram;
  *
  * @author james
  * @version 1.0.0
- * @since 2017-10-25 오후 2:18
- **/
+ * @since 2017 -10-25 오후 2:18
+ */
 @Repository
 public interface AdProgramRepository extends AXBootJPAQueryDSLRepository<AdProgram, AdProgram.AdProgramId> {
 }

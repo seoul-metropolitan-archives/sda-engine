@@ -14,6 +14,9 @@ import org.hibernate.annotations.DynamicUpdate;
 import javax.persistence.*;
 import java.io.Serializable;
 
+/**
+ * The type Ac role permission.
+ */
 @Setter
 @Getter
 @DynamicInsert
@@ -47,6 +50,9 @@ public class AcRolePermission extends BaseJpaModel<AcRolePermission.AcRolePermis
         return AcRolePermissionId.of(rolePermissionUuid);
     }
 
+    /**
+     * The type Ac role permission id.
+     */
     @Embeddable
     @Data
     @NoArgsConstructor

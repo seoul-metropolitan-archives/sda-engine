@@ -8,12 +8,21 @@ import org.springframework.web.bind.annotation.GetMapping;
 import rmsoft.ams.seoul.rc.rc002.service.Rc002Service;
 import rmsoft.ams.seoul.utils.CommonCodeUtils;
 
+/**
+ * The type Rc 002 view router.
+ */
 @Controller
 public class Rc002ViewRouter extends BaseController {
 
     @Autowired
     private Rc002Service rc002Service;
 
+    /**
+     * View string.
+     *
+     * @param model the model
+     * @return the string
+     */
     @GetMapping("/rc/rc002/rc002")
     public String view(ModelMap model) {
         model.addAttribute("levelList", rc002Service.getLevel());

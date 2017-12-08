@@ -2,8 +2,6 @@ package rmsoft.ams.seoul.common.domain;
 
 import io.onsemiro.core.annotations.Comment;
 import io.onsemiro.core.domain.BaseJpaModel;
-import io.onsemiro.utils.DateUtils;
-import io.onsemiro.utils.SessionUtils;
 import lombok.*;
 import org.apache.ibatis.type.Alias;
 import org.hibernate.annotations.DynamicInsert;
@@ -11,9 +9,10 @@ import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
 
+/**
+ * The type Ad configuration.
+ */
 @Setter
 @Getter
 @DynamicInsert
@@ -52,6 +51,9 @@ public class AdConfiguration  extends BaseJpaModel<AdConfiguration.AdConfigurati
     }
 
 
+    /**
+     * The type Ad configuration id.
+     */
     @Embeddable
     @Data
     @NoArgsConstructor

@@ -8,7 +8,6 @@ import com.querydsl.core.types.Predicate;
 import io.onsemiro.core.api.response.ApiResponse;
 import io.onsemiro.core.code.ApiStatus;
 import io.onsemiro.core.domain.BaseService;
-import io.onsemiro.core.domain.user.QUserGroupUser;
 import io.onsemiro.core.parameter.RequestParams;
 import io.onsemiro.utils.ModelMapperUtils;
 import io.onsemiro.utils.UUIDUtils;
@@ -61,7 +60,7 @@ public class Ac004Service extends BaseService {
      *
      * @param pageable      the pageable
      * @param requestParams the request params
-     * @return page
+     * @return page page
      */
     public Page<Ac00401VO> findAllGroup(Pageable pageable, RequestParams<Ac00401VO> requestParams) {
 
@@ -125,7 +124,7 @@ public class Ac004Service extends BaseService {
      *
      * @param pageable      the pageable
      * @param requestParams the request params
-     * @return page
+     * @return page page
      */
 // USER GROUP 관련 호출부
     public Page<Ac00402VO> findUserGroupUser(Pageable pageable, RequestParams<Ac00402VO> requestParams) {
@@ -176,7 +175,7 @@ public class Ac004Service extends BaseService {
      *
      * @param pageable      the pageable
      * @param requestParams the request params
-     * @return page
+     * @return page page
      */
     public Page<Ac00403VO> findUserRole(Pageable pageable, RequestParams<Ac00403VO> requestParams) {
         String filter = requestParams.getString("filter", "");

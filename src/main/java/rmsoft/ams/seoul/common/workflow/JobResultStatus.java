@@ -11,12 +11,27 @@ import lombok.Getter;
  *
  * @author james
  * @version 1.0.0
- * @since 2017-12-04 오후 1:17
- **/
+ * @since 2017 -12-04 오후 1:17
+ */
 @Getter
 public enum JobResultStatus {
 
-    초기상태("PENDING"), 실행("RUNNING"), 성공("SUCCESS"), 에러("ERROR"), 종료("TERMINATED");
+    /**
+     * 초기상태 job result status.
+     */
+    초기상태("PENDING"), /**
+     * 실행 job result status.
+     */
+    실행("RUNNING"), /**
+     * 성공 job result status.
+     */
+    성공("SUCCESS"), /**
+     * 에러 job result status.
+     */
+    에러("ERROR"), /**
+     * 종료 job result status.
+     */
+    종료("TERMINATED");
 
     private String code;
 

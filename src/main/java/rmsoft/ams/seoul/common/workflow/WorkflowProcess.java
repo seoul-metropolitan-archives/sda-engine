@@ -22,6 +22,9 @@ import rmsoft.ams.seoul.wf.wf003.vo.Wf00303VO;
 
 import java.util.List;
 
+/**
+ * The type Workflow process.
+ */
 @Slf4j
 @Component
 public class WorkflowProcess implements Runnable {
@@ -34,12 +37,23 @@ public class WorkflowProcess implements Runnable {
     @Autowired
     private WfJobResultRepository wfJobResultRepository;
 
+    /**
+     * The Batch id.
+     */
     public String batchId = "";
+    /**
+     * The Stop batch id.
+     */
     public String stopBatchId = "";
 
     private Wf00303VO wf00303VO = null;
     private Thread runThread = null;
 
+    /**
+     * Sets workflow.
+     *
+     * @param wf00303VO the wf 00303 vo
+     */
     public void setWorkflow(Wf00303VO wf00303VO) {
         this.wf00303VO = wf00303VO;
     }
@@ -165,10 +179,18 @@ public class WorkflowProcess implements Runnable {
         return CommonCodeUtils.getCodeDetailUuidByCode(codeGroup, code);
     }
 
+    /**
+     * Stop process.
+     */
     public void stopProcess() {
         runThread.interrupt();
     }
 
+    /**
+     * Error logging.
+     *
+     * @param throwable the throwable
+     */
     protected void errorLogging(Throwable throwable) {
 
         if (log.isErrorEnabled()) {

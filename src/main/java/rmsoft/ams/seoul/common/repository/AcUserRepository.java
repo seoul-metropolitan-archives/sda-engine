@@ -9,8 +9,8 @@ import rmsoft.ams.seoul.common.domain.AcUser;
  *
  * @author james
  * @version 1.0.0
- * @since 2017-10-12 오후 1:59
- **/
+ * @since 2017 -10-12 오후 1:59
+ */
 @Repository
 public interface AcUserRepository extends AXBootJPAQueryDSLRepository<AcUser, AcUser.AcUserId> {
 }

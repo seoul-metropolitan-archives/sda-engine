@@ -13,8 +13,8 @@ import rmsoft.ams.seoul.common.domain.WfJobResult;
  *
  * @author james
  * @version 1.0.0
- * @since 2017-11-01 오후 3:56
- **/
+ * @since 2017 -11-01 오후 3:56
+ */
 @Repository
 public interface WfJobResultRepository extends AXBootJPAQueryDSLRepository<WfJobResult, WfJobResult.WfJobResultId> {
 }

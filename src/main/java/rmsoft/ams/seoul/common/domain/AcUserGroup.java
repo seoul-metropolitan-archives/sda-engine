@@ -14,6 +14,9 @@ import org.hibernate.annotations.DynamicUpdate;
 import javax.persistence.*;
 import java.io.Serializable;
 
+/**
+ * The type Ac user group.
+ */
 @Setter
 @Getter
 @DynamicInsert
@@ -43,6 +46,9 @@ public class AcUserGroup extends BaseJpaModel<AcUserGroup.AcUserGroupId> {
         return AcUserGroupId.of(userGroupUuid);
     }
 
+    /**
+     * The type Ac user group id.
+     */
     @Embeddable
     @Data
     @NoArgsConstructor

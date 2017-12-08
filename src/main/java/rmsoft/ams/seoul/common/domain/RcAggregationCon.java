@@ -1,7 +1,6 @@
 package rmsoft.ams.seoul.common.domain;
 
 import io.onsemiro.core.annotations.Comment;
-import io.onsemiro.core.domain.BaseJpaModel;
 import io.onsemiro.core.domain.SimpleJpaModel;
 import lombok.*;
 import org.apache.ibatis.type.Alias;
@@ -11,6 +10,9 @@ import org.hibernate.annotations.DynamicUpdate;
 import javax.persistence.*;
 import java.io.Serializable;
 
+/**
+ * The type Rc aggregation con.
+ */
 @Setter
 @Getter
 @DynamicInsert
@@ -78,6 +80,9 @@ public class RcAggregationCon extends SimpleJpaModel<RcAggregationCon.RcAggregat
     @Override
     public RcAggregationCon.RcAggregationConId getId() { return RcAggregationCon.RcAggregationConId.of(aggregationUuid); }
 
+    /**
+     * The type Rc aggregation con id.
+     */
     @Embeddable
     @Data
     @NoArgsConstructor

@@ -2,6 +2,9 @@ package rmsoft.ams.seoul.ac.ac002.vo;
 
 import lombok.Data;
 
+/**
+ * The type Ac 002 vo.
+ */
 @Data
 public class Ac002VO
 {
@@ -16,6 +19,11 @@ public class Ac002VO
     private String status = "on";
     private boolean fixed = true;
 
+    /**
+     * Sets prog ph.
+     *
+     * @param progPh the prog ph
+     */
     public void setProgPh(String progPh) {
         String[] urlPath = progPh.toLowerCase().split("/");
         if(urlPath.length > 0)
@@ -23,6 +31,11 @@ public class Ac002VO
         this.progPh = progPh;
     }
 
+    /**
+     * Sets url.
+     *
+     * @param url the url
+     */
     public void setUrl(String url) {
         String[] urlPath = url.toLowerCase().split("/");
         if(urlPath.length > 0)

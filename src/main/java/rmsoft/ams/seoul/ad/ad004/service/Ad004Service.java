@@ -18,6 +18,9 @@ import rmsoft.ams.seoul.common.repository.AdPopupHeaderRepository;
 
 import java.util.List;
 
+/**
+ * The type Ad 004 service.
+ */
 @Service
 public class Ad004Service extends BaseService {
 
@@ -30,10 +33,22 @@ public class Ad004Service extends BaseService {
     @Autowired
     private AdPopupDetailRepository popupDetailRepository;
 
+    /**
+     * Search popup header list.
+     *
+     * @param param the param
+     * @return the list
+     */
     public List<Ad00401VO> searchPopupHeader(Ad00401VO param) {
         return mapper.searchPopupHeader(param);
     }
 
+    /**
+     * Save popup header api response.
+     *
+     * @param list the list
+     * @return the api response
+     */
     @Transactional
     public ApiResponse savePopupHeader(List<AdPopupHeader> list) {
 
@@ -61,10 +76,22 @@ public class Ad004Service extends BaseService {
         return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");
     }
 
+    /**
+     * Gets popup detail.
+     *
+     * @param param the param
+     * @return the popup detail
+     */
     public List<Ad00402VO> getPopupDetail(Ad00402VO param) {
         return mapper.getPopupDetail(param);
     }
 
+    /**
+     * Save popup detail api response.
+     *
+     * @param list the list
+     * @return the api response
+     */
     @Transactional
     public ApiResponse savePopupDetail(List<AdPopupDetail> list) {
         for (AdPopupDetail data : list) {

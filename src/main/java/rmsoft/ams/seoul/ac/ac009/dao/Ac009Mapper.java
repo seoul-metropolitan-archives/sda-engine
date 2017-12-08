@@ -14,8 +14,14 @@ import java.util.List;
  *
  * @author james
  * @version 1.0.0
- * @since 2017-09-26 오후 3:44
- **/
+ * @since 2017 -09-26 오후 3:44
+ */
 public interface Ac009Mapper extends MyBatisMapper {
+    /**
+     * Find all menu list.
+     *
+     * @param ac00901VO the ac 00901 vo
+     * @return the list
+     */
     List<Ac00901VO> findAllMenu(Ac00901VO ac00901VO);
 }

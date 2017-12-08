@@ -10,6 +10,9 @@ import org.hibernate.annotations.DynamicUpdate;
 import javax.persistence.*;
 import java.io.Serializable;
 
+/**
+ * The type Ad code header.
+ */
 @Setter
 @Getter
 @DynamicInsert
@@ -86,6 +89,9 @@ public class AdCodeHeader extends BaseJpaModel<AdCodeHeader.AdCodeHeaderId>
     }
 
 
+    /**
+     * The type Ad code header id.
+     */
     @Embeddable
     @Data
     @NoArgsConstructor

@@ -12,6 +12,9 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.stereotype.Service;
 import rmsoft.ams.seoul.common.workflow.WorkflowResponse;
 
+/**
+ * The type Process ingest procedure.
+ */
 @Slf4j
 @Service
 public class ProcessIngestProcedure {
@@ -19,6 +22,11 @@ public class ProcessIngestProcedure {
 
     private static String procedureName = "AD_SEOUL_ARCHIVE_CONV_T.main";
 
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
     public static void main(String[] args) {
         ProcessIngestProcedure test = new ProcessIngestProcedure();
         test.setJdbcTemplate(new JdbcTemplate(test.getDataSource()));
@@ -27,10 +35,20 @@ public class ProcessIngestProcedure {
         test.runProcess();
     }
 
+    /**
+     * Sets procedure name.
+     *
+     * @param procedureName the procedure name
+     */
     public void setProcedureName(String procedureName) {
         this.procedureName = procedureName;
     }
 
+    /**
+     * Run process workflow response.
+     *
+     * @return the workflow response
+     */
     public WorkflowResponse runProcess() {
         WorkflowResponse workflowResult = new WorkflowResponse();
 
@@ -61,6 +79,12 @@ public class ProcessIngestProcedure {
         }
     }
 
+    /**
+     * Call procedure.
+     *
+     * @param procedureName the procedure name
+     * @throws Exception the exception
+     */
     public void callProcedure(String procedureName) throws Exception {
         log.info("Start Procedure : {}", procedureName);
 
@@ -69,6 +93,11 @@ public class ProcessIngestProcedure {
         log.info("Finished Procedure : {}", procedureName);
     }
 
+    /**
+     * Gets data source.
+     *
+     * @return the data source
+     */
     public DriverManagerDataSource getDataSource() {
 
         DriverManagerDataSource dataSource = new org.springframework.jdbc.datasource.DriverManagerDataSource();
@@ -84,6 +113,11 @@ public class ProcessIngestProcedure {
         return dataSource;
     }
 
+    /**
+     * Sets jdbc template.
+     *
+     * @param jdbcTemplate the jdbc template
+     */
     public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }

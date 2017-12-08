@@ -13,8 +13,8 @@ import rmsoft.ams.seoul.common.domain.AcUserGroupUser;
  *
  * @author james
  * @version 1.0.0
- * @since 2017-10-13 오후 1:00
- **/
+ * @since 2017 -10-13 오후 1:00
+ */
 @Repository
 public interface AcUserGroupUserRepository extends AXBootJPAQueryDSLRepository<AcUserGroupUser, AcUserGroupUser.AcUserGroupUserId> {
 }

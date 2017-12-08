@@ -12,6 +12,9 @@ import rmsoft.ams.seoul.common.controller.MessageBaseController;
 import rmsoft.ams.seoul.rc.rc003.service.Rc003Service;
 import rmsoft.ams.seoul.rc.rc003.vo.Rc00301VO;
 
+/**
+ * The type Rc 003 controller.
+ */
 @RestController
 @RequestMapping("/api/v1/rc003/")
 public class Rc003Controller extends MessageBaseController{
@@ -19,6 +22,13 @@ public class Rc003Controller extends MessageBaseController{
     @Autowired
     private Rc003Service rc003Service;
 
+    /**
+     * Get record aggregation list responses . page response.
+     *
+     * @param pageable      the pageable
+     * @param requestParams the request params
+     * @return the responses . page response
+     */
     @GetMapping("/01/list")
     public Responses.PageResponse getRecordAggregationList(Pageable pageable, RequestParams<Rc00301VO> requestParams){
         Page<Rc00301VO> pages = rc003Service.getRecordAggregationList(pageable, requestParams);

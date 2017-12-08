@@ -10,11 +10,21 @@ import rmsoft.ams.seoul.rc.rc003.vo.Rc00301VO;
 
 import javax.inject.Inject;
 
+/**
+ * The type Rc 003 service.
+ */
 @Service
 public class Rc003Service extends BaseService{
     @Inject
     private Rc003Mapper rc003Mapper;
 
+    /**
+     * Get record aggregation list page.
+     *
+     * @param pageable      the pageable
+     * @param requestParams the request params
+     * @return the page
+     */
     public Page<Rc00301VO> getRecordAggregationList(Pageable pageable, RequestParams<Rc00301VO> requestParams){
         Rc00301VO rc00301VO = new Rc00301VO();
         rc00301VO.setAggregationUuid(requestParams.getString("aggregationUuid"));

@@ -24,6 +24,9 @@ public class XlsDataSetWriter {
 
     private static final Logger logger = LoggerFactory.getLogger(org.dbunit.dataset.excel.XlsDataSetWriter.class);
 
+    /**
+     * The constant ZEROS.
+     */
     public static final String ZEROS = "0000000000000000000000000000000000000000000000000000";
 
     /**
@@ -46,6 +49,11 @@ public class XlsDataSetWriter {
 
     /**
      * Write the specified dataset to the specified Excel document.
+     *
+     * @param dataSet the data set
+     * @param out     the out
+     * @throws IOException      the io exception
+     * @throws DataSetException the data set exception
      */
     public void write(IDataSet dataSet, OutputStream out) throws IOException, DataSetException {
 
@@ -117,6 +125,12 @@ public class XlsDataSetWriter {
         out.flush();
     }
 
+    /**
+     * Create date cell style cell style.
+     *
+     * @param workbook the workbook
+     * @return the cell style
+     */
     protected static CellStyle createDateCellStyle(Workbook workbook) {
         DataFormat format = workbook.createDataFormat();
         short dateFormatCode = format.getFormat(DATE_FORMAT_AS_NUMBER_DBUNIT);
@@ -124,6 +138,13 @@ public class XlsDataSetWriter {
         return getCellStyle(workbook, dateFormatCode);
     }
 
+    /**
+     * Gets cell style.
+     *
+     * @param workbook   the workbook
+     * @param formatCode the format code
+     * @return the cell style
+     */
     protected static CellStyle getCellStyle(Workbook workbook, short formatCode) {
         Map<Short, CellStyle> map = findWorkbookCellStyleMap(workbook);
         CellStyle cellStyle = findCellStyle(workbook, formatCode, map);
@@ -131,6 +152,12 @@ public class XlsDataSetWriter {
         return cellStyle;
     }
 
+    /**
+     * Find workbook cell style map map.
+     *
+     * @param workbook the workbook
+     * @return the map
+     */
     protected static Map<Short, CellStyle> findWorkbookCellStyleMap(Workbook workbook) {
 
         Map<Short, CellStyle> map = cellStyleMap.get(workbook);
@@ -143,6 +170,14 @@ public class XlsDataSetWriter {
         return map;
     }
 
+    /**
+     * Find cell style cell style.
+     *
+     * @param workbook   the workbook
+     * @param formatCode the format code
+     * @param map        the map
+     * @return the cell style
+     */
     protected static CellStyle findCellStyle(Workbook workbook, Short formatCode, Map<Short, CellStyle> map) {
 
         CellStyle cellStyle = map.get(formatCode);
@@ -157,6 +192,13 @@ public class XlsDataSetWriter {
         return cellStyle;
     }
 
+    /**
+     * Sets timestamp cell.
+     *
+     * @param cell     the cell
+     * @param value    the value
+     * @param workbook the workbook
+     */
     protected void setTimestampCell(Cell cell, Timestamp value, Workbook workbook) {
 
         try {
@@ -225,6 +267,13 @@ public class XlsDataSetWriter {
 
     }
 
+    /**
+     * Sets date cell.
+     *
+     * @param cell     the cell
+     * @param value    the value
+     * @param workbook the workbook
+     */
     protected void setDateCell(Cell cell, Date value, Workbook workbook) {
 
 //        double excelDateValue = HSSFDateUtil.getExcelDate(value);
@@ -287,6 +336,13 @@ public class XlsDataSetWriter {
 
     }
 
+    /**
+     * Sets numeric cell.
+     *
+     * @param cell     the cell
+     * @param value    the value
+     * @param workbook the workbook
+     */
     protected void setNumericCell(Cell cell, BigDecimal value, Workbook workbook) {
 
         if(log.isDebugEnabled())
@@ -339,6 +395,11 @@ public class XlsDataSetWriter {
         return ZEROS.substring(0, count);
     }
 
+    /**
+     * Create workbook workbook.
+     *
+     * @return the workbook
+     */
     protected Workbook createWorkbook() {
         return new HSSFWorkbook();
     }

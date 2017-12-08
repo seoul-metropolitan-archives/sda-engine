@@ -12,11 +12,22 @@ import rmsoft.ams.seoul.rc.rc005.vo.Rc00502VO;
 
 import javax.inject.Inject;
 import java.util.List;
+
+/**
+ * The type Rc 005 service.
+ */
 @Service
 public class Rc005Service extends BaseService{
     @Inject
     private Rc005Mapper rc005Mapper;
 
+    /**
+     * Get record item list page.
+     *
+     * @param pageable      the pageable
+     * @param requestParams the request params
+     * @return the page
+     */
     public Page<Rc00501VO> getRecordItemList(Pageable pageable, RequestParams<Rc00501VO> requestParams){
         Rc00501VO rc00501VO = new Rc00501VO();
         Rc00502VO rc00502VO;

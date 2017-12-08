@@ -36,12 +36,30 @@ import java.io.IOException;
 //@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+    /**
+     * The constant LOGIN_API.
+     */
     public static final String LOGIN_API = "/api/login";
+    /**
+     * The constant LOGOUT_API.
+     */
     public static final String LOGOUT_API = "/api/logout";
+    /**
+     * The constant LOGIN_PAGE.
+     */
     public static final String LOGIN_PAGE = "/login";
+    /**
+     * The constant ACCESS_DENIED_PAGE.
+     */
     public static final String ACCESS_DENIED_PAGE = "/jsp/common/not-authorized.jsp?errorCode=401";
+    /**
+     * The constant ROLE.
+     */
     public static final String ROLE = "ASP_ACCESS";
 
+    /**
+     * The constant ignorePages.
+     */
     public static final String[] ignorePages = new String[]{
             //"/resources/**",
             "/axboot.config.js",
@@ -68,6 +86,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private AXBootTokenAuthenticationService tokenAuthenticationService;
 
 
+    /**
+     * Instantiates a new Security config.
+     */
     public SecurityConfig() {
         super(true);
     }
@@ -111,6 +132,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean();
     }
 
+    /**
+     * Dao authentication provider dao authentication provider.
+     *
+     * @return the dao authentication provider
+     */
     @Bean
     public DaoAuthenticationProvider daoAuthenticationProvider() {
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
@@ -130,8 +156,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return userDetailsService;
     }
 
+    /**
+     * The type Logout success handler.
+     */
     static class LogoutSuccessHandler extends SimpleUrlLogoutSuccessHandler {
 
+        /**
+         * Instantiates a new Logout success handler.
+         *
+         * @param defaultTargetURL the default target url
+         */
         public LogoutSuccessHandler(String defaultTargetURL) {
             this.setDefaultTargetUrl(defaultTargetURL);
         }

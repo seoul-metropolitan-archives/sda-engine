@@ -24,8 +24,8 @@ import java.util.List;
  *
  * @author james
  * @version 1.0.0
- * @since 2017-10-12 오후 5:48
- **/
+ * @since 2017 -10-12 오후 5:48
+ */
 @RestController
 @RequestMapping(value = "/api/v1/ac007/")
 public class Ac007Controller extends MessageBaseController {
@@ -33,6 +33,13 @@ public class Ac007Controller extends MessageBaseController {
     @Autowired
     private Ac007Service ac007Service;
 
+    /**
+     * Find all role responses . page response.
+     *
+     * @param pageable      the pageable
+     * @param requestParams the request params
+     * @return the responses . page response
+     */
     @GetMapping("/01/list")
     public Responses.PageResponse findAllRole(Pageable pageable, RequestParams<Ac00701VO> requestParams) {
         Page<Ac00701VO> pages = ac007Service.findAllRole(pageable, requestParams);
@@ -40,6 +47,13 @@ public class Ac007Controller extends MessageBaseController {
         return Responses.PageResponse.of(pages.getContent(), pages);
     }
 
+    /**
+     * Find role menu responses . page response.
+     *
+     * @param pageable      the pageable
+     * @param requestParams the request params
+     * @return the responses . page response
+     */
     @GetMapping("/02/list")
     public Responses.PageResponse findRoleMenu(Pageable pageable, RequestParams<Ac00702VO> requestParams) {
         Page<Ac00702VO> pages = ac007Service.findRoleMenu(pageable, requestParams);
@@ -47,6 +61,13 @@ public class Ac007Controller extends MessageBaseController {
         return Responses.PageResponse.of(pages.getContent(), pages);
     }
 
+    /**
+     * Find permission responses . page response.
+     *
+     * @param pageable      the pageable
+     * @param requestParams the request params
+     * @return the responses . page response
+     */
     @GetMapping("/03/list")
     public Responses.PageResponse findPermission(Pageable pageable, RequestParams<Ac00702VO> requestParams) {
         Page<Ac00703VO> pages = ac007Service.findPermission(pageable, requestParams);
@@ -54,12 +75,24 @@ public class Ac007Controller extends MessageBaseController {
         return Responses.PageResponse.of(pages.getContent(), pages);
     }
 
+    /**
+     * Save role menu api response.
+     *
+     * @param requestParams the request params
+     * @return the api response
+     */
     @PutMapping(value = "/02/save")
     @PostMapping
     public ApiResponse saveRoleMenu(@RequestBody List<Ac00702VO> requestParams) {
         return ac007Service.saveRoleMenu(requestParams);
     }
 
+    /**
+     * Save permission api response.
+     *
+     * @param requestParams the request params
+     * @return the api response
+     */
     @PutMapping(value = "/03/save")
     @PostMapping
     public ApiResponse savePermission(@RequestBody List<Ac00703VO> requestParams) {

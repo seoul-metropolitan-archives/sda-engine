@@ -1,7 +1,6 @@
 package rmsoft.ams.seoul.common.domain;
 
 import io.onsemiro.core.annotations.Comment;
-import io.onsemiro.core.domain.BaseJpaModel;
 import io.onsemiro.core.domain.SimpleJpaModel;
 import lombok.*;
 import org.apache.ibatis.type.Alias;
@@ -11,6 +10,9 @@ import org.hibernate.annotations.DynamicUpdate;
 import javax.persistence.*;
 import java.io.Serializable;
 
+/**
+ * The type Ad popup detail.
+ */
 @Setter
 @Getter
 @DynamicInsert
@@ -69,6 +71,9 @@ public class AdPopupDetail extends SimpleJpaModel<AdPopupDetail.AdPopupDetailId>
         return AdPopupDetailId.of(popupDetailUuid);
     }
 
+    /**
+     * The type Ad popup detail id.
+     */
     @Embeddable
     @Data
     @NoArgsConstructor

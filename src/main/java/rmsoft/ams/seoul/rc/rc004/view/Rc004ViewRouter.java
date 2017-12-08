@@ -6,9 +6,18 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import rmsoft.ams.seoul.utils.CommonCodeUtils;
 
+/**
+ * The type Rc 004 view router.
+ */
 @Controller
 public class Rc004ViewRouter extends BaseController {
 
+    /**
+     * View string.
+     *
+     * @param model the model
+     * @return the string
+     */
     @GetMapping("/rc/rc004/rc004")
     public String view(ModelMap model) {
         model.addAttribute("typeUuid", CommonCodeUtils.get("CD136"));

@@ -13,8 +13,8 @@ import rmsoft.ams.seoul.common.domain.WfParameter;
  *
  * @author james
  * @version 1.0.0
- * @since 2017-11-01 오후 3:58
- **/
+ * @since 2017 -11-01 오후 3:58
+ */
 @Repository
 public interface WfParameterRepository extends AXBootJPAQueryDSLRepository<WfParameter, WfParameter.WfParameterId> {
 }

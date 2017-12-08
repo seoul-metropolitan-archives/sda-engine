@@ -1,6 +1,5 @@
 package rmsoft.ams.seoul.cl.cl002.service;
 
-import io.netty.util.internal.StringUtil;
 import io.onsemiro.core.api.ApiException;
 import io.onsemiro.core.api.response.ApiResponse;
 import io.onsemiro.core.code.ApiStatus;
@@ -9,7 +8,6 @@ import io.onsemiro.core.parameter.RequestParams;
 import io.onsemiro.utils.DateUtils;
 import io.onsemiro.utils.ModelMapperUtils;
 import io.onsemiro.utils.SessionUtils;
-import io.onsemiro.utils.UUIDUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -32,6 +30,9 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * The type Cl 002 service.
+ */
 @Service
 public class Cl002Service extends BaseService {
 
@@ -47,11 +48,23 @@ public class Cl002Service extends BaseService {
     @Autowired
     private ClClassConRepository clClassConRepository;
 
+    /**
+     * Gets classification scheme.
+     *
+     * @return the classification scheme
+     */
     public Cl00101VO getClassificationScheme() {
 
         return cl002Mapper.getClassificationScheme();
     }
 
+    /**
+     * Gets class list.
+     *
+     * @param pageable      the pageable
+     * @param requestParams the request params
+     * @return the class list
+     */
     public Page<Cl00201VO> getClassList(Pageable pageable, RequestParams<Cl00201VO> requestParams) {
 
         Cl00201VO cl00201VO = new Cl00201VO();
@@ -65,6 +78,13 @@ public class Cl002Service extends BaseService {
         return filter(cl002Mapper.getClassList(cl00201VO), pageable, "", Cl00201VO.class);
     }
 
+    /**
+     * Gets selected class list.
+     *
+     * @param pageable      the pageable
+     * @param requestParams the request params
+     * @return the selected class list
+     */
     public Page<Cl00201VO> getSelectedClassList(Pageable pageable, RequestParams<Cl00201VO> requestParams) {
 
         Cl00201VO cl00201VO = new Cl00201VO();
@@ -85,6 +105,13 @@ public class Cl002Service extends BaseService {
         return filter(cl002Mapper.getSelectedClassList(cl00201VO), pageable, "", Cl00201VO.class);
     }
 
+    /**
+     * Gets class hierarchy list.
+     *
+     * @param pageable                 the pageable
+     * @param classificationSchemeUuid the classification scheme uuid
+     * @return the class hierarchy list
+     */
     public Page<Cl00201VO> getClassHierarchyList(Pageable pageable, String classificationSchemeUuid) {
 
         Cl00201VO cl00201VO = new Cl00201VO();
@@ -93,12 +120,24 @@ public class Cl002Service extends BaseService {
         return filter(cl002Mapper.getClassHierarchyList(cl00201VO), pageable, "", Cl00201VO.class);
     }
 
+    /**
+     * Gets selected class detail.
+     *
+     * @param pageable      the pageable
+     * @param requestParams the request params
+     * @return the selected class detail
+     */
     public Cl00202VO getSelectedClassDetail(Pageable pageable, RequestParams<Cl00201VO> requestParams) {
         Cl00201VO cl00201VO = new Cl00201VO();
         cl00201VO.setClassUuid(requestParams.getString("classUuid"));
         return cl002Mapper.getSelectedClassDetail(cl00201VO);
     }
 
+    /**
+     * Update status confirm.
+     *
+     * @param lists the lists
+     */
     @Transactional
     public void updateStatusConfirm(List<Cl00201VO> lists) {
         List<ClClass> clClassList = ModelMapperUtils.mapList(lists, ClClass.class);
@@ -120,6 +159,12 @@ public class Cl002Service extends BaseService {
         }
     }
 
+    /**
+     * Update status cancel api response.
+     *
+     * @param list the list
+     * @return the api response
+     */
     @Transactional
     public ApiResponse updateStatusCancel(List<Cl00201VO> list) {
         List<ClClass> clClassList = ModelMapperUtils.mapList(list, ClClass.class);
@@ -139,6 +184,12 @@ public class Cl002Service extends BaseService {
         return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");
     }
 
+    /**
+     * Update class list api response.
+     *
+     * @param list the list
+     * @return the api response
+     */
     @Transactional
     public ApiResponse updateClassList(List<Cl00201VO> list) {
         List<ClClass> clClassList = ModelMapperUtils.mapList(list, ClClass.class);
@@ -215,6 +266,11 @@ public class Cl002Service extends BaseService {
         return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");
     }
 
+    /**
+     * Update class con.
+     *
+     * @param requestParams the request params
+     */
     @Transactional
     public void updateClassCon(RequestParams<Cl00202VO> requestParams) {
         ClClassCon clClassCon = new ClClassCon();
@@ -238,10 +294,22 @@ public class Cl002Service extends BaseService {
         clClassConRepository.save(clClassCon);
     }
 
+    /**
+     * Gets child class.
+     *
+     * @param classUuid the class uuid
+     * @return the child class
+     */
     public int getChildClass(String classUuid) {
         return cl002Mapper.getChildClass(classUuid);
     }
 
+    /**
+     * Gets max class code.
+     *
+     * @param classificationSchemeUuid the classification scheme uuid
+     * @return the max class code
+     */
     public String getMaxClassCode(String classificationSchemeUuid) {
         return cl002Mapper.getMaxClassCode(classificationSchemeUuid);
     }

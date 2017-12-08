@@ -11,6 +11,9 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Blob;
 
+/**
+ * The type Rc component.
+ */
 @Setter
 @Getter
 @DynamicInsert
@@ -93,6 +96,9 @@ public class RcComponent extends BaseJpaModel<RcComponent.RcComponentId> {
         return RcComponentId.of(componentUuid);
     }
 
+    /**
+     * The type Rc component id.
+     */
     @Embeddable
     @Data
     @NoArgsConstructor

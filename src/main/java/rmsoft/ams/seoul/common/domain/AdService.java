@@ -10,6 +10,9 @@ import org.hibernate.annotations.DynamicUpdate;
 import javax.persistence.*;
 import java.io.Serializable;
 
+/**
+ * The type Ad service.
+ */
 @Setter
 @Getter
 @DynamicInsert
@@ -44,6 +47,9 @@ public class AdService extends BaseJpaModel<AdService.AdServiceId> {
     }
 
 
+    /**
+     * The type Ad service id.
+     */
     @Embeddable
     @Data
     @NoArgsConstructor

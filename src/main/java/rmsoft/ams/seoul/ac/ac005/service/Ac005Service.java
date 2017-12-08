@@ -8,8 +8,6 @@ import com.querydsl.core.types.Predicate;
 import io.onsemiro.core.api.response.ApiResponse;
 import io.onsemiro.core.code.ApiStatus;
 import io.onsemiro.core.domain.BaseService;
-import io.onsemiro.core.domain.user.role.QRoleMenu;
-import io.onsemiro.core.domain.user.role.QRolePermission;
 import io.onsemiro.core.parameter.RequestParams;
 import io.onsemiro.utils.ModelMapperUtils;
 import io.onsemiro.utils.UUIDUtils;
@@ -63,7 +61,7 @@ public class Ac005Service extends BaseService {
      *
      * @param pageable      the pageable
      * @param requestParams the request params
-     * @return page
+     * @return page page
      */
     public Page<Ac00501VO> findAllRole(Pageable pageable, RequestParams<Ac00501VO> requestParams) {
 
@@ -133,7 +131,7 @@ public class Ac005Service extends BaseService {
      *
      * @param pageable      the pageable
      * @param requestParams the request params
-     * @return page
+     * @return page page
      */
     public Page<Ac00502VO> findRolePermission(Pageable pageable, RequestParams<Ac00502VO> requestParams) {
         String filter = requestParams.getString("filter", "");

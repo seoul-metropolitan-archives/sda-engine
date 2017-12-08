@@ -14,6 +14,9 @@ import org.hibernate.annotations.DynamicUpdate;
 import javax.persistence.*;
 import java.io.Serializable;
 
+/**
+ * The type Cl classification scheme.
+ */
 @Setter
 @Getter
 @DynamicInsert
@@ -56,6 +59,9 @@ public class ClClassificationScheme extends BaseJpaModel<ClClassificationScheme.
     @Override
     public ClClassificationSchemeId getId() { return ClClassificationSchemeId.of(classificationSchemeUuid); }
 
+    /**
+     * The type Cl classification scheme id.
+     */
     @Embeddable
     @Data
     @NoArgsConstructor

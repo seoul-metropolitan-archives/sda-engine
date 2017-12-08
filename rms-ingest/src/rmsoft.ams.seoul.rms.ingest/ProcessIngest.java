@@ -22,6 +22,9 @@ import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The type Process ingest.
+ */
 @Slf4j
 @Service
 public class ProcessIngest {
@@ -32,6 +35,11 @@ public class ProcessIngest {
     private static boolean truncateTableYn = true;
     private static int sqlBatchSize = 1000;
 
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
     public static void main(String[] args) {
         ProcessIngest test = new ProcessIngest();
         test.setJdbcTemplate(new JdbcTemplate(test.getDataSource()));
@@ -51,26 +59,43 @@ public class ProcessIngest {
 
     /******************************************************
      * Setter Methods
-     *******************************************************/
+     * @param sqlFilePath the sql file path
+     */
     public void setSqlFilePath(String sqlFilePath) {
         this.sqlFilePath = sqlFilePath;
     }
 
+    /**
+     * Sets truncate list.
+     *
+     * @param truncateList the truncate list
+     */
     public void setTruncateList(List<String> truncateList) {
         this.truncateList = truncateList;
     }
 
+    /**
+     * Sets truncate table yn.
+     *
+     * @param truncateTableYn the truncate table yn
+     */
     public void setTruncateTableYn(Boolean truncateTableYn) {
         this.truncateTableYn = truncateTableYn.booleanValue();
     }
 
+    /**
+     * Sets sql batch size.
+     *
+     * @param sqlBatchSize the sql batch size
+     */
     public void setSqlBatchSize(Integer sqlBatchSize) {
         this.sqlBatchSize = sqlBatchSize.intValue();
     }
 
     /******************************************************
      * Main Threads
-     *******************************************************/
+     * @return the workflow response
+     */
     public WorkflowResponse runProcess() {
         WorkflowResponse workflowResult = new WorkflowResponse();
 
@@ -223,6 +248,11 @@ public class ProcessIngest {
         }
     }
 
+    /**
+     * Gets data source.
+     *
+     * @return the data source
+     */
     public DriverManagerDataSource getDataSource() {
 
         DriverManagerDataSource dataSource = new org.springframework.jdbc.datasource.DriverManagerDataSource();
@@ -238,6 +268,11 @@ public class ProcessIngest {
         return dataSource;
     }
 
+    /**
+     * Sets jdbc template.
+     *
+     * @param jdbcTemplate the jdbc template
+     */
     public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }

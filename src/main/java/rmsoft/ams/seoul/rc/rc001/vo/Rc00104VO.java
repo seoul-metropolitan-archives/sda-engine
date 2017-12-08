@@ -3,6 +3,9 @@ package rmsoft.ams.seoul.rc.rc001.vo;
 import lombok.Data;
 import rmsoft.ams.seoul.common.vo.PageInfoVO;
 
+/**
+ * The type Rc 00104 vo.
+ */
 @Data
 public class Rc00104VO extends PageInfoVO {
     private String isDisplayItem;

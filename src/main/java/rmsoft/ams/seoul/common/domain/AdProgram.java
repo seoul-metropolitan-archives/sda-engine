@@ -14,6 +14,9 @@ import org.hibernate.annotations.DynamicUpdate;
 import javax.persistence.*;
 import java.io.Serializable;
 
+/**
+ * The type Ad program.
+ */
 @Setter
 @Getter
 @DynamicInsert
@@ -55,6 +58,9 @@ public class AdProgram extends BaseJpaModel<AdProgram.AdProgramId> {
         return AdProgramId.of(programUuid);
     }
 
+    /**
+     * The type Ad program id.
+     */
     @Embeddable
     @Data
     @NoArgsConstructor

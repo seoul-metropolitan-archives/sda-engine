@@ -5,7 +5,6 @@
 package rmsoft.ams.seoul.common.domain;
 
 import io.onsemiro.core.annotations.Comment;
-import io.onsemiro.core.domain.BaseJpaModel;
 import io.onsemiro.core.domain.SimpleJpaModel;
 import lombok.*;
 import org.apache.ibatis.type.Alias;
@@ -15,6 +14,9 @@ import org.hibernate.annotations.DynamicUpdate;
 import javax.persistence.*;
 import java.io.Serializable;
 
+/**
+ * The type Cl classification scheme con.
+ */
 @Setter
 @Getter
 @DynamicInsert
@@ -85,6 +87,9 @@ public class ClClassificationSchemeCon extends SimpleJpaModel<ClClassificationSc
     @Override
     public ClClassificationSchemeId getId() { return ClClassificationSchemeId.of(classificationSchemeUuid); }
 
+    /**
+     * The type Cl classification scheme id.
+     */
     @Embeddable
     @Data
     @NoArgsConstructor

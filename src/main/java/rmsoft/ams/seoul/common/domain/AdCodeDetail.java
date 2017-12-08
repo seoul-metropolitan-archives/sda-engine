@@ -10,6 +10,9 @@ import org.hibernate.annotations.DynamicUpdate;
 import javax.persistence.*;
 import java.io.Serializable;
 
+/**
+ * The type Ad code detail.
+ */
 @Setter
 @Getter
 @DynamicInsert
@@ -85,6 +88,9 @@ public class AdCodeDetail extends BaseJpaModel<AdCodeDetail.AdCodeDetailId> {
         return AdCodeDetailId.of(codeDetailUuid);
     }
 
+    /**
+     * The type Ad code detail id.
+     */
     @Embeddable
     @Data
     @NoArgsConstructor

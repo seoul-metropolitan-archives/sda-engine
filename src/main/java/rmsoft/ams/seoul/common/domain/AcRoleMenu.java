@@ -14,6 +14,9 @@ import org.hibernate.annotations.DynamicUpdate;
 import javax.persistence.*;
 import java.io.Serializable;
 
+/**
+ * The type Ac role menu.
+ */
 @Setter
 @Getter
 @DynamicInsert
@@ -55,6 +58,9 @@ public class AcRoleMenu extends BaseJpaModel<AcRoleMenu.AcRoleMenuId> {
         return AcRoleMenuId.of(roleMenuUuid);
     }
 
+    /**
+     * The type Ac role menu id.
+     */
     @Embeddable
     @Data
     @NoArgsConstructor

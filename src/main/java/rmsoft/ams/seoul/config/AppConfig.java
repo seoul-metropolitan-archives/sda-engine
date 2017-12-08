@@ -45,6 +45,9 @@ import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 import java.util.Properties;
 
+/**
+ * The type App config.
+ */
 @Slf4j
 @Configuration
 @EnableAutoConfiguration
@@ -77,17 +80,34 @@ public class AppConfig implements ApplicationContextAware {
         PackageManager.BASE = PackageNames.BASE;
     }
 
+    /**
+     * Data source data source.
+     *
+     * @param axBootContextConfig the ax boot context config
+     * @return the data source
+     * @throws Exception the exception
+     */
     @Bean
     @Primary
     public DataSource dataSource(@Named(value = "axBootContextConfig") AXBootContextConfig axBootContextConfig) throws Exception {
         return AXBootDataSourceFactory.create(axBootContextConfig.getDataSourceConfig());
     }
 
+    /**
+     * Property placeholder configurer property sources placeholder configurer.
+     *
+     * @return the property sources placeholder configurer
+     */
     @Bean
     public static PropertySourcesPlaceholderConfigurer propertyPlaceholderConfigurer() {
         return new PropertySourcesPlaceholderConfigurer();
     }
 
+    /**
+     * Model mapper model mapper.
+     *
+     * @return the model mapper
+     */
     @Bean
     public ModelMapper modelMapper() {
 
@@ -100,11 +120,23 @@ public class AppConfig implements ApplicationContextAware {
         return modelMapper;
     }
 
+    /**
+     * Model factory mapper factory.
+     *
+     * @return the mapper factory
+     */
     @Bean
     public MapperFactory modelFactory() {
         return new DefaultMapperFactory.Builder().build();
     }
 
+    /**
+     * Entity manager factory local container entity manager factory bean.
+     *
+     * @param dataSource          the data source
+     * @param axBootContextConfig the ax boot context config
+     * @return the local container entity manager factory bean
+     */
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource, AXBootContextConfig axBootContextConfig) {
 
@@ -119,16 +151,35 @@ public class AppConfig implements ApplicationContextAware {
         return entityManagerFactory;
     }
 
+    /**
+     * Exception translation persistence exception translation post processor.
+     *
+     * @return the persistence exception translation post processor
+     */
     @Bean
     public PersistenceExceptionTranslationPostProcessor exceptionTranslation() {
         return new PersistenceExceptionTranslationPostProcessor();
     }
 
+    /**
+     * Managed transaction factory spring managed transaction factory.
+     *
+     * @return the spring managed transaction factory
+     */
     @Bean
     public SpringManagedTransactionFactory managedTransactionFactory() {
         return new SpringManagedTransactionFactory();
     }
 
+    /**
+     * Sql session factory sql session factory.
+     *
+     * @param springManagedTransactionFactory the spring managed transaction factory
+     * @param dataSource                      the data source
+     * @param axBootContextConfig             the ax boot context config
+     * @return the sql session factory
+     * @throws Exception the exception
+     */
     @Bean
     public SqlSessionFactory sqlSessionFactory(SpringManagedTransactionFactory springManagedTransactionFactory, DataSource dataSource, AXBootContextConfig axBootContextConfig) throws Exception {
 
@@ -183,6 +234,13 @@ public class AppConfig implements ApplicationContextAware {
         return mapperScannerConfigurer;
     }*/
 
+    /**
+     * Transaction manager platform transaction manager.
+     *
+     * @param entityManagerFactory the entity manager factory
+     * @return the platform transaction manager
+     * @throws ClassNotFoundException the class not found exception
+     */
     @Bean
     public PlatformTransactionManager transactionManager(EntityManagerFactory entityManagerFactory) throws ClassNotFoundException {
 
@@ -192,26 +250,53 @@ public class AppConfig implements ApplicationContextAware {
         return jpaTransactionManager;
     }
 
+    /**
+     * B crypt password encoder b crypt password encoder.
+     *
+     * @return the b crypt password encoder
+     */
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder(11);
     }
 
+    /**
+     * Jdbc metadata service jdbc metadata service.
+     *
+     * @return the jdbc metadata service
+     */
     @Bean
     public JdbcMetadataService jdbcMetadataService() {
         return new JdbcMetadataService();
     }
 
+    /**
+     * Ax boot context config ax boot context config.
+     *
+     * @return the ax boot context config
+     */
     @Bean(name = "axBootContextConfig")
     public AXBootContextConfig axBootContextConfig() {
         return new AXBootContextConfig();
     }
 
+    /**
+     * Sql monitoring service sql monitoring service.
+     *
+     * @param dataSource the data source
+     * @return the sql monitoring service
+     * @throws Exception the exception
+     */
     @Bean
     public SqlMonitoringService sqlMonitoringService(DataSource dataSource) throws Exception {
         return new SqlMonitoringService(dataSource);
     }
 
+    /**
+     * Validator factory bean local validator factory bean.
+     *
+     * @return the local validator factory bean
+     */
     @Bean
     public LocalValidatorFactoryBean validatorFactoryBean() {
         return new LocalValidatorFactoryBean();
@@ -221,7 +306,7 @@ public class AppConfig implements ApplicationContextAware {
     /**
      * 여기 설정된 함수 이름이 Thread를 돌렸을때의 이름으로 보여짐
      *
-     * @return
+     * @return task executor
      */
     @Bean
     public TaskExecutor taskExecutor() {

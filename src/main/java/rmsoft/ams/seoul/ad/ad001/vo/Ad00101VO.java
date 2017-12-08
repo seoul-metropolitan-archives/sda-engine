@@ -1,10 +1,12 @@
 package rmsoft.ams.seoul.ad.ad001.vo;
 
 import io.onsemiro.core.vo.BaseVO;
-import lombok.*;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
-import java.io.Serializable;
-
+/**
+ * The type Ad 00101 vo.
+ */
 @Data
 @EqualsAndHashCode(callSuper = false)
 public class Ad00101VO extends BaseVO
