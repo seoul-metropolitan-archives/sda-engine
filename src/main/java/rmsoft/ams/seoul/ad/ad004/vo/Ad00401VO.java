@@ -5,17 +5,20 @@ import io.onsemiro.utils.DateUtils;
 import io.onsemiro.utils.SessionUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
 
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
+/**
+ * The type Ad 00401 vo.
+ */
 @Data
 @EqualsAndHashCode(callSuper = false)
 public class Ad00401VO extends BaseVO
 {
+    /**
+     * Instantiates a new Ad 00401 vo.
+     */
     public Ad00401VO()
     {
         this.insertUuid = this.updateUuid = SessionUtils.getCurrentUser().getUserUuid();

@@ -14,6 +14,12 @@ import java.text.MessageFormat;
 @Slf4j
 public class SendMsgEncoderWriter {
 
+    /**
+     * Write.
+     *
+     * @param packageName       the package name
+     * @param socketMsgTemplate the socket msg template
+     */
     public static void write(String packageName, SocketMsgTemplate socketMsgTemplate) {
 
         String contents = buildContents(socketMsgTemplate);

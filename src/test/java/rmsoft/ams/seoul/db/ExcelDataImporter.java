@@ -1,6 +1,5 @@
 package rmsoft.ams.seoul.db;
 
-import rmsoft.ams.seoul.socket.SocketMsgUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.IDatabaseConnection;
@@ -9,6 +8,7 @@ import org.dbunit.dataset.excel.XlsDataSet;
 import org.dbunit.operation.DatabaseOperation;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
 import org.springframework.jdbc.datasource.DataSourceUtils;
+import rmsoft.ams.seoul.socket.SocketMsgUtils;
 
 import javax.sql.DataSource;
 import java.io.File;
@@ -61,6 +61,12 @@ public class ExcelDataImporter {
         }
     }
 
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     * @throws Exception the exception
+     */
     public static void main(String[] args) throws Exception{
 
         String userName = args[0];

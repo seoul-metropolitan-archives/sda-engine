@@ -13,8 +13,10 @@ import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.sql.Timestamp;
 
+/**
+ * The type Rc level.
+ */
 @Setter
 @Getter
 @DynamicInsert
@@ -48,6 +50,9 @@ public class RcLevel extends BaseJpaModel<RcLevel.RcLevelId> {
         return RcLevelId.of(levelUuid);
     }
 
+    /**
+     * The type Rc level id.
+     */
     @Embeddable
     @Data
     @NoArgsConstructor

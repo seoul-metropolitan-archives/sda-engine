@@ -15,8 +15,8 @@ import rmsoft.ams.seoul.common.domain.AcUserGroup;
  *
  * @author james
  * @version 1.0.0
- * @since 2017-09-26 오후 3:36
- **/
+ * @since 2017 -09-26 오후 3:36
+ */
 @Component
 public class Ac00401ModelMapper extends CustomMapper<AcUserGroup, Ac00401VO> {
 

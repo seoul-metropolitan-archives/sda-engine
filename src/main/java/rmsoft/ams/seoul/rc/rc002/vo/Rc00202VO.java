@@ -2,6 +2,9 @@ package rmsoft.ams.seoul.rc.rc002.vo;
 
 import lombok.Data;
 
+/**
+ * The type Rc 00202 vo.
+ */
 @Data
 public class Rc00202VO {
     private String saveType;

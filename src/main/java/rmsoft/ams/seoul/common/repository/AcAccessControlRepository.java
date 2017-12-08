@@ -13,8 +13,8 @@ import rmsoft.ams.seoul.common.domain.AcAccessControl;
  *
  * @author james
  * @version 1.0.0
- * @since 2017-10-13 오후 1:19
- **/
+ * @since 2017 -10-13 오후 1:19
+ */
 @Repository
 public interface AcAccessControlRepository extends AXBootJPAQueryDSLRepository<AcAccessControl, AcAccessControl.AcAccessControlId> {
 }

@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.RestController;
 import rmsoft.ams.seoul.cl.cl003.service.Cl003Service;
 import rmsoft.ams.seoul.cl.cl003.vo.Cl00301VO;
 
+/**
+ * The type Cl 003 controller.
+ */
 @RestController
 @RequestMapping("/cl/cl003")
 public class Cl003Controller extends BaseController {
@@ -19,6 +22,13 @@ public class Cl003Controller extends BaseController {
     @Autowired
     private Cl003Service cl003Service;
 
+    /**
+     * Gets classified record list.
+     *
+     * @param pageable      the pageable
+     * @param requestParams the request params
+     * @return the classified record list
+     */
     @GetMapping("/01/list")
     public Responses.PageResponse getClassifiedRecordList(Pageable pageable, RequestParams<Cl00301VO> requestParams) {
         Page<Cl00301VO> pages = cl003Service.getClassifiedRecordList(pageable, requestParams);

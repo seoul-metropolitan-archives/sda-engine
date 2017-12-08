@@ -23,8 +23,8 @@ import java.util.List;
  *
  * @author james
  * @version 1.0.0
- * @since 2017-10-12 오후 5:48
- **/
+ * @since 2017 -10-12 오후 5:48
+ */
 @RestController
 @RequestMapping(value = "/api/v1/ac005/")
 public class Ac005Controller extends MessageBaseController {
@@ -32,6 +32,13 @@ public class Ac005Controller extends MessageBaseController {
     @Autowired
     private Ac005Service ac005Service;
 
+    /**
+     * Find all role responses . page response.
+     *
+     * @param pageable      the pageable
+     * @param requestParams the request params
+     * @return the responses . page response
+     */
     @GetMapping("/01/list")
     public Responses.PageResponse findAllRole(Pageable pageable, RequestParams<Ac00501VO> requestParams) {
         Page<Ac00501VO> pages = ac005Service.findAllRole(pageable, requestParams);
@@ -39,6 +46,13 @@ public class Ac005Controller extends MessageBaseController {
         return Responses.PageResponse.of(pages.getContent(), pages);
     }
 
+    /**
+     * Find role permission responses . page response.
+     *
+     * @param pageable      the pageable
+     * @param requestParams the request params
+     * @return the responses . page response
+     */
     @GetMapping("/02/list")
     public Responses.PageResponse findRolePermission(Pageable pageable, RequestParams<Ac00502VO> requestParams) {
         Page<Ac00502VO> pages = ac005Service.findRolePermission(pageable, requestParams);
@@ -46,12 +60,24 @@ public class Ac005Controller extends MessageBaseController {
         return Responses.PageResponse.of(pages.getContent(), pages);
     }
 
+    /**
+     * Save group api response.
+     *
+     * @param requestParams the request params
+     * @return the api response
+     */
     @PutMapping(value = "/01/save")
     @PostMapping
     public ApiResponse saveGroup(@RequestBody List<Ac00501VO> requestParams) {
         return ac005Service.saveRole(requestParams);
     }
 
+    /**
+     * Save user group api response.
+     *
+     * @param requestParams the request params
+     * @return the api response
+     */
     @PutMapping(value = "/02/save")
     @PostMapping
     public ApiResponse saveUserGroup(@RequestBody List<Ac00502VO> requestParams) {

@@ -22,8 +22,8 @@ import java.util.List;
  *
  * @author james
  * @version 1.0.0
- * @since 2017-10-12 오후 5:48
- **/
+ * @since 2017 -10-12 오후 5:48
+ */
 @RestController
 @RequestMapping(value = "/api/v1/ac006/")
 public class Ac006Controller extends MessageBaseController {
@@ -31,6 +31,13 @@ public class Ac006Controller extends MessageBaseController {
     @Autowired
     private Ac006Service ac006Service;
 
+    /**
+     * Find all permission responses . page response.
+     *
+     * @param pageable      the pageable
+     * @param requestParams the request params
+     * @return the responses . page response
+     */
     @GetMapping("/01/list")
     public Responses.PageResponse findAllPermission(Pageable pageable, RequestParams<Ac00601VO> requestParams) {
         Page<Ac00601VO> pages = ac006Service.findAllPermission(pageable, requestParams);
@@ -38,6 +45,12 @@ public class Ac006Controller extends MessageBaseController {
         return Responses.PageResponse.of(pages.getContent(), pages);
     }
 
+    /**
+     * Save user group api response.
+     *
+     * @param requestParams the request params
+     * @return the api response
+     */
     @PutMapping(value = "/01/save")
     @PostMapping
     public ApiResponse saveUserGroup(@RequestBody List<Ac00601VO> requestParams) {

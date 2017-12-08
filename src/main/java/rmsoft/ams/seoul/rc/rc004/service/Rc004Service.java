@@ -1,7 +1,5 @@
 package rmsoft.ams.seoul.rc.rc004.service;
 
-import io.onsemiro.core.api.response.ApiResponse;
-import io.onsemiro.core.code.ApiStatus;
 import io.onsemiro.core.domain.BaseService;
 import io.onsemiro.core.parameter.RequestParams;
 import io.onsemiro.utils.DateUtils;
@@ -26,6 +24,9 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * The type Rc 004 service.
+ */
 @Service
 public class Rc004Service extends BaseService{
     @Inject
@@ -37,6 +38,11 @@ public class Rc004Service extends BaseService{
     @Autowired
     private RcItemConRepository rcItemConRepository;
 
+    /**
+     * Save item details.
+     *
+     * @param requestParams the request params
+     */
     @Transactional
     public void saveItemDetails(RequestParams<Rc00501VO> requestParams){
         RcItem rcItem = new RcItem(); //RC_ITEM
@@ -105,6 +111,11 @@ public class Rc004Service extends BaseService{
 
     }
 
+    /**
+     * Save component list.
+     *
+     * @param list the list
+     */
     @Transactional
     public void saveComponentList(List<Rc00402VO> list){
         List<RcComponent> rcComponentList = ModelMapperUtils.mapList(list, RcComponent.class);

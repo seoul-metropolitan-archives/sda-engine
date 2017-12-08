@@ -1,8 +1,10 @@
 package rmsoft.ams.seoul.rc.rc002.vo;
 
-import io.onsemiro.utils.UUIDUtils;
 import lombok.Data;
 
+/**
+ * The type Rc 00201 vo.
+ */
 @Data
 public class Rc00201VO
 {

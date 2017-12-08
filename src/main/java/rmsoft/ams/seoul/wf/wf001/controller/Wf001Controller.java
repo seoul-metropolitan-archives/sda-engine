@@ -23,8 +23,8 @@ import java.util.List;
  *
  * @author james
  * @version 1.0.0
- * @since 2017-10-12 오후 5:48
- **/
+ * @since 2017 -10-12 오후 5:48
+ */
 @RestController
 @RequestMapping(value = "/api/v1/wf001/")
 public class Wf001Controller extends MessageBaseController {
@@ -32,6 +32,13 @@ public class Wf001Controller extends MessageBaseController {
     @Autowired
     private Wf001Service wf001Service;
 
+    /**
+     * Find all job responses . page response.
+     *
+     * @param pageable      the pageable
+     * @param requestParams the request params
+     * @return the responses . page response
+     */
     @GetMapping("/01/list")
     public Responses.PageResponse findAllJob(Pageable pageable, RequestParams<Wf00101VO> requestParams) {
         Page<Wf00101VO> pages = wf001Service.findAllJob(pageable, requestParams);
@@ -39,6 +46,13 @@ public class Wf001Controller extends MessageBaseController {
         return Responses.PageResponse.of(pages.getContent(), pages);
     }
 
+    /**
+     * Find parameter responses . page response.
+     *
+     * @param pageable      the pageable
+     * @param requestParams the request params
+     * @return the responses . page response
+     */
     @GetMapping("/02/list")
     public Responses.PageResponse findParameter(Pageable pageable, RequestParams<Wf00102VO> requestParams) {
         Page<Wf00102VO> pages = wf001Service.findParameter(pageable, requestParams);
@@ -46,12 +60,24 @@ public class Wf001Controller extends MessageBaseController {
         return Responses.PageResponse.of(pages.getContent(), pages);
     }
 
+    /**
+     * Save job api response.
+     *
+     * @param requestParams the request params
+     * @return the api response
+     */
     @PutMapping(value = "/01/save")
     @PostMapping
     public ApiResponse saveJob(@RequestBody List<Wf00101VO> requestParams) {
         return wf001Service.saveJob(requestParams);
     }
 
+    /**
+     * Save parameter api response.
+     *
+     * @param requestParams the request params
+     * @return the api response
+     */
     @PutMapping(value = "/02/save")
     @PostMapping
     public ApiResponse saveParameter(@RequestBody List<Wf00102VO> requestParams) {

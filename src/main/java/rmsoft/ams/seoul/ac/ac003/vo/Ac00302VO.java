@@ -16,6 +16,9 @@ import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 
+/**
+ * The type Ac 00302 vo.
+ */
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
@@ -30,6 +33,12 @@ public class Ac00302VO extends BaseVO {
 
     private String useYn;
 
+    /**
+     * Of ac 00302 vo.
+     *
+     * @param acUserGroupUser the ac user group user
+     * @return the ac 00302 vo
+     */
     public static Ac00302VO of(AcUserGroupUser acUserGroupUser) {
         // Custom Mapper
         /*BoundMapperFacade<AcUser, Ac00301VO> mapper =
@@ -38,10 +47,22 @@ public class Ac00302VO extends BaseVO {
         return ModelMapperUtils.map(acUserGroupUser, Ac00302VO.class);
     }
 
+    /**
+     * Of list.
+     *
+     * @param acUserGroupUserList the ac user group user list
+     * @return the list
+     */
     public static List<Ac00302VO> of(List<AcUserGroupUser> acUserGroupUserList) {
         return acUserGroupUserList.stream().map(acUserGroupUser -> of(acUserGroupUser)).collect(toList());
     }
 
+    /**
+     * Of list.
+     *
+     * @param acUserGroupUserPage the ac user group user page
+     * @return the list
+     */
     public static List<Ac00302VO> of(Page<AcUserGroupUser> acUserGroupUserPage) {
         return acUserGroupUserPage.getContent().stream().map(acUserGroupUser -> of(acUserGroupUser)).collect(toList());
     }

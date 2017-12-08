@@ -14,6 +14,9 @@ import org.hibernate.annotations.DynamicUpdate;
 import javax.persistence.*;
 import java.io.Serializable;
 
+/**
+ * The type Cl class.
+ */
 @Setter
 @Getter
 @DynamicInsert
@@ -69,6 +72,9 @@ public class ClClass extends BaseJpaModel<ClClass.ClClassId> {
     @Override
     public ClClassId getId() { return ClClassId.of(classUuid); }
 
+    /**
+     * The type Cl class id.
+     */
     @Embeddable
     @Data
     @NoArgsConstructor

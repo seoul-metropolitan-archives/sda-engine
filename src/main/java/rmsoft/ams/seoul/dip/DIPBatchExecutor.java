@@ -32,33 +32,57 @@ import java.util.Map;
  *
  * @author james
  * @version 1.0.0
- * @since 2017-12-06 오후 6:13
- **/
+ * @since 2017 -12-06 오후 6:13
+ */
 @Slf4j
 @Component
 @ConditionalOnClass(DIPBatchExecutionCondition.class)
 public class DIPBatchExecutor {
+    /**
+     * The Ftp host.
+     */
     @Value("${dip.process.sftp.host}")
     protected String ftpHost;
 
+    /**
+     * The Ftp port.
+     */
     @Value("${dip.process.sftp.port}")
     protected int ftpPort;
 
+    /**
+     * The Ftp user.
+     */
     @Value("${dip.process.sftp.user}")
     protected String ftpUser;
 
+    /**
+     * The Ftp password.
+     */
     @Value("${dip.process.sftp.password}")
     protected String ftpPassword;
 
+    /**
+     * The Ftp json path.
+     */
     @Value("${dip.process.sftp.json-file-path}")
     protected String ftpJsonPath;
 
+    /**
+     * The Ftp digital file path.
+     */
     @Value("${dip.process.sftp.digital-file-path}")
     protected String ftpDigitalFilePath;
 
+    /**
+     * The Json tmp dir.
+     */
     @Value("${dip.process.tmp.dir}")
     protected String jsonTmpDir;
 
+    /**
+     * The Digital file dir.
+     */
     @Value("${dip.process.digital.file.dir}")
     protected String digitalFileDir;
 
@@ -72,11 +96,17 @@ public class DIPBatchExecutor {
     private Session session;
     private Channel channel;
 
+    /**
+     * Execute.
+     */
     @Scheduled(cron = "${dip.process.batch.cron}")
     public void execute() {
         runDipProcess();
     }
 
+    /**
+     * Run dip process.
+     */
     public void runDipProcess() {
         log.info("DIPBatchExecutor-execute DIP Process :: {}");
 
@@ -129,20 +159,6 @@ public class DIPBatchExecutor {
             errorLogging(e);
             log.error("DIP Process Error : " + e.getMessage());
         }
-
-
-
-        /*List<File> fileList = (List<File>) FileUtils.listFiles(new File(fileDir), null, false);
-
-        List<File> filteredFileList = fileList.stream()
-                .filter(file -> {
-                    String fileName = file.getName();
-                    fileName = fileName.replace(".dat", "");
-                    return fileName.endsWith("0");
-                })
-                .collect(Collectors.toList());
-
-        filteredFileList.forEach(file -> doExecute(file.getName()));*/
     }
 
     private void connect() throws JSchException {
@@ -252,6 +268,11 @@ public class DIPBatchExecutor {
         return listFiles;
     }
 
+    /**
+     * Error logging.
+     *
+     * @param throwable the throwable
+     */
     protected void errorLogging(Throwable throwable) {
 
         if (log.isErrorEnabled()) {

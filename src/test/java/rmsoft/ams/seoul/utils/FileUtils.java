@@ -38,7 +38,7 @@ import java.util.zip.ZipOutputStream;
 
 /**
  * 파일 및 디렉토리 복사, 삭제, 초기화 등에 관련한 편의 기능들을 제공한다.<br>
- * 
+ *
  * @author james
  * @since 1.0.0
  */
@@ -54,19 +54,19 @@ public final class FileUtils {
 		return result;
 	}
 
-	/**
+    /**
      * byte단위의 파일 사이즈를 읽기 쉽도록 EB, PB, TB, GB, MB, KB, bytes 단위로 파싱하여 반환한다.
-     * 
+     *
      * @param file 사이즈 측정에 사용될 파일
      * @return EB, PB, TB, GB, MB, KB, bytes 단위의 파일 사이즈
      */
     public static String byteCountToDisplaySize(File file) {
     	return org.apache.commons.io.FileUtils.byteCountToDisplaySize(file.length());    	
     }
-	
-	/**
+
+    /**
      * byte단위의 파일 사이즈를 읽기 쉽도록 EB, PB, TB, GB, MB, KB, bytes 단위로 파싱하여 반환한다.
-     * 
+     *
      * @param size bytes 단위의 파일 크기
      * @return EB, PB, TB, GB, MB, KB, bytes 단위의 파일 사이즈
      */
@@ -74,13 +74,13 @@ public final class FileUtils {
     	return org.apache.commons.io.FileUtils.byteCountToDisplaySize(size);    	
     }
 
-	/**
-	 * 루트 디렉토리 내의 파일 및 하위 디렉토리를 삭제한다. 루트 디렉토리는 삭제하지 않는다.
-	 * 
-	 * @param dir 루트 디렉토리 File
-	 * @return 성공하면 enum 타입의 Result.SUCCESS를 그렇지 않으면 Result.FAIL을 반환
-	 */
-	public static Result cleanDir(File dir) {
+    /**
+     * 루트 디렉토리 내의 파일 및 하위 디렉토리를 삭제한다. 루트 디렉토리는 삭제하지 않는다.
+     *
+     * @param dir 루트 디렉토리 File
+     * @return 성공하면 enum 타입의 Result.SUCCESS를 그렇지 않으면 Result.FAIL을 반환
+     */
+    public static Result cleanDir(File dir) {
 
 		if (notExistsDir(dir)) {
 			return buildFailResult(dir + "가 존재하지 않습니다.");
@@ -98,67 +98,67 @@ public final class FileUtils {
 		}
 	}
 
-	/**
-	 * 루트 디렉토리 내의 파일 및 하위 디렉토리를 삭제한다. 루트 디렉토리는 삭제하지 않는다.
-	 * 
-	 * @param dir 루트 디렉토리 명
-	 * @return 성공하면 enum 타입의 Result.SUCCESS를 그렇지 않으면 Result.FAIL을 반환
-	 */
-	public static Result cleanDir(String dir) {
+    /**
+     * 루트 디렉토리 내의 파일 및 하위 디렉토리를 삭제한다. 루트 디렉토리는 삭제하지 않는다.
+     *
+     * @param dir 루트 디렉토리 명
+     * @return 성공하면 enum 타입의 Result.SUCCESS를 그렇지 않으면 Result.FAIL을 반환
+     */
+    public static Result cleanDir(String dir) {
 		return cleanDir(new File(dir));
 	}
 
-	/**
-	 * 원본 디렉토리를 대상 디렉토리명으로 복사한다.
-	 * 
-	 * @param srcDir  원본 디렉토리
-	 * @param destDir 대상 디렉토리
-	 * @return 성공하면 enum 타입의 Result.SUCCESS를 그렇지 않으면 Result.FAIL을 반환
-	 */
-	public static Result copyDir(File srcDir, File destDir) {
+    /**
+     * 원본 디렉토리를 대상 디렉토리명으로 복사한다.
+     *
+     * @param srcDir  원본 디렉토리
+     * @param destDir 대상 디렉토리
+     * @return 성공하면 enum 타입의 Result.SUCCESS를 그렇지 않으면 Result.FAIL을 반환
+     */
+    public static Result copyDir(File srcDir, File destDir) {
 		return copyDir(srcDir, destDir, null, true);
 
 	}
 
-	/**
-	 * 원본디렉토리를 대상 디렉토리명으로 복사한다.<br>
-	 * preserveFileDate가 true면 원본디렉토리의 파일 최종 수정일을 그대로 사용하고 false면 현재 일자를 최종 수정일로
-	 * 설정한다.
-	 * 
-	 * @param srcDir  원본 디렉토리
-	 * @param destDir 대상 디렉토리
-	 * @param preserveFileDate 수정일 설정 플래그
-	 * @return 성공하면 enum 타입의 Result.SUCCESS를 그렇지 않으면 Result.FAIL을 반환
-	 */
-	public static Result copyDir(File srcDir, File destDir, boolean preserveFileDate) {
+    /**
+     * 원본디렉토리를 대상 디렉토리명으로 복사한다.<br>
+     * preserveFileDate가 true면 원본디렉토리의 파일 최종 수정일을 그대로 사용하고 false면 현재 일자를 최종 수정일로
+     * 설정한다.
+     *
+     * @param srcDir           원본 디렉토리
+     * @param destDir          대상 디렉토리
+     * @param preserveFileDate 수정일 설정 플래그
+     * @return 성공하면 enum 타입의 Result.SUCCESS를 그렇지 않으면 Result.FAIL을 반환
+     */
+    public static Result copyDir(File srcDir, File destDir, boolean preserveFileDate) {
 		return copyDir(srcDir, destDir, null, true);
 		
 	}
 
-	/**
-	 * 원본디렉토리를 대상 디렉토리명으로 복사한다. fileDir가 'file'이면 파일만 'directory'면 디렉토리만 복사한다.
-	 * 
-	 * @param srcDir  원본 디렉토리
-	 * @param destDir 대상 디렉토리
-	 * @param fileOrDir 파일인지 디렉토리인지를 결정하는 플래그
-	 * @return 성공하면 enum 타입의 Result.SUCCESS를 그렇지 않으면 Result.FAIL을 반환
-	 */
-	public static Result copyDir(File srcDir, File destDir, String fileOrDir) {
+    /**
+     * 원본디렉토리를 대상 디렉토리명으로 복사한다. fileDir가 'file'이면 파일만 'directory'면 디렉토리만 복사한다.
+     *
+     * @param srcDir    원본 디렉토리
+     * @param destDir   대상 디렉토리
+     * @param fileOrDir 파일인지 디렉토리인지를 결정하는 플래그
+     * @return 성공하면 enum 타입의 Result.SUCCESS를 그렇지 않으면 Result.FAIL을 반환
+     */
+    public static Result copyDir(File srcDir, File destDir, String fileOrDir) {
 		return copyDir(srcDir, destDir, fileOrDir, true);
 	}
 
-	/**
-	 * 원본디렉토리를 대상 디렉토리명으로 복사한다. fileOrDir가 'file'이면 파일만 'directory'면 디렉토리만 복사한다.<br>
-	 * preserveFileDate가 true면 원본디렉토리의 파일 최종 수정일을 그대로 사용하고 false면 현재 일자를 최종 수정일로
-	 * 설정한다.
-	 * 
-	 * @param srcDir  원본 디렉토리
-	 * @param destDir 대상 디렉토리
-	 * @param fileOrDir 파일인지 디렉토리인지를 결정하는 플래그
-	 * @param preserveFileDate 수정일 설정 플래그
-	 * @return 성공하면 enum 타입의 Result.SUCCESS를 그렇지 않으면 Result.FAIL을 반환
-	 */
-	public static Result copyDir(File srcDir, File destDir, String fileOrDir, boolean preserveFileDate) {
+    /**
+     * 원본디렉토리를 대상 디렉토리명으로 복사한다. fileOrDir가 'file'이면 파일만 'directory'면 디렉토리만 복사한다.<br>
+     * preserveFileDate가 true면 원본디렉토리의 파일 최종 수정일을 그대로 사용하고 false면 현재 일자를 최종 수정일로
+     * 설정한다.
+     *
+     * @param srcDir           원본 디렉토리
+     * @param destDir          대상 디렉토리
+     * @param fileOrDir        파일인지 디렉토리인지를 결정하는 플래그
+     * @param preserveFileDate 수정일 설정 플래그
+     * @return 성공하면 enum 타입의 Result.SUCCESS를 그렇지 않으면 Result.FAIL을 반환
+     */
+    public static Result copyDir(File srcDir, File destDir, String fileOrDir, boolean preserveFileDate) {
 
 		if (notExistsDir(srcDir)) {
 			return buildFailResult(srcDir + "가 존재하지 않습니다.");
@@ -212,82 +212,82 @@ public final class FileUtils {
 		return Result.SUCCESS;
 	}
 
-	/**
-	 * 원본 디렉토리를 대상 디렉토리명으로 복사한다.
-	 * 
-	 * @param srcDir  원본 디렉토리
-	 * @param destDir 대상 디렉토리
-	 * @return 성공하면 enum 타입의 Result.SUCCESS를 그렇지 않으면 Result.FAIL을 반환
-	 */
-	public static Result copyDir(String srcDir, String destDir) {
+    /**
+     * 원본 디렉토리를 대상 디렉토리명으로 복사한다.
+     *
+     * @param srcDir  원본 디렉토리
+     * @param destDir 대상 디렉토리
+     * @return 성공하면 enum 타입의 Result.SUCCESS를 그렇지 않으면 Result.FAIL을 반환
+     */
+    public static Result copyDir(String srcDir, String destDir) {
 		return copyDir(new File(srcDir), new File(destDir), true);
 	}
 
-	/**
-	 * 원본디렉토리를 대상 디렉토리명으로 복사한다.<br>
-	 * preserveFileDate가 true면 원본디렉토리의 파일 최종 수정일을 그대로 사용하고 false면 현재 일자를 최종 수정일로
-	 * 설정한다.
-	 * 
-	 * @param srcDir  원본 디렉토리
-	 * @param destDir 대상 디렉토리
-	 * @param preserveFileDate 수정일 설정 플래그
-	 * @return 성공하면 enum 타입의 Result.SUCCESS를 그렇지 않으면 Result.FAIL을 반환
-	 */
-	public static Result copyDir(String srcDir, String destDir, boolean preserveFileDate) {
+    /**
+     * 원본디렉토리를 대상 디렉토리명으로 복사한다.<br>
+     * preserveFileDate가 true면 원본디렉토리의 파일 최종 수정일을 그대로 사용하고 false면 현재 일자를 최종 수정일로
+     * 설정한다.
+     *
+     * @param srcDir           원본 디렉토리
+     * @param destDir          대상 디렉토리
+     * @param preserveFileDate 수정일 설정 플래그
+     * @return 성공하면 enum 타입의 Result.SUCCESS를 그렇지 않으면 Result.FAIL을 반환
+     */
+    public static Result copyDir(String srcDir, String destDir, boolean preserveFileDate) {
 		return copyDir(new File(srcDir), new File(destDir), preserveFileDate);
 	}
 
-	/**
-	 * 원본디렉토리를 대상 디렉토리명으로 복사한다. fileDir가 'file'이면 파일만 'directory'면 디렉토리만 복사한다.
-	 * 
-	 * @param srcDir  원본 디렉토리
-	 * @param destDir 대상 디렉토리
-	 * @param fileOrDir 파일인지 디렉토리인지를 결정하는 플래그
-	 * @return 성공하면 enum 타입의 Result.SUCCESS를 그렇지 않으면 Result.FAIL을 반환
-	 */
-	public static Result copyDir(String srcDir, String destDir, String fileOrDir) {
+    /**
+     * 원본디렉토리를 대상 디렉토리명으로 복사한다. fileDir가 'file'이면 파일만 'directory'면 디렉토리만 복사한다.
+     *
+     * @param srcDir    원본 디렉토리
+     * @param destDir   대상 디렉토리
+     * @param fileOrDir 파일인지 디렉토리인지를 결정하는 플래그
+     * @return 성공하면 enum 타입의 Result.SUCCESS를 그렇지 않으면 Result.FAIL을 반환
+     */
+    public static Result copyDir(String srcDir, String destDir, String fileOrDir) {
 		return copyDir(new File(srcDir), new File(destDir), fileOrDir, true);
 	}
 
-	/**
-	 * 원본디렉토리를 대상 디렉토리명으로 복사한다. fileOrDir가 'file'이면 파일만 'directory'면 디렉토리만 복사한다.<br>
-	 * preserveFileDate가 true면 원본디렉토리의 파일 최종 수정일을 그대로 사용하고 false면 현재 일자를 최종 수정일로
-	 * 설정한다.
-	 * 
-	 * @param srcDir  원본 디렉토리
-	 * @param destDir 대상 디렉토리
-	 * @param fileOrDir 파일인지 디렉토리인지를 결정하는 플래그 "file" 또는 "directory"를 사용
-	 * @param preserveFileDate 수정일 설정 플래그
-	 * @return 성공하면 enum 타입의 Result.SUCCESS를 그렇지 않으면 Result.FAIL을 반환
-	 */
-	public static Result copyDir(String srcDir, String destDir, String fileOrDir, boolean preserveFileDate) {
+    /**
+     * 원본디렉토리를 대상 디렉토리명으로 복사한다. fileOrDir가 'file'이면 파일만 'directory'면 디렉토리만 복사한다.<br>
+     * preserveFileDate가 true면 원본디렉토리의 파일 최종 수정일을 그대로 사용하고 false면 현재 일자를 최종 수정일로
+     * 설정한다.
+     *
+     * @param srcDir           원본 디렉토리
+     * @param destDir          대상 디렉토리
+     * @param fileOrDir        파일인지 디렉토리인지를 결정하는 플래그 "file" 또는 "directory"를 사용
+     * @param preserveFileDate 수정일 설정 플래그
+     * @return 성공하면 enum 타입의 Result.SUCCESS를 그렇지 않으면 Result.FAIL을 반환
+     */
+    public static Result copyDir(String srcDir, String destDir, String fileOrDir, boolean preserveFileDate) {
 		return copyDir(new File(srcDir), new File(destDir), fileOrDir, preserveFileDate);
 	}
 
-	/**
-	 * 원본디렉토리를 대상 디렉토리명으로 복사한다. 입력된 파일 확장자랑 일치하는 파일들만 복사한다.
-	 * 
-	 * @param srcDir  원본 디렉토리
-	 * @param destDir 대상 디렉토리
-	 * @param extList 파일 확장자들
-	 * @return 성공하면 enum 타입의 Result.SUCCESS를 그렇지 않으면 Result.FAIL을 반환
-	 */
-	public static Result copyDirAfterCheckFileExt(File srcDir, File destDir, String... extList) {
+    /**
+     * 원본디렉토리를 대상 디렉토리명으로 복사한다. 입력된 파일 확장자랑 일치하는 파일들만 복사한다.
+     *
+     * @param srcDir  원본 디렉토리
+     * @param destDir 대상 디렉토리
+     * @param extList 파일 확장자들
+     * @return 성공하면 enum 타입의 Result.SUCCESS를 그렇지 않으면 Result.FAIL을 반환
+     */
+    public static Result copyDirAfterCheckFileExt(File srcDir, File destDir, String... extList) {
 		return copyDirAfterCheckFileExt(srcDir, destDir, true, extList);
 	}
 
-	/**
-	 * 원본디렉토리를 대상 디렉토리명으로 복사한다. 입력된 파일 확장자랑 일치하는 파일들만 복사한다.<br>
-	 * preserveFileDate가 true면 원본디렉토리의 파일 최종 수정일을 그대로 사용하고 false면 현재 일자를 최종 수정일로
-	 * 설정한다.
-	 * 
-	 * @param srcDir  원본 디렉토리
-	 * @param destDir 대상 디렉토리
-	 * @param extList 파일 확장자들
-	 * @param preserveFileDate 수정일 설정 플래그
-	 * @return 성공하면 enum 타입의 Result.SUCCESS를 그렇지 않으면 Result.FAIL을 반환
-	 */
-	public static Result copyDirAfterCheckFileExt(File srcDir, File destDir, boolean preserveFileDate, String... extList) {
+    /**
+     * 원본디렉토리를 대상 디렉토리명으로 복사한다. 입력된 파일 확장자랑 일치하는 파일들만 복사한다.<br>
+     * preserveFileDate가 true면 원본디렉토리의 파일 최종 수정일을 그대로 사용하고 false면 현재 일자를 최종 수정일로
+     * 설정한다.
+     *
+     * @param srcDir           원본 디렉토리
+     * @param destDir          대상 디렉토리
+     * @param preserveFileDate 수정일 설정 플래그
+     * @param extList          파일 확장자들
+     * @return 성공하면 enum 타입의 Result.SUCCESS를 그렇지 않으면 Result.FAIL을 반환
+     */
+    public static Result copyDirAfterCheckFileExt(File srcDir, File destDir, boolean preserveFileDate, String... extList) {
 
 		Result result = Result.EMPTY;
 		
@@ -324,66 +324,66 @@ public final class FileUtils {
 		return Result.SUCCESS;
 	}
 
-	/**
-	 * 원본디렉토리를 대상 디렉토리명으로 복사한다. 입력된 파일 확장자랑 일치하는 파일들만 복사한다.
-	 * 
-	 * @param srcDir  원본 디렉토리
-	 * @param destDir 대상 디렉토리
-	 * @param extList 파일 확장자들
-	 * @return 성공하면 enum 타입의 Result.SUCCESS를 그렇지 않으면 Result.FAIL을 반환
-	 */
-	public static Result copyDirAfterCheckFileExt(String srcDir, String destDir, String... extList) {
+    /**
+     * 원본디렉토리를 대상 디렉토리명으로 복사한다. 입력된 파일 확장자랑 일치하는 파일들만 복사한다.
+     *
+     * @param srcDir  원본 디렉토리
+     * @param destDir 대상 디렉토리
+     * @param extList 파일 확장자들
+     * @return 성공하면 enum 타입의 Result.SUCCESS를 그렇지 않으면 Result.FAIL을 반환
+     */
+    public static Result copyDirAfterCheckFileExt(String srcDir, String destDir, String... extList) {
 		return copyDirAfterCheckFileExt(srcDir, destDir, true, extList);
 	}
 
-	/**
-	 * 원본디렉토리를 대상 디렉토리명으로 복사한다. 입력된 파일 확장자랑 일치하는 파일들만 복사한다.<br>
-	 * preserveFileDate가 true면 원본디렉토리의 파일 최종 수정일을 그대로 사용하고 false면 현재 일자를 최종 수정일로
-	 * 설정한다.
-	 * 
-	 * @param srcDir  원본 디렉토리
-	 * @param destDir 대상 디렉토리
-	 * @param extList 파일 확장자들
-	 * @param preserveFileDate 수정일 설정 플래그
-	 * @return 성공하면 enum 타입의 Result.SUCCESS를 그렇지 않으면 Result.FAIL을 반환
-	 */
-	public static Result copyDirAfterCheckFileExt(String srcDir, String destDir, boolean preserveFileDate, String... extList) {
+    /**
+     * 원본디렉토리를 대상 디렉토리명으로 복사한다. 입력된 파일 확장자랑 일치하는 파일들만 복사한다.<br>
+     * preserveFileDate가 true면 원본디렉토리의 파일 최종 수정일을 그대로 사용하고 false면 현재 일자를 최종 수정일로
+     * 설정한다.
+     *
+     * @param srcDir           원본 디렉토리
+     * @param destDir          대상 디렉토리
+     * @param preserveFileDate 수정일 설정 플래그
+     * @param extList          파일 확장자들
+     * @return 성공하면 enum 타입의 Result.SUCCESS를 그렇지 않으면 Result.FAIL을 반환
+     */
+    public static Result copyDirAfterCheckFileExt(String srcDir, String destDir, boolean preserveFileDate, String... extList) {
 		return copyDirAfterCheckFileExt(new File(srcDir), new File(destDir), preserveFileDate, extList);
 	}
 
-	/**
-	 * 원본 디렉토리를 대상 디렉토리의 하위로 복사한다.
-	 * 
-	 * @param srcDir  원본 디렉토리
-	 * @param destDir 대상 디렉토리
-	 * @return 성공하면 enum 타입의 Result.SUCCESS를 그렇지 않으면 Result.FAIL을 반환
-	 */
-	public static Result copyDirToDir(File srcDir, File destDir) {
+    /**
+     * 원본 디렉토리를 대상 디렉토리의 하위로 복사한다.
+     *
+     * @param srcDir  원본 디렉토리
+     * @param destDir 대상 디렉토리
+     * @return 성공하면 enum 타입의 Result.SUCCESS를 그렇지 않으면 Result.FAIL을 반환
+     */
+    public static Result copyDirToDir(File srcDir, File destDir) {
 		return copyDirToDir(srcDir, destDir, true);
 	}
 
-	/**
-	 * 원본 디렉토리를 대상 디렉토리의 하위로 복사한다.
-	 * 
-	 * @param srcDir  원본 디렉토리
-	 * @param destDir 대상 디렉토리
-	 * @return 성공하면 enum 타입의 Result.SUCCESS를 그렇지 않으면 Result.FAIL을 반환
-	 */
-	public static Result copyDirToDir(String srcDir, String destDir) {
+    /**
+     * 원본 디렉토리를 대상 디렉토리의 하위로 복사한다.
+     *
+     * @param srcDir  원본 디렉토리
+     * @param destDir 대상 디렉토리
+     * @return 성공하면 enum 타입의 Result.SUCCESS를 그렇지 않으면 Result.FAIL을 반환
+     */
+    public static Result copyDirToDir(String srcDir, String destDir) {
 		return copyDirToDir(new File(srcDir), new File(destDir), true);
 	}
-	
-	/**
-	 * 원본 디렉토리를 대상 디렉토리의 하위로 복사한다.<br>
-	 * preserveFileDate가 true면 원본디렉토리의 파일 최종 수정일을 그대로 사용하고 false면 현재 일자를 최종 수정일로
-	 * 설정한다.
-	 * 
-	 * @param srcDir  원본 디렉토리
-	 * @param destDir 대상 디렉토리
-	 * @param preserveFileDate 수정일 설정 플래그           
-	 * @return 성공하면 enum 타입의 Result.SUCCESS를 그렇지 않으면 Result.FAIL을 반환
-	 */
-	public static Result copyDirToDir(File srcDir, File destDir, boolean preserveFileDate) {
+
+    /**
+     * 원본 디렉토리를 대상 디렉토리의 하위로 복사한다.<br>
+     * preserveFileDate가 true면 원본디렉토리의 파일 최종 수정일을 그대로 사용하고 false면 현재 일자를 최종 수정일로
+     * 설정한다.
+     *
+     * @param srcDir           원본 디렉토리
+     * @param destDir          대상 디렉토리
+     * @param preserveFileDate 수정일 설정 플래그
+     * @return 성공하면 enum 타입의 Result.SUCCESS를 그렇지 않으면 Result.FAIL을 반환
+     */
+    public static Result copyDirToDir(File srcDir, File destDir, boolean preserveFileDate) {
 
 		Result result = Result.EMPTY;
 		
@@ -425,42 +425,42 @@ public final class FileUtils {
 		return Result.SUCCESS;
 	}
 
-	/**
-	 * 원본 디렉토리를 대상 디렉토리의 하위로 복사한다.<br>
-	 * preserveFileDate가 true면 원본디렉토리의 파일 최종 수정일을 그대로 사용하고 false면 현재 일자를 최종 수정일로
-	 * 설정한다.
-	 * 
-	 * @param srcDir  원본 디렉토리
-	 * @param destDir 대상 디렉토리
-	 * @param preserveFileDate 수정일 설정 플래그           
-	 * @return 성공하면 enum 타입의 Result.SUCCESS를 그렇지 않으면 Result.FAIL을 반환
-	 */
-	public static Result copyDirToDir(String srcDir, String destDir, boolean preserveFileDate) {
+    /**
+     * 원본 디렉토리를 대상 디렉토리의 하위로 복사한다.<br>
+     * preserveFileDate가 true면 원본디렉토리의 파일 최종 수정일을 그대로 사용하고 false면 현재 일자를 최종 수정일로
+     * 설정한다.
+     *
+     * @param srcDir           원본 디렉토리
+     * @param destDir          대상 디렉토리
+     * @param preserveFileDate 수정일 설정 플래그
+     * @return 성공하면 enum 타입의 Result.SUCCESS를 그렇지 않으면 Result.FAIL을 반환
+     */
+    public static Result copyDirToDir(String srcDir, String destDir, boolean preserveFileDate) {
 		return copyDirToDir(new File(srcDir), new File(destDir), preserveFileDate);
 	}
 
-	/**
-	 * 원본 파일을 대상 파일명으로 복사한다
-	 * 
-	 * @param srcFile  원본 파일
-	 * @param destFile 대상 파일
-	 * @return 성공하면 enum 타입의 Result.SUCCESS를 그렇지 않으면 Result.FAIL을 반환
-	 */
-	public static Result copyFile(File srcFile, File destFile) {
+    /**
+     * 원본 파일을 대상 파일명으로 복사한다
+     *
+     * @param srcFile  원본 파일
+     * @param destFile 대상 파일
+     * @return 성공하면 enum 타입의 Result.SUCCESS를 그렇지 않으면 Result.FAIL을 반환
+     */
+    public static Result copyFile(File srcFile, File destFile) {
 		return copyFile(srcFile, destFile, true);
 	}
 
-	/**
-	 * 원본 파일을 대상 파일명으로 복사한다.<br>
-	 * preserveFileDate가 true면 원본디렉토리의 파일 최종 수정일을 그대로 사용하고 false면 현재 일자를 최종 수정일로
-	 * 설정한다.
-	 * 
-	 * @param srcFile  원본 파일
-	 * @param destFile 대상 파일
-	 * @param preserveFileDate 수정일 설정 플래그
-	 * @return 성공하면 enum 타입의 Result.SUCCESS를 그렇지 않으면 Result.FAIL을 반환
-	 */
-	public static Result copyFile(File srcFile, File destFile, boolean preserveFileDate) {
+    /**
+     * 원본 파일을 대상 파일명으로 복사한다.<br>
+     * preserveFileDate가 true면 원본디렉토리의 파일 최종 수정일을 그대로 사용하고 false면 현재 일자를 최종 수정일로
+     * 설정한다.
+     *
+     * @param srcFile          원본 파일
+     * @param destFile         대상 파일
+     * @param preserveFileDate 수정일 설정 플래그
+     * @return 성공하면 enum 타입의 Result.SUCCESS를 그렇지 않으면 Result.FAIL을 반환
+     */
+    public static Result copyFile(File srcFile, File destFile, boolean preserveFileDate) {
 
 		if (notExistsFile(srcFile)) {
 			return buildFailResult(srcFile.getName() + "가 존재하지 않습니다.");
@@ -495,53 +495,53 @@ public final class FileUtils {
 		return Result.SUCCESS;
 	}
 
-	/**
-	 * 원본 파일을 대상 파일명으로 복사한다
-	 * 
-	 * @param srcFile  원본 파일
-	 * @param destFile 대상 파일
-	 * @return 성공하면 enum 타입의 Result.SUCCESS를 그렇지 않으면 Result.FAIL을 반환
-	 */
-	public static Result copyFile(String srcFile, String destFile) {
+    /**
+     * 원본 파일을 대상 파일명으로 복사한다
+     *
+     * @param srcFile  원본 파일
+     * @param destFile 대상 파일
+     * @return 성공하면 enum 타입의 Result.SUCCESS를 그렇지 않으면 Result.FAIL을 반환
+     */
+    public static Result copyFile(String srcFile, String destFile) {
 		return copyFile(new File(srcFile), new File(destFile), true);
 	}
 
-	/**
-	 * 원본 파일을 대상 파일명으로 복사한다.<br>
-	 * preserveFileDate가 true면 원본디렉토리의 파일 최종 수정일을 그대로 사용하고 false면 현재 일자를 최종 수정일로
-	 * 설정한다.
-	 * 
-	 * @param srcFile  원본 파일
-	 * @param destFile 대상 파일
-	 * @param preserveFileDate 수정일 설정 플래그
-	 * @return 성공하면 enum 타입의 Result.SUCCESS를 그렇지 않으면 Result.FAIL을 반환
-	 */
-	public static Result copyFile(String srcFile, String destFile, boolean preserveFileDate) {
+    /**
+     * 원본 파일을 대상 파일명으로 복사한다.<br>
+     * preserveFileDate가 true면 원본디렉토리의 파일 최종 수정일을 그대로 사용하고 false면 현재 일자를 최종 수정일로
+     * 설정한다.
+     *
+     * @param srcFile          원본 파일
+     * @param destFile         대상 파일
+     * @param preserveFileDate 수정일 설정 플래그
+     * @return 성공하면 enum 타입의 Result.SUCCESS를 그렇지 않으면 Result.FAIL을 반환
+     */
+    public static Result copyFile(String srcFile, String destFile, boolean preserveFileDate) {
 		return copyFile(new File(srcFile), new File(destFile), preserveFileDate);
 	}
 
-	/**
-	 * 파일을 대상 디렉토리에 복사한다.
-	 * 
-	 * @param srcFile 원본 파일
-	 * @param destDir 대상 디렉토리
-	 * @return 성공하면 enum 타입의 Result.SUCCESS를 그렇지 않으면 Result.FAIL을 반환
-	 */
-	public static Result copyFileToDir(File srcFile, File destDir) {
+    /**
+     * 파일을 대상 디렉토리에 복사한다.
+     *
+     * @param srcFile 원본 파일
+     * @param destDir 대상 디렉토리
+     * @return 성공하면 enum 타입의 Result.SUCCESS를 그렇지 않으면 Result.FAIL을 반환
+     */
+    public static Result copyFileToDir(File srcFile, File destDir) {
 		return copyFileToDir(srcFile, destDir, true);
 	}
 
-	/**
-	 * 파일을 대상 디렉토리에 복사한다.<br>
-	 * preserveFileDate가 true면 원본디렉토리의 파일 최종 수정일을 그대로 사용하고 false면 현재 일자를 최종 수정일로
-	 * 설정한다.
-	 * 
-	 * @param srcFile 원본 파일
-	 * @param destDir 대상 디렉토리
-	 * @param preserveFileDate 수정일 설정 플래그
-	 * @return 성공하면 enum 타입의 Result.SUCCESS를 그렇지 않으면 Result.FAIL을 반환
-	 */
-	public static Result copyFileToDir(File srcFile, File destDir, boolean preserveFileDate) {
+    /**
+     * 파일을 대상 디렉토리에 복사한다.<br>
+     * preserveFileDate가 true면 원본디렉토리의 파일 최종 수정일을 그대로 사용하고 false면 현재 일자를 최종 수정일로
+     * 설정한다.
+     *
+     * @param srcFile          원본 파일
+     * @param destDir          대상 디렉토리
+     * @param preserveFileDate 수정일 설정 플래그
+     * @return 성공하면 enum 타입의 Result.SUCCESS를 그렇지 않으면 Result.FAIL을 반환
+     */
+    public static Result copyFileToDir(File srcFile, File destDir, boolean preserveFileDate) {
 
 		if (!srcFile.exists()) {
 			return buildFailResult( srcFile + "가 존재하지 않습니다.");
@@ -569,38 +569,38 @@ public final class FileUtils {
 		return Result.SUCCESS;
 	}
 
-	/**
-	 * 파일을 대상 디렉토리에 복사한다.
-	 * 
-	 * @param srcFile 원본 파일
-	 * @param destDir 대상 디렉토리
-	 * @return 성공하면 enum 타입의 Result.SUCCESS를 그렇지 않으면 Result.FAIL을 반환
-	 */
-	public static Result copyFileToDir(String srcFile, String destDir) {
+    /**
+     * 파일을 대상 디렉토리에 복사한다.
+     *
+     * @param srcFile 원본 파일
+     * @param destDir 대상 디렉토리
+     * @return 성공하면 enum 타입의 Result.SUCCESS를 그렇지 않으면 Result.FAIL을 반환
+     */
+    public static Result copyFileToDir(String srcFile, String destDir) {
 		return copyFileToDir(new File(srcFile), new File(destDir), true);
 	}
 
-	/**
-	 * 파일을 대상 디렉토리에 복사한다.<br>
-	 * preserveFileDate가 true면 원본디렉토리의 파일 최종 수정일을 그대로 사용하고 false면 현재 일자를 최종 수정일로
-	 * 설정한다.
-	 * 
-	 * @param srcFile 원본 파일
-	 * @param destDir 대상 디렉토리
-	 * @param preserveFileDate 수정일 설정 플래그
-	 * @return 성공하면 enum 타입의 Result.SUCCESS를 그렇지 않으면 Result.FAIL을 반환
-	 */
-	public static Result copyFileToDir(String srcFile, String destDir, boolean preserveFileDate) {
+    /**
+     * 파일을 대상 디렉토리에 복사한다.<br>
+     * preserveFileDate가 true면 원본디렉토리의 파일 최종 수정일을 그대로 사용하고 false면 현재 일자를 최종 수정일로
+     * 설정한다.
+     *
+     * @param srcFile          원본 파일
+     * @param destDir          대상 디렉토리
+     * @param preserveFileDate 수정일 설정 플래그
+     * @return 성공하면 enum 타입의 Result.SUCCESS를 그렇지 않으면 Result.FAIL을 반환
+     */
+    public static Result copyFileToDir(String srcFile, String destDir, boolean preserveFileDate) {
 		return copyFileToDir(new File(srcFile), new File(destDir), preserveFileDate);
 	}
 
-	/**
-	 * 주어진 디렉토리명으로 디렉토리를 생성한다.
-	 * 
-	 * @param dirPath 생성할 디렉토리 명
-	 * @return enum 타입의 Result로 작업 결과를 반환
-	 */
-	public static Result createDir(String dirPath) {
+    /**
+     * 주어진 디렉토리명으로 디렉토리를 생성한다.
+     *
+     * @param dirPath 생성할 디렉토리 명
+     * @return enum 타입의 Result로 작업 결과를 반환
+     */
+    public static Result createDir(String dirPath) {
 		
 		try {
 			org.apache.commons.io.FileUtils.forceMkdir(new File(dirPath));
@@ -611,13 +611,13 @@ public final class FileUtils {
 		return Result.SUCCESS;
 	}
 
-	/**
-	 * 해당 디렉토리 및 하위 파일을 삭제한다.
-	 * 
-	 * @param targetDir 삭제할 디렉토리
-	 * @return 성공하면 enum 타입의 Result.SUCCESS를 그렇지 않으면 Result.FAIL을 반환
-	 */
-	public static Result deleteDir(File targetDir) {
+    /**
+     * 해당 디렉토리 및 하위 파일을 삭제한다.
+     *
+     * @param targetDir 삭제할 디렉토리
+     * @return 성공하면 enum 타입의 Result.SUCCESS를 그렇지 않으면 Result.FAIL을 반환
+     */
+    public static Result deleteDir(File targetDir) {
 
 		Result result = Result.EMPTY;
 		
@@ -638,23 +638,23 @@ public final class FileUtils {
 		return Result.SUCCESS;
 	}
 
-	/**
-	 * 해당 디렉토리 및 하위 파일을 삭제한다.
-	 * 
-	 * @param targetDir 삭제할 디렉토리
-	 * @return 성공하면 enum 타입의 Result.SUCCESS를 그렇지 않으면 Result.FAIL을 반환
-	 */
-	public static Result deleteDir(String targetDir) {
+    /**
+     * 해당 디렉토리 및 하위 파일을 삭제한다.
+     *
+     * @param targetDir 삭제할 디렉토리
+     * @return 성공하면 enum 타입의 Result.SUCCESS를 그렇지 않으면 Result.FAIL을 반환
+     */
+    public static Result deleteDir(String targetDir) {
 		return deleteDir(new File(targetDir));
 	}
 
-	/**
-	 * 해당파일을 삭제한다.
-	 * 
-	 * @param targetFile 삭제할 File
-	 * @return 성공하면 enum 타입의 Result.SUCCESS를 그렇지 않으면 Result.FAIL을 반환
-	 */
-	public static Result deleteFile(File targetFile) {
+    /**
+     * 해당파일을 삭제한다.
+     *
+     * @param targetFile 삭제할 File
+     * @return 성공하면 enum 타입의 Result.SUCCESS를 그렇지 않으면 Result.FAIL을 반환
+     */
+    public static Result deleteFile(File targetFile) {
 
 		if (!targetFile.exists()) {
 			return buildFailResult(targetFile	+ "가 존재하지 않습니다.");
@@ -673,248 +673,248 @@ public final class FileUtils {
 		return Result.SUCCESS;
 	}
 
-	/**
-	 * 해당파일을 삭제한다.
-	 * 
-	 * @param targetFile 삭제할 File
-	 * @return 성공하면 enum 타입의 Result.SUCCESS를 그렇지 않으면 Result.FAIL을 반환
-	 */
-	public static Result deleteFile(String targetFile) {
+    /**
+     * 해당파일을 삭제한다.
+     *
+     * @param targetFile 삭제할 File
+     * @return 성공하면 enum 타입의 Result.SUCCESS를 그렇지 않으면 Result.FAIL을 반환
+     */
+    public static Result deleteFile(String targetFile) {
 		return deleteFile(new File(targetFile));
 	}
 
-	/**
-	 * 해당 디렉토리의 존재유무를 확인한다.
-	 * 
-	 * @param dir 존재유무를 확인할 디렉토리
-	 * @return 존재유무에 대한 결과
-	 */
-	public static boolean existsDir(File dir) {
+    /**
+     * 해당 디렉토리의 존재유무를 확인한다.
+     *
+     * @param dir 존재유무를 확인할 디렉토리
+     * @return 존재유무에 대한 결과
+     */
+    public static boolean existsDir(File dir) {
 		return (dir.exists() && isDir(dir)) ? true : false;
 	}
 
-	/**
-	 * 해당 디렉토리의 존재유무를 확인한다.
-	 * 
-	 * @param dir 존재유무를 확인할 디렉토리
-	 * @return 존재유무에 대한 결과
-	 */
-	public static boolean existsDir(String dir) {
+    /**
+     * 해당 디렉토리의 존재유무를 확인한다.
+     *
+     * @param dir 존재유무를 확인할 디렉토리
+     * @return 존재유무에 대한 결과
+     */
+    public static boolean existsDir(String dir) {
 		return existsDir(new File(dir));
 	}
 
-	/**
-	 * 해당 파일의 존재유무를 확인한다.
-	 * 
-	 * @param file 존재유무를 확인할 파일
-	 * @return 존재유무에 대한 결과
-	 */
-	public static boolean existsFile(File file) {
+    /**
+     * 해당 파일의 존재유무를 확인한다.
+     *
+     * @param file 존재유무를 확인할 파일
+     * @return 존재유무에 대한 결과
+     */
+    public static boolean existsFile(File file) {
 		return (file.exists() && isFile(file)) ? true : false; 
 	}
 
-	/**
-	 * 해당 파일의 존재유무를 확인한다.
-	 * 
-	 * @param file 존재유무를 확인할 파일
-	 * @return 존재유무에 대한 결과
-	 */
-	public static boolean existsFile(String file) {
+    /**
+     * 해당 파일의 존재유무를 확인한다.
+     *
+     * @param file 존재유무를 확인할 파일
+     * @return 존재유무에 대한 결과
+     */
+    public static boolean existsFile(String file) {
 		return existsFile(new File(file));
 	}
-	
-	/**
-	 * 해당 디렉토리의 존재유무를 확인한다.
-	 * 
-	 * @param dir 존재유무를 확인할 디렉토리
-	 * @return 존재유무에 대한 결과
-	 */
-	public static boolean notExistsDir(File dir) {
+
+    /**
+     * 해당 디렉토리의 존재유무를 확인한다.
+     *
+     * @param dir 존재유무를 확인할 디렉토리
+     * @return 존재유무에 대한 결과
+     */
+    public static boolean notExistsDir(File dir) {
 		return !existsDir(dir);
 	}
-	
-	/**
-	 * 해당 디렉토리의 존재유무를 확인한다.
-	 * 
-	 * @param dir 존재유무를 확인할 디렉토리
-	 * @return 존재유무에 대한 결과
-	 */
-	public static boolean notExistsDir(String dir) {
+
+    /**
+     * 해당 디렉토리의 존재유무를 확인한다.
+     *
+     * @param dir 존재유무를 확인할 디렉토리
+     * @return 존재유무에 대한 결과
+     */
+    public static boolean notExistsDir(String dir) {
 		return !existsDir(new File(dir));
 	}
 
-	/**
-	 * 해당 파일의 존재유무를 확인한다.
-	 * 
-	 * @param file 존재유무를 확인할 파일
-	 * @return 존재유무에 대한 결과
-	 */
-	public static boolean notExistsFile(File file) {
+    /**
+     * 해당 파일의 존재유무를 확인한다.
+     *
+     * @param file 존재유무를 확인할 파일
+     * @return 존재유무에 대한 결과
+     */
+    public static boolean notExistsFile(File file) {
 		return !existsFile(file);
 	}
 
-	/**
-	 * 해당 파일의 존재유무를 확인한다.
-	 * 
-	 * @param file 존재유무를 확인할 파일
-	 * @return 존재유무에 대한 결과
-	 */
-	public static boolean notExistsFile(String file) {
+    /**
+     * 해당 파일의 존재유무를 확인한다.
+     *
+     * @param file 존재유무를 확인할 파일
+     * @return 존재유무에 대한 결과
+     */
+    public static boolean notExistsFile(String file) {
 		return !existsFile(new File(file));
 	}
 
-	/**
+    /**
      * Java가 실행되는 현재 폴더 경로를 반환한다.
-     * 
+     *
      * @return 현재 폴더 경로
      */
     public static String getCurrentDir() {
         return System.getProperty("user.dir");
     }
 
-	/**
+    /**
      * Java가 실행되는 현재 폴더 경로를 File 객체로 반환한다.
-     * 
+     *
      * @return 현재 위치 경로를 가진 File 객체.
      */
     public static File getCurrentDirAsFile() {
         return new File(getUserHomeDir());
     }
 
-	/**
-	 * 해당 디렉토리의 부모 디렉토리명을 반환한다.
-	 * 
-	 * @param file 디렉토리명
-	 * @return 현재 디렉토리에 대한 부모 디렉토리 명
-	 */
-	public static String getParenet(String file) {
+    /**
+     * 해당 디렉토리의 부모 디렉토리명을 반환한다.
+     *
+     * @param file 디렉토리명
+     * @return 현재 디렉토리에 대한 부모 디렉토리 명
+     */
+    public static String getParenet(String file) {
 		return new File(file).getParent();
 	}
 
-	/**
+    /**
      * system temporary directory 경로를 반환한다.
-     * 
+     *
      * @return system temporary directory 경로
      */
     public static String getTempDir() {
         return System.getProperty("java.io.tmpdir");
     }
 
-	/**
+    /**
      * system temporary directory 경로를 File 객체로 반환한다.
-     * 
-     * @return system temporary directory 경로를 가진 File 객체. 
+     *
+     * @return system temporary directory 경로를 가진 File 객체.
      */
     public static File getTempDirAsFile() {
         return new File(getTempDir());
     }
-    
-	/**
+
+    /**
      * user's home directory 경로를 반환한다.
-     * 
-     * @return user's home directory 경로
+     *
+     * @return user 's home directory 경로
      */
     public static String getUserHomeDir() {
         return System.getProperty("user.home");
     }
-	
-	/**
+
+    /**
      * user's home directory 경로를 File 객체로 반환한다.
-     * 
-     * @return user's home directory 경로를 가진 File 객체.
+     *
+     * @return user 's home directory 경로를 가진 File 객체.
      */
     public static File getUserHomeDirAsFile() {
         return new File(getUserHomeDir());
     }
-	
-	/**
-	 * 해당 target이 디렉토리인지를 체크한다.
-	 * 
-	 * @param dir 디렉토리
-	 * @return 해당 파일이 디렉토리이면 true, 아니면 false
-	 */
-	public static boolean isDir(File dir) {
+
+    /**
+     * 해당 target이 디렉토리인지를 체크한다.
+     *
+     * @param dir 디렉토리
+     * @return 해당 파일이 디렉토리이면 true, 아니면 false
+     */
+    public static boolean isDir(File dir) {
 		return (!dir.isDirectory()) ? false : true;
 	}
-	
-	/**
-	 * 해당 target이 디렉토리인지를 체크한다.
-	 * 
-	 * @param dir 디렉토리
-	 * @return 해당 파일이 디렉토리이면 true, 아니면 false
-	 */
-	public static boolean isDir(String dir) {
+
+    /**
+     * 해당 target이 디렉토리인지를 체크한다.
+     *
+     * @param dir 디렉토리
+     * @return 해당 파일이 디렉토리이면 true, 아니면 false
+     */
+    public static boolean isDir(String dir) {
 		return isDir(new File(dir));
 	}
 
-	/**
-	 * 해당 target이 파일인지를 체크한다.
-	 * 
-	 * @param file 파일
-	 * @return 해당 파일이 파일이면 true, 아니면 false
-	 */
-	public static boolean isFile(File file) {
+    /**
+     * 해당 target이 파일인지를 체크한다.
+     *
+     * @param file 파일
+     * @return 해당 파일이 파일이면 true, 아니면 false
+     */
+    public static boolean isFile(File file) {
 		return (!file.isFile()) ? false : true;
 	}
-	
-	/**
-	 * 해당 target이 파일인지를 체크한다.
-	 * 
-	 * @param file 파일
-	 * @return 해당 파일이 파일이면 true, 아니면 false
-	 */
-	public static boolean isFile(String file) {
+
+    /**
+     * 해당 target이 파일인지를 체크한다.
+     *
+     * @param file 파일
+     * @return 해당 파일이 파일이면 true, 아니면 false
+     */
+    public static boolean isFile(String file) {
 		return isFile(new File(file));
 	}
 
-	/**
-	 * 해당 target이 디렉토리가 아닌지를 체크한다.
-	 * 
-	 * @param dir 디렉토리
-	 * @return 해당 파일이 디렉토리가 아니면 true, 아니면 false
-	 */
-	public static boolean isNotDir(File dir) {
+    /**
+     * 해당 target이 디렉토리가 아닌지를 체크한다.
+     *
+     * @param dir 디렉토리
+     * @return 해당 파일이 디렉토리가 아니면 true, 아니면 false
+     */
+    public static boolean isNotDir(File dir) {
 		return (!dir.isDirectory()) ? true : false;
 	}
-	
-	/**
-	 * 해당 target이 디렉토리가 아닌지를 체크한다.
-	 * 
-	 * @param dir 디렉토리
-	 * @return 해당 파일이 디렉토리가 아니면 true, 아니면 false
-	 */
-	public static boolean isNotDir(String dir) {
+
+    /**
+     * 해당 target이 디렉토리가 아닌지를 체크한다.
+     *
+     * @param dir 디렉토리
+     * @return 해당 파일이 디렉토리가 아니면 true, 아니면 false
+     */
+    public static boolean isNotDir(String dir) {
 		return isNotDir(new File(dir));
 	}
 
-	/**
-	 * 해당 target이 파일이 아닌지를 체크한다.
-	 * 
-	 * @param file 파일
-	 * @return 해당 파일이 파일이 아니면 true, 아니면 false
-	 */
-	public static boolean isNotFile(File file) {
+    /**
+     * 해당 target이 파일이 아닌지를 체크한다.
+     *
+     * @param file 파일
+     * @return 해당 파일이 파일이 아니면 true, 아니면 false
+     */
+    public static boolean isNotFile(File file) {
 		return (!file.isFile()) ? true : false;
 	}
-	
-	/**
-	 * 해당 target이 파일이 아닌지를 체크한다.
-	 * 
-	 * @param file 파일
-	 * @return 해당 파일이 파일이 아니면 true, 아니면 false
-	 */
-	public static boolean isNotFile(String file) {
+
+    /**
+     * 해당 target이 파일이 아닌지를 체크한다.
+     *
+     * @param file 파일
+     * @return 해당 파일이 파일이 아니면 true, 아니면 false
+     */
+    public static boolean isNotFile(String file) {
 		return isNotFile(new File(file));
 	}
-	
-	/**
-	 * 지정한 디렉토리 하위의 디렉토리명과 파일명을 가져온다. 
-	 * 
-	 * @param dir 디렉토리
-	 * @param includeRootDir 가장 상위의 디렉토리명을 포함할지를 결정. (true면 최상위 폴더 포함)
-	 * @return 디렉토리 하위의 디렉토리명과 파일명에 대한 리스트
-	 */
-	public static List<String> listFileAndDirNames(String dir, boolean includeRootDir) {
+
+    /**
+     * 지정한 디렉토리 하위의 디렉토리명과 파일명을 가져온다.
+     *
+     * @param dir            디렉토리
+     * @param includeRootDir 가장 상위의 디렉토리명을 포함할지를 결정. (true면 최상위 폴더 포함)
+     * @return 디렉토리 하위의 디렉토리명과 파일명에 대한 리스트
+     */
+    public static List<String> listFileAndDirNames(String dir, boolean includeRootDir) {
 		
 		List<File> dirs = (List<File>) org.apache.commons.io.FileUtils.listFilesAndDirs(new File(dir), 
 				FileFileFilter.FILE, DirectoryFileFilter.DIRECTORY);
@@ -935,15 +935,15 @@ public final class FileUtils {
 		
 		return dirNameList;
 	}
-	
-	/**
-	 * 지정한 디렉토리 하위의 디렉토리명과 파일명을 File 타입의 배열로 가져온다. 
-	 * 
-	 * @param dir 디렉토리
-	 * @param includeRootDir 가장 상위의 디렉토리명을 포함할지를 결정. (true면 최상위 폴더 포함)
-	 * @return 디렉토리 하위의 디렉토리명과 파일명에 대한 File 타입의 배열
-	 */
-	public static File[] listFilesAndDirs(String dir, boolean includeRootDir) {
+
+    /**
+     * 지정한 디렉토리 하위의 디렉토리명과 파일명을 File 타입의 배열로 가져온다.
+     *
+     * @param dir            디렉토리
+     * @param includeRootDir 가장 상위의 디렉토리명을 포함할지를 결정. (true면 최상위 폴더 포함)
+     * @return 디렉토리 하위의 디렉토리명과 파일명에 대한 File 타입의 배열
+     */
+    public static File[] listFilesAndDirs(String dir, boolean includeRootDir) {
 		
 		List<File> filesAndDirs = (List<File>) org.apache.commons.io.FileUtils.listFilesAndDirs(new File(dir), 
 				FileFileFilter.FILE, DirectoryFileFilter.DIRECTORY);
@@ -965,15 +965,15 @@ public final class FileUtils {
 		return filesAndDirsList.toArray(new File[filesAndDirsList.size()]);
 		
 	}
-	
-	/**
-	 * 지정한 디렉토리 하위의 디렉토리명을 가져온다. 
-	 * 
-	 * @param dir 디렉토리
-	 * @param includeRootDir 가장 상위의 디렉토리명을 포함할지를 결정. (true면 최상위 폴더 포함)
-	 * @return 디렉토리 하위의 디렉토리명에 대한 리스트
-	 */
-	public static List<String> listDirNames(String dir, boolean includeRootDir) {
+
+    /**
+     * 지정한 디렉토리 하위의 디렉토리명을 가져온다.
+     *
+     * @param dir            디렉토리
+     * @param includeRootDir 가장 상위의 디렉토리명을 포함할지를 결정. (true면 최상위 폴더 포함)
+     * @return 디렉토리 하위의 디렉토리명에 대한 리스트
+     */
+    public static List<String> listDirNames(String dir, boolean includeRootDir) {
 		
 		List<File> dirs = (List<File>) org.apache.commons.io.FileUtils.listFilesAndDirs(new File(dir), 
 				new NotFileFilter(TrueFileFilter.INSTANCE), DirectoryFileFilter.DIRECTORY);
@@ -994,15 +994,15 @@ public final class FileUtils {
 		
 		return dirNameList;		
 	}
-	
-	/**
-	 * 지정한 디렉토리 하위의 디렉토리명을 File 타입의 배열로 가져온다. 
-	 * 
-	 * @param dir 디렉토리
-	 * @param includeRootDir 가장 상위의 디렉토리명을 포함할지를 결정. (true면 최상위 폴더 포함)
-	 * @return 디렉토리 하위의 디렉토리명에 대한 File 타입의 배열
-	 */
-	public static File[] listDirs(String dir, boolean includeRootDir) {
+
+    /**
+     * 지정한 디렉토리 하위의 디렉토리명을 File 타입의 배열로 가져온다.
+     *
+     * @param dir            디렉토리
+     * @param includeRootDir 가장 상위의 디렉토리명을 포함할지를 결정. (true면 최상위 폴더 포함)
+     * @return 디렉토리 하위의 디렉토리명에 대한 File 타입의 배열
+     */
+    public static File[] listDirs(String dir, boolean includeRootDir) {
 		
 		List<File> dirs = (List<File>) org.apache.commons.io.FileUtils.listFilesAndDirs(new File(dir), 
 				new NotFileFilter(TrueFileFilter.INSTANCE), DirectoryFileFilter.DIRECTORY);
@@ -1023,28 +1023,28 @@ public final class FileUtils {
 		
 		return dirList.toArray(new File[dirList.size()]);
 	}
-	
-	/**
-	 * 지정한 디렉토리 하위의 파일들을 File 타입의 배열로 가져온다. 
-	 * 
-	 * @param dir 디렉토리
-	 * @param recursive 하위 폴더 내부의 파일들에 대한 탐색 유무
-	 * @return 디렉토리 하위의 파일에 대한 File 타입의 배열
-	 */
-	public static File[] listFiles(String dir, boolean recursive) {
+
+    /**
+     * 지정한 디렉토리 하위의 파일들을 File 타입의 배열로 가져온다.
+     *
+     * @param dir       디렉토리
+     * @param recursive 하위 폴더 내부의 파일들에 대한 탐색 유무
+     * @return 디렉토리 하위의 파일에 대한 File 타입의 배열
+     */
+    public static File[] listFiles(String dir, boolean recursive) {
 		
 		return org.apache.commons.io.FileUtils.convertFileCollectionToFileArray(
                 org.apache.commons.io.FileUtils.listFiles(new File(dir), null, recursive));
 	}
-	
-	/**
-	 * 지정한 디렉토리 하위의 파일명들에 대한 리스트를 가져온다.
-	 * 
-	 * @param dir 디렉토리
-	 * @param recursive 하위 폴더 내부의 파일들에 대한 탐색 유무
-	 * @return 디렉토리 하위의 파일들에 대한 파일명 리스트
-	 */
-	public static List<String> listFileNames(String dir, boolean recursive) {
+
+    /**
+     * 지정한 디렉토리 하위의 파일명들에 대한 리스트를 가져온다.
+     *
+     * @param dir       디렉토리
+     * @param recursive 하위 폴더 내부의 파일들에 대한 탐색 유무
+     * @return 디렉토리 하위의 파일들에 대한 파일명 리스트
+     */
+    public static List<String> listFileNames(String dir, boolean recursive) {
 		
 		Collection<File> files = null;
 		
@@ -1062,16 +1062,16 @@ public final class FileUtils {
 		
 		return fileNamesList;
 	}
-	
-	/**
-	 * 지정한 파일 확장자로 구성된 파일들에 대한 리스트를 가져온다.
-	 * 
-	 * @param dir 디렉토리 
-	 * @param recursive 하위 폴더 내부의 파일들에 대한 작업 유무
-	 * @param extList 포함시킬 확장자 리스트
-	 * @return 지정한 파일 확장자로 구성된 파일들에 대한 리스트
-	 */
-	public static List<String> listFilenamesIncludeExt(String dir, boolean recursive, String... extList) {
+
+    /**
+     * 지정한 파일 확장자로 구성된 파일들에 대한 리스트를 가져온다.
+     *
+     * @param dir       디렉토리
+     * @param recursive 하위 폴더 내부의 파일들에 대한 작업 유무
+     * @param extList   포함시킬 확장자 리스트
+     * @return 지정한 파일 확장자로 구성된 파일들에 대한 리스트
+     */
+    public static List<String> listFilenamesIncludeExt(String dir, boolean recursive, String... extList) {
 		
 		List<File> extFilterList = (List<File>) org.apache.commons.io.FileUtils.listFiles(new File(dir), extList,  recursive);
 		
@@ -1084,30 +1084,30 @@ public final class FileUtils {
 		return resultList;		
 	}
 
-	/**
-	 * 지정한 파일 확장자로 구성된 파일들을 File 타입의 배열로 가져온다.
-	 * 
-	 * @param dir 디렉토리 
-	 * @param recursive 하위 폴더 내부의 파일들에 대한 작업 유무
-	 * @param extList 포함시킬 확장자 리스트
-	 * @return 지정한 파일 확장자로 구성된 파일들에 대한 File 타입의 배열
-	 */
-	public static File[] listFilesIncludeExt(String dir, boolean recursive, String... extList) {
+    /**
+     * 지정한 파일 확장자로 구성된 파일들을 File 타입의 배열로 가져온다.
+     *
+     * @param dir       디렉토리
+     * @param recursive 하위 폴더 내부의 파일들에 대한 작업 유무
+     * @param extList   포함시킬 확장자 리스트
+     * @return 지정한 파일 확장자로 구성된 파일들에 대한 File 타입의 배열
+     */
+    public static File[] listFilesIncludeExt(String dir, boolean recursive, String... extList) {
 		
 		Collection<File> resultFiles = org.apache.commons.io.FileUtils.listFiles(new File(dir), extList,  recursive);
 		
 		return org.apache.commons.io.FileUtils.convertFileCollectionToFileArray(resultFiles);		
 	}
-	
-	/**
-	 * 지정한 파일 확장자를 제외한 파일들의 파일명 리스트를 가져온다.
-	 * 
-	 * @param dir 디렉토리 
-	 * @param recursive 하위 폴더 내부의 파일들에 대한 작업 유무
-	 * @param extList 포함시킬 확장자 리스트
-	 * @return 지정한 파일 확장자를 제외한 파일들의 파일명 리스트
-	 */
-	public static List<String> listFilenamesExcludeExt(String dir, boolean recursive, String... extList) {
+
+    /**
+     * 지정한 파일 확장자를 제외한 파일들의 파일명 리스트를 가져온다.
+     *
+     * @param dir       디렉토리
+     * @param recursive 하위 폴더 내부의 파일들에 대한 작업 유무
+     * @param extList   포함시킬 확장자 리스트
+     * @return 지정한 파일 확장자를 제외한 파일들의 파일명 리스트
+     */
+    public static List<String> listFilenamesExcludeExt(String dir, boolean recursive, String... extList) {
 		
 		IOFileFilter suffixFileFilters = new SuffixFileFilter(extList, IOCase.INSENSITIVE);
 		IOFileFilter excludeExtFilter = FileFilterUtils.notFileFilter(FileFilterUtils.or(suffixFileFilters));
@@ -1123,15 +1123,15 @@ public final class FileUtils {
 		return resultList;		
 	}
 
-	/**
-	 * 지정한 파일 확장자를 제외한 파일들을 File 타입의 배열로 가져온다.
-	 * 
-	 * @param dir 디렉토리 
-	 * @param recursive 하위 폴더 내부의 파일들에 대한 작업 유무
-	 * @param extList 포함시킬 확장자 리스트
-	 * @return 지정한 파일 확장자를 제외한 파일들에 대한 File 타입의 배열
-	 */
-	public static File[] listFilesExcludeExt(String dir, boolean recursive, String... extList) {
+    /**
+     * 지정한 파일 확장자를 제외한 파일들을 File 타입의 배열로 가져온다.
+     *
+     * @param dir       디렉토리
+     * @param recursive 하위 폴더 내부의 파일들에 대한 작업 유무
+     * @param extList   포함시킬 확장자 리스트
+     * @return 지정한 파일 확장자를 제외한 파일들에 대한 File 타입의 배열
+     */
+    public static File[] listFilesExcludeExt(String dir, boolean recursive, String... extList) {
 		
 		IOFileFilter suffixFileFilters = new SuffixFileFilter(extList, IOCase.INSENSITIVE);
 		IOFileFilter excludeExtFilter = FileFilterUtils.notFileFilter(FileFilterUtils.or(suffixFileFilters));
@@ -1140,17 +1140,17 @@ public final class FileUtils {
 
 		return org.apache.commons.io.FileUtils.convertFileCollectionToFileArray(resultFiles);		
 	}
-	
-	/**
-	 * 지정한 와일드카드가 포함된 파일들에 대한 파일명의 리스트를 가져온다.<br>
-	 * 예) 와일드 카드: "test*.*" - test로 시작되는 파일 전부
-	 * 
-	 * @param dir 디렉토리
-	 * @param wildcards 포함시킬 와일드카드
-	 * @param recursive 하위 폴더 내부의 파일들에 대한 작업 유무
-	 * @return 지정한 와일드카드가 포함된 파일들에 대한 파일명의 리스트
-	 */
-	public static List<String> listFilenamesByWildcard(String dir, String[] wildcards, boolean recursive) {
+
+    /**
+     * 지정한 와일드카드가 포함된 파일들에 대한 파일명의 리스트를 가져온다.<br>
+     * 예) 와일드 카드: "test*.*" - test로 시작되는 파일 전부
+     *
+     * @param dir       디렉토리
+     * @param wildcards 포함시킬 와일드카드
+     * @param recursive 하위 폴더 내부의 파일들에 대한 작업 유무
+     * @return 지정한 와일드카드가 포함된 파일들에 대한 파일명의 리스트
+     */
+    public static List<String> listFilenamesByWildcard(String dir, String[] wildcards, boolean recursive) {
 		
 		IOFileFilter wildcardFileFileter = new WildcardFileFilter(wildcards, IOCase.INSENSITIVE);
 		
@@ -1171,16 +1171,16 @@ public final class FileUtils {
 		return resultList;		
 	}
 
-	/**
-	 * 지정한 와일드카드가 포함된 파일들에 대해 File 타입의 배열로 가져온다.<br>
-	 * 예) 와일드 카드: "test*.*" - test로 시작되는 파일 전부
-	 * 
-	 * @param dir 디렉토리
-	 * @param wildcards 포함시킬 와일드카드
-	 * @param recursive 하위 폴더 내부의 파일들에 대한 작업 유무
-	 * @return 지정한 와일드카드가 포함된 파일들에 대해 File 타입의 배열
-	 */
-	public static File[] listFilesByWildcard(String dir, String[] wildcards, boolean recursive) {
+    /**
+     * 지정한 와일드카드가 포함된 파일들에 대해 File 타입의 배열로 가져온다.<br>
+     * 예) 와일드 카드: "test*.*" - test로 시작되는 파일 전부
+     *
+     * @param dir       디렉토리
+     * @param wildcards 포함시킬 와일드카드
+     * @param recursive 하위 폴더 내부의 파일들에 대한 작업 유무
+     * @return 지정한 와일드카드가 포함된 파일들에 대해 File 타입의 배열
+     */
+    public static File[] listFilesByWildcard(String dir, String[] wildcards, boolean recursive) {
 		
 		
 		IOFileFilter wildcardFileFileter = new WildcardFileFilter(wildcards, IOCase.INSENSITIVE);
@@ -1195,40 +1195,40 @@ public final class FileUtils {
 		
 		return org.apache.commons.io.FileUtils.convertFileCollectionToFileArray(resultFiles);		
 	}
-	
-	/**
-	 * 원본 디렉토리가 대상 디렉토리 명으로 이동한다.
-	 * 
-	 * @param srcDir  원본 디렉토리
-	 * @param destDir 대상 디렉토리
-	 * @return 성공하면 enum 타입의 Result.SUCCESS를 그렇지 않으면 Result.FAIL을 반환
-	 */
-	public static Result moveDir(File srcDir, File destDir) {
+
+    /**
+     * 원본 디렉토리가 대상 디렉토리 명으로 이동한다.
+     *
+     * @param srcDir  원본 디렉토리
+     * @param destDir 대상 디렉토리
+     * @return 성공하면 enum 타입의 Result.SUCCESS를 그렇지 않으면 Result.FAIL을 반환
+     */
+    public static Result moveDir(File srcDir, File destDir) {
 		return moveDir(srcDir, destDir, true);
 	}
-	
-	/**
-	 * 원본 디렉토리가 대상 디렉토리 명으로 이동한다.
-	 * 
-	 * @param srcDir  원본 디렉토리
-	 * @param destDir 대상 디렉토리
-	 * @return 성공하면 enum 타입의 Result.SUCCESS를 그렇지 않으면 Result.FAIL을 반환
-	 */
-	public static Result moveDir(String srcDir, String destDir) {
+
+    /**
+     * 원본 디렉토리가 대상 디렉토리 명으로 이동한다.
+     *
+     * @param srcDir  원본 디렉토리
+     * @param destDir 대상 디렉토리
+     * @return 성공하면 enum 타입의 Result.SUCCESS를 그렇지 않으면 Result.FAIL을 반환
+     */
+    public static Result moveDir(String srcDir, String destDir) {
 		return moveDir(srcDir, destDir, true);
 	}
-	
-	/**
-	 * 원본 디렉토리가 대상 디렉토리 명으로 이동한다.<br>
-	 * preserveFileDate가 true면 원본디렉토리의 파일 최종 수정일을 그대로 사용하고 false면 현재 일자를 최종 수정일로
-	 * 설정한다.
-	 * 
-	 * @param srcDir  원본 디렉토리
-	 * @param destDir 대상 디렉토리
-	 * @param preserveFileDate 수정일 설정 플래그
-	 * @return 성공하면 enum 타입의 Result.SUCCESS를 그렇지 않으면 Result.FAIL을 반환
-	 */
-	public static Result moveDir(File srcDir, File destDir, boolean preserveFileDate) {
+
+    /**
+     * 원본 디렉토리가 대상 디렉토리 명으로 이동한다.<br>
+     * preserveFileDate가 true면 원본디렉토리의 파일 최종 수정일을 그대로 사용하고 false면 현재 일자를 최종 수정일로
+     * 설정한다.
+     *
+     * @param srcDir           원본 디렉토리
+     * @param destDir          대상 디렉토리
+     * @param preserveFileDate 수정일 설정 플래그
+     * @return 성공하면 enum 타입의 Result.SUCCESS를 그렇지 않으면 Result.FAIL을 반환
+     */
+    public static Result moveDir(File srcDir, File destDir, boolean preserveFileDate) {
 
 		Result result = Result.EMPTY;
 		
@@ -1263,54 +1263,54 @@ public final class FileUtils {
 		
 		return Result.SUCCESS;
 	}
-	
-	/**
-	 * 원본 디렉토리가 대상 디렉토리 명으로 이동한다.<br>
-	 * preserveFileDate가 true면 원본디렉토리의 파일 최종 수정일을 그대로 사용하고 false면 현재 일자를 최종 수정일로
-	 * 설정한다.
-	 * 
-	 * @param srcDir  원본 디렉토리
-	 * @param destDir 대상 디렉토리
-	 * @param preserveFileDate 수정일 설정 플래그            
-	 * @return 성공하면 enum 타입의 Result.SUCCESS를 그렇지 않으면 Result.FAIL을 반환
-	 */
-	public static Result moveDir(String srcDir, String destDir, boolean preserveFileDate) {
+
+    /**
+     * 원본 디렉토리가 대상 디렉토리 명으로 이동한다.<br>
+     * preserveFileDate가 true면 원본디렉토리의 파일 최종 수정일을 그대로 사용하고 false면 현재 일자를 최종 수정일로
+     * 설정한다.
+     *
+     * @param srcDir           원본 디렉토리
+     * @param destDir          대상 디렉토리
+     * @param preserveFileDate 수정일 설정 플래그
+     * @return 성공하면 enum 타입의 Result.SUCCESS를 그렇지 않으면 Result.FAIL을 반환
+     */
+    public static Result moveDir(String srcDir, String destDir, boolean preserveFileDate) {
 		return moveDir(new File(srcDir), new File(destDir), preserveFileDate);
 	}
 
-	/**
-	 * 원본 디렉토리가 대상 디렉토리 하위로 이동한다.
-	 * 
-	 * @param srcDir  원본 디렉토리
-	 * @param destDir 대상 디렉토리
-	 * @return 성공하면 enum 타입의 Result.SUCCESS를 그렇지 않으면 Result.FAIL을 반환
-	 */
-	public static Result moveDirToDir(File srcDir, File destDir) {
+    /**
+     * 원본 디렉토리가 대상 디렉토리 하위로 이동한다.
+     *
+     * @param srcDir  원본 디렉토리
+     * @param destDir 대상 디렉토리
+     * @return 성공하면 enum 타입의 Result.SUCCESS를 그렇지 않으면 Result.FAIL을 반환
+     */
+    public static Result moveDirToDir(File srcDir, File destDir) {
 		return moveDirToDir(srcDir, destDir, true);
 	}
 
-	/**
-	 * 원본 디렉토리가 대상 디렉토리 하위로 이동한다.
-	 * 
-	 * @param srcDir  원본 디렉토리
-	 * @param destDir 대상 디렉토리
-	 * @return 성공하면 enum 타입의 Result.SUCCESS를 그렇지 않으면 Result.FAIL을 반환
-	 */
-	public static Result moveDirToDir(String srcDir, String destDir) {
+    /**
+     * 원본 디렉토리가 대상 디렉토리 하위로 이동한다.
+     *
+     * @param srcDir  원본 디렉토리
+     * @param destDir 대상 디렉토리
+     * @return 성공하면 enum 타입의 Result.SUCCESS를 그렇지 않으면 Result.FAIL을 반환
+     */
+    public static Result moveDirToDir(String srcDir, String destDir) {
 		return moveDirToDir(new File(srcDir), new File(destDir), true);
 	}
-	
-	/**
-	 * 원본 디렉토리가 대상 디렉토리 하위로 이동한다.<br>
-	 * preserveFileDate가 true면 원본디렉토리의 파일 최종 수정일을 그대로 사용하고 false면 현재 일자를 최종 수정일로
-	 * 설정한다.
-	 * 
-	 * @param srcDir  원본 디렉토리
-	 * @param destDir 대상 디렉토리
-	 * @param preserveFileDate 수정일 설정 플래그
-	 * @return 성공하면 enum 타입의 Result.SUCCESS를 그렇지 않으면 Result.FAIL을 반환
-	 */
-	public static Result moveDirToDir(File srcDir, File destDir, boolean preserveFileDate) {
+
+    /**
+     * 원본 디렉토리가 대상 디렉토리 하위로 이동한다.<br>
+     * preserveFileDate가 true면 원본디렉토리의 파일 최종 수정일을 그대로 사용하고 false면 현재 일자를 최종 수정일로
+     * 설정한다.
+     *
+     * @param srcDir           원본 디렉토리
+     * @param destDir          대상 디렉토리
+     * @param preserveFileDate 수정일 설정 플래그
+     * @return 성공하면 enum 타입의 Result.SUCCESS를 그렇지 않으면 Result.FAIL을 반환
+     */
+    public static Result moveDirToDir(File srcDir, File destDir, boolean preserveFileDate) {
 
 		Result result = Result.EMPTY;
 		
@@ -1362,53 +1362,53 @@ public final class FileUtils {
 		return Result.SUCCESS;
 	}
 
-	/**
-	 * 원본 디렉토리가 대상 디렉토리 하위로 이동한다.<br>
-	 * preserveFileDate가 true면 원본디렉토리의 파일 최종 수정일을 그대로 사용하고 false면 현재 일자를 최종 수정일로
-	 * 설정한다.
-	 * 
-	 * @param srcDir  원본 디렉토리
-	 * @param destDir 대상 디렉토리
-	 * @param preserveFileDate 수정일 설정 플래그
-	 * @return 성공하면 enum 타입의 Result.SUCCESS를 그렇지 않으면 Result.FAIL을 반환
-	 */
-	public static Result moveDirToDir(String srcDir, String destDir, boolean preserveFileDate) {
+    /**
+     * 원본 디렉토리가 대상 디렉토리 하위로 이동한다.<br>
+     * preserveFileDate가 true면 원본디렉토리의 파일 최종 수정일을 그대로 사용하고 false면 현재 일자를 최종 수정일로
+     * 설정한다.
+     *
+     * @param srcDir           원본 디렉토리
+     * @param destDir          대상 디렉토리
+     * @param preserveFileDate 수정일 설정 플래그
+     * @return 성공하면 enum 타입의 Result.SUCCESS를 그렇지 않으면 Result.FAIL을 반환
+     */
+    public static Result moveDirToDir(String srcDir, String destDir, boolean preserveFileDate) {
 		return moveDirToDir(new File(srcDir), new File(destDir), preserveFileDate);
 	}
-	
-	/**
-	 * 원본 파일을 대상 파일 명으로 이동한다.
-	 * 
-	 * @param srcFile  원본 파일
-	 * @param destFile 대상 파일
-	 * @return 성공하면 enum 타입의 Result.SUCCESS를 그렇지 않으면 Result.FAIL을 반환
-	 */
-	public static Result moveFile(File srcFile, File destFile) {
+
+    /**
+     * 원본 파일을 대상 파일 명으로 이동한다.
+     *
+     * @param srcFile  원본 파일
+     * @param destFile 대상 파일
+     * @return 성공하면 enum 타입의 Result.SUCCESS를 그렇지 않으면 Result.FAIL을 반환
+     */
+    public static Result moveFile(File srcFile, File destFile) {
 		return moveFile(srcFile, destFile, true);
 	}
-	
-	/**
-	 * 원본 파일을 대상 파일 명으로 이동한다.
-	 * 
-	 * @param srcFile  원본 파일
-	 * @param destFile 대상 파일
-	 * @return 성공하면 enum 타입의 Result.SUCCESS를 그렇지 않으면 Result.FAIL을 반환
-	 */
-	public static Result moveFile(String srcFile, String destFile) {
+
+    /**
+     * 원본 파일을 대상 파일 명으로 이동한다.
+     *
+     * @param srcFile  원본 파일
+     * @param destFile 대상 파일
+     * @return 성공하면 enum 타입의 Result.SUCCESS를 그렇지 않으면 Result.FAIL을 반환
+     */
+    public static Result moveFile(String srcFile, String destFile) {
 		return moveFile(new File(srcFile), new File(destFile), true);
 	}
-	
-	/**
-	 * 원본 파일을 대상 파일 명으로 이동한다.<br>
-	 * preserveFileDate가 true면 원본디렉토리의 파일 최종 수정일을 그대로 사용하고 false면 현재 일자를 최종 수정일로
-	 * 설정한다.
-	 * 
-	 * @param srcFile  원본 파일
-	 * @param destFile 대상 파일
-	 * @param preserveFileDate 수정일 설정 플래그
-	 * @return 성공하면 enum 타입의 Result.SUCCESS를 그렇지 않으면 Result.FAIL을 반환
-	 */
-	public static Result moveFile(File srcFile, File destFile, boolean preserveFileDate) {
+
+    /**
+     * 원본 파일을 대상 파일 명으로 이동한다.<br>
+     * preserveFileDate가 true면 원본디렉토리의 파일 최종 수정일을 그대로 사용하고 false면 현재 일자를 최종 수정일로
+     * 설정한다.
+     *
+     * @param srcFile          원본 파일
+     * @param destFile         대상 파일
+     * @param preserveFileDate 수정일 설정 플래그
+     * @return 성공하면 enum 타입의 Result.SUCCESS를 그렇지 않으면 Result.FAIL을 반환
+     */
+    public static Result moveFile(File srcFile, File destFile, boolean preserveFileDate) {
 
 		Result result;
 
@@ -1443,54 +1443,54 @@ public final class FileUtils {
 		
 		return Result.SUCCESS;
 	}
-	
-	/**
-	 * 원본 파일을 대상 파일 명으로 이동한다.<br>
-	 * preserveFileDate가 true면 원본디렉토리의 파일 최종 수정일을 그대로 사용하고 false면 현재 일자를 최종 수정일로
-	 * 설정한다.
-	 * 
-	 * @param srcFile  원본 파일
-	 * @param destFile 대상 파일
-	 * @param preserveFileDate 수정일 설정 플래그
-	 * @return 성공하면 enum 타입의 Result.SUCCESS를 그렇지 않으면 Result.FAIL을 반환
-	 */
-	public static Result moveFile(String srcFile, String destFile, boolean preserveFileDate) {
+
+    /**
+     * 원본 파일을 대상 파일 명으로 이동한다.<br>
+     * preserveFileDate가 true면 원본디렉토리의 파일 최종 수정일을 그대로 사용하고 false면 현재 일자를 최종 수정일로
+     * 설정한다.
+     *
+     * @param srcFile          원본 파일
+     * @param destFile         대상 파일
+     * @param preserveFileDate 수정일 설정 플래그
+     * @return 성공하면 enum 타입의 Result.SUCCESS를 그렇지 않으면 Result.FAIL을 반환
+     */
+    public static Result moveFile(String srcFile, String destFile, boolean preserveFileDate) {
 		return moveFile(new File(srcFile), new File(destFile), preserveFileDate);
 	}
-	
-	/**
-	 * 원본 파일을 대상 디렉토리 하위로 이동한다.
-	 * 
-	 * @param srcFile 원본 파일
-	 * @param destDir 대상 디렉토리
-	 * @return 성공하면 enum 타입의 Result.SUCCESS를 그렇지 않으면 Result.FAIL을 반환
-	 */
-	public static Result moveFileToDir(File srcFile, File destDir) {
+
+    /**
+     * 원본 파일을 대상 디렉토리 하위로 이동한다.
+     *
+     * @param srcFile 원본 파일
+     * @param destDir 대상 디렉토리
+     * @return 성공하면 enum 타입의 Result.SUCCESS를 그렇지 않으면 Result.FAIL을 반환
+     */
+    public static Result moveFileToDir(File srcFile, File destDir) {
 		return moveFileToDir(srcFile, destDir, true);
 	}
-	
-	/**
-	 * 원본 파일을 대상 디렉토리 하위로 이동한다.
-	 * 
-	 * @param srcFile 원본 파일
-	 * @param destDir 대상 디렉토리
-	 * @return 성공하면 enum 타입의 Result.SUCCESS를 그렇지 않으면 Result.FAIL을 반환
-	 */
-	public static Result moveFileToDir(String srcFile, String destDir) {
+
+    /**
+     * 원본 파일을 대상 디렉토리 하위로 이동한다.
+     *
+     * @param srcFile 원본 파일
+     * @param destDir 대상 디렉토리
+     * @return 성공하면 enum 타입의 Result.SUCCESS를 그렇지 않으면 Result.FAIL을 반환
+     */
+    public static Result moveFileToDir(String srcFile, String destDir) {
 		return moveFileToDir(new File(srcFile), new File(destDir), true);
 	}
-	
-	/**
-	 * 원본 파일을 대상 디렉토리 하위로 이동한다.<br>
-	 * preserveFileDate가 true면 원본디렉토리의 파일 최종 수정일을 그대로 사용하고 false면 현재 일자를 최종 수정일로
-	 * 설정한다.
-	 * 
-	 * @param srcFile 원본 파일
-	 * @param destDir 대상 디렉토리
-	 * @param preserveFileDate 수정일 설정 플래그
-	 * @return 성공하면 enum 타입의 Result.SUCCESS를 그렇지 않으면 Result.FAIL을 반환
-	 */
-	public static Result moveFileToDir(File srcFile, File destDir, boolean preserveFileDate) {
+
+    /**
+     * 원본 파일을 대상 디렉토리 하위로 이동한다.<br>
+     * preserveFileDate가 true면 원본디렉토리의 파일 최종 수정일을 그대로 사용하고 false면 현재 일자를 최종 수정일로
+     * 설정한다.
+     *
+     * @param srcFile          원본 파일
+     * @param destDir          대상 디렉토리
+     * @param preserveFileDate 수정일 설정 플래그
+     * @return 성공하면 enum 타입의 Result.SUCCESS를 그렇지 않으면 Result.FAIL을 반환
+     */
+    public static Result moveFileToDir(File srcFile, File destDir, boolean preserveFileDate) {
 
 		Result result;
 		
@@ -1521,30 +1521,29 @@ public final class FileUtils {
 		
 		return Result.SUCCESS;
 	}
-	
-	/**
-	 * 원본 파일을 대상 디렉토리 하위로 이동한다.<br>
-	 * preserveFileDate가 true면 원본디렉토리의 파일 최종 수정일을 그대로 사용하고 false면 현재 일자를 최종 수정일로
-	 * 설정한다.
-	 * 
-	 * @param srcFile 원본 파일
-	 * @param destDir 대상 디렉토리
-	 * @param preserveFileDate 수정일 설정 플래그            
-	 * @return 성공하면 enum 타입의 Result.SUCCESS를 그렇지 않으면 Result.FAIL을 반환
-	 */
-	public static Result moveFileToDir(String srcFile, String destDir, boolean preserveFileDate) {
+
+    /**
+     * 원본 파일을 대상 디렉토리 하위로 이동한다.<br>
+     * preserveFileDate가 true면 원본디렉토리의 파일 최종 수정일을 그대로 사용하고 false면 현재 일자를 최종 수정일로
+     * 설정한다.
+     *
+     * @param srcFile          원본 파일
+     * @param destDir          대상 디렉토리
+     * @param preserveFileDate 수정일 설정 플래그
+     * @return 성공하면 enum 타입의 Result.SUCCESS를 그렇지 않으면 Result.FAIL을 반환
+     */
+    public static Result moveFileToDir(String srcFile, String destDir, boolean preserveFileDate) {
 		return moveFileToDir(new File(srcFile), new File(destDir), preserveFileDate);
 	}
-	
-	
 
-	/**
-	 * 대상 파일을 FileInputStream으로 반환한다.<br>
-	 * 
-	 * @param file 대상 파일
-	 * @return 대상 파일에 대한 FileInputStream
-	 */
-	public static FileInputStream openInputStream(File file) {
+
+    /**
+     * 대상 파일을 FileInputStream으로 반환한다.<br>
+     *
+     * @param file 대상 파일
+     * @return 대상 파일에 대한 FileInputStream
+     */
+    public static FileInputStream openInputStream(File file) {
 
 		if (file.exists()) {
 
@@ -1571,35 +1570,35 @@ public final class FileUtils {
 
 		return fis;
 	}
-	
-	/**
-	 * 대상 파일을 FileInputStream으로 반환한다.<br>
-	 * 
-	 * @param filePath 대상 파일 경로
-	 * @return 대상 파일에 대한 FileInputStream
-	 */
-	public static FileInputStream openInputStream(String filePath) {
+
+    /**
+     * 대상 파일을 FileInputStream으로 반환한다.<br>
+     *
+     * @param filePath 대상 파일 경로
+     * @return 대상 파일에 대한 FileInputStream
+     */
+    public static FileInputStream openInputStream(String filePath) {
 		return openInputStream(new File(filePath));
 	}
 
-	/**
-	 * 대상 파일을 outputStream으로 반환한다.
-	 * 
-	 * @param file 대상 파일
-	 * @return 대상 파일에 대한 FileOutputStream
-	 */
-	public static FileOutputStream openOutputStream(File file) {
+    /**
+     * 대상 파일을 outputStream으로 반환한다.
+     *
+     * @param file 대상 파일
+     * @return 대상 파일에 대한 FileOutputStream
+     */
+    public static FileOutputStream openOutputStream(File file) {
 		return openOutputStream(file, false);
 	}
-	
-	/**
-	 * 대상 파일을 outputStream으로 반환한다. append가 true이면 출력시 기존 파일의 내용 마지막에 덧붙인다.
-	 * 
-	 * @param file   대상 파일
-	 * @param append 기존 파일에 내용을 덧붙일지에 대한 플래그
-	 * @return 대상 파일에 대한 FileOutputStream
-	 */
-	public static FileOutputStream openOutputStream(File file, boolean append) {
+
+    /**
+     * 대상 파일을 outputStream으로 반환한다. append가 true이면 출력시 기존 파일의 내용 마지막에 덧붙인다.
+     *
+     * @param file   대상 파일
+     * @param append 기존 파일에 내용을 덧붙일지에 대한 플래그
+     * @return 대상 파일에 대한 FileOutputStream
+     */
+    public static FileOutputStream openOutputStream(File file, boolean append) {
 
 		if (file.exists()) {
 
@@ -1627,35 +1626,35 @@ public final class FileUtils {
 		}
 		return fos;
 	}
-	
-	/**
-	 * 대상 파일을 outputStream으로 반환한다.
-	 * 
-	 * @param filePath 대상 파일 경로
-	 * @return 대상 파일에 대한 FileOutputStream
-	 */
-	public static FileOutputStream openOutputStream(String filePath) {
+
+    /**
+     * 대상 파일을 outputStream으로 반환한다.
+     *
+     * @param filePath 대상 파일 경로
+     * @return 대상 파일에 대한 FileOutputStream
+     */
+    public static FileOutputStream openOutputStream(String filePath) {
 		return openOutputStream(new File(filePath), false);
 	}
-	
-	/**
-	 * 대상 파일을 outputStream으로 반환한다. append가 true이면 출력시 기존 파일의 내용 마지막에 덧붙인다.
-	 * 
-	 * @param filePath 대상 파일 경로
-	 * @param append   기존 파일에 내용을 덧붙일지에 대한 플래그
-	 * @return 대상 파일에 대한 FileOutputStream
-	 */
-	public static FileOutputStream openOutputStream(String filePath, boolean append) {
+
+    /**
+     * 대상 파일을 outputStream으로 반환한다. append가 true이면 출력시 기존 파일의 내용 마지막에 덧붙인다.
+     *
+     * @param filePath 대상 파일 경로
+     * @param append   기존 파일에 내용을 덧붙일지에 대한 플래그
+     * @return 대상 파일에 대한 FileOutputStream
+     */
+    public static FileOutputStream openOutputStream(String filePath, boolean append) {
 		return openOutputStream(new File(filePath), append);		
 	}
-	
-	/**
-	 * 대상 파일을 FileReader로 반환한다.
-	 * 
-	 * @param file 대상 파일
-	 * @return 대상 파일에 대한 FileReader
-	 */
-	public static FileReader openReader(File file) {
+
+    /**
+     * 대상 파일을 FileReader로 반환한다.
+     *
+     * @param file 대상 파일
+     * @return 대상 파일에 대한 FileReader
+     */
+    public static FileReader openReader(File file) {
 		
 		if (file.exists()) {
 
@@ -1681,35 +1680,35 @@ public final class FileUtils {
 
 		return fileReader;
 	}
-	
-	/**
-	 * 대상 파일을 FileReader로 반환한다.
-	 * 
-	 * @param filePath 대상 파일 경로
-	 * @return 대상 파일에 대한 FieReader
-	 */
-	public static FileReader openReader(String filePath) {
+
+    /**
+     * 대상 파일을 FileReader로 반환한다.
+     *
+     * @param filePath 대상 파일 경로
+     * @return 대상 파일에 대한 FieReader
+     */
+    public static FileReader openReader(String filePath) {
 		return openReader(new File(filePath));
 	}
-    
+
     /**
-	 * 대상 파일을 FileWriter로 반환한다.
-	 * 
-	 * @param file 대상 파일
-	 * @return 대상 파일에 대한 FileWriter
-	 */
-	public static FileWriter openWriter(File file) { 
+     * 대상 파일을 FileWriter로 반환한다.
+     *
+     * @param file 대상 파일
+     * @return 대상 파일에 대한 FileWriter
+     */
+    public static FileWriter openWriter(File file) {
 		return openWriter(file, false);
 	}
-    
+
     /**
-	 * 대상 파일을 FileWriter로 반환한다. append가 true이면 출력시 기존 파일의 내용 마지막에 덧붙인다.
-	 * 
-	 * @param file 대상 파일
-	 * @param append 기존 파일에 내용을 덧붙일지에 대한 플래그
-	 * @return 대상 파일에 대한 FileWriter
-	 */
-	public static FileWriter openWriter(File file, boolean append) {
+     * 대상 파일을 FileWriter로 반환한다. append가 true이면 출력시 기존 파일의 내용 마지막에 덧붙인다.
+     *
+     * @param file   대상 파일
+     * @param append 기존 파일에 내용을 덧붙일지에 대한 플래그
+     * @return 대상 파일에 대한 FileWriter
+     */
+    public static FileWriter openWriter(File file, boolean append) {
 
 		if (file.exists()) {
 
@@ -1740,58 +1739,58 @@ public final class FileUtils {
 		}
 		return fileWriter;
 	}
-    
+
     /**
-	 * 대상 파일을 FileWriter로 반환한다.
-	 * 
-	 * @param filePath 대상 파일 경로
-	 * @return 대상 파일에 대한 FileWriter
-	 */
-	public static FileWriter openWriter(String filePath) { 
+     * 대상 파일을 FileWriter로 반환한다.
+     *
+     * @param filePath 대상 파일 경로
+     * @return 대상 파일에 대한 FileWriter
+     */
+    public static FileWriter openWriter(String filePath) {
 		return openWriter(new File(filePath));
 	}
-    
+
     /**
-	 * 대상 파일을 FileWriter로 반환한다. append가 true이면 출력시 기존 파일의 내용 마지막에 덧붙인다.
-	 * 
-	 * @param filePath 대상 파일 경로
-	 * @param append 기존 파일에 내용을 덧붙일지에 대한 플래그
-	 * @return 대상 파일에 대한 FileWriter
-	 */
-	public static FileWriter openWriter(String filePath, boolean append) { 
+     * 대상 파일을 FileWriter로 반환한다. append가 true이면 출력시 기존 파일의 내용 마지막에 덧붙인다.
+     *
+     * @param filePath 대상 파일 경로
+     * @param append   기존 파일에 내용을 덧붙일지에 대한 플래그
+     * @return 대상 파일에 대한 FileWriter
+     */
+    public static FileWriter openWriter(String filePath, boolean append) {
 		return openWriter(new File(filePath), append);
 	}
-	
-	/**
-	 * 대상 파일을 BufferedWriter로 반환한다.
-	 * 
-	 * @param file 대상 파일
-	 * @return 대상 파일에 대한 FileWriter
-	 */
-	public static BufferedWriter openBufferWriter(File file) { 
+
+    /**
+     * 대상 파일을 BufferedWriter로 반환한다.
+     *
+     * @param file 대상 파일
+     * @return 대상 파일에 대한 FileWriter
+     */
+    public static BufferedWriter openBufferWriter(File file) {
 		return openBufferWriter(file, "UTF-8", false);
 	}
-	
-	/**
-	 * 대상 파일을 BufferedWriter로 반환한다.
-	 * 
-	 * @param file 대상 파일
-	 * @param charSet 인코딩에 사용할 캐릭터셋
-	 * @return 대상 파일에 대한 FileWriter
-	 */
-	public static BufferedWriter openBufferWriter(File file, String charSet) { 
+
+    /**
+     * 대상 파일을 BufferedWriter로 반환한다.
+     *
+     * @param file    대상 파일
+     * @param charSet 인코딩에 사용할 캐릭터셋
+     * @return 대상 파일에 대한 FileWriter
+     */
+    public static BufferedWriter openBufferWriter(File file, String charSet) {
 		return openBufferWriter(file, charSet, false);
 	}
-    
+
     /**
-	 * 대상 파일을 BufferedWriter로 반환한다. append가 true이면 출력시 기존 파일의 내용 마지막에 덧붙인다.
-	 * 
-	 * @param file 대상 파일
-	 * @param charSet 인코딩에 사용할 캐릭터셋
-	 * @param append 기존 파일에 내용을 덧붙일지에 대한 플래그
-	 * @return 대상 파일에 대한 FileWriter
-	 */
-	public static BufferedWriter openBufferWriter(File file, String charSet, boolean append) {
+     * 대상 파일을 BufferedWriter로 반환한다. append가 true이면 출력시 기존 파일의 내용 마지막에 덧붙인다.
+     *
+     * @param file    대상 파일
+     * @param charSet 인코딩에 사용할 캐릭터셋
+     * @param append  기존 파일에 내용을 덧붙일지에 대한 플래그
+     * @return 대상 파일에 대한 FileWriter
+     */
+    public static BufferedWriter openBufferWriter(File file, String charSet, boolean append) {
 
 		if (file.exists()) {
 
@@ -1825,58 +1824,58 @@ public final class FileUtils {
 		
 		return bufferedWriter;
 	}
-    
+
     /**
-	 * 대상 파일을 BufferedWriter로 반환한다.
-	 * 
-	 * @param filePath 대상 파일 경로
-	 * @return 대상 파일에 대한 FileWriter
-	 */
-	public static BufferedWriter openBufferWriter(String filePath) { 
+     * 대상 파일을 BufferedWriter로 반환한다.
+     *
+     * @param filePath 대상 파일 경로
+     * @return 대상 파일에 대한 FileWriter
+     */
+    public static BufferedWriter openBufferWriter(String filePath) {
 		return openBufferWriter(new File(filePath), "UTF-8", false);
 	}
-	
-	/**
-	 * 대상 파일을 BufferedWriter로 반환한다.
-	 * 
-	 * @param filePath 대상 파일 경로
-	 * @param charSet 인코딩에 사용할 캐릭터셋
-	 * @return 대상 파일에 대한 FileWriter
-	 */
-	public static BufferedWriter openBufferWriter(String filePath, String charSet) { 
+
+    /**
+     * 대상 파일을 BufferedWriter로 반환한다.
+     *
+     * @param filePath 대상 파일 경로
+     * @param charSet  인코딩에 사용할 캐릭터셋
+     * @return 대상 파일에 대한 FileWriter
+     */
+    public static BufferedWriter openBufferWriter(String filePath, String charSet) {
 		return openBufferWriter(new File(filePath), charSet, false);
 	}
-    
+
     /**
-	 * 대상 파일을 BufferedWriter로 반환한다. append가 true이면 출력시 기존 파일의 내용 마지막에 덧붙인다.
-	 * 
-	 * @param filePath 대상 파일 경로
-	 * @param append 기존 파일에 내용을 덧붙일지에 대한 플래그
-	 * @return 대상 파일에 대한 FileWriter
-	 */
-	public static BufferedWriter openBufferWriter(String filePath, boolean append) { 
+     * 대상 파일을 BufferedWriter로 반환한다. append가 true이면 출력시 기존 파일의 내용 마지막에 덧붙인다.
+     *
+     * @param filePath 대상 파일 경로
+     * @param append   기존 파일에 내용을 덧붙일지에 대한 플래그
+     * @return 대상 파일에 대한 FileWriter
+     */
+    public static BufferedWriter openBufferWriter(String filePath, boolean append) {
 		return openBufferWriter(new File(filePath), "UTF-8", append);
 	}
-	
-	/**
-	 * 대상 파일을 BufferedWriter로 반환한다. append가 true이면 출력시 기존 파일의 내용 마지막에 덧붙인다.
-	 * 
-	 * @param filePath 대상 파일 경로
-	 * @param charSet 인코딩에 사용할 캐릭터셋
-	 * @param append 기존 파일에 내용을 덧붙일지에 대한 플래그
-	 * @return 대상 파일에 대한 FileWriter
-	 */
-	public static BufferedWriter openBufferWriter(String filePath, String charSet, boolean append) { 
+
+    /**
+     * 대상 파일을 BufferedWriter로 반환한다. append가 true이면 출력시 기존 파일의 내용 마지막에 덧붙인다.
+     *
+     * @param filePath 대상 파일 경로
+     * @param charSet  인코딩에 사용할 캐릭터셋
+     * @param append   기존 파일에 내용을 덧붙일지에 대한 플래그
+     * @return 대상 파일에 대한 FileWriter
+     */
+    public static BufferedWriter openBufferWriter(String filePath, String charSet, boolean append) {
 		return openBufferWriter(new File(filePath), charSet, append);
 	}
-    
+
     /**
-	 * 파일을 읽어 들인 후 바이트 배열로 반환한다.<br>
-	 * 
-	 * @param file 대상 파일
-	 * @return 원본 파일의 byte[]
-	 */
-	public static byte[] readFileToByteArray(File file) {
+     * 파일을 읽어 들인 후 바이트 배열로 반환한다.<br>
+     *
+     * @param file 대상 파일
+     * @return 원본 파일의 byte[]
+     */
+    public static byte[] readFileToByteArray(File file) {
 
 		InputStream in = null;
 
@@ -1889,21 +1888,21 @@ public final class FileUtils {
 			IOUtils.closeQuietly(in);
 		}
 	}
-    
+
     /**
-	 * 파일을 읽어 들인 후 바이트 배열로 반환한다.<br>
-	 * 
-	 * @param file 대상 파일 경로
-	 * @return 원본 파일의 byte[]
-	 */
-	public static byte[] readFileToByteArray(String file) {
+     * 파일을 읽어 들인 후 바이트 배열로 반환한다.<br>
+     *
+     * @param file 대상 파일 경로
+     * @return 원본 파일의 byte[]
+     */
+    public static byte[] readFileToByteArray(String file) {
 		return readFileToByteArray(new File(file));
 	}
-	
+
     /**
      * 파일을 읽어 들인 후 지정한 charset으로 인토딩한 문자열을 반환한다.
-     * 
-     * @param file 대상 파일 경로
+     *
+     * @param file     대상 파일 경로
      * @param encoding 인코딩할 charset
      * @return 파일 내용을 지정한 charset으로 인코딩한 문자열
      */
@@ -1920,11 +1919,11 @@ public final class FileUtils {
 			IOUtils.closeQuietly(in);
 		}
     }
-    
+
     /**
      * 파일을 읽어 들인 후 지정한 charset으로 인토딩한 문자열을 반환한다.
-     * 
-     * @param file 대상 파일 경로
+     *
+     * @param file     대상 파일 경로
      * @param encoding 인코딩할 charset 문자열
      * @return 파일 내용을 지정한 charset으로 인코딩한 문자열
      */
@@ -1934,23 +1933,23 @@ public final class FileUtils {
 
     /**
      * 파일을 읽어 들인 후 문자열을 반환한다.
-     * 
+     *
      * @param file 대상 파일 경로
      * @return 파일 내용을 지정한 charset으로 인코딩한 문자열
      */
     public static String readFileToString(File file) {
         return readFileToString(file, Charset.defaultCharset());
     }
-    
+
     /**
-	 * 원본 파일명을 대상 파일 명으로 변경한다.<br>
-	 * 파일변경후 원본 파일 삭제
-	 * 
-	 * @param srcFile  원본 파일
-	 * @param destFile 대상 파일
-	 * @return 성공하면 enum 타입의 Result.SUCCESS를 그렇지 않으면 Result.FAIL을 반환
-	 */
-	public static Result rename(String srcFile, String destFile) {
+     * 원본 파일명을 대상 파일 명으로 변경한다.<br>
+     * 파일변경후 원본 파일 삭제
+     *
+     * @param srcFile  원본 파일
+     * @param destFile 대상 파일
+     * @return 성공하면 enum 타입의 Result.SUCCESS를 그렇지 않으면 Result.FAIL을 반환
+     */
+    public static Result rename(String srcFile, String destFile) {
 		
 		Result result;
 		
@@ -1990,12 +1989,13 @@ public final class FileUtils {
 		}
 	}
 
-	/**
-	 * 대상 경로의 폴더에 전체권한을 부여한다.
-	 * @param paths 대상 폴더 경로
-	 * @throws IOException
-	 */
-	public static void setAllPermission(String ... paths) throws IOException {
+    /**
+     * 대상 경로의 폴더에 전체권한을 부여한다.
+     *
+     * @param paths 대상 폴더 경로
+     * @throws IOException the io exception
+     */
+    public static void setAllPermission(String ... paths) throws IOException {
 		for (String localPath : paths) {
 			Path path = Paths.get(localPath);
 			Set<PosixFilePermission> perms = Sets.newHashSet();
@@ -2015,18 +2015,20 @@ public final class FileUtils {
 		}
 	}
 
-	/**
-	 * URL에서 파일명을 추출한다.
-	 * @param url
-	 * @return
-	 */
-	public static String getFilenameByUrl(String url) {
+    /**
+     * URL에서 파일명을 추출한다.
+     *
+     * @param url the url
+     * @return filename by url
+     */
+    public static String getFilenameByUrl(String url) {
 		return url.substring(url.lastIndexOf("/") + 1, url.length());
 	}
 
     /**
      * 대상 String 파일들을 ZIP FILE로 생성
-     * @param zipFile 생성될 Zipfile FULL PATH
+     *
+     * @param zipFile     생성될 Zipfile FULL PATH
      * @param targetFiles ZipFile 대상
      * @return 성공하면 enum 타입의 Result.SUCCESS를 그렇지 않으면 Result.FAIL을 반환
      */
@@ -2072,7 +2074,8 @@ public final class FileUtils {
 
     /**
      * 대상 FILE객체 파일들을 ZIP FILE로 생성
-     * @param zipFile 생성될 Zipfile FULL PATH
+     *
+     * @param zipFile     생성될 Zipfile FULL PATH
      * @param targetFiles ZipFile 대상
      * @return 성공하면 enum 타입의 Result.SUCCESS를 그렇지 않으면 Result.FAIL을 반환
      */
@@ -2115,6 +2118,12 @@ public final class FileUtils {
         return Result.SUCCESS;
     }
 
+    /**
+     * Write.
+     *
+     * @param filePath the file path
+     * @param content  the content
+     */
     public static void write(String filePath, String content) {
 
     	FileWriter fileWriter = openWriter(filePath);

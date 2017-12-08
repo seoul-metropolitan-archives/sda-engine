@@ -10,6 +10,9 @@ import org.hibernate.annotations.DynamicUpdate;
 import javax.persistence.*;
 import java.io.Serializable;
 
+/**
+ * The type Rc aggregation.
+ */
 @Setter
 @Getter
 @DynamicInsert
@@ -59,6 +62,9 @@ public class RcAggregation extends BaseJpaModel<RcAggregation.RcAggregationId> {
     @Override
     public RcAggregation.RcAggregationId getId() { return RcAggregation.RcAggregationId.of(aggregationUuid); }
 
+    /**
+     * The type Rc aggregation id.
+     */
     @Embeddable
     @Data
     @NoArgsConstructor

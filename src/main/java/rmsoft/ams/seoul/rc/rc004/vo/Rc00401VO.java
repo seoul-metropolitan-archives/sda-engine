@@ -5,8 +5,9 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
+/**
+ * The type Rc 00401 vo.
+ */
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)

@@ -6,6 +6,9 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
+/**
+ * The type App runner.
+ */
 @SpringBootApplication(scanBasePackages = {"io.onsemiro", "rmsoft.ams.seoul"})
 @EnableScheduling
 public class AppRunner extends SpringBootServletInitializer {
@@ -15,6 +18,11 @@ public class AppRunner extends SpringBootServletInitializer {
         return application.sources(AppRunner.class);
     }
 
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
     public static void main(String[] args) {
         SpringApplication.run(AppRunner.class, args);
     }

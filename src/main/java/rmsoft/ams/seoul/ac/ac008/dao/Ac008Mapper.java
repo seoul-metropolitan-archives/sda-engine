@@ -14,8 +14,14 @@ import java.util.List;
  *
  * @author james
  * @version 1.0.0
- * @since 2017-09-26 오후 3:44
- **/
+ * @since 2017 -09-26 오후 3:44
+ */
 public interface Ac008Mapper extends MyBatisMapper {
+    /**
+     * Find all program list.
+     *
+     * @param ac00801VO the ac 00801 vo
+     * @return the list
+     */
     List<Ac00801VO> findAllProgram(Ac00801VO ac00801VO);
 }

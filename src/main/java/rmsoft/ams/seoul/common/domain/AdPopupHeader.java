@@ -10,6 +10,9 @@ import org.hibernate.annotations.DynamicUpdate;
 import javax.persistence.*;
 import java.io.Serializable;
 
+/**
+ * The type Ad popup header.
+ */
 @Setter
 @Getter
 @DynamicInsert
@@ -60,6 +63,9 @@ public class AdPopupHeader extends BaseJpaModel<AdPopupHeader.AdPopupHeaderId>
     }
 
 
+    /**
+     * The type Ad popup header id.
+     */
     @Embeddable
     @Data
     @NoArgsConstructor

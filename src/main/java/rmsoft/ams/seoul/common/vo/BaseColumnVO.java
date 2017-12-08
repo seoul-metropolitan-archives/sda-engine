@@ -2,6 +2,9 @@ package rmsoft.ams.seoul.common.vo;
 
 import lombok.Data;
 
+/**
+ * The type Base column vo.
+ */
 @Data
 public abstract class BaseColumnVO {
     private int sortNo = 0;
@@ -17,6 +20,11 @@ public abstract class BaseColumnVO {
     private String treeRelationType = "";
     private String treeColumnYN = "N";
 
+    /**
+     * Sets required.
+     *
+     * @param required the required
+     */
     public void setRequired(String required) {
         this.required = Boolean.parseBoolean(required);
     }

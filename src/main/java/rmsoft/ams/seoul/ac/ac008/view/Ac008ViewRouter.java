@@ -15,11 +15,17 @@ import rmsoft.ams.seoul.utils.CommonCodeUtils;
  *
  * @author james
  * @version 1.0.0
- * @since 2017-10-23 오후 2:06
- **/
+ * @since 2017 -10-23 오후 2:06
+ */
 @Controller
 public class Ac008ViewRouter extends BaseController {
 
+    /**
+     * View string.
+     *
+     * @param model the model
+     * @return the string
+     */
     @GetMapping("/ac/ac008/ac008")
     public String view(ModelMap model) {
         model.addAttribute("serviceUuid", CommonCodeUtils.get("CD006"));

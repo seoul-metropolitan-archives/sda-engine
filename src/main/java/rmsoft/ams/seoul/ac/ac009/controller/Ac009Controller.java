@@ -22,8 +22,8 @@ import java.util.List;
  *
  * @author james
  * @version 1.0.0
- * @since 2017-10-12 오후 5:48
- **/
+ * @since 2017 -10-12 오후 5:48
+ */
 @RestController
 @RequestMapping(value = "/api/v1/ac009/")
 public class Ac009Controller extends MessageBaseController {
@@ -31,6 +31,13 @@ public class Ac009Controller extends MessageBaseController {
     @Autowired
     private Ac009Service ac009Service;
 
+    /**
+     * Find all menu responses . page response.
+     *
+     * @param pageable      the pageable
+     * @param requestParams the request params
+     * @return the responses . page response
+     */
     @GetMapping("/01/list")
     public Responses.PageResponse findAllMenu(Pageable pageable, RequestParams<Ac00901VO> requestParams) {
         Page<Ac00901VO> pages = ac009Service.findAllMenu(pageable, requestParams);
@@ -38,6 +45,12 @@ public class Ac009Controller extends MessageBaseController {
         return Responses.PageResponse.of(pages.getContent(), pages);
     }
 
+    /**
+     * Save menu api response.
+     *
+     * @param requestParams the request params
+     * @return the api response
+     */
     @PutMapping(value = "/01/save")
     @PostMapping
     public ApiResponse saveMenu(@RequestBody List<Ac00901VO> requestParams) {

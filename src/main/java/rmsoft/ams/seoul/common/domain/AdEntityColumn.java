@@ -14,6 +14,9 @@ import org.hibernate.annotations.DynamicUpdate;
 import javax.persistence.*;
 import java.io.Serializable;
 
+/**
+ * The type Ad entity column.
+ */
 @Setter
 @Getter
 @DynamicInsert
@@ -52,6 +55,9 @@ public class AdEntityColumn extends BaseJpaModel<AdEntityColumn.AdEntityColumnId
         return AdEntityColumnId.of(entityColumnUuid);
     }
 
+    /**
+     * The type Ad entity column id.
+     */
     @Embeddable
     @Data
     @NoArgsConstructor

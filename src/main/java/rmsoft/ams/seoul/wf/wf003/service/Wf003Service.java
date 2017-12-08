@@ -77,7 +77,7 @@ public class Wf003Service extends BaseService {
      *
      * @param pageable      the pageable
      * @param requestParams the request params
-     * @return page
+     * @return page page
      */
     public Page<Wf00301VO> findAllWorkflow(Pageable pageable, RequestParams<Wf00301VO> requestParams) {
 
@@ -132,7 +132,7 @@ public class Wf003Service extends BaseService {
      *
      * @param pageable      the pageable
      * @param requestParams the request params
-     * @return page
+     * @return page page
      */
     public Page<Wf00302VO> findWorkflowJob(Pageable pageable, RequestParams<Wf00302VO> requestParams) {
         String filter = requestParams.getString("filter", "");
@@ -188,7 +188,7 @@ public class Wf003Service extends BaseService {
      *
      * @param pageable      the pageable
      * @param requestParams the request params
-     * @return page
+     * @return page page
      */
     public Page<Wf00301_P0101VO> findAllJob(Pageable pageable, RequestParams<Wf00301_P0101VO> requestParams) {
 
@@ -205,7 +205,7 @@ public class Wf003Service extends BaseService {
      *
      * @param pageable      the pageable
      * @param requestParams the request params
-     * @return page
+     * @return page page
      */
     public Page<Wf00301_P0102VO> findParameter(Pageable pageable, RequestParams<Wf00301_P0102VO> requestParams) {
         String filter = requestParams.getString("filter", "");
@@ -214,8 +214,10 @@ public class Wf003Service extends BaseService {
     }
 
     /**
-     * @param wf00301_p0102VOList
-     * @return
+     * Save parameter api response.
+     *
+     * @param wf00301_p0102VOList the wf 00301 p 0102 vo list
+     * @return api response
      */
     @Transactional
     public ApiResponse saveParameter(List<Wf00301_P0102VO> wf00301_p0102VOList) {
@@ -243,6 +245,12 @@ public class Wf003Service extends BaseService {
         return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");
     }
 
+    /**
+     * Gets popup info.
+     *
+     * @param requestParams the request params
+     * @return the popup info
+     */
     public Map<String, Object> getPopupInfo(RequestParams<Wf00301_P0102VO> requestParams) {
         Map<String, Object> popupInfo = new HashMap<String, Object>();
         popupInfo.put("columnInfo", wf003Mapper.getColumnInfo(requestParams.getString("jobUuid")));
@@ -251,7 +259,9 @@ public class Wf003Service extends BaseService {
 
     /**********************************************************************************
      *  Run Process
-     **********************************************************************************/
+     * @param requestParams the request params
+     * @return the api response
+     */
     public ApiResponse runProcess(Wf00303VO requestParams) {
         // Workflow Result에 등록
         WfWorkflowResult wfWorkflowResult = new WfWorkflowResult();
@@ -340,6 +350,12 @@ public class Wf003Service extends BaseService {
         return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");
     }
 
+    /**
+     * Stop process api response.
+     *
+     * @param batchId the batch id
+     * @return the api response
+     */
     public ApiResponse stopProcess(String batchId) {
         workflowManager.stopProcess(batchId);
         return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");

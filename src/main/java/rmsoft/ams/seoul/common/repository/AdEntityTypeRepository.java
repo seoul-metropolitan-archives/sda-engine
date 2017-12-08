@@ -9,8 +9,8 @@ import rmsoft.ams.seoul.common.domain.AdEntityType;
  *
  * @author james
  * @version 1.0.0
- * @since 2017-11-01 오후 7:59
- **/
+ * @since 2017 -11-01 오후 7:59
+ */
 @Repository
 public interface AdEntityTypeRepository extends AXBootJPAQueryDSLRepository<AdEntityType, AdEntityType.AdEntityTypeId> {
 }

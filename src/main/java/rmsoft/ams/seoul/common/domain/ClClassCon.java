@@ -5,7 +5,6 @@
 package rmsoft.ams.seoul.common.domain;
 
 import io.onsemiro.core.annotations.Comment;
-import io.onsemiro.core.domain.BaseJpaModel;
 import io.onsemiro.core.domain.SimpleJpaModel;
 import lombok.*;
 import org.apache.ibatis.type.Alias;
@@ -15,6 +14,9 @@ import org.hibernate.annotations.DynamicUpdate;
 import javax.persistence.*;
 import java.io.Serializable;
 
+/**
+ * The type Cl class con.
+ */
 @Setter
 @Getter
 @DynamicInsert
@@ -77,6 +79,9 @@ public class ClClassCon extends SimpleJpaModel<ClClassCon.ClClassConId> {
     @Override
     public ClClassConId getId() { return ClClassConId.of(classUuid); }
 
+    /**
+     * The type Cl class con id.
+     */
     @Embeddable
     @Data
     @NoArgsConstructor

@@ -14,6 +14,9 @@ import org.hibernate.annotations.DynamicUpdate;
 import javax.persistence.*;
 import java.io.Serializable;
 
+/**
+ * The type Cl classified records.
+ */
 @Setter
 @Getter
 @DynamicInsert
@@ -53,6 +56,9 @@ public class ClClassifiedRecords extends BaseJpaModel<ClClassifiedRecords.ClClas
     @Override
     public ClClassifiedRecordsId getId() { return ClClassifiedRecordsId.of(classifiedRecordsUuid); }
 
+    /**
+     * The type Cl classified records id.
+     */
     @Embeddable
     @Data
     @NoArgsConstructor

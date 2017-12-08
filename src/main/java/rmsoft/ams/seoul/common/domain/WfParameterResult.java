@@ -14,6 +14,9 @@ import rmsoft.ams.seoul.common.workflow.WorkflowJpaModel;
 import javax.persistence.*;
 import java.io.Serializable;
 
+/**
+ * The type Wf parameter result.
+ */
 @Setter
 @Getter
 @DynamicInsert
@@ -75,6 +78,9 @@ public class WfParameterResult extends WorkflowJpaModel<WfParameterResult.WfPara
         return WfParameterResultId.of(parameterResultUuid);
     }
 
+    /**
+     * The type Wf parameter result id.
+     */
     @Embeddable
     @Data
     @NoArgsConstructor

@@ -13,8 +13,8 @@ import rmsoft.ams.seoul.common.domain.AcRoleMenu;
  *
  * @author james
  * @version 1.0.0
- * @since 2017-10-26 오후 4:17
- **/
+ * @since 2017 -10-26 오후 4:17
+ */
 @Repository
 public interface AcRoleMenuRepository extends AXBootJPAQueryDSLRepository<AcRoleMenu, AcRoleMenu.AcRoleMenuId> {
 }

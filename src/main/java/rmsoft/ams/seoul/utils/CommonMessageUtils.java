@@ -11,13 +11,29 @@ import rmsoft.ams.seoul.common.repository.AdMessageRepository;
 
 import java.util.List;
 
+/**
+ * The type Common message utils.
+ */
 public class CommonMessageUtils {
     private static List<AdMessage> commonMessageList;
 
+    /**
+     * Gets message.
+     *
+     * @param messageCode the message code
+     * @return the message
+     */
     public static String getMessage(String messageCode) {
         return getMessage(messageCode, false);
     }
 
+    /**
+     * Gets message.
+     *
+     * @param messageCode     the message code
+     * @param isDatabaseError the is database error
+     * @return the message
+     */
     public static String getMessage(String messageCode, boolean isDatabaseError) {
         if (commonMessageList == null) {
             commonMessageList = getAllMessageByList();
@@ -51,6 +67,11 @@ public class CommonMessageUtils {
         return message.getMessageName();
     }
 
+    /**
+     * Gets all message by list.
+     *
+     * @return the all message by list
+     */
     public static List<AdMessage> getAllMessageByList() {
         commonMessageList = null;
         commonMessageList = getRepository().findAll();
@@ -58,11 +79,21 @@ public class CommonMessageUtils {
         return commonMessageList;
     }
 
+    /**
+     * Gets all message by json.
+     *
+     * @return the all message by json
+     */
     public static String getAllMessageByJson() {
         return JsonUtils.toJson(getAllMessageByList());
     }
 
 
+    /**
+     * Gets repository.
+     *
+     * @return the repository
+     */
     public static AdMessageRepository getRepository() {
         return AppContextManager.getBean(AdMessageRepository.class);
     }

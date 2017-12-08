@@ -1,8 +1,13 @@
 package rmsoft.ams.seoul.rc.rc003.vo;
 
 import io.onsemiro.core.vo.BaseVO;
-import lombok.*;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
+/**
+ * The type Rc 00301 vo.
+ */
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)

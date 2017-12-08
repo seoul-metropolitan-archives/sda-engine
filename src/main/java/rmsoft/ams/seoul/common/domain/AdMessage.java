@@ -19,8 +19,8 @@ import java.io.Serializable;
  *
  * @author james
  * @version 1.0.0
- * @since 2017-10-20 오후 3:14
- **/
+ * @since 2017 -10-20 오후 3:14
+ */
 @Setter
 @Getter
 @DynamicInsert
@@ -63,6 +63,9 @@ public class AdMessage extends BaseJpaModel<AdMessage.AdMessageId> {
     }
 
 
+    /**
+     * The type Ad message id.
+     */
     @Embeddable
     @Data
     @NoArgsConstructor

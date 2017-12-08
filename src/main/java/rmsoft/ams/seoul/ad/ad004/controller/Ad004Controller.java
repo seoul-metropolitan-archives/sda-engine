@@ -20,6 +20,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * The type Ad 004 controller.
+ */
 @RestController
 @RequestMapping("/api/v1/ad/ad004")
 public class Ad004Controller extends MessageBaseController {
@@ -27,6 +30,11 @@ public class Ad004Controller extends MessageBaseController {
     @Autowired
     private Ad004Service service;
 
+    /**
+     * Gets uuid.
+     *
+     * @return the uuid
+     */
     @RequestMapping("/getUUID")
     public Responses.MapResponse getUUID() {
         Map<String,Object> response = new HashMap<String,Object>();
@@ -34,24 +42,48 @@ public class Ad004Controller extends MessageBaseController {
         return Responses.MapResponse.of(response);
     }
 
+    /**
+     * Search popup header responses . list response.
+     *
+     * @param param the param
+     * @return the responses . list response
+     */
     @RequestMapping("/searchPopupHeader")
     @ResponseBody
     public Responses.ListResponse searchPopupHeader(@RequestBody Ad00401VO param) {
         return Responses.ListResponse.of(service.searchPopupHeader(param));
     }
 
+    /**
+     * Gets popup detail.
+     *
+     * @param param the param
+     * @return the popup detail
+     */
     @RequestMapping("/getPopupDetail")
     @ResponseBody
     public Responses.ListResponse getPopupDetail(@RequestBody Ad00402VO param) {
         return Responses.ListResponse.of(service.getPopupDetail(param));
     }
 
+    /**
+     * Save popup header api response.
+     *
+     * @param list the list
+     * @return the api response
+     */
     @RequestMapping("/savePopupHeader")
     public ApiResponse savePopupHeader(@RequestBody List<Ad00401VO> list) {
         ApiResponse apiResponse = service.savePopupHeader(ModelMapperUtils.mapList(list, AdPopupHeader.class));
         return apiResponse;
     }
 
+    /**
+     * Save popup detail api response.
+     *
+     * @param list the list
+     * @return the api response
+     */
     @RequestMapping("/savePopupDetail")
     public ApiResponse savePopupDetail(@RequestBody List<Ad00402VO> list) {
         ApiResponse apiResponse = service.savePopupDetail(ModelMapperUtils.mapList(list, AdPopupDetail.class));

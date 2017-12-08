@@ -12,6 +12,9 @@ import lombok.NoArgsConstructor;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The type Ac 00702 vo.
+ */
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
@@ -46,6 +49,11 @@ public class Ac00702VO extends BaseVO {
 
     private List<Ac00702VO> children = new ArrayList<>();
 
+    /**
+     * Add children.
+     *
+     * @param menu the menu
+     */
     public void addChildren(Ac00702VO menu) {
         children.add(menu);
     }

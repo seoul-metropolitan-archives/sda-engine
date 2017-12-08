@@ -12,6 +12,12 @@ public class SocketMsgTemplateManager {
 
     private static final String TEMPLATE_DIR = "/socket/msg/templates/";
 
+    /**
+     * Gets template.
+     *
+     * @param type the type
+     * @return the template
+     */
     public static String getTemplate(String type) {
 
         try {

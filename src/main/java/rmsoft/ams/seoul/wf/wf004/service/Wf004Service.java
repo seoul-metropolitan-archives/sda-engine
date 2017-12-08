@@ -59,7 +59,7 @@ public class Wf004Service extends BaseService {
      *
      * @param pageable      the pageable
      * @param requestParams the request params
-     * @return page
+     * @return page page
      */
     public Page<Wf00401VO> findAllWorkflowResult(Pageable pageable, RequestParams<Wf00401VO> requestParams) {
 
@@ -122,7 +122,7 @@ public class Wf004Service extends BaseService {
      *
      * @param pageable      the pageable
      * @param requestParams the request params
-     * @return page
+     * @return page page
      */
     public Page<Wf00402VO> findWorkflowJobResult(Pageable pageable, RequestParams<Wf00402VO> requestParams) {
         String filter = requestParams.getString("filter", "");
@@ -172,7 +172,7 @@ public class Wf004Service extends BaseService {
      *
      * @param pageable      the pageable
      * @param requestParams the request params
-     * @return page
+     * @return page page
      */
     public Page<Wf00403VO> findParameterResult(Pageable pageable, RequestParams<Wf00403VO> requestParams) {
         String filter = requestParams.getString("filter", "");

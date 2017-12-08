@@ -11,6 +11,12 @@ import java.io.IOException;
 @Slf4j
 public class TaskHandlerWriter {
 
+    /**
+     * Write.
+     *
+     * @param packageName       the package name
+     * @param socketMsgTemplate the socket msg template
+     */
     public static void write(String packageName, SocketMsgTemplate socketMsgTemplate) {
 
         String className = socketMsgTemplate.getName().replace("Atms", "");

@@ -1,6 +1,5 @@
 package rmsoft.ams.seoul.cl.cl001.controller;
 
-import io.onsemiro.controller.BaseController;
 import io.onsemiro.core.api.ApiException;
 import io.onsemiro.core.api.response.ApiResponse;
 import io.onsemiro.core.api.response.Responses;
@@ -18,6 +17,9 @@ import rmsoft.ams.seoul.common.controller.MessageBaseController;
 import java.util.List;
 
 
+/**
+ * The type Cl 001 controller.
+ */
 @RestController
 @RequestMapping("/api/v1/cl001/")
 public class Cl001Controller extends MessageBaseController {
@@ -25,6 +27,13 @@ public class Cl001Controller extends MessageBaseController {
     @Autowired
     private Cl001Service cl001Service;
 
+    /**
+     * Gets classification scheme list.
+     *
+     * @param pageable      the pageable
+     * @param requestParams the request params
+     * @return the classification scheme list
+     */
     @GetMapping("/01/list")
     public Responses.PageResponse getClassificationSchemeList(Pageable pageable, RequestParams<Cl00101VO> requestParams) {
         Page<Cl00101VO> pages = cl001Service.getClassificationSchemeList(pageable, requestParams);
@@ -32,11 +41,23 @@ public class Cl001Controller extends MessageBaseController {
         return Responses.PageResponse.of(pages.getContent(), pages);
     }
 
+    /**
+     * Gets classification scheme detail.
+     *
+     * @param requestParams the request params
+     * @return the classification scheme detail
+     */
     @GetMapping("/02/detail")
     public Cl00102VO getClassificationSchemeDetail(RequestParams<Cl00101VO> requestParams) {
         return cl001Service.getClassificationSchemeDetail(requestParams);
     }
 
+    /**
+     * Update classification scheme list api response.
+     *
+     * @param requestParams the request params
+     * @return the api response
+     */
     @PutMapping(value = "/03/updateClassificationSchemeList")
     @PostMapping
     public ApiResponse updateClassificationSchemeList(@RequestBody List<Cl00101VO> requestParams) {
@@ -47,6 +68,12 @@ public class Cl001Controller extends MessageBaseController {
         return apiResponse;
     }
 
+    /**
+     * Update status api response.
+     *
+     * @param requestParams the request params
+     * @return the api response
+     */
     @PutMapping(value = "/04/updateStatus")
     @PostMapping
     public ApiResponse updateStatus(@RequestBody List<Cl00101VO> requestParams) {
@@ -57,6 +84,11 @@ public class Cl001Controller extends MessageBaseController {
         return apiResponse;
     }
 
+    /**
+     * Update classification scheme con detail.
+     *
+     * @param requestParams the request params
+     */
     @GetMapping("/05/updateClassificationSchemeConDetail")
     public void updateClassificationSchemeConDetail(RequestParams<Cl00102VO> requestParams) {
         cl001Service.updateClassificationSchemeConDetail(requestParams);

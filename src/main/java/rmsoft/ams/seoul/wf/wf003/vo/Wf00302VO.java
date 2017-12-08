@@ -17,8 +17,8 @@ import java.util.Map;
  *
  * @author james
  * @version 1.0.0
- * @since 2017-10-23 오후 2:06
- **/
+ * @since 2017 -10-23 오후 2:06
+ */
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)

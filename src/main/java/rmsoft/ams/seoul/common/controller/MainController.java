@@ -31,11 +31,22 @@ public class MainController {
     private String commonMessageJson;
     private String commonConfigJson;
 
+    /**
+     * Index string.
+     *
+     * @return the string
+     */
     @GetMapping("/")
     public String index() {
         return "redirect:/login";
     }
 
+    /**
+     * Login string.
+     *
+     * @param model the model
+     * @return the string
+     */
     @GetMapping("/login")
     public String login(ModelMap model) {
 
@@ -51,11 +62,22 @@ public class MainController {
         return SessionUtils.isLoggedIn() ? "redirect:/" + appName : "/ac/ac001/ac001";
     }
 
+    /**
+     * Main string.
+     *
+     * @return the string
+     */
     @GetMapping("/main")
     public String main() {
         return "redirect:/" + appName;
     }
 
+    /**
+     * App string.
+     *
+     * @param model the model
+     * @return the string
+     */
     @GetMapping("/${onsemiro.app-name}")
     public String app(Model model) {
 

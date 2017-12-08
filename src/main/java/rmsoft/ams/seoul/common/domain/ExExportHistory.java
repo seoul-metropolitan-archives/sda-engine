@@ -15,6 +15,9 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
 
+/**
+ * The type Ex export history.
+ */
 @Setter
 @Getter
 @DynamicInsert
@@ -56,6 +59,9 @@ public class ExExportHistory extends BaseJpaModel<ExExportHistory.ExExportHistor
         return ExExportHistoryId.of(exportHistoryUuid);
     }
 
+    /**
+     * The type Ex export history id.
+     */
     @Embeddable
     @Data
     @NoArgsConstructor

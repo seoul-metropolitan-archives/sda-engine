@@ -14,6 +14,9 @@ import org.hibernate.annotations.DynamicUpdate;
 import javax.persistence.*;
 import java.io.Serializable;
 
+/**
+ * The type Wf parameter.
+ */
 @Setter
 @Getter
 @DynamicInsert
@@ -71,6 +74,9 @@ public class WfParameter extends BaseJpaModel<WfParameter.WfParameterId> {
         return WfParameterId.of(parameterUuid);
     }
 
+    /**
+     * The type Wf parameter id.
+     */
     @Embeddable
     @Data
     @NoArgsConstructor

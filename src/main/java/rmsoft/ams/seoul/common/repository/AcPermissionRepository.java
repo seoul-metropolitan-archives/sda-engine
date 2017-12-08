@@ -13,8 +13,8 @@ import rmsoft.ams.seoul.common.domain.AcPermission;
  *
  * @author james
  * @version 1.0.0
- * @since 2017-10-24 오후 5:21
- **/
+ * @since 2017 -10-24 오후 5:21
+ */
 @Repository
 public interface AcPermissionRepository extends AXBootJPAQueryDSLRepository<AcPermission, AcPermission.AcPermissionId> {
 }

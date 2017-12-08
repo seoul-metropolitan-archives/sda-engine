@@ -13,8 +13,8 @@ import rmsoft.ams.seoul.common.domain.AcRole;
  *
  * @author james
  * @version 1.0.0
- * @since 2017-10-24 오후 1:24
- **/
+ * @since 2017 -10-24 오후 1:24
+ */
 @Repository
 public interface AcRoleRepository extends AXBootJPAQueryDSLRepository<AcRole, AcRole.AcRoleId> {
 }

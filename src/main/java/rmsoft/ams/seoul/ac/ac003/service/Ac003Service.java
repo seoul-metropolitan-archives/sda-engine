@@ -5,7 +5,6 @@ import io.onsemiro.core.api.ApiException;
 import io.onsemiro.core.api.response.ApiResponse;
 import io.onsemiro.core.code.ApiStatus;
 import io.onsemiro.core.domain.BaseService;
-import io.onsemiro.core.domain.user.QUserGroupUser;
 import io.onsemiro.core.parameter.RequestParams;
 import io.onsemiro.utils.DateUtils;
 import io.onsemiro.utils.ModelMapperUtils;
@@ -19,7 +18,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestParam;
 import rmsoft.ams.seoul.ac.ac003.dao.Ac003Mapper;
 import rmsoft.ams.seoul.ac.ac003.vo.Ac00301VO;
 import rmsoft.ams.seoul.ac.ac003.vo.Ac00302VO;
@@ -34,6 +32,9 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * The type Ac 003 service.
+ */
 @Slf4j
 @Service
 public class Ac003Service extends BaseService {
@@ -61,9 +62,9 @@ public class Ac003Service extends BaseService {
     /**
      * 모든 사용자 조회
      *
-     * @param pageable
-     * @param requestParams
-     * @return
+     * @param pageable      the pageable
+     * @param requestParams the request params
+     * @return page
      */
     public Page<Ac00301VO> findAllUser(Pageable pageable, RequestParams<Ac00301VO> requestParams) {
 
@@ -79,8 +80,8 @@ public class Ac003Service extends BaseService {
     /**
      * 사용자 암호변경
      *
-     * @param ac00301VOList
-     * @return
+     * @param requestParams the request params
+     * @return api response
      */
     @Transactional
     public ApiResponse savePassword(RequestParams<Ac00301VO> requestParams) {
@@ -110,8 +111,8 @@ public class Ac003Service extends BaseService {
     /**
      * 사용자 정보 저장
      *
-     * @param ac00301VOList
-     * @return
+     * @param ac00301VOList the ac 00301 vo list
+     * @return api response
      */
     @Transactional
     public ApiResponse saveUser(List<Ac00301VO> ac00301VOList) {
@@ -169,11 +170,11 @@ public class Ac003Service extends BaseService {
     /**
      * 그룹 사용자 조회
      *
-     * @param pageable
-     * @param requestParams
-     * @return
+     * @param pageable      the pageable
+     * @param requestParams the request params
+     * @return page
      */
-    // USER GROUP 관련 호출부
+// USER GROUP 관련 호출부
     public Page<Ac00302VO> findUserGroupUser(Pageable pageable, RequestParams<Ac00302VO> requestParams) {
         String filter = requestParams.getString("filter", "");
 
@@ -183,8 +184,8 @@ public class Ac003Service extends BaseService {
     /**
      * 그룹 사용자 정보 저장
      *
-     * @param ac00302VOList
-     * @return
+     * @param ac00302VOList the ac 00302 vo list
+     * @return api response
      */
     @Transactional
     public ApiResponse saveUserGroup(List<Ac00302VO> ac00302VOList) {
@@ -220,9 +221,9 @@ public class Ac003Service extends BaseService {
     /**
      * 사용자 접근제어 정보 조회
      *
-     * @param pageable
-     * @param requestParams
-     * @return
+     * @param pageable      the pageable
+     * @param requestParams the request params
+     * @return page
      */
     public Page<Ac00303VO> findUserRole(Pageable pageable, RequestParams<Ac00303VO> requestParams) {
         String filter = requestParams.getString("filter", "");
@@ -242,8 +243,8 @@ public class Ac003Service extends BaseService {
     /**
      * 사용자 접근제어 정보 저장
      *
-     * @param ac00303VOList
-     * @return
+     * @param ac00303VOList the ac 00303 vo list
+     * @return api response
      */
     @Transactional
     public ApiResponse saveUserRole(List<Ac00303VO> ac00303VOList) {

@@ -9,6 +9,9 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+/**
+ * The type Ac 00304 vo.
+ */
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)

@@ -5,7 +5,6 @@ import io.onsemiro.core.code.ApiStatus;
 import io.onsemiro.core.domain.BaseService;
 import io.onsemiro.core.parameter.RequestParams;
 import io.onsemiro.utils.ModelMapperUtils;
-import io.onsemiro.utils.UUIDUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +19,9 @@ import rmsoft.ams.seoul.utils.CommonMessageUtils;
 
 import java.util.List;
 
+/**
+ * The type Ad 006 service.
+ */
 @Service
 public class Ad006Service extends BaseService {
 
@@ -32,6 +34,12 @@ public class Ad006Service extends BaseService {
     @Autowired
     private AdEntityColumnRepository adEntityColumnRepository;
 
+    /**
+     * Search entity type list.
+     *
+     * @param param the param
+     * @return the list
+     */
     public List<Ad00601VO> searchEntityType(RequestParams<Ad00601VO> param) {
         Ad00601VO ad00601VO = new Ad00601VO();
 
@@ -42,6 +50,12 @@ public class Ad006Service extends BaseService {
         return mapper.searchEntityType(ad00601VO);
     }
 
+    /**
+     * Gets entity column list.
+     *
+     * @param param the param
+     * @return the entity column list
+     */
     public List<Ad00602VO> getEntityColumnList(RequestParams<Ad00601VO> param) {
         Ad00601VO ad00601VO = new Ad00601VO();
 
@@ -50,6 +64,12 @@ public class Ad006Service extends BaseService {
         return mapper.getEntityColumnList(ad00601VO);
     }
 
+    /**
+     * Save entity type api response.
+     *
+     * @param ad00601VOList the ad 00601 vo list
+     * @return the api response
+     */
     @Transactional
     public ApiResponse saveEntityType(List<Ad00601VO> ad00601VOList) {
 
@@ -77,6 +97,12 @@ public class Ad006Service extends BaseService {
         return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");
     }
 
+    /**
+     * Save entity column api response.
+     *
+     * @param ad00602VOList the ad 00602 vo list
+     * @return the api response
+     */
     @Transactional
     public ApiResponse saveEntityColumn(List<Ad00602VO> ad00602VOList) {
 

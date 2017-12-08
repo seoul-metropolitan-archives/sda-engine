@@ -14,6 +14,9 @@ import org.hibernate.annotations.DynamicUpdate;
 import javax.persistence.*;
 import java.io.Serializable;
 
+/**
+ * The type Ad menu.
+ */
 @Setter
 @Getter
 @DynamicInsert
@@ -59,6 +62,9 @@ public class AdMenu extends BaseJpaModel<AdMenu.AdMenuId> {
         return AdMenuId.of(menuUuid);
     }
 
+    /**
+     * The type Ad menu id.
+     */
     @Embeddable
     @Data
     @NoArgsConstructor

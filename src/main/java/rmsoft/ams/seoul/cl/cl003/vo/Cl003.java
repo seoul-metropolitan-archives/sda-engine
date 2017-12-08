@@ -10,6 +10,9 @@ import org.hibernate.annotations.DynamicUpdate;
 import javax.persistence.*;
 import java.io.Serializable;
 
+/**
+ * The type Cl 003.
+ */
 @Setter
 @Getter
 @DynamicInsert
@@ -45,6 +48,9 @@ public class Cl003 extends BaseJpaModel<Cl003.Cl003Id> {
         return Cl003Id.of(service_uuid);
     }
 
+    /**
+     * The type Cl 003 id.
+     */
     @Embeddable
     @Data
     @NoArgsConstructor

@@ -15,6 +15,9 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
 
+/**
+ * The type Wf workflow result.
+ */
 @Setter
 @Getter
 @DynamicInsert
@@ -55,10 +58,16 @@ public class WfWorkflowResult extends WorkflowJpaModel<WfWorkflowResult.WfWorkfl
     @Comment(value = "Program UUID")
     private String menuUuid;
 
+    /**
+     * The Start date.
+     */
     @Column(name = "START_DATE", nullable = false)
     @Comment(value = "Start Date")
     protected Timestamp startDate;
 
+    /**
+     * The End date.
+     */
     @Column(name = "END_DATE")
     @Comment(value = "End Date")
     protected Timestamp endDate;
@@ -68,6 +77,9 @@ public class WfWorkflowResult extends WorkflowJpaModel<WfWorkflowResult.WfWorkfl
         return WfWorkflowResultId.of(workflowResultUuid);
     }
 
+    /**
+     * The type Wf workflow result id.
+     */
     @Embeddable
     @Data
     @NoArgsConstructor

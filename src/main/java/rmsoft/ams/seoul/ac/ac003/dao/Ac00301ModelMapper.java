@@ -11,8 +11,8 @@ import rmsoft.ams.seoul.common.domain.AcUser;
  *
  * @author james
  * @version 1.0.0
- * @since 2017-09-26 오후 3:36
- **/
+ * @since 2017 -09-26 오후 3:36
+ */
 @Component
 public class Ac00301ModelMapper extends CustomMapper<AcUser, Ac00301VO> {
 

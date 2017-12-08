@@ -13,8 +13,8 @@ import rmsoft.ams.seoul.common.domain.WfWorkflow;
  *
  * @author james
  * @version 1.0.0
- * @since 2017-11-01 오후 3:59
- **/
+ * @since 2017 -11-01 오후 3:59
+ */
 @Repository
 public interface WfWorkflowRepository extends AXBootJPAQueryDSLRepository<WfWorkflow, WfWorkflow.WfWorkflowId> {
 }

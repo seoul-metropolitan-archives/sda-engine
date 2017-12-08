@@ -14,11 +14,17 @@ import org.springframework.web.bind.annotation.GetMapping;
  *
  * @author james
  * @version 1.0.0
- * @since 2017-10-23 오후 2:06
- **/
+ * @since 2017 -10-23 오후 2:06
+ */
 @Controller
 public class Wf001ViewRouter extends BaseController {
 
+    /**
+     * View string.
+     *
+     * @param model the model
+     * @return the string
+     */
     @GetMapping("/wf/wf001/wf001")
     public String view(ModelMap model) {
         return "/wf/wf001/wf001";

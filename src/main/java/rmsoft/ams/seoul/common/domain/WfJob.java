@@ -14,6 +14,9 @@ import org.hibernate.annotations.DynamicUpdate;
 import javax.persistence.*;
 import java.io.Serializable;
 
+/**
+ * The type Wf job.
+ */
 @Setter
 @Getter
 @DynamicInsert
@@ -47,6 +50,9 @@ public class WfJob extends BaseJpaModel<WfJob.WfJobId> {
         return WfJobId.of(jobUuid);
     }
 
+    /**
+     * The type Wf job id.
+     */
     @Embeddable
     @Data
     @NoArgsConstructor

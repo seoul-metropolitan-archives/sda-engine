@@ -15,6 +15,9 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
 
+/**
+ * The type Ac user.
+ */
 @Setter
 @Getter
 @DynamicInsert
@@ -68,6 +71,9 @@ public class AcUser extends BaseJpaModel<AcUser.AcUserId> {
         return AcUserId.of(userUuid);
     }
 
+    /**
+     * The type Ac user id.
+     */
     @Embeddable
     @Data
     @NoArgsConstructor

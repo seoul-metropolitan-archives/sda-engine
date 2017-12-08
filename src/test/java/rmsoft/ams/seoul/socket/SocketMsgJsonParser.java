@@ -21,6 +21,12 @@ public class SocketMsgJsonParser {
     private static ObjectMapper objectMapper = new ObjectMapper();
     private static ModelMapper modelMapper = new ModelMapper();
 
+    /**
+     * Parse socket msg template.
+     *
+     * @param jsonFile the json file
+     * @return the socket msg template
+     */
     public static SocketMsgTemplate parse(String jsonFile) {
 
         Map<String, Object> tempJsonTemplate = null;

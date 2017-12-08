@@ -14,6 +14,9 @@ import org.hibernate.annotations.DynamicUpdate;
 import javax.persistence.*;
 import java.io.Serializable;
 
+/**
+ * The type Ac access control.
+ */
 @Setter
 @Getter
 @DynamicInsert
@@ -51,6 +54,9 @@ public class AcAccessControl extends BaseJpaModel<AcAccessControl.AcAccessContro
         return AcAccessControlId.of(accessControlUuid);
     }
 
+    /**
+     * The type Ac access control id.
+     */
     @Embeddable
     @Data
     @NoArgsConstructor

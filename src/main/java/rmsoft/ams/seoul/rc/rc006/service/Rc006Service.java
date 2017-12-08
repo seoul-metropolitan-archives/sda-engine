@@ -14,6 +14,9 @@ import rmsoft.ams.seoul.rc.rc006.vo.Rc00601VO;
 
 import java.util.List;
 
+/**
+ * The type Rc 006 service.
+ */
 @Service
 public class Rc006Service extends BaseService {
 
@@ -23,10 +26,22 @@ public class Rc006Service extends BaseService {
     @Autowired
     private RcLevelOfDescriptionRepository rcLevelOfDescriptionRepository;
 
+    /**
+     * Search level of description list.
+     *
+     * @param param the param
+     * @return the list
+     */
     public List<Rc00601VO> searchLevelOfDescription(Rc00601VO param) {
         return mapper.searchLevelOfDescription(param);
     }
 
+    /**
+     * Save level of description api response.
+     *
+     * @param rc00601VOList the rc 00601 vo list
+     * @return the api response
+     */
     @Transactional
     public ApiResponse saveLevelOfDescription(List<Rc00601VO> rc00601VOList) {
 

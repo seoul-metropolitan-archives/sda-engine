@@ -1,8 +1,13 @@
 package rmsoft.ams.seoul.ad.ad003.vo;
 
 import io.onsemiro.core.vo.BaseVO;
-import lombok.*;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
+/**
+ * The type Ad 00302 vo.
+ */
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)

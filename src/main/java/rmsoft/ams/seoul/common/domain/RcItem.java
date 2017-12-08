@@ -10,6 +10,9 @@ import org.hibernate.annotations.DynamicUpdate;
 import javax.persistence.*;
 import java.io.Serializable;
 
+/**
+ * The type Rc item.
+ */
 @Setter
 @Getter
 @DynamicInsert
@@ -63,6 +66,9 @@ public class RcItem extends BaseJpaModel<RcItem.RcItemId> {
     @Override
     public RcItem.RcItemId getId() { return RcItem.RcItemId.of(itemUuid); }
 
+    /**
+     * The type Rc item id.
+     */
     @Embeddable
     @Data
     @NoArgsConstructor

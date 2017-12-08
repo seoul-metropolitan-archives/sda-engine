@@ -14,6 +14,9 @@ import org.hibernate.annotations.DynamicUpdate;
 import javax.persistence.*;
 import java.io.Serializable;
 
+/**
+ * The type Ac role.
+ */
 @Setter
 @Getter
 @DynamicInsert
@@ -43,6 +46,9 @@ public class AcRole extends BaseJpaModel<AcRole.AcRoleId> {
         return AcRoleId.of(roleUuid);
     }
 
+    /**
+     * The type Ac role id.
+     */
     @Embeddable
     @Data
     @NoArgsConstructor

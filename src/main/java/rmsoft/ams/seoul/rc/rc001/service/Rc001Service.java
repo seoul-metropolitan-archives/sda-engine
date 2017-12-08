@@ -5,8 +5,6 @@ import io.onsemiro.core.code.ApiStatus;
 import io.onsemiro.core.domain.BaseService;
 import io.onsemiro.utils.ModelMapperUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import rmsoft.ams.seoul.common.vo.ResponseForPaging;
 import rmsoft.ams.seoul.rc.rc001.dao.Rc001Mapper;
@@ -19,12 +17,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * The type Rc 001 service.
+ */
 @Service("Rc001Service")
 public class Rc001Service extends BaseService
 {
     @Autowired
     private Rc001Mapper rc001Mapper;
 
+    /**
+     * Gets all node.
+     *
+     * @param param the param
+     * @return the all node
+     */
     public List<Rc00101VO> getAllNode(Rc00101VO param)
     {
         ArrayList<Rc00101VO> nodes = new ArrayList<Rc00101VO>();
@@ -38,6 +45,13 @@ public class Rc001Service extends BaseService
 
         return nodes;
     }
+
+    /**
+     * Gets all node.
+     *
+     * @param param the param
+     * @return the all node
+     */
     public ResponseForPaging<Rc00101VO> getAllNode(Rc00104VO param)
     {
         ResponseForPaging pageData = ModelMapperUtils.map(param,ResponseForPaging.class);
@@ -48,14 +62,35 @@ public class Rc001Service extends BaseService
 
         return pageData;
     }
+
+    /**
+     * Gets aggregation info.
+     *
+     * @param param the param
+     * @return the aggregation info
+     */
     public Rc00102VO getAggregationInfo(Rc00101VO param)
     {
         return rc001Mapper.getAggregationInfo(param);
     }
+
+    /**
+     * Gets item info.
+     *
+     * @param param the param
+     * @return the item info
+     */
     public Rc00102VO getItemInfo(Rc00101VO param)
     {
         return rc001Mapper.getItemInfo(param);
     }
+
+    /**
+     * Gets grid data.
+     *
+     * @param param the param
+     * @return the grid data
+     */
     public List<Rc00103VO> getGridData(Rc00101VO param)
     {
         List<Rc00103VO> gridData = new ArrayList<Rc00103VO>();
@@ -68,6 +103,12 @@ public class Rc001Service extends BaseService
         return gridData;
     }
 
+    /**
+     * Save api response.
+     *
+     * @param list the list
+     * @return the api response
+     */
     public ApiResponse save(List<Map<String,String>> list)
     {
         for (Map<String,String> data: list) {
@@ -77,6 +118,12 @@ public class Rc001Service extends BaseService
         return ApiResponse.of(ApiStatus.SUCCESS,"SUCCESS");
     }
 
+    /**
+     * Gets menu.
+     *
+     * @param param the param
+     * @return the menu
+     */
     public Object getMenu(Map<String,String> param)
     {
         return rc001Mapper.getMenu(param);

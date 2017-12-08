@@ -60,7 +60,7 @@ public class Wf001Service extends BaseService {
      *
      * @param pageable      the pageable
      * @param requestParams the request params
-     * @return page
+     * @return page page
      */
     public Page<Wf00101VO> findAllJob(Pageable pageable, RequestParams<Wf00101VO> requestParams) {
 
@@ -125,7 +125,7 @@ public class Wf001Service extends BaseService {
      *
      * @param pageable      the pageable
      * @param requestParams the request params
-     * @return page
+     * @return page page
      */
     public Page<Wf00102VO> findParameter(Pageable pageable, RequestParams<Wf00102VO> requestParams) {
         String filter = requestParams.getString("filter", "");

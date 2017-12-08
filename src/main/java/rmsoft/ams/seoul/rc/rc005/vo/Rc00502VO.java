@@ -7,6 +7,9 @@ import lombok.NoArgsConstructor;
 
 import java.sql.Blob;
 
+/**
+ * The type Rc 00502 vo.
+ */
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)

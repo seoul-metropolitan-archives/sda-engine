@@ -1,13 +1,11 @@
 package rmsoft.ams.seoul.ad.ad003.service;
 
-import com.querydsl.core.types.Predicate;
 import io.onsemiro.core.api.response.ApiResponse;
 import io.onsemiro.core.code.ApiStatus;
 import io.onsemiro.core.domain.BaseService;
 import io.onsemiro.utils.DateUtils;
 import io.onsemiro.utils.ModelMapperUtils;
 import io.onsemiro.utils.SessionUtils;
-import io.onsemiro.utils.UUIDUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,7 +15,6 @@ import rmsoft.ams.seoul.ad.ad003.vo.Ad00302VO;
 import rmsoft.ams.seoul.ad.ad003.vo.Ad00303VO;
 import rmsoft.ams.seoul.common.domain.AdCodeDetail;
 import rmsoft.ams.seoul.common.domain.AdCodeHeader;
-import rmsoft.ams.seoul.common.domain.QAdCodeDetail;
 import rmsoft.ams.seoul.common.repository.AdCodeDetailRepository;
 import rmsoft.ams.seoul.common.repository.AdCodeHeaderRepository;
 
@@ -25,6 +22,9 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * The type Ad 003 service.
+ */
 @Service
 public class Ad003Service extends BaseService {
 
@@ -37,13 +37,32 @@ public class Ad003Service extends BaseService {
     @Autowired
     private AdCodeDetailRepository adCodeDetailRepository;
 
+    /**
+     * Search code header list.
+     *
+     * @param param the param
+     * @return the list
+     */
     public List<Ad00301VO> searchCodeHeader(Ad00301VO param) {
         return mapper.searchCodeHeader(param);
     }
+
+    /**
+     * Gets code detail list.
+     *
+     * @param param the param
+     * @return the code detail list
+     */
     public List<Ad00302VO> getCodeDetailList(Ad00302VO param) {
         return mapper.getCodeDetailList(param);
     }
 
+    /**
+     * Save code header api response.
+     *
+     * @param ad00301VOList the ad 00301 vo list
+     * @return the api response
+     */
     @Transactional
     public ApiResponse saveCodeHeader(List<Ad00301VO> ad00301VOList) {
 
@@ -77,6 +96,12 @@ public class Ad003Service extends BaseService {
         return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");
     }
 
+    /**
+     * Save code detail api response.
+     *
+     * @param ad00302VOList the ad 00302 vo list
+     * @return the api response
+     */
     @Transactional
     public ApiResponse saveCodeDetail(List<Ad00302VO> ad00302VOList) {
 
@@ -109,6 +134,12 @@ public class Ad003Service extends BaseService {
     }
 
 
+    /**
+     * Gets code.
+     *
+     * @param param the param
+     * @return the code
+     */
     public List<Ad00303VO> getCode(Ad00303VO param) {
         return mapper.getCode(param);
     }

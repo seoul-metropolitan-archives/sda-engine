@@ -54,6 +54,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ * The type Web mvc config.
+ */
 @Configuration
 public class WebMvcConfig extends WebMvcConfigurerAdapter implements ApplicationContextAware {
 
@@ -92,6 +95,11 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter implements Application
         converters.add(mappingJackson2HttpMessageConverter());
     }
 
+    /**
+     * Object mapper object mapper.
+     *
+     * @return the object mapper
+     */
     @Bean
     @Primary
     public ObjectMapper objectMapper() {
@@ -120,6 +128,11 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter implements Application
         return objectMapper;
     }
 
+    /**
+     * Multi readable http servlet request filter registration bean filter registration bean.
+     *
+     * @return the filter registration bean
+     */
     @Bean
     public FilterRegistrationBean multiReadableHttpServletRequestFilterRegistrationBean() {
 
@@ -131,21 +144,41 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter implements Application
         return registrationBean;
     }
 
+    /**
+     * Cors filter ax boot cors filter.
+     *
+     * @return the ax boot cors filter
+     */
     @Bean
     public AXBootCorsFilter corsFilter() {
         return new AXBootCorsFilter();
     }
 
+    /**
+     * Mapping jackson 2 http message converter mapping jackson 2 http message converter.
+     *
+     * @return the mapping jackson 2 http message converter
+     */
     @Bean
     public MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter() {
         return new MappingJackson2HttpMessageConverter(objectMapper());
     }
 
+    /**
+     * String http message converter string http message converter.
+     *
+     * @return the string http message converter
+     */
     @Bean
     public StringHttpMessageConverter stringHttpMessageConverter() {
         return new StringHttpMessageConverter(Charset.forName("UTF-8"));
     }
 
+    /**
+     * Locale change interceptor locale change interceptor.
+     *
+     * @return the locale change interceptor
+     */
     @Bean
     public LocaleChangeInterceptor localeChangeInterceptor() {
         LocaleChangeInterceptor localeChangeInterceptor = new LocaleChangeInterceptor();
@@ -153,6 +186,11 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter implements Application
         return localeChangeInterceptor;
     }
 
+    /**
+     * Message source message source.
+     *
+     * @return the message source
+     */
     @Bean
     @Order(Ordered.HIGHEST_PRECEDENCE)
     public MessageSource messageSource() {
@@ -166,6 +204,11 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter implements Application
         return resourceBundleMessageSource;
     }
 
+    /**
+     * Locale resolver locale resolver.
+     *
+     * @return the locale resolver
+     */
     @Bean
     public LocaleResolver localeResolver() {
 
@@ -178,6 +221,11 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter implements Application
         return cookieLocaleResolver;
     }
 
+    /**
+     * View resolver view resolver.
+     *
+     * @return the view resolver
+     */
     @Bean
     public ViewResolver viewResolver() {
 
@@ -214,6 +262,11 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter implements Application
         return resolver;
     }
 
+    /**
+     * Rest template rest template.
+     *
+     * @return the rest template
+     */
     @Bean
     public RestTemplate restTemplate() {
         return new RestTemplate();

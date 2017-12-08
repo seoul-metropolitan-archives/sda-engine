@@ -6,7 +6,6 @@ import lombok.Data;
 /**
  * Created by james on 2017-01-23.
  */
-
 @Data
 public class SocketMsgNode {
 
@@ -22,6 +21,11 @@ public class SocketMsgNode {
 
     private int size;
 
+    /**
+     * Sets local member.
+     *
+     * @param localMember the local member
+     */
     public void setLocalMember(String localMember) {
         this.localMember = CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, localMember);
     }

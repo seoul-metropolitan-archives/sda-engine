@@ -14,6 +14,9 @@ import org.hibernate.annotations.DynamicUpdate;
 import javax.persistence.*;
 import java.io.Serializable;
 
+/**
+ * The type Rc level of description.
+ */
 @Setter
 @Getter
 @DynamicInsert
@@ -52,6 +55,9 @@ public class RcLevelOfDescription extends BaseJpaModel<RcLevelOfDescription.RcLe
         return RcLevelOfDescriptionId.of(levelUuid);
     }
 
+    /**
+     * The type Rc level of description id.
+     */
     @Embeddable
     @Data
     @NoArgsConstructor

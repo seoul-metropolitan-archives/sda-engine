@@ -16,11 +16,17 @@ import rmsoft.ams.seoul.utils.CommonCodeUtils;
  *
  * @author james
  * @version 1.0.0
- * @since 2017-10-23 오후 2:06
- **/
+ * @since 2017 -10-23 오후 2:06
+ */
 @Controller
 public class Wf003ViewRouter extends BaseController {
 
+    /**
+     * View string.
+     *
+     * @param model the model
+     * @return the string
+     */
     @GetMapping("/wf/wf003/wf003")
     public String view(ModelMap model) {
         model.addAttribute("serviceUuid", CommonCodeUtils.get("CD006"));
@@ -28,6 +34,12 @@ public class Wf003ViewRouter extends BaseController {
         return "/wf/wf003/wf003";
     }
 
+    /**
+     * View popup string.
+     *
+     * @param model the model
+     * @return the string
+     */
     @PostMapping("/wf/wf003/wf003-p01")
     public String viewPopup(ModelMap model) {
         return "/wf/wf003/wf003-p01";

@@ -12,13 +12,14 @@ import rmsoft.ams.seoul.common.domain.RcAggregationCon;
 import rmsoft.ams.seoul.common.domain.RcItem;
 import rmsoft.ams.seoul.common.domain.RcItemCon;
 import rmsoft.ams.seoul.common.repository.*;
-import rmsoft.ams.seoul.rc.rc002.vo.Rc00201VO;
-import rmsoft.ams.seoul.rc.rc002.vo.Rc00203VO;
 import rmsoft.ams.seoul.rc.rc002.vo.Rc00205VO;
 import rmsoft.ams.seoul.rc.rc002.vo.Rc002VO;
 
 import java.util.List;
 
+/**
+ * The type Rc 002 service.
+ */
 @Service("Rc002Service")
 public class Rc002Service extends BaseService
 {
@@ -38,10 +39,21 @@ public class Rc002Service extends BaseService
     private RcItemConRepository rcItemConRepository;
 
 
+    /**
+     * Get level list.
+     *
+     * @return the list
+     */
     public List<Rc00205VO> getLevel(){
         return ModelMapperUtils.mapList(rcLevelRepository.findAll(),Rc00205VO.class);
     }
 
+    /**
+     * Save api response.
+     *
+     * @param data the data
+     * @return the api response
+     */
     public ApiResponse save(Rc002VO data)
     {
 

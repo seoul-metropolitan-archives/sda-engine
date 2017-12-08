@@ -14,11 +14,20 @@ import rmsoft.ams.seoul.wf.wf003.vo.Wf00303VO;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * The type Workflow manager.
+ */
 @Slf4j
 @Component
 public class WorkflowManager {
     private final static Map<String, Runnable> threadStopMap = new HashMap<>();
 
+    /**
+     * Invoke process.
+     *
+     * @param batchId   the batch id
+     * @param wf00303VO the wf 00303 vo
+     */
     public void invokeProcess(String batchId, Wf00303VO wf00303VO) {
         ThreadPoolTaskExecutor threadPoolTaskExecutor = AppContextManager.getBean(ThreadPoolTaskExecutor.class);
         WorkflowProcess workflowProcess = AppContextManager.getBean(WorkflowProcess.class);
@@ -34,6 +43,11 @@ public class WorkflowManager {
         }
     }
 
+    /**
+     * Stop process.
+     *
+     * @param batchId the batch id
+     */
     public void stopProcess(String batchId) {
         WorkflowProcess runningThread = (WorkflowProcess) threadStopMap.get(batchId);
 
@@ -51,6 +65,11 @@ public class WorkflowManager {
         }
     }
 
+    /**
+     * Error logging.
+     *
+     * @param throwable the throwable
+     */
     protected void errorLogging(Throwable throwable) {
 
         if (log.isErrorEnabled()) {

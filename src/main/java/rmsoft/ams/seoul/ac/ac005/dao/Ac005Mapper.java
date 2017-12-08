@@ -15,10 +15,22 @@ import java.util.List;
  *
  * @author james
  * @version 1.0.0
- * @since 2017-09-26 오후 3:44
- **/
+ * @since 2017 -09-26 오후 3:44
+ */
 public interface Ac005Mapper extends MyBatisMapper {
+    /**
+     * Find all role list.
+     *
+     * @param ac00501VO the ac 00501 vo
+     * @return the list
+     */
     List<Ac00501VO> findAllRole(Ac00501VO ac00501VO);
 
+    /**
+     * Find role permission list.
+     *
+     * @param roleUuid the role uuid
+     * @return the list
+     */
     List<Ac00502VO> findRolePermission(String roleUuid);
 }

@@ -10,6 +10,11 @@ import java.io.File;
  */
 public class JsonTemplateGenerator {
 
+    /**
+     * Generate.
+     *
+     * @param jsonFile the json file
+     */
     public static void generate(String jsonFile) {
 
         String excelFile = jsonFile.replace(".json", ".xlsx");

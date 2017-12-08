@@ -8,10 +8,8 @@ import com.querydsl.core.types.Predicate;
 import io.onsemiro.core.api.response.ApiResponse;
 import io.onsemiro.core.code.ApiStatus;
 import io.onsemiro.core.domain.BaseService;
-import io.onsemiro.core.domain.user.role.QRolePermission;
 import io.onsemiro.core.parameter.RequestParams;
 import io.onsemiro.utils.ModelMapperUtils;
-import io.onsemiro.utils.UUIDUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -54,7 +52,7 @@ public class Ac006Service extends BaseService {
      *
      * @param pageable      the pageable
      * @param requestParams the request params
-     * @return page
+     * @return page page
      */
     public Page<Ac00601VO> findAllPermission(Pageable pageable, RequestParams<Ac00601VO> requestParams) {
         String filter = requestParams.getString("filter", "");
