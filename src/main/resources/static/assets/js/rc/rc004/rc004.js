@@ -88,13 +88,18 @@ fnObj.pageStart = function () {
         return;
     }else{
         PAGE_MODE = data.type;
+
+        if(data["title"]){
+            fnObj.formView.setFormData("headTitle",data["title"]);
+        }
+
+        if(data["navi"]){
+            fnObj.formView.setFormData("navi",data["navi"]);
+        }
+
         if(PAGE_MODE == "create") {
             fnObj.formView.setFormData("raAggregationUuid",data.aggregationUuid);
         } else {
-            if(data["title"]){
-                fnObj.formView.setFormData("headTitle",data["title"]);
-            }
-
             ACTIONS.dispatch(ACTIONS.PAGE_SEARCH,{aggregationUuid : data.aggregationUuid, itemUuid : data.itemUuid});
         }
     }
