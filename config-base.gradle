@@ -16,6 +16,7 @@ repositories {
             password NEXUS_PASSWORD
         }
     }
+    maven { url "http://www.egovframe.go.kr/maven/" }
 }
 
 

@@ -77,6 +77,12 @@ dependencies {
     // jsch : sftp
     compile group: 'com.jcraft', name: 'jsch', version: '0.1.44-1'
 
+    // egovframework
+    compile('egovframework.rte:egovframework.rte.psl.dataaccess:3.6.0') {
+        exclude group: 'egovframework.rte', module: 'egovframework.rte.fdl.logging'
+    }
+
+
     //___ testCompile ___
     testCompile 'org.springframework.boot:spring-boot-starter-test'
     testCompile 'org.dbunit:dbunit:2.5.3'
