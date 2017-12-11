@@ -325,9 +325,9 @@ setFormData = function(data){
 
     if(data.riDescriptionStartDate != "undefined" || data.riDescriptionStartDate != null) {
         if (data.riDescriptionStartDate == data.riDescriptionEndDate) {
-            fnObj.formView.setFormData("rcDateoOfDescription", dateFormatter(data.riDescriptionStartDate));
+            fnObj.formView.setFormData("rcDateOfDescription", dateFormatter(data.riDescriptionStartDate));
         } else {
-            fnObj.formView.setFormData("rcDateoOfDescription", dateFormatter(data.riDescriptionStartDate) + ' ~ ' + dateFormatter(data.riDescriptionEndDate));
+            fnObj.formView.setFormData("rcDateOfDescription", dateFormatter(data.riDescriptionStartDate) + ' ~ ' + dateFormatter(data.riDescriptionEndDate));
         }
     }
 

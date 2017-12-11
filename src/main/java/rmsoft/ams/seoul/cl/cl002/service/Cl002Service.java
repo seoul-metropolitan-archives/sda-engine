@@ -225,7 +225,7 @@ public class Cl002Service extends BaseService {
                 clClass.setClassCode(ctUuid);
 
 
-               clClass.setClassLevelUuid(CommonCodeUtils.getCodeDetailUuid("CD114", clClass.getClassLevelUuid()));
+                clClass.setClassLevelUuid(CommonCodeUtils.getCodeDetailUuid("CD114", clClass.getClassLevelUuid()));
 
                 clClass.setClassLevelUuid(clClass.getClassLevelUuid());
 
@@ -245,7 +245,7 @@ public class Cl002Service extends BaseService {
                     if(isEmpty(clClass.getOrderNo())){ clClass.setOrderNo("");}
 
                     if(!orgClClass.getParentClassUuid().equals(clClass.getParentClassUuid()) ||
-                                    !orgClClass.getOrderNo().equals(clClass.getOrderNo())){
+                            !orgClClass.getOrderNo().equals(clClass.getOrderNo())){
                         orderKey = jdbcTemplate.queryForObject("select AMS.FC_CL_CLASS_SORTKEY('" + clClass.getParentClassUuid() + "' , '" + clClass.getOrderNo() + "') from dual", String.class);
                         clClass.setOrderKey(orderKey);
                     }
