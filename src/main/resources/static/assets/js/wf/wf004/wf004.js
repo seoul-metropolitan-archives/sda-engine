@@ -418,6 +418,8 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     },
     itemClick: function (data, index) {
         if (data.workflowResultUuid != null && data.workflowResultUuid != "") {
+            fnObj.formView.setFormData("jobMessage", "");
+
             if (fnObj.gridView02.isChangeData() == true) {
                 axDialog.confirm({
                     msg: axboot.getCommonMessage("AA006")
