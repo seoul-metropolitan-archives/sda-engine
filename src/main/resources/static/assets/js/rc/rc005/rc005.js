@@ -59,6 +59,10 @@ fnObj.pageStart = function () {
     if(null == data ){
         return;
     } else {
+        if(data["navi"]){
+            fnObj.formView.setFormData("navi",data["navi"]);
+        }
+
         ACTIONS.dispatch(ACTIONS.PAGE_SEARCH,{aggregationUuid : data.parentUuid, itemUuid : data.uuid});
     }
 };
