@@ -1,3 +1,4 @@
+
 var fnObj = {};
 var selectedItem = {};
 var ACTIONS = axboot.actionExtend(fnObj, {
@@ -108,7 +109,12 @@ fnObj.pageStart = function () {
 
     _this.formView.initView();
     _this.treeView01.initView();
+    if(data["parentUuid"])
+    {
+        _this.systemMetaArea.nodeType = undefined == data["nodeType"]? data["type"] : data["nodeType"];
+    }
     _this.systemMetaArea.initView(uuid);
+    fnObj.systemMetaArea.setFrom(data["parentUuid"]);
     _this.contextualMetaArea.initView(uuid);
     _this.childrenAggre.initView(uuid);
     _this.referenceItem.initView(uuid);
@@ -204,9 +210,18 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
 fnObj.systemMetaArea = axboot.viewExtend({
     targetTag : $("#systemMetaArea"),
     aggregationUuid : "",
+    nodeType : "",
+    popupCode : "",
     initView : function(aggregationUuid){
         this.initEvent();
         this.aggregationUuid = aggregationUuid;
+
+        if(this.nodeType.toLowerCase() == "virtual")
+        {
+            this.popupCode = "PU121"
+        }
+        else
+            this.popupCode = "PU123"
     },
     initEvent : function(){
         var _this = this;
@@ -222,6 +237,8 @@ fnObj.systemMetaArea = axboot.viewExtend({
         });
         $("input[data-ax-path='parentsAggregationUuid']").blur(function(){
             var _thisObj = this;
+            _this.setFrom($(this).parents().eq(0).find("input[data-ax-path='parentsAggregationUuid']").val());
+            /*
             var data = {
                 popupCode : "PU123",
                 searchData : $(this).parents().eq(0).find("input[data-ax-path='parentsAggregationUuid']").val(),
@@ -233,9 +250,13 @@ fnObj.systemMetaArea = axboot.viewExtend({
                 }
             };
             ACTIONS.dispatch(ACTIONS.SEARCH_AGGREGATION,data);
+            */
         });
+
         $("#fromAggregation").click(function(){
             var _thisObj = this;
+            _this.setFrom($(this).parents().eq(0).find("input[data-ax-path='parentsAggregationUuid']").val());
+            /*
             var data = {
                 popupCode : "PU123",
                 preSearch : false,
@@ -248,9 +269,24 @@ fnObj.systemMetaArea = axboot.viewExtend({
                 }
             };
             ACTIONS.dispatch(ACTIONS.SEARCH_AGGREGATION,data);
+            */
         });
 
 
+    },
+    setFrom : function(data){
+        var data = {
+            popupCode : this.popupCode,
+            preSearch : false,
+            searchData : data,
+            callback : function(data){
+                var target = $("#fromAggregation").parents().eq(0).find("input[data-ax-path='parentsAggregationUuid']");
+                target.attr("parentsAggregationUuid",data["AGGREGATION_UUID"]);
+                target.val(data["TITLE"]);
+                console.log(data);
+            }
+        };
+        ACTIONS.dispatch(ACTIONS.SEARCH_AGGREGATION,data);
     },
     getData : function(){
         var data = {};

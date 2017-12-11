@@ -2,11 +2,11 @@ var fnObj = {};
 
 var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH : function(caller, act, data){
+        var reqData = $.extend({},{uuid : ""},fnObj.gridView01.getParam());
+        console.log(reqData);
         axboot.ajax({
             url: "/rc/rc001/getAllNodes",
-            data: JSON.stringify({uuid : ""}),
-            dataType:"JSON",
-            type : "post",
+            data: reqData,
             callback: function (res) {
                 fnObj.gridView01.setData(res.list);
             },
@@ -51,21 +51,60 @@ var ACTIONS = axboot.actionExtend(fnObj, {
 var fnObj = {
     pageStart: function () {
         fnObj.gridView01.initView(parent.axboot.modal.getData());
+
+        $("#apply").click(function(){
+            var list = fnObj.gridView01.getList();
+            var selectedData = fnObj.gridView01.getCurrentData();
+            console.log(selectedData);
+            var targetUuid = selectedData["uuid"];
+
+            if(!targetUuid)
+                return ;
+
+            var isComflict = false;
+
+            for(var i = 0; i < list.length; i++)
+            {
+
+                if(!list[i]["nodeType"])
+                    list[i]["nodeType"] = list[i]["type"];
+
+                if(targetUuid == list[i]["uuid"])
+                {
+                    isComflict = true;
+                    break;
+                }
+            }
+
+            axDialog.confirm({
+                msg: axboot.getCommonMessage("RC001_07")
+            }, function () {
+                if (this.key == "ok") {
+                    ACTIONS.dispatch(ACTIONS.MOVE,{
+                        targetUuid : targetUuid,
+                        list : list
+                    })
+                }
+            });
+
+        });
     }
 };
 
 fnObj.gridView01 = axboot.viewExtend(axboot.gridView,{
     tagId : "realgrid01",
     list : undefined,
+    type : undefined,
     initView : function(data){
         console.log(data);
+        this.type = data["selectType"];
         this.list = data["selectedList"];
         this.initEvent();
         this.initGrid();
     },
     initGrid : function(){
         fnObj.gridView01.gridObj = new TreeGridWrapper(fnObj.gridView01.tagId, "/assets/js/libs/realgrid");
-        fnObj.gridView01.gridObj.setGridStyle("100%", "445px");
+        fnObj.gridView01.gridObj.setGridStyle("100%", "100%");
         fnObj.gridView01.gridObj.setColumnInfo([
             {
                 "name": "uuid",
@@ -157,5 +196,13 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView,{
         }
         console.log(JSON.stringify({rows:treeList}));
         fnObj.gridView01.gridObj.setTreeData({rows:treeList}, "rows", "", "icon");
+    },
+    getList : function(){
+
+        return $.extend([],this.list);
+    },
+    getParam : function(){
+        var retData = $.extend({},{nodeType : this.type});
+        return retData;
     }
 });

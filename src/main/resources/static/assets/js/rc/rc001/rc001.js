@@ -521,7 +521,7 @@ var fnObj = {
                     */
                     var compAggregation = "";
                     var aggregationType = "";
-                    var reqType = "";
+                    var selectType = "";
                     var canMove = true;
                     var errorMsg = "";
                     selectedData.sort(function(a,b){
@@ -534,16 +534,16 @@ var fnObj = {
                     {
                         aggregationType = undefined === selectedData[i]["nodeType"] ? selectedData[i]["type"] : selectedData[i]["nodeType"];
                         if(i == 0)
-                            reqType = compAggregation = aggregationType;
+                            selectType = compAggregation = aggregationType;
 
-                        if(aggregationType == "" && reqType.toLowerCase().indexOf("virtual") > -1)
+                        if( ( !aggregationType || aggregationType == "") && selectType.toLowerCase().indexOf("virtual") > -1)
                         {
                             canMove = false;
                             errorMsg = "RC001_06";
                             break;
                         }
 
-                        if("" != aggregationType && compAggregation != aggregationType)
+                        if(aggregationType && "" != aggregationType && compAggregation != aggregationType)
                         {
                             canMove = false;
                             errorMsg = "RC001_02";
@@ -556,7 +556,6 @@ var fnObj = {
                         axWarningToast.push(axboot.getCommonMessage(errorMsg));
                         return ;
                     }
-                    return ;
                     axboot.modal.open({
                         modalType: "MOVE_AGGREGATION",
                         param: "",
@@ -569,6 +568,8 @@ var fnObj = {
                         callback: function (data) {
 
                             axToast.push(axboot.getCommonMessage("AA007"));
+                            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+
                             if($(".explorer_grid").css("display")=="none")
                                 ACTIONS.dispatch(ACTIONS.GET_SUBDATA,fnObj.naviView.getCurrent());
                             else

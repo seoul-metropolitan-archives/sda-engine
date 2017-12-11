@@ -14,6 +14,7 @@ import rmsoft.ams.seoul.common.vo.PageInfoVO;
 import rmsoft.ams.seoul.rc.rc001.service.Rc001Service;
 import rmsoft.ams.seoul.rc.rc001.vo.Rc00101VO;
 import rmsoft.ams.seoul.rc.rc001.vo.Rc00104VO;
+import rmsoft.ams.seoul.rc.rc001.vo.Rc00105VO;
 
 import java.util.List;
 import java.util.Map;
@@ -81,12 +82,18 @@ public class Rc001Controller extends MessageBaseController
     {
         return Responses.ListResponse.of(rc001Service.getNaviData(param));
     }
+
+    @RequestMapping("/move")
+    public ApiResponse move(@RequestBody Rc00105VO data)
+    {
+        return rc001Service.move(data);
+    }
+
     @RequestMapping("/updateState")
     public ApiResponse updateState(@RequestBody List<Map<String,String>> list)
     {
         return rc001Service.updateState(list);
     }
-
 
     @RequestMapping("/deleteAggregation")
     public ApiResponse deleteAggregation(@RequestBody List<Rc00101VO> list)

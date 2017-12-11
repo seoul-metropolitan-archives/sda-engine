@@ -14,10 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import rmsoft.ams.seoul.common.domain.RcAggregation;
 import rmsoft.ams.seoul.common.vo.ResponseForPaging;
 import rmsoft.ams.seoul.rc.rc001.dao.Rc001Mapper;
-import rmsoft.ams.seoul.rc.rc001.vo.Rc00101VO;
-import rmsoft.ams.seoul.rc.rc001.vo.Rc00102VO;
-import rmsoft.ams.seoul.rc.rc001.vo.Rc00103VO;
-import rmsoft.ams.seoul.rc.rc001.vo.Rc00104VO;
+import rmsoft.ams.seoul.rc.rc001.vo.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -138,6 +135,26 @@ public class Rc001Service extends BaseService
     public List<Rc00101VO> getNaviData(Rc00101VO param)
     {
         return rc001Mapper.getNaviData(param);
+    }
+
+
+    public ApiResponse move(Rc00105VO data)
+    {
+        String targetUuid = data.getTargetUuid();
+        List<Rc00106VO> list = data.getList();
+
+        for(Rc00106VO moveBean : list)
+        {
+            if(!targetUuid.equals(moveBean.getUuid()))
+            {
+                moveBean.setParentUuid(targetUuid);
+                moveBean.setUpdateUuid(SessionUtils.getCurrentLoginUserUuid());
+                rc001Mapper.move(moveBean);
+            }
+
+        }
+
+        return ApiResponse.of(ApiStatus.SUCCESS,"AA007");
     }
 
 }
