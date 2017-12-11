@@ -259,7 +259,6 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
         this.modelFormatter.formatting(); // 입력된 값을 포메팅 된 값으로 변경
     },
     validate: function () {
-        var rs = this.model.validate();
         if (rs.error) {
             alert(rs.error[0].jquery.attr("title") + '을(를) 입력해주세요.');
             rs.error[0].jquery.focus();
