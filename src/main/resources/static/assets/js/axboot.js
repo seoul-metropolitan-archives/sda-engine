@@ -2695,49 +2695,40 @@ axboot.gridView = {
         var generateUuid = false;
         var currentData = undefined;
         var beforeData = undefined;
-        for(var i = 0; i < itemIndex.length; i++)
-        {
+        for(var i = 0; i < itemIndex.length; i++) {
             if (_this.parentsGrid) {
                 _this.gridObj.setValue(itemIndex[i], _this.parentsUuidFieldName, _this.parentsGrid.getUUID());
-                currentData = _this.gridObj.dataProvider.getJsonRows(itemIndex[i],itemIndex[i]);
-                if(currentData[0][key])
-                {
+                //currentData = _this.gridObj.dataProvider.getJsonRows(itemIndex[i],itemIndex[i]);
+                //if(currentData[0][key])
+                //{
+                //    generateUuid = false;
+                //}
+                //else
+                //    generateUuid = true;
+                //data[this.gridObj.getFieldIndex(this.parentsUuidFieldName)] = this.parentsGrid.getUUID();
+            }
+            currentData = _this.gridObj.dataProvider.getJsonRows(itemIndex[i], itemIndex[i]);
+            if (itemIndex.length > 1 && i > 0) {
+                //초기 데이터의 UUID 와 비교해서 같으면 새로 생성하게 수정 ( DEFAULT value로 인하여 같은 값이 들어가게 되어있다Append 기능 및 여러가지 기능이 혼합해서 경우의 가지수가 너무 많다 )
+                beforeData = _this.gridObj.dataProvider.getJsonRows(itemIndex[0], itemIndex[0])
+
+                if (beforeData[0][key] == currentData[0][key]) {
+                    generateUuid = true;
+                }
+                else {
+                    generateUuid = false;
+                }
+                beforeData = undefined;
+            }
+            else {
+                if (currentData[0][key]) {
                     generateUuid = false;
                 }
                 else
                     generateUuid = true;
-                //data[this.gridObj.getFieldIndex(this.parentsUuidFieldName)] = this.parentsGrid.getUUID();
-            }
-            else {
-                currentData = _this.gridObj.dataProvider.getJsonRows(itemIndex[i],itemIndex[i]);
-                if(itemIndex.length > 1 && i > 0)
-                {
-                    //초기 데이터의 UUID 와 비교해서 같으면 새로 생성하게 수정 ( DEFAULT value로 인하여 같은 값이 들어가게 되어있다Append 기능 및 여러가지 기능이 혼합해서 경우의 가지수가 너무 많다 )
-                    beforeData = _this.gridObj.dataProvider.getJsonRows(itemIndex[0],itemIndex[0])
-
-                    if(beforeData[0][key] == currentData[0][key])
-                    {
-                        generateUuid = true;
-                    }
-                    else
-                    {
-                        generateUuid = false;
-                    }
-                    beforeData = undefined;
-                }
-                else {
-                    if(currentData[0][key])
-                    {
-                        generateUuid = false;
-                    }
-                    else
-                        generateUuid = true;
-                }
-
             }
 
-            if(generateUuid)
-            {
+            if (generateUuid) {
                 axboot.ajax({
                     url: "/api/v1/common/getUUID",
                     type: "POST",
