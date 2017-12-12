@@ -42,6 +42,15 @@ var rc00501 =
                     text: "Size(kb)",
                     disable : true,
                     dataType:"commanumber"
-                }
+                },
+                {
+                    sortNo : 5,
+                    width :80,
+                    name : "componentUuid",
+                    text : "Size(kb)",
+                    disable : true,
+                    dataType : "code",
+                    visvible : false
+                 }
             ]
     }

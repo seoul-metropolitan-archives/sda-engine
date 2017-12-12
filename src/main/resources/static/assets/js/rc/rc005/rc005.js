@@ -1,6 +1,7 @@
 var fnObj = {};
 var selectedItem = {};
 var from = "";
+
 var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH: function (caller, act, data) {
         axboot.ajax({
@@ -16,7 +17,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
 
                     setFormData(rcList[itemIndex]);
                     if(rcList[itemIndex].rc00502VoList!= "undefined" && rcList[itemIndex].rc00502VoList != null && rcList[itemIndex].rc00502VoList.length > 0){
-                        fnObj.gridView01.setData(rcList[0].rc00502VoList);
+                        fnObj.gridView01.setData(rcList[itemIndex].rc00502VoList);
                     }
                 }
             },
@@ -26,6 +27,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         });
         return false;
     },
+
     PAGE_SEARCH1: function (caller, act, data) {},
     PAGE_SAVE: function (caller, act, data) {},
     dispatch: function (caller, act, data) {
@@ -123,6 +125,29 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
             indicator: {visible: true}
         })
         this.makeGrid();
+        this.gridObj.itemClick(this.itemClick);
+    },
+    getRowData: function (){
+        return this.gridObj.getSelectedData();
+    },
+    itemClick: function (data, index) {
+        if (data.componentUuid != null && data.componentUuid != "") {
+            $.ajax({
+                url :"/api/v1/common/getStreamingUrl",
+                data : JSON.stringify({componentUuid:data.componentUuid}),
+                dataType : "json",
+                type : "post",
+                contentType : "application/json",
+                success : function(res){
+                    if(res.
+                    window.open(res.url, "", "");
+                },
+                error : function ()
+                {
+
+                }
+            })
+        }
     }
 });
 
