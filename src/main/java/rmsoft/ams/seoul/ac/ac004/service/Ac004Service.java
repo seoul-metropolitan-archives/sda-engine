@@ -100,7 +100,7 @@ public class Ac004Service extends BaseService {
 
                     // User Group이, User Group User 도 모두 삭제
                     QAcUserGroupUser qAcUserGroupUser = QAcUserGroupUser.acUserGroupUser;
-                    Predicate predicate1 = qAcUserGroupUser.userGroupUserUuid.eq(acUserGroup.getUserGroupUuid());
+                    Predicate predicate1 = qAcUserGroupUser.userGroupUuid.eq(acUserGroup.getUserGroupUuid());
                     acUserGroupUserRepository.delete(acUserGroupUserRepository.findAll(predicate1));
 
                 } else {
