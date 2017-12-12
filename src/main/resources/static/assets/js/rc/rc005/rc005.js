@@ -139,8 +139,9 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
                 type : "post",
                 contentType : "application/json",
                 success : function(res){
-                    if(res.
-                    window.open(res.url, "", "");
+                    if(res.url != undefined && res.url != null){
+                        window.open(res.url, "", "");
+                    }
                 },
                 error : function ()
                 {
