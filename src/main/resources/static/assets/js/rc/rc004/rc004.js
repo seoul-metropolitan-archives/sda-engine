@@ -534,6 +534,7 @@ function dateFormatter(orgDate){
 
     return year + '-' + month + '-' + day;
 }
+
 function checkDate(date) {
     var result = true;
     var strValue = date;
@@ -542,4 +543,12 @@ function checkDate(date) {
     if (strValue == "") { // 공백이면 무시
         return result;
     }
+
+    if (chk1.test(strValue) == false && chk2.test(strValue) == false) { // 유효성 검사에 둘다 성공하지 못했다면
+        //alert("1999-1-1 형식 또는 \r\n1999-01-01 형식으로 날자를 입력해주세요.");
+        axToast.push(axboot.getCommonMessage("AA011"));
+        result = false;
+
+    }
+    return result;
 }
