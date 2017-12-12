@@ -59,6 +59,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 data: JSON.stringify(entityColumnList),
                 callback: function (res) {
                     fnObj.gridView02.commit();
+                    ACTIONS.dispatch(ACTIONS.GET_ENTITY_DETAIL, fnObj.gridView01.getRowData());
                 }
             })
             .done(function () {
@@ -260,6 +261,9 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     clearChild: function () {
         fnObj.gridView02.gridObj.gridView.cancel();
         fnObj.gridView02.clearData();
+    },
+    getRowData: function (){
+        return this.gridObj.getSelectedData();
     },
     getEntityTypeHeaderUUID: function () {
         return this.gridObj.getSelectedData()["entityTypeUuid"];
