@@ -35,6 +35,7 @@
                 AND Z.USE_YN = #{useYn}
             </if>
         </where>
+        ORDER BY Z.USER_GROUP_NAME
     </select>
 
     <select id="findUserGroupUserByUserGroupUuid" resultType="Ac00402VO" parameterType="String"
