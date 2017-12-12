@@ -21,7 +21,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 fnObj.gridView01.resetCurrent();
                 fnObj.gridView02.clearData();
                 fnObj.gridView03.clearData();
-                if(res.list.length > 0)
+                if (res.list.length > 0)
                     ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, res.list[0]);
             },
             options: {
@@ -184,8 +184,18 @@ fnObj.pageStart = function () {
     _this.gridView01.initView();
     _this.gridView02.initView();
 
-    // Data 조회
-    ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+    var data = axboot.getMenuParams();
+
+    if (null == data) {
+        ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+    } else {
+        fnObj.formView.setFormData("serviceUuid", data);
+        $("#formView01 select").attr('disabled', true);
+        $("#formView01 select").css('background-color' , '#f2f2f2');
+
+        ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+    }
+
 };
 
 fnObj.formView = axboot.viewExtend(axboot.formView, {
@@ -220,7 +230,7 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
         this.modelFormatter.formatting(); // 입력된 값을 포메팅 된 값으로 변경
     },
     validate: function () {
-        if($("select[data-ax-path='serviceUuid']").val() == "") {
+        if ($("select[data-ax-path='serviceUuid']").val() == "") {
             axToast.push(axboot.getCommonMessage("AA011"));
             return false;
         }
@@ -437,7 +447,12 @@ clearSavedParameter = function () {
 }
 
 getSavedParameter = function (jobUuid) {
-    var saveParamArray = defaultParameter[jobUuid].columnInfo;
+
+    var saveParamArray;
+
+    if (defaultParameter[jobUuid] && defaultParameter[jobUuid].columnInfo) {
+        saveParamArray = defaultParameter[jobUuid].columnInfo;
+    }
 
     if (saveParamArray != null && saveParamArray.length > 0) {
         var parameterList = [];
