@@ -336,7 +336,8 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
          }*/
 
         if (data.roleUuid != null && data.roleUuid != "") {
-            if (fnObj.gridView02.isChangeData() == true || fnObj.gridView03.isChangeData() == true) {
+            //if (fnObj.gridView02.isChangeData() == true || fnObj.gridView03.isChangeData() == true) {
+            if (fnObj.gridView02.getData().length > 0 || fnObj.gridView03.getData().length > 0 ) {
                 axDialog.confirm({
                     msg: axboot.getCommonMessage("AA006")
                 }, function () {
@@ -460,6 +461,7 @@ fnObj.gridView03 = axboot.viewExtend(axboot.gridView, {
  * 모든 페이지에 넣기를 권고하며, 안넣은 경우 데이터 변경여부를 확인하지 않음
  * @returns {boolean}
  */
+
 isDataChanged = function () {
     if (fnObj.gridView01.isChangeData() == true || fnObj.gridView02.isChangeData() == true || fnObj.gridView03.isChangeData() == true) {
         return true;
@@ -467,3 +469,4 @@ isDataChanged = function () {
         return false;
     }
 }
+
