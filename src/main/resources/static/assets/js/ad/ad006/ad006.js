@@ -11,8 +11,11 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             callback: function (res) {
                 fnObj.gridView01.setData(res.list);
                 fnObj.gridView01.clearChild();
+                fnObj.gridView01.resetCurrent();
+                fnObj.gridView01.setFocus();
                 if(res.list.length > 0)
                     ACTIONS.dispatch(ACTIONS.GET_ENTITY_DETAIL, res.list[0]);
+                fnObj.gridView01.setFocus();
             },
             options: {
                 onError: axboot.viewError
