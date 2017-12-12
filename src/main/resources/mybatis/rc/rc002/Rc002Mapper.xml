@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="rmsoft.ams.seoul.rc.rc002.dao.Rc002Mapper">
+    <select id="getTreeData" resultType="Rc00204VO" parameterType="Rc00204VO" statementType="PREPARED">
+        SELECT
+        Z1.AGGREGATION_UUID uuid
+        , Z1.PARENT_AGGREGATION_UUID parentUuid
+        , Z1.TITLE name
+        , LOWER (Z2.CODE) nodeType
+        , Z3.LEVEL_NO
+        , (
+        (SELECT COUNT(*) FROM RC_AGGREGATION WHERE PARENT_AGGREGATION_UUID = Z1.AGGREGATION_UUID)
+        +(SELECT COUNT(*) FROM RC_ITEM WHERE AGGREGATION_UUID = Z1.AGGREGATION_UUID)
+        )as childCnt
+        FROM
+        RC_AGGREGATION Z1,
+        AD_CODE_DETAIL Z2,
+        RC_LEVEL Z3
+        WHERE
+        Z1.TYPE_UUID = Z2.CODE_DETAIL_UUID
+        AND
+        Z1.LEVEL_UUID = Z3.LEVEL_UUID
+        <choose>
+            <when test="null == uuid or '' == uuid">
+                AND
+                Z1.PARENT_AGGREGATION_UUID = '-1'
+            </when>
+            <otherwise>
+                START WITH          Z1.AGGREGATION_UUID  = #{uuid}
+                CONNECT BY PRIOR    Z1.PARENT_AGGREGATION_UUID = Z1.AGGREGATION_UUID
+                ORDER BY Z3.LEVEL_NO ASC
+            </otherwise>
+        </choose>
+    </select>
+
+</mapper>

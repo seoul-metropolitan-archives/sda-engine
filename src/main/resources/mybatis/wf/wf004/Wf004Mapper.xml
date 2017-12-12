@@ -55,7 +55,7 @@
             <if test="endToDate != null">
                 AND Z1.END_DATE <![CDATA[<]]> TO_DATE(#{endToDate})+1
             </if>
-        ORDER BY Z1.BATCH_ID
+        ORDER BY Z1.BATCH_ID desc
     </select>
 
     <select id="findWorkflowJobResult" resultType="Wf00402VO" parameterType="String" statementType="PREPARED">

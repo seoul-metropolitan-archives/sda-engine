@@ -23,7 +23,37 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         });
         return false;
     },
+    GET_TREE : function(caller, act, data)
+    {
+        axboot.ajax({
+            type: "GET",
+            url: "/api/v1/rc/rc002/getTreeData",
+            data: $.extend({},data),
+            callback: function (res) {
+                console.log(res);
+                fnObj.treeView01.setData({},res.list,data);
+            },
+            options: {
+                onError: axboot.viewError
+            }
+        });
+    },
     SEARCH_AGGREGATION: function (caller, act, data) {
+        var callback = data["callback"];
+        var reqData = ax5.util.deepCopy(data);
+        delete(reqData["callback"]);
+        axboot.modal.open({
+            modalType: "COMMON_POPUP",
+            preSearch : reqData["preSearch"],
+            sendData: function () {
+                return reqData;
+            },
+            callback: function (data) {
+                callback(data);
+            }
+        });
+    },
+    SEARCH_ITEM: function (caller, act, data) {
         var callback = data["callback"];
         var reqData = ax5.util.deepCopy(data);
         delete(reqData["callback"]);
@@ -88,6 +118,7 @@ fnObj.pageStart = function () {
     // Data 조회
     var data = axboot.getMenuParams();
     console.log(data);
+
     var uuid = "";
     if(null == data || data.type == "create")
     {
@@ -97,24 +128,35 @@ fnObj.pageStart = function () {
     {
         uuid = data.uuid;
         ACTIONS.dispatch(ACTIONS.PAGE_SEARCH,{aggregationUuid : data.uuid});
-    }
-    if(data["navi"])
-    {
-        $("#navigatorArea").text(data["navi"]);
-    }
-    if(data["title"])
-    {
-        $("#title").text(data["title"]);
+        if(data["navi"])
+        {
+            $("#navigatorArea").text(data["navi"]);
+        }
+        if(data["title"])
+        {
+            $("#title").text(data["title"]);
+        }
+        if(data["uuid"]){
+            ACTIONS.dispatch(ACTIONS.GET_TREE,data);
+        }
     }
 
     _this.formView.initView();
     _this.treeView01.initView();
-    if(data["parentUuid"])
+
+
+    if(null != data)
     {
         _this.systemMetaArea.nodeType = undefined == data["nodeType"]? data["type"] : data["nodeType"];
+        _this.childrenAggre.nodeType = undefined == data["nodeType"]? data["type"] : data["nodeType"];
+        _this.referenceAggre.nodeType = undefined == data["nodeType"]? data["type"] : data["nodeType"];
     }
     _this.systemMetaArea.initView(uuid);
-    fnObj.systemMetaArea.setFrom(data["parentUuid"]);
+    if(null != data && data["parentUuid"])
+    {
+        fnObj.systemMetaArea.setFrom(data["parentUuid"],true);
+    }
+
     _this.contextualMetaArea.initView(uuid);
     _this.childrenAggre.initView(uuid);
     _this.referenceItem.initView(uuid);
@@ -213,19 +255,33 @@ fnObj.systemMetaArea = axboot.viewExtend({
     nodeType : "",
     popupCode : "",
     initView : function(aggregationUuid){
+        var _this = this;
         this.initEvent();
         this.aggregationUuid = aggregationUuid;
 
         if(this.nodeType.toLowerCase() == "virtual")
-        {
             this.popupCode = "PU121"
-        }
         else
             this.popupCode = "PU123"
+
+        setTimeout(function(){
+            $("select[data-ax-path='typeUuid']>option").each(function(){
+                if($(this).text().toLowerCase() == _this.nodeType)
+                {
+                    $(this).prop("selected","selected");
+                    $("select[data-ax-path='typeUuid']").prop("disabled","disabled")
+                }
+            });
+
+        },500)
+
+
     },
     initEvent : function(){
         var _this = this;
         $("select[data-ax-path='typeUuid']").change(function(){
+            fnObj.referenceAggre.nodeType = $(this).find("option:selected").text();
+            fnObj.referenceAggre.setPopupCode();
             if($(this).find("option:selected").text()=="Virtual")
             {
                 $("#referenceAggreArea,#referenceItemArea").show();
@@ -238,46 +294,19 @@ fnObj.systemMetaArea = axboot.viewExtend({
         $("input[data-ax-path='parentsAggregationUuid']").blur(function(){
             var _thisObj = this;
             _this.setFrom($(this).parents().eq(0).find("input[data-ax-path='parentsAggregationUuid']").val());
-            /*
-            var data = {
-                popupCode : "PU123",
-                searchData : $(this).parents().eq(0).find("input[data-ax-path='parentsAggregationUuid']").val(),
-                callback : function(data){
-                    var target = $(_thisObj).parents().eq(0).find("input[data-ax-path='parentsAggregationUuid']");
-                    target.attr("parentsAggregationUuid",data["AGGREGATION_UUID"]);
-                    target.val(data["TITLE"]);
-                    console.log(data);
-                }
-            };
-            ACTIONS.dispatch(ACTIONS.SEARCH_AGGREGATION,data);
-            */
         });
 
         $("#fromAggregation").click(function(){
             var _thisObj = this;
             _this.setFrom($(this).parents().eq(0).find("input[data-ax-path='parentsAggregationUuid']").val());
-            /*
-            var data = {
-                popupCode : "PU123",
-                preSearch : false,
-                searchData : $(this).parents().eq(0).find("input[data-ax-path='parentsAggregationUuid']").val(),
-                callback : function(data){
-                    var target = $(_thisObj).parents().eq(0).find("input[data-ax-path='parentsAggregationUuid']");
-                    target.attr("parentsAggregationUuid",data["AGGREGATION_UUID"]);
-                    target.val(data["TITLE"]);
-                    console.log(data);
-                }
-            };
-            ACTIONS.dispatch(ACTIONS.SEARCH_AGGREGATION,data);
-            */
         });
 
 
     },
-    setFrom : function(data){
+    setFrom : function(data,preSearch){
         var data = {
             popupCode : this.popupCode,
-            preSearch : false,
+            preSearch : undefined == preSearch ? false : true,
             searchData : data,
             callback : function(data){
                 var target = $("#fromAggregation").parents().eq(0).find("input[data-ax-path='parentsAggregationUuid']");
@@ -304,12 +333,6 @@ fnObj.systemMetaArea = axboot.viewExtend({
                             data[$(this).attr("data-ax-path")] = $(this).val();
                     }
                 });
-                /*
-                $(this).children("li").find("select").each(function(){
-                    if($(this).attr("data-ax-path"))
-                        data[$(this).attr("data-ax-path")] = $(this).val();
-                });
-                */
             });
         }
         return data;
@@ -352,6 +375,8 @@ fnObj.contextualMetaArea = axboot.viewExtend({
 fnObj.childrenAggre = axboot.viewExtend({
     targetTag  : $("#childrenAggreArea"),
     parentUuid : "",
+    nodeType : "",
+    popupCode : "",
     template :
     "                                                            <li style='width: 11%;'>" +
     "                                                                <b>Aggregation Code</b>" +
@@ -380,6 +405,7 @@ fnObj.childrenAggre = axboot.viewExtend({
     initView: function (parentUuid) {
         this.initEvent();
         this.parentUuid = parentUuid;
+        this.setPopupCode();
         this.addChild($("#addAggregation"));
 
     },
@@ -400,6 +426,14 @@ fnObj.childrenAggre = axboot.viewExtend({
                 $(this).parents().eq(2).hide();
             }
         });
+    },
+    setPopupCode : function()
+    {
+        if(this.nodeType.toLowerCase() == "virtual")
+            this.popupCode = "PU121"
+        else
+            this.popupCode = "PU123"
+
     },
     addChild : function(_this){
         var cloneTag = $("<ul>").addClass("pdb_10").attr("data-ax-path","saveType").attr("saveType","create").html(this.template);
@@ -439,28 +473,63 @@ fnObj.childrenAggre = axboot.viewExtend({
 fnObj.referenceAggre = axboot.viewExtend({
     targetTag  : $("#referenceAggreArea"),
     parentUuid : "",
+    nodeType : "",
+    popupCode : "",
+    template : "<ul class='pdb_10' data-ax-path='saveType' saveType='create'>" +
+    "                                                        <li style='width: 11%;'>" +
+    "                                                            <b>Aggregation Code </b>" +
+    "                                                            <div class='src_box2'>" +
+    "                                                                <input type=text data-ax-path='aggregationUuid'>" +
+    "                                                                <a href='#' style='top: 0' class='searchAggregation' ><img src='/assets/images/ams/search_normal.png' alt='find'></a>" +
+    "                                                            </div>" +
+    "" +
+    "                                                        </li>" +
+    "                                                        <li style='width: 75%; padding: 0 0.5%;'>" +
+    "                                                            <b>Title</b>" +
+    "                                                            <input type='text' data-ax-path='title' style='width: 100%' readonly class='bgf7'>" +
+    "                                                        </li>" +
+    "                                                        <li style='width: 11%;'>" +
+    "                                                            <b>Level </b>" +
+    "                                                            <input type='text' data-ax-path='levelUuid' style='width: 135px; margin-right: 3px' readonly class='bgf7'>" +
+    "                                                        </li>" +
+    "" +
+    "                                                        <li style='width: 2%; text-align: center'>" +
+    "                                                            <b>&nbsp;</b>" +
+    "                                                            <a href='#' class='btn_del' style=''>X</a>" +
+    "                                                        </li>" +
+    "                                                    </ul>",
    initView: function (parentUuid) {
        this.initEvent();
        this.parentUuid = parentUuid;
+
+       this.addChild($("#addReference"));
    },
     initEvent: function () {
         //add aggregation
-
+        var _this = this;
         $("#addReference").click(function(){
-            var cloneTag = $("#referenceTemplate").clone();
-            cloneTag.attr("id","");
-            cloneTag.attr("saveType","create");
-            $(this).before(cloneTag);
-            cloneTag.show();
+            _this.addChild(this);
         });
 
 
         //Search Aggregation (Popup)
-        $(".childReference").delegate(".searchAggregation","click",function(){
-
+        $("#referenceAggreArea").delegate(".searchAggregation","click",function(){
+            var parentsTag  = $(this).parents().eq(2);
+            var data = {
+                popupCode : _this.popupCode,
+                preSearch : false,
+                searchData : data,
+                callback : function(data){
+                    parentsTag.find("input[data-ax-path='aggregationUuid']").attr("aggregationUuid",data["AGGREGATION_CODE"])
+                    parentsTag.find("input[data-ax-path='aggregationUuid']").val(data["AGGREGATION_CODE"])
+                    parentsTag.find("input[data-ax-path='title']").val(data["TITLE"])
+                    console.log(data);
+                }
+            };
+            ACTIONS.dispatch(ACTIONS.SEARCH_AGGREGATION,data);
         });
 
-        $(".childReference").delegate(".btn_del","click",function(){
+        $("#referenceAggreArea").delegate(".btn_del","click",function(){
             if("create" == $(this).parents().eq(2).attr("type"))
             {
                 $(this).parents().eq(2).remove();
@@ -471,6 +540,19 @@ fnObj.referenceAggre = axboot.viewExtend({
             }
         });
 
+    },
+    setPopupCode : function(){
+        if(this.nodeType.toLowerCase() == "virtual")
+            this.popupCode = "PU121"
+        else
+            this.popupCode = "PU123"
+    },
+    addChild : function(_this){
+        var cloneTag = $("<ul>").addClass("pdb_10").attr("data-ax-path","referenceAggreAreaSaveType").attr("saveType","create").html(this.template);
+        //cloneTag.find("select[data-ax-path='levelUuid']").append($("#addReference").find("select[data-ax-path='levelUuid']>option"));
+        // /cloneTag.find("select[data-ax-path='levelUuid']>option").eq(0).attr("selected","selected");
+        $(_this).before(cloneTag);
+        cloneTag.show();
     },
     getData : function(){
         var retData = new Array();
@@ -499,27 +581,57 @@ fnObj.referenceAggre = axboot.viewExtend({
     }
 });
 fnObj.referenceItem = axboot.viewExtend({
-    targetTag  : $("#referenceAggreArea"),
+    targetTag  : $("#referenceItemArea"),
     parentUuid : "",
+    template : "<ul class='pdb_10' data-ax-path='saveType' saveType='create'>" +
+    "                                                        <li style='width: 11%;'>" +
+    "                                                            <b>Item Code </b>" +
+    "                                                            <div>" +
+    "                                                                <div class='src_box2'>" +
+    "                                                                    <input type=text>" +
+    "                                                                    <a href='#' style='top: 0' class='searchReferenceItem' data-ax-path='itemUuid'>" +
+    "                                                                        <img src='/assets/images/ams/search_normal.png'" +
+    "                                                                             alt='find'></a>" +
+    "                                                                </div>" +
+    "                                                            </div>" +
+    "                                                        </li>" +
+    "                                                        <li style='width: 75%; padding: 0 0.5%;'>" +
+    "                                                            <b>Title</b>" +
+    "                                                            <div>" +
+    "                                                                <input type='text' style='width: 100%' readonly" +
+    "                                                                       class='bgf7'>" +
+    "                                                            </div>" +
+    "                                                        </li>" +
+    "                                                        <li style='width: 11%;'>" +
+    "                                                            <b>Type </b>" +
+    "                                                            <div>" +
+    "                                                                <input type='text' style='width: 135px; margin-right: 3px'" +
+    "                                                                       readonly class='bgf7'>" +
+    "                                                            </div>" +
+    "                                                        </li>" +
+    "" +
+    "                                                        <li style='width: 2%; text-align: center'>" +
+    "                                                            <b>&nbsp;</b>" +
+    "                                                            <div><a href='#' class='btn_del' style=''>X</a></div>" +
+    "                                                        </li>" +
+    "                                                    </ul>",
     initView: function (parentUuid) {
         this.initEvent();
         this.parentUuid = parentUuid;
+        this.addChild($("#addReferenceItem"));
     },
     initEvent: function () {
         //add aggregation
+        var _this = this;
         $("#addReferenceItem").click(function(){
-            var cloneTag = $("#referenceItemTemplate").clone();
-            cloneTag.attr("id","");
-            cloneTag.attr("saveType","create");
-            $(this).before(cloneTag);
-            cloneTag.show();
+            _this.addChild(this);
         });
 
-        $(".childReferenceItem").delegate(".searchReferenceItem","click",function(){
+        $("#referenceItemArea").delegate(".searchReferenceItem","click",function(){
 
         });
 
-        $(".childReferenceItem").delegate(".btn_del","click",function(){
+        $("#referenceItemArea").delegate(".btn_del","click",function(){
             if("create" == $(this).parents().eq(2).attr("type"))
             {
                 $(this).parents().eq(2).remove();
@@ -530,6 +642,13 @@ fnObj.referenceItem = axboot.viewExtend({
             }
         });
 
+    },
+    addChild : function(_this){
+        var cloneTag = $("<ul>").addClass("pdb_10").attr("data-ax-path","referenceItemAreaSaveType").attr("saveType","create").html(this.template);
+        //cloneTag.find("select[data-ax-path='levelUuid']").append($("#addReference").find("select[data-ax-path='levelUuid']>option"));
+        // /cloneTag.find("select[data-ax-path='levelUuid']>option").eq(0).attr("selected","selected");
+        $(_this).before(cloneTag);
+        cloneTag.show();
     },
     getData : function(){
         var retData = new Array();
@@ -659,9 +778,9 @@ fnObj.treeView01 = axboot.viewExtend(axboot.commonView, {
             var retList = new Array();
             for(var i = 0; i < list.length; i++)
             {
-                if( key == list[i]["parentAggregationUuid"] )
+                if( key == list[i]["parentUuid"] )
                 {
-                    list[i].children =  matchingData(list[i]["aggregationUuid"], list);
+                    list[i].children =  matchingData(list[i]["uuid"], list);
                     retList.push(list[i]);
                 }
             }
@@ -674,9 +793,9 @@ fnObj.treeView01 = axboot.viewExtend(axboot.commonView, {
         for(var i = 0; i < _tree.length; i++)
         {
             treeData = _tree[i];
-            if(treeData["parentAggregationUuid"] == null)
+            if(treeData["parentUuid"] == null)
             {
-                treeData.children = matchingData(treeData["aggregationUuid"],_tree);
+                treeData.children = matchingData(treeData["uuid"],_tree);
                 treeList.push(treeData);
             }
         }
