@@ -58,8 +58,13 @@ dip.process:
   tmp.dir: D:\02.DreamAntDev\git-workspaces\java\seoul-ams\dip\tmp\
   digital.file.dir: D:\02.DreamAntDev\git-workspaces\java\seoul-ams\dip\tmp\images\
 
-native.library.path: D:\02.DreamAntDev\git-workspaces\java\seoul-ams\src\main\resources\native-libs\
+native.library.path: /Users/hyukjunlee/IdeaProjects/seoul-ams/src/main/resources/native-libs/
 
+streaming.url: http://rmhost.iptime.org
+streaming.port: 18088
+streaming.context: /streamdocs
+streaming.param: /v3/documents/sftp?sftpPath=sftp://
+streaming.view : /view/sd;streamdocsId=
 taskExecutor:
   core-pool-size: 3
   max-pool-size: 10
@@ -79,7 +84,7 @@ onsemiro:
     max-total: 5
     max-wait-millis: 3000
     slow-query-threshold: 3000
-    sqlOutput: false
+    sqlOutput: true
     hibernate:
       hbm2ddlAuto: none
       databaseType: oracle

@@ -12,6 +12,9 @@ import rmsoft.ams.seoul.common.domain.RcAggregationCon;
 import rmsoft.ams.seoul.common.domain.RcItem;
 import rmsoft.ams.seoul.common.domain.RcItemCon;
 import rmsoft.ams.seoul.common.repository.*;
+import rmsoft.ams.seoul.rc.rc002.dao.Rc002Mapper;
+import rmsoft.ams.seoul.rc.rc002.vo.Rc00201VO;
+import rmsoft.ams.seoul.rc.rc002.vo.Rc00204VO;
 import rmsoft.ams.seoul.rc.rc002.vo.Rc00205VO;
 import rmsoft.ams.seoul.rc.rc002.vo.Rc002VO;
 
@@ -23,6 +26,7 @@ import java.util.List;
 @Service("Rc002Service")
 public class Rc002Service extends BaseService
 {
+
     @Autowired
     private RcLevelRepository rcLevelRepository;
 
@@ -38,6 +42,8 @@ public class Rc002Service extends BaseService
     @Autowired
     private RcItemConRepository rcItemConRepository;
 
+    @Autowired
+    private Rc002Mapper rc002Mapper;
 
     /**
      * Get level list.
@@ -111,5 +117,9 @@ public class Rc002Service extends BaseService
         }
 
         return ApiResponse.of(ApiStatus.SUCCESS,"SUCCESS");
+    }
+
+    public List<Rc00204VO> getTreeData(Rc00204VO param){
+        return rc002Mapper.getTreeData(param);
     }
 }

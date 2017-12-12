@@ -27541,7 +27541,11 @@ a.small_open {
     /* 라인수 */
     -webkit-box-orient: vertical;
     word-wrap: break-word;
-    line-height: 1.2em;
+    /*2017.12.11
+    author : Hyujkun Lee
+    글자가 보이는 현상으로 인하여 1.3으로 변경
+    */
+    line-height: 1.3em;
     height: 4.8em;
     /* line-height 가 1.2em 이고 4라인을 자르기 때문에 height는 1.2em * 4 = 4.8em */
     text-align: left;
@@ -27783,7 +27787,12 @@ a.small_open {
     height: 17px;
     text-align: center;
     background-color: #fff;
-    line-height: 1px;
+
+    /*
+    2017.12.11
+    삭제 버튼 x 내리기 위해서 1->16px 로 수정
+    */
+    line-height: 16px;
     float: right;
     color: #333;
     font-weight: bold;
