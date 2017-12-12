@@ -106,10 +106,12 @@ var ac00703 =
                     name: "useYn",
                     text: "Use",
                     width: 50,
-                    editable: true,
+                    editable: false,
                     dataType: "check",
                     textAlignment: "center",
-                    required: false
+                    equired: false,
+                    disable: true
+
                 },
                 {
                     sortNo: 11,
