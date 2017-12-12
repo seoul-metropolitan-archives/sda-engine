@@ -188,6 +188,85 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
     initEvent: function () {
         var _this = this;
         //by the Aggregation type, to control the Reference Area
+        $("input[data-ax-path='descriptionStartDate']").keyup(function () {
+            var date = this.value;
+            if (date.match(/^\d{4}$/) !== null) {
+                this.value = date + '-';
+            } else if (date.match(/^\d{4}\-\d{2}$/) !== null) {
+                this.value = date + '-';
+            }
+        });
+
+        $("input[data-ax-path='descriptionStartDate']").keypress(function () {
+            if ((event.keyCode < 48) || (event.keyCode > 57)) event.returnValue = false;
+        });
+
+        $("input[data-ax-path='descriptionStartDate']").focusout(function () {
+            if (!checkDate(this.value)) {
+                this.value = "";
+                this.focus = true;
+            }
+        });
+
+        $("input[data-ax-path='descriptionEndDate']").keyup(function () {
+            var date = this.value;
+            if (date.match(/^\d{4}$/) !== null) {
+                this.value = date + '-';
+            } else if (date.match(/^\d{4}\-\d{2}$/) !== null) {
+                this.value = date + '-';
+            }
+        });
+
+        $("input[data-ax-path='descriptionEndDate']").keypress(function () {
+            if ((event.keyCode < 48) || (event.keyCode > 57)) event.returnValue = false;
+        });
+
+        $("input[data-ax-path='descriptionEndDate']").focusout(function () {
+            if (!checkDate(this.value)) {
+                this.value = "";
+                this.focus = true;
+            }
+        });
+
+        $("input[data-ax-path='creationStartDate']").keyup(function () {
+            var date = this.value;
+            if (date.match(/^\d{4}$/) !== null) {
+                this.value = date + '-';
+            } else if (date.match(/^\d{4}\-\d{2}$/) !== null) {
+                this.value = date + '-';
+            }
+        });
+
+        $("input[data-ax-path='creationStartDate']").keypress(function () {
+            if ((event.keyCode < 48) || (event.keyCode > 57)) event.returnValue = false;
+        });
+
+        $("input[data-ax-path='creationStartDate']").focusout(function () {
+            if (!checkDate(this.value)) {
+                this.value = "";
+                this.focus = true;
+            }
+        });
+
+        $("input[data-ax-path='creationEndDate']").keyup(function () {
+            var date = this.value;
+            if (date.match(/^\d{4}$/) !== null) {
+                this.value = date + '-';
+            } else if (date.match(/^\d{4}\-\d{2}$/) !== null) {
+                this.value = date + '-';
+            }
+        });
+
+        $("input[data-ax-path='creationEndDate']").keypress(function () {
+            if ((event.keyCode < 48) || (event.keyCode > 57)) event.returnValue = false;
+        });
+
+        $("input[data-ax-path='creationEndDate']").focusout(function () {
+            if (!checkDate(this.value)) {
+                this.value = "";
+                this.focus = true;
+            }
+        });
 
 
         $('.togl01').click(function () {
@@ -894,5 +973,15 @@ function getFormattedDate(str) {
         return str.substr(0, 4) + "-" + str.substr(4, 2) + "-" + str.substr(6);
     } else {
         return str;
+    }
+}
+
+function checkDate(date) {
+    var result = true;
+    var strValue = date;
+    var chk1 = /^(19|20)\d{2}-([1-9]|1[012])-([1-9]|[12][0-9]|3[01])$/;
+    var chk2 = /^(19|20)\d{2}\/([0][1-9]|1[012])\/(0[1-9]|[12][0-9]|3[01])$/;
+    if (strValue == "") { // 공백이면 무시
+        return result;
     }
 }
