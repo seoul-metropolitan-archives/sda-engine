@@ -53,8 +53,8 @@ dip.process:
     json-file-path: /root/dip/
     digital-file-path: /root/dip/images/
   batch:
-    enable: false
-    cron: "0 5 12 * * *"
+    enable: true
+    cron: "0 5 0 * * *"
   tmp.dir: D:\02.DreamAntDev\git-workspaces\java\seoul-ams\dip\tmp\
   digital.file.dir: D:\02.DreamAntDev\git-workspaces\java\seoul-ams\dip\tmp\images\
 
@@ -65,6 +65,7 @@ streaming.port: 18088
 streaming.context: /streamdocs
 streaming.param: /v3/documents/sftp?sftpPath=sftp://
 streaming.view : /view/sd;streamdocsId=
+
 taskExecutor:
   core-pool-size: 3
   max-pool-size: 10
@@ -84,7 +85,7 @@ onsemiro:
     max-total: 5
     max-wait-millis: 3000
     slow-query-threshold: 3000
-    sqlOutput: true
+    sqlOutput: false
     hibernate:
       hbm2ddlAuto: none
       databaseType: oracle

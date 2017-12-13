@@ -12,7 +12,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -36,7 +36,7 @@ import java.util.Map;
  */
 @Slf4j
 @Component
-@ConditionalOnClass(DIPBatchExecutionCondition.class)
+@Conditional(DIPBatchExecutionCondition.class)
 public class DIPBatchExecutor {
     /**
      * The Ftp host.
@@ -108,7 +108,7 @@ public class DIPBatchExecutor {
      * Run dip process.
      */
     public void runDipProcess() {
-        log.info("DIPBatchExecutor-execute DIP Process :: {}");
+        log.info("DIPBatchExecutor-execute DIP Process");
 
         try {
             List<Map<String, Object>> entityList = dipMapper.findAllEntityType();
@@ -146,7 +146,11 @@ public class DIPBatchExecutor {
             }
 
             // Json 파일 전송
-            sendFileToFtp();
+            if (entityList.size() > 0) {
+                sendFileToFtp();
+            } else {
+                log.info("There is no entry lists.");
+            }
 
             // 디지털 파일이 있으면 디지털 파일도 전송
             if (rcComponentFile != null && rcComponentFile.size() > 0) {
@@ -155,6 +159,8 @@ public class DIPBatchExecutor {
 
             // 전송이 완료되면 DB 테이블의 전송 Flag를 Y로 설정
             dipMapper.updateSendHistory();
+            log.info("DIPBatchExecutor-end DIP Process");
+
         } catch (Exception e) {
             errorLogging(e);
             log.error("DIP Process Error : " + e.getMessage());
