@@ -28,10 +28,10 @@
                             <li style="width: 78%; text-align: left" id="navigatorArea"></li>
                             <li style="width: 78%; text-align: left" id="navigatorArea"></li>
                             <li style="width: 19.5%; padding-right: 0.5%">
-                              <!--    <div class="src_box3" ><input type=text>
-                              <a href="#" id="dialog-link5">
-                              <img src="images/search_normal.png" alt="search"></a>
-                              </div>-->
+                                <!--    <div class="src_box3" ><input type=text>
+                                <a href="#" id="dialog-link5">
+                                <img src="images/search_normal.png" alt="search"></a>
+                                </div>-->
                             </li>
                         </ul>
                     </div>
@@ -74,7 +74,7 @@
                                                 <div class="serv_title" style="border-top:0; margin-top: 0">
                                                     <span><b>System Metadata</b></span>
                                                 </div>
-                                                <dd class="bdb" style="padding: 5px;">
+                                                <div class="bdb" style="padding: 5px;">
                                                     <ul>
                                                         <li style="width: 33%;">
                                                             <b>Code </b>
@@ -173,7 +173,7 @@
 
                                                     <ul class="pdt_20">
                                                         <li style="width: 33%;">
-                                                            <b>Date of Description </b>
+                                                            <b>Date of Description  </b>
                                                             <dd class="w_auto">
                                                                 <div class="input-group" data-ax5picker="date">
                                                                     <div class="cld_box">
@@ -181,13 +181,12 @@
                                                                                placeholder="YYYY-MM-DD" maxlength="10">
                                                                         <img title="calendar" class="ui-datepicker-trigger" alt="..." src="/assets/images/ams/calendar.png" >
                                                                     </div>
-                                                                </div>
-                                                                ~
-                                                                <div class="cld_box">
+                                                                    ~
                                                                     <div class="cld_box">
                                                                         <input type="text" data-ax-path="descriptionEndDate" style="ime-mode:disabled;"
                                                                                placeholder="YYYY-MM-DD" maxlength="10">
                                                                         <img title="calendar" class="ui-datepicker-trigger" alt="..." src="/assets/images/ams/calendar.png" >
+
                                                                     </div>
                                                                 </div>
                                                             </dd>
@@ -202,153 +201,151 @@
                                                 <!-- system metadata -->
                                             </div>
                                             <div id="contextualMetaArea">
-                                            <!-- Contextual Metadata -->
+                                                <!-- Contextual Metadata -->
                                                 <div class="serv_title">
                                                     <span><b>Contextual Metadata </b></span>
                                                 </div>
-                                                <dd class="bdb" style="padding: 5px;">
-                                                <ul>
-                                                    <li style="width: 49%">
-                                                        <ol>
-                                                            <li>
-                                                                <b>Provenance </b>
-                                                                <div>
+                                                <div class="bdb" style="padding: 5px;">
+                                                    <ul>
+                                                        <li style="width: 49%">
+                                                            <ol>
+                                                                <li>
+                                                                    <b>Provenance </b>
+                                                                    <div>
                                                                     <textarea class="txtar" data-ax-path="provenance"
                                                                               style="height: 35px"></textarea>
-                                                                </div>
-                                                            </li>
-                                                            <li class="pdt_20">
-                                                                <b>Creator </b>
-                                                                <div>
+                                                                    </div>
+                                                                </li>
+                                                                <li class="pdt_20">
+                                                                    <b>Creator </b>
+                                                                    <div>
                                                                     <textarea class="txtar" data-ax-path="creator"
                                                                               style="height: 35px"></textarea>
-                                                                </div>
-                                                            </li>
-                                                            <li class="pdt_20">
-                                                                <b>Date of Creation</b>
-                                                                <dd class="w_auto">
-                                                                    <div class="input-group" data-ax5picker="date">
-                                                                        <div class="cld_box">
-                                                                            <input type="text" data-ax-path="creationStartDate" style="ime-mode:disabled;"
-                                                                                   placeholder="YYYY-MM-DD" maxlength="10">
-                                                                            <img title="calendar" class="ui-datepicker-trigger" alt="..." src="/assets/images/ams/calendar.png" >
-                                                                        </div>
                                                                     </div>
-                                                                    ~
-                                                                    <div class="cld_box" >
-                                                                        <div class="cld_box">
-                                                                            <input type="text" data-ax-path="creationEndDate" style="ime-mode:disabled;"
-                                                                                   placeholder="YYYY-MM-DD" maxlength="10">
-                                                                            <img title="calendar" class="ui-datepicker-trigger" alt="..." src="/assets/images/ams/calendar.png" >
+                                                                </li>
+                                                                <li class="pdt_20">
+                                                                    <b>Date of Creation</b>
+                                                                    <dd class="w_auto">
+                                                                        <div data-ax5picker="date">
+                                                                            <div class="cld_box" >
+                                                                                <input type="text" data-ax-path="creationStartDate" style="ime-mode:disabled;"
+                                                                                       placeholder="YYYY-MM-DD" maxlength="10">
+                                                                                <img title="calendar" class="ui-datepicker-trigger" alt="..." src="/assets/images/ams/calendar.png" >
+                                                                            </div>
+                                                                            ~
+                                                                            <div class="cld_box" >
+                                                                                <input type="text" data-ax-path="creationEndDate" style="ime-mode:disabled;"
+                                                                                       placeholder="YYYY-MM-DD" maxlength="10">
+                                                                                <img title="calendar" class="ui-datepicker-trigger" alt="..." src="/assets/images/ams/calendar.png" >
+                                                                            </div>
                                                                         </div>
-                                                                    </div>
-                                                                </dd>
-                                                            </li>
-                                                        </ol>
-                                                    </li>
-                                                    <li style="width: 2%;">
-                                                    </li>
-                                                    <li style="width: 49%;">
-                                                        <b>Reference Code </b>
-                                                        <span>
+                                                                    </dd>
+                                                                </li>
+                                                            </ol>
+                                                        </li>
+                                                        <li style="width: 2%;">
+                                                        </li>
+                                                        <li style="width: 49%;">
+                                                            <b>Reference Code </b>
+                                                            <span>
                                                             <textarea class="txtar" style="height: 170px" data-ax-path="referenceCode"></textarea>
                                                         </span>
-                                                    </li>
-                                                </ul>
+                                                        </li>
+                                                    </ul>
 
 
 
-                                    <!--<ul class="pdt_20">
-                                        <li style="width: 49%;">
-                                            <b>Additional Metadata 01 </b>
-                                            <div>
-                                                <input type="text" style="width: 100%">
-                                            </div>
-                                        </li>
-                                        <li style="width: 2%;">
-                                        </li>
-                                        <li style="width: 49%;">
-                                            <b>Additional Metadata 02</b>
-                                            <div>
-                                                <div class="cld_box">
-                                                    <input type=text id="datepicker5">
+                                                    <!--<ul class="pdt_20">
+                                                        <li style="width: 49%;">
+                                                            <b>Additional Metadata 01 </b>
+                                                            <div>
+                                                                <input type="text" style="width: 100%">
+                                                            </div>
+                                                        </li>
+                                                        <li style="width: 2%;">
+                                                        </li>
+                                                        <li style="width: 49%;">
+                                                            <b>Additional Metadata 02</b>
+                                                            <div>
+                                                                <div class="cld_box">
+                                                                    <input type=text id="datepicker5">
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                    </ul>
+
+                                                    <ul class="pdt_20">
+                                                        <li style="width: 49%;">
+                                                            <b>Additional Metadata 03 </b>
+                                                            <div>
+                                                                <input type="text" style="width: 100%">
+                                                            </div>
+                                                        </li>
+                                                        <li style="width: 2%;">
+                                                        </li>
+                                                        <li style="width: 49%;">
+                                                            <b>Additional Metadata 04</b>
+                                                            <div>
+                                                                <div class="cld_box">
+                                                                    <input type=text id="datepicker6">
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                    </ul>
+
+                                                    <ul class="pdt_20">
+                                                        <li style="width: 49%;">
+                                                            <b>Additional Metadata 05 </b>
+                                                            <div>
+                                                                <input type="text" style="width: 100%">
+                                                            </div>
+                                                        </li>
+                                                        <li style="width: 2%;">
+                                                        </li>
+                                                        <li style="width: 49%;">
+                                                            <b>Additional Metadata 06</b>
+                                                            <div>
+                                                                <div class="cld_box">
+                                                                    <input type=text id="datepicker7">
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                    </ul>
+
+                                                    <ul class="pdt_20">
+                                                        <li style="width: 49%;">
+                                                            <b>Additional Metadata 07 </b>
+                                                            <div>
+                                                                <input type="text" style="width: 100%">
+                                                            </div>
+                                                        </li>
+                                                        <li style="width: 2%;">
+                                                        </li>
+                                                        <li style="width: 49%;">
+                                                            <b>Additional Metadata 08</b>
+                                                            <div>
+                                                                <input type="text" style="width: 100%">
+                                                            </div>
+                                                        </li>
+                                                    </ul>
+
+                                                    <ul class="pdt_20">
+                                                        <li style="width: 49%;">
+                                                            <b>Additional Metadata 09</b>
+                                                            <div>
+                                                                <input type="text" style="width: 100%">
+                                                            </div>
+                                                        </li>
+                                                        <li style="width: 2%;">
+                                                        </li>
+                                                        <li style="width: 49%;">
+                                                            <b>Additional Metadata 10</b>
+                                                            <div>
+                                                                <input type="text" style="width: 100%">
+                                                            </div>
+                                                        </li>
+                                                    </ul>-->
                                                 </div>
-                                            </div>
-                                        </li>
-                                    </ul>
-
-                                    <ul class="pdt_20">
-                                        <li style="width: 49%;">
-                                            <b>Additional Metadata 03 </b>
-                                            <div>
-                                                <input type="text" style="width: 100%">
-                                            </div>
-                                        </li>
-                                        <li style="width: 2%;">
-                                        </li>
-                                        <li style="width: 49%;">
-                                            <b>Additional Metadata 04</b>
-                                            <div>
-                                                <div class="cld_box">
-                                                    <input type=text id="datepicker6">
-                                                </div>
-                                            </div>
-                                        </li>
-                                    </ul>
-
-                                    <ul class="pdt_20">
-                                        <li style="width: 49%;">
-                                            <b>Additional Metadata 05 </b>
-                                            <div>
-                                                <input type="text" style="width: 100%">
-                                            </div>
-                                        </li>
-                                        <li style="width: 2%;">
-                                        </li>
-                                        <li style="width: 49%;">
-                                            <b>Additional Metadata 06</b>
-                                            <div>
-                                                <div class="cld_box">
-                                                    <input type=text id="datepicker7">
-                                                </div>
-                                            </div>
-                                        </li>
-                                    </ul>
-
-                                    <ul class="pdt_20">
-                                        <li style="width: 49%;">
-                                            <b>Additional Metadata 07 </b>
-                                            <div>
-                                                <input type="text" style="width: 100%">
-                                            </div>
-                                        </li>
-                                        <li style="width: 2%;">
-                                        </li>
-                                        <li style="width: 49%;">
-                                            <b>Additional Metadata 08</b>
-                                            <div>
-                                                <input type="text" style="width: 100%">
-                                            </div>
-                                        </li>
-                                    </ul>
-
-                                    <ul class="pdt_20">
-                                        <li style="width: 49%;">
-                                            <b>Additional Metadata 09</b>
-                                            <div>
-                                                <input type="text" style="width: 100%">
-                                            </div>
-                                        </li>
-                                        <li style="width: 2%;">
-                                        </li>
-                                        <li style="width: 49%;">
-                                            <b>Additional Metadata 10</b>
-                                            <div>
-                                                <input type="text" style="width: 100%">
-                                            </div>
-                                        </li>
-                                    </ul>-->
-                                    </div>
                                             </div>
 
 
@@ -360,38 +357,38 @@
                                                     <span><b>Child Aggregations</b></span>
                                                     <input type="button" value="▼" id="open_btn1" class="open_btn">
                                                 </div>
-                                                    <div id="aggregationTemplate" style="display:none;">
-                                                        <ul class="pdb_10"  data-ax-path="saveType" saveType="create">
-                                                            <li style="width: 11%;">
-                                                                <b>Aggregation Code</b>
-                                                                <div>
-                                                                    <input type="text" data-ax-path="childaggregationCode" style="width: 135px;" class="bgf7" readonly>
-                                                                </div>
-                                                            </li>
-                                                            <li style="width: 75%; padding: 0 0.5%;">
-                                                                <b>Title </b>
-                                                                <div>
-                                                                    <input type="text" data-ax-path="childtitle" style="width: 100%;  background-color: #fffdd6; ">
-                                                                </div>
-                                                            </li>
-                                                            <li style="width: 11%;">
-                                                                <b>Level </b>
-                                                                <div>
-                                                                    <select data-ax-path="childlevelUuid" style="width: 135px" >
-                                                                        <option th:each="item : ${levelList}"
-                                                                                th:value="${item.levelUuid}"
-                                                                                th:text="${item.levelName}"
-                                                                        />
-                                                                    </select>
-                                                                </div>
-                                                            </li>
+                                                <div id="aggregationTemplate" style="display:none;">
+                                                    <ul class="pdb_10"  data-ax-path="saveType" saveType="create">
+                                                        <li style="width: 11%;">
+                                                            <b>Aggregation Code</b>
+                                                            <div>
+                                                                <input type="text" data-ax-path="childaggregationCode" style="width: 135px;" class="bgf7" readonly>
+                                                            </div>
+                                                        </li>
+                                                        <li style="width: 75%; padding: 0 0.5%;">
+                                                            <b>Title </b>
+                                                            <div>
+                                                                <input type="text" data-ax-path="childtitle" style="width: 100%;  background-color: #fffdd6; ">
+                                                            </div>
+                                                        </li>
+                                                        <li style="width: 11%;">
+                                                            <b>Level </b>
+                                                            <div>
+                                                                <select data-ax-path="childlevelUuid" style="width: 135px" >
+                                                                    <option th:each="item : ${levelList}"
+                                                                            th:value="${item.levelUuid}"
+                                                                            th:text="${item.levelName}"
+                                                                    />
+                                                                </select>
+                                                            </div>
+                                                        </li>
 
-                                                            <li style="width: 2%; text-align: center">
-                                                                <b>&nbsp; </b>
-                                                                <div><a href="#" class="btn_del" style="">X</a></div>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
+                                                        <li style="width: 2%; text-align: center">
+                                                            <b>&nbsp; </b>
+                                                            <div><a href="#" class="btn_del" style="">X</a></div>
+                                                        </li>
+                                                    </ul>
+                                                </div>
                                                 <div class="togl01_show serv_cont childAggregation">
 
                                                     <ul id="addAggregation">
@@ -401,21 +398,70 @@
                                                     </ul>
 
                                                 </div>
-                                            <!-- Child Aggregations -->
+                                                <!-- Child Aggregations -->
                                             </div>
                                             <div id="referenceAggreArea">
                                                 <!-- Reference Aggregation -->
-                                                <div class="togl02 serv_title">
+                                                <div class="togl02 serv_cont">
                                                     <span><b>Reference Aggregations</b></span>
                                                     <input type="button" value="▼" id="open_btn2" class="open_btn">
                                                 </div>
+                                                <div  style="display:none;">
+                                                    <ul class="pdb_10"  data-ax-path="saveType" saveType="create" id="referenceTemplate">
+                                                        <li style="width: 11%;">
+
+                                                            <div class="src_box2">
+                                                                <input type=text>
+                                                                <a href="#" style="top: 0" class="searchAggregation" data-ax-path="aggregationUuid" aggregationUuid="">
+                                                                    <img src="/assets/images/ams/search_normal.png" alt="find"></a>
+                                                            </div>
+
+                                                        </li>
+                                                        <li style="width: 75%; padding: 0 0.5%;">
+                                                            <input type="text" style="width: 100%" readonly class="bgf7">
+                                                        </li>
+                                                        <li style="width: 11%;">
+
+                                                            <input type="text" style="width: 135px; margin-right: 3px"
+                                                                   readonly class="bgf7">
+
+                                                        </li>
+
+                                                        <li style="width: 2%; text-align: center">
+                                                            <a href="#" class="btn_del" style="">X</a>
+                                                        </li>
+                                                    </ul>
+
+                                                </div>
                                                 <div class="togl02_show serv_cont childReference">
+
+                                                    <ul class="pdb_10" data-ax-path="saveType" saveType="create">
+                                                        <li style="width: 11%;">
+
+                                                            <div class="src_box2">
+                                                                <input type=text>
+                                                                <a href="#" style="top: 0" class="searchAggregation " data-ax-path="aggregationUuid"><img src="/assets/images/ams/search_normal.png" alt="find"></a>
+                                                            </div>
+
+                                                        </li>
+                                                        <li style="width: 75%; padding: 0 0.5%;">
+                                                            <input type="text" style="width: 100%" readonly class="bgf7">
+                                                        </li>
+                                                        <li style="width: 11%;">
+                                                            <input type="text" style="width: 135px; margin-right: 3px" readonly class="bgf7">
+                                                        </li>
+
+                                                        <li style="width: 2%; text-align: center">
+                                                            <a href="#" class="btn_del" style="">X</a>
+                                                        </li>
+                                                    </ul>
 
                                                     <ul id="addReference">
                                                         <li style="width: 100%;" >
                                                             <a href="#"><b style="color: red">+ Add New</b></a>
                                                         </li>
                                                     </ul>
+
                                                 </div>
                                                 <!-- Reference Aggregation -->
                                             </div>
@@ -425,7 +471,75 @@
                                                     <span><b>Reference Items</b></span>
                                                     <input type="button" value="▼" id="open_btn3" class="open_btn">
                                                 </div>
+                                                <div style="display:none;">
+                                                    <ul class="pdb_10" data-ax-path="saveType" saveType="create" id="referenceItemTemplate">
+                                                        <li style="width: 11%;">
+                                                            <b>Item Code </b>
+                                                            <div>
+                                                                <div class="src_box2">
+                                                                    <input type=text>
+                                                                    <a href="#" style="top: 0" class="searchReferenceItem" data-ax-path="itemUuid" itemUuid="">
+                                                                        <img src="/assets/images/ams/search_normal.png"
+                                                                             alt="find"></a>
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                        <li style="width: 75%; padding: 0 0.5%;">
+                                                            <b>Title</b>
+                                                            <div>
+                                                                <input type="text" style="width: 100%" readonly
+                                                                       class="bgf7">
+                                                            </div>
+                                                        </li>
+                                                        <li style="width: 11%;">
+                                                            <b>Type </b>
+                                                            <div>
+                                                                <input type="text" style="width: 135px; margin-right: 3px"
+                                                                       readonly class="bgf7">
+                                                            </div>
+                                                        </li>
+
+                                                        <li style="width: 2%; text-align: center">
+                                                            <b>&nbsp;</b>
+                                                            <div><a href="#" class="btn_del" style="">X</a></div>
+                                                        </li>
+                                                    </ul>
+                                                </div>
                                                 <div class="togl03_show serv_cont childReferenceItem">
+                                                    <ul class="pdb_10" data-ax-path="saveType" saveType="create">
+                                                        <li style="width: 11%;">
+                                                            <b>Item Code </b>
+                                                            <div>
+                                                                <div class="src_box2">
+                                                                    <input type=text>
+                                                                    <a href="#" style="top: 0" class="searchReferenceItem" data-ax-path="itemUuid">
+                                                                        <img src="/assets/images/ams/search_normal.png"
+                                                                             alt="find"></a>
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                        <li style="width: 75%; padding: 0 0.5%;">
+                                                            <b>Title</b>
+                                                            <div>
+                                                                <input type="text" style="width: 100%" readonly
+                                                                       class="bgf7">
+                                                            </div>
+                                                        </li>
+                                                        <li style="width: 11%;">
+                                                            <b>Type </b>
+                                                            <div>
+                                                                <input type="text" style="width: 135px; margin-right: 3px"
+                                                                       readonly class="bgf7">
+                                                            </div>
+                                                        </li>
+
+                                                        <li style="width: 2%; text-align: center">
+                                                            <b>&nbsp;</b>
+                                                            <div><a href="#" class="btn_del" style="">X</a></div>
+                                                        </li>
+                                                    </ul>
+
+
                                                     <ul id="addReferenceItem">
                                                         <li style="width: 100%;">
                                                             <a href="#"><b style="color: red">+ Add New</b></a>
