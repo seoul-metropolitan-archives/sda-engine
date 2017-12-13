@@ -535,7 +535,8 @@ function checkDate(date) {
     var result = true;
     var strValue = date;
     var chk1 = /^(19|20)\d{2}-([1-9]|1[012])-([1-9]|[12][0-9]|3[01])$/;
-    var chk2 = /^(19|20)\d{2}\/([0][1-9]|1[012])\/(0[1-9]|[12][0-9]|3[01])$/;
+    //var chk2 = /^(19|20)\d{2}\/([0][1-9]|1[012])\/(0[1-9]|[12][0-9]|3[01])$/;
+    var chk2 = /^(19|20)\d{2}-([0][1-9]|1[012])-([012][1-9]|3[01])$/;
     if (strValue == "") { // 공백이면 무시
         return result;
     }
@@ -544,6 +545,8 @@ function checkDate(date) {
 //-------------------------------------------------------------------------------
     if (chk1.test(strValue) == false && chk2.test(strValue) == false) { // 유효성 검사에 둘다 성공하지 못했다면
         //alert("1999-1-1 형식 또는 \r\n1999-01-01 형식으로 날자를 입력해주세요.");
+        alert(chk1.test(strValue));
+        alert(chk2.test(strValue));
         axToast.push(axboot.getCommonMessage("AA011"));
         result = false;
 
