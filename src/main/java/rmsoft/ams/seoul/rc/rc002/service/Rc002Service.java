@@ -83,7 +83,15 @@ public class Rc002Service extends BaseService
         {
             uuid = UUIDUtils.getUUID();
             rcAggregation.setAggregationUuid(uuid);
+            String aggregationCode = jdbcTemplate.queryForObject("select AMS.fc_rc_aggregation_code from dual", String.class);
+            rcAggregation.setAggregationCode(aggregationCode);
+            String descriptionStartDate = rcAggregation.getDescriptionStartDate().replace("-","");
+            rcAggregation.setDescriptionStartDate(descriptionStartDate);
+            String descriptionEndDate = rcAggregation.getDescriptionEndDate().replace("-","");
+            rcAggregation.setDescriptionEndDate(descriptionEndDate);
+            rcAggregation.set__created__(true);
             isCreate = true;
+            rcAggregationRepository.save(rcAggregation);
         }
         else
             uuid = rcAggregation.getAggregationUuid();
@@ -91,6 +99,12 @@ public class Rc002Service extends BaseService
         if(isCreate)
         {
             rcAggregationCon.setAggregationUuid(uuid);
+            String creationStartDate = rcAggregationCon.getCreationStartDate().replace("-","");
+            rcAggregationCon.setCreationStartDate(creationStartDate);
+            String creationEndDate = rcAggregationCon.getCreationEndDate().replace("-","");
+            rcAggregationCon.setCreationEndDate(creationEndDate);
+            rcAggregationCon.set__created__(true);
+            rcAggregationConRepository.save(rcAggregationCon);
 
             if(null != childrenAggregation)
             {

@@ -41,7 +41,7 @@ public class RcAggregation extends BaseJpaModel<RcAggregation.RcAggregationId> {
     @Column(name = "TYPE_UUID", length = 36, nullable = true)
     @Comment(value = "유형 UUID")
     private String typeUuid;
-    @Column(name = "PARENTS_AGGREGATION_UUID", length = 36, nullable = true)
+    @Column(name = "PARENT_AGGREGATION_UUID", length = 36, nullable = true)
     @Comment(value = "부모 AGGREGATION_UUID")
     private String parentsAggregationUuid;
     @Column(name = "LEVEL_UUID", length = 36, nullable = true)
