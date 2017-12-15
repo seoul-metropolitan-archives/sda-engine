@@ -523,4 +523,3 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
         this.setData([]);
     }
 });
-ㄷㄹ
