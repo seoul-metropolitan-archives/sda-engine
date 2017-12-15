@@ -122,10 +122,12 @@ fnObj.pageStart = function () {
     var uuid = "";
     if(null == data || data.type == "create")
     {
-
+        if(data["navi"])
+        {
+            $("#navigatorArea").text(data["navi"]);
+        }
     }
-    else
-    {
+    else {
         uuid = data.uuid;
         ACTIONS.dispatch(ACTIONS.PAGE_SEARCH,{aggregationUuid : data.uuid});
         if(data["navi"])

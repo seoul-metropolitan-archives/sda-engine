@@ -110,7 +110,15 @@ public class Rc002Service extends BaseService
             {
                 for(RcAggregation child : childrenAggregation)
                 {
+                    String aggregationCode = jdbcTemplate.queryForObject("select AMS.fc_rc_aggregation_code from dual", String.class);
+                    child.setAggregationCode(aggregationCode);
+                    child.setPublishedStatusUuid(rcAggregation.getPublishedStatusUuid());
                     child.setParentsAggregationUuid(uuid);
+                    child.setTypeUuid(rcAggregation.getTypeUuid());
+                    child.set__created__(true);
+                    uuid = UUIDUtils.getUUID();
+                    child.setAggregationUuid(uuid);
+                    rcAggregationRepository.save(child);
                 }
             }
             if(null != referenceAggregation)
