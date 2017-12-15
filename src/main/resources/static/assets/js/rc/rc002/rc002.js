@@ -190,7 +190,7 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
     initEvent: function () {
         var _this = this;
         //by the Aggregation type, to control the Reference Area
-        $("input[data-ax-path='descriptionStartDate']").keyup(function () {
+        $("input[data-ax-path='descriptionStartDate']").keyup(function (event) {
             var date = this.value;
             if (date.match(/^\d{4}$/) !== null) {
                 this.value = date + '-';
@@ -199,7 +199,7 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
             }
         });
 
-        $("input[data-ax-path='descriptionStartDate']").keypress(function () {
+        $("input[data-ax-path='descriptionStartDate']").keypress(function (event) {
             if ((event.keyCode < 48) || (event.keyCode > 57)) event.returnValue = false;
         });
 
@@ -219,7 +219,7 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
             }
         });
 
-        $("input[data-ax-path='descriptionEndDate']").keypress(function () {
+        $("input[data-ax-path='descriptionEndDate']").keypress(function (event) {
             if ((event.keyCode < 48) || (event.keyCode > 57)) event.returnValue = false;
         });
 
@@ -239,7 +239,7 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
             }
         });
 
-        $("input[data-ax-path='creationStartDate']").keypress(function () {
+        $("input[data-ax-path='creationStartDate']").keypress(function (event) {
             if ((event.keyCode < 48) || (event.keyCode > 57)) event.returnValue = false;
         });
 
@@ -259,7 +259,7 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
             }
         });
 
-        $("input[data-ax-path='creationEndDate']").keypress(function () {
+        $("input[data-ax-path='creationEndDate']").keypress(function (event) {
             if ((event.keyCode < 48) || (event.keyCode > 57)) event.returnValue = false;
         });
 
@@ -350,11 +350,12 @@ fnObj.systemMetaArea = axboot.viewExtend({
                 if($(this).text().toLowerCase() == _this.nodeType)
                 {
                     $(this).prop("selected","selected");
+                    $("select[data-ax-path='typeUuid']").css("background-color","");
                     $("select[data-ax-path='typeUuid']").prop("disabled","disabled")
                 }
             });
 
-        },500)
+        },50)
 
 
     },
@@ -363,7 +364,7 @@ fnObj.systemMetaArea = axboot.viewExtend({
         $("select[data-ax-path='typeUuid']").change(function(){
             fnObj.referenceAggre.nodeType = $(this).find("option:selected").text();
             fnObj.referenceAggre.setPopupCode();
-            if($(this).find("option:selected").text()=="Virtual")
+            if($(this).find("option:selected").text().toLowerCase()=="virtual")
             {
                 $("#referenceAggreArea,#referenceItemArea").show();
             }
