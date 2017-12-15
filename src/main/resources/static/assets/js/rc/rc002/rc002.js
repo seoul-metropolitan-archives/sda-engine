@@ -583,7 +583,7 @@ fnObj.referenceAggre = axboot.viewExtend({
    initView: function (parentUuid) {
        this.initEvent();
        this.parentUuid = parentUuid;
-
+       this.setPopupCode();
        this.addChild($("#addReference"));
    },
     initEvent: function () {
@@ -632,7 +632,7 @@ fnObj.referenceAggre = axboot.viewExtend({
     addChild : function(_this){
         var cloneTag = $("<ul>").addClass("pdb_10").attr("data-ax-path","referenceAggreAreaSaveType").attr("saveType","create").html(this.template);
         //cloneTag.find("select[data-ax-path='levelUuid']").append($("#addReference").find("select[data-ax-path='levelUuid']>option"));
-        // /cloneTag.find("select[data-ax-path='levelUuid']>option").eq(0).attr("selected","selected");
+        //cloneTag.find("select[data-ax-path='levelUuid']>option").eq(0).attr("selected","selected");
         $(_this).before(cloneTag);
         cloneTag.show();
     },
@@ -700,6 +700,7 @@ fnObj.referenceItem = axboot.viewExtend({
     initView: function (parentUuid) {
         this.initEvent();
         this.parentUuid = parentUuid;
+        this.setPopupCode();
         this.addChild($("#addReferenceItem"));
     },
     initEvent: function () {
@@ -724,6 +725,9 @@ fnObj.referenceItem = axboot.viewExtend({
             }
         });
 
+    },
+    setPopupCode : function(){
+        this.popupCode = "PU122"
     },
     addChild : function(_this){
         var cloneTag = $("<ul>").addClass("pdb_10").attr("data-ax-path","referenceItemAreaSaveType").attr("saveType","create").html(this.template);

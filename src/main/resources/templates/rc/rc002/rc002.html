@@ -357,38 +357,7 @@
                                                     <span><b>Child Aggregations</b></span>
                                                     <input type="button" value="▼" id="open_btn1" class="open_btn">
                                                 </div>
-                                                <div id="aggregationTemplate" style="display:none;">
-                                                    <ul class="pdb_10"  data-ax-path="saveType" saveType="create">
-                                                        <li style="width: 11%;">
-                                                            <b>Aggregation Code</b>
-                                                            <div>
-                                                                <input type="text" data-ax-path="childaggregationCode" style="width: 135px;" class="bgf7" readonly>
-                                                            </div>
-                                                        </li>
-                                                        <li style="width: 75%; padding: 0 0.5%;">
-                                                            <b>Title </b>
-                                                            <div>
-                                                                <input type="text" data-ax-path="childtitle" style="width: 100%;  background-color: #fffdd6; ">
-                                                            </div>
-                                                        </li>
-                                                        <li style="width: 11%;">
-                                                            <b>Level </b>
-                                                            <div>
-                                                                <select data-ax-path="childlevelUuid" style="width: 135px" >
-                                                                    <option th:each="item : ${levelList}"
-                                                                            th:value="${item.levelUuid}"
-                                                                            th:text="${item.levelName}"
-                                                                    />
-                                                                </select>
-                                                            </div>
-                                                        </li>
 
-                                                        <li style="width: 2%; text-align: center">
-                                                            <b>&nbsp; </b>
-                                                            <div><a href="#" class="btn_del" style="">X</a></div>
-                                                        </li>
-                                                    </ul>
-                                                </div>
                                                 <div class="togl01_show serv_cont childAggregation">
 
                                                     <ul id="addAggregation">
@@ -402,7 +371,7 @@
                                             </div>
                                             <div id="referenceAggreArea">
                                                 <!-- Reference Aggregation -->
-                                                <div class="togl02 serv_cont">
+                                                <div class="togl02 serv_title">
                                                     <span><b>Reference Aggregations</b></span>
                                                     <input type="button" value="▼" id="open_btn2" class="open_btn">
                                                 </div>
@@ -521,14 +490,14 @@
                                                         <li style="width: 75%; padding: 0 0.5%;">
                                                             <b>Title</b>
                                                             <div>
-                                                                <input type="text" style="width: 100%" readonly
+                                                                <input type="text" data-ax-path="childReferenceItemTitle" style="width: 100%" readonly
                                                                        class="bgf7">
                                                             </div>
                                                         </li>
                                                         <li style="width: 11%;">
                                                             <b>Type </b>
                                                             <div>
-                                                                <input type="text" style="width: 135px; margin-right: 3px"
+                                                                <input type="text" data-ax-path="childReferenceItemType" style="width: 135px; margin-right: 3px"
                                                                        readonly class="bgf7">
                                                             </div>
                                                         </li>
