@@ -96,6 +96,9 @@ public class DIPBatchExecutor {
     private Session session;
     private Channel channel;
 
+    private boolean sendFileSuccess = false;
+    private boolean sendDigitalFileSuccess = false;
+
     /**
      * Execute.
      */
@@ -155,10 +158,16 @@ public class DIPBatchExecutor {
             // 디지털 파일이 있으면 디지털 파일도 전송
             if (rcComponentFile != null && rcComponentFile.size() > 0) {
                 sendDigitalFileToFtp(rcComponentFile);
+            } else {
+                sendDigitalFileSuccess = true;
             }
 
             // 전송이 완료되면 DB 테이블의 전송 Flag를 Y로 설정
-            dipMapper.updateSendHistory();
+            if (sendFileSuccess && sendDigitalFileSuccess) {
+                log.info("History Table Update Export_Yn = 'Y'");
+                dipMapper.updateSendHistory();
+            }
+
             log.info("DIPBatchExecutor-end DIP Process");
 
         } catch (Exception e) {
@@ -205,13 +214,12 @@ public class DIPBatchExecutor {
         }
     }
 
-    private void sendFileToFtp() {
+    private boolean sendFileToFtp() {
         if (session == null || !session.isConnected()) {
             connect();
         }
 
         File[] jsonFileList = getJsonFileList(jsonTmpDir);
-
         FileInputStream fis = null;
 
         try {
@@ -231,7 +239,10 @@ public class DIPBatchExecutor {
             log.info("{} JSON file is uploaded.", jsonFileList.length);
 
             disconnect();
+            sendFileSuccess = true;
         } catch (Exception e) {
+            sendFileSuccess = false;
+
             errorLogging(e);
             log.error("FTP File Upload Error : {}", e.getMessage());
         } finally {
@@ -239,13 +250,16 @@ public class DIPBatchExecutor {
                 try {
                     fis.close();
                 } catch (IOException e) {
+                    sendFileSuccess = false;
                     errorLogging(e);
                 }
             }
         }
+
+        return sendFileSuccess;
     }
 
-    private void sendDigitalFileToFtp(List<Map<String, Object>> rcComponentFile) throws Exception {
+    private boolean sendDigitalFileToFtp(List<Map<String, Object>> rcComponentFile) {
         if (session == null || !session.isConnected()) {
             connect();
         }
@@ -254,28 +268,48 @@ public class DIPBatchExecutor {
         Map<String, Object> rcComponenMap = null;
         File digitalFile = null;
 
-        for (int i = 0; i < rcComponentFile.size(); i++) {
-            rcComponenMap = rcComponentFile.get(i);
+        try {
+            for (int i = 0; i < rcComponentFile.size(); i++) {
+                rcComponenMap = rcComponentFile.get(i);
 
-            // Change to output directory
-            sftpChannel.cd(ftpDigitalFilePath);
+                // Change to output directory
+                sftpChannel.cd(ftpDigitalFilePath);
 
-            digitalFile = new File(digitalFileDir + (String) rcComponenMap.get("FILE_PATH") + File.separator + (String) rcComponenMap.get("FILE_NAME"));
+                digitalFile = new File(digitalFileDir + (String) rcComponenMap.get("FILE_PATH") + File.separator + (String) rcComponenMap.get("FILE_NAME"));
 
-            if (digitalFile.exists()) {
-                // 입력 파일을 가져온다.
-                fis = new FileInputStream(digitalFile);
-                // 파일을 업로드한다.
-                sftpChannel.put(fis, digitalFile.getName());
+                if (digitalFile.exists()) {
+                    // 입력 파일을 가져온다.
+                    fis = new FileInputStream(digitalFile);
+                    // 파일을 업로드한다.
+                    sftpChannel.put(fis, digitalFile.getName());
 
-                fis.close();
-                log.debug("Digital file is uploaded  : {}", digitalFile.getName());
+                    fis.close();
+                    log.debug("Digital file is uploaded  : {}", digitalFile.getName());
+                }
+            }
+
+            log.info("{} Digital file is uploaded.", rcComponentFile.size());
+
+            disconnect();
+            sendDigitalFileSuccess = true;
+
+        } catch (Exception e) {
+            sendDigitalFileSuccess = false;
+
+            errorLogging(e);
+            log.error("FTP Digital File Upload Error : {}", e.getMessage());
+        } finally {
+            if (fis != null) {
+                try {
+                    fis.close();
+                } catch (IOException e) {
+                    sendDigitalFileSuccess = false;
+                    errorLogging(e);
+                }
             }
         }
 
-        log.info("{} Digital file is uploaded.", rcComponentFile.size());
-
-        disconnect();
+        return sendDigitalFileSuccess;
     }
 
     /**
