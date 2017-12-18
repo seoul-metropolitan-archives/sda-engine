@@ -25,4 +25,3 @@ public class Cl001ViewRouter extends MessageBaseController {
         return "/cl/cl001/cl001";
     }
 }
-
