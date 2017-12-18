@@ -20,6 +20,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -71,7 +72,7 @@ public class ProcessIngest {
      * @param truncateList the truncate list
      */
     public void setTruncateList(List<String> truncateList) {
-        this.truncateList = truncateList;
+        Collections.copy(this.truncateList, truncateList);
     }
 
     /**
