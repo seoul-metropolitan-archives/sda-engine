@@ -1,9 +1,11 @@
 package rmsoft.ams.seoul.common.controller;
 
+import com.jcraft.jsch.Logger;
 import io.onsemiro.controller.BaseController;
 import io.onsemiro.core.api.response.Responses;
 import io.onsemiro.utils.ModelMapperUtils;
 import io.onsemiro.utils.UUIDUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,6 +19,7 @@ import rmsoft.ams.seoul.common.domain.RcComponent;
 import rmsoft.ams.seoul.common.service.CommonService;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -27,6 +30,7 @@ import java.util.Map;
 /**
  * The type Common controller.
  */
+@Slf4j
 @RestController
 @RequestMapping(value = "/api/v1/common")
 public class CommonController extends BaseController {
@@ -64,6 +68,8 @@ public class CommonController extends BaseController {
     @ResponseBody
     public Object getStreamingId(@RequestBody Map<String, String> param) {
         String responseSB = "";
+        HttpURLConnection conn = null;
+        BufferedReader br = null;
         try {
 
             RcComponent rcComponent = commonService.getComponentData(param);
@@ -82,25 +88,38 @@ public class CommonController extends BaseController {
             URL url = new URL(
                     streamingUrl + ":" + streamingPort + streamingContext + streamingParam + prefix + "/" + rcComponent.getFilePath().replaceAll("\\\\\\\\", "/") + "/" + rcComponent.getFileName()
             );
-
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn = (HttpURLConnection) url.openConnection();
             conn.setDoOutput(true);
             conn.setRequestMethod("GET");
             conn.setRequestProperty("Content-Type", "application/json");
             // Write data
             // Read response
+            try {
+                br = new BufferedReader(new InputStreamReader(
+                        conn.getInputStream()));
 
-            BufferedReader br = new BufferedReader(new InputStreamReader(
-                    conn.getInputStream()));
+                String line;
+                while ((line = br.readLine()) != null)
+                    responseSB += line;
 
-            String line;
-            while ((line = br.readLine()) != null)
-                responseSB += line;
+                // Close streams
+            } catch (IOException e) {
 
-            // Close streams
-            br.close();
+            } finally {
+                if (null != br)
+                    br.close();
+            }
+
+
         } catch (Exception ex) {
-            ex.printStackTrace();
+            log.error(ex.getMessage());
+        }finally
+        {
+            if(null != conn)
+            {
+                conn.disconnect();
+            }
+
         }
         JSONObject obj = new JSONObject(responseSB);
 
