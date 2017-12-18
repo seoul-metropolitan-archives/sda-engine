@@ -925,8 +925,57 @@ fnObj.iconView = axboot.viewExtend({
             if(uuid == "")
                 imgSrc = $(this).parents().eq(index).find(".imageTag").find("img").prop("src")
 
-            if(imgSrc.indexOf("file")>-1)
+            var getMenu = function(searchData)
+            {
+                var menuObj = undefined;
+                axboot.ajax({
+                    url: "/rc/rc001/getMenuInfo",
+                    data: JSON.stringify({progNm : searchData}),
+                    type : "POST",
+                    dataType : "JSON",
+                    async : false,
+                    callback: function (res) {
+                        menuObj = res;
+                    },
+                    options: {
+                        onError: axboot.viewError
+                    }
+                });
+                return menuObj;
+            }
+
+            if(imgSrc.indexOf("file")>-1){
+                var selectedData = undefined;
+
+                var parentsObj = parent.window.fnObj;
+
+                //icon 실행
+                if($(".explorer_grid").css("display")=="none")
+                {
+                    selectedData= fnObj.iconView.getSelectedData();
+                }
+
+                if(selectedData.length == 1)
+                {
+                    var item = "";
+                    if(selectedData[0].nodeType == "item")
+                    {
+                        item = getMenu("view item");
+                    }
+                    else
+                    {
+                        item = getMenu("view aggregation");
+                    }
+                    if(item != "")
+                    {
+                        item.menuParams = $.extend({},selectedData[0],{type: "create"},{navi : fnObj.naviView.getPathString()},{title : selectedData["name"]});
+                        parentsObj.tabView.open(item);
+                    }
+                }
+
                 return ;
+            }
+
 
             fnObj.naviView.setData({uuid : $(this).parents().eq(index).attr("uuid"),name : $(this).parents().eq(index).find(".titleTag").children().eq(0).text()});
             ACTIONS.dispatch(ACTIONS.GET_SUBDATA,{
@@ -1556,6 +1605,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView,{
         if(reqData["iconType"] == "file")
         {
             //차후에 뷰어 붙여야된다
+            trace("여기여기");
             return;
         }
 
