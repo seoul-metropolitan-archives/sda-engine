@@ -14,7 +14,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                     var itemIndex = rcList.length - 1;
                     setFormData(rcList[itemIndex]);
                     if(rcList[itemIndex].rc00502VoList!= "undefined" && rcList[itemIndex].rc00502VoList != null && rcList[itemIndex].rc00502VoList.length > 0){
-                        fnObj.gridView01.setData(rcList[0].rc00502VoList);
+                        fnObj.gridView01.setData(rcList[itemIndex].rc00502VoList);
                     }
                 }
             },

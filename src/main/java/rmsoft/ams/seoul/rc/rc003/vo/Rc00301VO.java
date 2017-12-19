@@ -17,6 +17,8 @@ public class Rc00301VO extends BaseVO {
     private String aggregationCode;
     private String parentAggregationName;
     private String name;
+    private String publishedStatusName;
+    private String levelCode;
     private String parentAggregationUuid;
     private String levelUuid;
     private String author;

@@ -1,6 +1,9 @@
 var fnObj = {};
 var selectedItem = {};
 var from = "";
+var itemUuid = "";
+var aggregationUuid = "";
+var typeNm ="";
 
 var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH: function (caller, act, data) {
@@ -27,7 +30,26 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         });
         return false;
     },
+    DELETE_AGGREGATION : function(caller, act, list){
 
+        axboot.ajax({
+            url: "/rc/rc001/deleteAggregation",
+            data: JSON.stringify(list),
+            dataType : "JSON",
+            type : "POST",
+            callback: function (res) {
+                if(res.status == -500)
+                    axWarningToast.push(axboot.getCommonMessage(res.message));
+                else
+                {
+                    axToast.push(axboot.getCommonMessage(res.message));
+                }
+            },
+            options: {
+                onError: axboot.viewError
+            }
+        });
+    },
     PAGE_SEARCH1: function (caller, act, data) {},
     PAGE_SAVE: function (caller, act, data) {},
     dispatch: function (caller, act, data) {
@@ -82,6 +104,80 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
     },
     initEvent: function () {
         var _this = this;
+
+        $("#edit,#move,#updateStatus,#delete").click(function(e){
+
+            var parentsObj = parent.window.fnObj;
+
+            var getMenu = function(searchData)
+            {
+                var menuObj = undefined;
+                axboot.ajax({
+                    url: "/rc/rc001/getMenuInfo",
+                    data: JSON.stringify({progNm : searchData}),
+                    type : "POST",
+                    dataType : "JSON",
+                    async : false,
+                    callback: function (res) {
+                        menuObj = res;
+                    },
+                    options: {
+                        onError: axboot.viewError
+                    }
+                });
+                return menuObj;
+            }
+
+            switch(e.currentTarget.id)
+            {
+                case "edit":
+                    var item = getMenu("add item");
+                    item.menuParams = $.extend({},{
+                        aggregationUuid : aggregationUuid,
+                        itemUuid : itemUuid,
+                        title : fnObj.formView.getData()["itemTitle"],
+                        navi:fnObj.formView.getData()["navi"]
+                        },{type: "update"}
+                    );
+                    parentsObj.tabView.open(item);
+                    break;
+                case "move":
+                        axboot.modal.open({
+                        modalType: "MOVE_AGGREGATION",
+                        param: "",
+                        sendData: function () {
+                            return {
+                                selectType  :  typeNm,
+                                "selectedList": [{uuid: itemUuid, parentUuid: aggregationUuid}]
+                            };
+                        },
+                        callback: function (data) {
+                            axToast.push(axboot.getCommonMessage("AA007"));
+                            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH,{aggregationUuid : aggregationUuid, itemUuid :itemUuid});
+                        }
+                    });
+                    break;
+                case "updateStatus":
+                    axboot.modal.open({
+                        modalType: "UPDATE_STATE_AGGREGATION_N_ITEM",
+                        param: "",
+                        sendData: function () {
+                            return {
+                                "selectedList": [{uuid: itemUuid, parentUuid: aggregationUuid}]
+                            };
+                        },
+                        callback: function (data) {
+                            axToast.push(axboot.getCommonMessage("AA007"));
+                            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH,{aggregationUuid : aggregationUuid, itemUuid :itemUuid});
+                        }
+                    });
+                    break;
+                case "delete":
+                    ACTIONS.dispatch(ACTIONS.DELETE_AGGREGATION,[{uuid: itemUuid, parentUuid: aggregationUuid, nodeType: "item"}]);
+                    break;
+            }
+        });
+
     },
     getData: function () {
         var data = this.modelFormatter.getClearData(this.model.get()); // 모델의 값을 포멧팅 전 값으로 치환.
@@ -340,6 +436,10 @@ fnObj.treeView01 = axboot.viewExtend(axboot.commonView, {
     }
 });
 setFormData = function(data){
+    itemUuid = data.riItemUuid;
+    aggregationUuid = data.riAggregationUuid;
+    typeNm = data.riTypeNm;
+
     fnObj.formView.setFormData("itemTitle",'Item - ' + data.name);
     fnObj.formView.setFormData("title",data.name);
     fnObj.formView.setFormData("code",data.riItemCode);

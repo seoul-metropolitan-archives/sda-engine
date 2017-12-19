@@ -112,7 +112,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 if(res.status == -500)
                     axWarningToast.push(axboot.getCommonMessage(res.message));
                 else
-                {
+                {``
                     axToast.push(axboot.getCommonMessage(res.message));
                     ACTIONS.dispatch(ACTIONS.PAGE_SEARCH,fnObj.naviView.getRoot());
                     if($(".explorer_grid").css("display")=="none")
@@ -584,21 +584,21 @@ var fnObj = {
 
 
                     axboot.modal.open({
-                        modalType: "UPDATE_STATE_AGGREGATION_N_ITEM",
-                        param: "",
-                        sendData: function () {
-                            return {
-                                "selectedList": selectedData
-                            };
-                        },
-                        callback: function (data) {
-                            axToast.push(axboot.getCommonMessage("AA007"));
-                            if($(".explorer_grid").css("display")=="none")
-                                ACTIONS.dispatch(ACTIONS.GET_SUBDATA,fnObj.naviView.getCurrent());
-                            else
-                                ACTIONS.dispatch(ACTIONS.GET_GRID_DATA,fnObj.naviView.getCurrent());
-                        }
-                    });
+                    modalType: "UPDATE_STATE_AGGREGATION_N_ITEM",
+                    param: "",
+                    sendData: function () {
+                        return {
+                            "selectedList": selectedData
+                        };
+                    },
+                    callback: function (data) {
+                        axToast.push(axboot.getCommonMessage("AA007"));
+                        if($(".explorer_grid").css("display")=="none")
+                            ACTIONS.dispatch(ACTIONS.GET_SUBDATA,fnObj.naviView.getCurrent());
+                        else
+                            ACTIONS.dispatch(ACTIONS.GET_GRID_DATA,fnObj.naviView.getCurrent());
+                    }
+                });
 
 
                     break;
@@ -943,7 +943,6 @@ fnObj.iconView = axboot.viewExtend({
                 });
                 return menuObj;
             }
-
             if(imgSrc.indexOf("file")>-1){
                 var selectedData = undefined;
 

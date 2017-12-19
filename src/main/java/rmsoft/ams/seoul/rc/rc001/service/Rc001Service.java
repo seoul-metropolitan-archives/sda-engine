@@ -117,7 +117,7 @@ public class Rc001Service extends BaseService
                     msg = "RC001_05";
                     break;
                 }
-                if(rc001Mapper.getChildrenCnt(data) > 0)
+                if(!data.getNodeType().equals("item") && rc001Mapper.getChildrenCnt(data) > 0)
                 {
                     error = true;
                     msg = "RC001_04";

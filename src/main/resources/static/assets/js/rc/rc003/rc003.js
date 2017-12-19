@@ -1,5 +1,8 @@
 var fnObj = {};
 var selectedItem = {};
+var aggregationUuid = "";
+var parentAggregationUuid = "";
+
 var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH: function (caller, act, data) {
         axboot.ajax({
@@ -84,6 +87,80 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
                 $('#open_btn2').val('▼');
             }
         });
+
+        $("#doAggregation,#doItem,#edit,#move,#updateStatus,#delete").click(function(e){
+
+            var parentsObj = parent.window.fnObj;
+
+            var getMenu = function(searchData)
+            {
+                var menuObj = undefined;
+                axboot.ajax({
+                    url: "/rc/rc001/getMenuInfo",
+                    data: JSON.stringify({progNm : searchData}),
+                    type : "POST",
+                    dataType : "JSON",
+                    async : false,
+                    callback: function (res) {
+                        menuObj = res;
+                    },
+                    options: {
+                        onError: axboot.viewError
+                    }
+                });
+                return menuObj;
+            }
+
+            switch(e.currentTarget.id)
+            {
+                case "edit":
+                    var item = getMenu("add item");
+                    item.menuParams = $.extend({},{
+                            parentUuid : parentAggregationUuid,
+                            uuid : aggregationUuid,
+                            title : fnObj.formView.getData()["itemTitle"],
+                            navi:fnObj.formView.getData()["navi"]
+                        },{type: "update"}
+                    );
+                    parentsObj.tabView.open(item);
+                    break;
+                case "move":
+                    axboot.modal.open({
+                        modalType: "MOVE_AGGREGATION",
+                        param: "",
+                        sendData: function () {
+                            return {
+                                selectType  :  typeNm,
+                                "selectedList": [{uuid: aggregationUuid, parentUuid: parentAggregationUuid}]
+                            };
+                        },
+                        callback: function (data) {
+                            axToast.push(axboot.getCommonMessage("AA007"));
+                            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH,{aggregationUuid : aggregationUuid, parentAggregationUuid :parentAggregationUuid});
+                        }
+                    });
+                    break;
+                case "updateStatus":
+                    axboot.modal.open({
+                        modalType: "UPDATE_STATE_AGGREGATION_N_ITEM",
+                        param: "",
+                        sendData: function () {
+                            return {
+                                "selectedList": [{uuid: aggregationUuid, parentUuid: parentAggregationUuid}]
+                            };
+                        },
+                        callback: function (data) {
+                            axToast.push(axboot.getCommonMessage("AA007"));
+                            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH,{aggregationUuid : aggregationUuid, parentAggregationUuid :parentAggregationUuid});
+                        }
+                    });
+                    break;
+                case "delete":
+                    ACTIONS.dispatch(ACTIONS.DELETE_AGGREGATION,[{aggregationUuid : aggregationUuid, parentAggregationUuid :parentAggregationUuid}]);
+                    break;
+            }
+        });
+
     },
     getData: function () {
         var data = this.modelFormatter.getClearData(this.model.get()); // 모델의 값을 포멧팅 전 값으로 치환.
@@ -305,10 +382,13 @@ fnObj.treeView01 = axboot.viewExtend(axboot.commonView, {
     }
 });
 setFormData = function(data){
+    aggregationUuid = data.aggregationUuid;
+    parentAggregationUuid = data.parentAggregationUuid;
+
     fnObj.formView.setFormData("rcHeadTitle",data.headTitle);
     fnObj.formView.setFormData("rcTitle",data.name);
-    fnObj.formView.setFormData("rcPublishedStatus",data.publishedStatusUuid);
-    fnObj.formView.setFormData("rcLevel",data.levelUuid);
+    fnObj.formView.setFormData("rcPublishedStatus",data.publishedStatusName);
+    fnObj.formView.setFormData("rcLevel",data.levelCode);
     fnObj.formView.setFormData("rcDescription",data.description);
     fnObj.formView.setFormData("rcNotes",data.notes);
     fnObj.formView.setFormData("rcType",data.typeNm);
