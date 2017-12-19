@@ -143,9 +143,9 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
                         window.open(res.url, "", "");
                     }
                 },
-                error : function ()
+                error : function (a,b,c)
                 {
-
+                    console.log(a);
                 }
             })
         }

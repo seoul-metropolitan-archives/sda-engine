@@ -79,14 +79,15 @@ public class CommonController extends BaseController {
             ad00101VO.setConfigurationCode("SYS_STORAGE");
             List<Ad00101VO> ad00101VOList = ad001Service.getEnviromentList(ad00101VO);
             String prefix = ad00101VOList.get(0).getConfigurationValue();
-            //System.out.println(streamingUrl+":"+streamingPort+streamingContext+streamingParam+prefix+"/" +path+rcComponent.getFileName());
+            //System.out.println(streamingUrl+":"+streamingPort+streamingContext+streamingParam+prefix+"/"]] +path+rcComponent.getFileName());
             String path = rcComponent.getFilePath().replaceAll("\\\\\\\\", "/");
-            if (path.indexOf(path.length()) != '/')
+
+            if (!path.substring(path.length()-1,path.length()).equals("/"))
                 path += "/";
 
 
             URL url = new URL(
-                    streamingUrl + ":" + streamingPort + streamingContext + streamingParam + prefix + "/" + rcComponent.getFilePath().replaceAll("\\\\\\\\", "/") + "/" + rcComponent.getFileName()
+                    streamingUrl + ":" + streamingPort + streamingContext + streamingParam + prefix + "/" + path + rcComponent.getFileName()
             );
             conn = (HttpURLConnection) url.openConnection();
             conn.setDoOutput(true);
@@ -102,9 +103,9 @@ public class CommonController extends BaseController {
                 while ((line = br.readLine()) != null)
                     responseSB += line;
 
-                // Close streams
+                // Close streamsd
             } catch (IOException e) {
-
+                log.error(e.getMessage());
             } finally {
                 if (null != br)
                     br.close();
