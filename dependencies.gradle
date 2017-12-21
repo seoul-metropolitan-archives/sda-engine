@@ -75,7 +75,7 @@ dependencies {
     compile group: 'org.json', name: 'json', version: '20171018'
 
     // jsch : sftp
-    compile group: 'com.jcraft', name: 'jsch', version: '0.1.44-1'
+    compile group: 'com.jcraft', name: 'jsch', version: '0.1.54'
 
     // egovframework
     compile('egovframework.rte:egovframework.rte.psl.dataaccess:3.6.0') {

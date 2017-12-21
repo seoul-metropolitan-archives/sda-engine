@@ -26,6 +26,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Vector;
 
 /**
  * DIPBatchExecutor
@@ -73,6 +74,12 @@ public class DIPBatchExecutor {
      */
     @Value("${dip.process.sftp.digital-file-path}")
     protected String ftpDigitalFilePath;
+
+    /**
+     * The Digital file Upload Prefix
+     */
+    @Value("${dip.process.sftp.upload-prefix}")
+    protected String uploadPrefix;
 
     /**
      * The Json tmp dir.
@@ -147,6 +154,9 @@ public class DIPBatchExecutor {
                 FileUtils.write(jsonFile, JsonUtils.toJson(resultList).replace("null", "\"\""), StandardCharsets.UTF_8);
                 resultList.clear();
             }
+
+            ftpJsonPath = uploadPrefix + "/" + DateUtils.getNow("yyyyMMdd") + ftpJsonPath + "/";
+            ftpDigitalFilePath = uploadPrefix + "/" + DateUtils.getNow("yyyyMMdd") + ftpDigitalFilePath + "/";
 
             // Json 파일 전송
             if (entityList.size() > 0) {
@@ -225,6 +235,13 @@ public class DIPBatchExecutor {
         try {
             for (int i = 0; i < jsonFileList.length; i++) {
                 // Change to output directory
+                if (!isDirectoryExists(sftpChannel, ftpJsonPath)) {
+                    /*log.info("Creating Directory : {} ", ftpJsonPath);
+                    sftpChannel.mkdir(ftpJsonPath);*/
+
+                    makeDirectory(sftpChannel, ftpJsonPath);
+                }
+
                 sftpChannel.cd(ftpJsonPath);
 
                 // 입력 파일을 가져온다.
@@ -271,6 +288,13 @@ public class DIPBatchExecutor {
         try {
             for (int i = 0; i < rcComponentFile.size(); i++) {
                 rcComponenMap = rcComponentFile.get(i);
+
+                if (!isDirectoryExists(sftpChannel, ftpDigitalFilePath)) {
+                    /*log.info("Creating Directory : {} ", ftpDigitalFilePath);
+                    sftpChannel.mkdir(ftpDigitalFilePath);*/
+                    makeDirectory(sftpChannel, ftpDigitalFilePath);
+
+                }
 
                 // Change to output directory
                 sftpChannel.cd(ftpDigitalFilePath);
@@ -355,6 +379,56 @@ public class DIPBatchExecutor {
             } else {
                 log.error("ERROR", throwable);
             }
+        }
+    }
+
+    /**
+     * Check Remote Directory
+     *
+     * @param channelSftp
+     * @param path
+     * @return
+     */
+    private boolean isDirectoryExists(ChannelSftp channelSftp, String path) {
+        Vector res = null;
+        try {
+            res = channelSftp.ls(path);
+        } catch (SftpException e) {
+            log.info("There is no directory or file : {}", path);
+
+            if (e.id == ChannelSftp.SSH_FX_NO_SUCH_FILE) {
+                return false;
+            }
+        }
+        return res != null && !res.isEmpty();
+    }
+
+    private void makeDirectory(ChannelSftp channelSftp, String path) {
+
+        log.info("Creating Directory : {} ", path);
+
+        try {
+            String[] folders = path.split("/");
+            if (folders[0].isEmpty()) folders[0] = "/";
+            String fullPath = folders[0];
+            for (int i = 1; i < folders.length; i++) {
+                Vector ls = channelSftp.ls(fullPath);
+                boolean isExist = false;
+                for (Object o : ls) {
+                    if (o instanceof ChannelSftp.LsEntry) {
+                        ChannelSftp.LsEntry e = (ChannelSftp.LsEntry) o;
+                        if (e.getAttrs().isDir() && e.getFilename().equals(folders[i])) {
+                            isExist = true;
+                        }
+                    }
+                }
+                if (!isExist && !folders[i].isEmpty()) {
+                    channelSftp.mkdir(fullPath + folders[i]);
+                }
+                fullPath = fullPath + folders[i] + "/";
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }
