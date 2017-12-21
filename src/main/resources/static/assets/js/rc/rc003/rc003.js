@@ -434,6 +434,7 @@ setFormData = function(data){
     parentAggregationUuid = data.parentAggregationUuid;
 
     fnObj.formView.setFormData("rcHeadTitle",data.headTitle);
+    fnObj.formView.setFormData("navi",navi);
     fnObj.formView.setFormData("rcTitle",data.name);
     fnObj.formView.setFormData("rcPublishedStatus",data.publishedStatusName);
     fnObj.formView.setFormData("rcLevel",data.levelCode);

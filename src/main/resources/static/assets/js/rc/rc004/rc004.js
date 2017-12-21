@@ -99,6 +99,12 @@ fnObj.pageStart = function () {
 
         if(PAGE_MODE == "create") {
             fnObj.formView.setFormData("raAggregationUuid",data.aggregationUuid);
+
+            ACTIONS.dispatch(ACTIONS.SEARCH_FROM_SCH,{
+                popupCode : "PU123",
+                searchData : data.aggregationUuid
+            });
+
         } else {
             ACTIONS.dispatch(ACTIONS.PAGE_SEARCH,{aggregationUuid : data.aggregationUuid, itemUuid : data.itemUuid});
         }
