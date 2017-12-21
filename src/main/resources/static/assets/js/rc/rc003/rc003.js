@@ -2,13 +2,15 @@ var fnObj = {};
 var selectedItem = {};
 var aggregationUuid = "";
 var parentAggregationUuid = "";
+var sParam = [];
+var navi = "";
 
 var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH: function (caller, act, data) {
         axboot.ajax({
             type: "GET",
             url: "/api/v1/rc003/01/list",
-            data: $.extend({}, {pageSize: 1000, sort: "classificationCode" }, data),
+            data: $.extend({}, {pageSize: 1000}, data),
             callback: function (res) {
                 if(res.list != "undefined" && res.list != null && res.list.length > 0){
                     rcList = ax5.util.deepCopy(res.list);
@@ -21,6 +23,26 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             }
         });
         return false;
+    },
+    DELETE_AGGREGATION : function(caller, act, list){
+
+        axboot.ajax({
+            url: "/rc/rc001/deleteAggregation",
+            data: JSON.stringify(list),
+            dataType : "JSON",
+            type : "POST",
+            callback: function (res) {
+                if(res.status == -500)
+                    axWarningToast.push(axboot.getCommonMessage(res.message));
+                else
+                {
+                    axToast.push(axboot.getCommonMessage(res.message));
+                }
+            },
+            options: {
+                onError: axboot.viewError
+            }
+        });
     },
     PAGE_SEARCH1: function (caller, act, data) {},
     PAGE_SAVE: function (caller, act, data) {},
@@ -54,6 +76,16 @@ fnObj.pageStart = function () {
     if(null == data ){
         return;
     }else {
+        if(data["sendData"]){
+            sParam = data["sendData"];
+            if(sParam[0].parentUuid == undefined){
+                sParam[0].parentUuid = "";
+            }
+        }
+        if(data["navi"])
+        {
+            navi = data["navi"];
+        }
         ACTIONS.dispatch(ACTIONS.PAGE_SEARCH,{aggregationUuid : data.uuid});
     }
 };
@@ -113,13 +145,29 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
 
             switch(e.currentTarget.id)
             {
-                case "edit":
+                case "doAggregation":
+                    var item = getMenu("add aggregation");
+                    item.menuParams = $.extend({},
+                        sParam
+                        ,{type: "create"},{navi : navi},{title : ""}
+                    );
+                    parentsObj.tabView.open(item);
+                    break;
+                case "doItem":
                     var item = getMenu("add item");
                     item.menuParams = $.extend({},{
-                            parentUuid : parentAggregationUuid,
-                            uuid : aggregationUuid,
-                            title : fnObj.formView.getData()["itemTitle"],
-                            navi:fnObj.formView.getData()["navi"]
+                            aggregationUuid : sParam[0].uuid
+                        },{type: "create"},{title : ""},{navi : navi}
+                    );
+                    parentsObj.tabView.open(item);
+                    break;
+                case "edit":
+                    var item = getMenu("add aggregation");
+                    item.menuParams = $.extend({},{
+                            parentUuid : sParam[0].parentUuid,
+                            uuid : sParam[0].uuid,
+                            title : sParam[0].name,
+                            navi:navi
                         },{type: "update"}
                     );
                     parentsObj.tabView.open(item);
@@ -130,8 +178,8 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
                         param: "",
                         sendData: function () {
                             return {
-                                selectType  :  typeNm,
-                                "selectedList": [{uuid: aggregationUuid, parentUuid: parentAggregationUuid}]
+                                selectType  :  sParam[0].nodeType,
+                                "selectedList": sParam
                             };
                         },
                         callback: function (data) {
@@ -146,7 +194,7 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
                         param: "",
                         sendData: function () {
                             return {
-                                "selectedList": [{uuid: aggregationUuid, parentUuid: parentAggregationUuid}]
+                                "selectedList": sParam
                             };
                         },
                         callback: function (data) {
@@ -156,7 +204,7 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
                     });
                     break;
                 case "delete":
-                    ACTIONS.dispatch(ACTIONS.DELETE_AGGREGATION,[{aggregationUuid : aggregationUuid, parentAggregationUuid :parentAggregationUuid}]);
+                    ACTIONS.dispatch(ACTIONS.DELETE_AGGREGATION,sParam);
                     break;
             }
         });

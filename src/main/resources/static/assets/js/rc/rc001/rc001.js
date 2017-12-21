@@ -466,7 +466,7 @@ var fnObj = {
                         }
                         if(item != "")
                         {
-                            item.menuParams = $.extend({},selectedData[0],{type: "create"},{navi : fnObj.naviView.getPathString()},{title : selectedData["name"]});
+                            item.menuParams = $.extend({},selectedData[0],{type: "create"},{navi : fnObj.naviView.getPathString()},{title : selectedData["name"]},{sendData: selectedData});
                             parentsObj.tabView.open(item);
                         }
                     }

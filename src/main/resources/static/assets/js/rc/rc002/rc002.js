@@ -1,4 +1,4 @@
-
+var sParam = [];
 var fnObj = {};
 var selectedItem = {};
 var ACTIONS = axboot.actionExtend(fnObj, {
@@ -6,7 +6,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         axboot.ajax({
             type: "GET",
             url: "/api/v1/rc003/01/list",
-            data: $.extend({}, {pageSize: 1000, sort: "classificationCode"}, data
+            data: $.extend({}, {pageSize: 1000}, data
 
         //{aggregationUuid :'A2EF15E7-BE58-41DD-945C-E99FB5DE60C1'}
         ),
@@ -120,14 +120,15 @@ fnObj.pageStart = function () {
     console.log(data);
 
     var uuid = "";
-    if(null == data || data.type == "create")
+    if(null != data && data.type == "create")
     {
         if(data["navi"])
         {
             $("#navigatorArea").text(data["navi"]);
+
         }
     }
-    else {
+    else if(null != data && data.type != "create") {
         uuid = data.uuid;
         ACTIONS.dispatch(ACTIONS.PAGE_SEARCH,{aggregationUuid : data.uuid});
         if(data["navi"])
@@ -864,9 +865,9 @@ fnObj.treeView01 = axboot.viewExtend(axboot.commonView, {
             var retList = new Array();
             for(var i = 0; i < list.length; i++)
             {
-                if( key == list[i]["parentUuid"] )
+                if( key == list[i]["parentAggregationUuid"] )
                 {
-                    list[i].children =  matchingData(list[i]["uuid"], list);
+                    list[i].children =  matchingData(list[i]["aggregationUuid"], list);
                     retList.push(list[i]);
                 }
             }
@@ -879,9 +880,9 @@ fnObj.treeView01 = axboot.viewExtend(axboot.commonView, {
         for(var i = 0; i < _tree.length; i++)
         {
             treeData = _tree[i];
-            if(treeData["parentUuid"] == null)
+            if(treeData["parentAggregationUuid"] == null)
             {
-                treeData.children = matchingData(treeData["uuid"],_tree);
+                treeData.children = matchingData(treeData["aggregationUuid"],_tree);
                 treeList.push(treeData);
             }
         }

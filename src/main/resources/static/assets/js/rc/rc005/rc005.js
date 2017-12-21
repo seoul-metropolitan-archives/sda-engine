@@ -1,10 +1,8 @@
 var fnObj = {};
 var selectedItem = {};
 var from = "";
-var itemUuid = "";
-var aggregationUuid = "";
-var typeNm ="";
-
+var navi = "";
+var sParam = [];
 var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH: function (caller, act, data) {
         axboot.ajax({
@@ -85,8 +83,9 @@ fnObj.pageStart = function () {
     } else {
         if(data["navi"]){
             fnObj.formView.setFormData("navi",data["navi"]);
+            navi = data["navi"];
         }
-
+        sParam = data["sendData"];
         ACTIONS.dispatch(ACTIONS.PAGE_SEARCH,{aggregationUuid : data.parentUuid, itemUuid : data.uuid});
     }
 };
@@ -133,10 +132,10 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
                 case "edit":
                     var item = getMenu("add item");
                     item.menuParams = $.extend({},{
-                        aggregationUuid : aggregationUuid,
-                        itemUuid : itemUuid,
-                        title : fnObj.formView.getData()["itemTitle"],
-                        navi:fnObj.formView.getData()["navi"]
+                        aggregationUuid : sParam[0].parentUuid,
+                        itemUuid : sParam[0].uuid,
+                        title : sParam[0].name,
+                        navi:navi
                         },{type: "update"}
                     );
                     parentsObj.tabView.open(item);
@@ -148,12 +147,12 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
                         sendData: function () {
                             return {
                                 selectType  :  typeNm,
-                                "selectedList": [{uuid: itemUuid, parentUuid: aggregationUuid}]
+                                "selectedList":sParam // [{uuid: itemUuid, parentUuid: aggregationUuid,nodeType:typeNm}]
                             };
                         },
                         callback: function (data) {
                             axToast.push(axboot.getCommonMessage("AA007"));
-                            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH,{aggregationUuid : aggregationUuid, itemUuid :itemUuid});
+                            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH,{aggregationUuid : sParam.uuid, itemUuid :sParam.parentUuid});
                         }
                     });
                     break;
@@ -163,17 +162,17 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
                         param: "",
                         sendData: function () {
                             return {
-                                "selectedList": [{uuid: itemUuid, parentUuid: aggregationUuid}]
+                                "selectedList": sParam//[{uuid: itemUuid, parentUuid: aggregationUuid}]
                             };
                         },
                         callback: function (data) {
                             axToast.push(axboot.getCommonMessage("AA007"));
-                            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH,{aggregationUuid : aggregationUuid, itemUuid :itemUuid});
+                            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH,{aggregationUuid : sParam.uuid, itemUuid :sParam.parentUuid});
                         }
                     });
                     break;
                 case "delete":
-                    ACTIONS.dispatch(ACTIONS.DELETE_AGGREGATION,[{uuid: itemUuid, parentUuid: aggregationUuid, nodeType: "item"}]);
+                    ACTIONS.dispatch(ACTIONS.DELETE_AGGREGATION,sParam);
                     break;
             }
         });
@@ -436,10 +435,6 @@ fnObj.treeView01 = axboot.viewExtend(axboot.commonView, {
     }
 });
 setFormData = function(data){
-    itemUuid = data.riItemUuid;
-    aggregationUuid = data.riAggregationUuid;
-    typeNm = data.riTypeNm;
-
     fnObj.formView.setFormData("itemTitle",'Item - ' + data.name);
     fnObj.formView.setFormData("title",data.name);
     fnObj.formView.setFormData("code",data.riItemCode);
