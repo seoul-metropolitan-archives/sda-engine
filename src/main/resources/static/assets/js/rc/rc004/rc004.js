@@ -1,5 +1,6 @@
 var fnObj = {};
 var selectedItem = {};
+var nodeType = "";
 var PAGE_MODE = "create";
 var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH: function (caller, act, data) {
@@ -83,11 +84,18 @@ fnObj.pageStart = function () {
     // Data 조회
     var data = axboot.getMenuParams();
 
-
     if(null == data ){
         return;
     }else{
         PAGE_MODE = data.type;
+
+        if(data["nodeType"] && data["nodeType"] != undefined){
+            if(data["nodeType"].toLowerCase() == "virtual"){
+                nodeType = "PU121";
+            }else{
+                nodeType = "PU123";
+            }
+        }
 
         if(data["title"]){
             fnObj.formView.setFormData("headTitle",data["title"]);
@@ -101,7 +109,7 @@ fnObj.pageStart = function () {
             fnObj.formView.setFormData("raAggregationUuid",data.aggregationUuid);
 
             ACTIONS.dispatch(ACTIONS.SEARCH_FROM_SCH,{
-                popupCode : "PU123",
+                popupCode : nodeType,
                 searchData : data.aggregationUuid
             });
 
@@ -509,6 +517,7 @@ setFormData = function(data){
 
     fnObj.formView.setFormData("creationStartDate",dateFormatter(data.creationStartDate));
     fnObj.formView.setFormData("creationEndDate",dateFormatter(data.creationEndDate));
+
 
     ACTIONS.dispatch(ACTIONS.SEARCH_FROM_SCH,{
         popupCode : "PU123",

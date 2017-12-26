@@ -157,7 +157,7 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
                     var item = getMenu("add item");
                     item.menuParams = $.extend({},{
                             aggregationUuid : sParam[0].uuid
-                        },{type: "create"},{title : ""},{navi : navi}
+                        },{type: "create"},{title : ""},{navi : navi},{nodeType : nodeType}
                     );
                     parentsObj.tabView.open(item);
                     break;
@@ -432,6 +432,7 @@ fnObj.treeView01 = axboot.viewExtend(axboot.commonView, {
 setFormData = function(data){
     aggregationUuid = data.aggregationUuid;
     parentAggregationUuid = data.parentAggregationUuid;
+    nodeType = data.typeNm;
 
     fnObj.formView.setFormData("rcHeadTitle",data.headTitle);
     fnObj.formView.setFormData("navi",navi);

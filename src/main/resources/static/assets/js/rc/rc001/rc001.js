@@ -446,7 +446,7 @@ var fnObj = {
                         var naviStr = undefined == selectedData["name"]? "" : " > "+selectedData["name"]
                         item.menuParams = $.extend({},{
                             aggregationUuid : selectedData.uuid
-                        },{type: "create"},{navi : fnObj.naviView.getPathString()+naviStr},{title : ""}
+                        },{type: "create"},{navi : fnObj.naviView.getPathString()+naviStr},{title : ""},{nodeType : selectedData.nodeType}
                         );
                         parentsObj.tabView.open(item);
                     }
