@@ -13,7 +13,6 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             callback: function (res) {
                 if(res.list != "undefined" && res.list != null && res.list.length > 0){
                     rcList = ax5.util.deepCopy(res.list);
-                    fnObj.treeView01.setData({}, res.list, data);
                     setFormData(rcList[0]);
                 }
             },
@@ -77,7 +76,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 referenceAggregationList : fnObj.referenceAggre.getData(),
                 referenceItemList : fnObj.referenceItem.getData()
             }
-        console.log();
+            return;
         console.log(saveData);
         axboot.ajax({
             url: "/api/v1/rc/rc002/save",
@@ -164,6 +163,17 @@ fnObj.pageStart = function () {
     _this.childrenAggre.initView(uuid);
     _this.referenceItem.initView(uuid);
     _this.referenceAggre.initView(uuid);
+
+    if(data.nodeType=="virtual")
+    {
+        $("#referenceAggreArea,#referenceItemArea").show();
+        $("#childrenAggreArea").hide();
+    }
+    else
+    {
+        $("#referenceAggreArea,#referenceItemArea").hide();
+        $("#childrenAggreArea").show();
+    }
 };
 //=================================================================
 //작업영역
@@ -368,10 +378,12 @@ fnObj.systemMetaArea = axboot.viewExtend({
             if($(this).find("option:selected").text().toLowerCase()=="virtual")
             {
                 $("#referenceAggreArea,#referenceItemArea").show();
+                $("#childrenAggreArea").hide();
             }
             else
             {
                 $("#referenceAggreArea,#referenceItemArea").hide();
+                $("#childrenAggreArea").show();
             }
         });
         $("input[data-ax-path='parentsAggregationUuid']").blur(function(){
@@ -558,7 +570,7 @@ fnObj.referenceAggre = axboot.viewExtend({
     parentUuid : "",
     nodeType : "",
     popupCode : "",
-    template : "<ul class='pdb_10' data-ax-path='saveType' saveType='create'>" +
+    template :
     "                                                        <li style='width: 11%;'>" +
     "                                                            <b>Aggregation Code </b>" +
     "                                                            <div class='src_box2'>" +
@@ -579,8 +591,8 @@ fnObj.referenceAggre = axboot.viewExtend({
     "                                                        <li style='width: 2%; text-align: center'>" +
     "                                                            <b>&nbsp;</b>" +
     "                                                            <a href='#' class='btn_del' style=''>X</a>" +
-    "                                                        </li>" +
-    "                                                    </ul>",
+    "                                                        </li>"
+    ,
    initView: function (parentUuid) {
        this.initEvent();
        this.parentUuid = parentUuid;
@@ -603,7 +615,7 @@ fnObj.referenceAggre = axboot.viewExtend({
                 preSearch : false,
                 searchData : data,
                 callback : function(data){
-                    parentsTag.find("input[data-ax-path='aggregationUuid']").attr("aggregationUuid",data["AGGREGATION_CODE"])
+                    parentsTag.find("input[data-ax-path='aggregationUuid']").attr("aggregationUuid",data["AGGREGATION_UUID"])
                     parentsTag.find("input[data-ax-path='aggregationUuid']").val(data["AGGREGATION_CODE"])
                     parentsTag.find("input[data-ax-path='title']").val(data["TITLE"])
                     console.log(data);
@@ -631,7 +643,7 @@ fnObj.referenceAggre = axboot.viewExtend({
             this.popupCode = "PU123"
     },
     addChild : function(_this){
-        var cloneTag = $("<ul>").addClass("pdb_10").attr("data-ax-path","referenceAggreAreaSaveType").attr("saveType","create").html(this.template);
+        var cloneTag = $("<ul>").addClass("pdb_10").attr("data-ax-path","saveType").attr("saveType","create").html(this.template);
         //cloneTag.find("select[data-ax-path='levelUuid']").append($("#addReference").find("select[data-ax-path='levelUuid']>option"));
         //cloneTag.find("select[data-ax-path='levelUuid']>option").eq(0).attr("selected","selected");
         $(_this).before(cloneTag);
@@ -642,7 +654,7 @@ fnObj.referenceAggre = axboot.viewExtend({
         var data = {};
         if(this.targetTag.css("display") != "none")
         {
-            $(this.targetTag).find(".childAggregation>ul:not(#addReference)").each(function(){
+            $(this.targetTag).find(".childReference>ul:not(#addReference)").each(function(){
                 data = {};
                 data["saveType"] = $(this).attr("saveType");
                 $(this).children("li").find("input,select,textarea").each(function(){
@@ -654,8 +666,10 @@ fnObj.referenceAggre = axboot.viewExtend({
                             data[$(this).attr("data-ax-path")] = $(this).val();
                     }
                 });
+                /*
                 data["typeUuid"] = $("#systemMetaArea").find("select[data-ax-path='type']").val();
                 data["parentAggregationUuid"] = this.aggregationUuid;
+                */
                 if(data["aggregationUuid"] && data["aggregationUuid"] != "")
                     retData.push(data);
             });
@@ -666,13 +680,15 @@ fnObj.referenceAggre = axboot.viewExtend({
 fnObj.referenceItem = axboot.viewExtend({
     targetTag  : $("#referenceItemArea"),
     parentUuid : "",
-    template : "<ul class='pdb_10' data-ax-path='saveType' saveType='create'>" +
+    nodeType : "",
+    popupCode : "",
+    template :
     "                                                        <li style='width: 11%;'>" +
     "                                                            <b>Item Code </b>" +
     "                                                            <div>" +
     "                                                                <div class='src_box2'>" +
-    "                                                                    <input type=text>" +
-    "                                                                    <a href='#' style='top: 0' class='searchReferenceItem' data-ax-path='itemUuid'>" +
+    "                                                                    <input type=text data-ax-path='itemUuid'>" +
+    "                                                                    <a href='#' style='top: 0' class='searchReferenceItem'>" +
     "                                                                        <img src='/assets/images/ams/search_normal.png'" +
     "                                                                             alt='find'></a>" +
     "                                                                </div>" +
@@ -681,23 +697,21 @@ fnObj.referenceItem = axboot.viewExtend({
     "                                                        <li style='width: 75%; padding: 0 0.5%;'>" +
     "                                                            <b>Title</b>" +
     "                                                            <div>" +
-    "                                                                <input type='text' style='width: 100%' readonly" +
-    "                                                                       class='bgf7'>" +
+    "                                                                <input type='text' data-ax-path='title' style='width: 100%' readonly class='bgf7'>" +
     "                                                            </div>" +
     "                                                        </li>" +
     "                                                        <li style='width: 11%;'>" +
     "                                                            <b>Type </b>" +
     "                                                            <div>" +
-    "                                                                <input type='text' style='width: 135px; margin-right: 3px'" +
-    "                                                                       readonly class='bgf7'>" +
+    "                                                                <input type='text' style='width: 135px; margin-right: 3px' readonly class='bgf7'>" +
     "                                                            </div>" +
     "                                                        </li>" +
     "" +
     "                                                        <li style='width: 2%; text-align: center'>" +
     "                                                            <b>&nbsp;</b>" +
     "                                                            <div><a href='#' class='btn_del' style=''>X</a></div>" +
-    "                                                        </li>" +
-    "                                                    </ul>",
+    "                                                        </li>"
+    ,
     initView: function (parentUuid) {
         this.initEvent();
         this.parentUuid = parentUuid;
@@ -712,7 +726,19 @@ fnObj.referenceItem = axboot.viewExtend({
         });
 
         $("#referenceItemArea").delegate(".searchReferenceItem","click",function(){
-
+            var parentsTag  = $(this).parents().eq(3);
+            var data = {
+                popupCode : _this.popupCode,
+                preSearch : false,
+                searchData : data,
+                callback : function(data){
+                    parentsTag.find("input[data-ax-path='itemUuid']").attr("itemUuid",data["ITEM_UUID"])
+                    parentsTag.find("input[data-ax-path='itemUuid']").val(data["ITEM_CODE"])
+                    parentsTag.find("input[data-ax-path='title']").val(data["TITLE"])
+                    console.log(data);
+                }
+            };
+            ACTIONS.dispatch(ACTIONS.SEARCH_ITEM,data);
         });
 
         $("#referenceItemArea").delegate(".btn_del","click",function(){
@@ -731,9 +757,9 @@ fnObj.referenceItem = axboot.viewExtend({
         this.popupCode = "PU122"
     },
     addChild : function(_this){
-        var cloneTag = $("<ul>").addClass("pdb_10").attr("data-ax-path","referenceItemAreaSaveType").attr("saveType","create").html(this.template);
+        var cloneTag = $("<ul>").addClass("pdb_10").attr("data-ax-path","saveType").attr("saveType","create").html(this.template);
         //cloneTag.find("select[data-ax-path='levelUuid']").append($("#addReference").find("select[data-ax-path='levelUuid']>option"));
-        // /cloneTag.find("select[data-ax-path='levelUuid']>option").eq(0).attr("selected","selected");
+        //cloneTag.find("select[data-ax-path='levelUuid']>option").eq(0).attr("selected","selected");
         $(_this).before(cloneTag);
         cloneTag.show();
     },
@@ -742,7 +768,7 @@ fnObj.referenceItem = axboot.viewExtend({
         var data = {};
         if(this.targetTag.css("display") != "none")
         {
-            $(this.targetTag).find(".childAggregation>ul:not(#addReferenceItem)").each(function(){
+            $(this.targetTag).find(".childReferenceItem>ul:not(#addReferenceItem)").each(function(){
                 data = {};
                 data["saveType"] = $(this).attr("saveType");
                 $(this).children("li").find("input,select,textarea").each(function(){
@@ -754,8 +780,10 @@ fnObj.referenceItem = axboot.viewExtend({
                             data[$(this).attr("data-ax-path")] = $(this).val();
                     }
                 });
+                /*
                 data["type"] = $("#systemMetaArea").find("select[data-ax-path='type']").val();
                 data["parentAggregationUuid"] = this.aggregationUuid;
+                */
                 if(data["itemUuid"] && data["itemUuid"] != "")
                     retData.push(data);
             });
@@ -863,11 +891,15 @@ fnObj.treeView01 = axboot.viewExtend(axboot.commonView, {
         var matchingData = function(key, list)
         {
             var retList = new Array();
+            var uuid = undefined;
+            var parentUuid = undefined;
             for(var i = 0; i < list.length; i++)
             {
-                if( key == list[i]["parentAggregationUuid"] )
+                parentUuid = undefined === list[i]["parentAggregationUuid"] ? list[i]["parentUuid"] : list[i]["parentAggregationUuid"]
+                if( key == parentUuid )
                 {
-                    list[i].children =  matchingData(list[i]["aggregationUuid"], list);
+                    uuid = undefined === list[i]["aggregationUuid"] ? list[i]["uuid"] : list[i]["aggregationUuid"]
+                    list[i].children =  matchingData(uuid, list);
                     retList.push(list[i]);
                 }
             }
@@ -877,12 +909,16 @@ fnObj.treeView01 = axboot.viewExtend(axboot.commonView, {
 
         var treeData = undefined;
         _tree = this.convertTreeData(_tree);
+        var uuid = undefined;
+        var parentUuid = undefined;
         for(var i = 0; i < _tree.length; i++)
         {
             treeData = _tree[i];
-            if(treeData["parentAggregationUuid"] == null)
+            uuid = undefined === treeData["aggregationUuid"] ? treeData["uuid"] : treeData["aggregationUuid"]
+            parentUuid = undefined === treeData["parentAggregationUuid"] ? treeData["parentUuid"] : treeData["parentAggregationUuid"]
+            if(null == parentUuid || undefined == parentUuid)
             {
-                treeData.children = matchingData(treeData["aggregationUuid"],_tree);
+                treeData.children = matchingData(uuid,_tree);
                 treeList.push(treeData);
             }
         }

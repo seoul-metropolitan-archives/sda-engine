@@ -26,10 +26,10 @@ public class Rc002VO extends BaseVO
     /**
      * The Reference aggregation list.
      */
-    List<Rc00201VO> referenceAggregationList;
+    List<Rc00206VO> referenceAggregationList;
     /**
      * The Reference item list.
      */
-    List<Rc00203VO> referenceItemList;
+    List<Rc00206VO> referenceItemList;
 
 }

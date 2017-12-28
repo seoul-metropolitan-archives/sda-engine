@@ -7,10 +7,7 @@ import io.onsemiro.utils.ModelMapperUtils;
 import io.onsemiro.utils.UUIDUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import rmsoft.ams.seoul.common.domain.RcAggregation;
-import rmsoft.ams.seoul.common.domain.RcAggregationCon;
-import rmsoft.ams.seoul.common.domain.RcItem;
-import rmsoft.ams.seoul.common.domain.RcItemCon;
+import rmsoft.ams.seoul.common.domain.*;
 import rmsoft.ams.seoul.common.repository.*;
 import rmsoft.ams.seoul.rc.rc002.dao.Rc002Mapper;
 import rmsoft.ams.seoul.rc.rc002.vo.Rc00201VO;
@@ -37,10 +34,7 @@ public class Rc002Service extends BaseService
     private RcAggregationConRepository rcAggregationConRepository;
 
     @Autowired
-    private RcItemRepository rcItemRepository;
-
-    @Autowired
-    private RcItemConRepository rcItemConRepository;
+    private RcRecordReferenceRepository rcRecordReferenceRepository;
 
     @Autowired
     private Rc002Mapper rc002Mapper;
@@ -67,18 +61,17 @@ public class Rc002Service extends BaseService
         boolean isCreate = false;
         RcAggregation rcAggregation = null;
         RcAggregationCon rcAggregationCon = null;
-        RcItem rcItem = null;
-        RcItemCon rcItemCon = null;
+
         List<RcAggregation> childrenAggregation = null;
-        List<RcAggregation> referenceAggregation = null;
-        List<RcItem> referenceItem = null;
+        List<RcRecordReference> referenceAggregation = null;
+        List<RcRecordReference> referenceItem = null;
 
         rcAggregation = ModelMapperUtils.map(data.getSystemMeta(),RcAggregation.class);
         rcAggregationCon = ModelMapperUtils.map(data.getContextualMeta(),RcAggregationCon.class);
 
         childrenAggregation = ModelMapperUtils.mapList(data.getChildrenAggregationList(),RcAggregation.class);
-        referenceAggregation = ModelMapperUtils.mapList(data.getReferenceAggregationList(),RcAggregation.class);
-        referenceItem = ModelMapperUtils.mapList(data.getReferenceItemList(),RcItem.class);
+        referenceAggregation = ModelMapperUtils.mapList(data.getReferenceAggregationList(),RcRecordReference.class);
+        referenceItem = ModelMapperUtils.mapList(data.getReferenceItemList(),RcRecordReference.class);
         if(null == rcAggregation.getAggregationUuid() || rcAggregation.getAggregationUuid().equals(""))
         {
             uuid = UUIDUtils.getUUID();
@@ -123,16 +116,22 @@ public class Rc002Service extends BaseService
             }
             if(null != referenceAggregation)
             {
-                for(RcAggregation child : referenceAggregation)
+                for(RcRecordReference child : referenceAggregation)
                 {
-                    child.setParentsAggregationUuid(uuid);
+                    child.setRecordReferenceUuid(UUIDUtils.getUUID());
+                    child.setVirtualAggregationUuid(rcAggregation.getParentsAggregationUuid());
+                    child.set__created__(true);
+                    rcRecordReferenceRepository.save(child);
                 }
             }
             if(null != referenceItem)
             {
-                for(RcItem child : referenceItem)
+                for(RcRecordReference child : referenceItem)
                 {
-                    child.setAggregationUuid(uuid);
+                    child.setRecordReferenceUuid(UUIDUtils.getUUID());
+                    child.setVirtualAggregationUuid(rcAggregation.getParentsAggregationUuid());
+                    child.set__created__(true);
+                    rcRecordReferenceRepository.save(child);
                 }
             }
 
