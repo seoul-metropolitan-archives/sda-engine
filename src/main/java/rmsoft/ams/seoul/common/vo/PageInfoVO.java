@@ -34,7 +34,7 @@ public class PageInfoVO
         this.limit = limit;
 
         this.totalPages = (int)this.limit/this.pageSize;
-        if(this.limit%this.pageSize != 0)
+        if(this.totalPages != 0 && this.limit%this.pageSize != 0)
         {
             this.totalPages++;
             if(this.totalPages == 1)

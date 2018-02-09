@@ -422,6 +422,12 @@ var fnObj = {
                         {
                             selectedData = fnObj.naviView.getCurrent();
                         }
+                        if(selectedData["nodeType"] == "item")
+                        {
+                            alert("Item에는 Aggregation를 추가할 수 없습니다.");
+                            return ;
+                        }
+                        console.log(selectedData);
 
                         var item = getMenu("add aggregation");
                         var naviStr = undefined == selectedData["name"]? "" : " > "+selectedData["name"]
@@ -442,6 +448,13 @@ var fnObj = {
                         {
                             selectedData = fnObj.naviView.getCurrent();
                         }
+
+                        if(selectedData["nodeType"] == "item")
+                        {
+                            alert("Item에는 Item를 추가할 수 없습니다.");
+                            return ;
+                        }
+
                         var item = getMenu("add item");
                         var naviStr = undefined == selectedData["name"]? "" : " > "+selectedData["name"]
                         item.menuParams = $.extend({},{
@@ -752,14 +765,17 @@ fnObj.pageView = axboot.viewExtend({
     {
 
         this.page = page;
-
+        //page.limit
         var startPage = parseInt(page.pageNumber/10)*10 + 1;
         var maxPage = startPage+10;
         maxPage = page.totalPages < maxPage ? page.totalPages : maxPage;
         if(maxPage > 10 && maxPage%10 != 1)
             maxPage ++;
+
+        maxPage = maxPage == 0 ? 1 : maxPage;
+
         $(".page_no a:not(.page_start,.page_prev,.page_next,.page_end)").remove();
-        for(var i = startPage; i < maxPage; i++)
+        for(var i = startPage; i <= maxPage; i++)
         {
             $(".page_no .page_next").before($("<a>").attr("pageNo",i).attr("href","#").text(i));
         }
@@ -898,6 +914,7 @@ fnObj.iconView = axboot.viewExtend({
             //$("#archiveType").prop("src",imgSrc);
 
             var reqData = {uuid : uuid};
+            fnObj.pageView.resetPage();
             //setTimeout(function(){
                 //if(fnObj.iconView.isdbClk) {  return ;}
                 //if(imgSrc.indexOf("file")>-1)
@@ -1599,6 +1616,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView,{
     },
     itemDbClick : function(grid,index)
     {
+        fnObj.pageView.resetPage();
         var reqData = fnObj.gridView01.gridObj.getSelectedData();
         fnObj.naviView.setData({uuid : reqData["uuid"],name : reqData["title"],nodeType : reqData["type"]});
         if(reqData["iconType"] == "file")

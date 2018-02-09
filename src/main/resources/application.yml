@@ -1,8 +1,14 @@
 #debug: true
 
+#개발
 server:
   url: localhost
   port: 8888
+#운영
+#server:
+  #url: 98.33.1.162
+  #url: engine.archives.eseoul.go.kr
+  #port: 80
 
 # Active Profiles :: [local|dev|test|stage|prod]
 spring:
@@ -62,14 +68,17 @@ dip.process:
     #digital-file-path: /root/dip/images/
   batch:
     enable: true
-    cron: "0 43 18 * * *"
-  tmp.dir: D:\02.DreamAntDev\git-workspaces\java\seoul-ams\dip\tmp\
-  digital.file.dir: D:\02.DreamAntDev\git-workspaces\java\seoul-ams\dip\tmp\
-
-native.library.path: /Users/hyukjunlee/IdeaProjects/seoul-ams/src/main/resources/native-libs/
-
-streaming.url: http://rmhost.iptime.org
-streaming.port: 18088
+    cron: "0 0 5 * * *"
+  #tmp.dir: D:\02.DreamAntDev\git-workspaces\java\seoul-ams\dip\tmp\
+  #digital.file.dir: D:\02.DreamAntDev\git-workspaces\java\seoul-ams\dip\tmp\
+  tmp.dir: /data/dip/tmp/
+  digital.file.dir: /data/dip/tmp/
+#개발
+#native.library.path: /Users/hyukjunlee/IdeaProjects/seoul-ams/src/main/resources/native-libs/
+#운영
+native.library.path: /app/www/WEB-INF/classes/native-libs/
+streaming.url: http://98.33.1.163
+streaming.port: 18080
 streaming.context: /streamdocs
 streaming.param: /v3/documents/sftp?sftpPath=sftp://
 
@@ -94,7 +103,7 @@ onsemiro:
     max-total: 5
     max-wait-millis: 3000
     slow-query-threshold: 3000
-    sqlOutput: false
+    sqlOutput: true
     hibernate:
       hbm2ddlAuto: none
       databaseType: oracle
@@ -123,6 +132,11 @@ onsemiro:
       url: jdbc:oracle:thin:@//rmhost.iptime.org:1521/amsdb
       username: ams
       password: ams
+  #운영
+  #data-source:
+  #      url: jdbc:oracle:thin:@//98.33.1.46:1522/UNTDB2
+  #      username: amsdb
+  #      password: dkagh365!
   #data-source:
     #url: jdbc:oracle:thin:@//10.200.2.16:1531/amsdb
     #username: ams
@@ -166,5 +180,6 @@ server:
     min-spare-threads: 200 # default: 100
 
 # Logging
+#logging.config: /var/log/logback.xml
 logging.config: /var/log/logback.xml
 

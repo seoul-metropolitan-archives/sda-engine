@@ -76,8 +76,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 referenceAggregationList : fnObj.referenceAggre.getData(),
                 referenceItemList : fnObj.referenceItem.getData()
             }
-            return;
-        console.log(saveData);
+
         axboot.ajax({
             url: "/api/v1/rc/rc002/save",
             dataType : "JSON",
@@ -85,6 +84,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             data: JSON.stringify(saveData),
             callback: function (res) {
                 axboot.getCommonMessage("AA007");
+
             },
             options: {
                 onError: axboot.viewError
@@ -124,7 +124,7 @@ fnObj.pageStart = function () {
         if(data["navi"])
         {
             $("#navigatorArea").text(data["navi"]);
-
+            data["parentUuid"] = data["uuid"];
         }
     }
     else if(null != data && data.type != "create") {
@@ -154,6 +154,7 @@ fnObj.pageStart = function () {
         _this.referenceAggre.nodeType = undefined == data["nodeType"]? data["type"] : data["nodeType"];
     }
     _this.systemMetaArea.initView(uuid);
+
     if(null != data && data["parentUuid"])
     {
         fnObj.systemMetaArea.setFrom(data["parentUuid"],true);
@@ -164,7 +165,7 @@ fnObj.pageStart = function () {
     _this.referenceItem.initView(uuid);
     _this.referenceAggre.initView(uuid);
 
-    if(data.nodeType=="virtual")
+    if(data != null && !data["nodeType"] && data.nodeType=="virtual")
     {
         $("#referenceAggreArea,#referenceItemArea").show();
         $("#childrenAggreArea").hide();
@@ -440,6 +441,7 @@ fnObj.contextualMetaArea = axboot.viewExtend({
     initView : function(aggregationUuid){
         this.initEvent();
         this.aggregationUuid = aggregationUuid;
+        console.log(aggregationUuid);
     },
     initEvent : function(){
 
@@ -532,7 +534,14 @@ fnObj.childrenAggre = axboot.viewExtend({
     },
     addChild : function(_this){
         var cloneTag = $("<ul>").addClass("pdb_10").attr("data-ax-path","saveType").attr("saveType","create").html(this.template);
-        cloneTag.find("select[data-ax-path='levelUuid']").append($("#systemMetaArea").find("select[data-ax-path='levelUuid']>option"));
+
+        var optionList = $("#systemMetaArea").find("select[data-ax-path='levelUuid']>option");
+
+        for(var i = 0; i < optionList.length; i++)
+        {
+            cloneTag.find("select[data-ax-path='levelUuid']").append($(optionList[i]).clone());
+        }
+
         cloneTag.find("select[data-ax-path='levelUuid']>option").eq(0).attr("selected","selected");
         $(_this).before(cloneTag);
         cloneTag.show();
@@ -555,7 +564,7 @@ fnObj.childrenAggre = axboot.viewExtend({
                     }
 
                 });
-                data["type"] = $("#systemMetaArea").find("select[data-ax-path='type']").val();
+                data["type"] = $("#systemMetaArea").find("select[data-ax-path='typeUuid']").val();
 
                 if(data["title"] && data["title"] != "")
                     retData.push(data);

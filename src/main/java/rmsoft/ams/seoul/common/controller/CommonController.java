@@ -82,13 +82,17 @@ public class CommonController extends BaseController {
             //System.out.println(streamingUrl+":"+streamingPort+streamingContext+streamingParam+prefix+"/"]] +path+rcComponent.getFileName());
             String path = rcComponent.getFilePath().replaceAll("\\\\\\\\", "/");
 
+            if (!path.substring(0,1).equals("/"))
+                path = "/"+path;
+
             if (!path.substring(path.length()-1,path.length()).equals("/"))
                 path += "/";
 
 
             URL url = new URL(
-                    streamingUrl + ":" + streamingPort + streamingContext + streamingParam + prefix + "/" + path + rcComponent.getFileName()
+                    streamingUrl + ":" + streamingPort + streamingContext + streamingParam + prefix + path + rcComponent.getFileName()
             );
+            System.out.println("Stream URL => "+url);
             conn = (HttpURLConnection) url.openConnection();
             conn.setDoOutput(true);
             conn.setRequestMethod("GET");
@@ -122,6 +126,7 @@ public class CommonController extends BaseController {
             }
 
         }
+        System.out.println("Stream Viewer response =>"+responseSB);
         JSONObject obj = new JSONObject(responseSB);
 
         Map<String, Object> response = new HashMap<String, Object>();

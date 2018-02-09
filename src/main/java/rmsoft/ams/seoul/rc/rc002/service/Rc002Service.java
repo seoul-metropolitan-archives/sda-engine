@@ -119,7 +119,7 @@ public class Rc002Service extends BaseService
                 for(RcRecordReference child : referenceAggregation)
                 {
                     child.setRecordReferenceUuid(UUIDUtils.getUUID());
-                    child.setVirtualAggregationUuid(rcAggregation.getParentsAggregationUuid());
+                    child.setVirtualAggregationUuid(rcAggregation.getAggregationUuid());
                     child.set__created__(true);
                     rcRecordReferenceRepository.save(child);
                 }
@@ -129,7 +129,7 @@ public class Rc002Service extends BaseService
                 for(RcRecordReference child : referenceItem)
                 {
                     child.setRecordReferenceUuid(UUIDUtils.getUUID());
-                    child.setVirtualAggregationUuid(rcAggregation.getParentsAggregationUuid());
+                    child.setVirtualAggregationUuid(rcAggregation.getAggregationUuid());
                     child.set__created__(true);
                     rcRecordReferenceRepository.save(child);
                 }

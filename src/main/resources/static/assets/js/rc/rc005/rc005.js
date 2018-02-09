@@ -14,7 +14,14 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                     rcList = ax5.util.deepCopy(res.list);
                     fnObj.treeView01.setData({}, res.list, data);
                     var itemIndex = rcList.length - 1;
-                    from = rcList[rcList.length - 2]["raTitle"];
+                    try
+                    {
+                        from = rcList[rcList.length - 2]["raTitle"];
+                    }catch(exception)
+                    {
+                        console.log(exception);
+                    }
+
 
                     setFormData(rcList[itemIndex]);
                     if(rcList[itemIndex].rc00502VoList!= "undefined" && rcList[itemIndex].rc00502VoList != null && rcList[itemIndex].rc00502VoList.length > 0){

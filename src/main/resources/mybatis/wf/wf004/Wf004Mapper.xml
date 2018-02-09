@@ -44,16 +44,16 @@
                 AND Z1.MENU_UUID = #{menu}
             </if>
             <if test="startFromDate != null">
-                AND Z1.START_DATE <![CDATA[>=]]> TO_DATE(#{startFromDate})
+                AND Z1.START_DATE <![CDATA[>=]]> TO_DATE(#{startFromDate},'yyyy-mm-dd')
             </if>
             <if test="startToDate != null">
-                AND Z1.START_DATE <![CDATA[<]]> TO_DATE(#{startToDate})+1
+                AND Z1.START_DATE <![CDATA[<]]> TO_DATE(#{startToDate},'yyyy-mm-dd')+1
             </if>
             <if test="endFromDate != null">
-                AND Z1.END_DATE <![CDATA[>=]]> TO_DATE(#{endFromDate})
+                AND Z1.END_DATE <![CDATA[>=]]> TO_DATE(#{endFromDate},'yyyy-mm-dd')
             </if>
             <if test="endToDate != null">
-                AND Z1.END_DATE <![CDATA[<]]> TO_DATE(#{endToDate})+1
+                AND Z1.END_DATE <![CDATA[<]]> TO_DATE(#{endToDate},'yyyy-mm-dd')+1
             </if>
         ORDER BY Z1.BATCH_ID desc
     </select>
