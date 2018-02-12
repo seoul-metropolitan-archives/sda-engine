@@ -92,7 +92,8 @@ fnObj.pageStart = function () {
             fnObj.formView.setFormData("navi",data["navi"]);
             navi = data["navi"];
         }
-        sParam = data["sendData"];
+        //sParam = data["sendData"];
+        sParam = data;
         ACTIONS.dispatch(ACTIONS.PAGE_SEARCH,{aggregationUuid : data.parentUuid, itemUuid : data.uuid});
     }
 };
@@ -134,14 +135,18 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
                 return menuObj;
             }
 
+            var parentUuid = sParam[0] === undefined ? sParam.parentUuid : sParam[0].parentUuid;
+            var itemUuid = sParam[0] === undefined ? sParam.uuid : sParam[0].uuid;
+            var title = sParam[0] === undefined ? sParam.name : sParam[0].name;
             switch(e.currentTarget.id)
             {
+
                 case "edit":
                     var item = getMenu("add item");
                     item.menuParams = $.extend({},{
-                        aggregationUuid : sParam[0].parentUuid,
-                        itemUuid : sParam[0].uuid,
-                        title : sParam[0].name,
+                        aggregationUuid : parentUuid,
+                        itemUuid : itemUuid,
+                        title : title,
                         navi:navi
                         },{type: "update"}
                     );
@@ -159,7 +164,7 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
                         },
                         callback: function (data) {
                             axToast.push(axboot.getCommonMessage("AA007"));
-                            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH,{aggregationUuid : sParam.uuid, itemUuid :sParam.parentUuid});
+                            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH,{aggregationUuid : itemUuid, itemUuid :sParam.parentUuid});
                         }
                     });
                     break;
@@ -174,7 +179,7 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
                         },
                         callback: function (data) {
                             axToast.push(axboot.getCommonMessage("AA007"));
-                            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH,{aggregationUuid : sParam.uuid, itemUuid :sParam.parentUuid});
+                            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH,{aggregationUuid : sParam.uuid, itemUuid :parentUuid});
                         }
                     });
                     break;
