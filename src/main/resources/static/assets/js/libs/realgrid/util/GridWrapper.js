@@ -1882,7 +1882,7 @@ GridWrapper.prototype.getSelectedData = function () {
             this.gridView.commit(true);
 
         return this.gridView.getDataProvider().getJsonRow(
-            this.gridView.getCurrent().itemIndex);
+            this.gridView.getCurrent().dataRow);
 
     }
 };

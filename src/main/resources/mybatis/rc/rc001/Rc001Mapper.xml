@@ -24,7 +24,7 @@
               Z2.CODE_DETAIL_UUID(+) = Z1.TYPE_UUID
 
         ]]>
-            <if test="null != nodeType and '' != nodeType">
+            <if test="null != nodeType and '' != nodeType and 'item' != nodeType">
                 AND
                 LOWER (CODE_NAME) = LOWER (#{nodeType})
             </if>

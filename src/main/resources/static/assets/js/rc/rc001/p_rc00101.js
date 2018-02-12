@@ -52,6 +52,10 @@ var fnObj = {
     pageStart: function () {
         fnObj.gridView01.initView(parent.axboot.modal.getData());
 
+        $("#close").click(function(){
+            parent.axboot.modal.close();
+        })
+
         $("#apply").click(function(){
             var list = fnObj.gridView01.getList();
             var selectedData = fnObj.gridView01.getCurrentData();
