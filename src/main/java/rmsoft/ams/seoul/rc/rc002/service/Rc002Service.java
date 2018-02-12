@@ -4,6 +4,7 @@ import io.onsemiro.core.api.response.ApiResponse;
 import io.onsemiro.core.code.ApiStatus;
 import io.onsemiro.core.domain.BaseService;
 import io.onsemiro.utils.ModelMapperUtils;
+import io.onsemiro.utils.SessionUtils;
 import io.onsemiro.utils.UUIDUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,8 @@ import rmsoft.ams.seoul.rc.rc002.vo.Rc00204VO;
 import rmsoft.ams.seoul.rc.rc002.vo.Rc00205VO;
 import rmsoft.ams.seoul.rc.rc002.vo.Rc002VO;
 
+import java.sql.Timestamp;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -87,7 +90,18 @@ public class Rc002Service extends BaseService
             rcAggregationRepository.save(rcAggregation);
         }
         else
+        {
             uuid = rcAggregation.getAggregationUuid();
+            RcAggregation before = rcAggregationRepository.findOne(rcAggregation.getId());
+            rcAggregation.setInsertDate(before.getInsertDate());
+            rcAggregation.setInsertUuid(before.getInsertUuid());
+            rcAggregation.setAggregationCode(before.getAggregationCode());
+            rcAggregation.setUpdateDate(new Timestamp(System.currentTimeMillis()));
+            rcAggregation.setUpdateUuid(SessionUtils.getCurrentLoginUserUuid());
+
+            rcAggregationRepository.save(rcAggregation);
+        }
+
 
         if(isCreate)
         {
@@ -133,6 +147,22 @@ public class Rc002Service extends BaseService
                     child.set__created__(true);
                     rcRecordReferenceRepository.save(child);
                 }
+            }
+
+        }
+        else
+        {
+            rcAggregationCon.setAggregationUuid(uuid);
+            RcAggregationCon beforeCon = rcAggregationConRepository.findOne(rcAggregationCon.getId());
+            if(null != beforeCon)
+            {
+                rcAggregationCon.setInsertDate(beforeCon.getInsertDate());
+                rcAggregationCon.setInsertUuid(beforeCon.getInsertUuid());
+
+                rcAggregationCon.setUpdateDate(new Timestamp(System.currentTimeMillis()));
+                rcAggregationCon.setUpdateUuid(SessionUtils.getCurrentLoginUserUuid());
+
+                rcAggregationConRepository.save(rcAggregationCon);
             }
 
         }
