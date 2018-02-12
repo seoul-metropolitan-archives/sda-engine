@@ -50,6 +50,9 @@ fnObj.popupView = axboot.viewExtend({
     initEvent : function()
     {
         var _this = this;
+        $("#close").click(function(){
+            ACTIONS.dispatch(ACTIONS.PAGE_CLOSE)
+        })
         $("#apply").click(function(){
             var reqList = new Array();
             var publishedStatusUuid = $("select[data-ax-path='publishedStatusUuid']").val()

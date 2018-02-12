@@ -52,8 +52,8 @@ var fnObj = {
     pageStart: function () {
         fnObj.gridView01.initView(parent.axboot.modal.getData());
 
-        $("#close").click(function(){
-            parent.axboot.modal.close();
+        $("#btnClose").click(function(){
+            ACTIONS.dispatch(ACTIONS.PAGE_CLOSE)
         })
 
         $("#apply").click(function(){

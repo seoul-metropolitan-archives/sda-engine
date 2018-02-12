@@ -158,7 +158,7 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
                         param: "",
                         sendData: function () {
                             return {
-                                selectType  :  typeNm,
+                                selectType  :  "item",
                                 "selectedList":sParam // [{uuid: itemUuid, parentUuid: aggregationUuid,nodeType:typeNm}]
                             };
                         },
