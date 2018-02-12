@@ -645,10 +645,10 @@ fnObj.referenceAggre = axboot.viewExtend({
 
     },
     setPopupCode : function(){
-        if(this.nodeType.toLowerCase() == "virtual")
-            this.popupCode = "PU121"
-        else
+        //if(this.nodeType.toLowerCase() == "virtual")
             this.popupCode = "PU123"
+        //else
+            //this.popupCode = "PU121"
     },
     addChild : function(_this){
         var cloneTag = $("<ul>").addClass("pdb_10").attr("data-ax-path","saveType").attr("saveType","create").html(this.template);
