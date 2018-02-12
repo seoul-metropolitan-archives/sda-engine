@@ -83,7 +83,7 @@ public class Rc004Service extends BaseService{
         rcItemRepository.save(rcItem);
 
         //RC_ITEM  상세 업데이트
-       /* rcItemCon.setItemUuid(rcItem.getItemUuid());
+       rcItemCon.setItemUuid(rcItem.getItemUuid());
         oldRcItemCon = rcItemConRepository.findOne(rcItemCon.getId());
 
         if(oldRcItemCon != null){//create
@@ -107,7 +107,7 @@ public class Rc004Service extends BaseService{
         rcItemCon.setUpdateDate(Timestamp.valueOf(DateUtils.convertToString(LocalDateTime.now(), DateUtils.DATE_TIME_PATTERN)));
         rcItemCon.setUpdateUuid(SessionUtils.getCurrentLoginUserUuid());
 
-        rcItemConRepository.save(rcItemCon);*/
+        rcItemConRepository.save(rcItemCon);
 
     }
 

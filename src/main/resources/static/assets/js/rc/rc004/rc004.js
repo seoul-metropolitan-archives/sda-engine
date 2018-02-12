@@ -262,6 +262,7 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
     },
     getData: function () {
         var data = this.modelFormatter.getClearData(this.model.get()); // 모델의 값을 포멧팅 전 값으로 치환.
+        data["typeUuid"] = $("select[data-ax-path='typeUuid']").val();
         return $.extend({}, data);
     },
     setFormData: function (dataPath, value) {
@@ -270,7 +271,7 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
     setData: function (data) {
 
         if (typeof data === "undefined") data = this.getDefaultData();
-        data = $.extend({}, data);
+            data = $.extend({}, data);
 
         this.target.find('[data-ax-path="key"]').attr("readonly", "readonly");
 
