@@ -984,7 +984,7 @@ fnObj.iconView = axboot.viewExtend({
                     }
                     if(item != "")
                     {
-                        item.menuParams = $.extend({},selectedData[0],{type: "create"},{navi : fnObj.naviView.getPathString()},{title : selectedData["name"]});
+                        item.menuParams = $.extend({},{sendData : selectedData[0]},{type: "create"},{navi : fnObj.naviView.getPathString()},{title : selectedData["name"]});
                         parentsObj.tabView.open(item);
                     }
                 }
