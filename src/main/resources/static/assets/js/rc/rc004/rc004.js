@@ -33,6 +33,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 if(PAGE_MODE != 'create'){
                     ACTIONS.dispatch(ACTIONS.PAGE_SEARCH,{aggregationUuid : fnObj.formView.getData().raAggregationUuid, itemUuid : fnObj.formView.getData().itemUuid} );
                 }
+                axToast.push(axboot.getCommonMessage("AA007"));
             },
             options: {
                 onError: axboot.viewError

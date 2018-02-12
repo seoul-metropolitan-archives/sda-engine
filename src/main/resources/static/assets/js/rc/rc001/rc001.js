@@ -1077,7 +1077,7 @@ fnObj.iconView = axboot.viewExtend({
                 case "normal":
                     imgTag.prop("src",imgPath+"explorer_folder"+fullStr+".png").prop("alt","folder");
                     break;
-                case "temporarily":
+                case "temporary":
                     imgTag.prop("src",imgPath+"explorer_folder"+fullStr+"_t.png").prop("alt","folder");
                     break;
                 case "virtual":
@@ -1452,7 +1452,7 @@ fnObj.treeView01 = axboot.viewExtend(axboot.commonView, {
                             open:false, icon:"/assets/images/ams/icon/fo_v.png", iconOpen:"/assets/images/ams/icon/fo_op_v.png", iconClose:"/assets/images/ams/icon/fo_v.png"
                         };
                     break;
-                case "temporarily":
+                case "temporary":
                     iconObj =
                         {
                             open:false, icon:"/assets/images/ams/icon/fo_t.png",iconOpen:"/assets/images/ams/icon/fo_op_t.png", iconClose:"/assets/images/ams/icon/fo_t.png"
@@ -1663,7 +1663,8 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView,{
                 case "Normal":
                     iconType = "folder"+(isOpen ? "_open" : "")
                     break;
-                case "Temporarily":
+                // case "Temporarily":
+                case "Temporary":
                     iconType = "folder"+(isOpen ? "_open" : "")+"_t";
                 case "Virtual":
                     iconType = "folder"+(isOpen ? "_open" : "")+"_v";

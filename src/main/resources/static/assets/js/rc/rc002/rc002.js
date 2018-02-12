@@ -83,8 +83,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             type : "POST",
             data: JSON.stringify(saveData),
             callback: function (res) {
-                axboot.getCommonMessage("AA007");
-
+                axToast.push(axboot.getCommonMessage("AA007"));
             },
             options: {
                 onError: axboot.viewError
