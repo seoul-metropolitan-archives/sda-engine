@@ -40,7 +40,7 @@
         ZZ1.INSERT_DATE1 as insertDate1,
         ZZ1.UPDATE_UUID1 as updateUuid1,
         ZZ1.UPDATE_DATE1 as updateDate1,
-        ZZ1.OPEN_STATUS_UUID as openStatusUuid,
+        FC_AD_CODE_NM(ZZ1.OPEN_STATUS_UUID) as openStatusUuid,
         ZZ1.KEYWORD as keyword,
         ZZ1.REFERENCE_CODE as referenceCode,
         ZZ1.PROVENANCE as provenance,

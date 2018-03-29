@@ -53,7 +53,7 @@ public class Rc004Service extends BaseService{
         //RC_ITEM  업데이트
         if(StringUtils.isEmpty(requestParams.getString("itemUuid"))){
             rcItem.setItemUuid(UUIDUtils.getUUID());
-            String itemCode = jdbcTemplate.queryForObject("select AMS.fc_rc_item_code from dual", String.class);
+            String itemCode = jdbcTemplate.queryForObject("select fc_rc_item_code from dual", String.class);
             rcItem.setItemCode(itemCode);
 
         }else{

@@ -429,6 +429,12 @@ fnObj.systemMetaArea = axboot.viewExtend({
                     }
                 });
             });
+
+            data["descriptionStartDate"] = data["descriptionStartDate"].replace(/-/gi,"");
+            data["descriptionEndDate"] = data["descriptionEndDate"].replace(/-/gi,"");
+
+            data["description"] = $("textarea[data-ax-path='description']").val();
+            data["notes"] = $("textarea[data-ax-path='notes']").val();
         }
         return data;
     }
@@ -463,6 +469,9 @@ fnObj.contextualMetaArea = axboot.viewExtend({
                     }
                 });
             });
+
+            data["creationStartDate"] = data["creationStartDate"].replace(/-/gi,"");
+            data["creationEndDate"] = data["creationEndDate"].replace(/-/gi,"");
         }
         return data;
     }

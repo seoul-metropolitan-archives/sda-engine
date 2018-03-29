@@ -480,6 +480,7 @@ setFormData = function(data){
     fnObj.formView.setFormData("provenance",data.provenance);
     fnObj.formView.setFormData("creator",data.creator);
     fnObj.formView.setFormData("keyword",data.keyword);
+    fnObj.formView.setFormData("openStatusUuid",data.openStatusUuid);
 /*    fnObj.formView.setFormData("addMetadata01",data.addMetadata01);
     fnObj.formView.setFormData("addMetadata02",data.addMetadata02);
     fnObj.formView.setFormData("addMetadata03",data.addMetadata03);

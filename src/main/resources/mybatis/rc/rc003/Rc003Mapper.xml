@@ -30,7 +30,7 @@
           Z2.PROVENANCE as provenance,
           Z2.REFERENCE_CODE as referenceCode,
           Z2.CREATOR as creator,
-          Z2.CREATION_START_DATE as creationAtartDate,
+          Z2.CREATION_START_DATE as creationStartDate,
           Z2.CREATION_END_DATE as creationEndDate,
           Z2.ADD_METADATA01 as addMetadata01,
           Z2.ADD_METADATA02 as addMetadata02,

@@ -19,4 +19,6 @@ public class Rc00201VO
     private String author;
     private String descriptionStartDate;
     private String descriptionEndDate;
+    private String description;
+    private String notes;
 }

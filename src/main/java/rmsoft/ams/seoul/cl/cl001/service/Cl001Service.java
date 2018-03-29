@@ -92,7 +92,7 @@ public class Cl001Service extends BaseService {
             if(clClassificationScheme.isCreated()){ //ClassificationSchemeUuid가 없을때
 //                clClassificationScheme.setClassificationSchemeUuid(UUIDUtils.getUUID()); //UUID 생성
                 detailCode = CommonCodeUtils.getDetailCode("CD112",clClassificationScheme.getClassificationTypeUuid());//해당분류타입의 분류코드
-                ctUuid = jdbcTemplate.queryForObject("select AMS.FC_CL_CLS_SCHEME_CODE('" + detailCode + "') from dual", String.class);
+                ctUuid = jdbcTemplate.queryForObject("select FC_CL_CLS_SCHEME_CODE('" + detailCode + "') from dual", String.class);
                 clClassificationScheme.setClassificationCode(ctUuid);
                 clClassificationScheme.setStatusUuid(CommonCodeUtils.getCodeDetailUuid("CD111","Draft"));
             }

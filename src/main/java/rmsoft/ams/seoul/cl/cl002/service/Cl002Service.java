@@ -221,7 +221,7 @@ public class Cl002Service extends BaseService {
                 }*/
             if (clClass.isCreated()){
 //                clClass.setClassUuid(UUIDUtils.getUUID()); //UUID 생성
-                ctUuid = jdbcTemplate.queryForObject("select AMS.FC_CL_CLS_CLASS_CODE('" + clClass.getClassificationSchemeUuid() + "') from dual", String.class);
+                ctUuid = jdbcTemplate.queryForObject("select FC_CL_CLS_CLASS_CODE('" + clClass.getClassificationSchemeUuid() + "') from dual", String.class);
                 clClass.setClassCode(ctUuid);
 
 
@@ -230,7 +230,7 @@ public class Cl002Service extends BaseService {
                 clClass.setClassLevelUuid(clClass.getClassLevelUuid());
 
                 // Oracle Function Call
-                orderKey = jdbcTemplate.queryForObject("select AMS.FC_CL_CLASS_SORTKEY('" + clClass.getParentClassUuid() + "' , '" + clClass.getOrderNo() + "') from dual", String.class);
+                orderKey = jdbcTemplate.queryForObject("select FC_CL_CLASS_SORTKEY('" + clClass.getParentClassUuid() + "' , '" + clClass.getOrderNo() + "') from dual", String.class);
                 clClass.setOrderKey(orderKey);
                 clClass.setStatusUuid(CommonCodeUtils.getCodeDetailUuid("CD113", "Draft"));
 
@@ -246,7 +246,7 @@ public class Cl002Service extends BaseService {
 
                     if(!orgClClass.getParentClassUuid().equals(clClass.getParentClassUuid()) ||
                             !orgClClass.getOrderNo().equals(clClass.getOrderNo())){
-                        orderKey = jdbcTemplate.queryForObject("select AMS.FC_CL_CLASS_SORTKEY('" + clClass.getParentClassUuid() + "' , '" + clClass.getOrderNo() + "') from dual", String.class);
+                        orderKey = jdbcTemplate.queryForObject("select FC_CL_CLASS_SORTKEY('" + clClass.getParentClassUuid() + "' , '" + clClass.getOrderNo() + "') from dual", String.class);
                         clClass.setOrderKey(orderKey);
                     }
 

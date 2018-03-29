@@ -79,7 +79,7 @@ public class Rc002Service extends BaseService
         {
             uuid = UUIDUtils.getUUID();
             rcAggregation.setAggregationUuid(uuid);
-            String aggregationCode = jdbcTemplate.queryForObject("select AMS.fc_rc_aggregation_code from dual", String.class);
+            String aggregationCode = jdbcTemplate.queryForObject("select fc_rc_aggregation_code from dual", String.class);
             rcAggregation.setAggregationCode(aggregationCode);
             String descriptionStartDate = rcAggregation.getDescriptionStartDate().replace("-","");
             rcAggregation.setDescriptionStartDate(descriptionStartDate);
@@ -117,7 +117,7 @@ public class Rc002Service extends BaseService
             {
                 for(RcAggregation child : childrenAggregation)
                 {
-                    String aggregationCode = jdbcTemplate.queryForObject("select AMS.fc_rc_aggregation_code from dual", String.class);
+                    String aggregationCode = jdbcTemplate.queryForObject("select fc_rc_aggregation_code from dual", String.class);
                     child.setAggregationCode(aggregationCode);
                     child.setPublishedStatusUuid(rcAggregation.getPublishedStatusUuid());
                     child.setParentsAggregationUuid(uuid);

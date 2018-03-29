@@ -455,7 +455,8 @@ setFormData = function(data){
     fnObj.formView.setFormData("rcProvenance",data.provenance);
     fnObj.formView.setFormData("rcReferenceCode",data.referenceCode);
     fnObj.formView.setFormData("rcCreator",data.creator);
-    fnObj.formView.setFormData("rcDateOfCreation",data.creationStartDate);
+    fnObj.formView.setFormData("rcDateOfCreation",data.creationStartDate+"~"+data.creationEndDate);
+
     fnObj.formView.setFormData("rcAddMetadata01",data.addMetadata01);
     fnObj.formView.setFormData("rcAddMetadata02",data.addMetadata02);
     fnObj.formView.setFormData("rcAddMetadata03",data.addMetadata03);
