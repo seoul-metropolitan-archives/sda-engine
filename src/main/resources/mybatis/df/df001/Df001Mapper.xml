@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="rmsoft.ams.seoul..Df001Mapper">
+
+    <select id="findAll" resultType="df001" parameterType="df001" statementType="PREPARED">
+        SELECT
+            DISPOSAL_FREEZE_EVENT_UUID AS disposalFreezeEventUuid,
+            STATUS_UUID AS statusUuid,
+            EVENT_CODE AS eventCode,
+            EVENT_NAME AS eventName,
+            EVENT_TYPE_UUID AS eventTypeUuid,
+            REVIEW_DATE AS reviewDate,
+            DESCRIPTION AS description,
+            NOTES AS notes,
+            END_YN AS endYn,
+            TERMINATOR_UUID AS terminatorUuid,
+            END_DATE AS endDate,
+            INSERT_UUID AS insertUuid,
+            INSERT_DATE AS insertDate,
+            UPDATE_UUID AS updateUuid,
+            UPDATE_DATE AS updateDate
+        FROM
+            DF_DISPOSAL_FREEZE_EVENT
+    </select>
+
+    <select id="findOne" resultType="df001" parameterType="df001" statementType="PREPARED">
+        SELECT
+            DISPOSAL_FREEZE_EVENT_UUID AS disposalFreezeEventUuid,
+            STATUS_UUID AS statusUuid,
+            EVENT_CODE AS eventCode,
+            EVENT_NAME AS eventName,
+            EVENT_TYPE_UUID AS eventTypeUuid,
+            REVIEW_DATE AS reviewDate,
+            DESCRIPTION AS description,
+            NOTES AS notes,
+            END_YN AS endYn,
+            TERMINATOR_UUID AS terminatorUuid,
+            END_DATE AS endDate,
+            INSERT_UUID AS insertUuid,
+            INSERT_DATE AS insertDate,
+            UPDATE_UUID AS updateUuid,
+            UPDATE_DATE AS updateDate
+        FROM
+            DF_DISPOSAL_FREEZE_EVENT
+        WHERE
+            DISPOSAL_FREEZE_EVENT_UUID = #{disposalFreezeEventUuid}
+    </select>
+
+   <update id="delete" parameterType="df001" statementType="PREPARED">
+        DELETE FROM
+            DF_DISPOSAL_FREEZE_EVENT
+        WHERE
+            DISPOSAL_FREEZE_EVENT_UUID = #{disposalFreezeEventUuid}
+    </update>
+
+   <update id="update" parameterType="df001" statementType="PREPARED">
+        UPDATE DF_DISPOSAL_FREEZE_EVENT
+        SET
+            STATUS_UUID = #{statusUuid},
+            EVENT_CODE = #{eventCode},
+            EVENT_NAME = #{eventName},
+            EVENT_TYPE_UUID = #{eventTypeUuid},
+            REVIEW_DATE = #{reviewDate},
+            DESCRIPTION = #{description},
+            NOTES = #{notes},
+            END_YN = #{endYn},
+            TERMINATOR_UUID = #{terminatorUuid},
+            END_DATE = #{endDate},
+            INSERT_UUID = #{insertUuid},
+            INSERT_DATE = #{insertDate},
+            UPDATE_UUID = #{updateUuid},
+            UPDATE_DATE = #{updateDate}
+        WHERE
+            DISPOSAL_FREEZE_EVENT_UUID = #{disposalFreezeEventUuid}
+    </update>
+
+   <update id="insert" parameterType="df001" statementType="PREPARED">
+        INSERT INTO DF_DISPOSAL_FREEZE_EVENT (
+            DISPOSAL_FREEZE_EVENT_UUID,
+            STATUS_UUID,
+            EVENT_CODE,
+            EVENT_NAME,
+            EVENT_TYPE_UUID,
+            REVIEW_DATE,
+            DESCRIPTION,
+            NOTES,
+            END_YN,
+            TERMINATOR_UUID,
+            END_DATE,
+            INSERT_UUID,
+            INSERT_DATE,
+            UPDATE_UUID,
+            UPDATE_DATE
+        ) VALUES (
+            #{disposalFreezeEventUuid},
+            #{statusUuid},
+            #{eventCode},
+            #{eventName},
+            #{eventTypeUuid},
+            #{reviewDate},
+            #{description},
+            #{notes},
+            #{endYn},
+            #{terminatorUuid},
+            #{endDate},
+            #{insertUuid},
+            #{insertDate},
+            #{updateUuid},
+            #{updateDate}
+        )
+    </update>
+</mapper>

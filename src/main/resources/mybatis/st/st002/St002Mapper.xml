@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="rmsoft.ams.seoul..St002Mapper">
+
+    <select id="findAll" resultType="st002" parameterType="st002" statementType="PREPARED">
+        SELECT
+            CONTAINER_UUID AS containerUuid,
+            STATUS_UUID AS statusUuid,
+            CONTAINER_NAME AS containerName,
+            CONTAINER_TYPE_UUID AS containerTypeUuid,
+            CONTROL_NUMBER AS controlNumber,
+            PROVENANCE AS provenance,
+            CREATION_START_DATE AS creationStartDate,
+            CREATION_END_DATE AS creationEndDate,
+            ORDER_NO AS orderNo,
+            ORDER_KEY AS orderKey,
+            DESCRIPTION AS description,
+            NOTES AS notes,
+            USE_YN AS useYn,
+            INSERT_UUID AS insertUuid,
+            INSERT_DATE AS insertDate,
+            UPDATE_UUID AS updateUuid,
+            UPDATE_DATE AS updateDate
+        FROM
+            ST_CONTAINER
+    </select>
+
+    <select id="findOne" resultType="st002" parameterType="st002" statementType="PREPARED">
+        SELECT
+            CONTAINER_UUID AS containerUuid,
+            STATUS_UUID AS statusUuid,
+            CONTAINER_NAME AS containerName,
+            CONTAINER_TYPE_UUID AS containerTypeUuid,
+            CONTROL_NUMBER AS controlNumber,
+            PROVENANCE AS provenance,
+            CREATION_START_DATE AS creationStartDate,
+            CREATION_END_DATE AS creationEndDate,
+            ORDER_NO AS orderNo,
+            ORDER_KEY AS orderKey,
+            DESCRIPTION AS description,
+            NOTES AS notes,
+            USE_YN AS useYn,
+            INSERT_UUID AS insertUuid,
+            INSERT_DATE AS insertDate,
+            UPDATE_UUID AS updateUuid,
+            UPDATE_DATE AS updateDate
+        FROM
+            ST_CONTAINER
+        WHERE
+            CONTAINER_UUID = #{containerUuid}
+    </select>
+
+   <update id="delete" parameterType="st002" statementType="PREPARED">
+        DELETE FROM
+            ST_CONTAINER
+        WHERE
+            CONTAINER_UUID = #{containerUuid}
+    </update>
+
+   <update id="update" parameterType="st002" statementType="PREPARED">
+        UPDATE ST_CONTAINER
+        SET
+            STATUS_UUID = #{statusUuid},
+            CONTAINER_NAME = #{containerName},
+            CONTAINER_TYPE_UUID = #{containerTypeUuid},
+            CONTROL_NUMBER = #{controlNumber},
+            PROVENANCE = #{provenance},
+            CREATION_START_DATE = #{creationStartDate},
+            CREATION_END_DATE = #{creationEndDate},
+            ORDER_NO = #{orderNo},
+            ORDER_KEY = #{orderKey},
+            DESCRIPTION = #{description},
+            NOTES = #{notes},
+            USE_YN = #{useYn},
+            INSERT_UUID = #{insertUuid},
+            INSERT_DATE = #{insertDate},
+            UPDATE_UUID = #{updateUuid},
+            UPDATE_DATE = #{updateDate}
+        WHERE
+            CONTAINER_UUID = #{containerUuid}
+    </update>
+
+   <update id="insert" parameterType="st002" statementType="PREPARED">
+        INSERT INTO ST_CONTAINER (
+            CONTAINER_UUID,
+            STATUS_UUID,
+            CONTAINER_NAME,
+            CONTAINER_TYPE_UUID,
+            CONTROL_NUMBER,
+            PROVENANCE,
+            CREATION_START_DATE,
+            CREATION_END_DATE,
+            ORDER_NO,
+            ORDER_KEY,
+            DESCRIPTION,
+            NOTES,
+            USE_YN,
+            INSERT_UUID,
+            INSERT_DATE,
+            UPDATE_UUID,
+            UPDATE_DATE
+        ) VALUES (
+            #{containerUuid},
+            #{statusUuid},
+            #{containerName},
+            #{containerTypeUuid},
+            #{controlNumber},
+            #{provenance},
+            #{creationStartDate},
+            #{creationEndDate},
+            #{orderNo},
+            #{orderKey},
+            #{description},
+            #{notes},
+            #{useYn},
+            #{insertUuid},
+            #{insertDate},
+            #{updateUuid},
+            #{updateDate}
+        )
+    </update>
+</mapper>

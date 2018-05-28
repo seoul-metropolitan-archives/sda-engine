@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="rmsoft.ams.seoul..Lt003Mapper">
+
+    <select id="findAll" resultType="lt003" parameterType="lt003" statementType="PREPARED">
+        SELECT
+            TOOL_UUID AS toolUuid,
+            TOOL_NAME AS toolName,
+            API AS api,
+            SOFWARE_UUID AS sofwareUuid,
+            DESCRIPTION AS description,
+            NOTES AS notes,
+            USE_YN AS useYn,
+            INSERT_UUID AS insertUuid,
+            INSERT_DATE AS insertDate,
+            UPDATE_UUID AS updateUuid,
+            UPDATE_DATE AS updateDate
+        FROM
+            LT_TOOL
+    </select>
+
+    <select id="findOne" resultType="lt003" parameterType="lt003" statementType="PREPARED">
+        SELECT
+            TOOL_UUID AS toolUuid,
+            TOOL_NAME AS toolName,
+            API AS api,
+            SOFWARE_UUID AS sofwareUuid,
+            DESCRIPTION AS description,
+            NOTES AS notes,
+            USE_YN AS useYn,
+            INSERT_UUID AS insertUuid,
+            INSERT_DATE AS insertDate,
+            UPDATE_UUID AS updateUuid,
+            UPDATE_DATE AS updateDate
+        FROM
+            LT_TOOL
+        WHERE
+            TOOL_UUID = #{toolUuid}
+    </select>
+
+   <update id="delete" parameterType="lt003" statementType="PREPARED">
+        DELETE FROM
+            LT_TOOL
+        WHERE
+            TOOL_UUID = #{toolUuid}
+    </update>
+
+   <update id="update" parameterType="lt003" statementType="PREPARED">
+        UPDATE LT_TOOL
+        SET
+            TOOL_NAME = #{toolName},
+            API = #{api},
+            SOFWARE_UUID = #{sofwareUuid},
+            DESCRIPTION = #{description},
+            NOTES = #{notes},
+            USE_YN = #{useYn},
+            INSERT_UUID = #{insertUuid},
+            INSERT_DATE = #{insertDate},
+            UPDATE_UUID = #{updateUuid},
+            UPDATE_DATE = #{updateDate}
+        WHERE
+            TOOL_UUID = #{toolUuid}
+    </update>
+
+   <update id="insert" parameterType="lt003" statementType="PREPARED">
+        INSERT INTO LT_TOOL (
+            TOOL_UUID,
+            TOOL_NAME,
+            API,
+            SOFWARE_UUID,
+            DESCRIPTION,
+            NOTES,
+            USE_YN,
+            INSERT_UUID,
+            INSERT_DATE,
+            UPDATE_UUID,
+            UPDATE_DATE
+        ) VALUES (
+            #{toolUuid},
+            #{toolName},
+            #{api},
+            #{sofwareUuid},
+            #{description},
+            #{notes},
+            #{useYn},
+            #{insertUuid},
+            #{insertDate},
+            #{updateUuid},
+            #{updateDate}
+        )
+    </update>
+</mapper>

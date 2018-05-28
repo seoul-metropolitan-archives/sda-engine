@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="rmsoft.ams.seoul..St003Mapper">
+
+    <select id="findAll" resultType="st003" parameterType="st003" statementType="PREPARED">
+        SELECT
+            ARRANGE_RECORDS_RESULT_UUID AS arrangeRecordsResultUuid,
+            CONTAINER_UUID AS containerUuid,
+            AGGREGATION_UUID AS aggregationUuid,
+            ITEM_UUID AS itemUuid,
+            STATUS_UUID AS statusUuid,
+            ARRANGED_DATE AS arrangedDate,
+            DESCRIPTION AS description,
+            NOTES AS notes,
+            UPDATE_DATE AS updateDate,
+            INSERT_UUID AS insertUuid,
+            INSERT_DATE AS insertDate,
+            UPDATE_UUID AS updateUuid
+        FROM
+            ST_ARRANGE_RECORDS_RESULT
+    </select>
+
+    <select id="findOne" resultType="st003" parameterType="st003" statementType="PREPARED">
+        SELECT
+            ARRANGE_RECORDS_RESULT_UUID AS arrangeRecordsResultUuid,
+            CONTAINER_UUID AS containerUuid,
+            AGGREGATION_UUID AS aggregationUuid,
+            ITEM_UUID AS itemUuid,
+            STATUS_UUID AS statusUuid,
+            ARRANGED_DATE AS arrangedDate,
+            DESCRIPTION AS description,
+            NOTES AS notes,
+            UPDATE_DATE AS updateDate,
+            INSERT_UUID AS insertUuid,
+            INSERT_DATE AS insertDate,
+            UPDATE_UUID AS updateUuid
+        FROM
+            ST_ARRANGE_RECORDS_RESULT
+        WHERE
+            ARRANGE_RECORDS_RESULT_UUID = #{arrangeRecordsResultUuid}
+    </select>
+
+   <update id="delete" parameterType="st003" statementType="PREPARED">
+        DELETE FROM
+            ST_ARRANGE_RECORDS_RESULT
+        WHERE
+            ARRANGE_RECORDS_RESULT_UUID = #{arrangeRecordsResultUuid}
+    </update>
+
+   <update id="update" parameterType="st003" statementType="PREPARED">
+        UPDATE ST_ARRANGE_RECORDS_RESULT
+        SET
+            CONTAINER_UUID = #{containerUuid},
+            AGGREGATION_UUID = #{aggregationUuid},
+            ITEM_UUID = #{itemUuid},
+            STATUS_UUID = #{statusUuid},
+            ARRANGED_DATE = #{arrangedDate},
+            DESCRIPTION = #{description},
+            NOTES = #{notes},
+            UPDATE_DATE = #{updateDate},
+            INSERT_UUID = #{insertUuid},
+            INSERT_DATE = #{insertDate},
+            UPDATE_UUID = #{updateUuid}
+        WHERE
+            ARRANGE_RECORDS_RESULT_UUID = #{arrangeRecordsResultUuid}
+    </update>
+
+   <update id="insert" parameterType="st003" statementType="PREPARED">
+        INSERT INTO ST_ARRANGE_RECORDS_RESULT (
+            ARRANGE_RECORDS_RESULT_UUID,
+            CONTAINER_UUID,
+            AGGREGATION_UUID,
+            ITEM_UUID,
+            STATUS_UUID,
+            ARRANGED_DATE,
+            DESCRIPTION,
+            NOTES,
+            UPDATE_DATE,
+            INSERT_UUID,
+            INSERT_DATE,
+            UPDATE_UUID
+        ) VALUES (
+            #{arrangeRecordsResultUuid},
+            #{containerUuid},
+            #{aggregationUuid},
+            #{itemUuid},
+            #{statusUuid},
+            #{arrangedDate},
+            #{description},
+            #{notes},
+            #{updateDate},
+            #{insertUuid},
+            #{insertDate},
+            #{updateUuid}
+        )
+    </update>
+</mapper>

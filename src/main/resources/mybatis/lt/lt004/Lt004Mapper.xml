@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="rmsoft.ams.seoul..Lt004Mapper">
+
+    <select id="findAll" resultType="lt004" parameterType="lt004" statementType="PREPARED">
+        SELECT
+            PATHWAY_UUID AS pathwayUuid,
+            PATHWAY_NAME AS pathwayName,
+            SOURCE_FILE_FORMAT_UUID AS sourceFileFormatUuid,
+            TARGET_FILE_FORMAT_UUID AS targetFileFormatUuid,
+            TOOL_UUID AS toolUuid,
+            DESCRIPTION AS description,
+            NOTES AS notes,
+            USE_YN AS useYn,
+            INSERT_UUID AS insertUuid,
+            INSERT_DATE AS insertDate,
+            UPDATE_UUID AS updateUuid,
+            UPDATE_DATE AS updateDate
+        FROM
+            LT_PATHWAY
+    </select>
+
+    <select id="findOne" resultType="lt004" parameterType="lt004" statementType="PREPARED">
+        SELECT
+            PATHWAY_UUID AS pathwayUuid,
+            PATHWAY_NAME AS pathwayName,
+            SOURCE_FILE_FORMAT_UUID AS sourceFileFormatUuid,
+            TARGET_FILE_FORMAT_UUID AS targetFileFormatUuid,
+            TOOL_UUID AS toolUuid,
+            DESCRIPTION AS description,
+            NOTES AS notes,
+            USE_YN AS useYn,
+            INSERT_UUID AS insertUuid,
+            INSERT_DATE AS insertDate,
+            UPDATE_UUID AS updateUuid,
+            UPDATE_DATE AS updateDate
+        FROM
+            LT_PATHWAY
+        WHERE
+            PATHWAY_UUID = #{pathwayUuid}
+    </select>
+
+   <update id="delete" parameterType="lt004" statementType="PREPARED">
+        DELETE FROM
+            LT_PATHWAY
+        WHERE
+            PATHWAY_UUID = #{pathwayUuid}
+    </update>
+
+   <update id="update" parameterType="lt004" statementType="PREPARED">
+        UPDATE LT_PATHWAY
+        SET
+            PATHWAY_NAME = #{pathwayName},
+            SOURCE_FILE_FORMAT_UUID = #{sourceFileFormatUuid},
+            TARGET_FILE_FORMAT_UUID = #{targetFileFormatUuid},
+            TOOL_UUID = #{toolUuid},
+            DESCRIPTION = #{description},
+            NOTES = #{notes},
+            USE_YN = #{useYn},
+            INSERT_UUID = #{insertUuid},
+            INSERT_DATE = #{insertDate},
+            UPDATE_UUID = #{updateUuid},
+            UPDATE_DATE = #{updateDate}
+        WHERE
+            PATHWAY_UUID = #{pathwayUuid}
+    </update>
+
+   <update id="insert" parameterType="lt004" statementType="PREPARED">
+        INSERT INTO LT_PATHWAY (
+            PATHWAY_UUID,
+            PATHWAY_NAME,
+            SOURCE_FILE_FORMAT_UUID,
+            TARGET_FILE_FORMAT_UUID,
+            TOOL_UUID,
+            DESCRIPTION,
+            NOTES,
+            USE_YN,
+            INSERT_UUID,
+            INSERT_DATE,
+            UPDATE_UUID,
+            UPDATE_DATE
+        ) VALUES (
+            #{pathwayUuid},
+            #{pathwayName},
+            #{sourceFileFormatUuid},
+            #{targetFileFormatUuid},
+            #{toolUuid},
+            #{description},
+            #{notes},
+            #{useYn},
+            #{insertUuid},
+            #{insertDate},
+            #{updateUuid},
+            #{updateDate}
+        )
+    </update>
+</mapper>

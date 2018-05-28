@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="rmsoft.ams.seoul..Df002Mapper">
+
+    <select id="findAll" resultType="df002" parameterType="df002" statementType="PREPARED">
+        SELECT
+            DISPOSAL_FREEZE_DEGREE_UUID AS disposalFreezeDegreeUuid,
+            DISPOSAL_FREEZE_EVENT_UUID AS disposalFreezeEventUuid,
+            FREEZE_YN AS freezeYn,
+            DEGREE AS degree,
+            DESCRIPTION AS description,
+            NOTES AS notes,
+            END_YN AS endYn,
+            TERMINATOR_UUID AS terminatorUuid,
+            END_DATE AS endDate,
+            INSERT_UUID AS insertUuid,
+            INSERT_DATE AS insertDate,
+            UPDATE_UUID AS updateUuid,
+            UPDATE_DATE AS updateDate
+        FROM
+            DF_DISPOSAL_FREEZE_DEGREE
+    </select>
+
+    <select id="findOne" resultType="df002" parameterType="df002" statementType="PREPARED">
+        SELECT
+            DISPOSAL_FREEZE_DEGREE_UUID AS disposalFreezeDegreeUuid,
+            DISPOSAL_FREEZE_EVENT_UUID AS disposalFreezeEventUuid,
+            FREEZE_YN AS freezeYn,
+            DEGREE AS degree,
+            DESCRIPTION AS description,
+            NOTES AS notes,
+            END_YN AS endYn,
+            TERMINATOR_UUID AS terminatorUuid,
+            END_DATE AS endDate,
+            INSERT_UUID AS insertUuid,
+            INSERT_DATE AS insertDate,
+            UPDATE_UUID AS updateUuid,
+            UPDATE_DATE AS updateDate
+        FROM
+            DF_DISPOSAL_FREEZE_DEGREE
+        WHERE
+            DISPOSAL_FREEZE_DEGREE_UUID = #{disposalFreezeDegreeUuid}
+    </select>
+
+   <update id="delete" parameterType="df002" statementType="PREPARED">
+        DELETE FROM
+            DF_DISPOSAL_FREEZE_DEGREE
+        WHERE
+            DISPOSAL_FREEZE_DEGREE_UUID = #{disposalFreezeDegreeUuid}
+    </update>
+
+   <update id="update" parameterType="df002" statementType="PREPARED">
+        UPDATE DF_DISPOSAL_FREEZE_DEGREE
+        SET
+            DISPOSAL_FREEZE_EVENT_UUID = #{disposalFreezeEventUuid},
+            FREEZE_YN = #{freezeYn},
+            DEGREE = #{degree},
+            DESCRIPTION = #{description},
+            NOTES = #{notes},
+            END_YN = #{endYn},
+            TERMINATOR_UUID = #{terminatorUuid},
+            END_DATE = #{endDate},
+            INSERT_UUID = #{insertUuid},
+            INSERT_DATE = #{insertDate},
+            UPDATE_UUID = #{updateUuid},
+            UPDATE_DATE = #{updateDate}
+        WHERE
+            DISPOSAL_FREEZE_DEGREE_UUID = #{disposalFreezeDegreeUuid}
+    </update>
+
+   <update id="insert" parameterType="df002" statementType="PREPARED">
+        INSERT INTO DF_DISPOSAL_FREEZE_DEGREE (
+            DISPOSAL_FREEZE_DEGREE_UUID,
+            DISPOSAL_FREEZE_EVENT_UUID,
+            FREEZE_YN,
+            DEGREE,
+            DESCRIPTION,
+            NOTES,
+            END_YN,
+            TERMINATOR_UUID,
+            END_DATE,
+            INSERT_UUID,
+            INSERT_DATE,
+            UPDATE_UUID,
+            UPDATE_DATE
+        ) VALUES (
+            #{disposalFreezeDegreeUuid},
+            #{disposalFreezeEventUuid},
+            #{freezeYn},
+            #{degree},
+            #{description},
+            #{notes},
+            #{endYn},
+            #{terminatorUuid},
+            #{endDate},
+            #{insertUuid},
+            #{insertDate},
+            #{updateUuid},
+            #{updateDate}
+        )
+    </update>
+</mapper>

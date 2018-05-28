@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="rmsoft.ams.seoul..Df003Mapper">
+
+    <select id="findAll" resultType="df003" parameterType="df003" statementType="PREPARED">
+        SELECT
+            DISPOSAL_FREEZE_RESULT_UUID AS disposalFreezeResultUuid,
+            DISPOSAL_FREEZE_EVENT_UUID AS disposalFreezeEventUuid,
+            DISPOSAL_FREEZE_DEGREE_UUID AS disposalFreezeDegreeUuid,
+            AGGREGATION_ID AS aggregationId,
+            ITEM_UUID AS itemUuid,
+            STATUS_UUID AS statusUuid,
+            DESCRIPTION AS description,
+            NOTES AS notes,
+            FREEZED_DATE AS freezedDate,
+            TERMINATOR_UUID AS terminatorUuid,
+            END_DATE AS endDate,
+            INSERT_UUID AS insertUuid,
+            INSERT_DATE AS insertDate,
+            UPDATE_UUID AS updateUuid,
+            UPDATE_DATE AS updateDate
+        FROM
+            DF_DISPOSAL_FREEZE_RESULT
+    </select>
+
+    <select id="findOne" resultType="df003" parameterType="df003" statementType="PREPARED">
+        SELECT
+            DISPOSAL_FREEZE_RESULT_UUID AS disposalFreezeResultUuid,
+            DISPOSAL_FREEZE_EVENT_UUID AS disposalFreezeEventUuid,
+            DISPOSAL_FREEZE_DEGREE_UUID AS disposalFreezeDegreeUuid,
+            AGGREGATION_ID AS aggregationId,
+            ITEM_UUID AS itemUuid,
+            STATUS_UUID AS statusUuid,
+            DESCRIPTION AS description,
+            NOTES AS notes,
+            FREEZED_DATE AS freezedDate,
+            TERMINATOR_UUID AS terminatorUuid,
+            END_DATE AS endDate,
+            INSERT_UUID AS insertUuid,
+            INSERT_DATE AS insertDate,
+            UPDATE_UUID AS updateUuid,
+            UPDATE_DATE AS updateDate
+        FROM
+            DF_DISPOSAL_FREEZE_RESULT
+        WHERE
+            DISPOSAL_FREEZE_RESULT_UUID = #{disposalFreezeResultUuid}
+    </select>
+
+   <update id="delete" parameterType="df003" statementType="PREPARED">
+        DELETE FROM
+            DF_DISPOSAL_FREEZE_RESULT
+        WHERE
+            DISPOSAL_FREEZE_RESULT_UUID = #{disposalFreezeResultUuid}
+    </update>
+
+   <update id="update" parameterType="df003" statementType="PREPARED">
+        UPDATE DF_DISPOSAL_FREEZE_RESULT
+        SET
+            DISPOSAL_FREEZE_EVENT_UUID = #{disposalFreezeEventUuid},
+            DISPOSAL_FREEZE_DEGREE_UUID = #{disposalFreezeDegreeUuid},
+            AGGREGATION_ID = #{aggregationId},
+            ITEM_UUID = #{itemUuid},
+            STATUS_UUID = #{statusUuid},
+            DESCRIPTION = #{description},
+            NOTES = #{notes},
+            FREEZED_DATE = #{freezedDate},
+            TERMINATOR_UUID = #{terminatorUuid},
+            END_DATE = #{endDate},
+            INSERT_UUID = #{insertUuid},
+            INSERT_DATE = #{insertDate},
+            UPDATE_UUID = #{updateUuid},
+            UPDATE_DATE = #{updateDate}
+        WHERE
+            DISPOSAL_FREEZE_RESULT_UUID = #{disposalFreezeResultUuid}
+    </update>
+
+   <update id="insert" parameterType="df003" statementType="PREPARED">
+        INSERT INTO DF_DISPOSAL_FREEZE_RESULT (
+            DISPOSAL_FREEZE_RESULT_UUID,
+            DISPOSAL_FREEZE_EVENT_UUID,
+            DISPOSAL_FREEZE_DEGREE_UUID,
+            AGGREGATION_ID,
+            ITEM_UUID,
+            STATUS_UUID,
+            DESCRIPTION,
+            NOTES,
+            FREEZED_DATE,
+            TERMINATOR_UUID,
+            END_DATE,
+            INSERT_UUID,
+            INSERT_DATE,
+            UPDATE_UUID,
+            UPDATE_DATE
+        ) VALUES (
+            #{disposalFreezeResultUuid},
+            #{disposalFreezeEventUuid},
+            #{disposalFreezeDegreeUuid},
+            #{aggregationId},
+            #{itemUuid},
+            #{statusUuid},
+            #{description},
+            #{notes},
+            #{freezedDate},
+            #{terminatorUuid},
+            #{endDate},
+            #{insertUuid},
+            #{insertDate},
+            #{updateUuid},
+            #{updateDate}
+        )
+    </update>
+</mapper>

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="rmsoft.ams.seoul..St001Mapper">
+
+    <select id="findAll" resultType="st001" parameterType="st001" statementType="PREPARED">
+        SELECT
+            REPOSITORY_UUID AS repositoryUuid,
+            STATUS_UUID AS statusUuid,
+            REPOSITORY_CODE AS repositoryCode,
+            REPOSITORY_NAME AS repositoryName,
+            DESCRIPTION AS description,
+            NOTES AS notes,
+            USE_YN AS useYn,
+            INSERT_UUID AS insertUuid,
+            INSERT_DATE AS insertDate,
+            UPDATE_UUID AS updateUuid,
+            UPDATE_DATE AS updateDate
+        FROM
+            ST_REPOSITORY
+    </select>
+
+    <select id="findOne" resultType="st001" parameterType="st001" statementType="PREPARED">
+        SELECT
+            REPOSITORY_UUID AS repositoryUuid,
+            STATUS_UUID AS statusUuid,
+            REPOSITORY_CODE AS repositoryCode,
+            REPOSITORY_NAME AS repositoryName,
+            DESCRIPTION AS description,
+            NOTES AS notes,
+            USE_YN AS useYn,
+            INSERT_UUID AS insertUuid,
+            INSERT_DATE AS insertDate,
+            UPDATE_UUID AS updateUuid,
+            UPDATE_DATE AS updateDate
+        FROM
+            ST_REPOSITORY
+        WHERE
+            REPOSITORY_UUID = #{repositoryUuid}
+    </select>
+
+   <update id="delete" parameterType="st001" statementType="PREPARED">
+        DELETE FROM
+            ST_REPOSITORY
+        WHERE
+            REPOSITORY_UUID = #{repositoryUuid}
+    </update>
+
+   <update id="update" parameterType="st001" statementType="PREPARED">
+        UPDATE ST_REPOSITORY
+        SET
+            STATUS_UUID = #{statusUuid},
+            REPOSITORY_CODE = #{repositoryCode},
+            REPOSITORY_NAME = #{repositoryName},
+            DESCRIPTION = #{description},
+            NOTES = #{notes},
+            USE_YN = #{useYn},
+            INSERT_UUID = #{insertUuid},
+            INSERT_DATE = #{insertDate},
+            UPDATE_UUID = #{updateUuid},
+            UPDATE_DATE = #{updateDate}
+        WHERE
+            REPOSITORY_UUID = #{repositoryUuid}
+    </update>
+
+   <update id="insert" parameterType="st001" statementType="PREPARED">
+        INSERT INTO ST_REPOSITORY (
+            REPOSITORY_UUID,
+            STATUS_UUID,
+            REPOSITORY_CODE,
+            REPOSITORY_NAME,
+            DESCRIPTION,
+            NOTES,
+            USE_YN,
+            INSERT_UUID,
+            INSERT_DATE,
+            UPDATE_UUID,
+            UPDATE_DATE
+        ) VALUES (
+            #{repositoryUuid},
+            #{statusUuid},
+            #{repositoryCode},
+            #{repositoryName},
+            #{description},
+            #{notes},
+            #{useYn},
+            #{insertUuid},
+            #{insertDate},
+            #{updateUuid},
+            #{updateDate}
+        )
+    </update>
+</mapper>

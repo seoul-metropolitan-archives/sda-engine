@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="rmsoft.ams.seoul..Rs003Mapper">
+
+    <select id="findAll" resultType="rs003" parameterType="rs003" statementType="PREPARED">
+        SELECT
+            RECORD_SCHEDULE_UUID AS recordScheduleUuid,
+            STATUS_UUID AS statusUuid,
+            RS_CODE AS rsCode,
+            RS_NAME AS rsName,
+            GENERAL_RECORD_SCHEDULE_UUID AS generalRecordScheduleUuid,
+            TRIGGER_UUID AS triggerUuid,
+            RETENION_PERIOD_UUID AS retenionPeriodUuid,
+            DISPOSAL_TYPE_UUID AS disposalTypeUuid,
+            BASED_ON AS basedOn,
+            DESCRIPTION AS description,
+            NOTES AS notes,
+            USE_YN AS useYn,
+            INSERT_UUID AS insertUuid,
+            INSERT_DATE AS insertDate,
+            UPDATE_UUID AS updateUuid,
+            UPDATE_DATE AS updateDate
+        FROM
+            RS_RECORD_SCHEDULE
+    </select>
+
+    <select id="findOne" resultType="rs003" parameterType="rs003" statementType="PREPARED">
+        SELECT
+            RECORD_SCHEDULE_UUID AS recordScheduleUuid,
+            STATUS_UUID AS statusUuid,
+            RS_CODE AS rsCode,
+            RS_NAME AS rsName,
+            GENERAL_RECORD_SCHEDULE_UUID AS generalRecordScheduleUuid,
+            TRIGGER_UUID AS triggerUuid,
+            RETENION_PERIOD_UUID AS retenionPeriodUuid,
+            DISPOSAL_TYPE_UUID AS disposalTypeUuid,
+            BASED_ON AS basedOn,
+            DESCRIPTION AS description,
+            NOTES AS notes,
+            USE_YN AS useYn,
+            INSERT_UUID AS insertUuid,
+            INSERT_DATE AS insertDate,
+            UPDATE_UUID AS updateUuid,
+            UPDATE_DATE AS updateDate
+        FROM
+            RS_RECORD_SCHEDULE
+        WHERE
+            RECORD_SCHEDULE_UUID = #{recordScheduleUuid}
+    </select>
+
+   <update id="delete" parameterType="rs003" statementType="PREPARED">
+        DELETE FROM
+            RS_RECORD_SCHEDULE
+        WHERE
+            RECORD_SCHEDULE_UUID = #{recordScheduleUuid}
+    </update>
+
+   <update id="update" parameterType="rs003" statementType="PREPARED">
+        UPDATE RS_RECORD_SCHEDULE
+        SET
+            STATUS_UUID = #{statusUuid},
+            RS_CODE = #{rsCode},
+            RS_NAME = #{rsName},
+            GENERAL_RECORD_SCHEDULE_UUID = #{generalRecordScheduleUuid},
+            TRIGGER_UUID = #{triggerUuid},
+            RETENION_PERIOD_UUID = #{retenionPeriodUuid},
+            DISPOSAL_TYPE_UUID = #{disposalTypeUuid},
+            BASED_ON = #{basedOn},
+            DESCRIPTION = #{description},
+            NOTES = #{notes},
+            USE_YN = #{useYn},
+            INSERT_UUID = #{insertUuid},
+            INSERT_DATE = #{insertDate},
+            UPDATE_UUID = #{updateUuid},
+            UPDATE_DATE = #{updateDate}
+        WHERE
+            RECORD_SCHEDULE_UUID = #{recordScheduleUuid}
+    </update>
+
+   <update id="insert" parameterType="rs003" statementType="PREPARED">
+        INSERT INTO RS_RECORD_SCHEDULE (
+            RECORD_SCHEDULE_UUID,
+            STATUS_UUID,
+            RS_CODE,
+            RS_NAME,
+            GENERAL_RECORD_SCHEDULE_UUID,
+            TRIGGER_UUID,
+            RETENION_PERIOD_UUID,
+            DISPOSAL_TYPE_UUID,
+            BASED_ON,
+            DESCRIPTION,
+            NOTES,
+            USE_YN,
+            INSERT_UUID,
+            INSERT_DATE,
+            UPDATE_UUID,
+            UPDATE_DATE
+        ) VALUES (
+            #{recordScheduleUuid},
+            #{statusUuid},
+            #{rsCode},
+            #{rsName},
+            #{generalRecordScheduleUuid},
+            #{triggerUuid},
+            #{retenionPeriodUuid},
+            #{disposalTypeUuid},
+            #{basedOn},
+            #{description},
+            #{notes},
+            #{useYn},
+            #{insertUuid},
+            #{insertDate},
+            #{updateUuid},
+            #{updateDate}
+        )
+    </update>
+</mapper>

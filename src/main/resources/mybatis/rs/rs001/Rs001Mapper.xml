@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="rmsoft.ams.seoul..Rs001Mapper">
+
+    <select id="findAll" resultType="rs001" parameterType="rs001" statementType="PREPARED">
+        SELECT
+            GENERAL_RECORD_SCHEDULE_UUID AS generalRecordScheduleUuid,
+            STATUS_UUID AS statusUuid,
+            GRS_CODE AS grsCode,
+            GRS_NAME AS grsName,
+            RETENION_PERIOD_UUID AS retenionPeriodUuid,
+            DISPOSAL_TYPE_UUID AS disposalTypeUuid,
+            BASED_ON AS basedOn,
+            TRIGGER_YN AS triggerYn,
+            DESCRIPTION AS description,
+            NOTES AS notes,
+            USE_YN AS useYn,
+            INSERT_UUID AS insertUuid,
+            INSERT_DATE AS insertDate,
+            UPDATE_UUID AS updateUuid,
+            UPDATE_DATE AS updateDate
+        FROM
+            RS_GENERAL_RECORD_SCHEDULE
+    </select>
+
+    <select id="findOne" resultType="rs001" parameterType="rs001" statementType="PREPARED">
+        SELECT
+            GENERAL_RECORD_SCHEDULE_UUID AS generalRecordScheduleUuid,
+            STATUS_UUID AS statusUuid,
+            GRS_CODE AS grsCode,
+            GRS_NAME AS grsName,
+            RETENION_PERIOD_UUID AS retenionPeriodUuid,
+            DISPOSAL_TYPE_UUID AS disposalTypeUuid,
+            BASED_ON AS basedOn,
+            TRIGGER_YN AS triggerYn,
+            DESCRIPTION AS description,
+            NOTES AS notes,
+            USE_YN AS useYn,
+            INSERT_UUID AS insertUuid,
+            INSERT_DATE AS insertDate,
+            UPDATE_UUID AS updateUuid,
+            UPDATE_DATE AS updateDate
+        FROM
+            RS_GENERAL_RECORD_SCHEDULE
+        WHERE
+            GENERAL_RECORD_SCHEDULE_UUID = #{generalRecordScheduleUuid}
+    </select>
+
+   <update id="delete" parameterType="rs001" statementType="PREPARED">
+        DELETE FROM
+            RS_GENERAL_RECORD_SCHEDULE
+        WHERE
+            GENERAL_RECORD_SCHEDULE_UUID = #{generalRecordScheduleUuid}
+    </update>
+
+   <update id="update" parameterType="rs001" statementType="PREPARED">
+        UPDATE RS_GENERAL_RECORD_SCHEDULE
+        SET
+            STATUS_UUID = #{statusUuid},
+            GRS_CODE = #{grsCode},
+            GRS_NAME = #{grsName},
+            RETENION_PERIOD_UUID = #{retenionPeriodUuid},
+            DISPOSAL_TYPE_UUID = #{disposalTypeUuid},
+            BASED_ON = #{basedOn},
+            TRIGGER_YN = #{triggerYn},
+            DESCRIPTION = #{description},
+            NOTES = #{notes},
+            USE_YN = #{useYn},
+            INSERT_UUID = #{insertUuid},
+            INSERT_DATE = #{insertDate},
+            UPDATE_UUID = #{updateUuid},
+            UPDATE_DATE = #{updateDate}
+        WHERE
+            GENERAL_RECORD_SCHEDULE_UUID = #{generalRecordScheduleUuid}
+    </update>
+
+   <update id="insert" parameterType="rs001" statementType="PREPARED">
+        INSERT INTO RS_GENERAL_RECORD_SCHEDULE (
+            GENERAL_RECORD_SCHEDULE_UUID,
+            STATUS_UUID,
+            GRS_CODE,
+            GRS_NAME,
+            RETENION_PERIOD_UUID,
+            DISPOSAL_TYPE_UUID,
+            BASED_ON,
+            TRIGGER_YN,
+            DESCRIPTION,
+            NOTES,
+            USE_YN,
+            INSERT_UUID,
+            INSERT_DATE,
+            UPDATE_UUID,
+            UPDATE_DATE
+        ) VALUES (
+            #{generalRecordScheduleUuid},
+            #{statusUuid},
+            #{grsCode},
+            #{grsName},
+            #{retenionPeriodUuid},
+            #{disposalTypeUuid},
+            #{basedOn},
+            #{triggerYn},
+            #{description},
+            #{notes},
+            #{useYn},
+            #{insertUuid},
+            #{insertDate},
+            #{updateUuid},
+            #{updateDate}
+        )
+    </update>
+</mapper>
