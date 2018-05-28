@@ -4,11 +4,11 @@
 
 <th:block layout:fragment="buttons">
     <div data-page-buttons class="button-warp">
-        <th:block th:if="${authGroupMenu != null}">
+        <th:block>
             <!--<th:block th:if="${authGroupMenu.schAh == 'Y'}">
                 <button type="button" class="btn btn-default" data-page-btn="search"><i class="cqc-magnifier"></i> 조회</button>
             </th:block>-->
-            <th:block th:if="${authGroupMenu.savAh == 'Y'}">
+            <!--<th:block th:if="${authGroupMenu.savAh == 'Y'}">
                 <button type="button" class="btn btn-default" data-page-btn="save"><i class="cqc-save"></i> 저장</button>
             </th:block>
             <th:block th:if="${authGroupMenu.delAh == 'Y'}">
@@ -26,13 +26,13 @@
                     <option value="30" selected="selected">30초마다 갱신</option>
                     <option value="60"> 1분마다 갱신</option>
                 </select>
-            </th:block>
-            <th:block th:if="${authGroupMenu.fn2Ah == 'Y'}">
+            </th:block>-->
+            <th:block>
                 <button type="button" class="btn btn-primary" data-page-btn="fn2">
                     <i class="axi axi-plus-circle"></i> <span th:text="${fn2Label}">페이지+모델 작성</span>
                 </button>
             </th:block>
-            <th:block th:if="${authGroupMenu.fn3Ah == 'Y'}">
+            <!--<th:block th:if="${authGroupMenu.fn3Ah == 'Y'}">
                 <button type="button" class="btn btn-default" data-page-btn="fn3">
                     <i class="axi axi-minus-circle"></i> ${function1Label}
                 </button>
@@ -46,7 +46,7 @@
                 <button type="button" class="btn btn-default" data-page-btn="fn5">
                     ${function3Label}
                 </button>
-            </th:block>
+            </th:block>-->
         </th:block>
     </div>
 </th:block>
@@ -130,12 +130,6 @@
         <button type="button" class="btn btn-default" data-page-btn="exec">생성</button>
     </div>
 </th:block>
-
-<th:block layout:fragment="modal-exec-buttons">
-    <div data-page-buttons class="button-warp">
-        <button type="button" class="btn btn-default" data-page-btn="exec">생성</button>
-    </div>
-</th:block>
 <!--Save 버튼 & Inquiry 버튼-->
 <th:block layout:fragment="save-and-inquiry(btn1Visible , btn2Visible)">
     <li style="text-align:right; width:48%;">
@@ -179,7 +173,23 @@
         </button>
     </li>
 </th:block>
-
+<!--Confirm 버튼 & Cancle 버튼 & Add 버튼 & Delete 버튼-->
+<th:block layout:fragment="confirm-and-cancel-and-disposal">
+    <li style="text-align:right; width:48%;">
+        <button class="btn_co" th:id="confirm">
+            <span class="btn_icon_co" >&nbsp;</span>
+            <span class="btn_main_txt">Confirm</span>
+        </button>
+        <button class="btn_co" th:id="cancel">
+            <span class="btn_icon_co">&nbsp;</span>
+            <span class="btn_main_txt">Cancel</span>
+        </button>
+        <button class="btn_s" th:id="disposal">
+            <span class="btn_icon">&nbsp;</span>
+            <span class="btn_main_txt">Disposal</span>
+        </button>
+    </li>
+</th:block>
 <!--Confirm 버튼 & Cancle 버튼 & Add 버튼 & Delete 버튼-->
 <th:block layout:fragment="confirm-and-cancel-and-save-and-inquiry">
     <li style="text-align:right; width:48%;">
@@ -201,7 +211,32 @@
         </button>
     </li>
 </th:block>
-
+<!--inquiry 버튼 & confirm 버튼 & cancel 버튼 & add 버튼 & Delete 버튼-->
+<th:block layout:fragment="confirm-and-cancel">
+    <li style="text-align:right; width:48%;">
+        <button class="btn_co">
+            <span class="btn_icon_co" th:id="confirm">&nbsp;</span>
+            <span class="btn_main_txt">Confirm</span>
+        </button>
+        <button class="btn_co" th:id="cancel">
+            <span class="btn_icon_co">&nbsp;</span>
+            <span class="btn_main_txt">Cancel</span>
+        </button>
+    </li>
+</th:block>
+<!--inquiry 버튼 & confirm 버튼 & cancel 버튼 & add 버튼 & Delete 버튼-->
+<th:block layout:fragment="scheduling-and-inquiry">
+    <li style="text-align:right; width:48%;">
+        <button class="btn_co">
+            <span class="btn_icon_co" th:id="scheduling">&nbsp;</span>
+            <span class="btn_main_txt">Scheduling</span>
+        </button>
+        <button class="btn_co" th:id="inquiry">
+            <span class="btn_icon_co">&nbsp;</span>
+            <span class="btn_main_txt">Inquiry</span>
+        </button>
+    </li>
+</th:block>
 <!--inquiry 버튼 & confirm 버튼 & cancel 버튼 & add 버튼 & Delete 버튼-->
 <th:block layout:fragment="inquiry-and-confirm-and-cancel-and-add-and-delete">
     <li style="text-align:right; width:48%;">
