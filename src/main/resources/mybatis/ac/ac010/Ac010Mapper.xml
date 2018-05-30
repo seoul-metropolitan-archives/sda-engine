@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="rmsoft.ams.seoul..Ac010Mapper">
+
+    <select id="findAll" resultType="ac010" parameterType="ac010" statementType="PREPARED">
+        SELECT
+            ROW_SECURITY_UUID AS rowSecurityUuid,
+            RS_ENTITY_TYPE_UUID AS rsEntityTypeUuid,
+            RS_ENTITY_COLUMN_UUID AS rsEntityColumnUuid,
+            FROM_VALUE AS fromValue,
+            TO_VALUE AS toValue,
+            SELECT_YN AS selectYn,
+            INSERT_YN AS insertYn,
+            UPDATE_YN AS updateYn,
+            DELETE_YN AS deleteYn,
+            DESCRIPTION AS description,
+            NOTES AS notes,
+            USE_YN AS useYn,
+            INSERT_UUID AS insertUuid,
+            INSERT_DATE AS insertDate,
+            UPDATE_UUID AS updateUuid,
+            UPDATE_DATE AS updateDate
+        FROM
+            AC_ROW_SECURITY
+    </select>
+
+    <select id="findOne" resultType="ac010" parameterType="ac010" statementType="PREPARED">
+        SELECT
+            ROW_SECURITY_UUID AS rowSecurityUuid,
+            RS_ENTITY_TYPE_UUID AS rsEntityTypeUuid,
+            RS_ENTITY_COLUMN_UUID AS rsEntityColumnUuid,
+            FROM_VALUE AS fromValue,
+            TO_VALUE AS toValue,
+            SELECT_YN AS selectYn,
+            INSERT_YN AS insertYn,
+            UPDATE_YN AS updateYn,
+            DELETE_YN AS deleteYn,
+            DESCRIPTION AS description,
+            NOTES AS notes,
+            USE_YN AS useYn,
+            INSERT_UUID AS insertUuid,
+            INSERT_DATE AS insertDate,
+            UPDATE_UUID AS updateUuid,
+            UPDATE_DATE AS updateDate
+        FROM
+            AC_ROW_SECURITY
+        WHERE
+            ROW_SECURITY_UUID = #{rowSecurityUuid}
+    </select>
+
+   <update id="delete" parameterType="ac010" statementType="PREPARED">
+        DELETE FROM
+            AC_ROW_SECURITY
+        WHERE
+            ROW_SECURITY_UUID = #{rowSecurityUuid}
+    </update>
+
+   <update id="update" parameterType="ac010" statementType="PREPARED">
+        UPDATE AC_ROW_SECURITY
+        SET
+            RS_ENTITY_TYPE_UUID = #{rsEntityTypeUuid},
+            RS_ENTITY_COLUMN_UUID = #{rsEntityColumnUuid},
+            FROM_VALUE = #{fromValue},
+            TO_VALUE = #{toValue},
+            SELECT_YN = #{selectYn},
+            INSERT_YN = #{insertYn},
+            UPDATE_YN = #{updateYn},
+            DELETE_YN = #{deleteYn},
+            DESCRIPTION = #{description},
+            NOTES = #{notes},
+            USE_YN = #{useYn},
+            INSERT_UUID = #{insertUuid},
+            INSERT_DATE = #{insertDate},
+            UPDATE_UUID = #{updateUuid},
+            UPDATE_DATE = #{updateDate}
+        WHERE
+            ROW_SECURITY_UUID = #{rowSecurityUuid}
+    </update>
+
+   <update id="insert" parameterType="ac010" statementType="PREPARED">
+        INSERT INTO AC_ROW_SECURITY (
+            ROW_SECURITY_UUID,
+            RS_ENTITY_TYPE_UUID,
+            RS_ENTITY_COLUMN_UUID,
+            FROM_VALUE,
+            TO_VALUE,
+            SELECT_YN,
+            INSERT_YN,
+            UPDATE_YN,
+            DELETE_YN,
+            DESCRIPTION,
+            NOTES,
+            USE_YN,
+            INSERT_UUID,
+            INSERT_DATE,
+            UPDATE_UUID,
+            UPDATE_DATE
+        ) VALUES (
+            #{rowSecurityUuid},
+            #{rsEntityTypeUuid},
+            #{rsEntityColumnUuid},
+            #{fromValue},
+            #{toValue},
+            #{selectYn},
+            #{insertYn},
+            #{updateYn},
+            #{deleteYn},
+            #{description},
+            #{notes},
+            #{useYn},
+            #{insertUuid},
+            #{insertDate},
+            #{updateUuid},
+            #{updateDate}
+        )
+    </update>
+</mapper>

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="rmsoft.ams.seoul..Ac011Mapper">
+
+    <select id="findAll" resultType="ac011" parameterType="ac011" statementType="PREPARED">
+        SELECT
+            ROLE_ROW_SECURITY_UUID AS roleRowSecurityUuid,
+            ROLE_UUID AS roleUuid,
+            ROW_SECURITY_UUID AS rowSecurityUuid,
+            DESCRIPTION AS description,
+            NOTES AS notes,
+            USE_YN AS useYn,
+            INSERT_UUID AS insertUuid,
+            INSERT_DATE AS insertDate,
+            UPDATE_UUID AS updateUuid,
+            UPDATE_DATE AS updateDate
+        FROM
+            AC_ROLE_ROW_SECURITY
+    </select>
+
+    <select id="findOne" resultType="ac011" parameterType="ac011" statementType="PREPARED">
+        SELECT
+            ROLE_ROW_SECURITY_UUID AS roleRowSecurityUuid,
+            ROLE_UUID AS roleUuid,
+            ROW_SECURITY_UUID AS rowSecurityUuid,
+            DESCRIPTION AS description,
+            NOTES AS notes,
+            USE_YN AS useYn,
+            INSERT_UUID AS insertUuid,
+            INSERT_DATE AS insertDate,
+            UPDATE_UUID AS updateUuid,
+            UPDATE_DATE AS updateDate
+        FROM
+            AC_ROLE_ROW_SECURITY
+        WHERE
+            ROLE_ROW_SECURITY_UUID = #{roleRowSecurityUuid}
+    </select>
+
+   <update id="delete" parameterType="ac011" statementType="PREPARED">
+        DELETE FROM
+            AC_ROLE_ROW_SECURITY
+        WHERE
+            ROLE_ROW_SECURITY_UUID = #{roleRowSecurityUuid}
+    </update>
+
+   <update id="update" parameterType="ac011" statementType="PREPARED">
+        UPDATE AC_ROLE_ROW_SECURITY
+        SET
+            ROLE_UUID = #{roleUuid},
+            ROW_SECURITY_UUID = #{rowSecurityUuid},
+            DESCRIPTION = #{description},
+            NOTES = #{notes},
+            USE_YN = #{useYn},
+            INSERT_UUID = #{insertUuid},
+            INSERT_DATE = #{insertDate},
+            UPDATE_UUID = #{updateUuid},
+            UPDATE_DATE = #{updateDate}
+        WHERE
+            ROLE_ROW_SECURITY_UUID = #{roleRowSecurityUuid}
+    </update>
+
+   <update id="insert" parameterType="ac011" statementType="PREPARED">
+        INSERT INTO AC_ROLE_ROW_SECURITY (
+            ROLE_ROW_SECURITY_UUID,
+            ROLE_UUID,
+            ROW_SECURITY_UUID,
+            DESCRIPTION,
+            NOTES,
+            USE_YN,
+            INSERT_UUID,
+            INSERT_DATE,
+            UPDATE_UUID,
+            UPDATE_DATE
+        ) VALUES (
+            #{roleRowSecurityUuid},
+            #{roleUuid},
+            #{rowSecurityUuid},
+            #{description},
+            #{notes},
+            #{useYn},
+            #{insertUuid},
+            #{insertDate},
+            #{updateUuid},
+            #{updateDate}
+        )
+    </update>
+</mapper>
