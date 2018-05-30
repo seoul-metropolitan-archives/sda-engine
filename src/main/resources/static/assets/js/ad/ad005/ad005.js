@@ -14,8 +14,8 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 fnObj.gridView01.resetCurrent();
                 fnObj.gridView01.setFocus();
                 if(res.list.length > 0) {
-                    fnObj.formView.setFormData("termCode", res.list[0].termCode);
-                    ACTIONS.dispatch(ACTIONS.GET_ENTITY_TYPE, res.list[0]);
+                    fnObj.formView.setFormData("termCodeLabel", res.list[0].termCode);
+                    ACTIONS.dispatch(ACTIONS.GET_ENTITY_COLUMN_LIST, res.list[0]);
                 }
                 fnObj.gridView01.setFocus();
             },
@@ -24,7 +24,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             }
         });
     },
-    GET_ENTITY_TYPE: function (caller, act, data) {
+    GET_ENTITY_COLUMN_LIST: function (caller, act, data) {
         axboot.ajax({
             type: "GET",
             url: "/api/v1/ad/ad005/getEntityColumnList",
@@ -56,7 +56,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 data: JSON.stringify(glossaryList),
                 callback: function (res) {
                     fnObj.gridView01.commit();
-                    ACTIONS.dispatch(ACTIONS.GET_ENTITY_TYPE, fnObj.gridView01.getRowData());
+                    ACTIONS.dispatch(ACTIONS.GET_ENTITY_COLUMN_LIST, fnObj.gridView01.getRowData());
                 }
             })
             .done(function () {
@@ -116,7 +116,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             }
         });
         if (!result) {
-            ACTIONS.dispatch(ACTIONS.GET_ENTITY_TYPE, fnObj.gridView01.gridObj.getSelectedData());
+            ACTIONS.dispatch(ACTIONS.GET_ENTITY_COLUMN_LIST, fnObj.gridView01.gridObj.getSelectedData());
         }
 
 
@@ -240,8 +240,8 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
 
         this.gridObj.itemClick(function (data) {
             if (fnObj.gridView02.getData().length < 1) {
-                fnObj.formView.setFormData("termCode", data.termCode);
-                ACTIONS.dispatch(ACTIONS.GET_ENTITY_TYPE, data);
+                fnObj.formView.setFormData("termCodeLabel", data.termCode);
+                ACTIONS.dispatch(ACTIONS.GET_ENTITY_COLUMN_LIST, data);
             }
             else {
                 axDialog.confirm({
@@ -250,7 +250,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
                     if (this.key == "ok") {
                         ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
                     }
-                    ACTIONS.dispatch(ACTIONS.GET_ENTITY_TYPE, data);
+                    ACTIONS.dispatch(ACTIONS.GET_ENTITY_COLUMN_LIST, data);
                 });
             }
         });
@@ -269,7 +269,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
 /*엔티티 타입( Entity Type )*/
 fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
     tagId: "realgrid2",
-    entityName: "ENTITY_DETAIL",
+    entityName: "ENTITY_COLUMN_LIST",
     primaryKey: "entityColumnUuid",
     parentsUuidFieldName: "entityTypeUuid",
     parentsGrid: fnObj.gridView01,

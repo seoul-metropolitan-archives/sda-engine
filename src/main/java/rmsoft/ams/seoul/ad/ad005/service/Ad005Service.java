@@ -88,7 +88,7 @@ public class Ad005Service extends BaseService {
                 addGlossaryRepository.save(adGlossary);
             } else if (adGlossary.isDeleted()) {
                 if (mapper.checkGlossary(adGlossary.getGlossaryUuid()) > 0) {
-                    return ApiResponse.error(ApiStatus.SYSTEM_ERROR, CommonMessageUtils.getMessage("AD010_01"));
+                    return ApiResponse.error(ApiStatus.SYSTEM_ERROR, CommonMessageUtils.getMessage("AD009_01"));
                 } else {
                     addGlossaryRepository.delete(adGlossary);
                 }
