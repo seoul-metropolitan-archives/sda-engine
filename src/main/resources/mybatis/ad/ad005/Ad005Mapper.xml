@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="rmsoft.ams.seoul.ad.ad005.dao.Ad005Mapper">
+
+    <select id="searchGlossary" resultType="Ad00501VO" parameterType="Ad00501VO" statementType="PREPARED">
+        <![CDATA[
+      SELECT GLOSSARY_UUID  as  glossaryUuid
+            , TERM_CODE  as  termCode
+            , TERM_NAME  as  termName
+            , DATA_TYPE_UUID  as  dataTypeUuid
+            , DESCRIPTION       as  "description"
+            , NOTES             as  "notes"
+            , USE_YN            as  useYN
+            ]]>
+        ,
+        <include refid="Common.UserName">
+            <property name="userUuid" value="INSERT_UUID"/>
+        </include>
+        as insertUuid
+        <![CDATA[
+            , INSERT_DATE       as  insertDate
+            ]]>
+        ,
+        <include refid="Common.UserName">
+            <property name="userUuid" value="UPDATE_UUID"/>
+        </include>
+        as updateUuid
+        <![CDATA[
+            , UPDATE_DATE       as  updateDate
+            FROM AD_GLOSSARY
+        WHERE
+        1=1
+            ]]>
+        <if test="null != termCode and '' != termCode">
+            <![CDATA[
+            AND
+            TERM_CODE LIKE '%' || #{termCode} || '%'
+          ]]>
+        </if>
+        <if test="null != termName and '' != termName">
+            <![CDATA[
+            AND
+            TERM_NAME LIKE '%' || #{termName} || '%'
+          ]]>
+        </if>
+        <if test="null != description and '' != description">
+            <![CDATA[
+            AND
+            DESCRIPTION LIKE '%' || #{description} || '%'
+          ]]>
+        </if>
+        <if test="null != useYN and '' != useYN">
+            <![CDATA[
+            AND
+            USE_YN = #{useYN}
+          ]]>
+        </if>
+        ORDER BY TERM_CODE ASC
+    </select>
+
+    <select id="getEntityColumnList" resultType="Ad00502VO" parameterType="Ad00501VO" statementType="PREPARED">
+        <![CDATA[
+
+            SELECT
+                Z1.GLOSSARY_UUID AS glossaryUuid,
+                Z1.ENTITY_COLUMN_UUID AS entityColumnUuid,
+                Z1.ENTITY_TYPE_UUID AS entityTypeUuid,
+                Z1.TERM_CODE AS termCode,
+                Z1.ENTITY_TYPE_CODE AS tableCode,
+                Z1.ENTITY_TYPE_NAME AS tableName,
+                Z1.TABLE_DESCRIPTION AS tableDescription,
+                Z2.COLUMN_NAME AS columnName,
+                Z1.COLUMN_DESCRIPTION AS columnDescription,
+                Z2.DATA_TYPE AS dataType,
+                Z2.NULLABLE AS nullable
+            FROM
+                (SELECT
+                    T1.GLOSSARY_UUID,
+                    T2.ENTITY_COLUMN_UUID,
+                    T2.ENTITY_TYPE_UUID,
+                    T1.TERM_CODE,
+                    T3.ENTITY_TYPE_CODE,
+                    T3.ENTITY_TYPE_NAME,
+                    T3.DESCRIPTION AS TABLE_DESCRIPTION,
+                    T2.DESCRIPTION AS COLUMN_DESCRIPTION
+                FROM
+                    AD_GLOSSARY T1,
+                    AD_ENTITY_COLUMN T2,
+                    AD_ENTITY_TYPE T3
+                WHERE 1=1
+                AND T1.GLOSSARY_UUID = T2.GLOSSARY_UUID
+                AND T2.ENTITY_TYPE_UUID = T3.ENTITY_TYPE_UUID
+                AND T1.GLOSSARY_UUID = #{glossaryUuid}) Z1,
+                (SELECT
+                    A.TABLE_NAME,
+                    A.COLUMN_NAME,
+                    B.COMMENTS,
+                    A.DATA_TYPE,
+                    A.NULLABLE,
+                    A.COLUMN_ID
+                    FROM ALL_TAB_COLUMNS A, ALL_COL_COMMENTS B
+                    WHERE A.TABLE_NAME = B.TABLE_NAME
+                    AND A.COLUMN_NAME = B.COLUMN_NAME) Z2
+            WHERE 1=1
+            AND Z1.ENTITY_TYPE_CODE = Z2.TABLE_NAME
+            AND Z1.TERM_CODE = Z2.COLUMN_NAME
+
+        ]]>
+
+    </select>
+
+    <select id="checkGlossary" resultType="int" parameterType="String" statementType="PREPARED">
+        <![CDATA[
+
+          SELECT COUNT(GLOSSARY_UUID) FROM AD_ENTITY_COLUMN WHERE GLOSSARY_UUID = #{entityType}
+
+        ]]>
+    </select>
+
+
+</mapper>
