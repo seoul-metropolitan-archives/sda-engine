@@ -14,8 +14,8 @@ var df00101 =
                 {
                     sortNo: 0,
                     width:30,
-                    name: "",
-                    text: "Classification Scheme UUID",
+                    name: "disposalFreezeEventUuid",
+                    text: "",
                     dataType: "code",
                     editable: false,
                     required: false,
@@ -24,11 +24,11 @@ var df00101 =
                 {
                     sortNo: 1,
                     width:80,
-                    name: "",
+                    name: "statusUuid",
                     text: "Status",
                     dataType: "combo",
-                    values: axboot.commonCodeFilter("CD111").codeArr,
-                    labels: axboot.commonCodeFilter("CD111").nameArr,
+                    values: axboot.commonCodeFilter("CD115").codeArr,
+                    labels: axboot.commonCodeFilter("CD115").nameArr,
                     editable: false,
                     required: true,
                     disable: true
@@ -36,39 +36,52 @@ var df00101 =
                 {
                     sortNo: 2,
                     width:140,
-                    name: "",
+                    name: "eventCode",
                     text: "Event Code",
                     width: 140,
                     dataType: "text",
                     required: false,
-                    disable : true,
-                    editable : false
+                    editable : false,
+                    disable : true
                 },
                 {
                     sortNo: 3,
-                    name: "",
+                    name: "eventName",
                     text: "Event Name",
                     width: 160,
                     dataType: "code",
-                    required : true,
+                    required: true,
+                    editable : true,
+                    disable : false
+                },
+                {
+                    sortNo: 3,
+                    name: "eventTypeUuid",
+                    text: "Event Type",
+                    width: 80,
+                    dataType: "combo",
+                    values: axboot.commonCodeFilter("CD116").codeArr,
+                    labels: axboot.commonCodeFilter("CD116").nameArr,
+                    editable: true,
+                    required: true,
+                    disable: false
                 },
                 {
                     sortNo: 4,
-                    name: "",
+                    name: "reviewDate",
                     text: "Review Date",
-                    width: 140,
-                    dataType: "combo",
-                    values: axboot.commonCodeFilter("CD112").codeArr,
-                    labels: axboot.commonCodeFilter("CD112").nameArr,
-                    required : true,
-                    disable: false,
-                    editable : true
+                    width: 100,
+                    dataType: "date",
+                    length: 8,
+                    required: true,
+                    editable : true,
+                    disable : true
                 },
                 {
                     sortNo: 5,
-                    name: "",
+                    name: "description",
                     text: "Description",
-                    width: 70,
+                    width: 150,
                     textAlignment: "far",
                     dataType: "number",
                     required: false
@@ -77,18 +90,18 @@ var df00101 =
                     sortNo: 6,
                     name: "notes",
                     text: "Notes",
-                    width: 250,
+                    width: 150,
                     dataType: "richtext",
                     required: false
                 },
                 {
                     sortNo: 7,
-                    name: "",
+                    name: "endYN",
                     text: "End",
                     width: 50,
                     dataType: "check",
                     textAlignment: "center",
-                    defaultValue : "Y",
+                    defaultValue : "N",
                     renderer: {
                         type: "check",
                         shape: "",
@@ -96,11 +109,11 @@ var df00101 =
                         trueValues: "Y",
                         startEditOnClick: true,
                     },
-                    required: false
+                    required: false,
                 },
                 {
                     sortNo: 8,
-                    name: "",
+                    name: "terminatorUuid",
                     text: "Terminator",
                     width: 80,
                     dataType: "text",
@@ -109,8 +122,8 @@ var df00101 =
                     required: false
                 },
                 {
-                    sortNo: 10,
-                    name: "",
+                    sortNo: 9,
+                    name: "endDate",
                     text: "End date/time",
                     width: 140,
                     dataType: "timestamp",
@@ -119,38 +132,51 @@ var df00101 =
                     required: false
                 },
                 {
-                    sortNo: 11,
-                    name: "",
+                    sortNo: 10,
+                    name: "insertUuid",
                     text: "Created By",
                     width: 80,
                     dataType: "text",
-                    editable: false,
-                    disable : true,
-                    required: false
+                    editable : false,
+                    readonly : true,
+                    visible: true,
+                    required: false,
+                    disable: true
                 },
                 {
-                    sortNo: 12,
-                    name: "",
+                    sortNo: 11,
+                    name: "insertDate",
                     text: "Date/Time Created",
                     width: 140,
                     dataType: "timestamp",
-                    editable: false,
-                    disable : true,
-                    required: false
-                },
-                {
-                    sortNo: 13,
-                    name: "Modified By"
+                    required: false,
+                    disable: true
                 },
                 {
                     sortNo: 12,
-                    name: "",
+                    name: "updateUuid",
+                    text: "Modifed By",
+                    width: 80,
+                    visible: true,
+                    dataType: "text",
+                    required: false,
+                    disable: true
+                },
+                {
+                    sortNo: 13,
+                    name: "updateDate",
                     text: "Date/Time Modified",
                     width: 140,
                     dataType: "timestamp",
-                    editable: false,
-                    disable : true,
-                    required: false
+                    required: false,
+                    disable: true
+                },
+                {
+                    sortNo: 14,
+                    name: "reason",
+                    text: "REASON",
+                    dataType: "text",
+                    visible: false
                 }
             ]
     }

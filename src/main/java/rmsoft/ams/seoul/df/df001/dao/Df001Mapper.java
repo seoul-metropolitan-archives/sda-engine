@@ -1,20 +1,35 @@
 package rmsoft.ams.seoul.df.df001.dao;
 
 import io.onsemiro.core.mybatis.MyBatisMapper;
-import rmsoft.ams.seoul.df.df001.vo.Df001;
+import rmsoft.ams.seoul.df.df001.vo.Df00101VO;
+import rmsoft.ams.seoul.df.df001.vo.Df00102VO;
 
 import java.util.List;
 
 
 public interface Df001Mapper extends MyBatisMapper {
 
-    List<Df001> findAll();
+    /**
+     * Search entity type list.
+     *
+     * @param param the param
+     * @return the list
+     */
+    List<Df00101VO> searchList(Df00101VO param);
 
-    Df001 findOne(Df001 df001);
+    /**
+     * Gets classification scheme detail.
+     *
+     * @param param the cl 00102 vo
+     * @return the classification scheme detail
+     */
+    Df00102VO getDetail(Df00102VO param);
 
-    int update(Df001 df001);
-
-    int delete(Df001 df001);
-
-    int insert(Df001 df001);
+    /**
+     * Gets child class.
+     *
+     * @param disposalFreezeEventUuid the disposalFreezeEvent Uuid uuid
+     * @return the child class
+     */
+    int checkDegree(String disposalFreezeEventUuid);
 }
