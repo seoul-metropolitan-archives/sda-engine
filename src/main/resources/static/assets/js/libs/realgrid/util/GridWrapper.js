@@ -191,6 +191,8 @@ var GridWrapper = function(p_id,p_rootContext) {
             }
         });
         $("#"+_this.i_id).parents().eq(1).delegate(_this.delBtnName,"click",function(){
+            _this.dispatch("onRemoveRowBefore");
+
             if(_this.runDel) {
                 _this.gridView.commit(true);
                 _this.gridView.getDataProvider().removeRows(_this.gridView.getSelectedRows(), false);
@@ -1059,6 +1061,7 @@ GridWrapper.prototype.addRowBeforeEvent = function(_event) { this.bind("onBefore
 GridWrapper.prototype.addRowAfterEvent = function(_event) { this.bind("onAfterAddRow",_event); }
 //줄 지워지면 호출되는 함수
 GridWrapper.prototype.removeRowEvent = function(_event) { this.bind("onRemoveRow",_event); }
+GridWrapper.prototype.removeRowBeforeEvent = function(_event) { this.bind("onRemoveRowBefore",_event); }
 GridWrapper.prototype.onCellEdited = function(_event) { this.bind("onCellEdited",_event); }
 
 //============================================================================================
