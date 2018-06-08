@@ -2777,6 +2777,10 @@ axboot.gridView = {
     {
         this.gridObj.removeRowEvent(_event);
     },
+    removeRowBeforeEvent : function(_event)
+    {
+        this.gridObj.removeRowBeforeEvent(_event);
+    },
     /*그리드 줄 추가 전 이벤트 (자식 그리드)*/
     addRowBeforeEventForChildGrid: function (wrapperObj, _this) {
         if (_this.parentsGrid) {
