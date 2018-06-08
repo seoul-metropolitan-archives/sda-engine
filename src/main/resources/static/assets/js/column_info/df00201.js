@@ -14,8 +14,8 @@ var df00201 =
                 {
                     sortNo: 0,
                     width:30,
-                    name: "",
-                    text: "Classification Scheme UUID",
+                    name: "disposalFreezeDegreeUuid",
+                    text: "",
                     dataType: "code",
                     editable: false,
                     required: false,
@@ -23,72 +23,22 @@ var df00201 =
                 },
                 {
                     sortNo: 1,
-                    width:80,
-                    name: "",
-                    text: "Status",
-                    dataType: "combo",
-                    values: axboot.commonCodeFilter("CD111").codeArr,
-                    labels: axboot.commonCodeFilter("CD111").nameArr,
+                    width:30,
+                    name: "disposalFreezeEventUuid",
+                    text: "",
+                    dataType: "code",
                     editable: false,
-                    required: true,
-                    disable: true
+                    required: false,
+                    visible: false
                 },
                 {
                     sortNo: 2,
-                    width:140,
-                    name: "",
-                    text: "Event Code",
-                    width: 140,
-                    dataType: "text",
-                    required: false,
-                    disable : true,
-                    editable : false
-                },
-                {
-                    sortNo: 3,
-                    name: "",
-                    text: "Event Name",
-                    width: 160,
-                    dataType: "code",
-                    required : true,
-                },
-                {
-                    sortNo: 4,
-                    name: "",
-                    text: "Review Date",
-                    width: 140,
-                    dataType: "combo",
-                    values: axboot.commonCodeFilter("CD112").codeArr,
-                    labels: axboot.commonCodeFilter("CD112").nameArr,
-                    required : true,
-                    disable: false,
-                    editable : true
-                },
-                {
-                    sortNo: 5,
-                    name: "",
-                    text: "Description",
-                    width: 70,
-                    textAlignment: "far",
-                    dataType: "number",
-                    required: false
-                },
-                {
-                    sortNo: 6,
-                    name: "notes",
-                    text: "Notes",
-                    width: 250,
-                    dataType: "richtext",
-                    required: false
-                },
-                {
-                    sortNo: 7,
-                    name: "",
-                    text: "End",
+                    name: "freezeYN",
+                    text: "Freeze",
                     width: 50,
                     dataType: "check",
                     textAlignment: "center",
-                    defaultValue : "Y",
+                    defaultValue : "N",
                     renderer: {
                         type: "check",
                         shape: "",
@@ -96,11 +46,79 @@ var df00201 =
                         trueValues: "Y",
                         startEditOnClick: true,
                     },
+                    editable: false,
+                    required: false,
+                    disable: true
+                },
+                {
+                    sortNo: 3,
+                    width:140,
+                    name: "eventCode",
+                    text: "Event Code",
+                    width: 140,
+                    editable: true,
+                    dataType: "popup",
+                    popupCode : "PU129",
+                    sqlColumn : {DISPOSAL_FREEZE_EVENT_UUID: "disposalFreezeEventUuid",EVENT_NAME: "eventName",EVENT_CODE:"eventCode",EVENT_TYPE:"eventType",MAX_DEGREE:"degree"},
+                    required: true,
+                    visible: true
+                },
+                {
+                    sortNo: 4,
+                    name: "eventName",
+                    text: "Event Name",
+                    width: 160,
+                    dataType: "code",
+                    required: true,
+                    editable : true,
+                    disable : false
+                },
+                {
+                    sortNo: 5,
+                    name: "degree",
+                    text: "Degree",
+                    width: 70,
+                    textAlignment: "far",
+                    dataType: "number",
+                    required: false
+                },
+                {
+                    sortNo: 6,
+                    name: "description",
+                    text: "Description",
+                    width: 150,
+                    dataType: "richtext",
+                    required: false
+                },
+                {
+                    sortNo: 7,
+                    name: "notes",
+                    text: "Notes",
+                    width: 150,
+                    dataType: "richtext",
                     required: false
                 },
                 {
                     sortNo: 8,
-                    name: "",
+                    name: "endYN",
+                    text: "End",
+                    width: 50,
+                    dataType: "check",
+                    textAlignment: "center",
+                    defaultValue : "N",
+                    renderer: {
+                        type: "check",
+                        shape: "",
+                        falseValues: "N",
+                        trueValues: "Y",
+                        startEditOnClick: true,
+                    },
+                    required: false,
+                    editable: true
+                },
+                {
+                    sortNo: 9,
+                    name: "terminatorUuid",
                     text: "Terminator",
                     width: 80,
                     dataType: "text",
@@ -110,7 +128,7 @@ var df00201 =
                 },
                 {
                     sortNo: 10,
-                    name: "",
+                    name: "endDate",
                     text: "End date/time",
                     width: 140,
                     dataType: "timestamp",
@@ -120,37 +138,43 @@ var df00201 =
                 },
                 {
                     sortNo: 11,
-                    name: "",
+                    name: "insertUuid",
                     text: "Created By",
                     width: 80,
                     dataType: "text",
-                    editable: false,
-                    disable : true,
-                    required: false
+                    editable : false,
+                    readonly : true,
+                    visible: true,
+                    required: false,
+                    disable: true
                 },
                 {
                     sortNo: 12,
-                    name: "",
+                    name: "insertDate",
                     text: "Date/Time Created",
                     width: 140,
                     dataType: "timestamp",
-                    editable: false,
-                    disable : true,
-                    required: false
+                    required: false,
+                    disable: true
                 },
                 {
                     sortNo: 13,
-                    name: "Modified By"
+                    name: "updateUuid",
+                    text: "Modifed By",
+                    width: 80,
+                    visible: true,
+                    dataType: "text",
+                    required: false,
+                    disable: true
                 },
                 {
-                    sortNo: 12,
-                    name: "",
+                    sortNo: 14,
+                    name: "updateDate",
                     text: "Date/Time Modified",
                     width: 140,
                     dataType: "timestamp",
-                    editable: false,
-                    disable : true,
-                    required: false
+                    required: false,
+                    disable: true
                 }
             ]
     }

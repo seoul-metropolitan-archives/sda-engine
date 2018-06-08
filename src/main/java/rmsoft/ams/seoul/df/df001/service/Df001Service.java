@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 import rmsoft.ams.seoul.common.domain.DfEvent;
 import rmsoft.ams.seoul.common.repository.DfEventRepository;
 import rmsoft.ams.seoul.df.df001.dao.Df001Mapper;
-import rmsoft.ams.seoul.df.df001.vo.Df001;
 import rmsoft.ams.seoul.df.df001.vo.Df00101VO;
 import rmsoft.ams.seoul.df.df001.vo.Df00102VO;
 import rmsoft.ams.seoul.utils.CommonCodeUtils;
@@ -25,7 +24,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
-public class Df001Service extends BaseService<Df001, String> {
+public class Df001Service extends BaseService {
 
     @Autowired
     private Df001Mapper mapper;
@@ -49,8 +48,8 @@ public class Df001Service extends BaseService<Df001, String> {
         df00101VO.setEventCode(param.getString("eventCode"));
         df00101VO.setEventName(param.getString("eventName"));
         df00101VO.setEventTypeUuid(param.getString("eventTypeUuid"));
-        df00101VO.setReviewDate(param.getString("startFromDate"));
-        df00101VO.setReviewDateTo(param.getString("startToDate"));
+        df00101VO.setReviewDate(param.getString("reviewDate"));
+        df00101VO.setReviewDateTo(param.getString("reviewDateTo"));
         df00101VO.setEndYN(param.getString("endYN"));
 
         return mapper.searchList(df00101VO);

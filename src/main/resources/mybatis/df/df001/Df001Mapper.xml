@@ -72,32 +72,26 @@
           AND  END_YN = #{endYN}
         ]]>
         </if>
+        <if test="null != reviewDate and '' != reviewDate">
+            <![CDATA[
+          AND TO_CHAR(REVIEW_DATE, 'yyyy-MM-dd') BETWEEN #{reviewDate} AND #{reviewDateTo}
+        ]]>
+        </if>
+        ORDER BY EVENT_CODE ASC
     </select>
 
     <select id="getDetail" resultType="Df00102VO" parameterType="Df00102VO" statementType="PREPARED">
         SELECT
-        Z1.DISPOSAL_FREEZE_DEGREE_UUID as disposalFreezeEventUuid ,
-        (SELECT
-        COUNT(DISPOSAL_FREEZE_DEGREE_UUID)
-        FROM
-        DF_DISPOSAL_FREEZE_DEGREE ) as freezeCnt,
-        (SELECT
-        COUNT(AGGREGATION_ID)
-        FROM
-        DF_DISPOSAL_FREEZE_RESULT ) as aggregationCnt,
-        (SELECT
-        COUNT(ITEM_UUID)
-        FROM
-        DF_DISPOSAL_FREEZE_RESULT ) as itemCnt
-        FROM
-        DF_DISPOSAL_FREEZE_DEGREE Z1,
-        DF_DISPOSAL_FREEZE_RESULT Z2
-        <where>
-            <if test="disposalFreezeEventUuid != null">
-                Z1.DISPOSAL_FREEZE_DEGREE_UUID = #{disposalFreezeEventUuid}
-            </if>
-            AND Z1.DISPOSAL_FREEZE_DEGREE_UUID = Z2.DISPOSAL_FREEZE_DEGREE_UUID
-        </where>
+            (SELECT MAX("DEGREE")
+            FROM DF_DISPOSAL_FREEZE_DEGREE
+            WHERE DISPOSAL_FREEZE_EVENT_UUID = #{disposalFreezeEventUuid}) AS freezeCnt,
+            (SELECT COUNT(AGGREGATION_ID)
+            FROM DF_DISPOSAL_FREEZE_RESULT
+            WHERE DISPOSAL_FREEZE_EVENT_UUID = #{disposalFreezeEventUuid}) AS aggregationCnt,
+            (SELECT COUNT(ITEM_UUID)
+            FROM DF_DISPOSAL_FREEZE_RESULT
+            WHERE DISPOSAL_FREEZE_EVENT_UUID = #{disposalFreezeEventUuid}) AS itemCnt
+        FROM dual
     </select>
 
     <select id="checkDegree" resultType="int" parameterType="String" statementType="PREPARED">
@@ -105,11 +99,7 @@
           COUNT(DISPOSAL_FREEZE_DEGREE_UUID)
         FROM
           DF_DISPOSAL_FREEZE_DEGREE
-        <where>
-            <if test="disposalFreezeEventUuid != null">
-                DISPOSAL_FREEZE_DEGREE_UUID = #{disposalFreezeEventUuid}
-            </if>
-        </where>
+        WHERE
+          DISPOSAL_FREEZE_EVENT_UUID = #{uuid}
     </select>
-
 </mapper>

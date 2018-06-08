@@ -78,7 +78,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
 
         var params = rows.filter(function (item) {
             item.changeStatus = data;
-            return item.classificationSchemeUuid !== "";
+            return item.disposalFreezeEventUuid !== "";
         });
 
         axboot.ajax({
@@ -118,9 +118,10 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             callback: function (res) {
                 if(isDetailChanged){
                     isDetailChanged = false;
-                    ACTIONS.dispatch(ACTIONS.TOP_GRID_DETAIL_PAGE_SAVE);
                     fnObj.gridView01.commit();
                 }
+
+                ACTIONS.dispatch(ACTIONS.TOP_GRID_DETAIL_PAGE_SAVE);
                 isDetailChanged = false;
                 result = true;
             }
@@ -164,13 +165,6 @@ var ACTIONS = axboot.actionExtend(fnObj, {
 fnObj.pageStart = function () {
     var _this = this;
     $.ajax({
-        url: "/assets/js/controller/simple_controller.js",
-        dataType: "script",
-        async: false,
-        success: function () {
-        }
-    });
-    $.ajax({
         url: "/assets/js/column_info/df00101.js",
         dataType: "script",
         async: false,
@@ -200,6 +194,17 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
         this.model = new ax5.ui.binder();
         this.model.setModel(this.getDefaultData(), this.target);
         this.modelFormatter = new axboot.modelFormatter(this.model); // 모델 포메터 시작
+
+        this.target.find('[data-ax5picker="date"]').ax5picker({
+            direction: "auto",
+            content: {
+                type: 'date'
+            }
+        });
+
+        //$("input[data-ax-path='startFromDate']").val(getFormattedDate(new Date(), true));
+        //$("input[data-ax-path='startToDate']").val(getFormattedDate(new Date()));
+
         this.initEvent();
     },
     initEvent: function () {
@@ -274,7 +279,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
         var state = undefined;
         for(var i = 0; i < names.length; i++)
         {
-            if(names[i] == "Confirm")
+            if(names[i] == CONFIRM_STATUS)
             {
                 state = codes[i];
                 break;
@@ -311,7 +316,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
         var state = undefined;
         for(var i = 0; i < names.length; i++)
         {
-            if(names[i] == "Confirm")
+            if(names[i] == CONFIRM_STATUS)
             {
                 state = codes[i];
                 break;
