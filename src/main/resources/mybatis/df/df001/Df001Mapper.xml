@@ -85,10 +85,10 @@
             (SELECT MAX("DEGREE")
             FROM DF_DISPOSAL_FREEZE_DEGREE
             WHERE DISPOSAL_FREEZE_EVENT_UUID = #{disposalFreezeEventUuid}) AS freezeCnt,
-            (SELECT COUNT(AGGREGATION_ID)
+            (SELECT CASE WHEN COUNT(AGGREGATION_ID) = 0 THEN NULL ELSE COUNT(AGGREGATION_ID) END
             FROM DF_DISPOSAL_FREEZE_RESULT
             WHERE DISPOSAL_FREEZE_EVENT_UUID = #{disposalFreezeEventUuid}) AS aggregationCnt,
-            (SELECT COUNT(ITEM_UUID)
+            (SELECT CASE WHEN COUNT(ITEM_UUID) = 0 THEN NULL ELSE COUNT(ITEM_UUID) END
             FROM DF_DISPOSAL_FREEZE_RESULT
             WHERE DISPOSAL_FREEZE_EVENT_UUID = #{disposalFreezeEventUuid}) AS itemCnt
         FROM dual
@@ -96,10 +96,10 @@
 
     <select id="checkDegree" resultType="int" parameterType="String" statementType="PREPARED">
         SELECT
-          COUNT(DISPOSAL_FREEZE_DEGREE_UUID)
+        COUNT(DISPOSAL_FREEZE_DEGREE_UUID)
         FROM
-          DF_DISPOSAL_FREEZE_DEGREE
+        DF_DISPOSAL_FREEZE_DEGREE
         WHERE
-          DISPOSAL_FREEZE_EVENT_UUID = #{uuid}
+        DISPOSAL_FREEZE_EVENT_UUID = #{uuid}
     </select>
 </mapper>
