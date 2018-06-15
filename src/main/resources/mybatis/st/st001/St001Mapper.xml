@@ -3,93 +3,98 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="rmsoft.ams.seoul..St001Mapper">
-
-    <select id="findAll" resultType="st001" parameterType="st001" statementType="PREPARED">
+<mapper namespace="rmsoft.ams.seoul.st.st001.dao.St001Mapper">
+    <select id="getStRepositoryList" resultType="St00101VO" parameterType="St00101VO" statementType="PREPARED">
         SELECT
-            REPOSITORY_UUID AS repositoryUuid,
-            STATUS_UUID AS statusUuid,
-            REPOSITORY_CODE AS repositoryCode,
-            REPOSITORY_NAME AS repositoryName,
-            DESCRIPTION AS description,
-            NOTES AS notes,
-            USE_YN AS useYn,
-            INSERT_UUID AS insertUuid,
-            INSERT_DATE AS insertDate,
-            UPDATE_UUID AS updateUuid,
-            UPDATE_DATE AS updateDate
+        REPOSITORY_UUID as repositoryUuid,
+        STATUS_UUID as statusUuid,
+        REPOSITORY_CODE as repositoryCode,
+        REPOSITORY_NAME as repositoryName,
+        DESCRIPTION as description,
+        NOTES as notes,
+        USE_YN as useYn,
+        <include refid="Common.UserName"><property name="userUuid" value="INSERT_UUID"/></include> as insertUuid,
+        INSERT_DATE as insertDate,
+        <include refid="Common.UserName"><property name="userUuid" value="UPDATE_UUID"/></include> as updateUuid,
+        UPDATE_DATE as updateDate
         FROM
-            ST_REPOSITORY
+        ST_REPOSITORY
+        <where>
+            <if test="statusUuid != null">
+                STATUS_UUID = #{statusUuid}
+            </if>
+            <if test="repositoryCode != null">
+                AND REPOSITORY_CODE = #{repositoryCode}
+            </if>
+            <if test="repositoryName != null">
+                AND REPOSITORY_NAME = #{repositoryName}
+            </if>
+            <if test="useYn != null">
+                AND USE_YN = #{useYn}
+            </if>
+        </where>
     </select>
-
-    <select id="findOne" resultType="st001" parameterType="st001" statementType="PREPARED">
+    <select id="getStShelfList" resultType="St00102VO" parameterType="St00102VO" statementType="PREPARED">
         SELECT
-            REPOSITORY_UUID AS repositoryUuid,
-            STATUS_UUID AS statusUuid,
-            REPOSITORY_CODE AS repositoryCode,
-            REPOSITORY_NAME AS repositoryName,
-            DESCRIPTION AS description,
-            NOTES AS notes,
-            USE_YN AS useYn,
-            INSERT_UUID AS insertUuid,
-            INSERT_DATE AS insertDate,
-            UPDATE_UUID AS updateUuid,
-            UPDATE_DATE AS updateDate
+        SHELF_UUID as shelfUuid,
+        STATUS_UUID as statusUuid,
+        REPOSITORY_UUID as repositoryUuid,
+        SHELF_CODE as shelfCode,
+        SHELF_NAME as shelfName,
+        DESCRIPTION as description,
+        NOTES as notes,
+        USE_YN as useYn,
+        <include refid="Common.UserName"><property name="userUuid" value="INSERT_UUID"/></include> as insertUuid,
+        INSERT_DATE as insertDate,
+        <include refid="Common.UserName"><property name="userUuid" value="UPDATE_UUID"/></include> as updateUuid,
+        UPDATE_DATE as updateDate
         FROM
-            ST_REPOSITORY
-        WHERE
-            REPOSITORY_UUID = #{repositoryUuid}
+        ST_SHELF
+        <where>
+            <if test="statusUuid != null">
+                STATUS_UUID = #{statusUuid}
+            </if>
+            <if test="shelfCode != null">
+                AND SHELF_CODE = #{shelfCode}
+            </if>
+            <if test="shelfName != null">
+                AND SHELF_NAME = #{shelfName}
+            </if>
+            <if test="useYn != null">
+                AND USE_YN = #{useYn}
+            </if>
+        </where>
     </select>
-
-   <update id="delete" parameterType="st001" statementType="PREPARED">
-        DELETE FROM
-            ST_REPOSITORY
-        WHERE
-            REPOSITORY_UUID = #{repositoryUuid}
-    </update>
-
-   <update id="update" parameterType="st001" statementType="PREPARED">
-        UPDATE ST_REPOSITORY
-        SET
-            STATUS_UUID = #{statusUuid},
-            REPOSITORY_CODE = #{repositoryCode},
-            REPOSITORY_NAME = #{repositoryName},
-            DESCRIPTION = #{description},
-            NOTES = #{notes},
-            USE_YN = #{useYn},
-            INSERT_UUID = #{insertUuid},
-            INSERT_DATE = #{insertDate},
-            UPDATE_UUID = #{updateUuid},
-            UPDATE_DATE = #{updateDate}
-        WHERE
-            REPOSITORY_UUID = #{repositoryUuid}
-    </update>
-
-   <update id="insert" parameterType="st001" statementType="PREPARED">
-        INSERT INTO ST_REPOSITORY (
-            REPOSITORY_UUID,
-            STATUS_UUID,
-            REPOSITORY_CODE,
-            REPOSITORY_NAME,
-            DESCRIPTION,
-            NOTES,
-            USE_YN,
-            INSERT_UUID,
-            INSERT_DATE,
-            UPDATE_UUID,
-            UPDATE_DATE
-        ) VALUES (
-            #{repositoryUuid},
-            #{statusUuid},
-            #{repositoryCode},
-            #{repositoryName},
-            #{description},
-            #{notes},
-            #{useYn},
-            #{insertUuid},
-            #{insertDate},
-            #{updateUuid},
-            #{updateDate}
-        )
-    </update>
+    <select id="getLocationList" resultType="St00103VO" parameterType="St00103VO" statementType="PREPARED">
+        SELECT
+        LOCATION_UUID as locationUuid,
+        STATUS_UUID as statusUuid,
+        SHELF_UUID as shelfUuid,
+        ROW_NO as rowNo,
+        COLUMN_NO as columnNo,
+        TOTAL_CONTAINER as totalContainer,
+        DESCRIPTION as description,
+        NOTES as notes,
+        USE_YN as useYn,
+        <include refid="Common.UserName"><property name="userUuid" value="INSERT_UUID"/></include> as insertUuid,
+        INSERT_DATE as insertDate,
+        <include refid="Common.UserName"><property name="userUuid" value="UPDATE_UUID"/></include> as updateUuid,
+        UPDATE_DATE as updateDate
+        FROM
+        ST_LOCATION
+        <where>
+            <if test="statusUuid != null">
+                STATUS_UUID = #{statusUuid}
+            </if>
+            <if test="rowNo != null">
+                AND ROW_NO = #{rowNo}
+            </if>
+            <if test="columnNo != null">
+                AND COLUMN_NO = #{columnNo}
+            </if>
+            <if test="useYn != null">
+                AND USE_YN = #{useYn}
+            </if>
+        </where>
+    </select>
 </mapper>

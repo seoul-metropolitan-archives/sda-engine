@@ -3,118 +3,61 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="rmsoft.ams.seoul..Rs003Mapper">
-
-    <select id="findAll" resultType="rs003" parameterType="rs003" statementType="PREPARED">
+<mapper namespace="rmsoft.ams.seoul.rs.rs003.dao.Rs003Mapper">
+    <select id="getRsRecordScheduleList" resultType="Rs00301VO" parameterType="Rs00301VO" statementType="PREPARED">
         SELECT
-            RECORD_SCHEDULE_UUID AS recordScheduleUuid,
-            STATUS_UUID AS statusUuid,
-            RS_CODE AS rsCode,
-            RS_NAME AS rsName,
-            GENERAL_RECORD_SCHEDULE_UUID AS generalRecordScheduleUuid,
-            TRIGGER_UUID AS triggerUuid,
-            RETENION_PERIOD_UUID AS retenionPeriodUuid,
-            DISPOSAL_TYPE_UUID AS disposalTypeUuid,
-            BASED_ON AS basedOn,
-            DESCRIPTION AS description,
-            NOTES AS notes,
-            USE_YN AS useYn,
-            INSERT_UUID AS insertUuid,
-            INSERT_DATE AS insertDate,
-            UPDATE_UUID AS updateUuid,
-            UPDATE_DATE AS updateDate
+            A.RECORD_SCHEDULE_UUID as recordScheduleUuid,
+            A.GENERAL_RECORD_SCHEDULE_UUID as generalRecordScheduleUuid,
+            A.TRIGGER_UUID as triggerUuid,
+            A.STATUS_UUID as statusUuid,
+            A.RS_CODE as rsCode,
+            A.RS_NAME as rsName,
+            B.GRS_CODE as grsCode,
+            B.GRS_NAME as grsName,
+            A.RETENTION_PERIOD_UUID as retentionPeriodUuid,
+            A.DISPOSAL_TYPE_UUID as disposalTypeUuid,
+            A.BASED_ON as basedOn,
+            T.TRIGGER_NAME as triggerName,
+            T.TRIGGER_DATE as triggerDate,
+            A.DESCRIPTION as description,
+            A.NOTES as notes,
+            A.USE_YN as useYn,
+            <include refid="Common.UserName"><property name="userUuid" value="A.INSERT_UUID"/></include> as insertUuid,
+            A.INSERT_DATE as insertDate,
+            <include refid="Common.UserName"><property name="userUuid" value="A.UPDATE_UUID"/></include> as updateUuid,
+            A.UPDATE_DATE as updateDate
         FROM
-            RS_RECORD_SCHEDULE
+          RS_RECORD_SCHEDULE A, RS_GENERAL_RECORD_SCHEDULE B, RS_TRIGGER T
+        <where>
+            A.TRIGGER_UUID = T.TRIGGER_UUID(+)
+            AND A.GENERAL_RECORD_SCHEDULE_UUID = B.GENERAL_RECORD_SCHEDULE_UUID(+)
+            <if test="statusUuid != null">
+                AND A.STATUS_UUID = #{statusUuid}
+            </if>
+            <if test="retentionPeriodUuid != null">
+                AND A.RETENTION_PERIOD_UUID = #{retentionPeriodUuid}
+            </if>
+            <if test="disposalTypeUuid != null">
+                AND A.DISPOSAL_TYPE_UUID = #{disposalTypeUuid}
+            </if>
+            <if test="useYn != null">
+                AND A.USE_YN = #{useYn}
+            </if>
+            <if test="grsCode != null">
+                AND B.GRS_CODE = #{grsCode}
+            </if>
+            <if test="rsCode != null">
+                AND A.RS_CODE LIKE '%'||#{rsCode}||'%'
+            </if>
+            <if test="rsName != null">
+                AND A.RS_NAME LIKE '%'||#{rsName}||'%'
+            </if>
+            <if test="triggerYn != null and triggerYn.equalsIgnoreCase('Y')">
+                AND T.TRIGGER_NAME IS NOT NULL
+            </if>
+            <if test="triggerYn != null and triggerYn.equalsIgnoreCase('N')">
+                AND T.TRIGGER_NAME IS NULL
+            </if>
+        </where>
     </select>
-
-    <select id="findOne" resultType="rs003" parameterType="rs003" statementType="PREPARED">
-        SELECT
-            RECORD_SCHEDULE_UUID AS recordScheduleUuid,
-            STATUS_UUID AS statusUuid,
-            RS_CODE AS rsCode,
-            RS_NAME AS rsName,
-            GENERAL_RECORD_SCHEDULE_UUID AS generalRecordScheduleUuid,
-            TRIGGER_UUID AS triggerUuid,
-            RETENION_PERIOD_UUID AS retenionPeriodUuid,
-            DISPOSAL_TYPE_UUID AS disposalTypeUuid,
-            BASED_ON AS basedOn,
-            DESCRIPTION AS description,
-            NOTES AS notes,
-            USE_YN AS useYn,
-            INSERT_UUID AS insertUuid,
-            INSERT_DATE AS insertDate,
-            UPDATE_UUID AS updateUuid,
-            UPDATE_DATE AS updateDate
-        FROM
-            RS_RECORD_SCHEDULE
-        WHERE
-            RECORD_SCHEDULE_UUID = #{recordScheduleUuid}
-    </select>
-
-   <update id="delete" parameterType="rs003" statementType="PREPARED">
-        DELETE FROM
-            RS_RECORD_SCHEDULE
-        WHERE
-            RECORD_SCHEDULE_UUID = #{recordScheduleUuid}
-    </update>
-
-   <update id="update" parameterType="rs003" statementType="PREPARED">
-        UPDATE RS_RECORD_SCHEDULE
-        SET
-            STATUS_UUID = #{statusUuid},
-            RS_CODE = #{rsCode},
-            RS_NAME = #{rsName},
-            GENERAL_RECORD_SCHEDULE_UUID = #{generalRecordScheduleUuid},
-            TRIGGER_UUID = #{triggerUuid},
-            RETENION_PERIOD_UUID = #{retenionPeriodUuid},
-            DISPOSAL_TYPE_UUID = #{disposalTypeUuid},
-            BASED_ON = #{basedOn},
-            DESCRIPTION = #{description},
-            NOTES = #{notes},
-            USE_YN = #{useYn},
-            INSERT_UUID = #{insertUuid},
-            INSERT_DATE = #{insertDate},
-            UPDATE_UUID = #{updateUuid},
-            UPDATE_DATE = #{updateDate}
-        WHERE
-            RECORD_SCHEDULE_UUID = #{recordScheduleUuid}
-    </update>
-
-   <update id="insert" parameterType="rs003" statementType="PREPARED">
-        INSERT INTO RS_RECORD_SCHEDULE (
-            RECORD_SCHEDULE_UUID,
-            STATUS_UUID,
-            RS_CODE,
-            RS_NAME,
-            GENERAL_RECORD_SCHEDULE_UUID,
-            TRIGGER_UUID,
-            RETENION_PERIOD_UUID,
-            DISPOSAL_TYPE_UUID,
-            BASED_ON,
-            DESCRIPTION,
-            NOTES,
-            USE_YN,
-            INSERT_UUID,
-            INSERT_DATE,
-            UPDATE_UUID,
-            UPDATE_DATE
-        ) VALUES (
-            #{recordScheduleUuid},
-            #{statusUuid},
-            #{rsCode},
-            #{rsName},
-            #{generalRecordScheduleUuid},
-            #{triggerUuid},
-            #{retenionPeriodUuid},
-            #{disposalTypeUuid},
-            #{basedOn},
-            #{description},
-            #{notes},
-            #{useYn},
-            #{insertUuid},
-            #{insertDate},
-            #{updateUuid},
-            #{updateDate}
-        )
-    </update>
 </mapper>

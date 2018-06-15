@@ -5,7 +5,7 @@
 
 <!-- ===== [ script ] ===== -->
 <!--realgrid -->
-<script layout:fragment="script" type="text/javascript" th:src="@{/assets/js/ac/cl003/cl003.js}"></script>
+<script layout:fragment="script" type="text/javascript" th:src="@{/assets/js/cl/cl003/cl003.js}"></script>
 
 <!-- ===== [ script ] _END_ ===== -->
 
@@ -47,7 +47,7 @@
                         <li style="width:100%; text-align:left;">
                             <div style="float: right; width: 100%;">
                                 <div class="src_box3" style="background-color: #fffdd6" >
-                                    <input type=text style="background-color: #fffdd6">
+                                    <input type=text style="background-color: #fffdd6" data-ax-path="classificationCode">
                                     <a href="#">
                                         <img th:src="@{/assets/images/ams/search_normal.png}" alt="search"></a>
                                 </div>
@@ -77,9 +77,9 @@
 
                     <ul class="bdb bgf7 div_tablerow" style="height:30px;">
                         <th:block layout:insert="~{/fragments/page-buttons :: dot('Aggregation')}"/>
-                        <th:block layout:insert="~{/fragments/page-buttons :: inquiry-and-confirm-and-cancel-and-add-and-delete}"/>
+                        <th:block layout:insert="~{/fragments/page-buttons :: inquiry-and-confirm-and-cancel}"/>
                     </ul>
-                    <div class="div_tablerow" style="height:50px; width: 100%">
+                    <div class="div_tablerow" style="height:25px; width: 100%">
                         <dl>
                             <dt class="pdl_5">Status</dt>
                             <dd>
@@ -90,30 +90,9 @@
                                     <option>Status3</option>
                                 </select>
                             </dd>
-                            <dt class="w130">Aggregation Code</dt>
+                            <dt class="w130">Aggregation</dt>
                             <dd>
                                 <input type=text style="width:135px">
-                            </dd>
-                            <dt>Title</dt>
-                            <dd>
-                                <input type=text style="width:135px">
-                            </dd>
-                        </dl>
-                        <dl>
-                            <dt class="pdl_5">Type</dt>
-                            <dd>
-                                <select style="width:135px;">
-                                    <option>&nbsp;</option>
-                                    <option>Status1</option>
-                                    <option>Status2</option>
-                                    <option>Status3</option>
-                                </select>
-                            </dd>
-                            <dt class="w130">Classified Date</dt>
-                            <dd class="w_auto">
-                                <div class="cld_box"><input type=text id="datepicker1"></div>
-                                ~
-                                <div class="cld_box"><input type=text id="datepicker2"></div>
                             </dd>
                         </dl>
                     </div>
@@ -127,10 +106,14 @@
 
                     <ul class="bdb bdt bgf7 div_tablerow" style="height:30px;">
                         <th:block layout:insert="~{/fragments/page-buttons :: dot('Item')}"/>
-                        <th:block layout:insert="~{/fragments/page-buttons :: inquiry-and-confirm-and-cancel-and-add-and-delete}"/>
+                        <th:block layout:insert="~{/fragments/page-buttons :: inquiry-and-confirm-and-cancel}"/>
                     </ul>
-                    <div class="div_tablerow" style="height:50px; width: 100%">
+                    <div class="div_tablerow" style="height:25px; width: 100%">
                         <dl>
+                            <dt class="w130">Mode</dt>
+                            <dd>
+                                <input type=text style="width:135px">
+                            </dd>
                             <dt class="pdl_5">Status</dt>
                             <dd>
                                 <select style="width:135px;">
@@ -140,30 +123,9 @@
                                     <option>Status3</option>
                                 </select>
                             </dd>
-                            <dt class="w130">Item Code</dt>
+                            <dt>Item</dt>
                             <dd>
                                 <input type=text style="width:135px">
-                            </dd>
-                            <dt>Title</dt>
-                            <dd>
-                                <input type=text style="width:135px">
-                            </dd>
-                        </dl>
-                        <dl>
-                            <dt class="pdl_5">Type</dt>
-                            <dd>
-                                <select style="width:135px;">
-                                    <option>&nbsp;</option>
-                                    <option>Status1</option>
-                                    <option>Status2</option>
-                                    <option>Status3</option>
-                                </select>
-                            </dd>
-                            <dt class="w130">Classified Date</dt>
-                            <dd class="w_auto">
-                                <div class="cld_box"><input type=text id="datepicker3"></div>
-                                ~
-                                <div class="cld_box"><input type=text id="datepicker4"></div>
                             </dd>
                         </dl>
                     </div>

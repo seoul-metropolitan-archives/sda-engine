@@ -22,7 +22,7 @@ public class Rs001VO extends BaseVO {
 
 	private String grsName;
 
-	private String retenionPeriodUuid;
+	private String retentionPeriodUuid;
 
 	private String disposalTypeUuid;
 

@@ -1,21 +1,21 @@
-var cl00301 =
+var cl00302 =
     {
         column_info :
             [
                 /****************************************************
-                * sortNo: grid column number
-                * name: 바인딩명 - VO 변수명과 일치
-                * text: 그리드 헤더 텍스트
-                * dataType : 입력방법
-                * editable : 활성비활성 여유
-                * required : 필수 여부
-                * visible  : grid 포함여부
-                ****************************************************/
+                 * sortNo: grid column number
+                 * name: 바인딩명 - VO 변수명과 일치
+                 * text: 그리드 헤더 텍스트
+                 * dataType : 입력방법
+                 * editable : 활성비활성 여유
+                 * required : 필수 여부
+                 * visible  : grid 포함여부
+                 ****************************************************/
                 {
                     sortNo: 0,
                     width:30,
                     name: "classUuid",
-                    text: "CLASSIFIED_RECORDS_UUID",
+                    text: "Class UUID",
                     editable: false,
                     dataType: "code",
                     required: false,
@@ -25,7 +25,7 @@ var cl00301 =
                     sortNo: 1,
                     width:30,
                     name: "classificationSchemeUuid",
-                    text: "STATUS_UUID",
+                    text: "Classification Scheme UUID",
                     editable: false,
                     dataType: "code",
                     required: false,
@@ -35,7 +35,7 @@ var cl00301 =
                     sortNo: 2,
                     width: 120,
                     name: "statusUuid",
-                    text: "CLASS_UUID",
+                    text: "Status",
                     editable: false,
                     values: axboot.commonCodeFilter("CD111").codeArr,
                     labels: axboot.commonCodeFilter("CD111").nameArr,
@@ -44,16 +44,25 @@ var cl00301 =
                 {
                     sortNo: 3,
                     width: 150,
-                    name: "AGGREGATION_UUID",
-                    text: "Parent Class Code",
-                    editable: true
+                    name: "item",
+                    text: "Item",
+                    editable: false
                 },
                 {
                     sortNo: 4,
                     name: "classCode",
-                    text: "ITEM_UUID",
+                    text: "Aggregation Tree",
                     width: 150,
-                    dataType: "code",
+                    dataType: "",
+                    editable: false,
+                    sortable: true
+                },
+                {
+                    sortNo: 5,
+                    name: "classfiedDate",
+                    text: "Classfied Date",
+                    width: 150,
+                    dataType: "text",
                     editable: false,
                     sortable: true
                 },
@@ -61,54 +70,57 @@ var cl00301 =
                     sortNo: 6,
                     name: "description",
                     text: "Description",
-                    width: 250,
-                    dataType: "richtext"
+                    width: 100,
+                    editable: false,
+                    dataType : "text"
                 },
                 {
                     sortNo: 7,
                     name: "notes",
-                    text: "NOTES",
-                    width: 250,
-                    dataType: "richtext",
-                    required: true
+                    text: "Notes",
+                    width: 70,
+                    editable: true,
+                    sortable: true,
+                    datType: "number"
+                },
+                {
+                    sortNo: 8,
+                    name: "insertUuid",
+                    text: "Created By",
+                    width: 120,
+                    editable: false,
+                    disable: true,
+                    dataType: "text",
+                    required: false
                 },
                 {
                     sortNo: 9,
-                    name: "insertUuid",
-                    text: "Created By",
-                    width: 80,
-                    dataType: "timestamp",
+                    name: "insertDate",
+                    text: "Date/Time Created",
+                    width: 120,
                     editable: false,
-                    disable : true,
+                    disable: true,
+                    dataType: "timestamp",
                     required: false
                 },
                 {
                     sortNo: 10,
-                    name: "insertDate",
-                    text: "Date/Time Created",
-                    width: 140,
-                    dataType: "text",
+                    name: "updateUuid",
+                    text: "Modifed By",
+                    width: 120,
                     editable: false,
+                    disable: true,
+                    dataType: "text",
                     required: false
                 },
                 {
                     sortNo: 11,
-                    name: "updateUuid",
-                    text: "Modifed By",
-                    width: 80,
-                    dataType: "text",
-                    editable: false,
-                    disable : true,
-                    required: false
-                },
-                {
-                    sortNo: 12,
                     name: "updateDate",
                     text: "Date/Time Modified",
-                    width: 140,
-                    dataType: "timestamp",
+                    width: 120,
                     editable: false,
-                    disable : true,
+                    disable: true,
+                    dataType: "timestamp",
                     required: false
                 }
             ]

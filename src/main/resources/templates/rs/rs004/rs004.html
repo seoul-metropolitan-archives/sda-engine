@@ -21,32 +21,63 @@
                     </div>
                     <div class="bdb div_tablerow searchFields">
                         <dl>
-                            <dt class="mgl_5"></dt>
+                            <dt class="mgl_5 w130">Status</dt>
                             <dd>
-                                <input type=text style="width:135px" data-ax-path="messageCode">
-                            </dd>
-                            <dt></dt>
-                            <dd>
-                                <input type=text style="width:135px" data-ax-path="messageName">
-                            </dd>
-                            <dt></dt>
-                            <dd>
-                                <select data-ax-path="serviceUuid" style="width:135px;" id="serviceList">
+                                <select data-ax-path="statusUUid" style="width:135px;">
                                     <option value=""></option>
-                                    <option th:each="item : ${serviceList}"
+                                    <option th:each="item : ${statusUuid}"
                                             th:value="${item.codeDetailUUID}"
                                             th:text="${item.codeName}"/>
                                 </select>
                             </dd>
+                            <dt class="mgl_5 w130">Retention period</dt>
+                            <dd>
+                                <select data-ax-path="retentionPeriod" style="width:135px;">
+                                    <option value=""></option>
+                                    <option th:each="item : ${statusUuid}"
+                                            th:value="${item.codeDetailUUID}"
+                                            th:text="${item.codeName}"/>
+                                </select>
+                            </dd>
+                            <dt class="mgl_5 w130">Disposal Type</dt>
+                            <dd>
+                                <select data-ax-path="statusUUid" style="width:135px;">
+                                    <option value=""></option>
+                                    <option th:each="item : ${statusUuid}"
+                                            th:value="${item.codeDetailUUID}"
+                                            th:text="${item.codeName}"/>
+                                </select>
+                            </dd>
+                        </dl>
+                        <dl>
+                            <th:block layout:insert="~{/fragments/page-buttons :: searchInputYellow100 ('RS Code',' ')}"/>
+                            <dt class="mgl_5 w130">RS Name</dt>
+                            <dd>
+                                <input type=text style="width:135px" data-ax-path="rsName">
+                            </dd>
+                            <dt class="mgl_5 w130">Disposal Due Date</dt>
+                            <dd class="w_auto">
+                                <div class="input-group" data-ax5picker="date">
+                                    <div class="cld_box" style="background-color: #fffdd6">
+                                        <input type="text" data-ax-path="startFromDate" style="background-color: #fffdd6;ime-mode:disabled;"
+                                               placeholder="YYYY-MM-DD" maxlength="10">
+                                        <img title="calendar" class="ui-datepicker-trigger" alt="..." src="/assets/images/ams/calendar.png" >
+                                    </div>
+                                    ~
+                                    <div class="cld_box" style="background-color: #fffdd6">
+                                        <input type="text" data-ax-path="startToDate" style="background-color: #fffdd6;ime-mode:disabled;"
+                                               placeholder="YYYY-MM-DD" maxlength="10">
+                                        <img title="calendar" class="ui-datepicker-trigger" alt="..." src="/assets/images/ams/calendar.png">
+                                    </div>
+                                </div>
+                            </dd>
+                            <dt style="width: 15px;"/>
                             <dd class="w_auto">
                                 <div class="rdo_box">
-                                    <span class="rdo_box_title">Use</span>
-                                    <label>
-                                        <input type="radio" name="radio" data-ax-path="useYN" class="no_border" value="Y">Yes</label>
-                                    <label>
-                                        <input type="radio" name="radio" data-ax-path="useYN" class="no_border" value="N">No</label>
-                                    <label>
-                                        <input type="radio" name="radio" data-ax-path="useYN" class="no_border"  value="" checked>All</label>
+                                    <span class="rdo_box_title">Disposal Freeze</span>
+                                    <label><input type="radio" name="radio"  data-ax-path="useYn" class="no_border" value="Y">Yes</label>
+                                    <label><input type="radio" name="radio" data-ax-path="useYn" class="no_border" value="N">No</label>
+                                    <label><input type="radio" name="radio" checked="checked" data-ax-path="useYn" class="no_border" value="">All</label>
                                 </div>
                             </dd>
                         </dl>
@@ -56,7 +87,7 @@
 
                         <div style="height:100%; width:100%" class="div_table">
                             <ul class="bdb bdt div_tablerow" style="height:30px;">
-                                <th:block layout:insert="~{/fragments/page-buttons :: dot('Record Scheduling')}"/>
+                                <th:block layout:insert="~{/fragments/page-buttons :: dot('Record Schedule')}"/>
                                 <th:block layout:insert="~{/fragments/page-buttons :: confirm-and-cancel}"/>
                             </ul>
                             <div style="height:100%; width:100%" class="div_tablerow bdb">

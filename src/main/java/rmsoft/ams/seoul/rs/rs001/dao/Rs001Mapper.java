@@ -1,20 +1,13 @@
 package rmsoft.ams.seoul.rs.rs001.dao;
 
 import io.onsemiro.core.mybatis.MyBatisMapper;
-import rmsoft.ams.seoul.rs.rs001.vo.Rs001;
+import rmsoft.ams.seoul.rs.rs001.vo.Rs00101VO;
 
 import java.util.List;
 
 
 public interface Rs001Mapper extends MyBatisMapper {
 
-    List<Rs001> findAll();
+    List<Rs00101VO> getRsGeneralRecordScheduleList(Rs00101VO rs00101VO);
 
-    Rs001 findOne(Rs001 rs001);
-
-    int update(Rs001 rs001);
-
-    int delete(Rs001 rs001);
-
-    int insert(Rs001 rs001);
 }

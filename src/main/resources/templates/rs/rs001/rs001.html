@@ -4,7 +4,7 @@
       layout:decorate="~{/layout/base}">
 
 <!-- ===== [ script ] ===== -->
-<script layout:fragment="script" type="text/javascript" th:src="@{/assets/js/rs/rs001.js}"></script>
+<script layout:fragment="script" type="text/javascript" th:src="@{/assets/js/rs/rs001/rs001.js}"></script>
 <!--realgrid -->
 
 <!-- ===== [ base-content ] ===== -->
@@ -16,37 +16,69 @@
                     <div style=" height:30px; width:100%" class="bgf7 div_tablerow">
                         <ul class="bdb">
                             <th:block layout:insert="~{/fragments/page-buttons :: bookmark}"/>
-                            <th:block layout:insert="~{/fragments/page-buttons :: save-and-inquiry}"/>
+                            <th:block layout:insert="~{/fragments/page-buttons :: confirm-and-cancel-and-save-and-inquiry}"/>
                         </ul>
                     </div>
                     <div class="bdb div_tablerow searchFields">
                         <dl>
-                            <dt class="mgl_5">Message Code</dt>
+                            <dt class="mgl_5">Status</dt>
+                            <dd>
+                                <select data-ax-path="statusUuid" style="width:135px;">
+                                    <option value=""></option>
+                                    <option th:each="item : ${statusUuid}"
+                                            th:value="${item.codeDetailUUID}"
+                                            th:text="${item.codeName}"/>
+                                </select>
+                            </dd>
+                            <dt class="mgl_5">GRS Code</dt>
                             <dd>
                                 <input type=text style="width:135px" data-ax-path="messageCode">
                             </dd>
-                            <dt>Message Name</dt>
+                            <dt class="mgl_5">GRS Name</dt>
                             <dd>
                                 <input type=text style="width:135px" data-ax-path="messageName">
                             </dd>
-                            <dt>Service</dt>
+                        </dl>
+                        <dl>
+                            <dt class="mgl_5">Retention Period</dt>
                             <dd>
-                                <select data-ax-path="serviceUuid" style="width:135px;" id="serviceList">
+                                <select data-ax-path="retentionPeriodUuid" style="width:135px;">
                                     <option value=""></option>
-                                    <option th:each="item : ${serviceList}"
+                                    <option th:each="item : ${retentionPeriodUuid}"
+                                            th:value="${item.codeDetailUUID}"
+                                            th:text="${item.codeName}"/>
+                                </select>
+                            </dd>
+                            <dt class="mgl_5">Disposal Type</dt>
+                            <dd>
+                                <select data-ax-path="disposalTypeUuid" style="width:135px;">
+                                    <option value=""></option>
+                                    <option th:each="item : ${disposalTypeUuid}"
                                             th:value="${item.codeDetailUUID}"
                                             th:text="${item.codeName}"/>
                                 </select>
                             </dd>
                             <dd class="w_auto">
                                 <div class="rdo_box">
+                                    <span class="rdo_box_title">Trigger</span>
+                                    <label>
+                                        <input type="radio" name="radio1" data-ax-path="triggerYn" class="no_border" value="Y">Yes</label>
+                                    <label>
+                                        <input type="radio" name="radio1" data-ax-path="triggerYn" class="no_border" value="N">No</label>
+                                    <label>
+                                        <input type="radio" name="radio1" data-ax-path="triggerYn" class="no_border"  value="" checked>All</label>
+                                </div>
+                            </dd>
+                            <dt></dt>
+                            <dd class="w_auto">
+                                <div class="rdo_box">
                                     <span class="rdo_box_title">Use</span>
                                     <label>
-                                        <input type="radio" name="radio" data-ax-path="useYN" class="no_border" value="Y">Yes</label>
+                                        <input type="radio" name="radio2" data-ax-path="useYn" class="no_border" value="Y">Yes</label>
                                     <label>
-                                        <input type="radio" name="radio" data-ax-path="useYN" class="no_border" value="N">No</label>
+                                        <input type="radio" name="radio2" data-ax-path="useYn" class="no_border" value="N">No</label>
                                     <label>
-                                        <input type="radio" name="radio" data-ax-path="useYN" class="no_border"  value="" checked>All</label>
+                                        <input type="radio" name="radio2" data-ax-path="useYn" class="no_border"  value="" checked>All</label>
                                 </div>
                             </dd>
                         </dl>
@@ -56,7 +88,7 @@
 
                         <div style="height:100%; width:100%" class="div_table">
                             <ul class="bdb bdt div_tablerow" style="height:30px;">
-                                <th:block layout:insert="~{/fragments/page-buttons :: dot('Message')}"/>
+                                <th:block layout:insert="~{/fragments/page-buttons :: dot('General Record Schedule')}"/>
                                 <th:block layout:insert="~{/fragments/page-buttons :: add-and-delete}"/>
                             </ul>
                             <div style="height:100%; width:100%" class="div_tablerow bdb">

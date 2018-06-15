@@ -24,22 +24,7 @@
                 </div>
                 <div class="bdb div_tablerow">
                     <dl>
-                        <!--<th:block layout:insert="~{/fragments/page-buttons :: searchInputYellow ('Classification Scheme','classificationCode')}"/>-->
-                        <!--<th:block layout:insert="~{/fragments/page-buttons :: searchInput03 ('Parent Class Code','parentClassCode')}"/>-->
-                        <dt class="w150">Parent Class Code</dt>
-                        <dd>
-                            <div class="src_box2">
-                                <input data-ax-path='parentClassCode' type="text" style="width:133px">
-                            </div>
-                        </dd>
-                        <dt class="w150">Parent Class Name</dt>
-                        <dd>
-                            <input data-ax-path="parentClassName" type=text style="width:135px">
-                        </dd>
-
-                    </dl>
-                    <dl>
-                        <dt class="w150 mgl_5">Status</dt>
+                        <dt class="w120 mgl_5">Status</dt>
                         <dd>
                             <select data-ax-path="statusUuid" style="width:135px;">
                                 <option value="" ></option>
@@ -49,19 +34,27 @@
                             </select>
                         </dd>
 
+                        <dt class="w150">Container Name</dt>
+                        <dd>
+                            <input type=text style="width:135px" data-ax-path="containerName">
+                        </dd>
 
-                        <dt class="w150">Class Code</dt>
-                        <dd>
-                            <input data-ax-path="classCodeForm" type=text style="width:135px">
-                        </dd>
-                        <dt class="w150">Class Name</dt>
-                        <dd>
-                            <input data-ax-path="className" type=text style="width:135px">
-                        </dd>
+                        <th:block layout:insert="~{/fragments/page-buttons :: searchInputYellow ('Parent Container Name','parentContainerName')}"/>
+
+                        <!--<dt class="w120">Creation Start Date</dt>
+                        <dd class="w250">
+                            <div class="cld_box">
+                                <input type=text id="datepicker1">
+                            </div>
+                            ~
+                            <div class="cld_box">
+                                <input type=text id="datepicker2">
+                            </div>
+                        </dd>-->
 
                     </dl>
                     <dl>
-                        <dt class="mgl_5 w150">Class Level</dt>
+                        <dt class="mgl_5 w120">Container Type</dt>
                         <dd>
                             <select data-ax-path="classLevelUuid" style="width:135px;">
                                 <option value=""></option>
@@ -70,12 +63,37 @@
                                         th:text="${item.codeName}"/>
                             </select>
                         </dd>
-                        <dd class="w_auto">
+                        <dt class="w150">Control Number</dt>
+                        <dd>
+                            <input type=text style="width:135px" data-ax-path="controlNumber">
+                        </dd>
+                        <dt class="w150">Provenace</dt>
+                        <dd>
+                            <input type=text style="width:135px" data-ax-path="provenance">
+                        </dd>
+
+                        <!--<dt class="w120">Creation End Date</dt>
+                        <dd class="w250">
+                            <div class="cld_box">
+                                <input type=text id="datepicker3">
+                            </div>
+                            ~
+                            <div class="cld_box">
+                                <input type=text id="datepicker4">
+                            </div>
+                        </dd>-->
+                    </dl>
+                    <dl>
+                        <dt class="none">Use</dt>
+                        <dd class="w_auto mgl_5">
                             <div class="rdo_box">
                                 <span class="rdo_box_title">Use</span>
-                                <label><input type="radio" name="radio" data-ax-path="useYn" class="no_border" value="Y">Yes</label>
-                                <label><input type="radio" name="radio" data-ax-path="useYn" class="no_border" value="N">No</label>
-                                <label><input type="radio" name="radio" checked="checked"  data-ax-path="useYn" class="no_border" value="">All</label>
+                                <label>
+                                    <input type="radio" name="radio" class="no_border">Yes</label>
+                                <label>
+                                    <input type="radio" name="radio" class="no_border">No</label>
+                                <label>
+                                    <input type="radio" name="radio" class="no_border" checked>All</label>
                             </div>
                         </dd>
                     </dl>
@@ -116,7 +134,6 @@
                     <div style="display:table; height:100%; width:85%; float:left" class="bdr">
                         <ul class="bdb bdt div_tablerow bgf7" style="height:30px;">
                             <th:block layout:insert="~{/fragments/page-buttons :: dot('Container List')}"/>
-                            <th:block layout:insert="~{/fragments/page-buttons :: add-and-delete}"/>
                         </ul>
                         <ul class="bdb div_tablerow" style="height:25px;">
                             <li style="width:100%; text-align:left;">

@@ -5,7 +5,7 @@
 
 <!-- ===== [ script ] ===== -->
 <!--realgrid -->
-<script layout:fragment="script" type="text/javascript" th:src="@{/assets/js/st/st003/st003.js}"></script>
+<script layout:fragment="script" type="text/javascript" th:src="@{/assets/js/st/st002/st002.js}"></script>
 
 <!-- ===== [ script ] _END_ ===== -->
 
@@ -16,87 +16,237 @@
     <form name="formView01" id="formView01" method="post" onsubmit="return false">
         <div class="cssBody" style="top:80px">
             <div class="contents_wrap">
-                <div style=" height:31px; width:100%" class="bgf7 div_tablerow searchFields">
+                <div style=" height:30px; width:100%" class="bgf7 div_tablerow">
                     <ul class="bdb">
-                        <th:block layout:insert="~{/fragments/page-buttons :: bookmark}"/>
-                        <th:block layout:insert="~{/fragments/page-buttons :: confirm-and-cancel}"/>
+                        <li style="width:30px; height: 30px">
+                            <div class="bookmark_star"><img src="images/bookmark.png" alt="bookmark"></div>
+                        </li>
+                        <li style="width:30%; text-align:left;">Arrange Records</li>
+                        <li style="text-align:right; width:68%;">
+                            <button class="btn_co" id="dialog-link10">
+                                <span class="btn_icon_co">&nbsp;</span>
+                                <span class="btn_main_txt">Arrange</span>
+                            </button>
+                            <button class="btn_s">
+                                <span class="btn_icon">&nbsp;</span>
+                                <span class="btn_main_txt">Save(S)</span>
+                            </button>
+                            <button class="btn_i">
+                                <span class="btn_icon">&nbsp;</span>
+                                <span class="btn_main_txt">Inquiry(I)</span>
+                            </button>
+                        </li>
                     </ul>
-                </div>
-                <div class="bdb div_tablerow">
-                    <dl>
-                    </dl>
-
                 </div>
                 <div style="height:100%; width:100%" class="div_tablerow">
 
-                    <div style="display:table; height:100%; width:15%; float:left" class="bdr">
-                        <ul class="bdb bdt div_tablerow bgf7" style="height:30px;">
-                            <th:block layout:insert="~{/fragments/page-buttons :: dot('Container Tree')}"/>
-                        </ul>
-
-                        <ul class="bdb div_tablerow" style="height:25px;">
-                            <li style="width:100%; text-align:left;">
-                                <input data-ax-path="classificationName" type=text class="yeongye" value="Container.." readonly style="width:99.5%; margin-left: 0.5%">
+                    <div style="display:table; height:100%; width:16%; float:left" class="bdr">
+                        <ul class="bdb sdiv_tablerow bgf7" style="height:30px;">
+                            <li style="width:80%; text-align:left;">
+                                <img src="images/img_dot2.png" alt="dot">Container</li>
+                            <li style="text-align:right; width:18%;">
+                                <!--    <button class="btn_a">
+                                        <span class="btn_icon">&nbsp;</span>
+                                        <span class="btn_main_txt">Add</span>
+                                    </button>
+                                    <button class="btn_d">
+                                        <span class="btn_icon">&nbsp;</span>
+                                        <span class="btn_main_txt">Delete</span>
+                                    </button>-->
                             </li>
                         </ul>
+
+                        <!--                      <ul class="bdb div_tablerow" style="height:29px;">
+                                                <li style="width:100%; text-align:left;">
+                                                    <div style="float: left; width: 100%;padding-top: 3px" class="pdl_5">Classification Scheme</div>
+                                                </li>
+                                            </ul>
+
+                                            <ul class="bdb div_tablerow" style="height:25px;">
+                                                <li style="width:100%; text-align:left;">
+                                                    <div style="float: right; width: 100%;">
+                                                        <div class="src_box3" style="background-color: #fffdd6" >
+                                                        <input type=text style="background-color: #fffdd6">
+                                                        <a href="#">
+                                                        <img src="http://localhost/@AMS/images/search_normal.png" alt="search"></a>
+                                                        </div>
+                                                   </div>
+                                                </li>
+                                            </ul>-->
 
                         <ul class="bdb" style="height:25px;width:100%; float:left;">
-                            <li style="width:77%">
-                                <input type="text" style="width:100%; margin-left: 0.5%;" id="leftMenuParam">
+                            <li style="width:80%">
+                                <input type="text" style="width:100%; margin-left: 0.5%;">
                             </li>
-                            <li style="width:22%">
-                                <button class="btn_small" style="margin-right: 0" id="searchLeftMenu">Find</button>
+                            <li style="width:20%">
+                                <button class="btn_small" style="margin-right: 0">Find</button>
                             </li>
                         </ul>
 
                         <ul class="bdb" style="height:30px;width:100%; float:left">
-                            <li class="bdr"><a href="#" class="open_close expendAll" id="rg_tree_allopen">Expand All</a></li>
-                            <li><a href="#" class="open_close collapseAll" id="rg_tree_allclose">Collapse All</a></li>
+                            <li class="bdr"><a href="#" class="open_close" id="rg_tree_allopen">Expand All</a></li>
+                            <li><a href="#" class="open_close" id="rg_tree_allclose">Collapse All</a></li>
                         </ul>
                         <div style="height:100%; width:100%" class="div_tablerow bdb">
-                            <div id="realgrid01" style="width:100%; height:100%"></div>
+                            <div id="realgridT1" style="width:100%; height:100%"></div>
+                        </div>
+                    </div><!--오늘쪽 내용에서 좌측 트리부분-->
+
+                    <div style="display:table; height:50%; width:84%; float:left">
+
+                        <ul class="bdb bgf7 div_tablerow" style="height:30px;">
+                            <li style="width:10%; text-align:left;">
+                                <img src="images/img_dot2.png" alt="dot">Aggregation</li>
+                            <li style="text-align:right; width:88%;">
+                                <button class="btn_co">
+                                    <span class="btn_icon_co">&nbsp;</span>
+                                    <span class="btn_main_txt">Find</span>
+                                </button>
+                                <button class="btn_co">
+                                    <span class="btn_icon_co">&nbsp;</span>
+                                    <span class="btn_main_txt">Confrim</span>
+                                </button>
+                                <button class="btn_co">
+                                    <span class="btn_icon_co">&nbsp;</span>
+                                    <span class="btn_main_txt">Cancel</span>
+                                </button>
+                                <button class="btn_a">
+                                    <span class="btn_icon">&nbsp;</span>
+                                    <span class="btn_main_txt">Add</span>
+                                </button>
+                                <button class="btn_d">
+                                    <span class="btn_icon">&nbsp;</span>
+                                    <span class="btn_main_txt">Delete</span>
+                                </button>
+                            </li>
+                        </ul>
+                        <div class="div_tablerow" style="height:50px; width: 100%">
+                            <dl>
+                                <dt class="pdl_5">Status</dt>
+                                <dd>
+                                    <select style="width:135px;">
+                                        <option>&nbsp;</option>
+                                        <option>Status1</option>
+                                        <option>Status2</option>
+                                        <option>Status3</option>
+                                    </select>
+                                </dd>
+                                <dt class="w130">Aggregation Code</dt>
+                                <dd>
+                                    <input type=text style="width:135px">
+                                </dd>
+                                <dt>Title</dt>
+                                <dd>
+                                    <input type=text style="width:135px">
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt class="pdl_5">Type</dt>
+                                <dd>
+                                    <select style="width:135px;">
+                                        <option>&nbsp;</option>
+                                        <option>Status1</option>
+                                        <option>Status2</option>
+                                        <option>Status3</option>
+                                    </select>
+                                </dd>
+                                <dt class="w130">Arranged Date</dt>
+                                <dd class="w_auto">
+                                    <div class="cld_box"><input type=text id="datepicker1"></div>
+                                    ~
+                                    <div class="cld_box"><input type=text id="datepicker2"></div>
+                                </dd>
+                            </dl>
+                        </div>
+                        <ul class="bdt div_tablerow" style="height:25px;">
+                            <li style="width:100%; text-align:left;">
+                                <input type=text class="yeongye" value=" [철] 상반기 복지카드 발급대상자(강서구 마곡동)" readonly style="width: 318px">
+                            </li>
+                        </ul>
+                        <div style="height:100%; width:100%" class="div_tablerow">
+                            <div id="realgrid" style="width:100%; height:100%;" class="bdt"></div>
                         </div>
                     </div>
 
 
-                    <div style="display:table; height:100%; width:85%; float:left" class="bdr">
-                        <div style="display:table; height:50%; width:100%; float:left">
-                            <ul class="bdb bdt bgf7 div_tablerow" style="height:30px;">
-                                <th:block layout:insert="~{/fragments/page-buttons :: dot('Aggregation')}"/>
-                                <th:block layout:insert="~{/fragments/page-buttons :: confirm-and-cancel}"/>
-                            </ul>
-                            <ul class="bdb div_tablerow" style="height:25px;">
-                                <li style="width:100%; text-align:left;">
-                                    <input type=text class="yeongye" data-ax-path="roleNameHeader" value="" readonly style="width: 288px">
+                    <div style="display:table; height:50%; width:84%; float:left">
 
-                                    <button type="button" class="btn_small2" data-form-view-01-btn="select-all">
-                                        Select All
-                                    </button>
-                                    <button type="button" class="btn_small2" data-form-view-01-btn="deselect-all">
-                                        Deselect All
-                                    </button>
-                                </li>
-                            </ul>
-                            <div style="height:100%; width:100%" class="div_tablerow bdb">
-                                <div id="realgrid02" style="width:100%; height:100%"></div>
-                            </div>
+                        <ul class="bdb bdt bgf7 div_tablerow" style="height:30px;">
+                            <li style="width:10%; text-align:left;">
+                                <img src="images/img_dot2.png" alt="dot">Item</li>
+                            <li style="text-align:right; width:88%;">
+                                <button class="btn_co">
+                                    <span class="btn_icon_co">&nbsp;</span>
+                                    <span class="btn_main_txt">Find</span>
+                                </button>
+                                <button class="btn_co">
+                                    <span class="btn_icon_co">&nbsp;</span>
+                                    <span class="btn_main_txt">Confrim</span>
+                                </button>
+                                <button class="btn_co">
+                                    <span class="btn_icon_co">&nbsp;</span>
+                                    <span class="btn_main_txt">Cancel</span>
+                                </button>
+                                <button class="btn_a">
+                                    <span class="btn_icon">&nbsp;</span>
+                                    <span class="btn_main_txt">Add</span>
+                                </button>
+                                <button class="btn_d">
+                                    <span class="btn_icon">&nbsp;</span>
+                                    <span class="btn_main_txt">Delete</span>
+                                </button>
+                            </li>
+                        </ul>
+                        <div class="div_tablerow" style="height:50px; width: 100%">
+                            <dl>
+                                <dt class="pdl_5">Status</dt>
+                                <dd>
+                                    <select style="width:135px;">
+                                        <option>&nbsp;</option>
+                                        <option>Status1</option>
+                                        <option>Status2</option>
+                                        <option>Status3</option>
+                                    </select>
+                                </dd>
+                                <dt class="w130">Item Code</dt>
+                                <dd>
+                                    <input type=text style="width:135px">
+                                </dd>
+                                <dt>Title</dt>
+                                <dd>
+                                    <input type=text style="width:135px">
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt class="pdl_5">Type</dt>
+                                <dd>
+                                    <select style="width:135px;">
+                                        <option>&nbsp;</option>
+                                        <option>Status1</option>
+                                        <option>Status2</option>
+                                        <option>Status3</option>
+                                    </select>
+                                </dd>
+                                <dt class="w130">Arranged Date</dt>
+                                <dd class="w_auto">
+                                    <div class="cld_box"><input type=text id="datepicker3"></div>
+                                    ~
+                                    <div class="cld_box"><input type=text id="datepicker4"></div>
+                                </dd>
+                            </dl>
                         </div>
-                        <div style="display:table; height:50%; width:100%; float:left">
-
-                            <ul class="bdb bdt bgf7 div_tablerow" style="height:30px;">
-                                <th:block layout:insert="~{/fragments/page-buttons :: dot('Item')}"/>
-                                <th:block layout:insert="~{/fragments/page-buttons :: confirm-and-cancel}"/>
-                            </ul>
-                            <div style="height:100%; width:100%" class="div_tablerow bdb">
-                                <div id="realgrid03" style="width:100%; height:100%"></div>
-                            </div>
+                        <ul class="bdt div_tablerow" style="height:25px;">
+                            <li style="width:100%; text-align:left;">
+                                <input type=text class="yeongye" value=" [철] 상반기 복지카드 발급대상자(강서구 마곡동)" readonly style="width: 318px">
+                                <input type=text class="yeongye" value=" [Series] 2015년 1월 복지카드 발급대상자" readonly style="width: 353px; margin-left: -2px">
+                            </li>
+                        </ul>
+                        <div style="height:100%; width:100%" class="div_tablerow bdb">
+                            <div id="realgrid2" style="width:100%; height:100%" class="bdt"></div>
                         </div>
                     </div>
-                </div>
 
-
-
-            </div><!--오른쪽 내용영역 전체 e -->
+                </div><!--오른쪽 내용영역 전체 e -->
         </div>
     </form>
 </div>

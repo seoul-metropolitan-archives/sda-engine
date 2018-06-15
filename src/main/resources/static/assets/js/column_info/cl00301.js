@@ -44,42 +44,40 @@ var cl00301 =
                 {
                     sortNo: 3,
                     width: 150,
-                    name: "parentClassUuid",
-                    text: "Parent Class Code",
-                    editable: true
+                    name: "aggreation",
+                    text: "Aggreation",
+                    editable: false
                 },
                 {
                     sortNo: 4,
                     name: "classCode",
-                    text: "Class Code",
+                    text: "Aggregation Tree",
                     width: 150,
-                    dataType: "code",
+                    dataType: "",
                     editable: false,
                     sortable: true
                 },
                 {
                     sortNo: 5,
-                    name: "classCode",
-                    text: "Class Code",
+                    name: "classfiedDate",
+                    text: "Classfied Date",
                     width: 150,
-                    dataType: "code",
-                    editable: true,
+                    dataType: "text",
+                    editable: false,
                     sortable: true
                 },
                 {
-                    sortNo: "6",
-                    name: "classLevelUuid",
-                    text: "Class Level Uuid",
+                    sortNo: 6,
+                    name: "description",
+                    text: "Description",
                     width: 100,
-                    editable: true,
-                    values: axboot.commonCodeFilter("CD114").codeArr,
-                    labels: axboot.commonCodeFilter("CD114").nameArr,
-                    dataType : "combo"
+                    editable: false,
+                    dataType : "text"
                 },
                 {
-                    sortNo: "7",
-                    name: "orderNo",
-                    text: "Order No",
+                    sortNo: 7,
+                    name: "notes",
+                    text: "Notes",
                     width: 70,
                     editable: true,
                     sortable: true,
@@ -87,34 +85,6 @@ var cl00301 =
                 },
                 {
                     sortNo: 8,
-                    name: "description",
-                    text: "description",
-                    width: 120,
-                    editable: true,
-                    dataType: "richtext",
-                    required: false,
-                },
-                {
-                    sortNo: 9,
-                    name: "notes",
-                    text: "NOTES",
-                    width: 120,
-                    editable: true,
-                    dataType: "richtext",
-                    required: false
-                },
-                {
-                    sortNo: 10,
-                    name: "useYn",
-                    text: "USE",
-                    width: 120,
-                    editable: true,
-                    dataType: "check",
-                    textAlignment: "center",
-                    required: true
-                },
-                {
-                    sortNo: 11,
                     name: "insertUuid",
                     text: "Created By",
                     width: 120,
@@ -124,7 +94,7 @@ var cl00301 =
                     required: false
                 },
                 {
-                    sortNo: 12,
+                    sortNo: 9,
                     name: "insertDate",
                     text: "Date/Time Created",
                     width: 120,
@@ -134,7 +104,7 @@ var cl00301 =
                     required: false
                 },
                 {
-                    sortNo: 13,
+                    sortNo: 10,
                     name: "updateUuid",
                     text: "Modifed By",
                     width: 120,
@@ -144,7 +114,7 @@ var cl00301 =
                     required: false
                 },
                 {
-                    sortNo: 14,
+                    sortNo: 11,
                     name: "updateDate",
                     text: "Date/Time Modified",
                     width: 120,

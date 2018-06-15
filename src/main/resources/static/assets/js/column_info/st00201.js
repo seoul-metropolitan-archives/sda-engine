@@ -1,44 +1,77 @@
 var st00201 =
     {
-        column_info:
+        column_info :
             [
                 {
-                    sortNo: 1,
-                    name: "userUuid",
-                    text: "userUuid",
-                    width: 120,
-                    editable: true,
+                    sortNo: 0,
+                    width:140,
+                    name: "orderKey1",
+                    text: "ORDER_KEY",
+                    editable: false,
                     dataType: "code",
-                    required: false,
-                    visible: false
+                    visible : false
                 },
                 {
                     sortNo: 1,
-                    name: "startProgramUuid",
-                    text: "startProgramUuid",
-                    width: 120,
-                    editable: true,
-                    dataType: "code",
-                    required: false,
-                    visible: false
+                    width:140,
+                    name: "classTreeName",
+                    text: "CLASS_TREE_NAME",
+                    editable: false,
+                    dataType: "code"
                 },
                 {
                     sortNo: 2,
-                    name: "userId",
-                    text: "User ID",
-                    width: 120,
-                    editable: true,
-                    dataType: "text",
-                    required: true
+                    width:140,
+                    name: "classificationSchemeUuid",
+                    text: "CLASSIFICATION_SCHEME_UUID",
+                    editable: false,
+                    dataType: "code",
+                    visible : false
                 },
                 {
                     sortNo: 3,
-                    name: "userNm",
-                    text: "User Name",
-                    width: 120,
-                    editable: true,
-                    dataType: "text",
-                    required: true
+                    width:140,
+                    name: "orderNo",
+                    text: "ORDER_NO",
+                    editable: false,
+                    dataType: "code",
+                    visible : false
+                },
+                {
+                    sortNo: 4,
+                    width:140,
+                    name: "parentClassUuid",
+                    text: "PARENT_CLASS_UUID",
+                    editable: false,
+                    dataType: "code",
+                    visible : false
+                },
+                {
+                    sortNo: 5,
+                    width:140,
+                    name: "classCode",
+                    text: "Class_Code",
+                    editable: false,
+                    dataType: "code",
+                    visible : false
+                },
+                {
+                    sortNo: 5,
+                    width:140,
+                    name: "classUuid",
+                    text: "Class Uuid",
+                    editable: false,
+                    dataType: "code",
+                    visible : false
+                },
+                {
+                    sortNo: 0,
+                    width:140,
+                    name: "orderKey",
+                    text: "ORDER_KEY",
+                    editable: false,
+                    dataType: "code",
+                    visible : false
                 }
             ]
     }

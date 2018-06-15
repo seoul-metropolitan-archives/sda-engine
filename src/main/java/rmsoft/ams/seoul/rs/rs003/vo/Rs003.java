@@ -1,14 +1,13 @@
 package rmsoft.ams.seoul.rs.rs003.vo;
 
-import io.onsemiro.core.annotations.ColumnPosition;
-import io.onsemiro.core.domain.SimpleJpaModel;
 import io.onsemiro.core.annotations.Comment;
+import io.onsemiro.core.domain.SimpleJpaModel;
 import lombok.*;
 import org.apache.ibatis.type.Alias;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import javax.persistence.*;
-import java.sql.Timestamp;
+import java.io.Serializable;
 
 @Setter
 @Getter
@@ -16,7 +15,7 @@ import java.sql.Timestamp;
 @DynamicUpdate
 @Entity
 @EqualsAndHashCode(callSuper = true)
-@Table(name = "RS_RECORD_SCHEDULE")
+@Table(name = "RS_TRIGGER")
 @Comment("")
 @Alias("rs003")
 public class Rs003 extends SimpleJpaModel<String> {
@@ -40,7 +39,7 @@ public class Rs003 extends SimpleJpaModel<String> {
 	@Column(name = "TRIGGER_UUID", length = 36)
 	private String triggerUuid;
 
-	@Column(name = "RETENION_PERIOD_UUID", length = 36)
+	@Column(name = "RETENTION_PERIOD_UUID", length = 36)
 	private String retenionPeriodUuid;
 
 	@Column(name = "DISPOSAL_TYPE_UUID", length = 36, nullable = false)
@@ -49,30 +48,12 @@ public class Rs003 extends SimpleJpaModel<String> {
 	@Column(name = "BASED_ON", length = 1000, nullable = false)
 	private String basedOn;
 
-	@Column(name = "DESCRIPTION", length = 4000)
-	private String description;
-
-	@Column(name = "NOTES", length = 4000)
-	private String notes;
-
 	@Column(name = "USE_YN", length = 1, nullable = false)
 	private String useYn;
 
-	@Column(name = "INSERT_UUID", length = 36, nullable = false)
-	private String insertUuid;
 
-	@Column(name = "INSERT_DATE", nullable = false)
-	private Timestamp insertDate;
-
-	@Column(name = "UPDATE_UUID", length = 36, nullable = false)
-	private String updateUuid;
-
-	@Column(name = "UPDATE_DATE", nullable = false)
-	private Timestamp updateDate;
-
-
-    @Override
-    public String getId() {
-        return recordScheduleUuid;
-    }
+	@Override
+	public String getId() {
+		return recordScheduleUuid;
+	}
 }

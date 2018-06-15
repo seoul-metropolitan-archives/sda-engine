@@ -1,6 +1,5 @@
 package rmsoft.ams.seoul.rs.rs002.vo;
 
-import io.onsemiro.core.annotations.ColumnPosition;
 import io.onsemiro.core.domain.SimpleJpaModel;
 import io.onsemiro.core.annotations.Comment;
 import lombok.*;

@@ -211,6 +211,30 @@
         </button>
     </li>
 </th:block>
+<th:block layout:fragment="confirm-and-cancel-and-save-and-inquiry-and-update">
+    <li style="text-align:right; width:48%;">
+        <button class="btn_co" th:id="confirm">
+            <span class="btn_icon_co" >&nbsp;</span>
+            <span class="btn_main_txt">Confirm</span>
+        </button>
+        <button class="btn_co" th:id="cancel">
+            <span class="btn_icon_co">&nbsp;</span>
+            <span class="btn_main_txt">Cancel</span>
+        </button>
+        <button class="btn_s" th:id="save">
+            <span class="btn_icon">&nbsp;</span>
+            <span class="btn_main_txt">Save(S)</span>
+        </button>
+        <button class="btn_i" th:id="inquiry">
+            <span class="btn_icon">&nbsp;</span>
+            <span class="btn_main_txt">Inquiry(I)</span>
+        </button>
+        <button class="btn_co" th:id="update">
+            <span class="btn_icon_co">&nbsp;</span>
+            <span class="btn_main_txt">Due Date Update</span>
+        </button>
+    </li>
+</th:block>
 <!--inquiry 버튼 & confirm 버튼 & cancel 버튼 & add 버튼 & Delete 버튼-->
 <th:block layout:fragment="confirm-and-cancel">
     <li style="text-align:right; width:48%;">
@@ -225,6 +249,23 @@
     </li>
 </th:block>
 <!--inquiry 버튼 & confirm 버튼 & cancel 버튼 & add 버튼 & Delete 버튼-->
+<th:block layout:fragment="confirm-and-cancel-and-update">
+    <li style="text-align:right; width:48%;">
+        <button class="btn_co">
+            <span class="btn_icon_co" th:id="confirm">&nbsp;</span>
+            <span class="btn_main_txt">Confirm</span>
+        </button>
+        <button class="btn_co" th:id="cancel">
+            <span class="btn_icon_co">&nbsp;</span>
+            <span class="btn_main_txt">Cancel</span>
+        </button>
+        <button class="btn_co" th:id="update">
+            <span class="btn_icon_co">&nbsp;</span>
+            <span class="btn_main_txt">Due Date Update</span>
+        </button>
+    </li>
+</th:block>
+<!--inquiry 버튼 & confirm 버튼 & cancel 버튼 & add 버튼 & Delete 버튼-->
 <th:block layout:fragment="scheduling-and-inquiry">
     <li style="text-align:right; width:48%;">
         <button class="btn_co">
@@ -234,6 +275,23 @@
         <button class="btn_co" th:id="inquiry">
             <span class="btn_icon_co">&nbsp;</span>
             <span class="btn_main_txt">Inquiry</span>
+        </button>
+    </li>
+</th:block>
+<!--inquiry 버튼 & confirm 버튼 & cancel 버튼-->
+<th:block layout:fragment="inquiry-and-confirm-and-cancel">
+    <li style="text-align:right; width:48%;">
+        <button class="btn_co" th:id="inquiry">
+            <span class="btn_icon">&nbsp;</span>
+            <span class="btn_main_txt">Inquiry</span>
+        </button>
+        <button class="btn_co">
+            <span class="btn_icon_co" th:id="confirm">&nbsp;</span>
+            <span class="btn_main_txt">Confirm</span>
+        </button>
+        <button class="btn_co" th:id="cancel">
+            <span class="btn_icon_co">&nbsp;</span>
+            <span class="btn_main_txt">Cancel</span>
         </button>
     </li>
 </th:block>
@@ -326,7 +384,16 @@
     </li>
     <li style="width:50%; text-align:left;" th:text="${pageName==null?'User':pageName}"></li>
 </th:block>
-
+<!--<th:block layout:fragment="searchInputYellow (dap)">-->
+    <!--<dt class="mgl_5" th:text="${lb}"></dt>-->
+    <!--<dd>-->
+        <!--<div class="src_box3" style="background-color: #fffdd6;width: 100%">-->
+            <!--<input th:attr="data-ax-path=${dap}"  type="text" style="background-color: #fffdd6;width: 100%">-->
+            <!--<a href="#" id="dialog-link">-->
+                <!--<img th:src="@{/assets/images/ams/search_normal.png}" alt="find"></a>-->
+        <!--</div>-->
+    <!--</dd>-->
+<!--</th:block>-->
 <th:block layout:fragment="searchInputYellow (lb,dap)">
     <dt class="mgl_5 w150" th:text="${lb}"></dt>
     <dd>
@@ -337,7 +404,16 @@
         </div>
     </dd>
 </th:block>
-
+<th:block layout:fragment="searchInputYellow100 (lb,dap)">
+    <dt class="mgl_5 w130" th:text="${lb}"></dt>
+    <dd>
+        <div class="src_box2" style="background-color: #fffdd6">
+            <input th:attr="data-ax-path=${dap}"  type="text" style="background-color: #fffdd6">
+            <a href="#" id="dialog-link">
+                <img th:src="@{/assets/images/ams/search_normal.png}" alt="find"></a>
+        </div>
+    </dd>
+</th:block>
 <th:block layout:fragment="searchInput (lb,dap)">
     <dt class="mgl_5 w150" th:text="${lb}"></dt>
     <dd>
