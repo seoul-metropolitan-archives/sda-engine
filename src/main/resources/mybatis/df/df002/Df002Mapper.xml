@@ -3,103 +3,110 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="rmsoft.ams.seoul..Df002Mapper">
+<mapper namespace="rmsoft.ams.seoul.df.df002.dao.Df002Mapper">
 
-    <select id="findAll" resultType="df002" parameterType="df002" statementType="PREPARED">
+    <select id="searchList" resultType="Df00201VO" parameterType="Df00201VO" statementType="PREPARED">
+        <![CDATA[
         SELECT
-            DISPOSAL_FREEZE_DEGREE_UUID AS disposalFreezeDegreeUuid,
-            DISPOSAL_FREEZE_EVENT_UUID AS disposalFreezeEventUuid,
-            FREEZE_YN AS freezeYn,
-            DEGREE AS degree,
-            DESCRIPTION AS description,
-            NOTES AS notes,
-            END_YN AS endYn,
-            TERMINATOR_UUID AS terminatorUuid,
-            END_DATE AS endDate,
-            INSERT_UUID AS insertUuid,
-            INSERT_DATE AS insertDate,
-            UPDATE_UUID AS updateUuid,
-            UPDATE_DATE AS updateDate
+            T1.DISPOSAL_FREEZE_DEGREE_UUID AS disposalFreezeDegreeUuid,
+            T1.DISPOSAL_FREEZE_EVENT_UUID AS disposalFreezeEventUuid,
+            T1.FREEZE_YN AS freezeYN,
+            T2.EVENT_CODE AS eventCode,
+            T2.EVENT_NAME AS eventName,
+            T1."DEGREE" AS "degree",
+            T1.END_YN AS endYN,
+        ]]>
+        <include refid="Common.UserName">
+            <property name="userUuid" value="T1.TERMINATOR_UUID"/>
+        </include>
+        AS terminatorUuid,
+
+        <![CDATA[
+            T1.END_DATE AS endDate,
+        ]]>
+
+        <include refid="Common.UserName">
+            <property name="userUuid" value="T1.INSERT_UUID"/>
+        </include>
+        AS insertUuid,
+
+        <![CDATA[
+            T1.INSERT_DATE AS insertDate,
+        ]]>
+        <include refid="Common.UserName">
+            <property name="userUuid" value="T1.UPDATE_UUID"/>
+        </include>
+        AS updateUuid,
+
+        <![CDATA[
+            T1.UPDATE_DATE AS  updateDate
         FROM
-            DF_DISPOSAL_FREEZE_DEGREE
+            DF_DISPOSAL_FREEZE_DEGREE T1,
+	        DF_DISPOSAL_FREEZE_EVENT T2
+        WHERE 1=1
+        AND T1.DISPOSAL_FREEZE_EVENT_UUID = T2.DISPOSAL_FREEZE_EVENT_UUID
+        ]]>
+        <if test="null != freezeYN and '' != freezeYN">
+            <![CDATA[
+          AND T1.FREEZE_YN = #{freezeYN}
+        ]]>
+        </if>
+        <if test="null != eventCode and '' != eventCode">
+            <![CDATA[
+           AND T2.EVENT_CODE = #{eventCode}
+        ]]>
+        </if>
+        <if test="null != eventName and '' != eventName">
+            <![CDATA[
+          AND T2.EVENT_NAME LIKE '%' || #{eventName} || '%'
+        ]]>
+        </if>
+        <if test="null != degree and '' != degree">
+            <![CDATA[
+           AND T1.DEGREE = #{degree}
+        ]]>
+        </if>
+        <if test="null != endYN and '' != endYN">
+            <![CDATA[
+          AND  T1.END_YN = #{endYN}
+        ]]>
+        </if>
+        ORDER BY T2.EVENT_CODE ASC
     </select>
 
-    <select id="findOne" resultType="df002" parameterType="df002" statementType="PREPARED">
+    <select id="getDetail" resultType="Df00202VO" parameterType="Df00202VO" statementType="PREPARED">
         SELECT
-            DISPOSAL_FREEZE_DEGREE_UUID AS disposalFreezeDegreeUuid,
-            DISPOSAL_FREEZE_EVENT_UUID AS disposalFreezeEventUuid,
-            FREEZE_YN AS freezeYn,
-            DEGREE AS degree,
-            DESCRIPTION AS description,
-            NOTES AS notes,
-            END_YN AS endYn,
-            TERMINATOR_UUID AS terminatorUuid,
-            END_DATE AS endDate,
-            INSERT_UUID AS insertUuid,
-            INSERT_DATE AS insertDate,
-            UPDATE_UUID AS updateUuid,
-            UPDATE_DATE AS updateDate
+        Z1.DISPOSAL_FREEZE_DEGREE_UUID as disposalFreezeEventUuid ,
+        (SELECT
+        COUNT(DISPOSAL_FREEZE_DEGREE_UUID)
         FROM
-            DF_DISPOSAL_FREEZE_DEGREE
-        WHERE
-            DISPOSAL_FREEZE_DEGREE_UUID = #{disposalFreezeDegreeUuid}
+        DF_DISPOSAL_FREEZE_DEGREE ) as freezeCnt,
+        (SELECT
+        COUNT(AGGREGATION_ID)
+        FROM
+        DF_DISPOSAL_FREEZE_RESULT ) as aggregationCnt,
+        (SELECT
+        COUNT(ITEM_UUID)
+        FROM
+        DF_DISPOSAL_FREEZE_RESULT ) as itemCnt
+        FROM
+        DF_DISPOSAL_FREEZE_DEGREE Z1,
+        DF_DISPOSAL_FREEZE_RESULT Z2
+        <where>
+            <if test="disposalFreezeEventUuid != null">
+                Z1.DISPOSAL_FREEZE_DEGREE_UUID = #{disposalFreezeEventUuid}
+            </if>
+            AND Z1.DISPOSAL_FREEZE_DEGREE_UUID = Z2.DISPOSAL_FREEZE_DEGREE_UUID
+        </where>
     </select>
 
-   <update id="delete" parameterType="df002" statementType="PREPARED">
-        DELETE FROM
-            DF_DISPOSAL_FREEZE_DEGREE
+    <select id="checkDegree" resultType="int" parameterType="String" statementType="PREPARED">
+        SELECT
+          NVL2(MAX(DEGREE), MAX(DEGREE), 0)
+        FROM
+          DF_DISPOSAL_FREEZE_DEGREE
         WHERE
-            DISPOSAL_FREEZE_DEGREE_UUID = #{disposalFreezeDegreeUuid}
-    </update>
+          DISPOSAL_FREEZE_EVENT_UUID = #{uuid}
+    </select>
 
-   <update id="update" parameterType="df002" statementType="PREPARED">
-        UPDATE DF_DISPOSAL_FREEZE_DEGREE
-        SET
-            DISPOSAL_FREEZE_EVENT_UUID = #{disposalFreezeEventUuid},
-            FREEZE_YN = #{freezeYn},
-            DEGREE = #{degree},
-            DESCRIPTION = #{description},
-            NOTES = #{notes},
-            END_YN = #{endYn},
-            TERMINATOR_UUID = #{terminatorUuid},
-            END_DATE = #{endDate},
-            INSERT_UUID = #{insertUuid},
-            INSERT_DATE = #{insertDate},
-            UPDATE_UUID = #{updateUuid},
-            UPDATE_DATE = #{updateDate}
-        WHERE
-            DISPOSAL_FREEZE_DEGREE_UUID = #{disposalFreezeDegreeUuid}
-    </update>
-
-   <update id="insert" parameterType="df002" statementType="PREPARED">
-        INSERT INTO DF_DISPOSAL_FREEZE_DEGREE (
-            DISPOSAL_FREEZE_DEGREE_UUID,
-            DISPOSAL_FREEZE_EVENT_UUID,
-            FREEZE_YN,
-            DEGREE,
-            DESCRIPTION,
-            NOTES,
-            END_YN,
-            TERMINATOR_UUID,
-            END_DATE,
-            INSERT_UUID,
-            INSERT_DATE,
-            UPDATE_UUID,
-            UPDATE_DATE
-        ) VALUES (
-            #{disposalFreezeDegreeUuid},
-            #{disposalFreezeEventUuid},
-            #{freezeYn},
-            #{degree},
-            #{description},
-            #{notes},
-            #{endYn},
-            #{terminatorUuid},
-            #{endDate},
-            #{insertUuid},
-            #{insertDate},
-            #{updateUuid},
-            #{updateDate}
-        )
-    </update>
 </mapper>

@@ -23,29 +23,23 @@ import java.sql.Timestamp;
 @DynamicUpdate
 @Entity
 @EqualsAndHashCode(callSuper = true)
-@Table(name = "DF_DISPOSAL_FREEZE_EVENT")
-@IdClass(DfEvent.DfEventId.class)
-@Alias("dfEvent")
-public class DfEvent extends BaseJpaModel<DfEvent.DfEventId> {
+@Table(name = "DF_DISPOSAL_FREEZE_DEGREE")
+@IdClass(DfDegree.DfDegreeId.class)
+@Alias("dfDegree")
+public class DfDegree extends BaseJpaModel<DfDegree.DfDegreeId> {
 
     @Id
+    @Column(name = "DISPOSAL_FREEZE_DEGREE_UUID", length = 36, nullable = false)
+    private String disposalFreezeDegreeUuid;
+
     @Column(name = "DISPOSAL_FREEZE_EVENT_UUID", length = 36, nullable = false)
     private String disposalFreezeEventUuid;
 
-    @Column(name = "STATUS_UUID", length = 36, nullable = false)
-    private String statusUuid;
+    @Column(name = "FREEZE_YN", length = 3, nullable = false)
+    private String freezeYN;
 
-    @Column(name = "EVENT_CODE", length = 30, nullable = false)
-    private String eventCode;
-
-    @Column(name = "EVENT_NAME", length = 50, nullable = false)
-    private String eventName;
-
-    @Column(name = "EVENT_TYPE_UUID", length = 36)
-    private String eventTypeUuid;
-
-    @Column(name = "REVIEW_DATE")
-    private Timestamp reviewDate;
+    @Column(name = "DEGREE", length = 4, nullable = false)
+    private int degree;
 
     @Column(name = "END_YN", length = 1, nullable = false)
     private String endYn;
@@ -56,11 +50,8 @@ public class DfEvent extends BaseJpaModel<DfEvent.DfEventId> {
     @Column(name = "END_DATE")
     private Timestamp endDate;
 
-    @Column(name = "REASON", length = 4000)
-    private String reason;
-
     @Override
-    public DfEventId getId() { return DfEventId.of(disposalFreezeEventUuid); }
+    public DfDegreeId getId() { return DfDegreeId.of(disposalFreezeDegreeUuid); }
 
     /**
      * The type Ad entity type id.
@@ -69,9 +60,9 @@ public class DfEvent extends BaseJpaModel<DfEvent.DfEventId> {
     @Data
     @NoArgsConstructor
     @RequiredArgsConstructor(staticName = "of")
-    public static class DfEventId implements Serializable {
+    public static class DfDegreeId implements Serializable {
 
         @NonNull
-        private String disposalFreezeEventUuid;
+        private String disposalFreezeDegreeUuid;
     }
 }

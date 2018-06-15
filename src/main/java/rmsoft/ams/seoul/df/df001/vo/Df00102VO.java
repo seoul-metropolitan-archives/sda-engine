@@ -12,15 +12,7 @@ import java.sql.Timestamp;
 public class Df00102VO extends BaseVO {
 
 	private String disposalFreezeEventUuid;
-	private String statusUuid;
-	private String eventCode;
-	private String eventName;
-	private String eventTypeUuid;
-	private String reviewDate;
-	private String endYN;
-	private String terminatorUuid;
-	private Timestamp endDate;
-	private String changeStatus;
-	private String reviewDateTo;
-	private String reason;
+	private String freezeCnt;
+	private String aggregationCnt;
+	private String itemCnt;
 }

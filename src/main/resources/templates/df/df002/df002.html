@@ -4,7 +4,7 @@
       layout:decorate="~{/layout/base}">
 
 <!-- ===== [ script ] ===== -->
-<script layout:fragment="script" type="text/javascript" th:src="@{/assets/js/df/df002.js}"></script>
+<script layout:fragment="script" type="text/javascript" th:src="@{/assets/js/df/df002/df002.js}"></script>
 <!--realgrid -->
 
 <!-- ===== [ base-content ] ===== -->
@@ -16,7 +16,7 @@
                     <div style=" height:30px; width:100%" class="bgf7 div_tablerow">
                         <ul class="bdb">
                             <th:block layout:insert="~{/fragments/page-buttons :: bookmark}"/>
-                            <th:block layout:insert="~{/fragments/page-buttons :: save-and-inquiry}"/>
+                            <th:block layout:insert="~{/fragments/page-buttons :: freeze-and-cancel-and-save-and-inquiry}"/>
                         </ul>
                     </div>
                     <div class="bdb div_tablerow searchFields">
@@ -24,27 +24,24 @@
                             <dd class="w_auto">
                                 <div class="rdo_box">
                                     <span class="rdo_box_title">Freeze</span>
-                                    <label><input type="radio" name="radio"  data-ax-path="useYn" class="no_border" value="Y">Yes</label>
-                                    <label><input type="radio" name="radio" data-ax-path="useYn" class="no_border" value="N">No</label>
-                                    <label><input type="radio" name="radio" checked="checked" data-ax-path="useYn" class="no_border" value="">All</label>
+                                    <label><input type="radio" name="freezeYN"  data-ax-path="freezeYN" class="no_border" value="Y">Yes</label>
+                                    <label><input type="radio" name="freezeYN" data-ax-path="freezeYN" class="no_border" value="N">No</label>
+                                    <label><input type="radio" name="freezeYN" data-ax-path="freezeYN" class="no_border" value="" checked>All</label>
                                 </div>
                             </dd>
-                            <th:block layout:insert="~{/fragments/page-buttons :: searchInputYellow ('Event Code','')}"/>
+                            <th:block layout:insert="~{/fragments/page-buttons :: searchInput02 ('Event Code','eventCode')}"/>
                             <dt class="w130" >Event Name</dt>
-                            <dd><input type=text style="width:135px" data-ax-path="classificationName"></dd>
+                            <dd><input type=text style="width:135px" data-ax-path="eventName"></dd>
                             <dt class="w130" >Degree</dt>
-                            <dd><input type=text style="width:135px" data-ax-path="classificationName"></dd>
+                            <dd><input type=text style="width:135px" data-ax-path="degree"></dd>
                         </dl>
                         <dl>
                             <dd class="w_auto">
                                 <div class="rdo_box">
                                     <span class="rdo_box_title">End</span>
-                                    <label>
-                                        <input type="radio" name="radio" data-ax-path="useYN" class="no_border" value="Y">Yes</label>
-                                    <label>
-                                        <input type="radio" name="radio" data-ax-path="useYN" class="no_border" value="N">No</label>
-                                    <label>
-                                        <input type="radio" name="radio" data-ax-path="useYN" class="no_border"  value="" checked>All</label>
+                                    <label><input type="radio" name="endYN" data-ax-path="endYN" class="no_border" value="Y">Yes</label>
+                                    <label><input type="radio" name="endYN" data-ax-path="endYN" class="no_border" value="N">No</label>
+                                    <label><input type="radio" name="endYN" data-ax-path="endYN" class="no_border"  value="" checked>All</label>
                                 </div>
                             </dd>
                         </dl>

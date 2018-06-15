@@ -12,7 +12,7 @@ var df00101 =
                  * visible  : grid 포함여부
                  ****************************************************/
                 {
-                    sortNo: 0,
+                    sortNo: 1,
                     width:30,
                     name: "disposalFreezeEventUuid",
                     text: "",
@@ -22,7 +22,7 @@ var df00101 =
                     visible: false
                 },
                 {
-                    sortNo: 1,
+                    sortNo: 2,
                     width:80,
                     name: "statusUuid",
                     text: "Status",
@@ -34,7 +34,7 @@ var df00101 =
                     disable: true
                 },
                 {
-                    sortNo: 2,
+                    sortNo: 0,
                     width:140,
                     name: "eventCode",
                     text: "Event Code",
@@ -82,7 +82,6 @@ var df00101 =
                     name: "description",
                     text: "Description",
                     width: 150,
-                    textAlignment: "far",
                     dataType: "number",
                     required: false
                 },

@@ -1,15 +1,15 @@
 package rmsoft.ams.seoul.df.df002.controller;
 
 import io.onsemiro.controller.BaseController;
+import io.onsemiro.core.api.ApiException;
 import io.onsemiro.core.api.response.ApiResponse;
 import io.onsemiro.core.api.response.Responses;
+import io.onsemiro.core.code.ApiStatus;
 import io.onsemiro.core.parameter.RequestParams;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 import rmsoft.ams.seoul.df.df002.service.Df002Service;
-import rmsoft.ams.seoul.df.df002.vo.Df002;
-import rmsoft.ams.seoul.df.df002.vo.Df002VO;
+import rmsoft.ams.seoul.df.df002.vo.Df00201VO;
+import rmsoft.ams.seoul.df.df002.vo.Df00202VO;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -21,16 +21,43 @@ public class Df002Controller extends BaseController {
     @Inject
     private Df002Service df002Service;
 
-    @GetMapping
-    public Responses.PageResponse list(Pageable pageable, RequestParams<Df002> requestParams) {
-        Page<Df002> pages = df002Service.find(pageable, requestParams.getString("filter", ""));
-        return Responses.PageResponse.of(Df002VO.of(pages.getContent()), pages);
+    /**
+     * Search entity type responses . list response.
+     *
+     * @param param the param
+     * @return the responses . list response
+     */
+    @GetMapping("/searchList")
+    public Responses.ListResponse searchList(RequestParams<Df00201VO> param) {
+        return Responses.ListResponse.of(df002Service.searchList(param));
     }
 
-    @PutMapping
+    /**
+     * Save entity type api response.
+     *
+     * @param itemList the ad 00501 vo list
+     * @return the api response
+     */
+    @PutMapping(value = "/saveItems")
     @PostMapping
-    public ApiResponse save(@RequestBody List<Df002> request) {
-        df002Service.save(request);
-        return ok();
+    public ApiResponse saveItems(@RequestBody List<Df00201VO> itemList) {
+        return df002Service.saveItems(itemList);
     }
+
+    /**
+     * Update status api response.
+     *
+     * @param requestParams the request params
+     * @return the api response
+     */
+    @PutMapping(value = "/updateStatus")
+    @PostMapping
+    public ApiResponse updateStatus(@RequestBody List<Df00201VO> requestParams) {
+        ApiResponse apiResponse = df002Service.updateStatus(requestParams);
+        if (apiResponse.getStatus() == -1) {
+            throw new ApiException(ApiStatus.SYSTEM_ERROR, apiResponse.getMessage());
+        }
+        return apiResponse;
+    }
+
 }
