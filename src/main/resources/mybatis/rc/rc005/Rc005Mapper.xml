@@ -210,7 +210,7 @@
           FC_AD_CODE_NM(Z3.TYPE_UUID) as typeNm,
           Z3.TYPE_UUID as typeUuid,
           Z3.FILE_FORMAT_UUID as fileFormatUuid,
-          Z3.THUMBNAIL as thumbnail,
+          <!--Z3.THUMBNAIL as thumbnail,-->
           Z3.CHECKSUM_TYPE_UUID as checksumTypeUuid,
           Z3.CHECKSUM as checksum,
         <include refid="Common.UserName"><property name="userUuid" value="INSERT_UUID"/></include> as insertUuid,

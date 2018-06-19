@@ -1,14 +1,13 @@
-package rmsoft.ams.seoul.lt.lt002.vo;
+package rmsoft.ams.seoul.common.domain;
 
-import io.onsemiro.core.annotations.ColumnPosition;
 import io.onsemiro.core.domain.SimpleJpaModel;
-import io.onsemiro.core.annotations.Comment;
 import lombok.*;
 import org.apache.ibatis.type.Alias;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+
 import javax.persistence.*;
-import java.sql.Timestamp;
+import java.io.Serializable;
 
 @Setter
 @Getter
@@ -17,9 +16,9 @@ import java.sql.Timestamp;
 @Entity
 @EqualsAndHashCode(callSuper = true)
 @Table(name = "LT_SOFTWARE")
-@Comment("")
-@Alias("lt002")
-public class Lt002 extends SimpleJpaModel<String> {
+@IdClass(LtSoftware.LtSoftwareId.class)
+@Alias("LtSoftware")
+public class LtSoftware extends SimpleJpaModel<LtSoftware.LtSoftwareId> {
 
 	@Id
 	@Column(name = "SOFTWARE_UUID", length = 36, nullable = false)
@@ -46,30 +45,24 @@ public class Lt002 extends SimpleJpaModel<String> {
 	@Column(name = "EXE_FILE_NAME", length = 50, nullable = false)
 	private String exeFileName;
 
-	@Column(name = "DESCRIPTION", length = 4000)
-	private String description;
-
-	@Column(name = "NOTES", length = 4000)
-	private String notes;
-
 	@Column(name = "USE_YN", length = 1, nullable = false)
 	private String useYn;
 
-	@Column(name = "INSERT_UUID", length = 36, nullable = false)
-	private String insertUuid;
-
-	@Column(name = "INSERT_DATE", nullable = false)
-	private Timestamp insertDate;
-
-	@Column(name = "UPDATE_UUID", length = 36, nullable = false)
-	private String updateUuid;
-
-	@Column(name = "UPDATE_DATE", nullable = false)
-	private Timestamp updateDate;
 
 
-    @Override
-    public String getId() {
-        return softwareUuid;
-    }
+	@Override
+	public LtSoftware.LtSoftwareId getId() { return LtSoftware.LtSoftwareId.of(softwareUuid); }
+
+	/**
+	 * The type Ad entity type id.
+	 */
+	@Embeddable
+	@Data
+	@NoArgsConstructor
+	@RequiredArgsConstructor(staticName = "of")
+	public static class LtSoftwareId implements Serializable {
+
+		@NonNull
+		private String softwareUuid;
+	}
 }

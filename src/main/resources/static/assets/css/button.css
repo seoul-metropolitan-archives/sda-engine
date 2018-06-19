@@ -100,7 +100,7 @@ button.btn_small {
     box-sizing: border-box;
 }
 
-button.btn_a, button.btn_d, button.btn_s, button.btn_i, button.btn_ap, button.btn_co{
+button.btn_a, button.btn_d, button.btn_s, button.btn_i, button.btn_ap, button.btn_co, button.btn_adf{
     background-image: url(/assets/images/ams/icon_main.png);
     border: 1px solid #ddd;
     width: 100px;
@@ -116,11 +116,11 @@ ul.bdb button{
 }
 
 /*오른쪽 상단버튼 - 추가*/
-button.btn_a{
+button.btn_a, button.btn_adf{
     background-position: 0px -6px;
 }
 
-button.btn_a:hover{
+button.btn_a:hover,  button.btn_adf:hover{
     background-position: -97px -6px;
 }
 

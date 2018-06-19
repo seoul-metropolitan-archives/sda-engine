@@ -3,98 +3,84 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="rmsoft.ams.seoul..Lt004Mapper">
+<mapper namespace="rmsoft.ams.seoul.lt.lt004.dao.Lt004Mapper">
 
-    <select id="findAll" resultType="lt004" parameterType="lt004" statementType="PREPARED">
+    <select id="searchList" resultType="Lt00401VO" parameterType="Lt00401VO" statementType="PREPARED">
+        <![CDATA[
         SELECT
-            PATHWAY_UUID AS pathwayUuid,
-            PATHWAY_NAME AS pathwayName,
-            SOURCE_FILE_FORMAT_UUID AS sourceFileFormatUuid,
-            TARGET_FILE_FORMAT_UUID AS targetFileFormatUuid,
-            TOOL_UUID AS toolUuid,
-            DESCRIPTION AS description,
-            NOTES AS notes,
-            USE_YN AS useYn,
-            INSERT_UUID AS insertUuid,
+            T1.PATHWAY_UUID AS pathwayUuid,
+            T1.PATHWAY_NAME AS pathwayName,
+            (SELECT FORMAT_NAME FROM LT_FILE_FORMAT WHERE USE_YN='Y' AND FILE_FORMAT_UUID= T1.SOURCE_FILE_FORMAT_UUID) AS sourceFileFormat,
+            (SELECT FORMAT_NAME FROM LT_FILE_FORMAT WHERE USE_YN='Y' AND FILE_FORMAT_UUID= T1.TARGET_FILE_FORMAT_UUID) AS targetFileFormat,
+            (SELECT TOOL_NAME FROM LT_TOOL WHERE USE_YN='Y' AND TOOL_UUID= T1.TOOL_UUID) AS toolName,
+            T1.SOURCE_FILE_FORMAT_UUID AS sourceFileFormatUuid,
+            T1.TARGET_FILE_FORMAT_UUID AS targetFileFormatUuid,
+            T1.TOOL_UUID AS toolUuid,
+            T1.DESCRIPTION AS description,
+            T1.NOTES AS notes,
+            T1.USE_YN AS useYn,
+        ]]>
+        <include refid="Common.UserName">
+            <property name="userUuid" value="T1.INSERT_UUID"/>
+        </include>
+        AS insertUuid,
+
+        <![CDATA[
             INSERT_DATE AS insertDate,
-            UPDATE_UUID AS updateUuid,
-            UPDATE_DATE AS updateDate
+        ]]>
+        <include refid="Common.UserName">
+            <property name="userUuid" value="T1.UPDATE_UUID"/>
+        </include>
+        AS updateUuid,
+        <![CDATA[
+            T1.UPDATE_DATE AS  updateDate
         FROM
-            LT_PATHWAY
+            LT_PATHWAY T1
+        WHERE 1=1
+        ]]>
+        <if test="null != pathwayName and '' != pathwayName">
+        <![CDATA[
+          AND T1.PATHWAY_NAME LIKE '%' || #{pathwayName} || '%'
+        ]]>
+        </if>
+        <if test="null != sourceFileFormatUuid and '' != sourceFileFormatUuid">
+        <![CDATA[
+          AND  T1.SOURCE_FILE_FORMAT_UUID = #{sourceFileFormatUuid}
+        ]]>
+        </if>
+        <if test="null != targetFileFormatUuid and '' != targetFileFormatUuid">
+        <![CDATA[
+          AND  T1.TARGET_FILE_FORMAT_UUID = #{targetFileFormatUuid}
+        ]]>
+        </if>
+        <if test="null != toolUuid and '' != toolUuid">
+        <![CDATA[
+          AND  T1.TOOL_UUID = #{toolUuid}
+        ]]>
+        </if>
+        <if test="null != useYN and '' != useYN">
+            <![CDATA[
+          AND  T1.USE_YN = #{useYN}
+        ]]>
+        </if>
+        ORDER BY T1.PATHWAY_NAME ASC
     </select>
 
-    <select id="findOne" resultType="lt004" parameterType="lt004" statementType="PREPARED">
+    <select id="checkIndex01" resultType="int" parameterType="Lt00401VO" statementType="PREPARED">
         SELECT
-            PATHWAY_UUID AS pathwayUuid,
-            PATHWAY_NAME AS pathwayName,
-            SOURCE_FILE_FORMAT_UUID AS sourceFileFormatUuid,
-            TARGET_FILE_FORMAT_UUID AS targetFileFormatUuid,
-            TOOL_UUID AS toolUuid,
-            DESCRIPTION AS description,
-            NOTES AS notes,
-            USE_YN AS useYn,
-            INSERT_UUID AS insertUuid,
-            INSERT_DATE AS insertDate,
-            UPDATE_UUID AS updateUuid,
-            UPDATE_DATE AS updateDate
+          COUNT(PATHWAY_NAME)
         FROM
-            LT_PATHWAY
-        WHERE
-            PATHWAY_UUID = #{pathwayUuid}
+          LT_PATHWAY
+        WHERE PATHWAY_NAME = #{pathwayName}
     </select>
 
-   <update id="delete" parameterType="lt004" statementType="PREPARED">
-        DELETE FROM
-            LT_PATHWAY
-        WHERE
-            PATHWAY_UUID = #{pathwayUuid}
-    </update>
-
-   <update id="update" parameterType="lt004" statementType="PREPARED">
-        UPDATE LT_PATHWAY
-        SET
-            PATHWAY_NAME = #{pathwayName},
-            SOURCE_FILE_FORMAT_UUID = #{sourceFileFormatUuid},
-            TARGET_FILE_FORMAT_UUID = #{targetFileFormatUuid},
-            TOOL_UUID = #{toolUuid},
-            DESCRIPTION = #{description},
-            NOTES = #{notes},
-            USE_YN = #{useYn},
-            INSERT_UUID = #{insertUuid},
-            INSERT_DATE = #{insertDate},
-            UPDATE_UUID = #{updateUuid},
-            UPDATE_DATE = #{updateDate}
-        WHERE
-            PATHWAY_UUID = #{pathwayUuid}
-    </update>
-
-   <update id="insert" parameterType="lt004" statementType="PREPARED">
-        INSERT INTO LT_PATHWAY (
-            PATHWAY_UUID,
-            PATHWAY_NAME,
-            SOURCE_FILE_FORMAT_UUID,
-            TARGET_FILE_FORMAT_UUID,
-            TOOL_UUID,
-            DESCRIPTION,
-            NOTES,
-            USE_YN,
-            INSERT_UUID,
-            INSERT_DATE,
-            UPDATE_UUID,
-            UPDATE_DATE
-        ) VALUES (
-            #{pathwayUuid},
-            #{pathwayName},
-            #{sourceFileFormatUuid},
-            #{targetFileFormatUuid},
-            #{toolUuid},
-            #{description},
-            #{notes},
-            #{useYn},
-            #{insertUuid},
-            #{insertDate},
-            #{updateUuid},
-            #{updateDate}
-        )
-    </update>
+    <select id="checkIndex02" resultType="int" parameterType="Lt00401VO" statementType="PREPARED">
+        SELECT
+          COUNT(PATHWAY_NAME)
+        FROM
+          LT_PATHWAY
+        WHERE (SOURCE_FILE_FORMAT_UUID = #{sourceFileFormatUuid} AND
+          TARGET_FILE_FORMAT_UUID = #{targetFileFormatUuid} AND
+          TOOL_UUID = #{toolUuid})
+    </select>
 </mapper>

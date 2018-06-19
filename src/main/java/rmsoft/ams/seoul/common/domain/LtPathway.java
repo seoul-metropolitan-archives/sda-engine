@@ -1,14 +1,13 @@
-package rmsoft.ams.seoul.lt.lt004.vo;
+package rmsoft.ams.seoul.common.domain;
 
-import io.onsemiro.core.annotations.ColumnPosition;
 import io.onsemiro.core.domain.SimpleJpaModel;
-import io.onsemiro.core.annotations.Comment;
 import lombok.*;
 import org.apache.ibatis.type.Alias;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+
 import javax.persistence.*;
-import java.sql.Timestamp;
+import java.io.Serializable;
 
 @Setter
 @Getter
@@ -17,9 +16,9 @@ import java.sql.Timestamp;
 @Entity
 @EqualsAndHashCode(callSuper = true)
 @Table(name = "LT_PATHWAY")
-@Comment("")
-@Alias("lt004")
-public class Lt004 extends SimpleJpaModel<String> {
+@IdClass(LtPathway.LtPathwayId.class)
+@Alias("LtPathway")
+public class LtPathway extends SimpleJpaModel<LtPathway.LtPathwayId> {
 
 	@Id
 	@Column(name = "PATHWAY_UUID", length = 36, nullable = false)
@@ -37,30 +36,23 @@ public class Lt004 extends SimpleJpaModel<String> {
 	@Column(name = "TOOL_UUID", length = 36, nullable = false)
 	private String toolUuid;
 
-	@Column(name = "DESCRIPTION", length = 4000)
-	private String description;
-
-	@Column(name = "NOTES", length = 4000)
-	private String notes;
-
 	@Column(name = "USE_YN", length = 1, nullable = false)
 	private String useYn;
 
-	@Column(name = "INSERT_UUID", length = 36, nullable = false)
-	private String insertUuid;
 
-	@Column(name = "INSERT_DATE", nullable = false)
-	private Timestamp insertDate;
+	@Override
+	public LtPathway.LtPathwayId getId() { return LtPathway.LtPathwayId.of(pathwayUuid); }
 
-	@Column(name = "UPDATE_UUID", length = 36, nullable = false)
-	private String updateUuid;
+	/**
+	 * The type Ad entity type id.
+	 */
+	@Embeddable
+	@Data
+	@NoArgsConstructor
+	@RequiredArgsConstructor(staticName = "of")
+	public static class LtPathwayId implements Serializable {
 
-	@Column(name = "UPDATE_DATE", nullable = false)
-	private Timestamp updateDate;
-
-
-    @Override
-    public String getId() {
-        return pathwayUuid;
-    }
+		@NonNull
+		private String pathwayUuid;
+	}
 }

@@ -3,9 +3,9 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="rmsoft.ams.seoul..Ad008Mapper">
+<mapper namespace="rmsoft.ams.seoul.ad.ad008.dao.Ad008Mapper">
 
-    <select id="findAll" resultType="ad008" parameterType="ad008" statementType="PREPARED">
+    <select id="searchAuditList" resultType="ad008" parameterType="ad008" statementType="PREPARED">
         SELECT
             AUDIT_UUID AS auditUuid,
             ENTITY_TYPE_UUID AS entityTypeUuid,

@@ -1,13 +1,13 @@
-package rmsoft.ams.seoul.lt.lt001.vo;
+package rmsoft.ams.seoul.common.domain;
 
-import io.onsemiro.core.annotations.ColumnPosition;
 import io.onsemiro.core.domain.SimpleJpaModel;
-import io.onsemiro.core.annotations.Comment;
 import lombok.*;
 import org.apache.ibatis.type.Alias;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+
 import javax.persistence.*;
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 @Setter
@@ -17,9 +17,9 @@ import java.sql.Timestamp;
 @Entity
 @EqualsAndHashCode(callSuper = true)
 @Table(name = "LT_FILE_FORMAT")
-@Comment("")
-@Alias("lt001")
-public class Lt001 extends SimpleJpaModel<String> {
+@IdClass(LtFileFormat.LtFileFormatId.class)
+@Alias("LtFileFormat")
+public class LtFileFormat extends SimpleJpaModel<LtFileFormat.LtFileFormatId> {
 
 	@Id
 	@Column(name = "FILE_FORMAT_UUID", length = 36, nullable = false)
@@ -43,30 +43,24 @@ public class Lt001 extends SimpleJpaModel<String> {
 	@Column(name = "FORMAT_GROUP_UUID", length = 36)
 	private String formatGroupUuid;
 
-	@Column(name = "DESCRIPTION", length = 4000)
-	private String description;
-
-	@Column(name = "NOTES", length = 4000)
-	private String notes;
-
 	@Column(name = "USE_YN", length = 1, nullable = false)
 	private String useYn;
 
-	@Column(name = "INSERT_UUID", length = 36, nullable = false)
-	private String insertUuid;
-
-	@Column(name = "INSERT_DATE", nullable = false)
-	private Timestamp insertDate;
-
-	@Column(name = "UPDATE_UUID", length = 36, nullable = false)
-	private String updateUuid;
-
-	@Column(name = "UPDATE_DATE", nullable = false)
-	private Timestamp updateDate;
 
 
-    @Override
-    public String getId() {
-        return fileFormatUuid;
-    }
+	@Override
+	public LtFileFormat.LtFileFormatId getId() { return LtFileFormat.LtFileFormatId.of(fileFormatUuid); }
+
+	/**
+	 * The type Ad entity type id.
+	 */
+	@Embeddable
+	@Data
+	@NoArgsConstructor
+	@RequiredArgsConstructor(staticName = "of")
+	public static class LtFileFormatId implements Serializable {
+
+		@NonNull
+		private String fileFormatUuid;
+	}
 }

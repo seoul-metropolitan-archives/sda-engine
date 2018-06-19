@@ -4,7 +4,7 @@
       layout:decorate="~{/layout/base}">
 
 <!-- ===== [ script ] ===== -->
-<script layout:fragment="script" type="text/javascript" th:src="@{/assets/js/lt/lt001.js}"></script>
+<script layout:fragment="script" type="text/javascript" th:src="@{/assets/js/lt/lt001/lt001.js}"></script>
 <!--realgrid -->
 
 <!-- ===== [ base-content ] ===== -->
@@ -21,19 +21,42 @@
                     </div>
                     <div class="bdb div_tablerow searchFields">
                         <dl>
-                            <dt class="mgl_5">Message Code</dt>
+                            <dt class="mgl_5">PUID</dt>
                             <dd>
-                                <input type=text style="width:135px" data-ax-path="messageCode">
+                                <input type=text style="width:135px" data-ax-path="puid">
                             </dd>
-                            <dt>Message Name</dt>
+                            <dt>Format Name</dt>
                             <dd>
-                                <input type=text style="width:135px" data-ax-path="messageName">
+                                <input type=text style="width:135px" data-ax-path="formatName">
                             </dd>
-                            <dt>Service</dt>
+                            <dt>Format Version</dt>
                             <dd>
-                                <select data-ax-path="serviceUuid" style="width:135px;" id="serviceList">
+                                <input type=text style="width:135px" data-ax-path="formatVersion">
+                            </dd>
+                            <dt>Format Risk</dt>
+                            <dd>
+                                <input type=text style="width:135px" data-ax-path="formatRisk">
+                            </dd>
+                        </dl>
+                        <dl>
+                            <dt class="mgl_5">Extension</dt>
+                            <dd>
+                                <input type=text style="width:135px" data-ax-path="extention">
+                            </dd>
+                            <dt>Format Group</dt>
+                            <dd>
+                                <select data-ax-path="formatGroup" style="width:135px;" id="formatGroup">
                                     <option value=""></option>
-                                    <option th:each="item : ${serviceList}"
+                                    <option th:each="item : ${formatGroup}"
+                                            th:value="${item.codeDetailUUID}"
+                                            th:text="${item.codeName}"/>
+                                </select>
+                            </dd>
+                            <dt>Format Property</dt>
+                            <dd>
+                                <select data-ax-path="formatProperty" style="width:135px;" id="formatProperty">
+                                    <option value=""></option>
+                                    <option th:each="item : ${formatGroup}"
                                             th:value="${item.codeDetailUUID}"
                                             th:text="${item.codeName}"/>
                                 </select>
@@ -42,11 +65,12 @@
                                 <div class="rdo_box">
                                     <span class="rdo_box_title">Use</span>
                                     <label>
-                                        <input type="radio" name="radio" data-ax-path="useYN" class="no_border" value="Y">Yes</label>
+                                        <input type="radio" name="useYN" data-ax-path="useYN" class="no_border" value="Y">Yes</label>
                                     <label>
-                                        <input type="radio" name="radio" data-ax-path="useYN" class="no_border" value="N">No</label>
+
+                                        <input type="radio" name="useYN" data-ax-path="useYN" class="no_border" value="N">No</label>
                                     <label>
-                                        <input type="radio" name="radio" data-ax-path="useYN" class="no_border"  value="" checked>All</label>
+                                        <input type="radio" name="useYN" data-ax-path="useYN" class="no_border"  value="" checked>All</label>
                                 </div>
                             </dd>
                         </dl>
@@ -56,7 +80,7 @@
 
                         <div style="height:100%; width:100%" class="div_table">
                             <ul class="bdb bdt div_tablerow" style="height:30px;">
-                                <th:block layout:insert="~{/fragments/page-buttons :: dot('Message')}"/>
+                                <th:block layout:insert="~{/fragments/page-buttons :: dot('File Format')}"/>
                                 <th:block layout:insert="~{/fragments/page-buttons :: add-and-delete}"/>
                             </ul>
                             <div style="height:100%; width:100%" class="div_tablerow bdb">

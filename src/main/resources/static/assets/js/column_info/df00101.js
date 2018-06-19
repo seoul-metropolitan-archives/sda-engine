@@ -73,9 +73,9 @@ var df00101 =
                     width: 100,
                     dataType: "date",
                     length: 8,
-                    required: true,
+                    required: false,
                     editable : true,
-                    disable : true
+                    disable : false
                 },
                 {
                     sortNo: 5,
@@ -100,7 +100,7 @@ var df00101 =
                     width: 50,
                     dataType: "check",
                     textAlignment: "center",
-                    defaultValue : "N",
+                    defaultValue : "Y",
                     renderer: {
                         type: "check",
                         shape: "",
