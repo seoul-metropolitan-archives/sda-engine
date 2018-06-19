@@ -3,9 +3,10 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="rmsoft.ams.seoul..Lt001Mapper">
+<mapper namespace="rmsoft.ams.seoul.lt.lt001.dao.Lt001Mapper">
 
-    <select id="findAll" resultType="lt001" parameterType="lt001" statementType="PREPARED">
+    <select id="searchList" resultType="Lt00101VO" parameterType="Lt00101VO" statementType="PREPARED">
+        <![CDATA[
         SELECT
             FILE_FORMAT_UUID AS fileFormatUuid,
             PUID AS puid,
@@ -17,94 +18,69 @@
             DESCRIPTION AS description,
             NOTES AS notes,
             USE_YN AS useYn,
-            INSERT_UUID AS insertUuid,
+        ]]>
+        <include refid="Common.UserName">
+            <property name="userUuid" value="INSERT_UUID"/>
+        </include>
+        AS insertUuid,
+
+        <![CDATA[
             INSERT_DATE AS insertDate,
-            UPDATE_UUID AS updateUuid,
-            UPDATE_DATE AS updateDate
+        ]]>
+        <include refid="Common.UserName">
+            <property name="userUuid" value="UPDATE_UUID"/>
+        </include>
+        AS updateUuid,
+
+        <![CDATA[
+            UPDATE_DATE AS  updateDate
         FROM
             LT_FILE_FORMAT
+        WHERE 1=1
+        ]]>
+        <if test="null != puid and '' != puid">
+            <![CDATA[
+          AND PUID LIKE '%' || #{puid} || '%'
+        ]]>
+        </if>
+        <if test="null != formatName and '' != formatName">
+            <![CDATA[
+          AND FORMAT_NAME LIKE '%' || #{formatName} || '%'
+        ]]>
+        </if>
+        <if test="null != formatVersion and '' != formatVersion">
+            <![CDATA[
+          AND FORMAT_VERSION LIKE '%' || #{formatVersion} || '%'
+        ]]>
+        </if>
+        <if test="null != formatRisk and '' != formatRisk">
+            <![CDATA[
+          AND FORMAT_RISK LIKE '%' || #{formatName} || '%'
+        ]]>
+        </if>
+        <if test="null != extension and '' != extension">
+            <![CDATA[
+          AND EXTENTION LIKE '%' || #{extension} || '%'
+        ]]>
+        </if>
+        <if test="null != formatGroupUuid and '' != formatGroupUuid">
+            <![CDATA[
+          AND FORMAT_GROUP_UUID = #{formatGroupUuid}
+        ]]>
+        </if>
+        <if test="null != useYN and '' != useYN">
+            <![CDATA[
+          AND  USE_YN = #{useYN}
+        ]]>
+        </if>
     </select>
 
-    <select id="findOne" resultType="lt001" parameterType="lt001" statementType="PREPARED">
+    <select id="checkUpdate" resultType="int" parameterType="Lt00101VO" statementType="PREPARED">
         SELECT
-            FILE_FORMAT_UUID AS fileFormatUuid,
-            PUID AS puid,
-            FORMAT_NAME AS formatName,
-            FORMAT_VERSION AS formatVersion,
-            FORMAT_RISK AS formatRisk,
-            EXTENSION AS extension,
-            FORMAT_GROUP_UUID AS formatGroupUuid,
-            DESCRIPTION AS description,
-            NOTES AS notes,
-            USE_YN AS useYn,
-            INSERT_UUID AS insertUuid,
-            INSERT_DATE AS insertDate,
-            UPDATE_UUID AS updateUuid,
-            UPDATE_DATE AS updateDate
+          COUNT(PUID)
         FROM
-            LT_FILE_FORMAT
+          LT_FILE_FORMAT
         WHERE
-            FILE_FORMAT_UUID = #{fileFormatUuid}
+          PUID = #{puid} OR FORMAT_NAME = #{formatName}
     </select>
-
-   <update id="delete" parameterType="lt001" statementType="PREPARED">
-        DELETE FROM
-            LT_FILE_FORMAT
-        WHERE
-            FILE_FORMAT_UUID = #{fileFormatUuid}
-    </update>
-
-   <update id="update" parameterType="lt001" statementType="PREPARED">
-        UPDATE LT_FILE_FORMAT
-        SET
-            PUID = #{puid},
-            FORMAT_NAME = #{formatName},
-            FORMAT_VERSION = #{formatVersion},
-            FORMAT_RISK = #{formatRisk},
-            EXTENSION = #{extension},
-            FORMAT_GROUP_UUID = #{formatGroupUuid},
-            DESCRIPTION = #{description},
-            NOTES = #{notes},
-            USE_YN = #{useYn},
-            INSERT_UUID = #{insertUuid},
-            INSERT_DATE = #{insertDate},
-            UPDATE_UUID = #{updateUuid},
-            UPDATE_DATE = #{updateDate}
-        WHERE
-            FILE_FORMAT_UUID = #{fileFormatUuid}
-    </update>
-
-   <update id="insert" parameterType="lt001" statementType="PREPARED">
-        INSERT INTO LT_FILE_FORMAT (
-            FILE_FORMAT_UUID,
-            PUID,
-            FORMAT_NAME,
-            FORMAT_VERSION,
-            FORMAT_RISK,
-            EXTENSION,
-            FORMAT_GROUP_UUID,
-            DESCRIPTION,
-            NOTES,
-            USE_YN,
-            INSERT_UUID,
-            INSERT_DATE,
-            UPDATE_UUID,
-            UPDATE_DATE
-        ) VALUES (
-            #{fileFormatUuid},
-            #{puid},
-            #{formatName},
-            #{formatVersion},
-            #{formatRisk},
-            #{extension},
-            #{formatGroupUuid},
-            #{description},
-            #{notes},
-            #{useYn},
-            #{insertUuid},
-            #{insertDate},
-            #{updateUuid},
-            #{updateDate}
-        )
-    </update>
 </mapper>

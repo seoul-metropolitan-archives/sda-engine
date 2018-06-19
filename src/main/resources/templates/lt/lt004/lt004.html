@@ -4,7 +4,7 @@
       layout:decorate="~{/layout/base}">
 
 <!-- ===== [ script ] ===== -->
-<script layout:fragment="script" type="text/javascript" th:src="@{/assets/js/lt/lt004.js}"></script>
+<script layout:fragment="script" type="text/javascript" th:src="@{/assets/js/lt/lt004/lt004.js}"></script>
 <!--realgrid -->
 
 <!-- ===== [ base-content ] ===== -->
@@ -21,37 +21,21 @@
                     </div>
                     <div class="bdb div_tablerow">
                         <dl>
-                            <dt class="mgl_5 w130">Status</dt>
+                            <dt class="mgl_5">Pathway Name</dt>
                             <dd>
-                                <select data-ax-path="statusUuid" style="width:135px;">
-                                    <option value=""></option>
-                                    <option th:each="item : ${statusUuid}"
-                                            th:value="${item.codeDetailUUID}"
-                                            th:text="${item.codeName}"/>
-                                </select>
+                                <input type=text style="width:135px" data-ax-path="pathwayName">
                             </dd>
-                            <dt class="w130">Classification Code</dt>
-                            <dd><input type=text style="width:135px" data-ax-path="classificationCode"></dd>
-                            <dt class="w130" >Classification Name</dt>
-                            <dd><input type=text style="width:135px" data-ax-path="classificationName"></dd>
-
+                            <th:block layout:insert="~{/fragments/page-buttons :: searchInput02 ('Source File Format','sourceFileFormat')}"/>
+                            <th:block layout:insert="~{/fragments/page-buttons :: searchInput02 ('Target File Format','targetFileFormat')}"/>
                         </dl>
                         <dl>
-                            <dt class="mgl_5 w130">Classification Type</dt>
-                            <dd>
-                                <select data-ax-path="classificationTypeUuid" style="width:135px;">
-                                    <option value=""></option>
-                                    <option th:each="item : ${classificationTypeUuid}"
-                                            th:value="${item.codeDetailUUID}"
-                                            th:text="${item.codeName}"/>
-                                </select>
-                            </dd>
+                            <th:block layout:insert="~{/fragments/page-buttons :: searchInput02 ('Tool Name','toolName')}"/>
                             <dd class="w_auto">
                                 <div class="rdo_box">
                                     <span class="rdo_box_title">Use</span>
-                                    <label><input type="radio" name="radio"  data-ax-path="useYn" class="no_border" value="Y">Yes</label>
-                                    <label><input type="radio" name="radio" data-ax-path="useYn" class="no_border" value="N">No</label>
-                                    <label><input type="radio" name="radio" checked="checked" data-ax-path="useYn" class="no_border" value="">All</label>
+                                    <label><input type="radio" name="useYN" data-ax-path="useYN" class="no_border" value="Y">Yes</label>
+                                    <label><input type="radio" name="useYN" data-ax-path="useYN" class="no_border" value="N">No</label>
+                                    <label><input type="radio" name="useYN" data-ax-path="useYN" class="no_border" value="" checked>All</label>
                                 </div>
                             </dd>
                         </dl>
@@ -62,7 +46,7 @@
 
                         <div style="height:100%; width:100%" class="div_table">
                             <ul class="bdb bdt div_tablerow" style="height:30px;">
-                                <th:block layout:insert="~{/fragments/page-buttons :: dot('Message')}"/>
+                                <th:block layout:insert="~{/fragments/page-buttons :: dot('Pathway')}"/>
                                 <th:block layout:insert="~{/fragments/page-buttons :: add-and-delete}"/>
                             </ul>
                             <div style="height:100%; width:100%" class="div_tablerow bdb">

@@ -1,20 +1,27 @@
 package rmsoft.ams.seoul.lt.lt002.dao;
 
 import io.onsemiro.core.mybatis.MyBatisMapper;
-import rmsoft.ams.seoul.lt.lt002.vo.Lt002;
+import rmsoft.ams.seoul.lt.lt001.vo.Lt00101VO;
+import rmsoft.ams.seoul.lt.lt002.vo.Lt00201VO;
 
 import java.util.List;
 
 
 public interface Lt002Mapper extends MyBatisMapper {
 
-    List<Lt002> findAll();
+    /**
+     * Search entity type list.
+     *
+     * @param param the param
+     * @return the list
+     */
+    List<Lt00201VO> searchList(Lt00201VO param);
 
-    Lt002 findOne(Lt002 lt002);
-
-    int update(Lt002 lt002);
-
-    int delete(Lt002 lt002);
-
-    int insert(Lt002 lt002);
+    /**
+     * Gets child class.
+     *
+     * @param param the disposalFreezeEvent Uuid uuid
+     * @return the child class
+     */
+    int checkDelete(Lt00201VO param);
 }

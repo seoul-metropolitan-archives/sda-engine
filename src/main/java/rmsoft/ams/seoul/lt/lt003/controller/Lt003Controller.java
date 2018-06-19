@@ -4,12 +4,9 @@ import io.onsemiro.controller.BaseController;
 import io.onsemiro.core.api.response.ApiResponse;
 import io.onsemiro.core.api.response.Responses;
 import io.onsemiro.core.parameter.RequestParams;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 import rmsoft.ams.seoul.lt.lt003.service.Lt003Service;
-import rmsoft.ams.seoul.lt.lt003.vo.Lt003;
-import rmsoft.ams.seoul.lt.lt003.vo.Lt003VO;
+import rmsoft.ams.seoul.lt.lt003.vo.Lt00301VO;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -21,16 +18,28 @@ public class Lt003Controller extends BaseController {
     @Inject
     private Lt003Service lt003Service;
 
-    @GetMapping
-    public Responses.PageResponse list(Pageable pageable, RequestParams<Lt003> requestParams) {
-        Page<Lt003> pages = lt003Service.find(pageable, requestParams.getString("filter", ""));
-        return Responses.PageResponse.of(Lt003VO.of(pages.getContent()), pages);
+    /**
+     * Search entity type responses . list response.
+     *
+     * @param param the param
+     * @return the responses . list response
+     */
+    @GetMapping("/searchList")
+    public Responses.ListResponse searchList(RequestParams<Lt00301VO> param) {
+        return Responses.ListResponse.of(lt003Service.searchList(param));
     }
 
-    @PutMapping
+    /**
+     * Save entity type api response.
+     *
+     * @param itemList the ad 00501 vo list
+     * @return the api response
+     */
+    @PutMapping(value = "/saveItems")
     @PostMapping
-    public ApiResponse save(@RequestBody List<Lt003> request) {
-        lt003Service.save(request);
-        return ok();
+    public ApiResponse saveItems(@RequestBody List<Lt00301VO> itemList) {
+
+        return lt003Service.saveItems(itemList);
     }
+
 }

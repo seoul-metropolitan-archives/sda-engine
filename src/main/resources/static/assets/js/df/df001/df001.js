@@ -290,7 +290,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
                 return true;
             else
                 return false;
-        },["eventName","eventTypeUuid","reviewDate","endYN"]);
+        },["eventName","eventTypeUuid","reviewDate","description"]);
     },
     itemClick: function (data) {
         if (data.disposalFreezeEventUuid != null && data.disposalFreezeEventUuid != "") {

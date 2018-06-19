@@ -3,9 +3,10 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="rmsoft.ams.seoul..Lt002Mapper">
+<mapper namespace="rmsoft.ams.seoul.lt.lt002.dao.Lt002Mapper">
 
-    <select id="findAll" resultType="lt002" parameterType="lt002" statementType="PREPARED">
+    <select id="searchList" resultType="Lt00201VO" parameterType="Lt00201VO" statementType="PREPARED">
+        <![CDATA[
         SELECT
             SOFTWARE_UUID AS softwareUuid,
             SOFTWARE_NAME AS softwareName,
@@ -17,99 +18,46 @@
             EXE_FILE_NAME AS exeFileName,
             DESCRIPTION AS description,
             NOTES AS notes,
-            USE_YN AS useYn,
-            INSERT_UUID AS insertUuid,
+            USE_YN AS useYN,
+        ]]>
+        <include refid="Common.UserName">
+            <property name="userUuid" value="INSERT_UUID"/>
+        </include>
+        AS insertUuid,
+
+        <![CDATA[
             INSERT_DATE AS insertDate,
-            UPDATE_UUID AS updateUuid,
-            UPDATE_DATE AS updateDate
+        ]]>
+        <include refid="Common.UserName">
+            <property name="userUuid" value="UPDATE_UUID"/>
+        </include>
+        AS updateUuid,
+
+        <![CDATA[
+            UPDATE_DATE AS  updateDate
         FROM
             LT_SOFTWARE
+        WHERE 1=1
+        ]]>
+        <if test="null != softwareName and '' != softwareName">
+            <![CDATA[
+          AND SOFTWARE_NAME LIKE '%' || #{softwareName} || '%'
+        ]]>
+        </if>
+        <if test="null != useYN and '' != useYN">
+            <![CDATA[
+          AND  USE_YN = #{useYN}
+        ]]>
+        </if>
+        ORDER BY SOFTWARE_NAME ASC, SOFTWARE_VERSION ASC
     </select>
 
-    <select id="findOne" resultType="lt002" parameterType="lt002" statementType="PREPARED">
+    <select id="checkDelete" resultType="int" parameterType="Lt00201VO" statementType="PREPARED">
         SELECT
-            SOFTWARE_UUID AS softwareUuid,
-            SOFTWARE_NAME AS softwareName,
-            SOFTWARE_VERSION AS softwareVersion,
-            VENDOR_NAME AS vendorName,
-            VENDOR_HOMEPAGE AS vendorHomepage,
-            LICENSE_CODE AS licenseCode,
-            INSTALL_PATH AS installPath,
-            EXE_FILE_NAME AS exeFileName,
-            DESCRIPTION AS description,
-            NOTES AS notes,
-            USE_YN AS useYn,
-            INSERT_UUID AS insertUuid,
-            INSERT_DATE AS insertDate,
-            UPDATE_UUID AS updateUuid,
-            UPDATE_DATE AS updateDate
+          COUNT(SOFTWARE_NAME)
         FROM
-            LT_SOFTWARE
-        WHERE
-            SOFTWARE_UUID = #{softwareUuid}
+          LT_SOFTWARE
+        WHERE SOFTWARE_NAME = #{softwareName}
+        AND SOFTWARE_VERSION= #{softwareVersion}
     </select>
-
-   <update id="delete" parameterType="lt002" statementType="PREPARED">
-        DELETE FROM
-            LT_SOFTWARE
-        WHERE
-            SOFTWARE_UUID = #{softwareUuid}
-    </update>
-
-   <update id="update" parameterType="lt002" statementType="PREPARED">
-        UPDATE LT_SOFTWARE
-        SET
-            SOFTWARE_NAME = #{softwareName},
-            SOFTWARE_VERSION = #{softwareVersion},
-            VENDOR_NAME = #{vendorName},
-            VENDOR_HOMEPAGE = #{vendorHomepage},
-            LICENSE_CODE = #{licenseCode},
-            INSTALL_PATH = #{installPath},
-            EXE_FILE_NAME = #{exeFileName},
-            DESCRIPTION = #{description},
-            NOTES = #{notes},
-            USE_YN = #{useYn},
-            INSERT_UUID = #{insertUuid},
-            INSERT_DATE = #{insertDate},
-            UPDATE_UUID = #{updateUuid},
-            UPDATE_DATE = #{updateDate}
-        WHERE
-            SOFTWARE_UUID = #{softwareUuid}
-    </update>
-
-   <update id="insert" parameterType="lt002" statementType="PREPARED">
-        INSERT INTO LT_SOFTWARE (
-            SOFTWARE_UUID,
-            SOFTWARE_NAME,
-            SOFTWARE_VERSION,
-            VENDOR_NAME,
-            VENDOR_HOMEPAGE,
-            LICENSE_CODE,
-            INSTALL_PATH,
-            EXE_FILE_NAME,
-            DESCRIPTION,
-            NOTES,
-            USE_YN,
-            INSERT_UUID,
-            INSERT_DATE,
-            UPDATE_UUID,
-            UPDATE_DATE
-        ) VALUES (
-            #{softwareUuid},
-            #{softwareName},
-            #{softwareVersion},
-            #{vendorName},
-            #{vendorHomepage},
-            #{licenseCode},
-            #{installPath},
-            #{exeFileName},
-            #{description},
-            #{notes},
-            #{useYn},
-            #{insertUuid},
-            #{insertDate},
-            #{updateUuid},
-            #{updateDate}
-        )
-    </update>
 </mapper>

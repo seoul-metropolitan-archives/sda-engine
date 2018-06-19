@@ -4,7 +4,7 @@
       layout:decorate="~{/layout/base}">
 
 <!-- ===== [ script ] ===== -->
-<script layout:fragment="script" type="text/javascript" th:src="@{/assets/js/df/df003.js}"></script>
+<script layout:fragment="script" type="text/javascript" th:src="@{/assets/js/df/df003/df003.js}"></script>
 <!--realgrid -->
 
 <!-- ===== [ base-content ] ===== -->
@@ -65,7 +65,7 @@
                         <div style="height:100%; width:100%" class="div_table">
                             <ul class="bdb bdt div_tablerow bgf7" style="height:30px;">
                                 <th:block layout:insert="~{/fragments/page-buttons :: dot('Item')}"/>
-                                <th:block layout:insert="~{/fragments/page-buttons :: add-and-delete}"/>
+                                <th:block layout:insert="~{/fragments/page-buttons :: adddf-and-delete}"/>
                             </ul>
                             <div style="height:100%; width:100%" class="div_tablerow bdb">
                                 <div id="realgrid01" style="width:100%; height:100%"></div>
@@ -74,7 +74,7 @@
                     </div>
 
                 </div>
-
+`
             </div>
 
         </div>

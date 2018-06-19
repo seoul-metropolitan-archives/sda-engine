@@ -27,18 +27,6 @@ public class Ad005Controller extends MessageBaseController {
     private Ad005Service service;
 
     /**
-     * Gets uuid.
-     *
-     * @return the uuid
-     */
-    @RequestMapping("/getUUID")
-    public Responses.MapResponse getUUID() {
-        Map<String, Object> response = new HashMap<String, Object>();
-        response.put("uuid", UUIDUtils.getUUID());
-        return Responses.MapResponse.of(response);
-    }
-
-    /**
      * Search entity type responses . list response.
      *
      * @param param the param

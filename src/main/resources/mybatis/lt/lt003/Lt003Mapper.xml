@@ -3,93 +3,62 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="rmsoft.ams.seoul..Lt003Mapper">
+<mapper namespace="rmsoft.ams.seoul.lt.lt003.dao.Lt003Mapper">
 
-    <select id="findAll" resultType="lt003" parameterType="lt003" statementType="PREPARED">
+    <select id="searchList" resultType="Lt00301VO" parameterType="Lt00301VO" statementType="PREPARED">
+        <![CDATA[
         SELECT
-            TOOL_UUID AS toolUuid,
-            TOOL_NAME AS toolName,
-            API AS api,
-            SOFWARE_UUID AS sofwareUuid,
-            DESCRIPTION AS description,
-            NOTES AS notes,
-            USE_YN AS useYn,
-            INSERT_UUID AS insertUuid,
-            INSERT_DATE AS insertDate,
-            UPDATE_UUID AS updateUuid,
-            UPDATE_DATE AS updateDate
+            T1.TOOL_UUID AS toolUuid,
+            T1.TOOL_NAME AS toolName,
+            T1.API AS api,
+            T1.SOFTWARE_UUID AS softwareUuid,
+            (SELECT SOFTWARE_NAME FROM LT_SOFTWARE WHERE USE_YN='Y' AND SOFTWARE_UUID= T1.SOFTWARE_UUID) AS softwareName,
+            T1.DESCRIPTION AS description,
+            T1.NOTES AS notes,
+            T1.USE_YN AS useYn,
+        ]]>
+        <include refid="Common.UserName">
+            <property name="userUuid" value="T1.INSERT_UUID"/>
+        </include>
+        AS insertUuid,
+
+        <![CDATA[
+            T1.INSERT_DATE AS insertDate,
+        ]]>
+        <include refid="Common.UserName">
+            <property name="userUuid" value="T1.UPDATE_UUID"/>
+        </include>
+        AS updateUuid,
+
+        <![CDATA[
+            T1.UPDATE_DATE AS  updateDate
         FROM
-            LT_TOOL
+            LT_TOOL T1
+        WHERE 1=1
+        ]]>
+        <if test="null != toolName and '' != toolName">
+            <![CDATA[
+          AND T1.TOOL_NAME LIKE '%' || #{toolName} || '%'
+        ]]>
+        </if>
+        <if test="null != softwareUuid and '' != softwareUuid">
+            <![CDATA[
+          AND  T1.SOFTWARE_UUID = #{softwareUuid}
+        ]]>
+        </if>
+        <if test="null != useYN and '' != useYN">
+            <![CDATA[
+          AND  T1.USE_YN = #{useYN}
+        ]]>
+        </if>
+        ORDER BY T1.TOOL_NAME ASC
     </select>
 
-    <select id="findOne" resultType="lt003" parameterType="lt003" statementType="PREPARED">
+    <select id="checkDelete" resultType="int" parameterType="String" statementType="PREPARED">
         SELECT
-            TOOL_UUID AS toolUuid,
-            TOOL_NAME AS toolName,
-            API AS api,
-            SOFWARE_UUID AS sofwareUuid,
-            DESCRIPTION AS description,
-            NOTES AS notes,
-            USE_YN AS useYn,
-            INSERT_UUID AS insertUuid,
-            INSERT_DATE AS insertDate,
-            UPDATE_UUID AS updateUuid,
-            UPDATE_DATE AS updateDate
+        COUNT(TOOL_NAME)
         FROM
-            LT_TOOL
-        WHERE
-            TOOL_UUID = #{toolUuid}
+        LT_TOOL
+        WHERE TOOL_NAME = #{toolName}
     </select>
-
-   <update id="delete" parameterType="lt003" statementType="PREPARED">
-        DELETE FROM
-            LT_TOOL
-        WHERE
-            TOOL_UUID = #{toolUuid}
-    </update>
-
-   <update id="update" parameterType="lt003" statementType="PREPARED">
-        UPDATE LT_TOOL
-        SET
-            TOOL_NAME = #{toolName},
-            API = #{api},
-            SOFWARE_UUID = #{sofwareUuid},
-            DESCRIPTION = #{description},
-            NOTES = #{notes},
-            USE_YN = #{useYn},
-            INSERT_UUID = #{insertUuid},
-            INSERT_DATE = #{insertDate},
-            UPDATE_UUID = #{updateUuid},
-            UPDATE_DATE = #{updateDate}
-        WHERE
-            TOOL_UUID = #{toolUuid}
-    </update>
-
-   <update id="insert" parameterType="lt003" statementType="PREPARED">
-        INSERT INTO LT_TOOL (
-            TOOL_UUID,
-            TOOL_NAME,
-            API,
-            SOFWARE_UUID,
-            DESCRIPTION,
-            NOTES,
-            USE_YN,
-            INSERT_UUID,
-            INSERT_DATE,
-            UPDATE_UUID,
-            UPDATE_DATE
-        ) VALUES (
-            #{toolUuid},
-            #{toolName},
-            #{api},
-            #{sofwareUuid},
-            #{description},
-            #{notes},
-            #{useYn},
-            #{insertUuid},
-            #{insertDate},
-            #{updateUuid},
-            #{updateDate}
-        )
-    </update>
 </mapper>

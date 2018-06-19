@@ -399,6 +399,20 @@
     </li>
 </th:block>
 
+<!-- Disposal Freeze Add 버튼 & Delete 버튼-->
+<th:block layout:fragment="adddf-and-delete(str,str2)">
+    <li style="text-align:right; width:68%;">
+        <button class="btn_adf" th:classappend="${str}">
+            <span class="btn_icon">&nbsp;</span>
+            <span class="btn_main_txt">Add</span>
+        </button>
+        <button class="btn_d" th:classappend="${str2}">
+            <span class="btn_icon">&nbsp;</span>
+            <span class="btn_main_txt">Delete</span>
+        </button>
+    </li>
+</th:block>
+
 <!--북마크-->
 <th:block layout:fragment="bookmark">
     <li style="width:30px; height: 30px">

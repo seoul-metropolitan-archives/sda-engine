@@ -47,7 +47,6 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                     return ;
         */
         var glossaryList = [].concat(fnObj.gridView01.getData());
-        var entityColumnList = [].concat(fnObj.gridView02.getData());
 
         axboot
             .call({
