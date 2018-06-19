@@ -1,6 +1,6 @@
 
 var fnObj = {};
-var classificationSchemeUuid = "";
+var parentContainerUuid = "";
 var selectedItem ; //선택된 그리드 아이템
 var classList = new Object();
 var CONFIRM_STATUS = "Confirm";
@@ -9,29 +9,33 @@ var selectedTreeItem = {orderKey:"", classTreeName:"",classificationSchemeUuid:"
 var isDetailChanged = false;
 
 var ACTIONS = axboot.actionExtend(fnObj, {
-    PAGE_SEARCH0: function (caller, act, data){ //초기조회, Inquiry
-        axboot.ajax({
+    PAGE_SEARCH: function (caller, act, data) {
+        axboot.ajax({ //트리리스트조회
             type: "GET",
-            url: "/api/v1/cl002/01/getClassificationScheme",
+            url: "/api/v1/st/st002/01/list01",
             async : false,
-            data: $.extend({}, {pageSize: 1000}, this.formView.getData()),
+            data: $.extend({}, {pageSize: 1000}),
             callback: function (res) {
+                fnObj.gridView01.resetCurrent();
+                fnObj.gridView01.setData(res.list);
+                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1);
             },
             options: {
                 onError: axboot.viewError
             }
         });
-    },
-    PAGE_SEARCH: function (caller, act, data) {
-        ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1);
+        return false;
     },
     PAGE_SEARCH1: function (caller, act, data) {
-        axboot.ajax({ //트리 리스트
+        axboot.ajax({//그리드리스트조회
             type: "GET",
-            url: "/api/v1/cl002/03/getClassHierarchyList",
+            url: "/api/v1/st/st002/01/list02",
             async : false,
-            data: $.extend({}, {pageSize: 1000}, {classificationSchemeUuid:classificationSchemeUuid}),
+            data: $.extend({}, {pageSize: 1000},this.formView.getData(),{parentContainerUuid: parentContainerUuid}),
             callback: function (res) {
+                fnObj.gridView02.resetCurrent();
+                fnObj.gridView02.setData(res.list);
+                fnObj.gridView02.disabledColumn();
             },
             options: {
                 onError: axboot.viewError
@@ -40,16 +44,13 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         return false;
     },
     PAGE_SEARCH2: function (caller, act, data) {//트리에서 선택된 항목
-        if(selectedTreeItem["classificationSchemeUuid"] == ""){
-            selectedTreeItem["classificationSchemeUuid"] = classificationSchemeUuid;
-        }
         axboot.ajax({
             type: "GET",
-            url: "/api/v1/cl002/04/getSelectedClassList",
-            async: true,
-            data: $.extend({},  {pageSize: 1000},selectedTreeItem ,this.formView.getData()),
+            url: "/api/v1/st/st002/01/list03",
+            data: $.extend({},  {pageSize: 1000},data),
             callback: function (res) {
-
+                fnObj.gridView02.resetCurrent();
+                fnObj.gridView02.setData(res.list);
             },
             options: {
                 onError: axboot.viewError
@@ -57,83 +58,35 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         });
         return false;
     },
-    PAGE_SEARCH3: function (caller, act, data) { //상세
-        if(data["classUuid"] == "undefined" || data["classUuid"] == "" ){
-            setDefaultClassDetails();
-            return;
-        }
+    STATUS_UPDATE: function (caller, act, data) {
+        var rows = fnObj.gridView02.gridObj.getCheckedList();
+
+        if(!rows || rows.length < 1) return;
+
+        var params = rows.filter(function (item) {
+            item.changeStatus = data;
+            return item.containerUuid !== "";
+        });
 
         axboot.ajax({
-            type: "GET",
-            url: "/api/v1/cl002/05/getSelectedClassDetail",
-            async: true,
-            data: $.extend({}, {pageSize: 1000}, data),
+            type: "PUT",
+            url: "/api/v1/st/st002/02/confirm",
+            data: JSON.stringify(params),
             callback: function (res) {
-                fnObj.formView.setFormData("detailClassName",selectedItem.className);
-                fnObj.formView.setFormData("detailPath",selectedItem.path);
-                if(selectedItem.classLevelUuid != "undefined"){
-                    fnObj.formView.setFormData("detailClassLevel",axboot.commonCodeFilter("CD114").nameArr[axboot.commonCodeFilter("CD114").codeArr.indexOf(selectedItem.classLevelUuid)]);
-                }
-                fnObj.formView.setFormData("detailAddMetadata01",res.addMetadata01);
-                fnObj.formView.setFormData("detailAddMetadata02",res.addMetadata02);
-                fnObj.formView.setFormData("detailAddMetadata03",res.addMetadata03);
-                fnObj.formView.setFormData("detailAddMetadata04",res.addMetadata04);
-                isDetailChanged = false;
+                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
             },
             options: {
                 onError: axboot.viewError
             }
         });
-        return false;
-    },
-    STATUS_UPATE: function (caller, act, data) {
-
     },
     ERROR_SEARCH: function (caller, act, data) {
     },
     PAGE_CONFIRM: function (caller, act, data) {
-        var rows = fnObj.gridView02.gridObj.getCheckedList();
-
-        if(!rows || rows.length < 1) return;
-
-        var params = rows.filter(function (item) {
-            item.changeStatus = CONFIRM_STATUS;
-            return item.classUuid !== "";
-        });
-
-        axboot.ajax({
-            type: "PUT",
-            url: "/api/v1/cl002/06/updateStatusConfirm",
-            data: JSON.stringify(params),
-            callback: function (res) {
-                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
-            },
-            options: {
-                onError: axboot.viewError
-            }
-        });
+        ACTIONS.dispatch(ACTIONS.STATUS_UPDATE,CONFIRM_STATUS);
     },
     PAGE_CANCEL: function (caller, act, data) {
-        var rows = fnObj.gridView02.gridObj.getCheckedList();
-
-        if(!rows || rows.length < 1) return;
-
-        var params = rows.filter(function (item) {
-            item.changeStatus = CANCEL_STATUS;
-            return item.classUuid !== "";
-        });
-
-        axboot.ajax({
-            type: "PUT",
-            url: "/api/v1/cl002/07/updateStatusCancel",
-            data: JSON.stringify(params),
-            callback: function (res) {
-                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
-            },
-            options: {
-                onError: axboot.viewError
-            }
-        });
+        ACTIONS.dispatch(ACTIONS.STATUS_UPDATE,CANCEL_STATUS);
     },
     PAGE_SAVE: function (caller, act, data) {
         ACTIONS.dispatch(ACTIONS.TOP_GRID_SAVE);
@@ -143,16 +96,10 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         var result = false;
         axboot.call({
             type: "PUT",
-            url: "/api/v1/cl002/08/updateClassList",
+            url: "/api/v1/st/st002/02/save",
             data: JSON.stringify(this.gridView02.getData()),
             callback: function (res) {
-                if(isDetailChanged){
-                    fnObj.gridView02.commit();
-                    ACTIONS.dispatch(ACTIONS.TOP_GRID_DETAIL_PAGE_SAVE);
-                }else{
-                    // ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
-                }
-                result = true;
+              ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
             }
         })
             .done(function () {
@@ -174,8 +121,10 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             }
         });
     },
-    SEARCH_CLASS_SCH : function(caller, act, data)
-    {
+    CLOSE_TAB: function (caller, act, data) {
+        ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
+    },
+    SEARCH_CONTAINER_SCH: function(caller, act, data){
         axboot.modal.open({
             modalType: "COMMON_POPUP",
             preSearch : data["preSearch"],
@@ -183,37 +132,14 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 return data;
             },
             callback: function (data) {
-                $("input[data-ax-path='classificationCode']").val(data["CLASSIFICATION_NAME"])
-                $("input[data-ax-path='classificationCode']").attr("classificationCode",data["CLASSIFICATION_CODE"])
-                classificationSchemeUuid = data['CLASSIFICATION_SCHEME_UUID'];
-                selectedTreeItem = {orderKey:"", classTreeName:"",classificationSchemeUuid:"",orderNo:"",parentClassUuid:""};
+                $("input[data-ax-path='parentContainerName']").val(data["CONTAINER_NAME"])
+                $("input[data-ax-path='parentContainerName']").attr("parentContainerName",data["CONTAINER_NAME"])
+                parentContainerUuid = data['CONTAINER_UUID'];
                 if(this.close)
                     this.close();
                 ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1,data);
             }
         });
-    },
-    SEARCH_CLASS_CCD : function(caller, act, data)
-    {
-        axboot.modal.open({
-            modalType: "COMMON_POPUP",
-            preSearch : data["preSearch"],
-            sendData: function () {
-                return data;
-            },
-            callback: function (data) {
-                fnObj.formView.setFormData("parentClassCode",data["CLASS_CODE"]);
-
-                /* $("input[data-ax-path='parentClassCode']").val(data["CLASS_CODE"])
-                 $("input[data-ax-path='parentClassCode']").attr("parentClassCode",data["CLASS_CODE"])*/
-                if(this.close)
-                    this.close();
-                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH2);
-            }
-        });
-    },
-    CLOSE_TAB: function (caller, act, data) {
-        ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
     },
     dispatch: function (caller, act, data) {
         var result = ACTIONS.exec(caller, act, data);
@@ -254,7 +180,7 @@ fnObj.pageStart = function () {
     _this.formView.initView();
     _this.gridView01.initView();
     _this.gridView02.initView();
-    ACTIONS.dispatch(ACTIONS.PAGE_SEARCH0, this.formView.getData());
+    ACTIONS.dispatch(ACTIONS.PAGE_SEARCH, this.formView.getData());
 };
 
 fnObj.formView = axboot.viewExtend(axboot.formView, {
@@ -270,61 +196,48 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
     },
     initEvent: function () {
         var _this = this;
-        $("input[data-ax-path='classificationCode']").parents().eq(1).find("a").click(function(){
+        $("input[data-ax-path='parentContainerName']").parents().eq(1).find("a").click(function(){
             var data = {
-                popupCode : "PU101",
-                searchData : $("input[data-ax-path='classificationCode']").val().trim(),
+                popupCode : "PU135",
+                searchData : $("input[data-ax-path='parentContainerName']").val().trim(),
                 preSearch : false
             };
-            ACTIONS.dispatch(ACTIONS.SEARCH_CLASS_SCH,data);
+            ACTIONS.dispatch(ACTIONS.SEARCH_CONTAINER_SCH,data);
         });
-        $("input[data-ax-path='classificationCode']").focusout(function(){
+        $("input[data-ax-path='parentContainerName']").focusout(function(){
 
             if("" != $(this).val().trim())
             {
                 var data = {
-                    popupCode : "PU101",
+                    popupCode : "PU135",
                     searchData : $(this).val().trim()
                 };
-                ACTIONS.dispatch(ACTIONS.SEARCH_CLASS_SCH,data);
+                ACTIONS.dispatch(ACTIONS.SEARCH_CONTAINER_SCH,data);
             }
 
         });
-        /*
-        $("input[data-ax-path='parentClassCode']").parents().eq(1).find("a").click(function(){
-                var data = {
-                    popupCode : "PU115",
-                    searchData : $("input[data-ax-path='parentClassCode']").val().trim(),
-                    preSearch : false
-                };
-                ACTIONS.dispatch(ACTIONS.SEARCH_CLASS_CCD,data);
-        });
-
-        */
-        $("input[data-ax-path='parentClassCode']").focusout(function(){
+        $("input[data-ax-path='containerName']").focusout(function(){
 
             if("" == $(this).val().trim())
             {
-                $("input[data-ax-path='parentClassName']").val("");
+                $("input[data-ax-path='containerName']").val("");
             }
         });
-        $("input[data-ax-path='classCodeForm']").focusout(function(){
+        $("input[data-ax-path='provenance']").focusout(function(){
 
             if("" == $(this).val().trim())
             {
-                $("input[data-ax-path='className']").val("");
+                $("input[data-ax-path='provenance']").val("");
             }
         });
 
-        $("input[data-ax-path='detailAddMetadata01'],input[data-ax-path='detailAddMetadata02'],input[data-ax-path='detailAddMetadata03'],input[data-ax-path='detailAddMetadata04']").keyup(function(){
-            isDetailChanged = true;
-        });
-
-        $("input[data-ax-path='parentClassName'],input[data-ax-path='classCodeForm'],input[data-ax-path='className'] ,input[data-ax-path='parentClassCode']").keyup(function(){
+        $("input[data-ax-path='containerName'],input[data-ax-path='provenance'] ,input[data-ax-path='controlNumber']").keyup(function(){
             if(13 == event.keyCode)
                 ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
         });
-
+        $("select[data-ax-path='statusUuid'], select[data-ax-path='containerTypeUuid']").change(function() {
+            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+        });
 
         $(".bdb").delegate("#rg_tree_allopen", "click", function () {
             _this.expandAll();
@@ -337,11 +250,6 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
     getData: function () {
         var data = this.modelFormatter.getClearData(this.model.get()); // 모델의 값을 포멧팅 전 값으로 치환.
         return $.extend({}, data);
-        /*return $.extend({}, data,
-            {
-                classificationCode : $("input[data-ax-path='classificationCode']").attr("classificationCode")
-                ,parentClassCode :  $("input[data-ax-path='parentClassCode']").attr("parentClassCode")
-            });*/
     },
     setFormData: function (dataPath, value) {
         this.model.set(dataPath, value);
@@ -379,8 +287,6 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
 
 fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     tagId : "realgrid01",
-    uuidFieldName : "classificationSchemeUuid",
-    entityName : "ClassName",
     initView: function () {
         this.gridObj = new TreeGridWrapper("realgrid01", "/assets/js/libs/realgrid", true);
         this.gridObj.setGridStyle("100%", "100%")
@@ -415,7 +321,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
         $("#searchLeftMenu").click(function(){
             if("" != $("#leftMenuParam").val())
             {
-                _this.gridObj.search(["classTreeName"],$("#leftMenuParam").val())
+                _this.gridObj.search(["containerName"],$("#leftMenuParam").val())
             }
         });
     },
@@ -430,25 +336,8 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
         }
     },
     itemClick: function (data, index) {
-        if(selectedItem != null){
-            if (fnObj.gridView02.isChangeData() == true ||isDetailChanged == true) {
-                axDialog.confirm({
-                    msg: axboot.getCommonMessage("AA006")
-                }, function () {
-                    if (this.key == "ok") {
-                        ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
-                    } else {
-                        selectedTreeItem = data
-                        ACTIONS.dispatch(ACTIONS.PAGE_SEARCH2);
-                    }
-                });
-            } else {
-                selectedTreeItem = data
-                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH2);
-            }
-        }else{
-            selectedTreeItem = data
-            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH2);
+        if(data != null){
+            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH2, data);
         }
 
     },
@@ -460,10 +349,8 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
 
 fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
     tagId : "realgrid02",
-    entityName : "Class Grid",
-    uuidFieldName : "classUuid",
-    parentsUuidFieldName : "classificationSchemeUuid",
-    parentsGrid : fnObj.gridView01,
+    entityName : "containerUuid",
+    primaryKey : "containerUuid",
     initView: function () {
         this.initInstance();
         this.setColumnInfo(st00202.column_info);
@@ -479,8 +366,8 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
     },
     disabledColumn : function()
     {
-        var codes = axboot.commonCodeFilter("CD113").codeArr;
-        var names = axboot.commonCodeFilter("CD113").nameArr;
+        var codes = axboot.commonCodeFilter("CD138").codeArr;
+        var names = axboot.commonCodeFilter("CD138").nameArr;
         var state = undefined;
         for(var i = 0; i < names.length; i++)
         {
@@ -496,7 +383,7 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
                 return true;
             else
                 return false;
-        },["parentClassCode","className","classLevelUuid","orderNo","description"]);
+        },["containerName","parentContainerName","containerTypeUuid","controlNumber","provenance","creationStartDate","creationEndDate","description","orderNo"]);
     },
     isChangeData: function () {
         if (this.getData().length > 0) {
@@ -507,27 +394,6 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
     },
     getRowData: function (){
         return this.gridObj.getSelectedData();
-    },
-    itemClick: function (data) {
-        selectedItem = data;
-        if (fnObj.formView.getData().detailClassName != null && fnObj.formView.getData().detailClassName != "") {
-
-            if (isDetailChanged == true ) {
-                axDialog.confirm({
-                    msg: axboot.getCommonMessage("AA006")
-                }, function () {
-                    if (this.key == "ok") {
-                        ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
-                    } else {
-                        ACTIONS.dispatch(ACTIONS.PAGE_SEARCH3, data);
-                    }
-                });
-            } else {
-                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH3, data);
-            }
-        }else {
-            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH3, data);
-        }
     }
 });
 /**
@@ -544,20 +410,5 @@ isDataChanged = function () {
         return false;
     }
 }
-setDefaultClassDetails = function(){
-    fnObj.formView.setFormData("detailClassName",'');
-    fnObj.formView.setFormData("detailPath",'');
-    fnObj.formView.setFormData("detailClassLevel",'');
-    fnObj.formView.setFormData("detailAddMetadata01",'');
-    fnObj.formView.setFormData("detailAddMetadata02",'');
-    fnObj.formView.setFormData("detailAddMetadata03",'');
-    fnObj.formView.setFormData("detailAddMetadata04",'');
-    isDetailChanged = false;
-}
-/*
-getPreClassLevels = function(key) {
-    var path = classList.filter(function (item) {
-       return item.orderKey === key.path;
-    });
-    return path;
-}*/
+
+

@@ -3,123 +3,154 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="rmsoft.ams.seoul..St002Mapper">
-
-    <select id="findAll" resultType="st002" parameterType="st002" statementType="PREPARED">
+<mapper namespace="rmsoft.ams.seoul.st.st002.dao.St002Mapper">
+    <select id="getContainerHierarchyList" resultType="St00201VO"  statementType="PREPARED">
         SELECT
-            CONTAINER_UUID AS containerUuid,
-            STATUS_UUID AS statusUuid,
-            CONTAINER_NAME AS containerName,
-            CONTAINER_TYPE_UUID AS containerTypeUuid,
-            CONTROL_NUMBER AS controlNumber,
-            PROVENANCE AS provenance,
-            CREATION_START_DATE AS creationStartDate,
-            CREATION_END_DATE AS creationEndDate,
-            ORDER_NO AS orderNo,
-            ORDER_KEY AS orderKey,
-            DESCRIPTION AS description,
-            NOTES AS notes,
-            USE_YN AS useYn,
-            INSERT_UUID AS insertUuid,
-            INSERT_DATE AS insertDate,
-            UPDATE_UUID AS updateUuid,
-            UPDATE_DATE AS updateDate
+            CONTAINER_UUID as containerUuid,
+            CONTAINER_TYPE_UUID as containerTypeUuid,
+            STATUS_UUID as statusUuid,
+            PARENT_CONTAINER_UUID as parentContainerUuid,
+            CONTAINER_NAME as containerName,
+            ORDER_NO as orderNo,
+            ORDER_KEY as orderKey,
+            SUBSTR(SYS_CONNECT_BY_PATH(ROWNUM, '.'), 2 , length(SYS_CONNECT_BY_PATH(ROWNUM, '.'))) as orderKey1
         FROM
-            ST_CONTAINER
+            ST_CONTAINER A
+            START WITH PARENT_CONTAINER_UUID IS NULL
+        CONNECT BY PRIOR CONTAINER_UUID = PARENT_CONTAINER_UUID
+        ORDER SIBLINGS BY ORDER_KEY
     </select>
-
-    <select id="findOne" resultType="st002" parameterType="st002" statementType="PREPARED">
+    <select id="getContainerList" resultType="St00201VO" parameterType="St00201VO" statementType="PREPARED">
         SELECT
-            CONTAINER_UUID AS containerUuid,
-            STATUS_UUID AS statusUuid,
-            CONTAINER_NAME AS containerName,
-            CONTAINER_TYPE_UUID AS containerTypeUuid,
-            CONTROL_NUMBER AS controlNumber,
-            PROVENANCE AS provenance,
-            CREATION_START_DATE AS creationStartDate,
-            CREATION_END_DATE AS creationEndDate,
-            ORDER_NO AS orderNo,
-            ORDER_KEY AS orderKey,
-            DESCRIPTION AS description,
-            NOTES AS notes,
-            USE_YN AS useYn,
-            INSERT_UUID AS insertUuid,
-            INSERT_DATE AS insertDate,
-            UPDATE_UUID AS updateUuid,
-            UPDATE_DATE AS updateDate
+        CONTAINER_UUID as containerUuid,
+        STATUS_UUID as statusUuid,
+        CONTAINER_NAME as containerName,
+        CONTAINER_TYPE_UUID as containerTypeUuid,
+        PARENT_CONTAINER_UUID as parentContainerUuid,
+        CONTROL_NUMBER as controlNumber,
+        PROVENANCE as provenance,
+        TO_CHAR(TO_DATE(CREATION_START_DATE),'YYYY-MM-DD') as creationStartDate,
+        TO_CHAR(TO_DATE(CREATION_END_DATE),'YYYY-MM-DD') as creationEndDate,
+        (SELECT CONTAINER_NAME
+        FROM ST_CONTAINER I
+        WHERE I.CONTAINER_UUID = A.PARENT_CONTAINER_UUID) parentContainerName,
+        ORDER_NO as orderNo,
+        ORDER_KEY as orderKey,
+        USE_YN as useYn,
+        DESCRIPTION as description,
+        NOTES as notes,
+        <include refid="Common.UserName"><property name="userUuid" value="INSERT_UUID"/></include> as insertUuid,
+        INSERT_DATE as insertDate,
+        <include refid="Common.UserName"><property name="userUuid" value="UPDATE_UUID"/></include> as updateUuid,
+        UPDATE_DATE as updateDate
         FROM
-            ST_CONTAINER
-        WHERE
-            CONTAINER_UUID = #{containerUuid}
+        ST_CONTAINER A
+        <where>
+            <if test="provenance != null">
+                PROVENANCE = #{provenance}
+            </if>
+            <if test="parentContainerUuid != null">
+                AND  PARENT_CONTAINER_UUID = #{parentContainerUuid}
+            </if>
+            <if test="containerName != null">
+                AND UPPER(CONTAINER_NAME) LIKE '%'||#{containerName}||'%'
+            </if>
+            <if test="statusUuid != null">
+                AND STATUS_UUID = #{statusUuid}
+            </if>
+            <if test="controlNumber != null">
+                AND CONTROL_NUMBER = #{controlNumber}
+            </if>
+            <if test="containerTypeUuid != null">
+                AND CONTAINER_TYPE_UUID = #{containerTypeUuid}
+            </if>
+            <if test="useYn != null">
+                AND USE_YN = #{useYn}
+            </if>
+        </where>
     </select>
-
-   <update id="delete" parameterType="st002" statementType="PREPARED">
-        DELETE FROM
-            ST_CONTAINER
-        WHERE
-            CONTAINER_UUID = #{containerUuid}
-    </update>
-
-   <update id="update" parameterType="st002" statementType="PREPARED">
-        UPDATE ST_CONTAINER
-        SET
-            STATUS_UUID = #{statusUuid},
-            CONTAINER_NAME = #{containerName},
-            CONTAINER_TYPE_UUID = #{containerTypeUuid},
-            CONTROL_NUMBER = #{controlNumber},
-            PROVENANCE = #{provenance},
-            CREATION_START_DATE = #{creationStartDate},
-            CREATION_END_DATE = #{creationEndDate},
-            ORDER_NO = #{orderNo},
-            ORDER_KEY = #{orderKey},
-            DESCRIPTION = #{description},
-            NOTES = #{notes},
-            USE_YN = #{useYn},
-            INSERT_UUID = #{insertUuid},
-            INSERT_DATE = #{insertDate},
-            UPDATE_UUID = #{updateUuid},
-            UPDATE_DATE = #{updateDate}
-        WHERE
-            CONTAINER_UUID = #{containerUuid}
-    </update>
-
-   <update id="insert" parameterType="st002" statementType="PREPARED">
-        INSERT INTO ST_CONTAINER (
-            CONTAINER_UUID,
-            STATUS_UUID,
-            CONTAINER_NAME,
-            CONTAINER_TYPE_UUID,
-            CONTROL_NUMBER,
-            PROVENANCE,
-            CREATION_START_DATE,
-            CREATION_END_DATE,
-            ORDER_NO,
-            ORDER_KEY,
-            DESCRIPTION,
-            NOTES,
-            USE_YN,
-            INSERT_UUID,
-            INSERT_DATE,
-            UPDATE_UUID,
-            UPDATE_DATE
-        ) VALUES (
-            #{containerUuid},
-            #{statusUuid},
-            #{containerName},
-            #{containerTypeUuid},
-            #{controlNumber},
-            #{provenance},
-            #{creationStartDate},
-            #{creationEndDate},
-            #{orderNo},
-            #{orderKey},
-            #{description},
-            #{notes},
-            #{useYn},
-            #{insertUuid},
-            #{insertDate},
-            #{updateUuid},
-            #{updateDate}
+    <select id="getSelectedContainerList" resultType="St00201VO" parameterType="St00201VO" statementType="PREPARED">
+        SELECT
+        containerUuid,
+        statusUuid,
+        containerName,
+        containerTypeUuid,
+        parentContainerUuid,
+        controlNumber,
+        provenance,
+        creationStartDate,
+        creationEndDate,
+        orderKey,
+        orderKey1,
+        orderNo,
+        parentContainerName,
+        useYn,
+        notes,
+        description,
+        insertUuid,
+        insertDate,
+        updateUuid,
+        updateDate
+        FROM
+        (
+            SELECT
+                CONTAINER_UUID as containerUuid,
+                STATUS_UUID as statusUuid,
+                CONTAINER_NAME as containerName,
+                CONTAINER_TYPE_UUID as containerTypeUuid,
+                PARENT_CONTAINER_UUID as parentContainerUuid,
+                CONTROL_NUMBER as controlNumber,
+                PROVENANCE as provenance,
+                TO_CHAR(TO_DATE(CREATION_START_DATE),'YYYY-MM-DD') as creationStartDate,
+                TO_CHAR(TO_DATE(CREATION_END_DATE),'YYYY-MM-DD') as creationEndDate,
+                SUBSTR(SYS_CONNECT_BY_PATH(ROWNUM, '.'), 2 , length(SYS_CONNECT_BY_PATH(ROWNUM, '.'))) as orderKey1,
+                (
+                  SELECT CONTAINER_NAME
+                  FROM ST_CONTAINER I
+                  WHERE I.CONTAINER_UUID = A.PARENT_CONTAINER_UUID
+                ) parentContainerName,
+                ORDER_NO as orderNo,
+                ORDER_KEY as orderKey,
+                USE_YN as useYn,
+                DESCRIPTION as description,
+                NOTES as notes,
+                <include refid="Common.UserName"><property name="userUuid" value="INSERT_UUID"/></include> as insertUuid,
+                INSERT_DATE as insertDate,
+                <include refid="Common.UserName"><property name="userUuid" value="UPDATE_UUID"/></include> as updateUuid,
+                UPDATE_DATE as updateDate
+            FROM
+                ST_CONTAINER A
+            START WITH PARENT_CONTAINER_UUID IS NULL
+            CONNECT BY PRIOR CONTAINER_UUID = PARENT_CONTAINER_UUID
+            ORDER SIBLINGS BY ORDER_KEY
         )
-    </update>
+
+        <where>
+            <if test="orderKey1 != null">
+                (orderKey1 LIKE  #{orderKey1} || '.' || '%'
+                OR orderKey1 =  #{orderKey1})
+            </if>
+            <if test="provenance != null">
+                PROVENANCE = #{provenance}
+            </if>
+            <if test="parentContainerUuid != null">
+                AND  PARENT_CONTAINER_UUID = #{parentContainerUuid}
+            </if>
+            <if test="containerName != null">
+                AND UPPER(CONTAINER_NAME) LIKE '%'||#{containerName}||'%'
+            </if>
+            <if test="statusUuid != null">
+                AND STATUS_UUID = #{statusUuid}
+            </if>
+            <if test="controlNumber != null">
+                AND CONTROL_NUMBER = #{controlNumber}
+            </if>
+            <if test="containerTypeUuid != null">
+                AND CONTAINER_TYPE_UUID = #{containerTypeUuid}
+            </if>
+            <if test="useYn != null">
+                AND USE_YN = #{useYn}
+            </if>
+        </where>
+    </select>
 </mapper>

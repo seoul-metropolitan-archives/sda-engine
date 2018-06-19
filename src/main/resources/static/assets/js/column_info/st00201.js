@@ -14,16 +14,16 @@ var st00201 =
                 {
                     sortNo: 1,
                     width:140,
-                    name: "classTreeName",
-                    text: "CLASS_TREE_NAME",
+                    name: "containerName",
+                    text: "CONTAINER_NAME",
                     editable: false,
                     dataType: "code"
                 },
                 {
                     sortNo: 2,
                     width:140,
-                    name: "classificationSchemeUuid",
-                    text: "CLASSIFICATION_SCHEME_UUID",
+                    name: "containerUuid",
+                    text: "CONTAINER_UUID",
                     editable: false,
                     dataType: "code",
                     visible : false
@@ -40,32 +40,14 @@ var st00201 =
                 {
                     sortNo: 4,
                     width:140,
-                    name: "parentClassUuid",
-                    text: "PARENT_CLASS_UUID",
+                    name: "parentContainerUuid",
+                    text: "PARENT_CONTAINER_UUID",
                     editable: false,
                     dataType: "code",
                     visible : false
                 },
                 {
                     sortNo: 5,
-                    width:140,
-                    name: "classCode",
-                    text: "Class_Code",
-                    editable: false,
-                    dataType: "code",
-                    visible : false
-                },
-                {
-                    sortNo: 5,
-                    width:140,
-                    name: "classUuid",
-                    text: "Class Uuid",
-                    editable: false,
-                    dataType: "code",
-                    visible : false
-                },
-                {
-                    sortNo: 0,
                     width:140,
                     name: "orderKey",
                     text: "ORDER_KEY",

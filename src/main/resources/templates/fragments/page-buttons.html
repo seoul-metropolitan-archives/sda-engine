@@ -345,7 +345,23 @@
         </button>
     </li>
 </th:block>
-
+<!---->
+<th:block layout:fragment="arrange-and-save-and-inquiry">
+    <li style="text-align:right; width:48%;">
+        <button class="btn_co" th:id="arrange">
+            <span class="btn_icon_co">&nbsp;</span>
+            <span class="btn_main_txt">Arrange</span>
+        </button>
+        <button class="btn_s" th:id="save">
+            <span class="btn_icon">&nbsp;</span>
+            <span class="btn_main_txt">Save(S)</span>
+        </button>
+        <button class="btn_i" th:id="inquiry">
+            <span class="btn_icon">&nbsp;</span>
+            <span class="btn_main_txt">Inquiry(I)</span>
+        </button>
+    </li>
+</th:block>
 <!--terminate버튼 & Inquiry 버튼-->
 <th:block layout:fragment="terminate-and-inquiry">
     <li style="text-align:right; width:48%;">

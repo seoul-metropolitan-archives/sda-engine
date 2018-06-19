@@ -27,8 +27,8 @@ var st00202 =
                     name: "statusUuid",
                     text: "Status",
                     editable: false,
-                    values: axboot.commonCodeFilter("CD113").codeArr,
-                    labels: axboot.commonCodeFilter("CD113").nameArr,
+                    values: axboot.commonCodeFilter("CD138").codeArr,
+                    labels: axboot.commonCodeFilter("CD138").nameArr,
                     dataType : "combo",
                     disable : true,
                     required : true
@@ -49,59 +49,61 @@ var st00202 =
                     text: "Parent Container Name",
                     editable: true,
                     dataType: "popup",
-                    popupCode : "PU117",
-                    sqlColumn : {CLASS_CODE : "parentClassCode",CLASS_UUID: "parentClassUuid",CHILD_CLASS_LEVEL_UUID  : "classLevelUuid",CLASS_NAME: "parentClassName"},
+                    popupCode : "PU135",
+                    sqlColumn : {CONTAINER_NAME:"parentContainerName", PARENT_CONTAINER:"popContainerName" ,CONTAINER_UUID: "parentContainerUuid", CONTAINER_TYPE_UUID: "popContainerType"},
+                    pasteTarget : "popContainerUuid",
                     disable : false,
                     required:false,
 
                 },
                 {
                     sortNo: 4,
-                    width: 80,
-                    name: "containerType",
-                    text: "Container Type",
-                    editable: false,
-                    values: axboot.commonCodeFilter("CD113").codeArr,
-                    labels: axboot.commonCodeFilter("CD113").nameArr,
-                    dataType : "combo",
-                    disable : true,
-                    required : true
+                    width: 200,
+                    name: "parentContainerUuid",
+                    text: "parentContainerUuid",
+                    visible : false
                 },
                 {
                     sortNo: 5,
-                    width: 120,
-                    name: "provenance",
-                    text: "Provenance",
-                    editable: false,
-                    disable : true,
-                    dataType: "text",
-                    visible: true,
-                    required : false
-
+                    width: 80,
+                    name: "containerTypeUuid",
+                    text: "Container Type",
+                    values: axboot.commonCodeFilter("CD139").codeArr,
+                    labels: axboot.commonCodeFilter("CD139").nameArr,
+                    dataType : "combo",
+                    required : true
                 },
                 {
                     sortNo: 6,
-                    width: 230,
-                    name: "parentClassName",
-                    text: "Parent Class Name",
-                    editable: false,
-                    disable : true,
+                    width: 120,
+                    name: "controlNumber",
+                    text: "Control Number",
+                    dataType: "text",
+                    visible: true,
+                    required : true
+
+                },
+                {
+                    sortNo: 7,
+                    width: 120,
+                    name: "provenance",
+                    text: "Provenance",
                     dataType: "text",
                     visible: true,
                     required : false
-                },
 
+                },
                 {
-                    sortNo: 7,
+                    sortNo: 9,
                     name: "creationStartDate",
                     text: "Creation Start Date",
                     width: 100,
                     editable: true,
                     dataType : "date",
-                    required : true,
+                    required : true
                 },
                 {
-                    sortNo: 8,
+                    sortNo: 10,
                     name: "creationEndDate",
                     text: "Creation End Date",
                     width: 100,
@@ -110,16 +112,15 @@ var st00202 =
                     required : true,
                 },
                 {
-                    sortNo: 9,
+                    sortNo: 11,
                     name: "orderNo",
                     text: "Order No",
                     width: 100,
                     editable: true,
-                    dataType : "number",
-                    required : true,
+                    dataType : "number"
                 },
                 {
-                    sortNo: 10,
+                    sortNo: 12,
                     name: "description",
                     text: "Description",
                     width: 250,
@@ -128,7 +129,7 @@ var st00202 =
                     required: false
                 },
                 {
-                    sortNo: 11,
+                    sortNo: 13,
                     name: "notes",
                     text: "Notes",
                     width: 250,
@@ -137,7 +138,7 @@ var st00202 =
                     required: false
                 },
                 {
-                    sortNo: 12,
+                    sortNo: 14,
                     name: "useYn",
                     text: "Use",
                     width: 50,
@@ -148,7 +149,7 @@ var st00202 =
                     required: false
                 },
                 {
-                    sortNo: 13,
+                    sortNo: 15,
                     name: "insertUuid",
                     text: "Created By",
                     width: 80,
@@ -170,7 +171,7 @@ var st00202 =
                 {
                     sortNo: 15,
                     name: "updateUuid",
-                    text: "Modifed By",
+                    text: "Modified By",
                     width: 80,
                     editable: false,
                     disable: true,
@@ -186,6 +187,13 @@ var st00202 =
                     disable: true,
                     dataType: "timestamp",
                     required: false
+                },
+                {
+                    sortNo: 17,
+                    name: "orderKey",
+                    text: "OrderKey",
+                    width: 140,
+                    visible: false
                 }
             ]
     }
