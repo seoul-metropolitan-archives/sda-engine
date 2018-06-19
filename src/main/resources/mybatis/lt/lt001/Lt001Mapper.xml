@@ -77,10 +77,8 @@
 
     <select id="checkUpdate" resultType="int" parameterType="Lt00101VO" statementType="PREPARED">
         SELECT
-          COUNT(PUID)
-        FROM
-          LT_FILE_FORMAT
-        WHERE
-          PUID = #{puid} OR FORMAT_NAME = #{formatName}
+         ((SELECT COUNT(PUID) FROM LT_FILE_FORMAT WHERE PUID= #{puid}) +
+         (SELECT COUNT(FORMAT_NAME) FROM LT_FILE_FORMAT WHERE FORMAT_NAME= #{formatName})) AS CNT
+        FROM DUAL;
     </select>
 </mapper>
