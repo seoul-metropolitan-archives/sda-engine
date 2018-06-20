@@ -19,7 +19,7 @@ public interface Lt001Mapper extends MyBatisMapper {
     /**
      * Gets child class.
      *
-     * @param uuid the disposalFreezeEvent Uuid uuid
+     * @param param the disposalFreezeEvent Uuid uuid
      * @return the child class
      */
     int checkUpdate(Lt00101VO param);

@@ -100,7 +100,7 @@ var df00101 =
                     width: 50,
                     dataType: "check",
                     textAlignment: "center",
-                    defaultValue : "Y",
+                    defaultValue : "N",
                     renderer: {
                         type: "check",
                         shape: "",
