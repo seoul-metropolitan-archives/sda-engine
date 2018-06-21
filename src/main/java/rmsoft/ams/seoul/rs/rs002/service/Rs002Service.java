@@ -58,28 +58,37 @@ public class Rs002Service extends BaseService {
     public ApiResponse updateRsTriggerList(List<Rs00201VO> list) {
         List<RsTrigger> rsTriggerList = ModelMapperUtils.mapList(list,RsTrigger.class);
         RsTrigger orgRsTrigger = null;
+        String cnt = null;
         for(RsTrigger rsTrigger : rsTriggerList) {
-
-            if(rsTrigger.isCreated()){
-//
-            }
-            if (rsTrigger.isCreated() || rsTrigger.isModified()) {
+            if (rsTrigger.isDeleted()) {
+                if (getRelatedData(rsTrigger.getTriggerUuid()) == 0) {
+                    rsTriggerRepository.delete(rsTrigger);
+                } else {
+                    throw new ApiException("CL", "002_01");
+                }
+            }else{
+                if(rsTrigger.isCreated()){
+                    rsTrigger.setStatusUuid(CommonCodeUtils.getCodeDetailUuid("CD134","Draft"));
+                    cnt = jdbcTemplate.queryForObject("SELECT LPAD(TO_NUMBER(SUBSTR(MAX(TRIGGER_CODE),6)) + 1,4,'0') FROM RS_TRIGGER", String.class);
+                    if(cnt == null){
+                        cnt = "0001";
+                    }
+                    cnt = "RS-T-" + cnt;
+                    rsTrigger.setTriggerCode(cnt);
+                }
                 if(rsTrigger.isModified()) {
                     orgRsTrigger = rsTriggerRepository.findOne(rsTrigger.getId());
                     rsTrigger.setInsertDate(orgRsTrigger.getInsertDate());
                     rsTrigger.setInsertUuid(orgRsTrigger.getInsertUuid());
                 }
                 rsTriggerRepository.save(rsTrigger);
-            } else if (rsTrigger.isDeleted()) {
-                if(true){
-
-                }else{
-
-                }
-                //연관 테이블 데이터 삭제 (상세)
             }
         }
 
         return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");
+    }
+
+    public int getRelatedData(String triggerUuid) {
+        return rs002Mapper.getRelatedData(triggerUuid);
     }
 }

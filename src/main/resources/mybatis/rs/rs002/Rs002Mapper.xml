@@ -10,7 +10,7 @@
             STATUS_UUID as statusUuid,
             TRIGGER_CODE as triggerCode,
             TRIGGER_NAME as triggerName,
-            TRIGGER_DATE as triggerDate,
+            TO_CHAR(TRIGGER_DATE,'YYYY-MM-DD')  as triggerDate,
             DESCRIPTION as description,
             NOTES as notes,
             USE_YN as useYn,
@@ -34,6 +34,11 @@
                 AND USE_YN = #{useYn}
             </if>
         </where>
-        --ORDER BY
+        ORDER BY TRIGGER_CODE
+    </select>
+    <select id="getRelatedData" resultType="int" parameterType="String" statementType="PREPARED">
+        SELECT COUNT(*)
+        FROM RS_RECORD_SCHEDULE
+        WHERE TRIGGER_UUID = #{triggerUuid}
     </select>
 </mapper>

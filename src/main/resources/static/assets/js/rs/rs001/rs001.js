@@ -11,6 +11,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             callback: function (res) {
                 fnObj.gridView01.resetCurrent();
                 fnObj.gridView01.setData(res.list);
+                fnObj.gridView01.disabledColumn();
             },
             options: {
                 onError: axboot.viewError
@@ -191,7 +192,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
                 return true;
             else
                 return false;
-        },["grsName","retentionPeriodUuid","disposalTypeUuid","basedOn","description"]);
+        },["grsName","retentionPeriodUuid","disposalTypeUuid","basedOn","description","triggerYn"]);
     },
     itemClick: function (data) {
         /*if (data.classificationSchemeUuid != null && data.classificationSchemeUuid != "") {

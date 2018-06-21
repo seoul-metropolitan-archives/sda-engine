@@ -9,5 +9,5 @@ import java.util.List;
 public interface Rs001Mapper extends MyBatisMapper {
 
     List<Rs00101VO> getRsGeneralRecordScheduleList(Rs00101VO rs00101VO);
-
+    int getRelatedData(String generalRecordScheduleUuid);
 }

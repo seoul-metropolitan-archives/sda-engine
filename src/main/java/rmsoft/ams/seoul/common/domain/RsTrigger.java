@@ -8,6 +8,7 @@ import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.sql.Date;
 import java.sql.Timestamp;
 
 @Setter
@@ -35,7 +36,7 @@ public class RsTrigger extends BaseJpaModel<RsTrigger.RsTriggerId> {
 	private String triggerName;
 
 	@Column(name = "TRIGGER_DATE")
-	private Timestamp triggerDate;
+	private String triggerDate;
 
 	@Column(name = "USE_YN", length = 1, nullable = false)
 	private String useYn;

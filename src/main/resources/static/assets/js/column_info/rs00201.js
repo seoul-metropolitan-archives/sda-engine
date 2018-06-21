@@ -22,24 +22,25 @@ var rs00201 =
                     visible: false
                 },
                 {
-                    sortNo: 1,
-                    width:50,
+                    sortNo:1,
+                    width: 80,
                     name: "statusUuid",
                     text: "Status",
                     editable: false,
-                    dataType: "code",
+                    disable : true,
+                    required : true,
                     values: axboot.commonCodeFilter("CD134").codeArr,
                     labels: axboot.commonCodeFilter("CD134").nameArr,
-                    required: false
+                    dataType : "combo"
                 },
                 {
                     sortNo: 2,
                     width: 120,
                     name: "triggerCode",
                     text: "Trigger Code",
-                    editable: false,
-                    dataType : "combo",
-                    required: true
+                    editable: true,
+                    dataType : "text",
+                    required: false
                 },
                 {
                     sortNo: 3,
@@ -57,7 +58,8 @@ var rs00201 =
                     width: 150,
                     dataType: "date",
                     editable: true,
-                    required: false
+                    required: false,
+                    format:'yyyy-mm-dd'
                 },
                 {
                     sortNo: 5,
@@ -77,21 +79,14 @@ var rs00201 =
                 },
                 {
                     sortNo: 7,
-                    name: "useYN",
-                    text: "use",
-                    width: 120,
+                    name: "useYn",
+                    text: "Use",
                     width: 50,
+                    editable: true,
                     dataType: "check",
-                    textAlignment: "center",
                     defaultValue : "Y",
-                    renderer: {
-                        type: "check",
-                        shape: "",
-                        falseValues: "N",
-                        trueValues: "Y",
-                        startEditOnClick: true,
-                    },
-                    required: true
+                    textAlignment: "center",
+                    required: false
                 },
                 {
                     sortNo: 8,

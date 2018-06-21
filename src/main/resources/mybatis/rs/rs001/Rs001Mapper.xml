@@ -46,6 +46,6 @@
                 AND TRIGGER_YN = #{triggerYn}
             </if>
         </where>
-        --ORDER BY
+        ORDER BY GRS_NAME
     </select>
 </mapper>

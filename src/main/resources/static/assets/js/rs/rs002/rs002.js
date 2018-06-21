@@ -11,6 +11,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             callback: function (res) {
                 fnObj.gridView01.resetCurrent();
                 fnObj.gridView01.setData(res.list);
+                fnObj.gridView01.disabledColumn();
             },
             options: {
                 onError: axboot.viewError
@@ -59,7 +60,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         var result = false;
         axboot.call({
             type: "PUT",
-            url: "/api/v1/rs002/03/save",
+            url: "/api/v1/rs/rs002/03/save",
             data: JSON.stringify(this.gridView01.getData()),
             callback: function (res) {
                 ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
@@ -158,8 +159,7 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
 /*팝업 헤더*/
 fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     tagId: "realgrid01",
-    primaryKey : "generalRecordScheduleUuid",
-    entityName: "General Record Schedule UUID",
+    primaryKey : "triggerUuid",
     initView: function () {
         this.initInstance();
         this.setColumnInfo(rs00201.column_info);
@@ -191,7 +191,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
                 return true;
             else
                 return false;
-        },["grsName","retentionPeriodUuid","disposalTypeUuid","basedOn","description"]);
+        },["statusUuid","triggerCode","triggerName","triggerDate","description"]);
     },
     itemClick: function (data) {
         /*if (data.classificationSchemeUuid != null && data.classificationSchemeUuid != "") {

@@ -38,7 +38,7 @@ public class Rs001Service extends BaseService{
         rs00101VO.setGrsName(requestParams.getString("grsName"));
         rs00101VO.setRetentionPeriodUuid(requestParams.getString("retentionPeriodUuid"));
         rs00101VO.setStatusUuid (requestParams.getString("statusUuid"));
-        rs00101VO.setTriggerYn(requestParams.getString("triggerYN"));
+        rs00101VO.setTriggerYn(requestParams.getString("triggerYn"));
         rs00101VO.setUseYn(requestParams.getString("useYn"));
 
         return filter(rs001Mapper.getRsGeneralRecordScheduleList(rs00101VO), pageable, "", Rs00101VO.class);
@@ -64,29 +64,38 @@ public class Rs001Service extends BaseService{
     public ApiResponse updateRsGeneralRecordScheduleList(List<Rs00101VO> list) {
         List<RsGeneralRecordSchedule> rsGeneralRecordScheduleList = ModelMapperUtils.mapList(list,RsGeneralRecordSchedule.class);
         RsGeneralRecordSchedule orgRsGeneralRecordSchedule = null;
+        String cnt = null;
         for (RsGeneralRecordSchedule rsGeneralRecordSchedule : rsGeneralRecordScheduleList) {
 
-            if(rsGeneralRecordSchedule.isCreated()){ //ClassificationSchemeUuid가 없을때
-//
-            }
-
-            if (rsGeneralRecordSchedule.isCreated() || rsGeneralRecordSchedule.isModified()) {
+            if (rsGeneralRecordSchedule.isDeleted()) {
+                if (getRelatedData(rsGeneralRecordSchedule.getGeneralRecordScheduleUuid()) == 0) {
+                    rsGeneralRecordScheduleRepository.delete(rsGeneralRecordSchedule);
+                } else {
+                    throw new ApiException("CL", "002_01");
+                }
+            }else{
+                if(rsGeneralRecordSchedule.isCreated()){ //ClassificationSchemeUuid가 없을때
+                    rsGeneralRecordSchedule.setStatusUuid(CommonCodeUtils.getCodeDetailUuid("CD134","Draft"));
+                    cnt = jdbcTemplate.queryForObject("SELECT LPAD(TO_NUMBER(SUBSTR(MAX(GRS_CODE),5)) + 1,4,'0') FROM RS_GENERAL_RECORD_SCHEDULE", String.class);
+                    if(cnt == null){
+                        cnt = "0001";
+                    }
+                    cnt = "GRS-" + cnt;
+                    rsGeneralRecordSchedule.setGrsCode(cnt);
+                }
                 if(rsGeneralRecordSchedule.isModified()) {
                     orgRsGeneralRecordSchedule = rsGeneralRecordScheduleRepository.findOne(rsGeneralRecordSchedule.getId());
                     rsGeneralRecordSchedule.setInsertDate(orgRsGeneralRecordSchedule.getInsertDate());
                     rsGeneralRecordSchedule.setInsertUuid(orgRsGeneralRecordSchedule.getInsertUuid());
                 }
                 rsGeneralRecordScheduleRepository.save(rsGeneralRecordSchedule);
-            } else if (rsGeneralRecordSchedule.isDeleted()) {
-                if(true){
-
-                }else{
-                    throw new ApiException("RS", "001_03");
-                }
-                //연관 테이블 데이터 삭제 (상세)
             }
         }
 
         return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");
+    }
+
+    public int getRelatedData(String triggerUuid) {
+        return rs001Mapper.getRelatedData(triggerUuid);
     }
 }

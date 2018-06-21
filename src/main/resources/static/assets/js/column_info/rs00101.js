@@ -27,10 +27,11 @@ var rs00101 =
                     name: "statusUuid",
                     text: "Status",
                     editable: false,
-                    dataType: "code",
+                    disable : true,
+                    required : true,
+                    dataType: "combo",
                     values: axboot.commonCodeFilter("CD134").codeArr,
-                    labels: axboot.commonCodeFilter("CD134").nameArr,
-                    required: false
+                    labels: axboot.commonCodeFilter("CD134").nameArr
                 },
                 {
                     sortNo: 2,
@@ -38,8 +39,9 @@ var rs00101 =
                     name: "grsCode",
                     text: "GRS Code",
                     editable: false,
-                    dataType : "combo",
-                    required: true
+                    disable:true,
+                    dataType : "text",
+                    required: false
                 },
                 {
                     sortNo: 3,
@@ -83,20 +85,14 @@ var rs00101 =
                 },
                 {
                     sortNo: 7,
-                    name: "triggerYN",
+                    name: "triggerYn",
                     text: "Trigger",
                     width: 50,
+                    editable: true,
                     dataType: "check",
-                    textAlignment: "center",
                     defaultValue : "Y",
-                    renderer: {
-                        type: "check",
-                        shape: "",
-                        falseValues: "N",
-                        trueValues: "Y",
-                        startEditOnClick: true,
-                    },
-                    required: true
+                    textAlignment: "center",
+                    required: false
                 },
                 {
                     sortNo: 8,
@@ -116,21 +112,14 @@ var rs00101 =
                 },
                 {
                     sortNo: 10,
-                    name: "useYN",
-                    text: "use",
-                    width: 120,
+                    name: "useYn",
+                    text: "Use",
                     width: 50,
+                    editable: true,
                     dataType: "check",
-                    textAlignment: "center",
                     defaultValue : "Y",
-                    renderer: {
-                        type: "check",
-                        shape: "",
-                        falseValues: "N",
-                        trueValues: "Y",
-                        startEditOnClick: true,
-                    },
-                    required: true
+                    textAlignment: "center",
+                    required: false
                 },
                 {
                     sortNo: 11,
