@@ -36,7 +36,7 @@ public class StRepository extends BaseJpaModel<StRepository.StRepositoryId>{
 
 	@Column(name = "USE_YN", length = 1, nullable = false)
 	private String useYn;
-l
+
 	@Override
 	public StRepositoryId getId() {
 		return StRepositoryId.of(repositoryUuid);
