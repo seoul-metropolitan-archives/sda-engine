@@ -65,4 +65,19 @@ public class St001Controller extends BaseController {
         }
         return apiResponse;
     }
+    @PutMapping(value = "/02/save01")
+    @PostMapping
+    public void saveRepositoryList(@RequestBody List<St00101VO> requestParams) {
+        st001Service.saveRepositoryList(requestParams);
+    }
+    @PutMapping(value = "/02/save02")
+    @PostMapping
+    public void saveShelfList(@RequestBody List<St00102VO> requestParams) {
+        st001Service.saveShelfList(requestParams);
+    }
+    @PutMapping(value = "/02/save03")
+    @PostMapping
+    public void saveLocationList(@RequestBody List<St00103VO> requestParams) {
+        st001Service.saveLocationList(requestParams);
+    }
 }

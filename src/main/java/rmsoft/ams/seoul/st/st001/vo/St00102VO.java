@@ -20,4 +20,5 @@ public class St00102VO extends BaseVO {
     private String shelfName;
     private String useYn;
     private String changeStatus;
+    private String maxContainer;
 }

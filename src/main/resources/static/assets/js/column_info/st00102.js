@@ -28,19 +28,19 @@ var st00102 =
                     name: "statusUuid",
                     text: "Status",
                     editable: false,
+                    disable : true,
+                    required : true,
                     dataType: "combo",
                     values: axboot.commonCodeFilter("CD138").codeArr,
-                    labels: axboot.commonCodeFilter("CD138").nameArr,
-                    required: false
+                    labels: axboot.commonCodeFilter("CD138").nameArr
                 },
                 {
                     sortNo: 3,
                     name: "shelfCode",
                     text: "Shelf Code",
                     width: 120,
-                    editable: true,
-                    dataType: "text",
-                    required: true
+                    editable: false,
+                    dataType: "text"
                 },
                 {
                     sortNo: 4,
@@ -56,29 +56,38 @@ var st00102 =
                     name: "maxContainer",
                     text: "Max Container",
                     width: 120,
-                    editable: true,
-                    dataType: "text",
-                    required: true
+                    editable: false,
+                    dataType: "text"
                 },
                 {
                     sortNo: 6,
-                    name: "useYN",
-                    text: "use",
-                    width: 120,
-                    dataType: "check",
-                    textAlignment: "center",
-                    defaultValue : "Y",
-                    renderer: {
-                        type: "check",
-                        shape: "",
-                        falseValues: "N",
-                        trueValues: "Y",
-                        startEditOnClick: true,
-                    },
-                    required: true
+                    name: "description",
+                    text: "Description",
+                    width: 70,
+                    editable: true,
+                    datType: "multiline"
                 },
                 {
                     sortNo: 7,
+                    name: "notes",
+                    text: "Notes",
+                    width: 120,
+                    editable: true,
+                    dataType: "text"
+                },
+                {
+                    sortNo: 8,
+                    name: "useYn",
+                    text: "Use",
+                    width: 50,
+                    editable: true,
+                    dataType: "check",
+                    defaultValue : "Y",
+                    textAlignment: "center",
+                    required: false
+                },
+                {
+                    sortNo: 9,
                     name: "insertUuid",
                     text: "Created By",
                     width: 120,
@@ -87,7 +96,7 @@ var st00102 =
                     dataType: "text"
                 },
                 {
-                    sortNo: 8,
+                    sortNo: 10,
                     name: "insertDate",
                     text: "Date/Time Created",
                     width: 120,
@@ -96,7 +105,7 @@ var st00102 =
                     dataType: "timestamp"
                 },
                 {
-                    sortNo: 9,
+                    sortNo: 11,
                     name: "updateUuid",
                     text: "Modified By",
                     width: 120,
@@ -105,7 +114,7 @@ var st00102 =
                     dataType: "text"
                 },
                 {
-                    sortNo: 10,
+                    sortNo: 12,
                     name: "updateDate",
                     text: "Date/Time Modified",
                     width: 120,

@@ -25,7 +25,7 @@ public class StLocation extends BaseJpaModel<StLocation.StLocationId>{
 	private String locationUuid;
 
 	@Column(name = "SHELF_UUID", length = 36, nullable = false)
-	private String repositoryUuid;
+	private String shelfUuid;
 
 	@Column(name = "STATUS_UUID", length = 36, nullable = false)
 	private String statusUuid;

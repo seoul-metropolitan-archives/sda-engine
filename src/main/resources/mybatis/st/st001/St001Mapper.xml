@@ -33,6 +33,7 @@
                 AND USE_YN = #{useYn}
             </if>
         </where>
+        ORDER BY REPOSITORY_CODE
     </select>
     <select id="getStShelfList" resultType="St00102VO" parameterType="St00102VO" statementType="PREPARED">
         SELECT
@@ -44,12 +45,17 @@
         DESCRIPTION as description,
         NOTES as notes,
         USE_YN as useYn,
+        (
+        SELECT COUNT(*)
+        FROM ST_LOCATION I
+        WHERE I.SHELF_UUID = A.SHELF_UUID
+        ) maxContainer,
         <include refid="Common.UserName"><property name="userUuid" value="INSERT_UUID"/></include> as insertUuid,
         INSERT_DATE as insertDate,
         <include refid="Common.UserName"><property name="userUuid" value="UPDATE_UUID"/></include> as updateUuid,
         UPDATE_DATE as updateDate
         FROM
-        ST_SHELF
+        ST_SHELF A
         <where>
             <if test="statusUuid != null">
                 STATUS_UUID = #{statusUuid}
@@ -63,7 +69,11 @@
             <if test="useYn != null">
                 AND USE_YN = #{useYn}
             </if>
+            <if test="repositoryUuid != null">
+                AND REPOSITORY_UUID = #{repositoryUuid}
+            </if>
         </where>
+        ORDER BY SHELF_CODE
     </select>
     <select id="getLocationList" resultType="St00103VO" parameterType="St00103VO" statementType="PREPARED">
         SELECT
@@ -94,6 +104,9 @@
             </if>
             <if test="useYn != null">
                 AND USE_YN = #{useYn}
+            </if>
+            <if test="shelfUuid != null">
+                AND SHELF_UUID = #{shelfUuid}
             </if>
         </where>
     </select>

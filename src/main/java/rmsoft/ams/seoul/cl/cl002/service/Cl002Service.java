@@ -69,11 +69,11 @@ public class Cl002Service extends BaseService {
 
         Cl00201VO cl00201VO = new Cl00201VO();
         cl00201VO.setClassificationSchemeUuid(requestParams.getString("classificationSchemeUuid"));
-        /*cl00201VO.setParentClassUuid(requestParams.getString("parentClassUuid"));
+        cl00201VO.setParentClassUuid(requestParams.getString("parentClassUuid"));
         cl00201VO.setStatusUuid(requestParams.getString("statusUuid"));
         cl00201VO.setClassCode(requestParams.getString("classCode"));
         cl00201VO.setClassLevelUuid(requestParams.getString("classLevelUuid"));
-        cl00201VO.setUseYn(requestParams.getString("useYn"));*/
+        cl00201VO.setUseYn(requestParams.getString("useYn"));
 
         return filter(cl002Mapper.getClassList(cl00201VO), pageable, "", Cl00201VO.class);
     }
@@ -204,7 +204,7 @@ public class Cl002Service extends BaseService {
         for (ClClass clClass : clClassList) {
 //            if (StringUtil.isNullOrEmpty(clClass.getClassUuid())) { //Insert
 
-                /*maxCode = getMaxClassCode(clClass.getClassificationSchemeUuid());
+                maxCode = getMaxClassCode(clClass.getClassificationSchemeUuid());
                 if (StringUtils.isNotEmpty(maxCode)) { //분류코드 조합
                     maxDefaultCode = StringUtils.trim(maxCode).substring(0, 7);
                     ctUuid = StringUtils.trim(maxCode).substring(7);
@@ -218,14 +218,14 @@ public class Cl002Service extends BaseService {
                         ctUuid = "0" + ctUuid;
                     }
                     detailCode = maxDefaultCode + ctUuid;
-                }*/
+                }
             if (clClass.isCreated()){
 //                clClass.setClassUuid(UUIDUtils.getUUID()); //UUID 생성
-                ctUuid = jdbcTemplate.queryForObject("select FC_CL_CLS_CLASS_CODE('" + clClass.getClassificationSchemeUuid() + "') from dual", String.class);
-                clClass.setClassCode(ctUuid);
+                //ctUuid = jdbcTemplate.queryForObject("select FC_CL_CLS_CLASS_CODE('" + clClass.getClassificationSchemeUuid() + "') from dual", String.class);
+                //clClass.setClassCode(ctUuid);
 
 
-                clClass.setClassLevelUuid(CommonCodeUtils.getCodeDetailUuid("CD114", clClass.getClassLevelUuid()));
+                //clClass.setClassLevelUuid(CommonCodeUtils.getCodeDetailUuid("CD114", clClass.getClassLevelUuid()));
 
                 clClass.setClassLevelUuid(clClass.getClassLevelUuid());
 
