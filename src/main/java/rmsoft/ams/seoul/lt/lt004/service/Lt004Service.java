@@ -70,11 +70,12 @@ public class Lt004Service extends BaseService {
                     if (mapper.checkIndex01(lt00401VO) > 0 || mapper.checkIndex02(lt00401VO) > 0) {
                         return ApiResponse.error(ApiStatus.SYSTEM_ERROR, CommonMessageUtils.getMessage("AA003"));
                     }
-
+                }
+                if (saveItem.isModified()) {
                     orgItem = repository.findOne(saveItem.getId());
 
                     // LT_PATHWAY index 무결성 검사 1
-                    if( !saveItem.getPathwayName().equals(orgItem.getPathwayName())){
+                    if (!saveItem.getPathwayName().equals(orgItem.getPathwayName())) {
                         if (mapper.checkIndex01(lt00401VO) > 0) {
                             return ApiResponse.error(ApiStatus.SYSTEM_ERROR, CommonMessageUtils.getMessage("AA003"));
                         }

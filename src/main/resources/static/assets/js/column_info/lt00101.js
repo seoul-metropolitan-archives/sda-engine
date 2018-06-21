@@ -98,7 +98,7 @@ var lt00101 =
                     width: 50,
                     dataType: "check",
                     textAlignment: "center",
-                    defaultValue : "N",
+                    defaultValue : "Y",
                     renderer: {
                         type: "check",
                         shape: "",

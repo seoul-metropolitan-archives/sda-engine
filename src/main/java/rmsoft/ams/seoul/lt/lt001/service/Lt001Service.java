@@ -70,7 +70,7 @@ public class Lt001Service extends BaseService {
                 }else if(saveItem.isModified()){
                     orgItem = repository.findOne(saveItem.getId());
 
-                    if( !saveItem.getPuid().equals(orgItem.getPuid())){
+                    if( !saveItem.getPuid().equals(orgItem.getPuid()) || !saveItem.getFormatName().equals(orgItem.getFormatName())){
                         if (mapper.checkUpdate(lt00101VO) > 0) {
                             return ApiResponse.error(ApiStatus.SYSTEM_ERROR, CommonMessageUtils.getMessage("AA003"));
                         }

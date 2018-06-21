@@ -79,6 +79,6 @@
         SELECT
          ((SELECT COUNT(PUID) FROM LT_FILE_FORMAT WHERE PUID= #{puid}) +
          (SELECT COUNT(FORMAT_NAME) FROM LT_FILE_FORMAT WHERE FORMAT_NAME= #{formatName})) AS CNT
-        FROM DUAL;
+        FROM DUAL
     </select>
 </mapper>
