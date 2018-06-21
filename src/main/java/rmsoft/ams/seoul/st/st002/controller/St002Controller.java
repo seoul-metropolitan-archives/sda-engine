@@ -44,7 +44,7 @@ public class St002Controller extends BaseController {
 
     @PutMapping(value = "/02/save")
     @PostMapping
-    public void updateClassList(@RequestBody List<St00201VO> requestParams) {
+    public void saveContainerList(@RequestBody List<St00201VO> requestParams) {
         st002Service.saveContainerList(requestParams);
     }
     @PutMapping("/02/confirm")
