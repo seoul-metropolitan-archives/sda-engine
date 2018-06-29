@@ -4,7 +4,7 @@
       layout:decorate="~{/layout/base}">
 
 <!-- ===== [ script ] ===== -->
-<script layout:fragment="script" type="text/javascript" th:src="@{/assets/js/ad/ad008.js}"></script>
+<script layout:fragment="script" type="text/javascript" th:src="@{/assets/js/ad/ad008/ad008.js}"></script>
 <!--realgrid -->
 
 <!-- ===== [ base-content ] ===== -->
@@ -21,32 +21,43 @@
                     </div>
                     <div class="bdb div_tablerow searchFields">
                         <dl>
-                            <dt class="mgl_5">Message Code</dt>
+                            <th:block layout:insert="~{/fragments/page-buttons :: searchInput02 ('Entity Type','entityTypeCode')}"/>
+                            <dt>Entity Name</dt>
                             <dd>
-                                <input type=text style="width:135px" data-ax-path="messageCode">
+                                <input type="text" style="width:135px" data-ax-path="entityName">
+                                <input type="hidden" data-ax-path="entityTypeUuid">
                             </dd>
-                            <dt>Message Name</dt>
+                            <dt>Primary Key</dt>
                             <dd>
-                                <input type=text style="width:135px" data-ax-path="messageName">
+                                <input type=text style="width:135px" data-ax-path="primaryKey">
                             </dd>
-                            <dt>Service</dt>
+                        </dl>
+                        <dl>
+                            <th:block layout:insert="~{/fragments/page-buttons :: searchInput02 ('Program','programName')}"/>
+                            <input type="hidden" data-ax-path="programUuid">
+                            <dt>Function</dt>
                             <dd>
-                                <select data-ax-path="serviceUuid" style="width:135px;" id="serviceList">
+                                <select data-ax-path="functionUuid" style="width:135px;" id="funtionList">
                                     <option value=""></option>
-                                    <option th:each="item : ${serviceList}"
+                                    <option th:each="item : ${functionList}"
                                             th:value="${item.codeDetailUUID}"
                                             th:text="${item.codeName}"/>
                                 </select>
                             </dd>
+                            <dt>Modify Date</dt>
                             <dd class="w_auto">
-                                <div class="rdo_box">
-                                    <span class="rdo_box_title">Use</span>
-                                    <label>
-                                        <input type="radio" name="radio" data-ax-path="useYN" class="no_border" value="Y">Yes</label>
-                                    <label>
-                                        <input type="radio" name="radio" data-ax-path="useYN" class="no_border" value="N">No</label>
-                                    <label>
-                                        <input type="radio" name="radio" data-ax-path="useYN" class="no_border"  value="" checked>All</label>
+                                <div class="input-group" data-ax5picker="date">
+                                    <div class="cld_box" style="background-color: #fffdd6">
+                                        <input type="text" data-ax-path="modifyDateFrom" style= "background-color: #fffdd6;ime-mode:disabled;"
+                                               placeholder="YYYY-MM-DD" maxlength="10">
+                                        <img title="calendar" class="ui-datepicker-trigger" alt="..." src="/assets/images/ams/calendar.png" >
+                                    </div>
+                                    ~
+                                    <div class="cld_box" style="background-color: #fffdd6">
+                                        <input type="text" data-ax-path="modifyDateTo" style="background-color: #fffdd6;ime-mode:disabled;"
+                                               placeholder="YYYY-MM-DD" maxlength="10">
+                                        <img title="calendar" class="ui-datepicker-trigger" alt="..." src="/assets/images/ams/calendar.png">
+                                    </div>
                                 </div>
                             </dd>
                         </dl>
@@ -56,7 +67,7 @@
 
                         <div style="height:100%; width:100%" class="div_table">
                             <ul class="bdb bdt div_tablerow" style="height:30px;">
-                                <th:block layout:insert="~{/fragments/page-buttons :: dot('Message')}"/>
+                                <th:block layout:insert="~{/fragments/page-buttons :: dot('Audit')}"/>
                                 <th:block layout:insert="~{/fragments/page-buttons :: add-and-delete}"/>
                             </ul>
                             <div style="height:100%; width:100%" class="div_tablerow bdb">

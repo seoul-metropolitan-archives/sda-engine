@@ -16,24 +16,29 @@
                     <div style=" height:30px; width:100%" class="bgf7 div_tablerow">
                         <ul class="bdb">
                             <th:block layout:insert="~{/fragments/page-buttons :: bookmark}"/>
-                            <th:block layout:insert="~{/fragments/page-buttons :: save-and-inquiry}"/>
+                            <th:block layout:insert="~{/fragments/page-buttons :: confirm-and-cancel-and-save-and-inquiry}"/>
                         </ul>
                     </div>
                     <div class="bdb div_tablerow searchFields">
                         <dl>
-                            <dt class="mgl_5">Message Code</dt>
+                            <dt class="mgl_5">Status</dt>
                             <dd>
-                                <input type=text style="width:135px" data-ax-path="messageCode">
+                                <select data-ax-path="statusUuid" style="width:135px;">
+                                    <option value=""></option>
+                                    <option th:each="item : ${statusList}"
+                                            th:value="${item.codeDetailUUID}"
+                                            th:text="${item.codeName}"/>
+                                </select>
                             </dd>
                             <dt>Message Name</dt>
                             <dd>
                                 <input type=text style="width:135px" data-ax-path="messageName">
                             </dd>
-                            <dt>Service</dt>
+                            <dt>Entity Type</dt>
                             <dd>
-                                <select data-ax-path="serviceUuid" style="width:135px;" id="serviceList">
+                                <select data-ax-path="entityType" style="width:135px;" id="serviceList">
                                     <option value=""></option>
-                                    <option th:each="item : ${serviceList}"
+                                    <option th:each="item : ${entityTypeList}"
                                             th:value="${item.codeDetailUUID}"
                                             th:text="${item.codeName}"/>
                                 </select>

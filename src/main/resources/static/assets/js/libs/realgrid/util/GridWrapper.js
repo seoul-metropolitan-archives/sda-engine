@@ -129,6 +129,29 @@ var GridWrapper = function(p_id,p_rootContext) {
             }
         });
     };
+
+    /**
+     * 컬럼명에 해당하는 컬럼정보를 추출
+     * @param name 컬럼명
+     * @param prop 컬럼속성명
+     */
+    this.getColumnInfo = function(name, prop){
+        var rtnInfo = null;
+        var columns = this.columnInfo;
+
+        columns.forEach(function(item){
+            if(item["name"] == name){
+                if(prop){
+                    rtnInfo = item[prop];
+                }else{
+                    rtnInfo = item;
+                }
+                return false;
+            }
+        });
+
+        return rtnInfo;
+    };
     //==========================================================================================
     //          Event 영역
     //==========================================================================================
@@ -1347,7 +1370,7 @@ GridWrapper.prototype.setColumnInfo = function(list) {
             case "popup":
                 obj.button = "image";
                 obj.imageButtons = $.extend({},_this.defaultStyle.data.imageButtons,data.imageButtons);
-                _this.popupNames[data.name] = { popupCode : data.popupCode, sqlColumn : {},popupCallback : data.popupCallback};
+                _this.popupNames[data.name] = { popupCode : data.popupCode, sqlColumn : {},popupCallback : data.popupCallback, checkFunction: data.popupCheckfunction};
                 for(var key in data.sqlColumn)
                 {
                     _this.popupNames[data.name]["sqlColumn"][key] = data.sqlColumn[key];

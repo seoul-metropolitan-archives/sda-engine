@@ -3086,13 +3086,25 @@ axboot.commonCodeFilter = function (categoryCode) {
 
     var nameArr = [];
     var codeArr = [];
+    var attrArr = [];
 
-    commonCodeArray.forEach(function (item) {
+
+    commonCodeArray.forEach(function (item, field) {
         codeArr.push(item['codeDetailUUID']);
         nameArr.push(item['codeName']);
+
+        var attrObj = {};
+        for(var prop in item){
+            if(prop.indexOf("attribute") > -1){
+                attrObj[prop] = item[prop];
+            }else if(prop == 'codeDetailUUID'){
+                attrObj['uuid'] = item[prop];
+            }
+        }
+        attrArr.push(attrObj);
     });
 
-    return $.extend({}, {nameArr: nameArr}, {codeArr: codeArr});
+    return $.extend({}, {nameArr: nameArr}, {codeArr: codeArr}, {attrArr: attrArr});
 }
 /**
  * 공통코드를 Grid에서 사용하기 위해 label과 value를 분리해주는 함수
@@ -3102,6 +3114,48 @@ axboot.commonCodeFilter = function (categoryCode) {
  */
 axboot.commonCodeVO = function (categoryCode) {
     return parent.COMMON_CODE[categoryCode];
+}
+
+/**
+ * 특정카테고리의 codeName에 해당하는 field를 불러오는 함수
+ * @param categoryCode
+ * @param nameValue
+ * @param value
+ * @returns {*}
+ */
+axboot.commonCodeValueByCodeName = function (categoryCode, nameValue, field="codeDetailUUID") {
+    var rtn = null;
+
+    parent.COMMON_CODE[categoryCode].some(function(value){
+        if(value['codeName'] == nameValue)
+        {
+            rtn = value[field];
+            return true;
+        }
+    });
+
+    return rtn;
+}
+
+/**
+ * 특정카테고리의 codeDetailUUID에 해당하는 codeName를 불러오는 함수
+ * @param categoryCode
+ * @param nameValue
+ * @param value
+ * @returns {*}
+ */
+axboot.commonCodeValueByUuid = function (categoryCode, uuid, field="codeName") {
+    var rtn = null;
+
+    parent.COMMON_CODE[categoryCode].some(function(value){
+        if(value['codeDetailUUID'] == uuid)
+        {
+            rtn = value[field];
+            return true;
+        }
+    });
+
+    return rtn;
 }
 
 axboot.getCommonMessage = function (messageCode) {

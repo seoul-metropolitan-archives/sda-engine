@@ -3,93 +3,55 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="rmsoft.ams.seoul..Ad007Mapper">
+<mapper namespace="rmsoft.ams.seoul.ad.ad007.dao.Ad007Mapper">
 
-    <select id="findAll" resultType="ad007" parameterType="ad007" statementType="PREPARED">
+    <select id="searchList" resultType="Ad00701VO" parameterType="Ad00701VO" statementType="PREPARED">
+        <![CDATA[
         SELECT
-            SERVICE_UUID AS serviceUuid,
-            SERVICE_CODE AS serviceCode,
-            SERVICE_NAME AS serviceName,
-            INSTALL_YN AS installYn,
+            ADD_CONTEXTUAL_META_UUID AS addContextualMetaUuid,
+            STATUS_UUID AS statusUuid,
+            ENTITY_TYPE AS entityType,
+            COLUMN_CODE AS columnCode,
+            COLUMN_VALUE AS columnValue,
+            METADATA_ENTITY_TYPE AS metadataEntityType,
+            ADDITIONAL_COLUMN AS additionalColumn,
+            INPUT_METHOD_UUID AS inputMethodUuid,
+            INPUT_VALUE AS inputValue,
+            TITLE AS title,
+            REQUIRED_YN AS requiredYN,
+            DISPLAY_YN AS displayYN,
             DESCRIPTION AS description,
             NOTES AS notes,
-            USE_YN AS useYn,
-            INSERT_UUID AS insertUuid,
-            INSERT_DATE AS insertDate,
-            UPDATE_UUID AS updateUuid,
-            UPDATE_DATE AS updateDate
-        FROM
-            AD_SERVICE
-    </select>
+            USE_YN AS useYN,
+        ]]>
+        <include refid="Common.UserName">
+            <property name="userUuid" value="INSERT_UUID"/>
+        </include>
+        AS insertUuid,
 
-    <select id="findOne" resultType="ad007" parameterType="ad007" statementType="PREPARED">
+        <![CDATA[
+            INSERT_DATE AS insertDate,
+        ]]>
+        <include refid="Common.UserName">
+            <property name="userUuid" value="UPDATE_UUID"/>
+        </include>
+        AS updateUuid,
+
+        <![CDATA[
+            UPDATE_DATE AS  updateDate
+        FROM
+            AD_CONTEXTUAL_METADATA_SETUP
+        WHERE 1=1
+
+        ORDER BY EN
+        ]]>
+    </select>
+    <select id="checkDelete" resultType="int" parameterType="String" statementType="PREPARED">
         SELECT
-            SERVICE_UUID AS serviceUuid,
-            SERVICE_CODE AS serviceCode,
-            SERVICE_NAME AS serviceName,
-            INSTALL_YN AS installYn,
-            DESCRIPTION AS description,
-            NOTES AS notes,
-            USE_YN AS useYn,
-            INSERT_UUID AS insertUuid,
-            INSERT_DATE AS insertDate,
-            UPDATE_UUID AS updateUuid,
-            UPDATE_DATE AS updateDate
+        COUNT(DISPOSAL_FREEZE_DEGREE_UUID)
         FROM
-            AD_SERVICE
+        DF_DISPOSAL_FREEZE_DEGREE
         WHERE
-            SERVICE_UUID = #{serviceUuid}
+        DISPOSAL_FREEZE_EVENT_UUID = #{uuid}
     </select>
-
-   <update id="delete" parameterType="ad007" statementType="PREPARED">
-        DELETE FROM
-            AD_SERVICE
-        WHERE
-            SERVICE_UUID = #{serviceUuid}
-    </update>
-
-   <update id="update" parameterType="ad007" statementType="PREPARED">
-        UPDATE AD_SERVICE
-        SET
-            SERVICE_CODE = #{serviceCode},
-            SERVICE_NAME = #{serviceName},
-            INSTALL_YN = #{installYn},
-            DESCRIPTION = #{description},
-            NOTES = #{notes},
-            USE_YN = #{useYn},
-            INSERT_UUID = #{insertUuid},
-            INSERT_DATE = #{insertDate},
-            UPDATE_UUID = #{updateUuid},
-            UPDATE_DATE = #{updateDate}
-        WHERE
-            SERVICE_UUID = #{serviceUuid}
-    </update>
-
-   <update id="insert" parameterType="ad007" statementType="PREPARED">
-        INSERT INTO AD_SERVICE (
-            SERVICE_UUID,
-            SERVICE_CODE,
-            SERVICE_NAME,
-            INSTALL_YN,
-            DESCRIPTION,
-            NOTES,
-            USE_YN,
-            INSERT_UUID,
-            INSERT_DATE,
-            UPDATE_UUID,
-            UPDATE_DATE
-        ) VALUES (
-            #{serviceUuid},
-            #{serviceCode},
-            #{serviceName},
-            #{installYn},
-            #{description},
-            #{notes},
-            #{useYn},
-            #{insertUuid},
-            #{insertDate},
-            #{updateUuid},
-            #{updateDate}
-        )
-    </update>
 </mapper>
