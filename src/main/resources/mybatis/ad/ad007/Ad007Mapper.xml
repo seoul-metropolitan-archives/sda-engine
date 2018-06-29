@@ -42,9 +42,23 @@
         FROM
             AD_CONTEXTUAL_METADATA_SETUP
         WHERE 1=1
-
-        ORDER BY ENTITY_TYPE ASC
         ]]>
+        <if test="null != statusUuid and '' != statusUuid">
+            <![CDATA[
+            AND STATUS_UUID = #{statusUuid}
+          ]]>
+        </if>
+        <if test="null != entityType and '' != entityType">
+            <![CDATA[
+            AND ENTITY_TYPE = #{entityType}
+          ]]>
+        </if>
+        <if test="null != useYN and '' != useYN">
+            <![CDATA[
+            AND USE_YN = #{useYN}
+          ]]>
+        </if>
+        ORDER BY ENTITY_TYPE ASC
     </select>
     <select id="checkDelete" resultType="int" parameterType="String" statementType="PREPARED">
         SELECT

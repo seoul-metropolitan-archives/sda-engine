@@ -35,6 +35,8 @@ public class Ad007Service extends BaseService {
     public List<Ad00701VO> searchList(RequestParams<Ad00701VO> param) {
         Ad00701VO ad00701VO = new Ad00701VO();
 
+        ad00701VO.setStatusUuid(param.getString("statusUuid"));
+        ad00701VO.setEntityType(param.getString("entityType"));
         ad00701VO.setUseYN(param.getString("useYN"));
 
         return mapper.searchList(ad00701VO);

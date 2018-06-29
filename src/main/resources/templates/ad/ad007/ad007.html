@@ -30,10 +30,6 @@
                                             th:text="${item.codeName}"/>
                                 </select>
                             </dd>
-                            <dt>Message Name</dt>
-                            <dd>
-                                <input type=text style="width:135px" data-ax-path="messageName">
-                            </dd>
                             <dt>Entity Type</dt>
                             <dd>
                                 <select data-ax-path="entityType" style="width:135px;" id="serviceList">
@@ -43,15 +39,19 @@
                                             th:text="${item.codeName}"/>
                                 </select>
                             </dd>
+                            <dt>Column Code</dt>
+                            <dd>
+                                <input type=text style="width:135px" data-ax-path="columnCode">
+                            </dd>
                             <dd class="w_auto">
                                 <div class="rdo_box">
                                     <span class="rdo_box_title">Use</span>
                                     <label>
-                                        <input type="radio" name="radio" data-ax-path="useYN" class="no_border" value="Y">Yes</label>
+                                        <input type="radio" name="useYN" data-ax-path="useYN" class="no_border" value="Y">Yes</label>
                                     <label>
-                                        <input type="radio" name="radio" data-ax-path="useYN" class="no_border" value="N">No</label>
+                                        <input type="radio" name="useYN" data-ax-path="useYN" class="no_border" value="N">No</label>
                                     <label>
-                                        <input type="radio" name="radio" data-ax-path="useYN" class="no_border"  value="" checked>All</label>
+                                        <input type="radio" name="useYN" data-ax-path="useYN" class="no_border"  value="" checked>All</label>
                                 </div>
                             </dd>
                         </dl>
