@@ -1,6 +1,6 @@
 package rmsoft.ams.seoul.common.domain;
 
-import io.onsemiro.core.domain.SimpleJpaModel;
+import io.onsemiro.core.domain.BaseJpaModel;
 import lombok.*;
 import org.apache.ibatis.type.Alias;
 import org.hibernate.annotations.DynamicInsert;
@@ -18,7 +18,7 @@ import java.io.Serializable;
 @Table(name = "AD_CONTEXTUAL_METADATA_SETUP")
 @IdClass(AdContextualMeta.AdContextualMetaId.class)
 @Alias("AdContextualMetadataSetup")
-public class AdContextualMeta extends SimpleJpaModel<AdContextualMeta.AdContextualMetaId> {
+public class AdContextualMeta extends BaseJpaModel<AdContextualMeta.AdContextualMetaId> {
 
 	@Id
 	@Column(name = "ADD_CONTEXTUAL_META_UUID", length = 36, nullable = false)

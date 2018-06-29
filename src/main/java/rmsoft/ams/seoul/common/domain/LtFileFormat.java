@@ -1,6 +1,6 @@
 package rmsoft.ams.seoul.common.domain;
 
-import io.onsemiro.core.domain.SimpleJpaModel;
+import io.onsemiro.core.domain.BaseJpaModel;
 import lombok.*;
 import org.apache.ibatis.type.Alias;
 import org.hibernate.annotations.DynamicInsert;
@@ -8,7 +8,6 @@ import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.sql.Timestamp;
 
 @Setter
 @Getter
@@ -19,7 +18,7 @@ import java.sql.Timestamp;
 @Table(name = "LT_FILE_FORMAT")
 @IdClass(LtFileFormat.LtFileFormatId.class)
 @Alias("LtFileFormat")
-public class LtFileFormat extends SimpleJpaModel<LtFileFormat.LtFileFormatId> {
+public class LtFileFormat extends BaseJpaModel<LtFileFormat.LtFileFormatId> {
 
 	@Id
 	@Column(name = "FILE_FORMAT_UUID", length = 36, nullable = false)

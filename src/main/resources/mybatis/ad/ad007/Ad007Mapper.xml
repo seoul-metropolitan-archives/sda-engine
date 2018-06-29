@@ -43,7 +43,7 @@
             AD_CONTEXTUAL_METADATA_SETUP
         WHERE 1=1
 
-        ORDER BY EN
+        ORDER BY ENTITY_TYPE ASC
         ]]>
     </select>
     <select id="checkDelete" resultType="int" parameterType="String" statementType="PREPARED">
