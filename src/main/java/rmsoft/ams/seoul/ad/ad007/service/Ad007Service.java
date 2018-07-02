@@ -37,6 +37,8 @@ public class Ad007Service extends BaseService {
 
         ad00701VO.setStatusUuid(param.getString("statusUuid"));
         ad00701VO.setEntityType(param.getString("entityType"));
+        ad00701VO.setAdditionalColumn(param.getString("additionalColumn"));
+        ad00701VO.setColumnCode(param.getString("columnCode"));
         ad00701VO.setUseYN(param.getString("useYN"));
 
         return mapper.searchList(ad00701VO);
@@ -58,6 +60,7 @@ public class Ad007Service extends BaseService {
 
         for (AdContextualMeta item : itemList) {
             if (item.isCreated() || item.isModified()) {
+
                 if(item.isCreated()){ //disposalFreezeEventUuid 없을때
                     item.setStatusUuid(CommonCodeUtils.getCodeDetailUuid("CD152","Draft"));
                 }

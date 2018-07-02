@@ -39,7 +39,7 @@ var ad00701 =
                     text: "Entity Type",
                     width: 100,
                     dataType: "combo",
-                    values: axboot.commonCodeFilter("CD145").codeArr,
+                    values: axboot.commonCodeFilter("CD145").cCodeArr,
                     labels: axboot.commonCodeFilter("CD145").nameArr,
                     attributes: axboot.commonCodeFilter("CD145").attrArr,
                     editable: true,
@@ -50,11 +50,11 @@ var ad00701 =
                     sortNo: 4,
                     name: "columnCode",
                     text: "Column Code",
-                    width: 140,
+                    width: 180,
                     dataType: "text",
-                    editable: true,
+                    editable: false,
                     required: false,
-                    disable: false
+                    disable: true
                 },
                 {
                     sortNo: 5,
@@ -70,11 +70,11 @@ var ad00701 =
                     sortNo: 6,
                     name: "metadataEntityType",
                     text: "Metadata Entity Type",
-                    width: 170,
+                    width: 200,
                     dataType: "text",
-                    editable: true,
+                    editable: false,
                     required: true,
-                    disable: false
+                    disable: true
                 },
                 {
                     sortNo: 7,

@@ -53,6 +53,16 @@
             AND ENTITY_TYPE = #{entityType}
           ]]>
         </if>
+        <if test="null != columnCode and '' != columnCode">
+            <![CDATA[
+            AND COLUMN_CODE = #{columnCode}
+          ]]>
+        </if>
+        <if test="null != additionalColumn and '' != additionalColumn">
+            <![CDATA[
+            AND ADDITIONAL_COLUMN = #{additionalColumn}
+          ]]>
+        </if>
         <if test="null != useYN and '' != useYN">
             <![CDATA[
             AND USE_YN = #{useYN}

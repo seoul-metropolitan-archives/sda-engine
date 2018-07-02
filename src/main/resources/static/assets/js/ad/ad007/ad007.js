@@ -127,22 +127,6 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         } else {
             return false;
         }
-    },
-    SEARCH_POPUP01 : function(caller, act, data)
-    {
-        axboot.modal.open({
-            modalType: "COMMON_POPUP",
-            preSearch : data["preSearch"],
-            sendData: function () {
-                return data;
-            },
-            callback: function (data) {
-                fnObj.formView.setFormData("eventCode", data['EVENT_CODE']);
-                if(this.close)
-                    this.close();
-                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH,data);
-            }
-        });
     }
 });
 
@@ -183,30 +167,10 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
     initEvent: function () {
         var _this = this;
 
-        $("input[data-ax-path='eventName']").keyup(function(){
-            if(13 == event.keyCode)
-                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
-        });
+        $("#entityType").change(function(){
+            //$("input[data-ax-path='entityType']").val($(this).);
 
-        $("input[data-ax-path='eventCode']").parents().eq(1).find("a").click(function(){
-            var data = {
-                popupCode : "PU128",
-                searchData : $("input[data-ax-path='eventCode']").val().trim(),
-                preSearch : false
-            };
-            ACTIONS.dispatch(ACTIONS.SEARCH_POPUP01,data);
-        });
-        $("input[data-ax-path='eventCode']").focusout(function(){
-
-            if("" != $(this).val().trim())
-            {
-                var data = {
-                    popupCode : "PU128",
-                    searchData : $(this).val().trim()
-                };
-                ACTIONS.dispatch(ACTIONS.SEARCH_POPUP01,data);
-            }
-
+            alert($(this).val().toString());
         });
     },
     getData: function () {
@@ -303,7 +267,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
 
             gridWrapper.commit();
             columnInfo.some(function (item) {
-                if (item['uuid'] == rowData['entityType']) {
+                if (item['code'] == rowData['entityType']) {
                     gridWrapper.setValue(cellInfo.itemIndex, 'columnCode', item['attribute01']);
                     gridWrapper.setValue(cellInfo.itemIndex, 'metadataEntityType', item['attribute02']);
 

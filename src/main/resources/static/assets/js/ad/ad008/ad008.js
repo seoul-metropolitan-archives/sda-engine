@@ -76,7 +76,8 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 return data;
             },
             callback: function (data) {
-                fnObj.formView.setFormData("entityTypeCode", data['ENTITY_TYPE_CODE']);
+                fnObj.formView.setFormData("entityType", data['ENTITY_TYPE_CODE']);
+                fnObj.formView.setFormData("entityName", data['ENTITY_TYPE_NAME']);
                 if(this.close)
                     this.close();
                 ACTIONS.dispatch(ACTIONS.PAGE_SEARCH,data);
@@ -143,15 +144,19 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
                 ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
         });
 
-        $("input[data-ax-path='entityTypeCode']").parents().eq(1).find("a").click(function(){
+        $("input[data-ax-path='entityType']").change(function(){
+            $("input[data-ax-path='entityName']").val(" ");
+        });
+
+        $("input[data-ax-path='entityType']").parents().eq(1).find("a").click(function(){
             var data = {
                 popupCode : "PU110",
-                searchData : $("input[data-ax-path='entityTypeCode']").val().trim(),
+                searchData : $("input[data-ax-path='entityType']").val().trim(),
                 preSearch : false
             };
             ACTIONS.dispatch(ACTIONS.POPUP_SEARCH_01,data);
         });
-        $("input[data-ax-path='entityTypeCode']").focusout(function(){
+        $("input[data-ax-path='entityType']").focusout(function(){
 
             if("" != $(this).val().trim())
             {

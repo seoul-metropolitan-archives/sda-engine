@@ -12,7 +12,9 @@ public class Ad007ViewRouter extends BaseController {
     @GetMapping("/ad/ad007/ad007")
     public String view(ModelMap model) {
         model.addAttribute("statusList", CommonCodeUtils.get("CD152"));
+        model.addAttribute("columnCodeList", CommonCodeUtils.get("CD146"));
         model.addAttribute("entityTypeList", CommonCodeUtils.get("CD145"));
+        model.addAttribute("addColumnList", CommonCodeUtils.get("CD148"));
 
         return "/ad/ad007/ad007";
     }
