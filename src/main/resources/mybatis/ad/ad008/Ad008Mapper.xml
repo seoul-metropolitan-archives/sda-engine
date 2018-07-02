@@ -5,7 +5,8 @@
 
 <mapper namespace="rmsoft.ams.seoul.ad.ad008.dao.Ad008Mapper">
 
-    <select id="searchAuditList" resultType="ad008" parameterType="ad008" statementType="PREPARED">
+    <select id="searchList" resultType="Ad00801VO" parameterType="Ad00801VO" statementType="PREPARED">
+        <![CDATA[
         SELECT
             AUDIT_UUID AS auditUuid,
             ENTITY_TYPE_UUID AS entityTypeUuid,
@@ -18,98 +19,26 @@
             NEW_VALUE AS newValue,
             DESCRIPTION AS description,
             NOTES AS notes,
-            INSERT_UUID AS insertUuid,
+        ]]>
+        <include refid="Common.UserName">
+            <property name="userUuid" value="INSERT_UUID"/>
+        </include>
+        AS insertUuid,
+
+        <![CDATA[
             INSERT_DATE AS insertDate,
-            UPDATE_UUID AS updateUuid,
-            UPDATE_DATE AS updateDate
+        ]]>
+        <include refid="Common.UserName">
+            <property name="userUuid" value="UPDATE_UUID"/>
+        </include>
+        AS updateUuid,
+
+        <![CDATA[
+            UPDATE_DATE AS  updateDate
         FROM
             AD_AUDIT
+        WHERE 1=1
+        ]]>
     </select>
 
-    <select id="findOne" resultType="ad008" parameterType="ad008" statementType="PREPARED">
-        SELECT
-            AUDIT_UUID AS auditUuid,
-            ENTITY_TYPE_UUID AS entityTypeUuid,
-            ENTITY_COLUMN_UUID AS entityColumnUuid,
-            PROGRAM_UUID AS programUuid,
-            PROGRAM_NAME AS programName,
-            FUNCTION_UUID AS functionUuid,
-            PRIMARY_KEY_UUID AS primaryKeyUuid,
-            PREVIOUS_VALUE AS previousValue,
-            NEW_VALUE AS newValue,
-            DESCRIPTION AS description,
-            NOTES AS notes,
-            INSERT_UUID AS insertUuid,
-            INSERT_DATE AS insertDate,
-            UPDATE_UUID AS updateUuid,
-            UPDATE_DATE AS updateDate
-        FROM
-            AD_AUDIT
-        WHERE
-            AUDIT_UUID = #{auditUuid}
-    </select>
-
-   <update id="delete" parameterType="ad008" statementType="PREPARED">
-        DELETE FROM
-            AD_AUDIT
-        WHERE
-            AUDIT_UUID = #{auditUuid}
-    </update>
-
-   <update id="update" parameterType="ad008" statementType="PREPARED">
-        UPDATE AD_AUDIT
-        SET
-            ENTITY_TYPE_UUID = #{entityTypeUuid},
-            ENTITY_COLUMN_UUID = #{entityColumnUuid},
-            PROGRAM_UUID = #{programUuid},
-            PROGRAM_NAME = #{programName},
-            FUNCTION_UUID = #{functionUuid},
-            PRIMARY_KEY_UUID = #{primaryKeyUuid},
-            PREVIOUS_VALUE = #{previousValue},
-            NEW_VALUE = #{newValue},
-            DESCRIPTION = #{description},
-            NOTES = #{notes},
-            INSERT_UUID = #{insertUuid},
-            INSERT_DATE = #{insertDate},
-            UPDATE_UUID = #{updateUuid},
-            UPDATE_DATE = #{updateDate}
-        WHERE
-            AUDIT_UUID = #{auditUuid}
-    </update>
-
-   <update id="insert" parameterType="ad008" statementType="PREPARED">
-        INSERT INTO AD_AUDIT (
-            AUDIT_UUID,
-            ENTITY_TYPE_UUID,
-            ENTITY_COLUMN_UUID,
-            PROGRAM_UUID,
-            PROGRAM_NAME,
-            FUNCTION_UUID,
-            PRIMARY_KEY_UUID,
-            PREVIOUS_VALUE,
-            NEW_VALUE,
-            DESCRIPTION,
-            NOTES,
-            INSERT_UUID,
-            INSERT_DATE,
-            UPDATE_UUID,
-            UPDATE_DATE
-        ) VALUES (
-            #{auditUuid},
-            #{entityTypeUuid},
-            #{entityColumnUuid},
-            #{programUuid},
-            #{programName},
-            #{functionUuid},
-            #{primaryKeyUuid},
-            #{previousValue},
-            #{newValue},
-            #{description},
-            #{notes},
-            #{insertUuid},
-            #{insertDate},
-            #{updateUuid},
-            #{updateDate}
-        )
-    </update>
 </mapper>

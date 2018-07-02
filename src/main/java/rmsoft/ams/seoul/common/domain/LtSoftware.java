@@ -1,6 +1,6 @@
 package rmsoft.ams.seoul.common.domain;
 
-import io.onsemiro.core.domain.SimpleJpaModel;
+import io.onsemiro.core.domain.BaseJpaModel;
 import lombok.*;
 import org.apache.ibatis.type.Alias;
 import org.hibernate.annotations.DynamicInsert;
@@ -18,7 +18,7 @@ import java.io.Serializable;
 @Table(name = "LT_SOFTWARE")
 @IdClass(LtSoftware.LtSoftwareId.class)
 @Alias("LtSoftware")
-public class LtSoftware extends SimpleJpaModel<LtSoftware.LtSoftwareId> {
+public class LtSoftware extends BaseJpaModel<LtSoftware.LtSoftwareId> {
 
 	@Id
 	@Column(name = "SOFTWARE_UUID", length = 36, nullable = false)

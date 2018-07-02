@@ -5,12 +5,10 @@ import io.onsemiro.core.api.response.ApiResponse;
 import io.onsemiro.core.api.response.Responses;
 import io.onsemiro.core.parameter.RequestParams;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 import rmsoft.ams.seoul.ad.ad008.service.Ad008Service;
 import rmsoft.ams.seoul.ad.ad008.vo.Ad008;
-import rmsoft.ams.seoul.ad.ad008.vo.Ad008VO;
+import rmsoft.ams.seoul.ad.ad008.vo.Ad00801VO;
 
 import java.util.List;
 
@@ -27,9 +25,9 @@ public class Ad008Controller extends BaseController {
      * @param param the param
      * @return the responses . list response
      */
-    @RequestMapping("/searchAuditList")
-    public Responses.ListResponse searchAuditList(RequestParams<Ad008VO> param) {
-        return Responses.ListResponse.of(service.searchAuditList(param));
+    @RequestMapping("/searchList")
+    public Responses.ListResponse searchList(RequestParams<Ad00801VO> param) {
+        return Responses.ListResponse.of(service.searchList(param));
     }
 
     @RequestMapping(value = "")
