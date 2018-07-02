@@ -3091,9 +3091,9 @@ axboot.commonCodeFilter = function (categoryCode) {
 
 
     commonCodeArray.forEach(function (item, field) {
-        codeArr.push(item['codeDetailUUID']);
-        nameArr.push(item['codeName']);
-        cCodeArr.push(item['code']);
+        codeArr.push(item['codeDetailUUID']);   // uuid
+        nameArr.push(item['codeName']);         // 코드명
+        cCodeArr.push(item['code']);            // 코드값
 
         var attrObj = {};
         for(var prop in item){

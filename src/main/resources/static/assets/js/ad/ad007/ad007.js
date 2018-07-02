@@ -168,9 +168,7 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
         var _this = this;
 
         $("#entityType").change(function(){
-            //$("input[data-ax-path='entityType']").val($(this).);
-
-            alert($(this).val().toString());
+            $("input[data-ax-path='columnCode']").val($('select#entityType option:selected').attr("data-attr01"));
         });
     },
     getData: function () {
