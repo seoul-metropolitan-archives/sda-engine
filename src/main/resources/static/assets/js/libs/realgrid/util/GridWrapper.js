@@ -1786,12 +1786,20 @@ GridWrapper.prototype.setCustomCellStyleRows = function(type, conditionFunc, col
     var applyData = {rows: new Array(), columns: columnNames}
 
     for (var i = 0; i < rows.length; i++) {
+        var columns = null;
+
+        if(typeof columnNames == "function"){
+            columns = columnNames(rows[i]);
+        }else{
+            columns = columnNames;
+        }
+
         if (conditionFunc(rows[i])) {
             applyData.rows.push(i);
 
             for (var j = 0; j < columnIndexList.length; j++) {
                 //this.gridView.setCellStyle(i, columnIndexList[j], type, true);
-                this.gridView.setCellStyles(i, columnNames, type, true);
+                this.gridView.setCellStyles(i, columns, type, true);
             }
         } else {
             for (var j = 0; j < columnIndexList.length; j++) {

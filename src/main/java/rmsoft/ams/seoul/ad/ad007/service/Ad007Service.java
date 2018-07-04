@@ -15,6 +15,7 @@ import rmsoft.ams.seoul.common.repository.AdContextualMetaRepository;
 import rmsoft.ams.seoul.utils.CommonCodeUtils;
 import rmsoft.ams.seoul.utils.CommonMessageUtils;
 
+import javax.persistence.PersistenceException;
 import java.util.List;
 
 @Service
@@ -42,7 +43,7 @@ public class Ad007Service extends BaseService {
         ad00701VO.setUseYN(param.getString("useYN"));
 
         return mapper.searchList(ad00701VO);
-    }
+}
 
     /**
      * Save entity type api response.
@@ -72,7 +73,11 @@ public class Ad007Service extends BaseService {
                     item.setInsertUuid(orgItem.getInsertUuid());
                 }
 
-                repository.save(item);
+                try {
+                    repository.save(item);
+                }catch(PersistenceException err){
+                    return ApiResponse.error(ApiStatus.SYSTEM_ERROR, CommonMessageUtils.getMessage("AD003"));
+                }
             } else if (item.isDeleted()) {
                 if (mapper.checkDelete(item.getAddContextualMetaUuid()) > 0) {
                     return ApiResponse.error(ApiStatus.SYSTEM_ERROR, CommonMessageUtils.getMessage("AD011_02"));
@@ -100,8 +105,8 @@ public class Ad007Service extends BaseService {
             changeStatus = list.get(index).getChangeStatus() == "" ?  "Draft" : list.get(index).getChangeStatus();
             orgItem = repository.findOne(item.getId());
             item.setStatusUuid(CommonCodeUtils.getCodeDetailUuid("CD152",changeStatus));
-            item.setInsertDate(item.getInsertDate());
-            item.setInsertUuid(item.getInsertUuid());
+            item.setInsertDate(orgItem.getInsertDate());
+            item.setInsertUuid(orgItem.getInsertUuid());
             repository.save(item);
             index++;
         }

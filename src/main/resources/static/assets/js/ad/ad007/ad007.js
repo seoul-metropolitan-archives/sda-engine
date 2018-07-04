@@ -230,13 +230,28 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     disabledColumn : function()
     {
         var state = axboot.commonCodeValueByCodeName("CD152", CONFIRM_STATUS);
+        var isDisable = false;
+        var columns = ["entityType","columnCode","columnValue","metadataEntityType","additionalColumn","inputMethodUuid","inputValue","title","requiredYN","displayYN","useYN"];
 
-        this.gridObj.setCustomCellStyleRows("disable",function(row){
-            if(row["statusUuid"] == state)
-                return true;
-            else
-                return false;
-        },["entityType","columnCode","columnValue","metadataEntityType","additionalColumn","inputMethodUuid","inputValue","title","requiredYN","displayYN","useYN"]);
+        this.gridObj.setCustomCellStyleRows("disable",
+            function(row){
+                if(row["statusUuid"] == state) {
+                    return true;
+                }else {
+                    if(row['metaCnt'] > 0){
+                        return true;
+                    }else{
+                        return false;
+                    }
+                }
+            },function(row){
+                if(row["statusUuid"] == state) {
+                    return ["entityType","columnCode","columnValue","metadataEntityType","additionalColumn","inputMethodUuid","inputValue","title","requiredYN","displayYN","useYN"];
+                }else {
+                    return ["entityType","columnCode","columnValue","metadataEntityType","additionalColumn","inputMethodUuid","inputValue"];
+                }
+            }
+        );
     },
     itemClick: function (data) {
 

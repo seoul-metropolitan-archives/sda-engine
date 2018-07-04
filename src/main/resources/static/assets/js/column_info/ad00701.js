@@ -246,9 +246,9 @@ var ad00701 =
                     disable: true
                 },
                 {
-                    sortNo: 20,
-                    name: "reason",
-                    text: "REASON",
+                    sortNo:20 ,
+                    name: "metaCnt",
+                    text: "",
                     dataType: "text",
                     visible: false
                 }
