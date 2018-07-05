@@ -11,6 +11,8 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             callback: function (res) {
                 fnObj.gridView01.resetCurrent();
                 fnObj.gridView01.setData(res.list);
+                fnObj.gridView01.disabledColumn();
+                setTimeout(fnObj.gridView01.selectiveDisabledColumn(),30000)
             },
             options: {
                 onError: axboot.viewError
@@ -59,7 +61,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         var result = false;
         axboot.call({
             type: "PUT",
-            url: "/api/v1/rs003/03/save",
+            url: "/api/v1/rs/rs003/03/save",
             data: JSON.stringify(this.gridView01.getData()),
             callback: function (res) {
                 ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
@@ -76,6 +78,9 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     },
     MENU_OPEN: function (caller,act, data){
 
+    },
+    PAGE_SEARCH1: function (caller,act, data){
+        fnObj.gridView01.selectiveDisabledColumn();
     },
     SEARCH_GRS_CODE : function(caller, act, data)
     {
@@ -203,10 +208,41 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
             checkBar: {visible: true}
         })
         this.makeGrid();
-        this.gridObj.itemClick(this.itemClick);
+        //this.gridObj.itemClick(this.itemClick);
+
+        var _this = this;
+        this.gridObj.onCellEdited(function(gridWrapper,grid){
+            fnObj.gridView01.selectiveDisabledColumn();
+        });
+    },
+    popupCallback: function(grid,data) {
+        grid.commit(true);
+        fnObj.gridView01.selectiveDisabledColumn();
     },
     getSelectedData : function(){
         return this.gridObj.getSelectedData()
+    },
+    selectiveDisabledColumn: function(){
+        this.gridObj.setCustomCellStyleRows("disable",function(row){
+            var codes = axboot.commonCodeFilter("CD134").codeArr;
+            var names = axboot.commonCodeFilter("CD134").nameArr;
+            var state = undefined;
+            for(var i = 0; i < names.length; i++)
+            {
+                if(names[i] == "Confirm")
+                {
+                    state = codes[i];
+                    break;
+                }
+            }
+            if(row["statusUuid"] != state) {//Draft 일때
+                if (row["grsCode"] == "" || row["grsCode"] == undefined)
+                    return false;
+                else
+                    return true;
+            }else
+                return true;
+        },["retentionPeriodUuid","disposalTypeUuid","basedOn"]);
     },
     disabledColumn : function()
     {
@@ -223,11 +259,21 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
         }
         this.gridObj.setCustomCellStyleRows("disable",function(row){
 
-            if(row["statusUuid"] == state)
+            if(row["statusUuid"] == state) //Confirm 일때
                 return true;
             else
                 return false;
-        },["grsName","retentionPeriodUuid","disposalTypeUuid","basedOn","description"]);
+        },["grsCode","retentionPeriodUuid","disposalTypeUuid","basedOn","triggerName","description"],false);
+
+        // this.gridObj.setCustomCellStyleRows("disable",function(row){
+        //    if(row["statusUuid"] != state) {//Draft 일때
+        //        if (row["grsCode"] == "" || row["grsCode"] == undefined)
+        //            return false;
+        //        else
+        //             return true;
+        //     }else return true;
+        // },["retentionPeriodUuid","disposalTypeUuid","basedOn"]);
+
     },
     itemClick: function (data) {
         /*if (data.classificationSchemeUuid != null && data.classificationSchemeUuid != "") {
@@ -248,7 +294,6 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
         }*/
     }
 });
-
 /**
  * [필수]
  * Grid 데이터 변경 여부를 체크하기 위한 함수

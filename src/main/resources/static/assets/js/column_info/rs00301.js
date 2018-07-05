@@ -29,8 +29,7 @@ var rs00301 =
                     editable: false,
                     dataType: "combo",
                     values: axboot.commonCodeFilter("CD134").codeArr,
-                    labels: axboot.commonCodeFilter("CD134").nameArr,
-                    required: true
+                    labels: axboot.commonCodeFilter("CD134").nameArr
                 },
                 {
                     sortNo: 2,
@@ -40,16 +39,18 @@ var rs00301 =
                     dataType: "check",
                     textAlignment: "center",
                     defaultValue : "N",
-                    editable: false
+                    editable: true
                 },
                 {
                     sortNo: 3,
                     width: 150,
                     name: "rsCode",
                     text: "RS Code",
+                    disable: true,
                     editable: false,
-                    dataType:"text",
-                    required: false
+                    dataType: "text",
+                    required: false,
+                    visible: true
                 },
                 {
                     sortNo: 4,
@@ -68,18 +69,20 @@ var rs00301 =
                     editable: true,
                     dataType: "popup",
                     popupCode : "PU130",
-                    sqlColumn : {GENERAL_RECORD_SCHEDULE_UUID : "generalRecordScheduleUuid",GRS_CODE : "grsCode",GRS_NAME : "grsName"},
-                    pasteTarget:"grsName",
+                    popupCallback: fnObj.gridView01.popupCallback,
+                    sqlColumn : {GENERAL_RECORD_SCHEDULE_UUID : "generalRecordScheduleUuid",GRS_CODE : "grsCode",GRS_NAME : "grsName",RETENTION_PERIOD : "retentionPeriodUuid", DISPOSAL_TYPE: "disposalTypeUuid" , BASED_ON:"basedOn"},
                     required: false
                 },
                 {
                     sortNo: 6,
                     name: "grsName",
                     text: "GRS Name",
-                    width: 120,
+                    width: 170,
+                    disable: true,
                     editable: false,
-                    required: true,
-                    dataType: "text"
+                    dataType: "text",
+                    required: false,
+                    visible: true
                 },
                 {
                     sortNo: 7,
@@ -120,9 +123,8 @@ var rs00301 =
                     editable: true,
                     dataType: "popup",
                     popupCode : "PU131",
-                    sqlColumn : {TRIGGER_UUID : "triggerUuid",TRIGGER_CODE : "triggerCode",TRIGGER_NAME : "triggerName",TRIGGER_DATE:"triggerDate"},
+                    sqlColumn : {TRIGGER_UUID : "triggerUuid",TRIGGER_NAME : "triggerName",TRIGGER_DATE:"triggerDate"},
                     required: false,
-                    pasteTarget:"triggerDate",
                     visible: true
                 },
                 {
@@ -130,7 +132,11 @@ var rs00301 =
                     name: "triggerDate",
                     text: "Trigger Date",
                     width: 120,
-                    dataType: "date"
+                    disable: true,
+                    editable: false,
+                    dataType: "text",
+                    required: false,
+                    visible: true
                 },
                 {
                     sortNo: 12,
@@ -151,20 +157,13 @@ var rs00301 =
                 {
                     sortNo: 14,
                     name: "useYn",
-                    text: "use",
-                    width: 120,
+                    text: "Use",
                     width: 50,
+                    editable: true,
                     dataType: "check",
-                    textAlignment: "center",
                     defaultValue : "Y",
-                    renderer: {
-                        type: "check",
-                        shape: "",
-                        falseValues: "N",
-                        trueValues: "Y",
-                        startEditOnClick: true,
-                    },
-                    required: true
+                    textAlignment: "center",
+                    required: false
                 },
                 {
                     sortNo: 15,
@@ -187,7 +186,7 @@ var rs00301 =
                 {
                     sortNo: 17,
                     name: "updateUuid",
-                    text: "Modifed By",
+                    text: "Modified By",
                     width: 120,
                     editable: false,
                     disable: true,
@@ -201,6 +200,18 @@ var rs00301 =
                     editable: false,
                     disable: true,
                     dataType: "timestamp"
+                },
+                {
+                    sortNo: 19,
+                    name : "generalRecordScheduleUuid",
+                    text : "General Record Schedule Uuid",
+                    visible : false
+                },
+                {
+                    sortNo: 20,
+                    name : "triggerUuid",
+                    text : "Trigger Uuid",
+                    visible : false
                 }
             ]
     }

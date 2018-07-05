@@ -23,34 +23,28 @@ var cl00302 =
                 },
                 {
                     sortNo: 1,
-                    width:30,
-                    name: "classificationSchemeUuid",
-                    text: "Classification Scheme UUID",
-                    editable: false,
-                    dataType: "code",
-                    required: false,
-                    visible: false
-                },
-                {
-                    sortNo: 2,
                     width: 120,
                     name: "statusUuid",
                     text: "Status",
                     editable: false,
                     values: axboot.commonCodeFilter("CD111").codeArr,
                     labels: axboot.commonCodeFilter("CD111").nameArr,
-                    dataType : "combo"
+                    dataType : "combo",
+                    disable:true
                 },
                 {
-                    sortNo: 3,
-                    width: 150,
-                    name: "item",
+                    sortNo: 2,
+                    width:30,
+                    name: "title",
                     text: "Item",
-                    editable: false
+                    editable: false,
+                    dataType: "code",
+                    required: false,
+                    disable:true
                 },
                 {
                     sortNo: 4,
-                    name: "classCode",
+                    name: "aggregationTree",
                     text: "Aggregation Tree",
                     width: 150,
                     dataType: "",
@@ -59,8 +53,8 @@ var cl00302 =
                 },
                 {
                     sortNo: 5,
-                    name: "classfiedDate",
-                    text: "Classfied Date",
+                    name: "classifiedDate",
+                    text: "Classified Date",
                     width: 150,
                     dataType: "text",
                     editable: false,
@@ -71,8 +65,8 @@ var cl00302 =
                     name: "description",
                     text: "Description",
                     width: 100,
-                    editable: false,
-                    dataType : "text"
+                    editable: true,
+                    dataType : "richtext"
                 },
                 {
                     sortNo: 7,
@@ -80,8 +74,7 @@ var cl00302 =
                     text: "Notes",
                     width: 70,
                     editable: true,
-                    sortable: true,
-                    datType: "number"
+                    datType: "richtext"
                 },
                 {
                     sortNo: 8,
@@ -106,7 +99,7 @@ var cl00302 =
                 {
                     sortNo: 10,
                     name: "updateUuid",
-                    text: "Modifed By",
+                    text: "Modified By",
                     width: 120,
                     editable: false,
                     disable: true,
@@ -122,6 +115,34 @@ var cl00302 =
                     disable: true,
                     dataType: "timestamp",
                     required: false
+                },
+                {
+                    sortNo: 12,
+                    width:30,
+                    name: "classifyRecordsUuid",
+                    text: "Classify Records UUID",
+                    editable: false,
+                    dataType: "code",
+                    required: false,
+                    visible: false
+                },
+                {
+                    sortNo: 13,
+                    width:30,
+                    name: "aggregationUuid",
+                    editable: false,
+                    dataType: "code",
+                    required: false,
+                    visible: false
+                },
+                {
+                    sortNo: 14,
+                    width:30,
+                    name: "itemUuid",
+                    editable: false,
+                    dataType: "code",
+                    required: false,
+                    visible: false
                 }
             ]
     }

@@ -1,5 +1,6 @@
 package rmsoft.ams.seoul.rs.rs003.service;
 
+import io.onsemiro.core.api.ApiException;
 import io.onsemiro.core.api.response.ApiResponse;
 import io.onsemiro.core.code.ApiStatus;
 import io.onsemiro.core.parameter.RequestParams;
@@ -58,6 +59,36 @@ public class Rs003Service extends BaseService {
             rsRecordScheduleRepository.save(rsRecordSchedulesList);
             index++;
         }
+        return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");
+    }
+
+    public ApiResponse updateRsRecordScheduleList(List<Rs00301VO> list) {
+        List<RsRecordSchedule> rsRecordScheduleList = ModelMapperUtils.mapList(list,RsRecordSchedule.class);
+        RsRecordSchedule orgRsRecordSchedule = null;
+        String cnt = null;
+        for (RsRecordSchedule rsRecordSchedule : rsRecordScheduleList) {
+
+            if (rsRecordSchedule.isDeleted()) {
+                rsRecordScheduleRepository.delete(rsRecordSchedule);
+            }else{
+                if(rsRecordSchedule.isCreated()){ //ClassificationSchemeUuid가 없을때
+                    rsRecordSchedule.setStatusUuid(CommonCodeUtils.getCodeDetailUuid("CD134","Draft"));
+                    cnt = jdbcTemplate.queryForObject("SELECT LPAD(TO_NUMBER(SUBSTR(MAX(RS_CODE),4)) + 1,4,'0') FROM RS_RECORD_SCHEDULE", String.class);
+                    if(cnt == null){
+                        cnt = "0001";
+                    }
+                    cnt = "RS-" + cnt;
+                    rsRecordSchedule.setRsCode(cnt);
+                }
+                if(rsRecordSchedule.isModified()) {
+                    orgRsRecordSchedule = rsRecordScheduleRepository.findOne(rsRecordSchedule.getId());
+                    rsRecordSchedule.setInsertDate(orgRsRecordSchedule.getInsertDate());
+                    rsRecordSchedule.setInsertUuid(orgRsRecordSchedule.getInsertUuid());
+                }
+                rsRecordScheduleRepository.save(rsRecordSchedule);
+            }
+        }
+
         return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");
     }
 }

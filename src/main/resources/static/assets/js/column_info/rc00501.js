@@ -50,7 +50,7 @@ var rc00501 =
                     text : "Size(kb)",
                     disable : true,
                     dataType : "code",
-                    visvible : false
+                    visible : false
                  }
             ]
     }

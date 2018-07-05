@@ -17,7 +17,8 @@ var st00201 =
                     name: "containerName",
                     text: "CONTAINER_NAME",
                     editable: false,
-                    dataType: "code"
+                    dataType: "code",
+                    visible: false
                 },
                 {
                     sortNo: 2,
@@ -54,6 +55,14 @@ var st00201 =
                     editable: false,
                     dataType: "code",
                     visible : false
-                }
+                },
+                {
+                    sortNo: 6,
+                    width:140,
+                    name: "containerTreeName",
+                    text: "CONTAINER_TREE_NAME",
+                    editable: false,
+                    dataType: "code"
+                },
             ]
     }

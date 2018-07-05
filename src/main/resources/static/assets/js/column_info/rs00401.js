@@ -88,11 +88,11 @@ var rs00401 =
                         },
                         {
                             sortNo: 4,
-                            name: "disposalFreeze",
+                            name: "disposalFreezeYn",
                             text: "Disposal Freeze",
                             width : 220,
                             editable: false,
-                            dataType: "combo",
+                            dataType: "check",
                             visible: true,
                             disable: true
                         }]
@@ -146,6 +146,16 @@ var rs00401 =
                         },
                         {
                             sortNo: 9,
+                            name: "initialDate",
+                            text: "Initial Date",
+                            width : 100,
+                            editable: false,
+                            dataType: "text",
+                            visible: true,
+                            disable: true
+                        },
+                        {
+                            sortNo: 10,
                             name: "disposalDueDate",
                             text: "Disposal Due Date",
                             width: 220,
@@ -184,7 +194,7 @@ var rs00401 =
                 },
                 {
                     sortNo: 13,
-                    name: "useYN",
+                    name: "useYn",
                     text: "Use",
                     width: 50,
                     editable: true,
@@ -217,7 +227,7 @@ var rs00401 =
                 {
                     sortNo: 16,
                     name: "updateUuid",
-                    text: "Modifed By",
+                    text: "Modified By",
                     width: 80,
                     visible: true,
                     dataType: "text",

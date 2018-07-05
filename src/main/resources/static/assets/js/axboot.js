@@ -2470,7 +2470,13 @@ axboot.baseView =
             });
             $(".bdb").delegate("#cancel", "click", function () {
                 _this.cancel();
-            })
+            });
+            $(".bdb").delegate("#arrange", "click", function () {
+                _this.arrange();
+            });
+            $(".bdb").delegate("#classify", "click", function () {
+                _this.classify();
+            });
            /* $(document).delegate(".ax-body .div_tablerow:not(.searchFields) input", "keydown", function (e) {
                 if (e.ctrlKey && e.altKey && e.keyCode == 73) {
                     e.preventDefault();
@@ -2541,7 +2547,14 @@ axboot.baseView =
         , cancel: function () {
         if (ACTIONS && ACTIONS.PAGE_CANCEL)
             ACTIONS.dispatch(ACTIONS.PAGE_CANCEL);
-    }
+    }   , arrange: function () {
+            if (ACTIONS && ACTIONS.PAGE_ARRANGE)
+                ACTIONS.dispatch(ACTIONS.PAGE_ARRANGE);
+        }
+        , classify: function () {
+            if (ACTIONS && ACTIONS.PAGE_CLASSIFY)
+                ACTIONS.dispatch(ACTIONS.PAGE_CLASSIFY);
+        }
     };
 
 /**
@@ -2764,9 +2777,9 @@ axboot.gridView = {
         column.defaultValue = uuid;
         wrapperObj.setColumn(column);
     },
-    customAddRowBeforeEvent : function()
+    customAddRowBeforeEvent : function(_event)
     {
-
+        this.gridObj.addRowBeforeEvent(_event);
     },
     addRowAfterEvent : function(_event){
 

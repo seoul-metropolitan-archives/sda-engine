@@ -1,24 +1,12 @@
 
 var fnObj = {};
-var parentContainerUuid = "";
-var selectedItem ; //선택된 그리드 아이템
-var classList = new Object();
-var CONFIRM_STATUS = "Confirm";
-var CANCEL_STATUS = "Draft";
-var isDetailChanged = false;
-var currentContainerUuid = "";
-var currentAggregationUuid = "";
+var parentsData;
 
 var ACTIONS = axboot.actionExtend(fnObj, {
-    PAGE_SEARCH: function (caller, act, data) {
-        if(currentContainerUuid != "") {
-            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1,{containerUuid:currentContainerUuid});
-        }
-    },
     PAGE_SEARCH_TREE: function (caller, act, data) {
         axboot.ajax({ //트리리스트조회
             type: "GET",
-            url: "/api/v1/st/st002/01/list01",
+            url: "/api/v1/st/st003/04/list01",
             async : false,
             data: $.extend({}, {pageSize: 1000}),
             callback: function (res) {
@@ -34,14 +22,12 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH1: function (caller, act, data) {
         axboot.ajax({//그리드리스트조회
             type: "GET",
-            url: "/api/v1/st/st003/01/list01",
+            url: "/api/v1/cl/cl003/02/list01",
             async : false,
-            data: $.extend({}, {pageSize: 1000},this.formView.getData(),{containerUuid: data.containerUuid}),
+            data: $.extend({}, {pageSize: 10000},{aggregationUuid: data.aggregationUuid, classUuid: parentsData.classUuid}),
             callback: function (res) {
                 fnObj.gridView02.resetCurrent();
                 fnObj.gridView02.setData(res.list);
-                fnObj.formView.setFormData("itInAggregationName", "");
-                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH2,data)
             },
             options: {
                 onError: axboot.viewError
@@ -49,53 +35,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         });
         return false;
     },
-    PAGE_SEARCH2: function (caller, act, data) {//트리에서 선택된 항목
-        axboot.ajax({
-            type: "GET",
-            url: "/api/v1/st/st003/01/list02",
-            data: $.extend({}, {pageSize: 1000},this.formView.getData(),{containerUuid: data.containerUuid}),
-            callback: function (res) {
-                fnObj.gridView03.resetCurrent();
-                fnObj.gridView03.setData(res.list);
-            },
-            options: {
-                onError: axboot.viewError
-            }
-        });
-        return false;
-    },
-    STATUS_UPDATE: function (caller, act, data) {
 
-        var checkedCnt01 = fnObj.gridView02.gridObj.getCheckedList().length;
-        var checkedCnt02 = fnObj.gridView03.gridObj.getCheckedList().length;
-
-        var rows = fnObj.gridView02.gridObj.getCheckedList();
-        rows = rows.concat(fnObj.gridView03.gridObj.getCheckedList());
-
-        if(!rows || rows.length < 1) return;
-
-        var params = rows.filter(function (item) {
-            item.changeStatus = data;
-            return item.arrangeRecordsResultUuid !== "";
-        });
-
-        axboot.ajax({
-            type: "PUT",
-            url: "/api/v1/st/st003/02/confirm",
-            data: JSON.stringify(params),
-            callback: function (res) {
-                if(checkedCnt01 > 0) {
-                    ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1,{containerUuid:currentContainerUuid});
-                }
-                if(checkedCnt02 > 0) {
-                    ACTIONS.dispatch(ACTIONS.PAGE_SEARCH2,{containerUuid:currentContainerUuid});
-                }
-            },
-            options: {
-                onError: axboot.viewError
-            }
-        });
-    },
     ERROR_SEARCH: function (caller, act, data) {
     },
     PAGE_CONFIRM: function (caller, act, data) {
@@ -108,52 +48,31 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         ACTIONS.dispatch(ACTIONS.TOP_GRID_SAVE);
         // ACTIONS.dispatch(ACTIONS.TOP_GRID_DETAIL_PAGE_SAVE);
     },
-    TOP_GRID_SAVE: function (caller, act, data) {
-        var lists = fnObj.gridView02.gridObj.getData();
-        lists = lists.concat(fnObj.gridView03.gridObj.getData());
-        var result = false;
-
-        axboot.call({
-            type: "PUT",
-            url: "/api/v1/st/st003/03/save",
-            data: JSON.stringify(lists),
-            callback: function (res) {
-                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
-            }
-        })
-            .done(function () {
-                axToast.push("저장 작업이 완료되었습니다.");
-            });
-        return result;
-    },
-    CLOSE_TAB: function (caller, act, data) {
-        ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
+    PAGE_CLOSE: function (caller, act, data) {
+        if (parent) {
+            parent.axboot.modal.callback(data);
+        }
     },
     PAGE_ARRANGE: function (caller, act, data) {
-        if(fnObj.formView.getData().aggInContainerName == "" ||fnObj.formView.getData().aggInContainerName == undefined ){
+        if(fnObj.gridView03.getData().length  < 1){
+            alert("Select Arrange Item List")
             return
         }
-        axboot.modal.open({
-            modalType: "ARRANGE_POPUP",
-            width: 1600,
-            height: 800,
-            header: {
-                title: "ARRANGE"
+        for(var i=0;i<fnObj.gridView03.getData().length;i++){
+            fnObj.gridView03.gridObj.setValue(i, "containerUuid", parentsData.containerUuid)
+        }
+        axboot.ajax({
+            type: "PUT",
+            url: "/api/v1/st/st003/03/save",
+            data: JSON.stringify(fnObj.gridView03.getData()),
+            callback: function (res) {
+                ACTIONS.dispatch(ACTIONS.PAGE_CLOSE,{containerUuid:parentsData.containerUuid});
             },
-            sendData: function () {
-                return {
-                    confirmBtn:"Arrange",
-                    crrntAgg: fnObj.formView.getData().aggInContainerName,
-                    containerUuid :  currentContainerUuid
-                };
-            },
-            callback: function (data) {
-                if(this) this.close();
-                if(data){
-                    ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1,data);
-                }
+            options: {
+                onError: axboot.viewError
             }
         });
+        return false;
     },
     dispatch: function (caller, act, data) {
         var result = ACTIONS.exec(caller, act, data);
@@ -167,6 +86,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
 
 fnObj.pageStart = function () {
     var _this = this;
+    parentsData = parent.axboot.modal.getData();
     $.ajax({
         url: "/assets/js/controller/simple_controller.js",
         dataType: "script",
@@ -176,23 +96,14 @@ fnObj.pageStart = function () {
     });
 
     $.ajax({
-        url: "/assets/js/column_info/st00201.js",
+        url: "/assets/js/column_info/st00301_p01_01.js",
         dataType: "script",
         async: false,
         success: function () {
         }
     });
-
     $.ajax({
-        url: "/assets/js/column_info/st00301.js",
-        dataType: "script",
-        async: false,
-        success: function () {
-        }
-    });
-
-    $.ajax({
-        url: "/assets/js/column_info/st00302.js",
+        url: "/assets/js/column_info/st00301_p01_02.js",
         dataType: "script",
         async: false,
         success: function () {
@@ -220,27 +131,28 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
     initEvent: function () {
         var _this = this;
 
-        $("input[data-ax-path='containerName']").focusout(function(){
+        $(".btn_main_txt01").text(parentsData.confirmBtn);
 
-            if("" == $(this).val().trim())
-            {
-                $("input[data-ax-path='containerName']").val("");
-            }
-        });
-        $("input[data-ax-path='provenance']").focusout(function(){
+        $(".sltCont").text(parentsData.crrntAgg);
 
-            if("" == $(this).val().trim())
-            {
-                $("input[data-ax-path='provenance']").val("");
-            }
+        $(".open_close.expendAll").click(function(){
+            _this.gridObj.expandAll();
+        });
+        $(".open_close.collapseAll").click(function(){
+            _this.gridObj.collapseAll();
+        });
+        $(".btn_exclude").click(function(){
+            exportItemList();
+        });
+        $(".btn_include").click(function(){
+            importItemList();
+        });
+        $(".btn_arrange").click(function(){
+            ACTIONS.dispatch(ACTIONS.PAGE_ARRANGE);
         });
 
-        $("input[data-ax-path='containerName'],input[data-ax-path='provenance'] ,input[data-ax-path='controlNumber']").keyup(function(){
-            if(13 == event.keyCode)
-                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
-        });
-        $("select[data-ax-path='statusUuid'], select[data-ax-path='containerTypeUuid']").change(function() {
-            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+        $(".close_popup").click(function(){
+            ACTIONS.dispatch(ACTIONS.PAGE_CLOSE);
         });
 
         $(".bdb").delegate("#rg_tree_allopen", "click", function () {
@@ -291,6 +203,7 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
 
 fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     tagId : "realgrid01",
+
     initView: function () {
         this.gridObj = new TreeGridWrapper("realgrid01", "/assets/js/libs/realgrid", true);
         this.gridObj.setGridStyle("100%", "100%")
@@ -299,38 +212,21 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
                 header: { visible: false },
                 checkBar: {visible: false},
                 indicator: {visible: false},
-                stateBar:{visible:false}
+                stateBar:{visible:false},
+                checkBox:{visible:true},
             })
-        this.gridObj.setColumnInfo(st00201.column_info).makeGrid();
+        this.gridObj.setColumnInfo(st00301_p01_01.column_info).makeGrid();
 
         this.gridObj.setDisplayOptions({
             fitStyle:"evenFill"
         });
         this.gridObj.itemClick(this.itemClick);
+        this.gridObj.onItemChecked(this.onItemChecked);
         this.bindEvent();
     },
     bindEvent : function()
     {
         var _this = this;
-        $(".open_close.expendAll").click(function(){
-            _this.gridObj.expandAll();
-        });
-        $(".open_close.collapseAll").click(function(){
-            _this.gridObj.collapseAll();
-        });
-        $("#leftMenuParam").keydown(function(event){
-            if(13 == event.keyCode)
-                $("#searchLeftMenu").click();
-        })
-        $("#searchLeftMenu").click(function(){
-            if("" != $("#leftMenuParam").val())
-            {
-                _this.gridObj.search(["containerName"],$("#leftMenuParam").val())
-            }
-        });
-        $(".btn_arrange").click(function(){
-            ACTIONS.dispatch(ACTIONS.MODAL_OPEN);
-        });
     },
     setData: function (list) {
         this.gridObj.setTreeDataForArray(list, "orderKey1");
@@ -343,19 +239,20 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
         }
     },
     itemClick: function (data, index) {
-        if(data != null){
-            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, data);
-            fnObj.gridView03.clearData();
-            fnObj.formView.setFormData("aggInContainerName", data.containerTreeName);
-            fnObj.formView.setFormData("itInAggregationName", "");
-            currentContainerUuid = data.containerUuid;
+        if(data){
+            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1,data);
         }
-
     },
     getData: function () {
         return this.gridObj.getData();
     },
 
+    checkChildren : function(index,checked){
+        this.gridObj.checkChildren(index, checked, true, false);
+    },
+    onItemChecked: function(grid,itemIndex,checked) {
+        fnObj.gridView01.checkChildren(itemIndex,checked);
+    }
 });
 
 fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
@@ -364,7 +261,7 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
     primaryKey : "arrangeRecordsResultUuid",
     initView: function () {
         this.initInstance();
-        this.setColumnInfo(st00301.column_info);
+        this.setColumnInfo(st00301_p01_02.column_info);
         this.gridObj.setFixedOptions({
             colCount: 3
         });
@@ -374,6 +271,7 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
         })
         this.makeGrid();
         this.gridObj.itemClick(this.itemClick);
+        this.gridObj.onItemChecked(this.onItemChecked)
     },
     isChangeData: function () {
         if (this.getData().length > 0) {
@@ -386,22 +284,21 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
         return this.gridObj.getSelectedData();
     },
     itemClick: function (data, index) {
-        // if(data != null){
-        //     ACTIONS.dispatch(ACTIONS.PAGE_SEARCH2, data);
-        //     fnObj.formView.setFormData("itInAggregationName", data.title);
-        //     currentContainerUuid = data.containerUuid;
-        // }
 
+    },
+    onItemChecked: function(grid, itemIndex, checked){
+        // alert("adfaf");
     }
+
 });
 
 fnObj.gridView03 = axboot.viewExtend(axboot.gridView, {
     tagId : "realgrid03",
-    entityName : "containerUuid",
-    primaryKey : "containerUuid",
+    entityName : "arrangeRecordsResultUuid",
+    primaryKey : "arrangeRecordsResultUuid",
     initView: function () {
         this.initInstance();
-        this.setColumnInfo(st00302.column_info);
+        this.setColumnInfo(st00301_p01_02.column_info);
         this.gridObj.setFixedOptions({
             colCount: 3
         });
@@ -423,7 +320,10 @@ fnObj.gridView03 = axboot.viewExtend(axboot.gridView, {
         return this.gridObj.getSelectedData();
     },
     itemClick: function (data, index) {
-    }
+    },
+    getData: function () {
+        return this.gridObj.getJsonRows();
+    },
 });
 /**
  * [필수]
@@ -439,5 +339,29 @@ isDataChanged = function () {
         return false;
     }
 }
+exportItemList = function() {
+    if(fnObj.gridView02.gridObj.getCheckedList().length > 0){
+        //gridView03 목록에 추가
+        fnObj.gridView03.setData(fnObj.gridView02.gridObj.getCheckedList());
+        // fnObj.gridView02.gridObj.onItemChecked()
+        // var getCheckedRows = fnObj.gridView02.gridObj.getCheckedRows();
+        // fnObj.gridView02.gridObj.setCheckable(0,false);
+        // fnObj.gridView02.gridObj.getcheck
+        // fnObj.gridView02.gridObj.setCustomCellStyleRows("disable",function(row){
+        //
+        //     if(row["statusUuid"] == state)
+        //         return true;
+        //     else
+        //         return false;
+        // },["containerName","parentContainerName","containerTypeUuid","controlNumber","provenance","creationStartDate","creationEndDate","description","orderNo"]);
+    }else{
+        alert("Select Arrange Item List")
+    }
+}
+importItemList = function(){
+    alert("import");
+}
 
-
+setCheckable = function(rows){
+    // for()
+}

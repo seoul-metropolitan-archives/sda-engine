@@ -4,20 +4,127 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="rmsoft.ams.seoul.cl.cl003.dao.Cl003Mapper">
-
-    <select id="getClassifiedRecordList" resultType="Cl00301VO" parameterType="Cl00301VO" statementType="PREPARED">
+    <select id="getClassAggregationList" resultType="Cl00301VO"  statementType="PREPARED">
         SELECT
-         CLASSIFIED_RECORDS_UUID as classifiedRecordsUuid,
-         STATUS_UUID as statusUuid,
-         CLASS_UUID as classUuid,
-         AGGREGATION_UUID as aggregationUuid,
-         ITEM_UUID as itemUuid,
-         CLASSIFIED_DATE as classifiedDate,
-        <include refid="Common.UserName"><property name="userUuid" value="INSERT_UUID"/></include> as insertUuid,
-         INSERT_DATE as insertDate,
-        <include refid="Common.UserName"><property name="userUuid" value="UPDATE_UUID"/></include> as updateUuid,
-         UPDATE_DATE as updateDate
+        A.CLASSIFY_RECORDS_UUID as classifyRecordsUuid,
+        A.STATUS_UUID as statusUuid,
+        A.CLASS_UUID as classUuid,
+        B.AGGREGATION_CODE as aggregationCode,
+        B.TITLE as title,
+        A.AGGREGATION_UUID as aggregationUuid,
+        A.ITEM_UUID as itemUuid,
+        B.TYPE_UUID as typeUuid,
+        A.DESCRIPTION as description,
+        A.NOTES as notes,
+        to_char(A.CLASSIFIED_DATE, 'YYYY-MM-DD') as classifiedDate,
+        (SELECT
+        SUBSTR(SYS_CONNECT_BY_PATH(TITLE,' >> '),4) path
         FROM
-        CL_CLASSIFIED_RECORDS
+        RC_AGGREGATION C
+        WHERE A.AGGREGATION_UUID = C.AGGREGATION_UUID
+        START WITH PARENT_AGGREGATION_UUID IS NULL
+        CONNECT BY PRIOR AGGREGATION_UUID = PARENT_AGGREGATION_UUID) AS aggregationTree,
+        <include refid="Common.UserName"><property name="userUuid" value="A.INSERT_UUID"/></include> as insertUuid,
+        A.INSERT_DATE as insertDate,
+        <include refid="Common.UserName"><property name="userUuid" value="A.UPDATE_UUID"/></include> as updateUuid,
+        A.UPDATE_DATE as updateDate
+        FROM CL_CLASSIFY_RECORDS_RESULT A, RC_AGGREGATION B
+        <where>
+            A.AGGREGATION_UUID = B.AGGREGATION_UUID
+            <if test="classUuid != null">
+                AND  A.CLASS_UUID = #{classUuid}
+            </if>
+        </where>
+    </select>
+    <select id="getClassItemList" resultType="Cl00301VO"  statementType="PREPARED">
+        SELECT
+        A.CLASSIFY_RECORDS_UUID as classifyRecordsUuid,
+        A.STATUS_UUID as statusUuid,
+        A.CLASS_UUID as classUuid,
+        B.ITEM_CODE as itemCode,
+        B.TITLE as title,
+        A.AGGREGATION_UUID as aggregationUuid,
+        A.ITEM_UUID as itemUuid,
+        B.TYPE_UUID as typeUuid,
+        A.DESCRIPTION as description,
+        A.NOTES as notes,
+        to_char(A.CLASSIFIED_DATE, 'YYYY-MM-DD') as classifiedDate,
+        (SELECT
+        SUBSTR(SYS_CONNECT_BY_PATH(TITLE,' >> '),4) path
+        FROM
+        RC_AGGREGATION C
+        WHERE B.AGGREGATION_UUID = C.AGGREGATION_UUID
+        START WITH PARENT_AGGREGATION_UUID IS NULL
+        CONNECT BY PRIOR AGGREGATION_UUID = PARENT_AGGREGATION_UUID) AS aggregationTree,
+        <include refid="Common.UserName"><property name="userUuid" value="A.INSERT_UUID"/></include> as insertUuid,
+        A.INSERT_DATE as insertDate,
+        <include refid="Common.UserName"><property name="userUuid" value="A.UPDATE_UUID"/></include> as updateUuid,
+        A.UPDATE_DATE as updateDate
+        FROM CL_CLASSIFY_RECORDS_RESULT A, RC_ITEM B
+        <where>
+            A.ITEM_UUID = B.ITEM_UUID
+            <if test="classUuid != null">
+                AND  A.CLASS_UUID = #{classUuid}
+            </if>
+        </where>
+    </select>
+    <select id="getSelectedItem" resultType="St00303VO" statementType="PREPARED">
+        SELECT
+            B.ITEM_UUID AS itemUuid,
+            B.TITLE AS itemTitle,
+            B.ITEM_CODE AS itemCode,
+            A.LEVEL_UUID as levelUuid,
+            A.AGGREGATION_UUID as aggregationUuid,
+            A.PUBLISHED_STATUS_UUID as publishedStatusUuid,
+            A.AGGREGATION_CODE as aggregationCode,
+            A.TITLE as title,
+            A.TYPE_UUID as typeUuid,
+            B.TYPE_UUID AS itemTypeUuid,
+            B.DESCRIPTION as description,
+            B.NOTES as notes,
+            B.AGGREGATION_UUID as parentAggregationUuid,
+            (
+            SELECT SYS_CONNECT_BY_PATH((
+                SELECT TITLE FROM RC_AGGREGATION WHERE AGGREGATION_UUID = T1.AGGREGATION_UUID), ' > ')
+                FROM
+                (
+                    SELECT CONNECT_BY_ROOT AGGREGATION_UUID AS ROOT, AGGREGATION_UUID, PARENT_AGGREGATION_UUID, TITLE
+                    FROM RC_AGGREGATION
+                    START WITH PARENT_AGGREGATION_UUID IS NULL
+                    CONNECT BY PRIOR AGGREGATION_UUID = PARENT_AGGREGATION_UUID
+                ) T1
+            WHERE AGGREGATION_UUID = A.AGGREGATION_UUID
+            AND ROWNUM = 1
+            START WITH T1.PARENT_AGGREGATION_UUID IS NULL
+            CONNECT BY PRIOR T1.AGGREGATION_UUID = T1.PARENT_AGGREGATION_UUID
+            ) AS catPath
+        FROM RC_AGGREGATION A,
+            (
+            SELECT
+              AGGREGATION_UUID, ITEM_UUID, TITLE, ITEM_CODE,DESCRIPTION,NOTES,TYPE_UUID
+            FROM
+              RC_ITEM
+            WHERE AGGREGATION_UUID = #{aggregationUuid}
+            UNION ALL
+            SELECT
+              AGGREGATION_UUID, ITEM_UUID, TITLE, ITEM_CODE,DESCRIPTION,NOTES,TYPE_UUID
+            FROM RC_ITEM
+            WHERE AGGREGATION_UUID IN
+            (
+                SELECT AGGREGATION_UUID
+                FROM RC_AGGREGATION
+                START WITH PARENT_AGGREGATION_UUID = #{aggregationUuid}
+                CONNECT BY PRIOR AGGREGATION_UUID = PARENT_AGGREGATION_UUID
+            )
+        ) B
+        WHERE A.AGGREGATION_UUID = B.AGGREGATION_UUID AND B.ITEM_UUID NOT IN
+        (   SELECT
+              ITEM_UUID
+            FROM
+              CL_CLASSIFY_RECORDS_RESULT
+            WHERE
+              CLASS_UUID = #{classUuid}
+        )
+        ORDER BY catPath
     </select>
 </mapper>

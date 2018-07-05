@@ -3,6 +3,7 @@ package rmsoft.ams.seoul.cl.cl003.dao;
 import io.onsemiro.core.mybatis.MyBatisMapper;
 import rmsoft.ams.seoul.cl.cl003.vo.Cl003;
 import rmsoft.ams.seoul.cl.cl003.vo.Cl00301VO;
+import rmsoft.ams.seoul.st.st003.vo.St00303VO;
 
 import java.util.List;
 
@@ -17,5 +18,7 @@ public interface Cl003Mapper extends MyBatisMapper
      * @param cl00301VO the cl 00301 vo
      * @return the classification scheme list
      */
-    List<Cl003> getClassificationSchemeList(Cl00301VO cl00301VO);
+    List<Cl003> getClassAggregationList(Cl00301VO cl00301VO);
+    List<Cl003> getClassItemList(Cl00301VO cl00301VO);
+    List<St00303VO> getSelectedItem(St00303VO st00303VO);
 }

@@ -15,6 +15,7 @@ public class St00201VO extends BaseVO {
 	private String containerUuid;
 	private String statusUuid;
 	private String containerName;
+	private String containerTreeName;
 	private String containerTypeUuid;
 	private String parentContainerUuid;
 	private String controlNumber;

@@ -201,6 +201,7 @@ var GridWrapper = function(p_id,p_rootContext) {
                 _this.dispatch("onAfterAddRow",_this,_this.makeObj,grid, itemIndex);
             }
         };
+        _this.gridView.onItemChecked  = function(grid,itemIndex,checked){ _this.dispatch("onItemChecked",grid, itemIndex, checked); };
         _this.gridView.onSelectionChanged = function (grid) { _this.dispatch("onSelectionChanged",grid); };
         _this.gridView.onContextMenuItemClicked = function (grid, label, index) { _this.dispatch("onContextMenuItemClicked",grid, label, index); };
         _this.gridView.onDataCellClicked = function(grid, index)  { _this.dispatch("onDataCellClicked",grid, index); };
@@ -746,6 +747,9 @@ GridWrapper.prototype.option = {
         stateBar : {
             visible : false
         },
+        checkBox :{
+            visible : false
+        },
         footer : {
             visible : false
         },
@@ -1075,6 +1079,7 @@ GridWrapper.prototype.itemClick = function(_event)
     })
 
 };
+GridWrapper.prototype.onItemChecked = function(_event) { this.bind("onItemChecked",_event); }
 GridWrapper.prototype.onDataCellClicked = function(_event) { this.bind("onDataCellClicked",_event); }
 GridWrapper.prototype.onEditChange = function(_event) { this.bind("onEditChange",_event); }
 GridWrapper.prototype.onDataCellDblClicked = function(_event) { this.bind("onDataCellDblClicked",_event); }
@@ -1611,6 +1616,11 @@ GridWrapper.prototype.getCheckedList = function()
 
     return checkList;
 }
+GridWrapper.prototype.getCheckedRows = function()
+{
+    var rowIndexList = this.gridView.getCheckedRows(false);
+    return rowIndexList;
+}
 /**
  * 줄 추가시 검증로직 세팅하는 함수
  * @param func
@@ -1897,6 +1907,8 @@ GridWrapper.prototype.setColumn = function(_column) { this.gridView.setColumn(_c
  * @returns {*}
  */
 GridWrapper.prototype.getRowCnt = function() { return this.dataProvider.getRows(); };
+
+GridWrapper.prototype.setCheckable = function(itemIndex, value){ this.gridView.setCheckable(itemIndex, value);}
 
 //셀렉트 된 행 데이터 가져오는 함수
 GridWrapper.prototype.getSelectedData = function () {

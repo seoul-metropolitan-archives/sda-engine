@@ -147,6 +147,22 @@
                     title: "Job Parameter"
                 }
             },
+            "ARRANGE_POPUP" :{
+                width: 1600,
+                height: 700,
+                iframe: {
+                    url: "/st/st003/st003-p01"
+                }
+
+            },
+            "CLASSIFY_POPUP" :{
+                width: 1600,
+                height: 700,
+                iframe: {
+                    url: "/cl/cl003/cl003-p01"
+                }
+
+            },
             "MOVE_AGGREGATION": {
                 width: 600,
                 height: 515,

@@ -11,6 +11,7 @@
             STATUS_UUID as statusUuid,
             PARENT_CONTAINER_UUID as parentContainerUuid,
             CONTAINER_NAME as containerName,
+             '[' || FC_AD_CODE_NM(CONTAINER_TYPE_UUID) || '] ' || CONTAINER_NAME as containerTreeName,
             ORDER_NO as orderNo,
             ORDER_KEY as orderKey,
             SUBSTR(SYS_CONNECT_BY_PATH(ROWNUM, '.'), 2 , length(SYS_CONNECT_BY_PATH(ROWNUM, '.'))) as orderKey1

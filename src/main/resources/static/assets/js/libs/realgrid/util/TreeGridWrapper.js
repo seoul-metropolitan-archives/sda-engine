@@ -24,7 +24,8 @@ var TreeGridWrapper = function(p_id,p_rootContext)
                 "visible": false
             },
             "header": option.header === undefined ? {"visible": false} : option.header,
-            "footer": option.footer === undefined ? {"visible": false} : option.footer
+            "footer": option.footer === undefined ? {"visible": false} : option.footer,
+            "showCheckBox" : option.checkBox === undefined ? false : option.checkBox,
         });
         console.log(option.header === undefined ? true : option.header);
 
@@ -218,3 +219,6 @@ TreeGridWrapper.prototype.getJsonRows = function () {
     return this.dataProvider.getJsonRows(-1, true, this.childrenProp, "icon");
 };
 
+TreeGridWrapper.prototype.checkChildren = function(itemIndex, checked, recursive, visibleOnly, checkableOnly, checkEvent) {
+    this.gridView.checkChildren(itemIndex, checked, recursive, visibleOnly, checkableOnly, checkEvent);
+}

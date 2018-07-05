@@ -30,7 +30,12 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     TOGGLE_FULLSCREEN: function (caller, act, data) {
         caller.frameView.toggleFullScreen();
     },
-
+    PAGE_ARRANGE : function (caller, act, data){
+        return false;
+    },
+    PAGE_CLASSIFY : function (caller, act, data){
+        return false;
+    },
     dispatch: function (caller, act, data) {
         var result = ACTIONS.exec(caller, act, data);
         if (result != "error") {

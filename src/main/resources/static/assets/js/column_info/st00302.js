@@ -1,4 +1,4 @@
-var st00301 =
+var st00302 =
     {
         column_info :
             [
@@ -27,19 +27,19 @@ var st00301 =
                     name: "statusUuid",
                     text: "Status",
                     editable: false,
+                    disable: true,
                     values: axboot.commonCodeFilter("CD138").codeArr,
                     labels: axboot.commonCodeFilter("CD138").nameArr,
                     dataType : "combo",
-                    disable: true,
                     required : false
                 },
                 {
                     sortNo: 2,
                     width: 100,
-                    name: "aggregationCode",
-                    text: "Aggregation Code",
-                    editable: false,
+                    name: "itemCode",
+                    text: "Item Code",
                     disable: true,
+                    editable: false,
                     dataType: "text",
                     required: false,
                 },
@@ -51,7 +51,7 @@ var st00301 =
                     disable: true,
                     editable: false,
                     dataType: "text",
-                    required: false,
+                    required: false
 
                 },
                 {
@@ -59,10 +59,10 @@ var st00301 =
                     width: 80,
                     name: "typeUuid",
                     text: "Type",
-                    disable: true,
-                    values: axboot.commonCodeFilter("CD127").codeArr,
-                    labels: axboot.commonCodeFilter("CD127").nameArr,
+                    values: axboot.commonCodeFilter("CD136").codeArr,
+                    labels: axboot.commonCodeFilter("CD136").nameArr,
                     dataType : "combo",
+                    disable: true,
                     editable : false
                 },
                 {
@@ -88,8 +88,8 @@ var st00301 =
                     name: "aggregationTree",
                     text: "Aggregation Tree",
                     width: 50,
-                    disable: true,
                     type: "text",
+                    disable: true,
                     editable: false
                 },
                 {
@@ -97,8 +97,8 @@ var st00301 =
                     name: "arrangedDate",
                     text: "Arranged Date",
                     width: 50,
-                    disable: true,
                     type: "text",
+                    disable: true,
                     editable: false
                 },
                 {
@@ -106,9 +106,9 @@ var st00301 =
                     name: "insertUuid",
                     text: "Created By",
                     width: 80,
-                    disable: true,
                     editable: false,
                     dataType: "text",
+                    disable: true,
                     required: false
                 },
                 {
@@ -116,9 +116,9 @@ var st00301 =
                     name: "insertDate",
                     text: "Date/Time Created",
                     width: 140,
-                    disable: true,
                     editable: false,
                     dataType: "timestamp",
+                    disable: true,
                     required: false
                 },
                 {
@@ -126,9 +126,9 @@ var st00301 =
                     name: "updateUuid",
                     text: "Modified By",
                     width: 80,
-                    disable: true,
                     editable: false,
                     dataType: "text",
+                    disable: true,
                     required: false
                 },
                 {
@@ -136,9 +136,9 @@ var st00301 =
                     name: "updateDate",
                     text: "Date/Time Modified",
                     width: 140,
-                    disable: true,
                     editable: false,
                     dataType: "timestamp",
+                    disable: true,
                     required: false
                 },
                 {
@@ -149,6 +149,7 @@ var st00301 =
                     editable: false,
                     dataType: "code",
                     required: false,
+                    disable: true,
                     visible: false
                 },
                 {

@@ -16,9 +16,12 @@ import java.sql.Timestamp;
 public class Cl00301VO extends BaseVO
 {
     private String classifiedRecordsUuid ;
-    private String statusUuid;
     private String classUuid;
-    private String aggregationId;
+    private String statusUuid;
+    private String title;
+    private String aggregationTree;
+    private String classifiedDate;
+    private String aggregationUuid;
     private String itemUuid;
-    private Timestamp classifiedDate;
+    private String changeStatus;
 }

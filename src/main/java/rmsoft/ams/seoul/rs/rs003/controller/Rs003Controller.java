@@ -40,7 +40,7 @@ public class Rs003Controller extends BaseController {
         return apiResponse;
     }
 
-    /*@PutMapping("/03/save")
+    @PutMapping("/03/save")
     @PostMapping
     public ApiResponse updateRsRecordScheduleList(@RequestBody List<Rs00301VO> requestParams) {
         ApiResponse apiResponse = rs003Service.updateRsRecordScheduleList(requestParams);
@@ -48,5 +48,5 @@ public class Rs003Controller extends BaseController {
             throw new ApiException(ApiStatus.SYSTEM_ERROR, apiResponse.getMessage());
         }
         return apiResponse;
-    }*/
+    }
 }

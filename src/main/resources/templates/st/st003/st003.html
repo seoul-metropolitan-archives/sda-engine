@@ -23,30 +23,8 @@
                     </ul>
                 </div>
                 <div style="height:100%; width:100%" class="div_tablerow">
-
                     <div style="display:table; height:100%; width:16%; float:left" class="bdr">
                         <th:block layout:insert="~{/fragments/page-buttons :: dot('Container')}"/>
-                        <!--<ul class="bdb bdt div_tablerow bgf7" style="height:30px;">-->
-                        <!--</ul>-->
-
-                        <!--                      <ul class="bdb div_tablerow" style="height:29px;">
-                                                <li style="width:100%; text-align:left;">
-                                                    <div style="float: left; width: 100%;padding-top: 3px" class="pdl_5">Classification Scheme</div>
-                                                </li>
-                                            </ul>
-
-                                            <ul class="bdb div_tablerow" style="height:25px;">
-                                                <li style="width:100%; text-align:left;">
-                                                    <div style="float: right; width: 100%;">
-                                                        <div class="src_box3" style="background-color: #fffdd6" >
-                                                        <input type=text style="background-color: #fffdd6">
-                                                        <a href="#">
-                                                        <img src="http://localhost/@AMS/images/search_normal.png" alt="search"></a>
-                                                        </div>
-                                                   </div>
-                                                </li>
-                                            </ul>-->
-
                         <ul class="bdb" style="height:25px;width:100%; float:left;">
                             <li style="width:80%">
                                 <input type="text" style="width:100%; margin-left: 0.5%;">
@@ -61,43 +39,44 @@
                             <li><a href="#" class="open_close" id="rg_tree_allclose">Collapse All</a></li>
                         </ul>
                         <div style="height:100%; width:100%" class="div_tablerow bdb">
-                            <div id="realgridT1" style="width:100%; height:100%"></div>
+                            <div id="realgrid01" style="width:100%; height:100%"></div>
                         </div>
                     </div><!--오늘쪽 내용에서 좌측 트리부분-->
 
                     <div style="display:table; height:50%; width:84%; float:left">
-                        <ul class="bdb bdt div_tablerow bgf7" style="height:30px;">
+                        <ul class="bdb div_tablerow bgf7" style="height:30px;">
                             <th:block layout:insert="~{/fragments/page-buttons :: dot('Aggregation')}"/>
-                            <th:block layout:insert="~{/fragments/page-buttons :: inquiry-and-and-confirm-and-cancel}"/>
+                            <th:block layout:insert="~{/fragments/page-buttons :: arrange-and-confirm-and-cancel-and-save-and-inquiry}"/>
                         </ul>
                         <div class="div_tablerow" style="height:50px; width: 100%">
                             <dl>
                                 <dt class="pdl_5">Status</dt>
                                 <dd>
-                                    <select style="width:135px;">
-                                        <option>&nbsp;</option>
-                                        <option>Status1</option>
-                                        <option>Status2</option>
-                                        <option>Status3</option>
+                                    <select data-ax-path="statusUuid" style="width:135px;">
+                                        <option value="" ></option>
+                                        <option th:each="item : ${statusUuid}"
+                                                th:value="${item.codeDetailUUID}"
+                                                th:text="${item.codeName}"/>
                                     </select>
                                 </dd>
-                                <dt class="w130">Aggregation Code</dt>
+                                <dt class="w150">Container Name</dt>
                                 <dd>
-                                    <input type=text style="width:135px">
+                                    <input type=text style="width:135px" data-ax-path="containerName">
                                 </dd>
+                                <th:block layout:insert="~{/fragments/page-buttons :: searchInputYellow ('Aggregation Code','aggregationCode')}"/>
                                 <dt>Title</dt>
                                 <dd>
-                                    <input type=text style="width:135px">
+                                    <input type=text style="width:135px" data-ax-path="title">
                                 </dd>
                             </dl>
                             <dl>
                                 <dt class="pdl_5">Type</dt>
                                 <dd>
-                                    <select style="width:135px;">
-                                        <option>&nbsp;</option>
-                                        <option>Status1</option>
-                                        <option>Status2</option>
-                                        <option>Status3</option>
+                                    <select data-ax-path="aggregationTypeUuid" style="width:135px;">
+                                        <option value="" ></option>
+                                        <option th:each="item : ${aggregationTypeUuid}"
+                                                th:value="${item.codeDetailUUID}"
+                                                th:text="${item.codeName}"/>
                                     </select>
                                 </dd>
                                 <dt class="w130">Arranged Date</dt>
@@ -110,11 +89,11 @@
                         </div>
                         <ul class="bdt div_tablerow" style="height:25px;">
                             <li style="width:100%; text-align:left;">
-                                <input type=text class="yeongye" value=" [철] 상반기 복지카드 발급대상자(강서구 마곡동)" readonly style="width: 318px">
+                                <input type=text class="yeongye" data-ax-path="aggInContainerName" readonly style="width: 318px">
                             </li>
                         </ul>
                         <div style="height:100%; width:100%" class="div_tablerow">
-                            <div id="realgrid" style="width:100%; height:100%;" class="bdt"></div>
+                            <div id="realgrid02" style="width:100%; height:100%;" class="bdt"></div>
                         </div>
                     </div>
 
@@ -129,30 +108,30 @@
                             <dl>
                                 <dt class="pdl_5">Status</dt>
                                 <dd>
-                                    <select style="width:135px;">
-                                        <option>&nbsp;</option>
-                                        <option>Status1</option>
-                                        <option>Status2</option>
-                                        <option>Status3</option>
+                                    <select data-ax-path="itemStatusUuid" style="width:135px;">
+                                        <option value="" ></option>
+                                        <option th:each="item : ${statusUuid}"
+                                                th:value="${item.codeDetailUUID}"
+                                                th:text="${item.codeName}"/>
                                     </select>
                                 </dd>
                                 <dt class="w130">Item Code</dt>
                                 <dd>
-                                    <input type=text style="width:135px">
+                                    <input type=text style="width:135px" data-ax-path="itemCode">
                                 </dd>
                                 <dt>Title</dt>
                                 <dd>
-                                    <input type=text style="width:135px">
+                                    <input type=text style="width:135px" data-ax-path="itemTitle">
                                 </dd>
                             </dl>
                             <dl>
                                 <dt class="pdl_5">Type</dt>
                                 <dd>
-                                    <select style="width:135px;">
-                                        <option>&nbsp;</option>
-                                        <option>Status1</option>
-                                        <option>Status2</option>
-                                        <option>Status3</option>
+                                    <select data-ax-path="itemTypeUuid" style="width:135px;">
+                                        <option value="" ></option>
+                                        <option th:each="item : ${itemTypeUuid}"
+                                                th:value="${item.codeDetailUUID}"
+                                                th:text="${item.codeName}"/>
                                     </select>
                                 </dd>
                                 <dt class="w130">Arranged Date</dt>
@@ -165,12 +144,12 @@
                         </div>
                         <ul class="bdt div_tablerow" style="height:25px;">
                             <li style="width:100%; text-align:left;">
-                                <input type=text class="yeongye" value=" [철] 상반기 복지카드 발급대상자(강서구 마곡동)" readonly style="width: 318px">
-                                <input type=text class="yeongye" value=" [Series] 2015년 1월 복지카드 발급대상자" readonly style="width: 353px; margin-left: -2px">
+                                <input type=text class="yeongye" data-ax-path="aggInContainerName" readonly style="width: 318px">
+                                <input type=text class="yeongye" data-ax-path="itInAggregationName" readonly style="width: 353px; margin-left: -2px">
                             </li>
                         </ul>
                         <div style="height:100%; width:100%" class="div_tablerow bdb">
-                            <div id="realgrid2" style="width:100%; height:100%" class="bdt"></div>
+                            <div id="realgrid03" style="width:100%; height:100%" class="bdt"></div>
                         </div>
                     </div>
 

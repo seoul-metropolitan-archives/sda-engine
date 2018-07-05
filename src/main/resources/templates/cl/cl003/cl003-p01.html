@@ -1,0 +1,149 @@
+<!DOCTYPE HTML>
+<!--
+  ~ Copyright (c) 2017. RMSoft Co.,Ltd. All rights reserved
+  -->
+
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout/modal}">
+
+<!-- ===== [ script ] ===== -->
+<script layout:fragment="script" type="text/javascript" th:src="@{/assets/js/cl/cl003/cl003-p01.js}"></script>
+<!-- ===== [ script ] _END_ ===== -->
+
+<!-- ===== [ base-content ] ===== -->
+<div layout:fragment="base-content" class="ax-base-content">
+    <div class="cssBody" style="top:80px">
+        <div class="contents_wrap">
+            <div style="height:100%; width:100%" class="div_tablerow">
+                <div class="layer_pop_tree">
+                    <div style="height:30px; line-height: 28px" class="bgf7 bdbd">
+                        <li style="width:32%; text-align:left;">
+                            <span style="margin-left: 10px" class="sltCont"></span>
+                        </li>
+                    </div>
+                    <ul style="height:30px; width: 100%; float: left; padding-top:4px; padding-right: 0.1%" class="bdb">
+                        <li style="width:20%; height: 100%; float: left; line-height: 22px" class="pdl_5">
+                            Class
+                        </li>
+                        <li style="width:75.9%; height: 100%; float: left;">
+                            <div class="src_box3" style="background-color: #fffdd6" >
+                                <input type=text style="background-color: #fffdd6" data-ax-path="classificationCode">
+                                <a href="#">
+                                    <img th:src="@{/assets/images/ams/search_normal.png}" alt="search"></a>
+                            </div>
+                        </li>
+                    </ul>
+
+                    <ul class="bdb" style="height:25px;width:100%; float:left;padding-top:1px;">
+                        <li style="width:80%">
+                            <input type="text" style="width:100%; margin-left: 0.5%;">
+                        </li>
+                        <li style="width:20%">
+                            <button class="btn_small" style="margin-right: 0">Find</button>
+                        </li>
+                    </ul>
+
+                    <ul class="bdb" style="height:30px;width:100%; float:left; text-align: center; line-height: 28px">
+                        <li class="bdr" style="float: left; width: 50%; height: 100%">
+                            <a href="#" class="open_close" id="rg_tree2_allopen">Expand All</a>
+                        </li>
+                        <li style="float: left; width: 50%; height: 100%">
+                            <a href="#" class="open_close" id="rg_tree2_allclose">Collapse All</a>
+                        </li>
+                    </ul>
+
+                    <div style="height:280px; width:100%;float:left;" class="bdb">
+                        <div id="realgrid01" style="width: 100%; height: 100%;" ></div>
+                    </div>
+                </div>
+
+                <div class="layer_pop_grid bdl">
+                    <div style="height:30px; line-height: 28px" class="bgf7 bdbd">
+                        <ul>
+                            <th:block layout:insert="~{/fragments/page-buttons :: dot('item')}"/>
+                            <li style="text-align:right; width:66%; float:right; padding-right:5px;">
+                                <button class="btn_co" style="line-height: 20px">
+                                    <span class="btn_icon_co">&nbsp;</span>
+                                    <span class="btn_main_txt">Find</span>
+                                </button>
+                                <button class="btn_co btn_arrange" style="line-height: 20px">
+                                    <span class="btn_icon_co">&nbsp;</span>
+                                    <span class="btn_main_txt01">Classify</span>
+                                </button>
+                                <button class="btn_co close_popup" style="line-height: 20px">
+                                    <span class="btn_icon_co">&nbsp;</span>
+                                    <span class="btn_main_txt">Close</span>
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                    <div style="width:100%; height:26px;">
+                        <dl>
+                            <dt class="pdl_5">Item Code</dt>
+                            <dd>
+                                <input type=text style="width:135px">
+                            </dd>
+                            <dt>Title</dt>
+                            <dd>
+                                <input type=text style="width:135px">
+                            </dd>
+                            <dt>Type</dt>
+                            <dd>
+                                <select style="width:135px;">
+                                    <option>&nbsp;</option>
+                                    <option>Status1</option>
+                                    <option>Status2</option>
+                                    <option>Status3</option>
+                                </select>
+                            </dd>
+
+                        </dl>
+                    </div>
+
+                    <div style="height:336px; width:100%;" class="bdt bdb">
+                        <div id="realgrid02" style="width: 100%; height: 100%;"></div>
+                    </div>
+
+                </div>
+                <div class="submit_updown">
+                    <div class="submit_arr2 btn_exclude">
+                        <a href="#">
+                            <img alt="send" th:src="@{/assets/images/ams/btn_arr4.png}">
+                        </a>
+                    </div>
+                    &nbsp;
+                    <div class="submit_arr2 btn_include">
+                        <a href="#">
+                            <img alt="bring" th:src="@{/assets/images/ams/btn_arr3.png}">
+                        </a>
+                    </div>
+                </div>
+
+                <div class="layer_pop_grid2">
+                    <div style="height:30px; line-height: 28px" class="bgf7 bdt">
+                        <th:block layout:insert="~{/fragments/page-buttons :: dot('Selected List')}"/>
+                    </div>
+                    <div style="height:335px; width:100%;" class="bdt bdb">
+                        <div id="realgrid03" style="width: 100%; height: 100%;"></div>
+                    </div>
+                </div>
+
+
+
+                <div class="footradius">
+                    <button class="btn_co btn_arrange">
+                        <span class="btn_icon_co">&nbsp;</span>
+                        <span class="btn_main_txt01">Classify</span>
+                    </button>
+                    <button class="btn_co close_popup">
+                        <span class="btn_icon_co">&nbsp;</span>
+                        <span class="btn_main_txt">Close</span>
+                    </button>
+                </div>
+            </div>
+        </div><!--오른쪽 내용영역 전체 e -->
+    </div>
+</div>
+<!-- ===== [ base-content ] _END_ ===== -->
+</html>

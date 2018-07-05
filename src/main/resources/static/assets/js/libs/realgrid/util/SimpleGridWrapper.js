@@ -75,7 +75,8 @@ SimpleGridWrapper.prototype.defaultBind = function()
 
         var index = grid.getCurrent();
         var editable = grid.getColumnProperty(index.fieldName,"editable");
-        if(false == editable)
+        var disable = grid.getCellStyle(index.dataRow,index.fieldName) == "disable";
+        if(false == editable || disable)
             return ;
 
         var popupData = gridWrapper.getPopupData(column.fieldName);

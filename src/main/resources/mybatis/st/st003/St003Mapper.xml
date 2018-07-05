@@ -3,98 +3,179 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="rmsoft.ams.seoul..St003Mapper">
-
-    <select id="findAll" resultType="st003" parameterType="st003" statementType="PREPARED">
+<mapper namespace="rmsoft.ams.seoul.st.st003.dao.St003Mapper">
+    <select id="getContainerAggregationList" resultType="St00301VO"  statementType="PREPARED">
         SELECT
-            ARRANGE_RECORDS_RESULT_UUID AS arrangeRecordsResultUuid,
-            CONTAINER_UUID AS containerUuid,
-            AGGREGATION_UUID AS aggregationUuid,
-            ITEM_UUID AS itemUuid,
-            STATUS_UUID AS statusUuid,
-            ARRANGED_DATE AS arrangedDate,
-            DESCRIPTION AS description,
-            NOTES AS notes,
-            UPDATE_DATE AS updateDate,
-            INSERT_UUID AS insertUuid,
-            INSERT_DATE AS insertDate,
-            UPDATE_UUID AS updateUuid
-        FROM
-            ST_ARRANGE_RECORDS_RESULT
+            A.ARRANGE_RECORDS_RESULT_UUID as arrangeRecordsResultUuid,
+            A.STATUS_UUID as statusUuid,
+            A.CONTAINER_UUID as containerUuid,
+            B.AGGREGATION_CODE as aggregationCode,
+            A.AGGREGATION_UUID as aggregationUuid,
+            A.ITEM_UUID as itemUuid,
+            B.TITLE as title,
+            B.TYPE_UUID as typeUuid,
+            to_char(A.ARRANGED_DATE, 'YYYY-MM-DD') as arrangedDate,
+            A.DESCRIPTION as description,
+            A.NOTES as notes,
+            (SELECT
+                SUBSTR(SYS_CONNECT_BY_PATH(TITLE,' >> '),4) path
+             FROM
+                RC_AGGREGATION C
+             WHERE A.AGGREGATION_UUID = C.AGGREGATION_UUID
+             START WITH PARENT_AGGREGATION_UUID IS NULL
+             CONNECT BY PRIOR AGGREGATION_UUID = PARENT_AGGREGATION_UUID) AS aggregationTree,
+            <include refid="Common.UserName"><property name="userUuid" value="A.INSERT_UUID"/></include> as insertUuid,
+            A.INSERT_DATE as insertDate,
+            <include refid="Common.UserName"><property name="userUuid" value="A.UPDATE_UUID"/></include> as updateUuid,
+            A.UPDATE_DATE as updateDate
+            FROM ST_ARRANGE_RECORDS_RESULT A, RC_AGGREGATION B
+            <where>
+                A.AGGREGATION_UUID = B.AGGREGATION_UUID
+                <if test="containerUuid != null">
+                    AND  A.CONTAINER_UUID = #{containerUuid}
+                </if>
+                <if test="arrangedFromDate != null">
+                    AND A.ARRANGED_DATE <![CDATA[>=]]> TO_DATE(#{arrangedFromDate},'yyyy-mm-dd')
+                </if>
+                <if test="arrangedToDate != null">
+                    AND A.ARRANGED_DATE <![CDATA[<]]> TO_DATE(#{arrangedToDate},'yyyy-mm-dd')+1
+                </if>
+                <if test="aggregationCode != null">
+                    AND  B.AGGREGATION_CODE = #{aggregationCode}
+                </if>
+                <if test="statusUuid != null">
+                    AND  A.STATUS_UUID = #{statusUuid}
+                </if>
+                <if test="title != null">
+                    AND  B.TITLE = #{title}
+                </if>
+                <if test="typeUuid != null">
+                    AND  B.TYPEUUID = #{typeUuid}
+                </if>
+            </where>
     </select>
-
-    <select id="findOne" resultType="st003" parameterType="st003" statementType="PREPARED">
+    <select id="getContainerItemList" resultType="St00301VO"  statementType="PREPARED">
         SELECT
-            ARRANGE_RECORDS_RESULT_UUID AS arrangeRecordsResultUuid,
-            CONTAINER_UUID AS containerUuid,
-            AGGREGATION_UUID AS aggregationUuid,
-            ITEM_UUID AS itemUuid,
-            STATUS_UUID AS statusUuid,
-            ARRANGED_DATE AS arrangedDate,
-            DESCRIPTION AS description,
-            NOTES AS notes,
-            UPDATE_DATE AS updateDate,
-            INSERT_UUID AS insertUuid,
-            INSERT_DATE AS insertDate,
-            UPDATE_UUID AS updateUuid
+        A.ARRANGE_RECORDS_RESULT_UUID as arrangeRecordsResultUuid,
+        A.STATUS_UUID as statusUuid,
+        A.CONTAINER_UUID as containerUuid,
+        B.ITEM_CODE as itemCode,
+        B.TITLE as title,
+        A.AGGREGATION_UUID as aggregationUuid,
+        A.ITEM_UUID as itemUuid,
+        B.TYPE_UUID as typeUuid,
+        to_char(A.ARRANGED_DATE, 'YYYY-MM-DD') as arrangedDate,
+        A.DESCRIPTION as description,
+        A.NOTES as notes,
+        (SELECT
+        SUBSTR(SYS_CONNECT_BY_PATH(TITLE,' >> '),4) path
         FROM
-            ST_ARRANGE_RECORDS_RESULT
-        WHERE
-            ARRANGE_RECORDS_RESULT_UUID = #{arrangeRecordsResultUuid}
+        RC_AGGREGATION C
+        WHERE B.AGGREGATION_UUID = C.AGGREGATION_UUID
+        START WITH PARENT_AGGREGATION_UUID IS NULL
+        CONNECT BY PRIOR AGGREGATION_UUID = PARENT_AGGREGATION_UUID) AS aggregationTree,
+        <include refid="Common.UserName"><property name="userUuid" value="A.INSERT_UUID"/></include> as insertUuid,
+        A.INSERT_DATE as insertDate,
+        <include refid="Common.UserName"><property name="userUuid" value="A.UPDATE_UUID"/></include> as updateUuid,
+        A.UPDATE_DATE as updateDate
+        FROM ST_ARRANGE_RECORDS_RESULT A, RC_ITEM B
+        <where>
+            A.ITEM_UUID = B.ITEM_UUID
+            <if test="containerUuid != null">
+                AND  A.CONTAINER_UUID = #{containerUuid}
+            </if>
+            <if test="arrangedFromDate != null">
+                AND A.ARRANGED_DATE <![CDATA[>=]]> TO_DATE(#{arrangedFromDate},'yyyy-mm-dd')
+            </if>
+            <if test="arrangedToDate != null">
+                AND A.ARRANGED_DATE <![CDATA[<]]> TO_DATE(#{arrangedToDate},'yyyy-mm-dd')+1
+            </if>
+            <if test="itemCode != null">
+                AND  B.ITEM_CODE = #{itemCode}
+            </if>
+            <if test="statusUuid != null">
+                AND  A.STATUS_UUID = #{statusUuid}
+            </if>
+            <if test="title != null">
+                AND  B.TITLE = #{title}
+            </if>
+            <if test="typeUuid != null">
+                AND  B.TYPEUUID = #{typeUuid}
+            </if>
+        </where>
     </select>
-
-   <update id="delete" parameterType="st003" statementType="PREPARED">
-        DELETE FROM
-            ST_ARRANGE_RECORDS_RESULT
-        WHERE
-            ARRANGE_RECORDS_RESULT_UUID = #{arrangeRecordsResultUuid}
-    </update>
-
-   <update id="update" parameterType="st003" statementType="PREPARED">
-        UPDATE ST_ARRANGE_RECORDS_RESULT
-        SET
-            CONTAINER_UUID = #{containerUuid},
-            AGGREGATION_UUID = #{aggregationUuid},
-            ITEM_UUID = #{itemUuid},
-            STATUS_UUID = #{statusUuid},
-            ARRANGED_DATE = #{arrangedDate},
-            DESCRIPTION = #{description},
-            NOTES = #{notes},
-            UPDATE_DATE = #{updateDate},
-            INSERT_UUID = #{insertUuid},
-            INSERT_DATE = #{insertDate},
-            UPDATE_UUID = #{updateUuid}
-        WHERE
-            ARRANGE_RECORDS_RESULT_UUID = #{arrangeRecordsResultUuid}
-    </update>
-
-   <update id="insert" parameterType="st003" statementType="PREPARED">
-        INSERT INTO ST_ARRANGE_RECORDS_RESULT (
-            ARRANGE_RECORDS_RESULT_UUID,
-            CONTAINER_UUID,
-            AGGREGATION_UUID,
-            ITEM_UUID,
-            STATUS_UUID,
-            ARRANGED_DATE,
-            DESCRIPTION,
-            NOTES,
-            UPDATE_DATE,
-            INSERT_UUID,
-            INSERT_DATE,
-            UPDATE_UUID
-        ) VALUES (
-            #{arrangeRecordsResultUuid},
-            #{containerUuid},
-            #{aggregationUuid},
-            #{itemUuid},
-            #{statusUuid},
-            #{arrangedDate},
-            #{description},
-            #{notes},
-            #{updateDate},
-            #{insertUuid},
-            #{insertDate},
-            #{updateUuid}
-        )
-    </update>
+    <select id="getAggregationHierarchyList" resultType="St00302VO"  statementType="PREPARED">
+        SELECT
+          AGGREGATION_UUID as aggregationUuid,
+          PUBLISHED_STATUS_UUID as publishedStatusUuid,
+          AGGREGATION_CODE as aggregationCode,
+          TITLE as title,
+          TYPE_UUID as typeUuid,
+          PARENT_AGGREGATION_UUID as parentAggregationUuid,
+          LEVEL_UUID as levelUuid,
+          SUBSTR(SYS_CONNECT_BY_PATH(ROWNUM, '.'), 2 , length(SYS_CONNECT_BY_PATH(ROWNUM, '.'))) as orderKey1
+        FROM
+            RC_AGGREGATION
+        START WITH PARENT_AGGREGATION_UUID IS NULL
+        CONNECT BY PRIOR AGGREGATION_UUID = PARENT_AGGREGATION_UUID
+    </select>
+    <select id="getSelectedItem" resultType="St00303VO" statementType="PREPARED">
+	  SELECT
+        B.ITEM_UUID AS itemUuid,
+        B.TITLE AS itemTitle,
+        B.ITEM_CODE AS itemCode,
+        A.LEVEL_UUID as levelUuid,
+        A.AGGREGATION_UUID as aggregationUuid,
+        A.PUBLISHED_STATUS_UUID as publishedStatusUuid,
+        A.AGGREGATION_CODE as aggregationCode,
+        A.TITLE as title,
+        A.TYPE_UUID as typeUuid,
+        B.TYPE_UUID AS itemTypeUuid,
+        B.DESCRIPTION as description,
+        B.NOTES as notes,
+        B.AGGREGATION_UUID as parentAggregationUuid,
+        (
+            SELECT SYS_CONNECT_BY_PATH((
+                SELECT TITLE FROM RC_AGGREGATION WHERE AGGREGATION_UUID = T1.AGGREGATION_UUID), ' > ')
+                FROM
+                (
+                    SELECT CONNECT_BY_ROOT AGGREGATION_UUID AS ROOT, AGGREGATION_UUID, PARENT_AGGREGATION_UUID, TITLE
+                    FROM RC_AGGREGATION
+                    START WITH PARENT_AGGREGATION_UUID IS NULL
+                    CONNECT BY PRIOR AGGREGATION_UUID = PARENT_AGGREGATION_UUID
+                ) T1
+                WHERE AGGREGATION_UUID = A.AGGREGATION_UUID
+                AND ROWNUM = 1
+                START WITH T1.PARENT_AGGREGATION_UUID IS NULL
+                CONNECT BY PRIOR T1.AGGREGATION_UUID = T1.PARENT_AGGREGATION_UUID
+        ) AS catPath
+        FROM RC_AGGREGATION A,
+        (
+            SELECT
+              AGGREGATION_UUID, ITEM_UUID, TITLE, ITEM_CODE,DESCRIPTION,NOTES,TYPE_UUID
+            FROM
+              RC_ITEM
+            WHERE AGGREGATION_UUID = #{aggregationUuid}
+            UNION ALL
+            SELECT
+                AGGREGATION_UUID, ITEM_UUID, TITLE, ITEM_CODE,DESCRIPTION,NOTES,TYPE_UUID
+            FROM RC_ITEM
+            WHERE AGGREGATION_UUID IN
+            (
+                SELECT AGGREGATION_UUID
+                FROM RC_AGGREGATION
+                START WITH PARENT_AGGREGATION_UUID = #{aggregationUuid}
+                CONNECT BY PRIOR AGGREGATION_UUID = PARENT_AGGREGATION_UUID
+            )
+        ) B
+        WHERE A.AGGREGATION_UUID = B.AGGREGATION_UUID AND B.ITEM_UUID NOT IN
+            (SELECT
+                    ITEM_UUID
+                FROM
+                    ST_ARRANGE_RECORDS_RESULT
+                WHERE
+                    CONTAINER_UUID = #{containerUuid}
+            )
+        ORDER BY catPath
+     </select>
 </mapper>
