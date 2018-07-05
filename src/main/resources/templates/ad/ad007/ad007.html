@@ -21,7 +21,7 @@
                     </div>
                     <div class="bdb div_tablerow searchFields">
                         <dl>
-                            <dt class="mgl_5">Status</dt>
+                            <dt class="mgl_5 w130">Status</dt>
                             <dd>
                                 <select data-ax-path="statusUuid" style="width:135px;">
                                     <option value=""></option>
@@ -32,26 +32,35 @@
                             </dd>
                             <dt>Entity Type</dt>
                             <dd>
-                                <select data-ax-path="entityType" style="width:135px;" id="serviceList">
+                                <select data-ax-path="entityType" style="width:135px;" id="entityType">
                                     <option value=""></option>
                                     <option th:each="item : ${entityTypeList}"
-                                            th:value="${item.codeDetailUUID}"
-                                            th:text="${item.codeName}"/>
+                                            th:value="${item.code}"
+                                            th:text="${item.codeName}"
+                                            th:data-attr01="${item.attribute01}"/>
                                 </select>
                             </dd>
                             <dt>Column Code</dt>
                             <dd>
-                                <input type=text style="width:135px" data-ax-path="columnCode">
+                                <input type=text style="width:190px" data-ax-path="columnCode" disabled>
+                            </dd>
+                        </dl>
+                        <dl>
+                            <dt class="mgl_5 w130">Additional Column</dt>
+                            <dd>
+                                <select data-ax-path="additionalColumn" style="width:135px;" id="additionalColumn">
+                                    <option value=""></option>
+                                    <option th:each="item : ${addColumnList}"
+                                            th:value="${item.codeName}"
+                                            th:text="${item.codeName}"/>
+                                </select>
                             </dd>
                             <dd class="w_auto">
                                 <div class="rdo_box">
                                     <span class="rdo_box_title">Use</span>
-                                    <label>
-                                        <input type="radio" name="useYN" data-ax-path="useYN" class="no_border" value="Y">Yes</label>
-                                    <label>
-                                        <input type="radio" name="useYN" data-ax-path="useYN" class="no_border" value="N">No</label>
-                                    <label>
-                                        <input type="radio" name="useYN" data-ax-path="useYN" class="no_border"  value="" checked>All</label>
+                                    <label><input type="radio" name="useYN" data-ax-path="useYN" class="no_border" value="Y">Yes</label>
+                                    <label><input type="radio" name="useYN" data-ax-path="useYN" class="no_border" value="N">No</label>
+                                    <label><input type="radio" name="useYN" data-ax-path="useYN" class="no_border" value="" checked>All</label>
                                 </div>
                             </dd>
                         </dl>
@@ -61,7 +70,7 @@
 
                         <div style="height:100%; width:100%" class="div_table">
                             <ul class="bdb bdt div_tablerow" style="height:30px;">
-                                <th:block layout:insert="~{/fragments/page-buttons :: dot('Message')}"/>
+                                <th:block layout:insert="~{/fragments/page-buttons :: dot('Additional Contextual Metadata')}"/>
                                 <th:block layout:insert="~{/fragments/page-buttons :: add-and-delete}"/>
                             </ul>
                             <div style="height:100%; width:100%" class="div_tablerow bdb">

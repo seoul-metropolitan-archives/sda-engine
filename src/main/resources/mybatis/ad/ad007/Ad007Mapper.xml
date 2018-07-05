@@ -23,6 +23,7 @@
             DESCRIPTION AS description,
             NOTES AS notes,
             USE_YN AS useYN,
+            FC_AD_ADD_METADATA_CNT(ENTITY_TYPE, METADATA_ENTITY_TYPE, COLUMN_CODE, COLUMN_VALUE, ADDITIONAL_COLUMN) AS metaCnt,
         ]]>
         <include refid="Common.UserName">
             <property name="userUuid" value="INSERT_UUID"/>
@@ -32,11 +33,11 @@
         <![CDATA[
             INSERT_DATE AS insertDate,
         ]]>
+
         <include refid="Common.UserName">
             <property name="userUuid" value="UPDATE_UUID"/>
         </include>
         AS updateUuid,
-
         <![CDATA[
             UPDATE_DATE AS  updateDate
         FROM
@@ -51,6 +52,16 @@
         <if test="null != entityType and '' != entityType">
             <![CDATA[
             AND ENTITY_TYPE = #{entityType}
+          ]]>
+        </if>
+        <if test="null != columnCode and '' != columnCode">
+            <![CDATA[
+            AND COLUMN_CODE = #{columnCode}
+          ]]>
+        </if>
+        <if test="null != additionalColumn and '' != additionalColumn">
+            <![CDATA[
+            AND ADDITIONAL_COLUMN = #{additionalColumn}
           ]]>
         </if>
         <if test="null != useYN and '' != useYN">

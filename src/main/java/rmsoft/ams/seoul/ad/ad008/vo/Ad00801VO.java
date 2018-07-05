@@ -11,20 +11,26 @@ public class Ad00801VO extends BaseVO {
 
 	private String auditUuid;
 
-	private String entityTypeUuid;
+	private String entityType;
 
-	private String entityColumnUuid;
+	private String entityTypeName;
 
-	private String programUuid;
+	private String entityColumn;
+
+	private String programId;
 
 	private String programName;
 
-	private String functionUuid;
+	private String function;
 
-	private String primaryKeyUuid;
+	private String primaryKey;
 
 	private String previousValue;
 
 	private String newValue;
+
+	private String modifyDateFrom;
+
+	private String modifyDateTo;
 
 }

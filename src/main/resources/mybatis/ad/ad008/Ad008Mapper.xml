@@ -8,17 +8,18 @@
     <select id="searchList" resultType="Ad00801VO" parameterType="Ad00801VO" statementType="PREPARED">
         <![CDATA[
         SELECT
-            AUDIT_UUID AS auditUuid,
-            ENTITY_TYPE_UUID AS entityTypeUuid,
-            ENTITY_COLUMN_UUID AS entityColumnUuid,
-            PROGRAM_UUID AS programUuid,
-            PROGRAM_NAME AS programName,
-            FUNCTION_UUID AS functionUuid,
-            PRIMARY_KEY_UUID AS primaryKeyUuid,
-            PREVIOUS_VALUE AS previousValue,
-            NEW_VALUE AS newValue,
-            DESCRIPTION AS description,
-            NOTES AS notes,
+            T1.AUDIT_UUID AS auditUuid,
+            T1.ENTITY_TYPE AS entityType,
+            (SELECT ENTITY_TYPE_NAME FROM AD_ENTITY_TYPE WHERE ENTITY_TYPE_CODE = T1.ENTITY_TYPE) AS entityTypeName,
+            T1.ENTITY_COLUMN AS entityColumn,
+            T1.PROGRAM_ID AS programId,
+            T1.PROGRAM_NAME AS programName,
+            T1.FUNCTION AS "function",
+            T2.TERM_NAME AS primaryKey,
+            T1.PREVIOUS_VALUE AS previousValue,
+            T1.NEW_VALUE AS newValue,
+            T1.DESCRIPTION AS description,
+            T1.NOTES AS notes,
         ]]>
         <include refid="Common.UserName">
             <property name="userUuid" value="INSERT_UUID"/>
@@ -36,9 +37,40 @@
         <![CDATA[
             UPDATE_DATE AS  updateDate
         FROM
-            AD_AUDIT
-        WHERE 1=1
+             AD_AUDIT T1,
+            (
+                SELECT A.ENTITY_COLUMN_UUID, B.TERM_NAME
+                FROM AD_ENTITY_COLUMN A, AD_GLOSSARY B
+                WHERE A.GLOSSARY_UUID = B.GLOSSARY_UUID
+            ) T2
+        WHERE T1.PRIMARY_KEY_UUID = T2.ENTITY_COLUMN_UUID(+)
         ]]>
+        <if test="null != entityType and '' != entityType">
+            <![CDATA[
+            AND T1.ENTITY_TYPE = #{entityType}
+          ]]>
+        </if>
+        <if test="null != primaryKey and '' != primaryKey">
+            <![CDATA[
+            AND T2.TERM_NAME LIKE '%' || #{primaryKey} || '%'
+          ]]>
+        </if>
+        <if test="null != programName and '' != programName">
+            <![CDATA[
+            AND T1.PROGRAM_NAME = #{programName}
+          ]]>
+        </if>
+        <if test="null != function and '' != function">
+            <![CDATA[
+            AND T1.FUNCTION = #{function}
+          ]]>
+        </if>
+        <if test="null != modifyDateFrom and '' != modifyDateFrom">
+            <![CDATA[
+          AND TO_CHAR(T1.UPDATE_DATE, 'yyyy-MM-dd') BETWEEN #{modifyDateFrom} AND #{modifyDateTo}
+        ]]>
+        </if>
+        ORDER BY T1.UPDATE_DATE DESC
     </select>
 
 </mapper>

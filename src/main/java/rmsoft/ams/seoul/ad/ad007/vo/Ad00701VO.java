@@ -37,4 +37,5 @@ public class Ad00701VO extends BaseVO {
 
 	private String changeStatus;
 
+	private int metaCnt;
 }

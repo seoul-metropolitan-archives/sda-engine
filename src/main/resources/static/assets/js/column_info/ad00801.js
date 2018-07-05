@@ -23,8 +23,8 @@ var ad00801 =
                     visible: true
                 },
                 {
-                    sortNo: 2,
-                    name: "entityName",
+                    sortNo: 3,
+                    name: "entityTypeName",
                     text: "Entity Name",
                     width: 150,
                     dataType: "text",
@@ -33,7 +33,7 @@ var ad00801 =
                     visible: true
                 },
                 {
-                    sortNo: 3,
+                    sortNo: 4,
                     name: "primaryKey",
                     text: "Primary Key",
                     width: 150,
@@ -43,8 +43,8 @@ var ad00801 =
                     visible: true
                 },
                 {
-                    sortNo: 4,
-                    name: "columnName",
+                    sortNo: 5,
+                    name: "entityColumn",
                     text: "Column",
                     width: 150,
                     dataType: "text",
@@ -53,7 +53,7 @@ var ad00801 =
                     visible: true
                 },
                 {
-                    sortNo: 5,
+                    sortNo: 6,
                     name: "programName",
                     text: "Program",
                     width: 170,
@@ -63,8 +63,8 @@ var ad00801 =
                     visible: true
                 },
                 {
-                    sortNo: 6,
-                    name: "functionName",
+                    sortNo: 7,
+                    name: "function",
                     text: "Function",
                     width: 120,
                     dataType: "combo",
@@ -75,7 +75,7 @@ var ad00801 =
                     visible: true
                 },
                 {
-                    sortNo: 7,
+                    sortNo: 8,
                     name: "previousValue",
                     text: "Previous Value",
                     width: 120,
@@ -85,7 +85,7 @@ var ad00801 =
                     visible: true
                 },
                 {
-                    sortNo: 8,
+                    sortNo: 9,
                     name: "newValue",
                     text: "New Value",
                     width: 120,
@@ -95,7 +95,7 @@ var ad00801 =
                     visible: true
                 },
                 {
-                    sortNo: 9,
+                    sortNo: 10,
                     name: "updateUuid",
                     text: "Modifed By",
                     width: 80,
@@ -105,7 +105,7 @@ var ad00801 =
                     visible: true
                 },
                 {
-                    sortNo: 10,
+                    sortNo: 11,
                     name: "updateDate",
                     text: "Date/Time Modified",
                     width: 140,

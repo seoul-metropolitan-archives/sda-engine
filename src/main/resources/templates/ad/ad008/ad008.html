@@ -21,11 +21,10 @@
                     </div>
                     <div class="bdb div_tablerow searchFields">
                         <dl>
-                            <th:block layout:insert="~{/fragments/page-buttons :: searchInput02 ('Entity Type','entityTypeCode')}"/>
+                            <th:block layout:insert="~{/fragments/page-buttons :: searchInput02 ('Entity Type','entityType')}"/>
                             <dt>Entity Name</dt>
                             <dd>
-                                <input type="text" style="width:135px" data-ax-path="entityName">
-                                <input type="hidden" data-ax-path="entityTypeUuid">
+                                <input type="text" style="width:135px" data-ax-path="entityName" disabled>
                             </dd>
                             <dt>Primary Key</dt>
                             <dd>
@@ -37,10 +36,10 @@
                             <input type="hidden" data-ax-path="programUuid">
                             <dt>Function</dt>
                             <dd>
-                                <select data-ax-path="functionUuid" style="width:135px;" id="funtionList">
+                                <select data-ax-path="function" style="width:135px;" id="function">
                                     <option value=""></option>
                                     <option th:each="item : ${functionList}"
-                                            th:value="${item.codeDetailUUID}"
+                                            th:value="${item.codeName}"
                                             th:text="${item.codeName}"/>
                                 </select>
                             </dd>

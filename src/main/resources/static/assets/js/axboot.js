@@ -3100,11 +3100,13 @@ axboot.commonCodeFilter = function (categoryCode) {
     var nameArr = [];
     var codeArr = [];
     var attrArr = [];
+    var cCodeArr = [];
 
 
     commonCodeArray.forEach(function (item, field) {
-        codeArr.push(item['codeDetailUUID']);
-        nameArr.push(item['codeName']);
+        codeArr.push(item['codeDetailUUID']);   // uuid
+        nameArr.push(item['codeName']);         // 코드명
+        cCodeArr.push(item['code']);            // 코드값
 
         var attrObj = {};
         for(var prop in item){
@@ -3112,12 +3114,14 @@ axboot.commonCodeFilter = function (categoryCode) {
                 attrObj[prop] = item[prop];
             }else if(prop == 'codeDetailUUID'){
                 attrObj['uuid'] = item[prop];
+            }else if(prop == 'code'){
+                attrObj['code'] = item[prop];
             }
         }
         attrArr.push(attrObj);
     });
 
-    return $.extend({}, {nameArr: nameArr}, {codeArr: codeArr}, {attrArr: attrArr});
+    return $.extend({}, {nameArr: nameArr}, {codeArr: codeArr}, {attrArr: attrArr}, {cCodeArr: cCodeArr});
 }
 /**
  * 공통코드를 Grid에서 사용하기 위해 label과 value를 분리해주는 함수
