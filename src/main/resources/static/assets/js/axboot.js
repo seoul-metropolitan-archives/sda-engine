@@ -2477,6 +2477,12 @@ axboot.baseView =
             $(".bdb").delegate("#classify", "click", function () {
                 _this.classify();
             });
+            $(".bdb").delegate("#unfreeze", "click", function () {
+                _this.unfreeze();
+            });
+            $(".bdb").delegate("#inquiryGrid", "click", function () {
+                _this.inquiryGrid();
+            });
            /* $(document).delegate(".ax-body .div_tablerow:not(.searchFields) input", "keydown", function (e) {
                 if (e.ctrlKey && e.altKey && e.keyCode == 73) {
                     e.preventDefault();
@@ -2554,6 +2560,14 @@ axboot.baseView =
         , classify: function () {
             if (ACTIONS && ACTIONS.PAGE_CLASSIFY)
                 ACTIONS.dispatch(ACTIONS.PAGE_CLASSIFY);
+        }
+        , unfreeze: function () {
+            if (ACTIONS && ACTIONS.PAGE_UNFREEZE)
+                ACTIONS.dispatch(ACTIONS.PAGE_UNFREEZE);
+        }
+        , inquiryGrid: function () {
+            if (ACTIONS && ACTIONS.PAGE_GRID_INQUIRY)
+                ACTIONS.dispatch(ACTIONS.PAGE_GRID_INQUIRY);
         }
     };
 

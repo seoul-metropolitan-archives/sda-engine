@@ -126,17 +126,17 @@ public class Df001Service extends BaseService {
      * @return the api response
      */
     public ApiResponse updateStatus(List<Df00101VO> list){
-        List<DfEvent> dfEventList = ModelMapperUtils.mapList(list,DfEvent.class);
-        DfEvent orgDfEvent = null;
+        List<DfEvent> dfList = ModelMapperUtils.mapList(list,DfEvent.class);
+        DfEvent orgItem = null;
         int index = 0;
         String changeStatus = "";
-        for (DfEvent dfEvent : dfEventList) {
+        for (DfEvent item : dfList) {
             changeStatus = list.get(index).getChangeStatus() == "" ?  "Draft" : list.get(index).getChangeStatus();
-            orgDfEvent = repository.findOne(dfEvent.getId());
-            dfEvent.setStatusUuid(CommonCodeUtils.getCodeDetailUuid("CD115",changeStatus));
-            dfEvent.setInsertDate(orgDfEvent.getInsertDate());
-            dfEvent.setInsertUuid(orgDfEvent.getInsertUuid());
-            repository.save(dfEvent);
+            orgItem = repository.findOne(item.getId());
+            item.setStatusUuid(CommonCodeUtils.getCodeDetailUuid("CD115",changeStatus));
+            item.setInsertDate(orgItem.getInsertDate());
+            item.setInsertUuid(orgItem.getInsertUuid());
+            repository.save(item);
             index++;
         }
         return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");

@@ -1,3 +1,4 @@
+
 package rmsoft.ams.seoul.df.df002.service;
 
 import io.onsemiro.core.api.response.ApiResponse;
@@ -16,6 +17,7 @@ import rmsoft.ams.seoul.common.repository.DfDegreeRepository;
 import rmsoft.ams.seoul.df.df002.dao.Df002Mapper;
 import rmsoft.ams.seoul.df.df002.vo.Df00201VO;
 import rmsoft.ams.seoul.df.df002.vo.Df00202VO;
+import rmsoft.ams.seoul.utils.CommonCodeUtils;
 import rmsoft.ams.seoul.utils.CommonMessageUtils;
 
 import java.sql.Timestamp;
@@ -40,7 +42,7 @@ public class Df002Service extends BaseService {
     public List<Df00201VO> searchList(RequestParams<Df00201VO> param) {
         Df00201VO df00201VO = new Df00201VO();
 
-        df00201VO.setFreezeYN(param.getString("freezeYN"));
+        df00201VO.setStatusUuid(param.getString("statusUuid"));
         df00201VO.setEventCode(param.getString("eventCode"));
         df00201VO.setEventName(param.getString("eventName"));
         df00201VO.setDegree(param.getInt("degree"));
@@ -115,15 +117,17 @@ public class Df002Service extends BaseService {
      * @return the api response
      */
     public ApiResponse updateStatus(List<Df00201VO> list){
-        List<DfDegree> dfDegreeList = ModelMapperUtils.mapList(list,DfDegree.class);
-        DfDegree orgDfDegree = null;
+        List<DfDegree> dfList = ModelMapperUtils.mapList(list,DfDegree.class);
+        DfDegree orgItem = null;
         int index = 0;
         String changeStatus = "";
-        for (DfDegree dfDegree : dfDegreeList) {
-            orgDfDegree = repository.findOne(dfDegree.getId());
-            dfDegree.setInsertDate(orgDfDegree.getInsertDate());
-            dfDegree.setInsertUuid(orgDfDegree.getInsertUuid());
-            repository.save(dfDegree);
+        for (DfDegree item : dfList) {
+            changeStatus = list.get(index).getChangeStatus() == "" ?  "Draft" : list.get(index).getChangeStatus();
+            orgItem = repository.findOne(item.getId());
+            item.setStatusUuid(CommonCodeUtils.getCodeDetailUuid("CD115",changeStatus));
+            item.setInsertDate(orgItem.getInsertDate());
+            item.setInsertUuid(orgItem.getInsertUuid());
+            repository.save(item);
             index++;
         }
         return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");

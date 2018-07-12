@@ -18,6 +18,7 @@ public class Df002ViewRouter extends BaseController {
      */
     @GetMapping("/df/df002/df002")
     public String view(ModelMap model) {
+        model.addAttribute("statusList", CommonCodeUtils.get("CD115"));
 
         return "/df/df002/df002";
     }

@@ -274,17 +274,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     },
     disabledColumn : function()
     {
-        var codes = axboot.commonCodeFilter("CD115").codeArr;
-        var names = axboot.commonCodeFilter("CD115").nameArr;
-        var state = undefined;
-        for(var i = 0; i < names.length; i++)
-        {
-            if(names[i] == CONFIRM_STATUS)
-            {
-                state = codes[i];
-                break;
-            }
-        }
+        var state = axboot.commonCodeValueByCodeName("CD115", CONFIRM_STATUS);
         this.gridObj.setCustomCellStyleRows("disable",function(row){
             if(row["statusUuid"] == state)
                 return true;
@@ -311,17 +301,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
         }
     },
     cancelDelete: function(){
-        var codes = axboot.commonCodeFilter("CD115").codeArr;
-        var names = axboot.commonCodeFilter("CD115").nameArr;
-        var state = undefined;
-        for(var i = 0; i < names.length; i++)
-        {
-            if(names[i] == CONFIRM_STATUS)
-            {
-                state = codes[i];
-                break;
-            }
-        }
+        var state = axboot.commonCodeValueByCodeName("CD115", CONFIRM_STATUS);
 
         if(fnObj.gridView01.getSelectedData().statusUuid == state) {
             axToast.push(axboot.getCommonMessage("DF001_01"));

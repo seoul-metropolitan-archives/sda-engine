@@ -1,7 +1,7 @@
 var fnObj = {};
 var selectedItem ; //선택된 그리드 아이템
-var FREEZE_STATUS = "Y";
-var CANCEL_STATUS = "N";
+var CONFIRM_STATUS = "Confirm";
+var CANCEL_STATUS = "Draft";
 var eventCode = "";
 
 var ACTIONS = axboot.actionExtend(fnObj, {
@@ -62,7 +62,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         if(!rows || rows.length < 1) return;
 
         var params = rows.filter(function (item) {
-            item.freezeYN = data;
+            item.changeStatus = data;
             return item.disposalFreezeDegreeUuid !== "";
         });
 
@@ -80,7 +80,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     },
 
     PAGE_CONFIRM: function (caller, act, data) {
-        ACTIONS.dispatch(ACTIONS.STATUS_UPATE,FREEZE_STATUS);
+        ACTIONS.dispatch(ACTIONS.STATUS_UPATE,CONFIRM_STATUS);
     },
     PAGE_CANCEL: function (caller, act, data) {
         ACTIONS.dispatch(ACTIONS.STATUS_UPATE,CANCEL_STATUS);
@@ -250,7 +250,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
         this.initInstance();
         this.setColumnInfo(df00201.column_info);
         this.setFixedOptions({
-            colCount: 4
+            colCount: 5
         });
         this.gridObj.setOption({
             checkBar: {visible: true},
@@ -265,19 +265,21 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     },
     disabledColumn : function()
     {
+        var state = axboot.commonCodeValueByCodeName("CD115", CONFIRM_STATUS);
         this.gridObj.setCustomCellStyleRows("disable",function(row){
-            if(row["freezeYN"] == FREEZE_STATUS)
+            if(row["statusUuid"] == state)
                 return true;
             else
                 return false;
         },["eventName","eventCode","degree"]);
     },
     itemClick: function (data) {
-
     },
     cancelDelete: function(){
-        if(fnObj.gridView01.getSelectedData().freezeYN == FREEZE_STATUS){
-            axToast.push(axboot.getCommonMessage("DF002_01"));
+        var state = axboot.commonCodeValueByCodeName("CD115", CONFIRM_STATUS);
+
+        if(fnObj.gridView01.getSelectedData().statusUuid == state) {
+            axToast.push(axboot.getCommonMessage("DF001_01"));
 
             this.setRunDel(false);
         }else{

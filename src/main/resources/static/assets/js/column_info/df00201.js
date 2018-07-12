@@ -33,21 +33,14 @@ var df00201 =
                 },
                 {
                     sortNo: 2,
-                    name: "freezeYN",
-                    text: "Freeze",
-                    width: 50,
-                    dataType: "check",
-                    textAlignment: "center",
-                    defaultValue : "N",
-                    renderer: {
-                        type: "check",
-                        shape: "",
-                        falseValues: "N",
-                        trueValues: "Y",
-                        startEditOnClick: true,
-                    },
+                    width:80,
+                    name: "statusUuid",
+                    text: "Status",
+                    dataType: "combo",
+                    values: axboot.commonCodeFilter("CD115").codeArr,
+                    labels: axboot.commonCodeFilter("CD115").nameArr,
                     editable: false,
-                    required: false,
+                    required: true,
                     disable: true
                 },
                 {
@@ -80,6 +73,15 @@ var df00201 =
                     width: 70,
                     textAlignment: "far",
                     dataType: "number",
+                    required: false
+                },
+                {
+                    sortNo: 5,
+                    name: "keyword",
+                    text: "Keyword",
+                    width: 120,
+                    textAlignment: "far",
+                    dataType: "text",
                     required: false
                 },
                 {

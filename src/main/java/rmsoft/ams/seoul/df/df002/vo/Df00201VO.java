@@ -12,10 +12,11 @@ public class Df00201VO extends BaseVO {
 
 	private String disposalFreezeDegreeUuid;
 	private String disposalFreezeEventUuid;
-	private String freezeYN;
+	private String statusUuid;
 	private String eventCode;
 	private String eventName;
 	private int degree;
+	private String keyword;
 	private String endYN;
 	private String terminatorUuid;
 	private Timestamp endDate;

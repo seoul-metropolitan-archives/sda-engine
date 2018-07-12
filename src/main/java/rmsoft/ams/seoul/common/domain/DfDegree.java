@@ -13,6 +13,7 @@ import org.hibernate.annotations.DynamicUpdate;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.List;
 
 /**
  * The type Ad entity type.
@@ -35,11 +36,14 @@ public class DfDegree extends BaseJpaModel<DfDegree.DfDegreeId> {
     @Column(name = "DISPOSAL_FREEZE_EVENT_UUID", length = 36, nullable = false)
     private String disposalFreezeEventUuid;
 
-    @Column(name = "FREEZE_YN", length = 3, nullable = false)
-    private String freezeYN;
+    @Column(name = "STATUS_UUID", length = 36, nullable = false)
+    private String statusUuid;
 
     @Column(name = "DEGREE", length = 4, nullable = false)
     private int degree;
+
+    @Column(name = "KEYWORD", length = 4000, nullable = false)
+    private String keyword;
 
     @Column(name = "END_YN", length = 1, nullable = false)
     private String endYn;

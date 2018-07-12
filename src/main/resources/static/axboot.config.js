@@ -155,6 +155,14 @@
                 }
 
             },
+            "FREEZE_POPUP" :{
+                width: 1600,
+                height: 700,
+                iframe: {
+                    url: "/df/df003/df003-p01"
+                }
+
+            },
             "CLASSIFY_POPUP" :{
                 width: 1600,
                 height: 700,
