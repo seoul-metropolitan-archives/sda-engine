@@ -3,113 +3,212 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="rmsoft.ams.seoul..Df003Mapper">
+<mapper namespace="rmsoft.ams.seoul.df.df003.dao.Df003Mapper">
 
-    <select id="findAll" resultType="df003" parameterType="df003" statementType="PREPARED">
+    <select id="searchTree" resultType="Df00301VO" parameterType="Df00301VO" statementType="PREPARED">
+        <![CDATA[
+            SELECT C.*,
+                SUBSTR(SYS_CONNECT_BY_PATH(RNUM, '.'), 2, length(SYS_CONNECT_BY_PATH(RNUM, '.'))) as orderKey1
+            FROM
+                (
+                SELECT
+                    uuid,
+                    disposalFreezeEventUuid,
+                    disposalFreezeDegreeUuid,
+                    "level",
+                    parentCode,
+                    title,
+                    "DEGREE",
+                    eventCode,
+                    keyword,
+                    ROWNUM AS RNUM
+                FROM
+                    (
+                        SELECT *
+                        FROM
+                        (
+                            SELECT
+                                DISPOSAL_FREEZE_EVENT_UUID AS uuid,
+                                DISPOSAL_FREEZE_EVENT_UUID AS disposalFreezeEventUuid,
+                                '' AS disposalFreezeDegreeUuid,
+                                1 AS "level",
+                                '' AS parentCode,
+                                EVENT_CODE || '(' ||  EVENT_NAME  || ')' AS title,
+                                EVENT_CODE AS eventCode,
+                                0 AS "DEGREE",
+                                '' AS keyword
+                            FROM DF_DISPOSAL_FREEZE_EVENT T1
+                            WHERE 0 < (SELECT COUNT(DISPOSAL_FREEZE_DEGREE_UUID) FROM DF_DISPOSAL_FREEZE_DEGREE WHERE DISPOSAL_FREEZE_EVENT_UUID = T1.DISPOSAL_FREEZE_EVENT_UUID)
+                            UNION ALL
+                            SELECT
+                                DISPOSAL_FREEZE_DEGREE_UUID AS uuid,
+                                T1.DISPOSAL_FREEZE_EVENT_UUID AS disposalFreezeEventUuid,
+                                T1.DISPOSAL_FREEZE_DEGREE_UUID AS disposalFreezeDegreeUuid,
+                                2 AS "level",
+                                T1.DISPOSAL_FREEZE_EVENT_UUID AS parentCode,
+                                EVENT_CODE || ' ' ||  "DEGREE" AS title,
+                                EVENT_CODE AS eventCode,
+                                "DEGREE",
+                                KEYWORD AS keyword
+                            FROM
+                                DF_DISPOSAL_FREEZE_DEGREE T1,
+                                DF_DISPOSAL_FREEZE_EVENT T2
+                            WHERE T1.DISPOSAL_FREEZE_EVENT_UUID = T2.DISPOSAL_FREEZE_EVENT_UUID
+                            --AND FC_AD_CODE_NM(T1.STATUS_UUID) = 'Confirm'
+                        )
+                        ORDER BY eventCode, "level", "DEGREE"
+                    ) A
+                ) C
+            START WITH parentCode IS NULL
+            CONNECT BY PRIOR uuid = parentCode
+            ORDER BY RNUM
+        ]]>
+    </select>
+    <select id="searchList" resultType="Df00302VO" parameterType="Df00302VO" statementType="PREPARED">
         SELECT
             DISPOSAL_FREEZE_RESULT_UUID AS disposalFreezeResultUuid,
             DISPOSAL_FREEZE_EVENT_UUID AS disposalFreezeEventUuid,
             DISPOSAL_FREEZE_DEGREE_UUID AS disposalFreezeDegreeUuid,
-            AGGREGATION_ID AS aggregationId,
             ITEM_UUID AS itemUuid,
-            STATUS_UUID AS statusUuid,
+            A.AGGREGATION_UUID AS aggregationUuid,
+            B.CATE_PATH AS aggregationTree,
+            ITEM_CODE AS itemCode,
+            TITLE AS title,
             DESCRIPTION AS description,
             NOTES AS notes,
             FREEZED_DATE AS freezedDate,
-            TERMINATOR_UUID AS terminatorUuid,
-            END_DATE AS endDate,
-            INSERT_UUID AS insertUuid,
+
+            <include refid="Common.UserName">
+                <property name="userUuid" value="INSERT_UUID"/>
+            </include>  AS insertUuid,
             INSERT_DATE AS insertDate,
-            UPDATE_UUID AS updateUuid,
-            UPDATE_DATE AS updateDate
+
+            <include refid="Common.UserName">
+                <property name="userUuid" value="UPDATE_UUID"/>
+            </include> AS updateUuid,
+            UPDATE_DATE AS  updateDate
         FROM
-            DF_DISPOSAL_FREEZE_RESULT
+            DF_DISPOSAL_FREEZE_RESULT A,
+            (
+                SELECT ITEM_CODE, TITLE, A1.AGGREGATION_UUID, SUBSTR(CATE_PATH, 4) AS CATE_PATH
+                FROM
+                (
+                    SELECT ITEM_CODE, TITLE, AGGREGATION_UUID
+                    FROM RC_ITEM
+                    WHERE ITEM_UUID IN (
+                        SELECT ITEM_UUID
+                        FROM DF_DISPOSAL_FREEZE_RESULT
+                        WHERE 1=1
+                        <if test="null != disposalFreezeEventUuid and '' != disposalFreezeEventUuid">
+                            AND DISPOSAL_FREEZE_EVENT_UUID = #{disposalFreezeEventUuid}
+                        </if>
+                        <if test="null != disposalFreezeDegreeUuid and '' != disposalFreezeDegreeUuid">
+                            AND DISPOSAL_FREEZE_DEGREE_UUID = #{disposalFreezeDegreeUuid}
+                        </if>
+                    )
+                ) A1,
+                (
+                    SELECT
+                        AGGREGATION_UUID,
+                        SYS_CONNECT_BY_PATH((SELECT TITLE FROM RC_AGGREGATION WHERE AGGREGATION_UUID = T1.AGGREGATION_UUID), ' > ') AS CATE_PATH
+                    FROM (
+                            SELECT CONNECT_BY_ROOT AGGREGATION_UUID AS ROOT, AGGREGATION_UUID, PARENT_AGGREGATION_UUID
+                            FROM RC_AGGREGATION
+        START WITH PARENT_AGGREGATION_UUID IS NULL
+        CONNECT BY PRIOR AGGREGATION_UUID = PARENT_AGGREGATION_UUID
+        ) T1
+        START WITH T1.PARENT_AGGREGATION_UUID IS NULL
+        CONNECT BY PRIOR T1.AGGREGATION_UUID = T1.PARENT_AGGREGATION_UUID
+        ) A2
+        WHERE A1.AGGREGATION_UUID = A2.AGGREGATION_UUID
+        ) B
+        WHERE A.AGGREGATION_UUID = B.AGGREGATION_UUID
+        <if test="null != disposalFreezeEventUuid and '' != disposalFreezeEventUuid">
+            AND DISPOSAL_FREEZE_EVENT_UUID = #{disposalFreezeEventUuid}
+        </if>
+        <if test="null != disposalFreezeDegreeUuid and '' != disposalFreezeDegreeUuid">
+            AND DISPOSAL_FREEZE_DEGREE_UUID = #{disposalFreezeDegreeUuid}
+        </if>
+        <if test="null != aggregationUuid and '' != aggregationUuid">
+            AND A.AGGREGATION_UUID = #{aggregationUuid}
+        </if>
+        <if test="null != itemUuid and '' != itemUuid">
+            AND A.ITEM_UUID = #{itemUuid}
+        </if>
+        <if test="null != freezedFromDate and '' != freezedFromDate">
+            <![CDATA[ AND TO_CHAR(FREEZED_DATE, 'yyyy-MM-dd') >=  #{freezedFromDate}]]>
+        </if>
+        <if test="null != freezedToDate and '' != freezedToDate">
+            <![CDATA[ AND TO_CHAR(FREEZED_DATE, 'yyyy-MM-dd') <=  #{freezedToDate}]]>
+        </if>
+
     </select>
 
-    <select id="findOne" resultType="df003" parameterType="df003" statementType="PREPARED">
+    <select id="checkDelete" resultType="int" parameterType="String" statementType="PREPARED">
         SELECT
-            DISPOSAL_FREEZE_RESULT_UUID AS disposalFreezeResultUuid,
-            DISPOSAL_FREEZE_EVENT_UUID AS disposalFreezeEventUuid,
-            DISPOSAL_FREEZE_DEGREE_UUID AS disposalFreezeDegreeUuid,
-            AGGREGATION_ID AS aggregationId,
-            ITEM_UUID AS itemUuid,
-            STATUS_UUID AS statusUuid,
-            DESCRIPTION AS description,
-            NOTES AS notes,
-            FREEZED_DATE AS freezedDate,
-            TERMINATOR_UUID AS terminatorUuid,
-            END_DATE AS endDate,
-            INSERT_UUID AS insertUuid,
-            INSERT_DATE AS insertDate,
-            UPDATE_UUID AS updateUuid,
-            UPDATE_DATE AS updateDate
+        COUNT(DISPOSAL_FREEZE_RESULT_UUID)
         FROM
-            DF_DISPOSAL_FREEZE_RESULT
+        DF_DISPOSAL_FREEZE_RESULT
         WHERE
-            DISPOSAL_FREEZE_RESULT_UUID = #{disposalFreezeResultUuid}
+        DISPOSAL_FREEZE_EVENT_UUID = #{uuid}
     </select>
 
-   <update id="delete" parameterType="df003" statementType="PREPARED">
-        DELETE FROM
-            DF_DISPOSAL_FREEZE_RESULT
-        WHERE
-            DISPOSAL_FREEZE_RESULT_UUID = #{disposalFreezeResultUuid}
-    </update>
-
-   <update id="update" parameterType="df003" statementType="PREPARED">
-        UPDATE DF_DISPOSAL_FREEZE_RESULT
-        SET
-            DISPOSAL_FREEZE_EVENT_UUID = #{disposalFreezeEventUuid},
-            DISPOSAL_FREEZE_DEGREE_UUID = #{disposalFreezeDegreeUuid},
-            AGGREGATION_ID = #{aggregationId},
-            ITEM_UUID = #{itemUuid},
-            STATUS_UUID = #{statusUuid},
-            DESCRIPTION = #{description},
-            NOTES = #{notes},
-            FREEZED_DATE = #{freezedDate},
-            TERMINATOR_UUID = #{terminatorUuid},
-            END_DATE = #{endDate},
-            INSERT_UUID = #{insertUuid},
-            INSERT_DATE = #{insertDate},
-            UPDATE_UUID = #{updateUuid},
-            UPDATE_DATE = #{updateDate}
-        WHERE
-            DISPOSAL_FREEZE_RESULT_UUID = #{disposalFreezeResultUuid}
-    </update>
-
-   <update id="insert" parameterType="df003" statementType="PREPARED">
-        INSERT INTO DF_DISPOSAL_FREEZE_RESULT (
-            DISPOSAL_FREEZE_RESULT_UUID,
-            DISPOSAL_FREEZE_EVENT_UUID,
-            DISPOSAL_FREEZE_DEGREE_UUID,
-            AGGREGATION_ID,
-            ITEM_UUID,
-            STATUS_UUID,
-            DESCRIPTION,
-            NOTES,
-            FREEZED_DATE,
-            TERMINATOR_UUID,
-            END_DATE,
-            INSERT_UUID,
-            INSERT_DATE,
-            UPDATE_UUID,
-            UPDATE_DATE
-        ) VALUES (
-            #{disposalFreezeResultUuid},
-            #{disposalFreezeEventUuid},
-            #{disposalFreezeDegreeUuid},
-            #{aggregationId},
-            #{itemUuid},
-            #{statusUuid},
-            #{description},
-            #{notes},
-            #{freezedDate},
-            #{terminatorUuid},
-            #{endDate},
-            #{insertUuid},
-            #{insertDate},
-            #{updateUuid},
-            #{updateDate}
+    <select id="search" resultType="Df00302VO" parameterType="Df00302VO" statementType="PREPARED">
+        SELECT
+            B.ITEM_UUID AS itemUuid,
+            B.TITLE AS itemTitle,
+            B.ITEM_CODE AS itemCode,
+            A.LEVEL_UUID as levelUuid,
+            A.AGGREGATION_UUID as aggregationUuid,
+            A.PUBLISHED_STATUS_UUID as publishedStatusUuid,
+            A.AGGREGATION_CODE as aggregationCode,
+            A.TITLE as title,
+            A.TYPE_UUID as typeUuid,
+            B.TYPE_UUID AS itemTypeUuid,
+            B.DESCRIPTION as description,
+            B.NOTES as notes,
+            B.AGGREGATION_UUID as parentAggregationUuid,
+            (
+                SELECT SYS_CONNECT_BY_PATH((
+                    SELECT TITLE FROM RC_AGGREGATION WHERE AGGREGATION_UUID = T1.AGGREGATION_UUID), ' > ')
+                FROM
+                    (
+                    SELECT CONNECT_BY_ROOT AGGREGATION_UUID AS ROOT, AGGREGATION_UUID, PARENT_AGGREGATION_UUID, TITLE
+                    FROM RC_AGGREGATION
+                    START WITH PARENT_AGGREGATION_UUID IS NULL
+                    CONNECT BY PRIOR AGGREGATION_UUID = PARENT_AGGREGATION_UUID
+                    ) T1
+                WHERE AGGREGATION_UUID = A.AGGREGATION_UUID
+                AND ROWNUM = 1
+                START WITH T1.PARENT_AGGREGATION_UUID IS NULL
+                CONNECT BY PRIOR T1.AGGREGATION_UUID = T1.PARENT_AGGREGATION_UUID
+            ) AS catPath
+        FROM RC_AGGREGATION A,
+        (
+            SELECT
+                AGGREGATION_UUID, ITEM_UUID, TITLE, ITEM_CODE,DESCRIPTION,NOTES,TYPE_UUID
+            FROM
+                RC_ITEM
+            WHERE AGGREGATION_UUID = #{aggregationUuid}
+            UNION ALL
+            SELECT
+                AGGREGATION_UUID, ITEM_UUID, TITLE, ITEM_CODE,DESCRIPTION,NOTES,TYPE_UUID
+            FROM RC_ITEM
+            WHERE AGGREGATION_UUID IN
+            (
+                SELECT AGGREGATION_UUID
+                FROM RC_AGGREGATION
+                START WITH PARENT_AGGREGATION_UUID = #{aggregationUuid}
+                CONNECT BY PRIOR AGGREGATION_UUID = PARENT_AGGREGATION_UUID
+            )
+        ) B
+        WHERE A.AGGREGATION_UUID = B.AGGREGATION_UUID
+        AND B.ITEM_UUID NOT IN
+        (
+            SELECT ITEM_UUID
+            FROM DF_DISPOSAL_FREEZE_RESULT
+            WHERE DISPOSAL_FREEZE_EVENT_UUID = #{disposalFreezeEventUuid}
         )
-    </update>
+        ORDER BY catPath
+    </select>
 </mapper>

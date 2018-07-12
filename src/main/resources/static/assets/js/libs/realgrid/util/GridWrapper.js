@@ -212,6 +212,8 @@ var GridWrapper = function(p_id,p_rootContext) {
             {
                 _this.gridView.beginAppendRow();
                 _this.gridView.setFocus();
+            }else{
+                _this.dispatch("onAfterAddRow");
             }
         });
         $("#"+_this.i_id).parents().eq(1).delegate(_this.delBtnName,"click",function(){

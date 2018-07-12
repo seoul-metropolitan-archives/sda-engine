@@ -10,10 +10,11 @@
         SELECT
             T1.DISPOSAL_FREEZE_DEGREE_UUID AS disposalFreezeDegreeUuid,
             T1.DISPOSAL_FREEZE_EVENT_UUID AS disposalFreezeEventUuid,
-            T1.FREEZE_YN AS freezeYN,
+            T1.STATUS_UUID AS statusUuid,
             T2.EVENT_CODE AS eventCode,
             T2.EVENT_NAME AS eventName,
             T1."DEGREE" AS "degree",
+            T1.KEYWORD AS keyword,
             T1.END_YN AS endYN,
         ]]>
         <include refid="Common.UserName">
@@ -46,9 +47,9 @@
         WHERE 1=1
         AND T1.DISPOSAL_FREEZE_EVENT_UUID = T2.DISPOSAL_FREEZE_EVENT_UUID
         ]]>
-        <if test="null != freezeYN and '' != freezeYN">
+        <if test="null != statusUuid and '' != statusUuid">
             <![CDATA[
-          AND T1.FREEZE_YN = #{freezeYN}
+          AND T1.STATUS_UUID = #{statusUuid}
         ]]>
         </if>
         <if test="null != eventCode and '' != eventCode">
@@ -71,7 +72,7 @@
           AND  T1.END_YN = #{endYN}
         ]]>
         </if>
-        ORDER BY T2.EVENT_CODE ASC
+        ORDER BY T2.EVENT_CODE, T1.DEGREE ASC
     </select>
 
     <select id="getDetail" resultType="Df00202VO" parameterType="Df00202VO" statementType="PREPARED">

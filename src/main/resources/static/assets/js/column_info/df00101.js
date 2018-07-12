@@ -30,11 +30,11 @@ var df00101 =
                     values: axboot.commonCodeFilter("CD115").codeArr,
                     labels: axboot.commonCodeFilter("CD115").nameArr,
                     editable: false,
-                    required: true,
+                    required: false,
                     disable: true
                 },
                 {
-                    sortNo: 0,
+                    sortNo: 3,
                     width:140,
                     name: "eventCode",
                     text: "Event Code",
@@ -45,7 +45,7 @@ var df00101 =
                     disable : true
                 },
                 {
-                    sortNo: 3,
+                    sortNo: 4,
                     name: "eventName",
                     text: "Event Name",
                     width: 160,
@@ -55,7 +55,7 @@ var df00101 =
                     disable : false
                 },
                 {
-                    sortNo: 3,
+                    sortNo: 5,
                     name: "eventTypeUuid",
                     text: "Event Type",
                     width: 80,
@@ -67,7 +67,7 @@ var df00101 =
                     disable: false
                 },
                 {
-                    sortNo: 4,
+                    sortNo: 6,
                     name: "reviewDate",
                     text: "Review Date",
                     width: 100,
@@ -78,7 +78,7 @@ var df00101 =
                     disable : false
                 },
                 {
-                    sortNo: 5,
+                    sortNo: 7,
                     name: "description",
                     text: "Description",
                     width: 150,
@@ -86,7 +86,7 @@ var df00101 =
                     required: false
                 },
                 {
-                    sortNo: 6,
+                    sortNo: 8,
                     name: "notes",
                     text: "Notes",
                     width: 150,
@@ -94,7 +94,7 @@ var df00101 =
                     required: false
                 },
                 {
-                    sortNo: 7,
+                    sortNo: 9,
                     name: "endYN",
                     text: "End",
                     width: 50,
@@ -111,7 +111,7 @@ var df00101 =
                     required: false,
                 },
                 {
-                    sortNo: 8,
+                    sortNo: 10,
                     name: "terminatorUuid",
                     text: "Terminator",
                     width: 80,
@@ -121,7 +121,7 @@ var df00101 =
                     required: false
                 },
                 {
-                    sortNo: 9,
+                    sortNo: 11,
                     name: "endDate",
                     text: "End date/time",
                     width: 140,
@@ -131,7 +131,7 @@ var df00101 =
                     required: false
                 },
                 {
-                    sortNo: 10,
+                    sortNo: 12,
                     name: "insertUuid",
                     text: "Created By",
                     width: 80,
@@ -143,7 +143,7 @@ var df00101 =
                     disable: true
                 },
                 {
-                    sortNo: 11,
+                    sortNo: 13,
                     name: "insertDate",
                     text: "Date/Time Created",
                     width: 140,
@@ -152,7 +152,7 @@ var df00101 =
                     disable: true
                 },
                 {
-                    sortNo: 12,
+                    sortNo: 14,
                     name: "updateUuid",
                     text: "Modifed By",
                     width: 80,
@@ -162,7 +162,7 @@ var df00101 =
                     disable: true
                 },
                 {
-                    sortNo: 13,
+                    sortNo: 15,
                     name: "updateDate",
                     text: "Date/Time Modified",
                     width: 140,
@@ -171,7 +171,7 @@ var df00101 =
                     disable: true
                 },
                 {
-                    sortNo: 14,
+                    sortNo: 16,
                     name: "reason",
                     text: "REASON",
                     dataType: "text",

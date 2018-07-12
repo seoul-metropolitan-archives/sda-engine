@@ -14,67 +14,80 @@
             <div style="display:table; height:100%; width:100%">
                 <div class="contents_wrap">
                     <div style=" height:30px; width:100%" class="bgf7 div_tablerow">
-                        <ul class="bdb">
+                        <ul class="bdb div_tablerow">
                             <th:block layout:insert="~{/fragments/page-buttons :: bookmark}"/>
-                            <th:block layout:insert="~{/fragments/page-buttons :: save-and-inquiry}"/>
+                            <th:block layout:insert="~{/fragments/page-buttons :: bin}"/>
                         </ul>
                     </div>
-                    <div class="bdb div_tablerow searchFields">
-                        <dl>
-                            <dt class="mgl_5 w130">Status</dt>
-                            <dd>
-                                <select data-ax-path="statusUuid" style="width:135px;">
-                                    <option value=""></option>
-                                    <option th:each="item : ${statusUuid}"
-                                            th:value="${item.codeDetailUUID}"
-                                            th:text="${item.codeName}"/>
-                                </select>
-                            </dd>
-                            <dt class="w130">Freezed Date</dt>
-                            <dd class="w_auto">
-                                <div class="input-group" data-ax5picker="date">
-                                    <div class="cld_box" style="background-color: #fffdd6">
-                                        <input type="text" data-ax-path="startFromDate" style="background-color: #fffdd6;ime-mode:disabled;"
-                                               placeholder="YYYY-MM-DD" maxlength="10">
-                                        <img title="calendar" class="ui-datepicker-trigger" alt="..." src="/assets/images/ams/calendar.png" >
-                                    </div>
-                                    ~
-                                    <div class="cld_box" style="background-color: #fffdd6">
-                                        <input type="text" data-ax-path="startToDate" style="background-color: #fffdd6;ime-mode:disabled;"
-                                               placeholder="YYYY-MM-DD" maxlength="10">
-                                        <img title="calendar" class="ui-datepicker-trigger" alt="..." src="/assets/images/ams/calendar.png">
-                                    </div>
-                                </div>
-                            </dd>
-                        </dl>
-                        <dl>
-                            <dt class="mgl_5 w130">Event</dt>
-                            <dd><input type=text style="width:135px" data-ax-path="aa1"></dd>
-                            <dd><input type=text style="width:135px" data-ax-path="aa2"></dd>
-                            <dt class="w130" >Degree</dt>
-                            <dd><input type=text style="width:135px" data-ax-path="aa3"></dd>
-                            <th:block layout:insert="~{/fragments/page-buttons :: searchInputYellow ('Aggregation','')}"/>
-                            <dd><input type=text style="width:135px" data-ax-path="aa4"></dd>
-                            <th:block layout:insert="~{/fragments/page-buttons :: searchInputYellow ('Item','')}"/>
-                            <dd><input type=text style="width:135px" data-ax-path="aa5"></dd>
-                        </dl>
-
-
-                    </div>
                     <div style="height:100%; width:100%" class="div_tablerow">
-                        <div style="height:100%; width:100%" class="div_table">
-                            <ul class="bdb bdt div_tablerow bgf7" style="height:30px;">
-                                <th:block layout:insert="~{/fragments/page-buttons :: dot('Item')}"/>
-                                <th:block layout:insert="~{/fragments/page-buttons :: adddf-and-delete}"/>
+                        <div style="display:table; height:100%; width:20%; float:left" class="bdr">
+                            <ul class="bdb bdt bgf7 div_tablerow" style="height:30px;">
+                                <th:block layout:insert="~{/fragments/page-buttons :: dotW100('Event')}"/>
+                                <th:block layout:insert="~{/fragments/page-buttons :: unfreeze-and-inquiry}"/>
+                            </ul>
+                            <ul class="bdb" style="height:25px;width:100%; float:left;">
+                                <li style="width:77%">
+                                    <input type="text" style="width:100%; margin-left: 0.5%;" id="leftMenuParam">
+                                </li>
+                                <li style="width:22%">
+                                    <button class="btn_small" style="margin-right: 0" id="searchLeftMenu">Find</button>
+                                </li>
+                            </ul>
+
+                            <ul class="bdb" style="height:30px;width:100%; float:left">
+                                <li class="bdr"><a href="#" class="open_close expendAll" id="rg_tree_allopen">Expand All</a></li>
+                                <li><a href="#" class="open_close collapseAll" id="rg_tree_allclose">Collapse All</a></li>
                             </ul>
                             <div style="height:100%; width:100%" class="div_tablerow bdb">
                                 <div id="realgrid01" style="width:100%; height:100%"></div>
                             </div>
+                        </div><!--오늘쪽 내용에서 좌측 트리부분-->
+
+                        <div style="display:table; height:100%; width:80%; float:left" class="bdr">
+                            <ul class="bdb bdt bgf7 div_tablerow" style="height:30px;">
+                                <th:block layout:insert="~{/fragments/page-buttons :: dot('Item')}"/>
+                                <th:block layout:insert="~{/fragments/page-buttons :: freeze-and-unfreeze-and-save-and-inquiry}"/>
+                            </ul>
+
+                            <div class="div_tablerow">
+                                <dl>
+                                    <th:block layout:insert="~{/fragments/page-buttons :: searchInput02 ('Aggregation','aggregationCode')}"/>
+                                    <dd>
+                                        <input type=text data-ax-path="aggregationTitle">
+                                        <input type=hidden data-ax-path="aggregationUuid">
+                                    </dd>
+                                    <dt>Freezed Date</dt>
+                                    <dd class="w_auto">
+                                        <div class="input-group" data-ax5picker="date">
+                                            <div class="cld_box" style="background-color: #fffdd6">
+                                                <input type="text" data-ax-path="freezedFromDate" style="background-color: #fffdd6;ime-mode:disabled;"
+                                                       placeholder="YYYY-MM-DD" maxlength="10">
+                                                <img title="calendar" class="ui-datepicker-trigger" alt="..." src="/assets/images/ams/calendar.png" >
+                                            </div>
+                                            ~
+                                            <div class="cld_box" style="background-color: #fffdd6">
+                                                <input type="text" data-ax-path="freezedToDate" style="background-color: #fffdd6;ime-mode:disabled;"
+                                                       placeholder="YYYY-MM-DD" maxlength="10">
+                                                <img title="calendar" class="ui-datepicker-trigger" alt="..." src="/assets/images/ams/calendar.png">
+                                            </div>
+                                        </div>
+                                    </dd>
+                                </dl>
+                                <dl>
+                                    <th:block layout:insert="~{/fragments/page-buttons :: searchInput02 ('Item','itemCode')}"/>
+                                    <dd>
+                                        <input type=text data-ax-path="itemTitle">
+                                        <input type=hidden data-ax-path="itemUuid">
+                                    </dd>
+                                </dl>
+                            </div>
+
+                            <div style="height:100%; width:100%" class="div_tablerow">
+                                <div id="realgrid02" style="width:100%; height:100%;" class="bdt"></div>
+                            </div>
                         </div>
                     </div>
-
                 </div>
-`
             </div>
 
         </div>

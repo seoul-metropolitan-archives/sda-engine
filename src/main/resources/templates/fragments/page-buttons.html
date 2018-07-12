@@ -328,6 +328,13 @@
     </li>
 </th:block>
 
+<th:block layout:fragment="dotW100 (str)">
+    <li style="width:20%; text-align:left;">
+        <img src="/assets/images/ams/img_dot2.png" alt="dot">
+        <span th:classappend="excelName" th:text="${str}"></span>
+    </li>
+</th:block>
+
 <!--Popup버튼 & Save 버튼 & Inquiry 버튼-->
 <th:block layout:fragment="popup-and-save-and-inquiry">
     <li style="text-align:right; width:48%;">
@@ -401,8 +408,8 @@
     </li>
 </th:block>
 
-<!--Freeze 버튼 & Cancel 버튼 & Add 버튼 & Delete 버튼-->
-<th:block layout:fragment="freeze-and-cancel-and-save-and-inquiry">
+<!--DF003 Freeze & Unfreeze-->
+<th:block layout:fragment="freeze-and-unfreeze-and-save-and-inquiry">
     <li style="text-align:right; width:48%;">
         <button class="btn_co" th:id="confirm">
             <span class="btn_icon_co" >&nbsp;</span>
@@ -410,29 +417,29 @@
         </button>
         <button class="btn_co" th:id="cancel">
             <span class="btn_icon_co">&nbsp;</span>
-            <span class="btn_main_txt">Cancel</span>
+            <span class="btn_main_txt">Unfreeze</span>
         </button>
         <button class="btn_s" th:id="save">
             <span class="btn_icon">&nbsp;</span>
             <span class="btn_main_txt">Save(S)</span>
         </button>
-        <button class="btn_i" th:id="inquiry">
+        <button class="btn_i" th:id="inquiryGrid">
             <span class="btn_icon">&nbsp;</span>
             <span class="btn_main_txt">Inquiry(I)</span>
         </button>
     </li>
 </th:block>
 
-<!-- Disposal Freeze Add 버튼 & Delete 버튼-->
-<th:block layout:fragment="adddf-and-delete(str,str2)">
-    <li style="text-align:right; width:68%;">
-        <button class="btn_adf" th:classappend="${str}">
-            <span class="btn_icon">&nbsp;</span>
-            <span class="btn_main_txt">Add</span>
+<!--DF003 Tree -->
+<th:block layout:fragment="unfreeze-and-inquiry">
+    <li style="text-align:right;width: available">
+        <button class="btn_co" th:id="unfreeze">
+            <span class="btn_icon_co" >&nbsp;</span>
+            <span class="btn_main_txt">Unfreeze</span>
         </button>
-        <button class="btn_d" th:classappend="${str2}">
-            <span class="btn_icon">&nbsp;</span>
-            <span class="btn_main_txt">Delete</span>
+        <button class="btn_co" th:id="inquiry">
+            <span class="btn_icon_co" >&nbsp;</span>
+            <span class="btn_main_txt">Inquiry</span>
         </button>
     </li>
 </th:block>
@@ -443,6 +450,10 @@
         <div class="bookmark_star"><img src="/assets/images/ams/bookmark.png" alt="즐겨찾기"></div>
     </li>
     <li style="width:50%; text-align:left;" th:text="${pageName==null?'User':pageName}"></li>
+</th:block>
+
+<th:block layout:fragment="bin">
+    <li style="text-align:right;width: available"></li>
 </th:block>
 <!--<th:block layout:fragment="searchInputYellow (dap)">-->
     <!--<dt class="mgl_5" th:text="${lb}"></dt>-->

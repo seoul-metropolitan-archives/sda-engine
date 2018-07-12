@@ -1,24 +1,23 @@
 var fnObj = {};
 var selectedItem ; //선택된 그리드 아이템
-var FREEZE_STATUS = "Y";
-var CANCEL_STATUS = "N";
+var CONFIRM_STATUS = "Confirm";
+var CANCEL_STATUS = "Draft";
 var eventCode = "";
+var isDetailChanged = false;
 
 var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH: function (caller, act, data) {
         axboot.ajax({
             type: "GET",
-            url: "/api/v1/df/df003/searchList",
+            url: "/api/v1/df/df003/searchTree",
             data: $.extend({}, {pageSize: 1000, sort: "eventCode"}, this.formView.getData()),
             callback: function (res) {
                 if(res.list == null || res.list.length <= 0){
                     fnObj.gridView01.setData([]);
-                    fnObj.gridView01.disabledColumn();
                     return;
                 }
                 fnObj.gridView01.setData(res.list);
                 fnObj.gridView01.resetCurrent();
-                fnObj.gridView01.disabledColumn();
             },
             options: {
                 onError: axboot.viewError
@@ -27,26 +26,17 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         return false;
     },
     PAGE_SEARCH1: function (caller, act, data) {
-        var selectedData = fnObj.gridView01.getSelectedData();
-
-        if(!selectedData)
-            return;
-
-        fnObj.formView.setFormData("eventNameTxt", selectedData.eventName);
-        fnObj.formView.setFormData("reason", selectedData.reason);
+        if(data == null) return;
 
         axboot.ajax({
             type: "GET",
-            url: "/api/v1/df/df003/detail",
-            data: $.extend({}, {pageSize: 1000}, fnObj.gridView01.getSelectedData()),
+            url: "/api/v1/df/df003/searchList",
+            async : false,
+            data: $.extend({}, {pageSize: 1000}, this.formView.getData(), data),
             callback: function (res) {
-                if(!selectedData)
-                    return ;
-
-                fnObj.formView.setFormData("freezeCnt",res.freezeCnt);
-                fnObj.formView.setFormData("aggregationCnt",res.aggregationCnt);
-                fnObj.formView.setFormData("itemCnt",res.itemCnt);
-
+                fnObj.gridView02.resetCurrent();
+                fnObj.gridView02.setData(res.list);
+                fnObj.formView.setFormData("itInAggregationName", "");
             },
             options: {
                 onError: axboot.viewError
@@ -57,30 +47,61 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     ERROR_SEARCH: function (caller, act, data) {
     },
     STATUS_UPATE: function (caller, act, data) {
-        var rows = fnObj.gridView01.gridObj.getCheckedList();
+        var rows = fnObj.gridView02.gridObj.getCheckedList();
 
         if(!rows || rows.length < 1) return;
 
         var params = rows.filter(function (item) {
-            item.freezeYN = data;
-            return item.disposalFreezeDegreeUuid !== "";
+            item.changeStatus = data;
+            return item.disposalFreezeResultUuid !== "";
         });
 
         axboot.ajax({
             type: "PUT",
-            url: "/api/v1/df/df003/updateStatus",
+            url: "/api/v1/df/df003/unfreeze",
             data: JSON.stringify(params),
             callback: function (res) {
-                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, fnObj.gridView01.getSelectedData());
             },
             options: {
                 onError: axboot.viewError
             }
         });
     },
-
     PAGE_CONFIRM: function (caller, act, data) {
-        ACTIONS.dispatch(ACTIONS.STATUS_UPATE,FREEZE_STATUS);
+        // Freeze시킬 Item 추가
+        if(fnObj.gridView01.getSelectedData() == null
+            || fnObj.gridView01.getSelectedData().disposalFreezeDegreeUuid == ""
+            || fnObj.gridView01.getSelectedData().disposalFreezeDegreeUuid == undefined){
+            return;
+        }
+
+        axboot.modal.open({
+            modalType: "FREEZE_POPUP",
+            width: 1600,
+            height: 800,
+            header: {
+                title: "Freeze"
+            },
+            sendData: function () {
+                return {
+                    confirmBtn: "Freeze",
+                    crrntAgg: fnObj.gridView01.getSelectedData().eventCode,
+                    disposalFreezeResultUuid :  fnObj.gridView01.getSelectedData().disposalFreezeResultUuid,
+                    disposalFreezeEventUuid :  fnObj.gridView01.getSelectedData().disposalFreezeEventUuid,
+                    disposalFreezeDegreeUuid :  fnObj.gridView01.getSelectedData().disposalFreezeDegreeUuid,
+                    primarykey :  fnObj.gridView01.primaryKey,
+                    listService : "/api/v1/df/df003/freeze/search",
+                    saveService : "/api/v1/df/df003/saveItems"
+                };
+            },
+            callback: function (data) {
+                if(this) this.close();
+                if(data){
+                    ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1,data);
+                }
+            }
+        });
     },
     PAGE_CANCEL: function (caller, act, data) {
         ACTIONS.dispatch(ACTIONS.STATUS_UPATE,CANCEL_STATUS);
@@ -93,20 +114,45 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         }
         // ACTIONS.dispatch(ACTIONS.TOP_GRID_DETAIL_PAGE_SAVE);
     },
+    PAGE_UNFREEZE: function (caller, act, data) {
+        var rows = fnObj.gridView01.gridObj.getCheckedList();
+
+        if(!rows || rows.length < 1) return;
+
+        var params = rows.filter(function (item) {
+            item.changeStatus = data;
+            return item.disposalFreezeEventUuid !== "";
+        });
+
+        axboot.ajax({
+            type: "PUT",
+            url: "/api/v1/df/df003/unfreeze",
+            data: JSON.stringify(params),
+            callback: function (res) {
+                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, fnObj.gridView01.getSelectedData());
+            },
+            options: {
+                onError: axboot.viewError
+            }
+        });
+    },
+    PAGE_GRID_INQUIRY: function (caller, act, data) {
+        ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, fnObj.gridView01.getSelectedData());
+    },
     TOP_GRID_SAVE: function (caller, act, data) {
         var result = false;
 
         axboot.call({
             type: "PUT",
             url: "/api/v1/df/df003/saveItems",
-            data: JSON.stringify(this.gridView01.getData()),
+            data: JSON.stringify(this.gridView02.getData()),
             callback: function (res) {
-                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, fnObj.gridView01.getSelectedData());
                 result = true;
             }
         })
             .done(function () {
-                fnObj.gridView01.commit();
+                fnObj.gridView02.commit();
                 axToast.push(axboot.getCommonMessage("AA007"));
             });
         return result;
@@ -128,7 +174,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             return false;
         }
     },
-    SEARCH_CLASS_SCH : function(caller, act, data)
+    SEARCH_AGG_CODE : function(caller, act, data)
     {
         axboot.modal.open({
             modalType: "COMMON_POPUP",
@@ -137,7 +183,27 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 return data;
             },
             callback: function (data) {
-                fnObj.formView.setFormData("eventCode", data['EVENT_CODE']);
+                fnObj.formView.setFormData("aggregationCode", data['AGGREGATION_CODE']);
+                fnObj.formView.setFormData("aggregationTitle", data['TITLE']);
+                fnObj.formView.setFormData("aggregationUuid", data['AGGREGATION_UUID']);
+                if(this.close)
+                    this.close();
+                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH,data);
+            }
+        });
+    },
+    SEARCH_ITEM_CODE : function(caller, act, data)
+    {
+        axboot.modal.open({
+            modalType: "COMMON_POPUP",
+            preSearch : data["preSearch"],
+            sendData: function () {
+                return data;
+            },
+            callback: function (data) {
+                fnObj.formView.setFormData("itemCode", data['ITEM_CODE']);
+                fnObj.formView.setFormData("itemTitle", data['TITLE']);
+                fnObj.formView.setFormData("itemUuid", data['ITEM_UUID']);
                 if(this.close)
                     this.close();
                 ACTIONS.dispatch(ACTIONS.PAGE_SEARCH,data);
@@ -155,6 +221,13 @@ fnObj.pageStart = function () {
         success: function () {
         }
     });
+    $.ajax({
+        url: "/assets/js/column_info/df00302.js",
+        dataType: "script",
+        async: false,
+        success: function () {
+        }
+    });
 
     $(document).delegate(".under.dfCondition", "click", function () {
         ACTIONS.dispatch(ACTIONS.MENU_OPEN);
@@ -166,6 +239,7 @@ fnObj.pageStart = function () {
 
     _this.formView.initView();
     _this.gridView01.initView();
+    _this.gridView02.initView();
     ACTIONS.dispatch(ACTIONS.PAGE_SEARCH, this.formView.getData());
 };
 
@@ -179,32 +253,66 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
         this.model.setModel(this.getDefaultData(), this.target);
         this.modelFormatter = new axboot.modelFormatter(this.model); // 모델 포메터 시작
         this.initEvent();
+
+        this.target.find('[data-ax5picker="date"]').ax5picker({
+            direction: "auto",
+            content: {
+                type: 'date'
+            }
+        });
     },
     initEvent: function () {
         var _this = this;
 
-        $("input[data-ax-path='eventName']").keyup(function(){
-            if(13 == event.keyCode)
-                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+        /** 팝업 초기화 시 관련 필드 함께 초기화 **/
+        $("input[data-ax-path='aggregationCode']").change(function(){
+            fnObj.formView.setFormData("aggregationTitle", "");
+            fnObj.formView.setFormData("aggregationUuid", "");
         });
 
-        $("input[data-ax-path='eventCode']").parents().eq(1).find("a").click(function(){
+        $("input[data-ax-path='itemCode']").change(function(){
+            fnObj.formView.setFormData("itemTitle", "");
+            fnObj.formView.setFormData("itemUuid", "");
+        });
+
+        $("input[data-ax-path='aggregationCode']").parents().eq(1).find("a").click(function(){
             var data = {
-                popupCode : "PU129",
-                searchData : $("input[data-ax-path='eventCode']").val().trim(),
+                popupCode : "PU123",
+                searchData : $("input[data-ax-path='aggregationCode']").val().trim(),
                 preSearch : false
             };
-            ACTIONS.dispatch(ACTIONS.SEARCH_CLASS_SCH,data);
+            ACTIONS.dispatch(ACTIONS.SEARCH_AGG_CODE,data);
         });
-        $("input[data-ax-path='eventCode']").focusout(function(){
+        $("input[data-ax-path='aggregationCode']").focusout(function(){
 
             if("" != $(this).val().trim())
             {
                 var data = {
-                    popupCode : "PU129",
+                    popupCode : "PU123",
                     searchData : $(this).val().trim()
                 };
-                ACTIONS.dispatch(ACTIONS.SEARCH_CLASS_SCH,data);
+                ACTIONS.dispatch(ACTIONS.SEARCH_AGG_CODE,data);
+            }
+
+        });
+
+        $("input[data-ax-path='itemCode']").parents().eq(1).find("a").click(function(){
+            var data = {
+                popupCode : "PU139",
+                searchData : $("input[data-ax-path='itemCode']").val().trim(),
+                preSearch : false
+            };
+            ACTIONS.dispatch(ACTIONS.SEARCH_ITEM_CODE,data);
+        });
+        $("input[data-ax-path='aggregationCode']").focusout(function(){
+
+            if("" != $(this).val().trim())
+            {
+                var data = {
+                    popupCode : "PU139",
+                    searchData : $(this).val().trim()
+                };
+                ACTIONS.dispatch(ACTIONS.SEARCH_ITEM_CODE,data);
             }
 
         });
@@ -243,37 +351,112 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
 
 /*팝업 헤더*/
 fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
+    tagId : "realgrid01",
+
+    initView: function () {
+        this.gridObj = new TreeGridWrapper("realgrid01", "/assets/js/libs/realgrid", true);
+        this.gridObj.setGridStyle("100%", "100%")
+            .setOption({
+                footer:{visible:false},
+                header: { visible: true},
+                checkBar: {visible:false, exclusive: true},
+                indicator: {visible: false},
+                stateBar:{visible:false},
+                checkBox:{visible:true},
+            })
+        this.gridObj.setColumnInfo(df00301.column_info).makeGrid();
+
+        this.gridObj.setDisplayOptions({
+            fitStyle:"evenFill"
+        });
+        this.gridObj.itemClick(this.itemClick);
+        this.gridObj.itemClick(this.itemClick);
+        this.gridObj.onItemChecked(this.onItemChecked);
+        this.bindEvent();
+    },
+    bindEvent : function()
+    {
+        var _this = this;
+        $(".open_close.expendAll").click(function(){
+            _this.gridObj.expandAll();
+        });
+        $(".open_close.collapseAll").click(function(){
+            _this.gridObj.collapseAll();
+        });
+        $("#leftMenuParam").keydown(function(event){
+            if(13 == event.keyCode)
+                $("#searchLeftMenu").click();
+        })
+        $("#searchLeftMenu").click(function(){
+            if("" != $("#leftMenuParam").val())
+            {
+                _this.gridObj.search(["title"],$("#leftMenuParam").val())
+            }
+        });
+        $(".btn_arrange").click(function(){
+            ACTIONS.dispatch(ACTIONS.MODAL_OPEN);
+        });
+    },
+    setData: function (list) {
+        this.gridObj.setTreeDataForArray(list, "orderKey1");
+    },
+    getSelectedData : function(){
+        return this.gridObj.getSelectedData();
+    },
+    isChangeData: function () {
+        if (this.getData().length > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    },
+    itemClick: function (data, index) {
+        if(data){
+            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1,data);
+        }
+    },
+    getData: function () {
+        return this.gridObj.getData();
+    },
+
+    checkChildren : function(index,checked){
+        this.gridObj.checkChildren(index, checked, true, false);
+    },
+    onItemChecked: function(grid,itemIndex,checked) {
+        fnObj.gridView01.checkChildren(itemIndex,checked);
+    }
+});
+/*fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     tagId: "realgrid01",
     primaryKey : "disposalFreezeDegreeUuid",
     entityName: "DF_DISPOSAL_FREEZE_DEGREE",
     initView: function () {
         this.initInstance();
         this.setColumnInfo(df00301.column_info);
-        this.setFixedOptions({
-            colCount: 4
-        });
-        this.gridObj.setOption({
-            checkBar: {visible: true},
-            indicator: {visible: true}
-        })
         this.makeGrid();
         this.removeRowBeforeEvent(this.cancelDelete);
-        //this.gridObj.itemClick(this.itemClick);
+        this.gridObj.itemClick(this.itemClick);
     },
     getSelectedData : function(){
         return this.gridObj.getSelectedData()
     },
-    disabledColumn : function()
-    {
-        this.gridObj.setCustomCellStyleRows("disable",function(row){
-            if(row["freezeYN"] == FREEZE_STATUS)
-                return true;
-            else
-                return false;
-        },["eventName","eventCode","degree"]);
-    },
-    itemClick: function (data) {
-
+    itemClick: function(data){
+        if (data.disposalFreezeDegreeUuid != null && data.disposalFreezeDegreeUuid != "") {
+            if (isDetailChanged) {
+                axDialog.confirm({
+                    msg: axboot.getCommonMessage("AA006")
+                }, function () {
+                    if (this.key == "ok") {
+                        ACTIONS.dispatch(ACTIONS.TOP_GRID_DETAIL_PAGE_SAVE);
+                    } else {
+                        isDetailChanged = false;
+                        ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, data);
+                    }
+                });
+            } else {
+                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, data);
+            }
+        }
     },
     cancelDelete: function(){
         if(fnObj.gridView01.getSelectedData().freezeYN == FREEZE_STATUS){
@@ -285,8 +468,52 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
         }
     }
 
-});
+});*/
 
+/*팝업 헤더*/
+fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
+    tagId: "realgrid02",
+    primaryKey : "disposalFreezeResultUuid",
+    entityName: "DF_DISPOSAL_FREEZE_RESULT",
+    initView: function () {
+        this.initInstance();
+        this.setColumnInfo(df00302.column_info);
+        this.gridObj.setOption({
+            checkBar: {visible: true},
+            indicator: {visible: true}
+        });
+        this.gridObj.setRunAdd(false);
+        this.makeGrid();
+        this.removeRowBeforeEvent(this.cancelDelete);
+        this.addRowAfterEvent(this.ADD_ITEM);
+    },
+    getSelectedData : function(){
+        return this.gridObj.getSelectedData();
+    },
+    disabledColumn : function()
+    {
+        this.gridObj.setCustomCellStyleRows("disable",function(row){
+            if(row["freezeYN"] == FREEZE_STATUS)
+                return true;
+            else
+                return false;
+        },["eventName","eventCode","degree"]);
+    },
+    ADD_ITEM: function (data) {
+
+    },
+    cancelDelete: function(){
+        var state = axboot.commonCodeValueByCodeName("CD115", CONFIRM_STATUS);
+
+        if(fnObj.gridView01.getSelectedData().statusUuid == state) {
+            axToast.push(axboot.getCommonMessage("DF001_01"));
+
+            this.setRunDel(false);
+        }else{
+            this.setRunDel(true);
+        }
+    }
+});
 /**
  * [필수]
  * Grid 데이터 변경 여부를 체크하기 위한 함수
