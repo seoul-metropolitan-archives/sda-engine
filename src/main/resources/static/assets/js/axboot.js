@@ -2483,6 +2483,12 @@ axboot.baseView =
             $(".bdb").delegate("#inquiryGrid", "click", function () {
                 _this.inquiryGrid();
             });
+            $(".bdb").delegate("#scheduling", "click", function () {
+                _this.scheduling();
+            });
+            $(".bdb").delegate("#disposal", "click", function () {
+                _this.disposal();
+            });
            /* $(document).delegate(".ax-body .div_tablerow:not(.searchFields) input", "keydown", function (e) {
                 if (e.ctrlKey && e.altKey && e.keyCode == 73) {
                     e.preventDefault();
@@ -2568,6 +2574,14 @@ axboot.baseView =
         , inquiryGrid: function () {
             if (ACTIONS && ACTIONS.PAGE_GRID_INQUIRY)
                 ACTIONS.dispatch(ACTIONS.PAGE_GRID_INQUIRY);
+        }
+        , scheduling: function () {
+            if (ACTIONS && ACTIONS.PAGE_SCHEDULING)
+                ACTIONS.dispatch(ACTIONS.PAGE_SCHEDULING);
+        }
+        , disposal: function () {
+            if (ACTIONS && ACTIONS.PAGE_DISPOSAL)
+                ACTIONS.dispatch(ACTIONS.PAGE_DISPOSAL);
         }
     };
 

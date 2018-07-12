@@ -163,6 +163,22 @@
                 }
 
             },
+            "ARRANGE_CONTAINER_POPUP" :{
+                width: 1600,
+                height: 700,
+                iframe: {
+                    url: "/st/st004/st004-p01"
+                }
+
+            },
+            "SCHEDULING_RECORD_POPUP" :{
+                width: 1600,
+                height: 700,
+                iframe: {
+                    url: "/rs/rs004/rs004-p01"
+                }
+
+            },
             "CLASSIFY_POPUP" :{
                 width: 1600,
                 height: 700,

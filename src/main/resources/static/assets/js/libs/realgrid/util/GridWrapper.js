@@ -1958,9 +1958,11 @@ GridWrapper.prototype.getSelectionData = function () {
     }
 };
 
-
 GridWrapper.prototype.setDoAppendValidate = function(_doValidate) { doAppendValidate = _doValidate;}
 GridWrapper.prototype.getDoAppendValidate = function(){
     var validate = doAppendValidate == undefined ? true :  doAppendValidate;
     return validate;
 }
+GridWrapper.prototype.setCheckable = function (itemIndex, value) {
+    this.gridView.setCheckable(itemIndex, value);
+};
