@@ -3,9 +3,9 @@ var fnObj = {};
 var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH: function (caller, act, data) {
         axboot.ajax({
-            type: "POST",
-            url: "/api/v1/ad/ad001/getEnviromentList.do",
-            data: JSON.stringify(fnObj.searchView.getData()),
+            type: "GET",
+            url: "/api/v1/common/controller",
+            data: $.extend({}, {pageSize: 1000, sort: "classificationCode", serviceId:"ad001", methodName:"getEnviromentList"}, fnObj.searchView.getData()),
             callback: function (res) {
                 fnObj.gridView01.resetCurrent();
                 fnObj.gridView01.setData(res.list);

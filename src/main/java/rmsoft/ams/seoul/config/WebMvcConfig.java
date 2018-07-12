@@ -82,6 +82,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter implements Application
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(localeChangeInterceptor());
+        registry.addInterceptor(commonAPIInterceptor());
     }
 
     @Override
@@ -184,6 +185,17 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter implements Application
         LocaleChangeInterceptor localeChangeInterceptor = new LocaleChangeInterceptor();
         localeChangeInterceptor.setParamName("language");
         return localeChangeInterceptor;
+    }
+
+    /**
+     * Locale change interceptor locale change interceptor.
+     *
+     * @return the locale change interceptor
+     */
+    @Bean
+    public CommonAPIInterceptor commonAPIInterceptor() {
+        CommonAPIInterceptor commonAPIInterceptor = new CommonAPIInterceptor();
+        return commonAPIInterceptor;
     }
 
     /**
