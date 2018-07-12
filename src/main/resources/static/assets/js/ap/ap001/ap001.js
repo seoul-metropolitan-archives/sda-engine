@@ -5,7 +5,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         axboot.ajax({
             type: "GET",
             url: "/api/v1/common/controller",
-            data: $.extend({}, {pageSize: 1000, sort: "classificationCode", serviceId:"ad001", methodName:"getEnviromentList"}, fnObj.searchView.getData()),
+            data: $.extend({}, {pageSize: 1000, sort: "", serviceId: "ad001", methodName: "getEnviromentList"}, fnObj.searchView.getData()),
             callback: function (res) {
                 fnObj.gridView01.resetCurrent();
                 fnObj.gridView01.setData(res.list);
@@ -118,12 +118,12 @@ fnObj.searchView = axboot.viewExtend(axboot.formView, {
 
 fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     tagId: "realgrid01",
-    primaryKey : "configurationUuid",
+    primaryKey: "configurationUuid",
     initView: function () {
         this.initInstance();
         this.setColumnInfo(ad00101.column_info);
         this.setFixedOptions({
-            colCount : 2
+            colCount: 2
         })
         this.makeGrid();
 

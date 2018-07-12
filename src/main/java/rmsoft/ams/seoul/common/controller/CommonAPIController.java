@@ -1,30 +1,22 @@
 package rmsoft.ams.seoul.common.controller;
 
-import io.onsemiro.core.api.response.ApiResponse;
-import io.onsemiro.core.api.response.Responses;
 import io.onsemiro.core.context.AppContextManager;
 import io.onsemiro.core.parameter.RequestParams;
-import io.onsemiro.core.vo.BaseVO;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import rmsoft.ams.seoul.ad.ad001.service.Ad001Service;
-import rmsoft.ams.seoul.ad.ad001.vo.Ad00101VO;
 import rmsoft.ams.seoul.common.vo.CommonServiceVO;
 import rmsoft.ams.seoul.config.constant.PackageNames;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 
@@ -49,9 +41,6 @@ public class CommonAPIController extends MessageBaseController {
      */
     @GetMapping("/controller")
     public Object controllerInvoker(Pageable pageable, CommonServiceVO serviceParams, RequestParams<Object> requestParams) {
-
-        //Ad001Controller controller = (Ad001Controller)CommonBeanUtils.getBean("Ad001Controller");
-
         String serviceId = serviceParams.getServiceId();
         String serviceMethodName = serviceParams.getMethodName();
 
@@ -61,8 +50,6 @@ public class CommonAPIController extends MessageBaseController {
         Parameter[] parameters = null;
         Constructor constructor = null;
         Object voInstance = null;
-        Object methodParam = null;
-
         Object[] inputParams = null;
 
         try {
@@ -86,13 +73,6 @@ public class CommonAPIController extends MessageBaseController {
                 }
             }
 
-
-            //constructor = parameterTypes[0].getConstructor(); // 파라미터가 여러개일수 있는 부분 처리해야할듯././.
-            //voInstance = constructor.newInstance();
-            //methodParam = convertMapToObject(params, voInstance);
-
-            //Object methodParam = ModelMapperUtils.map(convertMapToObject(params, new Object()), parameterTypes[0]);
-
             return method.invoke(controller, inputParams);
 
         } catch (Exception e) {
@@ -102,53 +82,12 @@ public class CommonAPIController extends MessageBaseController {
         return null;
     }
 
-
     /**
-     * Service invoker responses . list response.
      *
-     * @param param the param
-     * @return the responses . list response
+     * @param serviceId
+     * @param serviceGbn
+     * @return
      */
-    @GetMapping("/service")
-    public Responses.ListResponse serviceInvoker(@RequestBody Map param) {
-
-        //Ad001Controller controller = (Ad001Controller)CommonBeanUtils.getBean("Ad001Controller");
-
-        String serviceId = (String) param.get("service");
-        String serviceMethodName = (String) param.get("method");
-        Map params = (HashMap) param.get("params");
-
-        Class proxyClass = null;
-        Object controller = null; // Service
-        Method method = null; // Service Method
-
-        List<T> resultList = null;
-
-        try {
-            proxyClass = Class.forName(getCombinedPackagePath(serviceId, "service"));
-
-            controller = AppContextManager.getBean(proxyClass);
-            method = getMethodByName(controller, serviceMethodName);
-
-            Class[] parameterTypes = method.getParameterTypes();
-
-            Constructor constructor = parameterTypes[0].getConstructor(); // 파라미터가 여러개일수 있는 부분 처리해야할듯././.
-            Object voInstance = constructor.newInstance();
-            Object methodParam = convertMapToObject(params, voInstance);
-
-            //Object methodParam = ModelMapperUtils.map(convertMapToObject(params, new Object()), parameterTypes[0]);
-
-            // 메소드 시그니쳐(선언)을 가져와서 Mapping해줘야하남??? -_-;
-            resultList = (List) method.invoke(controller, methodParam);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return Responses.ListResponse.of(resultList);
-        //return Responses.ListResponse.of(service.getEnviromentList(null));
-    }
-
     private String getCombinedPackagePath(String serviceId, String serviceGbn) {
         String combinedStr = "";
 
@@ -164,20 +103,12 @@ public class CommonAPIController extends MessageBaseController {
         return combinedStr;
     }
 
-    private String getCombinedPackageVo(String serviceId, String voName) {
-        String combinedStr = "";
-
-        if (serviceId.length() == 5) {
-            combinedStr += PackageNames.BASE + ".";
-            combinedStr += serviceId.substring(0, 2) + ".";
-            combinedStr += serviceId + ".";
-
-            combinedStr += "vo." + voName;
-        }
-
-        return combinedStr;
-    }
-
+    /**
+     *
+     * @param classInstance
+     * @param methodName
+     * @return
+     */
     private Method getMethodByName(Object classInstance, String methodName) {
         Method[] methods = classInstance.getClass().getMethods();
 
@@ -190,6 +121,12 @@ public class CommonAPIController extends MessageBaseController {
         return null;
     }
 
+    /**
+     *
+     * @param map
+     * @param obj
+     * @return
+     */
     private Object convertMapToObject(Map map, Object obj) {
         String keyAttribute = null;
         String setMethodString = "set";
@@ -213,6 +150,11 @@ public class CommonAPIController extends MessageBaseController {
         return obj;
     }
 
+    /**
+     *
+     * @param stringValue
+     * @return
+     */
     private String getFirstUppercaseStr(String stringValue) {
         if (StringUtils.isNotEmpty(stringValue)) {
             return stringValue.substring(0, 1).toUpperCase() + stringValue.substring(1, stringValue.length());
@@ -220,17 +162,4 @@ public class CommonAPIController extends MessageBaseController {
 
         return stringValue;
     }
-
-    /**
-     * Save api response.
-     *
-     * @param list the list
-     * @return the api response
-     */
-    @RequestMapping("/save")
-    public ApiResponse save(@RequestBody List<Ad00101VO> list) {
-        ApiResponse apiResponse = service.save(list);
-        return apiResponse;
-    }
-
 }
