@@ -52,8 +52,10 @@ var ACTIONS = axboot.actionExtend(fnObj, {
 
         axboot.ajax({
             type: "GET",
-            url: "/api/v1/df/df001/detail",
-            data: $.extend({}, {pageSize: 1000}, fnObj.gridView01.getSelectedData()),
+            url: "/api/v1/common/controller",
+            data: $.extend({}, {pageSize: 1000, sort: "", serviceId:"df001", methodName:"detail"}, fnObj.gridView01.getSelectedData()),
+            //url: "/api/v1/df/df001/detail",
+            //data: $.extend({}, {pageSize: 1000}, fnObj.gridView01.getSelectedData()),
             callback: function (res) {
                 if(!selectedData)
                     return ;

@@ -12,7 +12,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             url: "/api/v1/df/df003/searchTree",
             data: $.extend({}, {pageSize: 1000, sort: "eventCode"}, this.formView.getData()),
             callback: function (res) {
-                if(res.list == null || res.list.length <= 0){
+                if (res.list == null || res.list.length <= 0) {
                     fnObj.gridView01.setData([]);
                     return;
                 }
@@ -26,12 +26,12 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         return false;
     },
     PAGE_SEARCH1: function (caller, act, data) {
-        if(data == null) return;
+        if (data == null) return;
 
         axboot.ajax({
             type: "GET",
             url: "/api/v1/df/df003/searchList",
-            async : false,
+            async: false,
             data: $.extend({}, {pageSize: 1000}, this.formView.getData(), data),
             callback: function (res) {
                 fnObj.gridView02.resetCurrent();
@@ -46,33 +46,11 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     },
     ERROR_SEARCH: function (caller, act, data) {
     },
-    STATUS_UPATE: function (caller, act, data) {
-        var rows = fnObj.gridView02.gridObj.getCheckedList();
-
-        if(!rows || rows.length < 1) return;
-
-        var params = rows.filter(function (item) {
-            item.changeStatus = data;
-            return item.disposalFreezeResultUuid !== "";
-        });
-
-        axboot.ajax({
-            type: "PUT",
-            url: "/api/v1/df/df003/unfreeze",
-            data: JSON.stringify(params),
-            callback: function (res) {
-                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, fnObj.gridView01.getSelectedData());
-            },
-            options: {
-                onError: axboot.viewError
-            }
-        });
-    },
     PAGE_CONFIRM: function (caller, act, data) {
         // Freeze시킬 Item 추가
-        if(fnObj.gridView01.getSelectedData() == null
+        if (fnObj.gridView01.getSelectedData() == null
             || fnObj.gridView01.getSelectedData().disposalFreezeDegreeUuid == ""
-            || fnObj.gridView01.getSelectedData().disposalFreezeDegreeUuid == undefined){
+            || fnObj.gridView01.getSelectedData().disposalFreezeDegreeUuid == undefined) {
             return;
         }
 
@@ -87,54 +65,42 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 return {
                     confirmBtn: "Freeze",
                     crrntAgg: fnObj.gridView01.getSelectedData().eventCode,
-                    disposalFreezeResultUuid :  fnObj.gridView01.getSelectedData().disposalFreezeResultUuid,
-                    disposalFreezeEventUuid :  fnObj.gridView01.getSelectedData().disposalFreezeEventUuid,
-                    disposalFreezeDegreeUuid :  fnObj.gridView01.getSelectedData().disposalFreezeDegreeUuid,
-                    primarykey :  fnObj.gridView01.primaryKey,
-                    listService : "/api/v1/df/df003/freeze/search",
-                    saveService : "/api/v1/df/df003/saveItems"
+                    disposalFreezeResultUuid: fnObj.gridView01.getSelectedData().disposalFreezeResultUuid,
+                    disposalFreezeEventUuid: fnObj.gridView01.getSelectedData().disposalFreezeEventUuid,
+                    disposalFreezeDegreeUuid: fnObj.gridView01.getSelectedData().disposalFreezeDegreeUuid,
+                    primarykey: fnObj.gridView01.primaryKey,
+                    listService: "/api/v1/df/df003/freeze/search",
+                    saveService: "/api/v1/df/df003/saveItems"
                 };
             },
             callback: function (data) {
-                if(this) this.close();
-                if(data){
-                    ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1,data);
+                if (this) this.close();
+                if (data) {
+                    ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, data);
                 }
             }
         });
     },
     PAGE_CANCEL: function (caller, act, data) {
-        ACTIONS.dispatch(ACTIONS.STATUS_UPATE,CANCEL_STATUS);
+        ACTIONS.dispatch(ACTIONS.STATUS_UPATE, CANCEL_STATUS);
     },
     PAGE_SAVE: function (caller, act, data) {
-        if(!this.gridView01.gridObj.validate()){
+        if (!this.gridView01.gridObj.validate()) {
             return false;
-        }else{
+        } else {
             ACTIONS.dispatch(ACTIONS.TOP_GRID_SAVE);
         }
         // ACTIONS.dispatch(ACTIONS.TOP_GRID_DETAIL_PAGE_SAVE);
     },
+    STATUS_UPATE: function (caller, act, data) {
+        var rows = fnObj.gridView02.gridObj.getCheckedList();
+
+        ACTIONS.dispatch(ACTIONS.DO_UNFREEZE, rows);
+    },
     PAGE_UNFREEZE: function (caller, act, data) {
         var rows = fnObj.gridView01.gridObj.getCheckedList();
 
-        if(!rows || rows.length < 1) return;
-
-        var params = rows.filter(function (item) {
-            item.changeStatus = data;
-            return item.disposalFreezeEventUuid !== "";
-        });
-
-        axboot.ajax({
-            type: "PUT",
-            url: "/api/v1/df/df003/unfreeze",
-            data: JSON.stringify(params),
-            callback: function (res) {
-                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, fnObj.gridView01.getSelectedData());
-            },
-            options: {
-                onError: axboot.viewError
-            }
-        });
+        ACTIONS.dispatch(ACTIONS.DO_UNFREEZE, rows);
     },
     PAGE_GRID_INQUIRY: function (caller, act, data) {
         ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, fnObj.gridView01.getSelectedData());
@@ -156,6 +122,27 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 axToast.push(axboot.getCommonMessage("AA007"));
             });
         return result;
+    },
+    DO_UNFREEZE: function(caller, act, data){
+        if (!data || data.length < 1) return;
+
+        axDialog.confirm({
+            msg: "Unfreeze 하시겠습니까?"
+        }, function () {
+            if (this.key == "ok") {
+                axboot.ajax({
+                    type: "PUT",
+                    url: "/api/v1/df/df003/unfreeze",
+                    data: JSON.stringify(data),
+                    callback: function (res) {
+                        ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, fnObj.gridView01.getSelectedData());
+                    },
+                    options: {
+                        onError: axboot.viewError
+                    }
+                });
+            }
+        });
     },
     TOP_GRID_DETAIL_PAGE_SAVE :function () {
 

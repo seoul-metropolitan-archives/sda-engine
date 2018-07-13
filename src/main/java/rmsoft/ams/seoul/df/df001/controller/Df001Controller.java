@@ -39,7 +39,7 @@ public class Df001Controller extends BaseController {
      * @return the classification scheme detail
      */
     @GetMapping("/detail")
-    public Df00102VO getDetail(RequestParams<Df00102VO> requestParams) {
+    public Df00102VO detail(RequestParams<Df00102VO> requestParams) {
         return df001Service.getDetail(requestParams);
     }
 
