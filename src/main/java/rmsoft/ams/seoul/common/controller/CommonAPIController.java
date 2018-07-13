@@ -136,11 +136,26 @@ public class CommonAPIController extends MessageBaseController {
         while (itr.hasNext()) {
             keyAttribute = (String) itr.next();
             methodString = setMethodString + keyAttribute.substring(0, 1).toUpperCase() + keyAttribute.substring(1);
-            Method[] methods = obj.getClass().getDeclaredMethods();
+            Method[] methods = obj.getClass().getMethods();
             for (int i = 0; i < methods.length; i++) {
                 if (methodString.equals(methods[i].getName())) {
                     try {
-                        methods[i].invoke(obj, map.get(keyAttribute));
+                        if(methods[i].getParameterTypes().length < 1)
+                            continue;
+
+                        String paramType = methods[i].getParameterTypes()[0].getName();
+
+                        if(paramType.equals(int.class.getName())) {
+                           methods[i].invoke(obj, (Integer.parseInt((String) map.get(keyAttribute))));
+                        }else if(paramType.equals(float.class.getName())) {
+                            methods[i].invoke(obj, (Float.parseFloat((String) map.get(keyAttribute))));
+                        }else if(paramType.equals(long.class.getName())) {
+                            methods[i].invoke(obj, (Long.parseLong((String) map.get(keyAttribute))));
+                        }else if(paramType.equals(double.class.getName())) {
+                            methods[i].invoke(obj, (Double.parseDouble((String) map.get(keyAttribute))));
+                        }else{
+                            methods[i].invoke(obj, map.get(keyAttribute));
+                        }
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
