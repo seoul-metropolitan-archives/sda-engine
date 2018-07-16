@@ -112,7 +112,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 if(res.status == -500)
                     axWarningToast.push(axboot.getCommonMessage(res.message));
                 else
-                {``
+                {
                     axToast.push(axboot.getCommonMessage(res.message));
                     ACTIONS.dispatch(ACTIONS.PAGE_SEARCH,fnObj.naviView.getRoot());
                     if($(".explorer_grid").css("display")=="none")
