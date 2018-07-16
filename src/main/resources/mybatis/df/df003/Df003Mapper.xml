@@ -69,7 +69,7 @@
             DISPOSAL_FREEZE_RESULT_UUID AS disposalFreezeResultUuid,
             DISPOSAL_FREEZE_EVENT_UUID AS disposalFreezeEventUuid,
             DISPOSAL_FREEZE_DEGREE_UUID AS disposalFreezeDegreeUuid,
-            ITEM_UUID AS itemUuid,
+            A.ITEM_UUID AS itemUuid,
             A.AGGREGATION_UUID AS aggregationUuid,
             B.CATE_PATH AS aggregationTree,
             ITEM_CODE AS itemCode,
@@ -90,10 +90,10 @@
         FROM
             DF_DISPOSAL_FREEZE_RESULT A,
             (
-                SELECT ITEM_CODE, TITLE, A1.AGGREGATION_UUID, SUBSTR(CATE_PATH, 4) AS CATE_PATH
+                SELECT ITEM_UUID, ITEM_CODE, TITLE, A1.AGGREGATION_UUID, SUBSTR(CATE_PATH, 4) AS CATE_PATH
                 FROM
                 (
-                    SELECT ITEM_CODE, TITLE, AGGREGATION_UUID
+                    SELECT ITEM_UUID, ITEM_CODE, TITLE, AGGREGATION_UUID
                     FROM RC_ITEM
                     WHERE ITEM_UUID IN (
                         SELECT ITEM_UUID
@@ -113,16 +113,16 @@
                         SYS_CONNECT_BY_PATH((SELECT TITLE FROM RC_AGGREGATION WHERE AGGREGATION_UUID = T1.AGGREGATION_UUID), ' > ') AS CATE_PATH
                     FROM (
                             SELECT CONNECT_BY_ROOT AGGREGATION_UUID AS ROOT, AGGREGATION_UUID, PARENT_AGGREGATION_UUID
-                            FROM RC_AGGREGATION
-        START WITH PARENT_AGGREGATION_UUID IS NULL
-        CONNECT BY PRIOR AGGREGATION_UUID = PARENT_AGGREGATION_UUID
-        ) T1
-        START WITH T1.PARENT_AGGREGATION_UUID IS NULL
-        CONNECT BY PRIOR T1.AGGREGATION_UUID = T1.PARENT_AGGREGATION_UUID
-        ) A2
-        WHERE A1.AGGREGATION_UUID = A2.AGGREGATION_UUID
-        ) B
-        WHERE A.AGGREGATION_UUID = B.AGGREGATION_UUID
+                                FROM RC_AGGREGATION
+                            START WITH PARENT_AGGREGATION_UUID IS NULL
+                            CONNECT BY PRIOR AGGREGATION_UUID = PARENT_AGGREGATION_UUID
+                        ) T1
+                    START WITH T1.PARENT_AGGREGATION_UUID IS NULL
+                    CONNECT BY PRIOR T1.AGGREGATION_UUID = T1.PARENT_AGGREGATION_UUID
+                    ) A2
+                    WHERE A1.AGGREGATION_UUID = A2.AGGREGATION_UUID
+                ) B
+        WHERE A.ITEM_UUID = B.ITEM_UUID
         <if test="null != disposalFreezeEventUuid and '' != disposalFreezeEventUuid">
             AND DISPOSAL_FREEZE_EVENT_UUID = #{disposalFreezeEventUuid}
         </if>

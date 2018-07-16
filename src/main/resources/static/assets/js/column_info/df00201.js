@@ -80,9 +80,8 @@ var df00201 =
                     name: "keyword",
                     text: "Keyword",
                     width: 120,
-                    textAlignment: "far",
                     dataType: "text",
-                    required: false
+                    required: true
                 },
                 {
                     sortNo: 6,

@@ -82,7 +82,7 @@ var df00101 =
                     name: "description",
                     text: "Description",
                     width: 150,
-                    dataType: "number",
+                    dataType: "richtext",
                     required: false
                 },
                 {
@@ -175,6 +175,24 @@ var df00101 =
                     name: "reason",
                     text: "REASON",
                     dataType: "text",
+                    visible: false
+                },
+                {
+                    sortNo: 17,
+                    name: "freezeCnt",
+                    dataType: "number",
+                    visible: false
+                },
+                {
+                    sortNo: 18,
+                    name: "aggregationCnt",
+                    dataType: "number",
+                    visible: false
+                },
+                {
+                    sortNo: 19,
+                    name: "itemCnt",
+                    dataType: "number",
                     visible: false
                 }
             ]

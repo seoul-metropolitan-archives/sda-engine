@@ -18,6 +18,15 @@
             NOTES AS notes,
             END_YN AS endYN,
             REASON as reason,
+            (SELECT MAX("DEGREE")
+            FROM DF_DISPOSAL_FREEZE_DEGREE
+            WHERE DISPOSAL_FREEZE_EVENT_UUID = T1.DISPOSAL_FREEZE_EVENT_UUID) AS freezeCnt,
+            (SELECT COUNT(DISTINCT(AGGREGATION_UUID))
+            FROM DF_DISPOSAL_FREEZE_RESULT
+            WHERE DISPOSAL_FREEZE_EVENT_UUID = T1.DISPOSAL_FREEZE_EVENT_UUID) AS aggregationCnt,
+            (SELECT COUNT(ITEM_UUID)
+            FROM DF_DISPOSAL_FREEZE_RESULT
+            WHERE DISPOSAL_FREEZE_EVENT_UUID = T1.DISPOSAL_FREEZE_EVENT_UUID) AS itemCnt,
         ]]>
         <include refid="Common.UserName">
             <property name="userUuid" value="TERMINATOR_UUID"/>
@@ -44,7 +53,7 @@
         <![CDATA[
             UPDATE_DATE AS  updateDate
         FROM
-            DF_DISPOSAL_FREEZE_EVENT
+            DF_DISPOSAL_FREEZE_EVENT T1
         WHERE 1=1
         ]]>
         <if test="null != statusUuid and '' != statusUuid">
@@ -85,7 +94,7 @@
             (SELECT MAX("DEGREE")
             FROM DF_DISPOSAL_FREEZE_DEGREE
             WHERE DISPOSAL_FREEZE_EVENT_UUID = #{disposalFreezeEventUuid}) AS freezeCnt,
-            (SELECT CASE WHEN COUNT(AGGREGATION_UUID) = 0 THEN NULL ELSE COUNT(AGGREGATION_UUID) END
+            (SELECT CASE WHEN COUNT(DISTINCT(AGGREGATION_UUID)) = 0 THEN NULL ELSE COUNT(DISTINCT(AGGREGATION_UUID)) END
             FROM DF_DISPOSAL_FREEZE_RESULT
             WHERE DISPOSAL_FREEZE_EVENT_UUID = #{disposalFreezeEventUuid}) AS aggregationCnt,
             (SELECT CASE WHEN COUNT(ITEM_UUID) = 0 THEN NULL ELSE COUNT(ITEM_UUID) END

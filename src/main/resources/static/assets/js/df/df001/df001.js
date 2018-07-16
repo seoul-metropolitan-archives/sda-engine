@@ -227,6 +227,9 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
     setFormData: function (dataPath, value) {
         this.model.set(dataPath, value);
     },
+    getFormData: function (dataPath) {
+        return this.model.get(dataPath);
+    },
     setData: function (data) {
 
         if (typeof data === "undefined") data = this.getDefaultData();
@@ -264,12 +267,13 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
             colCount: 4
         });
         this.gridObj.setOption({
-            checkBar: {visible: true},
+            checkBar: {visible:true, showAll:false},
             indicator: {visible: true}
         })
         this.makeGrid();
         this.removeRowBeforeEvent(this.cancelDelete);
         this.gridObj.itemClick(this.itemClick);
+        this.gridObj.onItemChecked(this.onItemChecked);
     },
     getSelectedData : function(){
         return this.gridObj.getSelectedData()
@@ -277,12 +281,21 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     disabledColumn : function()
     {
         var state = axboot.commonCodeValueByCodeName("CD115", CONFIRM_STATUS);
-        this.gridObj.setCustomCellStyleRows("disable",function(row){
-            if(row["statusUuid"] == state)
-                return true;
-            else
-                return false;
-        },["eventName","eventTypeUuid","reviewDate","description"]);
+        this.gridObj.setCustomCellStyleRows("disable",
+            function(row){
+                if(row["statusUuid"] == state) {
+                    return true;
+                }else
+                    return false;
+            },["eventName", "eventTypeUuid", "reviewDate", "description"]);
+    },
+    onItemChecked: function (grid, itemIndex) {
+        var checkData = this.gridView.getDataProvider().getJsonRow(itemIndex);
+        if(checkData["freezeCnt"] > 0){
+            axWarningToast.push(axboot.getCommonMessage("DF001_02"));
+
+            this.gridView.checkItem(itemIndex, false);
+        }
     },
     itemClick: function (data) {
         if (data.disposalFreezeEventUuid != null && data.disposalFreezeEventUuid != "") {
@@ -306,7 +319,11 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
         var state = axboot.commonCodeValueByCodeName("CD115", CONFIRM_STATUS);
 
         if(fnObj.gridView01.getSelectedData().statusUuid == state) {
-            axToast.push(axboot.getCommonMessage("DF001_01"));
+            axWarningToast.push(axboot.getCommonMessage("DF001_01"));
+
+            this.setRunDel(false);
+        }else if(fnObj.formView.getFormData("freezeCnt") > 0){
+            axWarningToast.push(axboot.getCommonMessage("DF001_02"));
 
             this.setRunDel(false);
         }else{

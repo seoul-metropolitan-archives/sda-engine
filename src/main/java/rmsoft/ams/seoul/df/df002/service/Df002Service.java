@@ -82,6 +82,7 @@ public class Df002Service extends BaseService {
                 if(dfDegree.isCreated()){ //disposalFreezeDegreeUuid 없을때
                     degree = jdbcTemplate.queryForObject("select FC_DF_DEGREE_NUMBER('"+ dfDegree.getDisposalFreezeEventUuid() +"') from dual", Integer.class);
                     dfDegree.setDegree(degree);
+                    dfDegree.setStatusUuid(CommonCodeUtils.getCodeDetailUuid("CD115","Draft"));
                 }
 
                 if(dfDegree.isModified()) {

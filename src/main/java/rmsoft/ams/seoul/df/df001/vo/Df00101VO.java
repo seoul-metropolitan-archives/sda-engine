@@ -23,4 +23,8 @@ public class Df00101VO extends BaseVO {
 	private String changeStatus;
 	private String reviewDateTo;
 	private String reason;
+
+	private String freezeCnt;
+	private String aggregationCnt;
+	private String itemCnt;
 }

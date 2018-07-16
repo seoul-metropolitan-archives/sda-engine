@@ -253,8 +253,8 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
             colCount: 5
         });
         this.gridObj.setOption({
-            checkBar: {visible: true},
-            indicator: {visible: true}
+            checkBar: {visible:true, showAll:false},
+            indicator: {visible:true}
         })
         this.makeGrid();
         this.removeRowBeforeEvent(this.cancelDelete);
@@ -271,7 +271,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
                 return true;
             else
                 return false;
-        },["eventName","eventCode","degree"]);
+        },["eventName","eventCode","degree","keyword"]);
     },
     itemClick: function (data) {
     },
