@@ -21,21 +21,22 @@
                     </div>
                     <div class="bdb div_tablerow searchFields">
                         <dl>
-                            <dd class="w_auto">
-                                <div class="rdo_box">
-                                    <span class="rdo_box_title">Freeze</span>
-                                    <label><input type="radio" name="freezeYN"  data-ax-path="freezeYN" class="no_border" value="Y">Yes</label>
-                                    <label><input type="radio" name="freezeYN" data-ax-path="freezeYN" class="no_border" value="N">No</label>
-                                    <label><input type="radio" name="freezeYN" data-ax-path="freezeYN" class="no_border" value="" checked>All</label>
-                                </div>
+                            <dt class="mgl_5">Status</dt>
+                            <dd>
+                                <select data-ax-path="statusUuid" style="width:135px;">
+                                    <option value=""></option>
+                                    <option th:each="item : ${statusList}"
+                                            th:value="${item.codeDetailUUID}"
+                                            th:text="${item.codeName}"/>
+                                </select>
                             </dd>
                             <th:block layout:insert="~{/fragments/page-buttons :: searchInput02 ('Event Code','eventCode')}"/>
-                            <dt class="w130" >Event Name</dt>
+                            <dt>Event Name</dt>
                             <dd><input type=text style="width:135px" data-ax-path="eventName"></dd>
-                            <dt class="w130" >Degree</dt>
-                            <dd><input type=text style="width:135px" data-ax-path="degree"></dd>
                         </dl>
                         <dl>
+                            <dt class="mgl_5">Degree</dt>
+                            <dd><input type=text style="width:135px" data-ax-path="degree"></dd>
                             <dd class="w_auto">
                                 <div class="rdo_box">
                                     <span class="rdo_box_title">End</span>

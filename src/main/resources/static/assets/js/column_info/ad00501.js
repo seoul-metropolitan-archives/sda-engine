@@ -64,11 +64,10 @@ var ad00501 =
                 name: "useYN",
                 text: "Use",
                 width: 50,
-                editable: true,
                 dataType: "check",
                 textAlignment: "center",
                 defaultValue : "Y",
-                required: false
+                required: false,
             },
             {
                 sortNo: 7,

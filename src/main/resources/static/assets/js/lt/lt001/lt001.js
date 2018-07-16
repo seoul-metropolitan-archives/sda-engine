@@ -13,12 +13,10 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             callback: function (res) {
                 if(res.list == null || res.list.length <= 0){
                     fnObj.gridView01.setData([]);
-                    fnObj.gridView01.disabledColumn();
                     return;
                 }
                 fnObj.gridView01.setData(res.list);
                 fnObj.gridView01.resetCurrent();
-                fnObj.gridView01.disabledColumn();
             },
             options: {
                 onError: axboot.viewError
@@ -253,15 +251,6 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     },
     getSelectedData : function(){
         return this.gridObj.getSelectedData()
-    },
-    disabledColumn : function()
-    {
-        this.gridObj.setCustomCellStyleRows("disable",function(row){
-            if(row["freezeYN"] == FREEZE_STATUS)
-                return true;
-            else
-                return false;
-        },["eventName","eventCode","degree"]);
     },
     itemClick: function (data) {
 

@@ -107,15 +107,7 @@ var df00201 =
                     dataType: "check",
                     textAlignment: "center",
                     defaultValue : "N",
-                    renderer: {
-                        type: "check",
-                        shape: "",
-                        falseValues: "N",
-                        trueValues: "Y",
-                        startEditOnClick: true,
-                    },
                     required: false,
-                    editable: true
                 },
                 {
                     sortNo: 9,

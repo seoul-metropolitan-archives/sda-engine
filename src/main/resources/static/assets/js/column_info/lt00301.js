@@ -65,16 +65,8 @@ var lt00301 =
                     width: 50,
                     dataType: "check",
                     textAlignment: "center",
-                    defaultValue : "Y",
-                    renderer: {
-                        type: "check",
-                        shape: "",
-                        falseValues: "N",
-                        trueValues: "Y",
-                        startEditOnClick: true,
-                    },
-                    required: false,
-                    editable: true
+                    defaultValue : "N",
+                    required: false
                 },
                 {
                     sortNo: 8,
