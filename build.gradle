@@ -103,6 +103,9 @@ subprojects {
             exclude group: 'egovframework.rte', module: 'egovframework.rte.fdl.logging'
         }
 
+        // Excel util
+        compile 'org.dbunit:dbunit:2.5.3'
+
     }
 
 }
