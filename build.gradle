@@ -1,80 +1,108 @@
 buildscript {
     ext {
-        //springBootVersion = '1.4.3.RELEASE'
+        springBootVersion = '1.5.1.RELEASE'
+    }
+    repositories {
+        mavenCentral()
+        maven { url "https://plugins.gradle.org/m2/" }
+    }
+    dependencies {
+        classpath('io.spring.gradle:dependency-management-plugin:1.0.0.RELEASE')
+        classpath("io.franzbecker:gradle-lombok:1.8")
     }
 }
 
-plugins {
-    id 'java'
-    id 'groovy'
-    id 'idea'
-    id 'eclipse'
-    id 'org.springframework.boot' version '1.5.1.RELEASE'
-    id "org.flywaydb.flyway" version "4.0.3"
-    id 'io.franzbecker.gradle-lombok' version '1.8'
-}
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'eclipse'
+    apply plugin: 'idea'
+    apply plugin: 'groovy'
+    apply plugin: 'io.franzbecker.gradle-lombok'
 
-apply plugin: 'war'
-war {
-    baseName = 'seoul-ams'
-    manifest {
-        attributes 'Main-Class': 'rmsoft.ams.seoul.AppRunner'
-    }
-}
+    sourceCompatibility = 1.8
 
-/* _____ base config _____ */
-apply from: 'config-base.gradle'
-\
-/* _____ querydsl config _____ */
-apply from: 'config-querydsl.gradle'
-
-/* _____ dependencies config _____ */
-apply from: 'dependencies.gradle'
-
-jar {
-    baseName = 'seoul-ams'
-    version = '1.0.71'
-}
-
-/* _____ build task :: parkstore-app-server _____ */
-task buildApp(type: Copy) {
-
-    def appYmlPath = "${sourceSets.main.output.classesDir}/application.yml"
-
-    from appYmlPath
-    into 'build/libs'
-
-    def logbackPath = "${sourceSets.main.output.classesDir}/logback-prod.xml"
-
-    from logbackPath
-    into 'build/libs'
-
-    rename { fileName ->
-        if (fileName == 'logback-prod.xml') {
-            fileName.replace('-prod', '')
+    repositories {
+        maven {
+            url "${NEXUS_URL}/content/groups/public/"
+            credentials {
+                username NEXUS_ID
+                password NEXUS_PASSWORD
+            }
         }
+        maven { url "http://www.egovframe.go.kr/maven/" }
     }
 
-    dependsOn bootRepackage
-}
+    dependencies {
+        //___ compile ___
 
-/* _____ config :: flyway for local test _____ */
+        // onsemiro
+        compile 'io.dat:onsemiro-core-rm:0.6.1'
 
-def localUser = 'js_park'
+        // spring boot
+        compile 'org.springframework.boot:spring-boot-starter-web'
+        compile 'org.springframework.boot:spring-boot-starter-security'
+        compile 'org.springframework.boot:spring-boot-starter-thymeleaf'
+        compile 'org.springframework.boot:spring-boot-starter-data-jpa'
 
-flyway {
-    url = 'jdbc:oracle:thin:@shinhan.cwozeqnjffgl.ap-northeast-2.rds.amazonaws.com:1521:shinhan'
-    user = localUser
-    password = 'ParkSt0re!'
-    locations = ["filesystem:${projectDir}/src/test/resources/db/migration"]
-}
+        // spring boot - mybatis
+        compile 'org.mybatis.spring.boot:mybatis-spring-boot-starter:1.1.1'
 
-task wrapper(type: Wrapper) {
-    gradleVersion = '3.1'
-}
+        // jpa & jdbc :: querydsl, mariadb
+        compile 'com.querydsl:querydsl-jpa:4.1.4'
+        compile 'com.querydsl:querydsl-apt:4.1.4'
+        compile 'com.oracle:ojdbc6:11.2.0.3'
 
-task importExcelData(type: JavaExec) {
-    main = "rmsoft.ams.seoul.db.ExcelDataImporter"
-    classpath = sourceSets.test.runtimeClasspath
-    args localUser, "ATMS_ERROR_STATUS.xls", "ATMS_FACILITY_STATUS.xls", "ATMS_JISA_SIJE_CLOSE.xls", "ATMS_TERMINAL_STATUS.xls"
+        // thymeleaf 3.x
+        compile 'org.thymeleaf:thymeleaf:3.0.3.RELEASE'
+        compile 'org.thymeleaf:thymeleaf-spring4:3.0.3.RELEASE'
+        compile 'org.thymeleaf.extras:thymeleaf-extras-springsecurity4:3.0.1.RELEASE'
+        compile 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:2.1.2'
+
+        // model-mapper
+        compile 'org.modelmapper:modelmapper:0.7.7'
+        compile 'ma.glasnost.orika:orika-core:1.5.0'
+
+        // slack-webhook
+        compile 'net.gpedro.integrations.slack:slack-webhook:1.2.1'
+
+        // jackson-datatype
+        compile 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.8.5'
+        compile 'com.fasterxml.jackson.datatype:jackson-datatype-hibernate5:2.8.5'
+
+        // user-agent-utils
+        compile 'eu.bitwalker:UserAgentUtils:1.20'
+
+        // swagger
+        compile 'io.swagger:swagger-annotations:1.5.12'
+
+        // guava
+        compile 'com.google.guava:guava:21.0'
+
+        // apache commons
+        compile 'org.apache.commons:commons-dbcp2:2.1.1'
+        compile 'org.apache.commons:commons-lang3:3.5'
+        compile 'org.apache.commons:commons-exec:1.3'
+        compile 'commons-dbutils:commons-dbutils:1.6'
+        compile 'commons-io:commons-io:2.5'
+
+        // jxls
+        compile 'org.jxls:jxls:2.3.0'
+        compile 'net.sf.jxls:jxls-core:1.0.6'
+
+        //___ compileOnly ___
+        compileOnly 'org.projectlombok:lombok'
+
+        // https://mvnrepository.com/artifact/org.json/json
+        compile group: 'org.json', name: 'json', version: '20171018'
+
+        // jsch : sftp
+        compile group: 'com.jcraft', name: 'jsch', version: '0.1.54'
+
+        // egovframework
+        compile('egovframework.rte:egovframework.rte.psl.dataaccess:3.6.0') {
+            exclude group: 'egovframework.rte', module: 'egovframework.rte.fdl.logging'
+        }
+
+    }
+
 }

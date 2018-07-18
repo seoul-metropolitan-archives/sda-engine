@@ -9,7 +9,7 @@
         <appender-ref ref="CONSOLE" />
     </root>
 
-    <logger name="com.dat.parkstore" level="DEBUG"/>
+    <logger name="rmsoft.ams.seoul" level="DEBUG"/>
 
     <!-- Framework Category -->
     <logger name="org.apache" level="WARN" />

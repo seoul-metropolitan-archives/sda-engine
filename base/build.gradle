@@ -1,0 +1,57 @@
+buildscript {
+    ext {
+        springBootVersion = '1.5.1.RELEASE'
+    }
+    repositories {
+        mavenCentral()
+        maven { url "https://plugins.gradle.org/m2/" }
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
+
+apply plugin: 'org.springframework.boot'
+
+apply plugin: 'war'
+war {
+    baseName = 'seoul-ams'
+    manifest {
+        attributes 'Main-Class': 'rmsoft.ams.seoul.AppRunner'
+    }
+}
+
+/* _____ base config _____ */
+apply from: 'config-base.gradle'
+
+/* _____ querydsl config _____ */
+apply from: 'config-querydsl.gradle'
+
+
+jar {
+    baseName = 'seoul-ams'
+    version = '1.0.71'
+}
+
+/* _____ build task :: seoul-ams-app-server _____ */
+task buildApp(type: Copy) {
+
+    def appYmlPath = "${sourceSets.main.output.classesDir}/application.yml"
+
+    from appYmlPath
+    into 'build/libs'
+
+    def logbackPath = "${sourceSets.main.output.classesDir}/logback-prod.xml"
+
+    from logbackPath
+    into 'build/libs'
+
+    rename { fileName ->
+        if (fileName == 'logback-prod.xml') {
+            fileName.replace('-prod', '')
+        }
+    }
+
+    dependsOn bootRepackage
+}
+

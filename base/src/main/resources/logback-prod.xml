@@ -12,15 +12,15 @@
         <destination>52.78.125.49:4560</destination>
         <keepAliveDuration>5 minutes</keepAliveDuration>
         <encoder class="net.logstash.logback.encoder.LogstashEncoder">
-            <customFields>{"app_name":"app-server [dev]"}</customFields>
+            <customFields>{"app_name":"app-server [prod]"}</customFields>
         </encoder>
     </appender>
 
     <!-- File Appender -->
     <appender name="ROLLING_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${LOG_HOME}/parkstore-app-server.log</file>
+        <file>${LOG_HOME}/seoul-ams-app-server.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${LOG_HOME}/parkstore-app-server.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <fileNamePattern>${LOG_HOME}/seoul-ams-app-server.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
             <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
                 <maxFileSize>10MB</maxFileSize>
             </timeBasedFileNamingAndTriggeringPolicy>
@@ -32,16 +32,15 @@
     </appender>
 
     <!-- Logstash Appender -->
-    <appender name="SLACK" class="com.dat.parkstore.support.slack.SlackLogbackAppender"/>
+    <appender name="SLACK" class="com.dat.seoul-ams.support.slack.SlackLogbackAppender"/>
 
     <!-- ALL > TRACE > DEBUG > INFO > WARN > ERROR > OFF -->
     <root level="WARN">
         <appender-ref ref="LOGSTASH" />
         <appender-ref ref="ROLLING_FILE" />
-        <appender-ref ref="SLACK" />
     </root>
 
-    <logger name="com.dat.parkstore" level="DEBUG"/>
+    <logger name="rmsoft.ams.seoul" level="DEBUG"/>
 
     <!-- Framework Category -->
     <logger name="org.apache" level="WARN" />

@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2017. RMSoft Co.,Ltd. All rights reserved
+ *
  */
 
 package seoul;
@@ -13,6 +14,9 @@ import rmsoft.ams.seoul.common.repository.AcUserRepository;
 
 import java.util.List;
 
+/**
+ * The type Process test.
+ */
 @Service
 public class ProcessTest implements Runnable {
     private String batchId = "";
@@ -23,20 +27,38 @@ public class ProcessTest implements Runnable {
 
     private String message = "";
 
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
     public static void main(String[] args) {
         ProcessTest test = new ProcessTest();
         Thread thread = new Thread(test);
         thread.start();
     }
 
+    /**
+     * Sets message.
+     *
+     * @param message the message
+     */
     public void setMessage(String message) {
         this.message = message;
     }
 
+    /**
+     * Sets batch id.
+     *
+     * @param batchId the batch id
+     */
     public void setBatchId(String batchId) {
         this.batchId = batchId;
     }
 
+    /**
+     * Run.
+     */
     @Override
     public void run() {
         acUserRepository = AppContextManager.getBean(AcUserRepository.class);
@@ -76,6 +98,11 @@ public class ProcessTest implements Runnable {
         }
     }
 
+    /**
+     * Stop process.
+     *
+     * @param batchId the batch id
+     */
     public void stopProcess(String batchId) {
         this.stopBatchId = batchId;
     }

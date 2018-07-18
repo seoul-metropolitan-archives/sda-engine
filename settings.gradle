@@ -1,0 +1,3 @@
+rootProject.name = 'seoul-ams'
+include 'base' ,'workflow-modules/process-test'
+

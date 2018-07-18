@@ -5,7 +5,6 @@
     <include resource="org/springframework/boot/logging/logback/base.xml" />
 
     <!-- Logstash Appender -->
-    <!--<appender name="SLACK" class="com.dat.parkstore.support.slack.SlackLogbackAppender"/>-->
 
     <!-- ALL > TRACE > DEBUG > INFO > WARN > ERROR > OFF -->
     <root level="INFO">

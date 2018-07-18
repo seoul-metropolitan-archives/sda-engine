@@ -14,5 +14,5 @@ public interface Ac002Mapper extends MyBatisMapper{
      * @param param the param
      * @return the startup program
      */
-    public Ac002VO getStartupProgram(Ac002VO param);
+    Ac002VO getStartupProgram(Ac002VO param);
 }
