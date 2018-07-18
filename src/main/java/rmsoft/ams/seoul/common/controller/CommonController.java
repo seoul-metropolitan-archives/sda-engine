@@ -134,4 +134,5 @@ public class CommonController extends BaseController {
         //System.out.println(streamingUrl+":"+streamingPort+streamingContext+streamingView+obj.getString("streamdocsId")+";currentPage=1");
         return response;
     }
+
 }

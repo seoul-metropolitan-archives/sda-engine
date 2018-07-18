@@ -53,20 +53,80 @@
                         </dd>
                     </dl>
                 </div>
-                <div style="height:100%; width:100%" class="bgf7 div_tablerow">
-
-                    <div style="height:100%; width:100%" class="div_table">
-                        <ul class="bdb bdt div_tablerow" style="height:30px;">
-                            <th:block layout:insert="~{/fragments/page-buttons :: dot('System Environment')}"/>
-                            <th:block layout:insert="~{/fragments/page-buttons :: add-and-delete}"/>
-                        </ul>
-                        <div style="height:100%; width:100%" class="div_tablerow bdb">
-                            <div id="realgrid01" style="width:100%; height:100%"></div>
-                        </div>
+                <div style="width:100%" class="bgf7 div_tablerow">
+                    <div data-ax-tbl class="ax-search-tbl" minWidth="500px">
+                        <th:block
+                                layout:insert="~{/fragments/table :: tr-td2(text1='성명', style1='width: 350px', text2='주민번호', style2='width: 350px')}">
+                            <div layout:fragment="wrap-1">
+                                <input type="text" title="성명" data-ax-validate="required" id="customerNm" data-ax-path="customerNm" class="form-control W120" th:placeholder="성명입력필수"/>
+                            </div>
+                            <div layout:fragment="wrap-2" style="width: 300px">
+                                <div class="form-inline">
+                                    <input type="text" title="주민번호앞자리" data-ax-validate="required" id="idCardNo1" class="form-control W120"
+                                           data-ax-path="idCardNo1" style="text-align: center" maxlength="6"
+                                           minlength="6" th:placeholder="주민번호입력필수"/>~<input type="text" title="주민번호뒷자리" data-ax-validate="required" id="idCardNo2" class="form-control W120"
+                                                                                            data-ax-path="idCardNo2" style="text-align: center;-webkit-text-security: disc;" maxlength="7"
+                                                                                            minlength="7" th:placeholder="주민번호입력필수"/>
+                                </div>
+                            </div>
+                        </th:block>
+                        <th:block layout:insert="~{/fragments/table :: tr-td(text='주소찾기', style='width: 100%')}">
+                            <div layout:fragment="wrap">
+                                <input type="text" data-ax-path="postNo" class="form-control inline-block W100" readonly="readonly"/>
+                                <button class="btn btn-default" data-form-view-01-btn="addrfind">
+                                    <i class="cqc-magnifier"></i> 찾기
+                                </button>
+                                <div class="H5"></div>
+                                <div class="form-inline">
+                                    <input type="text" title="주소" data-ax-path="addr" data-ax-validate="required" class="form-control W400" th:placeholder="주소입력필수"/>
+                                    <input type="text" title="상세주소" data-ax-path="addr1" data-ax-validate="required" class="form-control" th:placeholder="상세주소입력필수"/>
+                                </div>
+                            </div>
+                        </th:block>
+                        <th:block
+                                layout:insert="~{/fragments/table :: tr-td2(text1='휴대전화번호', style1='width: 350px', text2='기타전화번호', style2='width: 350px')}">
+                            <div layout:fragment="wrap-1">
+                                <input type="text" title="휴대전화번호" id="phoneNo" data-ax-path="phoneNo" data-ax-validate="required" class="form-control" th:placeholder="휴대전화번호입력필수"/>
+                            </div>
+                            <div layout:fragment="wrap-2">
+                                <input type="text" id="phoneNo1" data-ax-path="phoneNo1" class="form-control"/>
+                            </div>
+                        </th:block>
+                        <th:block
+                                layout:insert="~{/fragments/table :: tr-td3(text1='은행명', style1='width: 240px', text2='계좌번호', style2='width: 320px', text3='예금주명', style3='width: 240px')}">
+                            <div layout:fragment="wrap-1">
+                                <input type="text" title="은행명" id="bankNm" data-ax-path="bankNm" data-ax-validate="required" class="form-control W120" th:placeholder="은행명입력필수"/>
+                            </div>
+                            <div layout:fragment="wrap-2">
+                                <input type="text" title="계좌번호" id="accountNo" data-ax-path="accountNo" data-ax-validate="required" class="form-control W200" th:placeholder="계좌번호입력필수"/>
+                            </div>
+                            <div layout:fragment="wrap-3">
+                                <input type="text" title="예금주명" id="accountHolderNm" data-ax-path="accountHolderNm" data-ax-validate="required" class="form-control W120"
+                                       th:placeholder="예금주명입력필수"/>
+                            </div>
+                        </th:block>
+                        <th:block layout:insert="~{/fragments/table :: tr-td(text='신분증사진', style='width: 100%')}">
+                            <div layout:fragment="wrap">
+                                <div data-ax5uploader="upload1" style="height: 181px">
+                                    <div data-uploaded-box="upload1"
+                                         data-ax5uploader-uploaded-box="inline"></div>
+                                </div>
+                            </div>
+                        </th:block>
+                        <th:block layout:insert="~{/fragments/table :: tr-td(text='비고', style='width: 100%')}">
+                            <div layout:fragment="wrap">
+                                <textarea title="비고" data-ax-path="customerNotes" id="customerNotes" class="form-control"></textarea>
+                            </div>
+                        </th:block>
                     </div>
-
                 </div>
+                <div data-ax5uploader="upload1" style="display: none">
+                    <button data-ax5uploader-button="selector" class="btn btn-primary">Select File (*/*)
+                    </button>
+                </div>
+                <!--<div style="height:50%; width:100%" class="bgf7 div_tablerow">
 
+                </div>-->
             </div>
         </div>
     </form>

@@ -52,9 +52,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     }
 });
 
-
-var fnObj = {
-    pageStart: function () {
+fnObj.pageStart = function () {
         var _this = this;
         $.ajax({
             url: "/assets/js/column_info/ad00101.js",
@@ -63,10 +61,90 @@ var fnObj = {
             success: function () {
             }
         });
+
         _this.searchView.initView();
-        _this.gridView01.initView();
-        ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
-    }
+
+        var API_SERVER = CONTEXT_PATH;
+
+        UPLOAD = new ax5.ui.uploader({
+            debug: false,
+            target: $('[data-ax5uploader="upload1"]'),
+            form: {
+                action: "/api/v1/common/upload",
+                fileName: "file"
+            },
+            multiple: true,
+            manualUpload: false,
+            progressBox: true,
+            progressBoxDirection: "left",
+            dropZone: {
+                target: $('[data-uploaded-box="upload1"]')
+            },
+            uploadedBox: {
+                target: $('[data-uploaded-box="upload1"]'),
+                icon: {
+                    "delete": '<i class="cqc-cancel" aria-hidden="true"></i>',
+                    "download": '<i class="cqc-save" aria-hidden="true"></i>'
+                },
+                columnKeys: {
+                    apiServerUrl: API_SERVER,
+                    name: "fileName",
+                    type: "ext",
+                    size: "fileSize",
+                    uploadedName: "saveName",
+                    thumbnail: ""
+                },
+                lang: {
+                    supportedHTML5_emptyListMsg: '<div class="text-center" style="padding-top: 30px;">신분증사진을 선택하세요(필수입력)</div>',
+                    emptyListMsg: '<div class="text-center" style="padding-top: 30px;">Empty of List.</div>'
+                },
+                onchange: function () {
+                    console.log('onchange: ', this);
+                },
+                onclick: function () {
+                    // console.log(this.cellType);
+                    var fileIndex = this.fileIndex;
+                    var file = this.uploadedFiles[fileIndex];
+                    switch (this.cellType) {
+                        case "delete":
+                            axDialog.confirm({
+                                title: "Seoul-AMS",
+                                msg: "선택된 이미지를 삭제하시겠습니까?"
+                            }, function () {
+                                if (this.key == "ok") {
+                                    UPLOAD.removeFile(fileIndex);
+                                }
+                            });
+                            break;
+
+                        case "download":
+                            if (file.download) {
+                                location.href = API_SERVER + file.download;
+                            }
+                            break;
+                    }
+                }
+            },
+            validateSelectedFiles: function () {
+
+                // 1개 이상 업로드 되지 않도록 제한.
+                return true;
+            },
+            onprogress: function () {
+                console.log('progress');
+            },
+            onuploaderror: function () {
+                axDialog.alert({
+                    title: 'Onsemiro Uploader',
+                    theme: "default",
+                    msg: this.error.message
+                });
+            },
+            onuploaded: function () {
+            },
+            onuploadComplete: function () {
+            }
+        });
 };
 
 fnObj.searchView = axboot.viewExtend(axboot.formView, {
