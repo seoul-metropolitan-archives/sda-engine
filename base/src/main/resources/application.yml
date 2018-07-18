@@ -117,6 +117,8 @@ onsemiro:
       channel: error_logs
     database.enabled: true
     admin-url:
+  upload.repository:
+    img: /Users/younghyunshin
   #project base path
   project-base-path:
 
