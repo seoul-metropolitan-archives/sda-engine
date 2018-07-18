@@ -174,7 +174,7 @@
     </li>
 </th:block>
 <!--Confirm 버튼 & Cancle 버튼 & Add 버튼 & Delete 버튼-->
-<th:block layout:fragment="confirm-and-cancel-and-disposal">
+<th:block layout:fragment="disposal-and-save-and-inquiry">
     <li style="text-align:right; width:48%;">
         <button class="btn_co" th:id="confirm">
             <span class="btn_icon_co" >&nbsp;</span>
@@ -187,6 +187,14 @@
         <button class="btn_s" th:id="disposal">
             <span class="btn_icon">&nbsp;</span>
             <span class="btn_main_txt">Disposal</span>
+        </button>
+        <button class="btn_s" th:id="save">
+            <span class="btn_icon">&nbsp;</span>
+            <span class="btn_main_txt">Save(S)</span>
+        </button>
+        <button class="btn_i" th:id="inquiry">
+            <span class="btn_icon">&nbsp;</span>
+            <span class="btn_main_txt">Inquiry(I)</span>
         </button>
     </li>
 </th:block>
@@ -238,8 +246,8 @@
 <!--inquiry 버튼 & confirm 버튼 & cancel 버튼 & add 버튼 & Delete 버튼-->
 <th:block layout:fragment="confirm-and-cancel">
     <li style="text-align:right; width:48%;">
-        <button class="btn_co">
-            <span class="btn_icon_co" th:id="confirm">&nbsp;</span>
+        <button class="btn_co" th:id="confirm">
+            <span class="btn_icon_co" >&nbsp;</span>
             <span class="btn_main_txt">Confirm</span>
         </button>
         <button class="btn_co" th:id="cancel">
@@ -251,8 +259,8 @@
 <!--inquiry 버튼 & confirm 버튼 & cancel 버튼 & add 버튼 & Delete 버튼-->
 <th:block layout:fragment="confirm-and-cancel-and-update">
     <li style="text-align:right; width:48%;">
-        <button class="btn_co">
-            <span class="btn_icon_co" th:id="confirm">&nbsp;</span>
+        <button class="btn_co" th:id="confirm">
+            <span class="btn_icon_co" >&nbsp;</span>
             <span class="btn_main_txt">Confirm</span>
         </button>
         <button class="btn_co" th:id="cancel">
@@ -268,8 +276,8 @@
 <!--inquiry 버튼 & confirm 버튼 & cancel 버튼 & add 버튼 & Delete 버튼-->
 <th:block layout:fragment="scheduling-and-inquiry">
     <li style="text-align:right; width:48%;">
-        <button class="btn_co">
-            <span class="btn_icon_co" th:id="scheduling">&nbsp;</span>
+        <button class="btn_co" th:id="scheduling">
+            <span class="btn_icon_co" >&nbsp;</span>
             <span class="btn_main_txt">Scheduling</span>
         </button>
         <button class="btn_co" th:id="inquiry">
@@ -285,8 +293,8 @@
             <span class="btn_icon">&nbsp;</span>
             <span class="btn_main_txt">Inquiry</span>
         </button>
-        <button class="btn_co">
-            <span class="btn_icon_co" th:id="confirm">&nbsp;</span>
+        <button class="btn_co" th:id="confirm">
+            <span class="btn_icon_co" >&nbsp;</span>
             <span class="btn_main_txt">Confirm</span>
         </button>
         <button class="btn_co" th:id="cancel">

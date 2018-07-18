@@ -3,26 +3,15 @@ var selectedItem ; //선택된 그리드 아이템
 var CONFIRM_STATUS = "Confirm";
 var CANCEL_STATUS = "Draft";
 var isDetailChanged = false;
-
+var CANCEL_STATUS_CD = "";
+var CONFIRM_STATUS_CD = "";
+var recordScheduleUuid = ""
 var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH: function (caller, act, data) {
-        if (isDetailChanged) {
-            axDialog.confirm({
-                msg: axboot.getCommonMessage("AA006")
-            }, function () {
-                if (this.key == "ok") {
-                    isDetailChanged = false;
-                    ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
-                    return;
-                }else{
-                    isDetailChanged = false;
-                }
-            });
-        }
         axboot.ajax({
             type: "GET",
-            url: "/api/v1/rs004/",
-            data: $.extend({}, {pageSize: 1000, sort: "classificationCode"}, this.formView.getData()),
+            url: "/api/v1/common/controller",
+            data: $.extend({}, {pageSize: 1000, sort:"", serviceId:"rs004",methodName:"getRecordScheduleResultList",recordScheduleUuid:recordScheduleUuid}, this.formView.getData()),
             callback: function (res) {
                 if(res.list == null || res.list.length <= 0){
                     fnObj.gridView01.setData([]);
@@ -32,7 +21,6 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 fnObj.gridView01.setData(res.list);
                 fnObj.gridView01.resetCurrent();
                 fnObj.gridView01.disabledColumn();
-                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1);
             },
             options: {
                 onError: axboot.viewError
@@ -55,19 +43,36 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     },
     ERROR_SEARCH: function (caller, act, data) {
     },
-    STATUS_UPATE: function (caller, act, data) {
+    STATUS_UPDATE: function (caller, act, state) {
         var rows = fnObj.gridView01.gridObj.getCheckedList();
-
         if(!rows || rows.length < 1) return;
 
-        var params = rows.filter(function (item) {
-            item.changeStatus = data;
-            return item.classificationSchemeUuid !== "";
-        });
+        if(state == CONFIRM_STATUS){//confirm 버튼 클릭 시 체크
+            for(var i=0;i<rows.length;i++){
+                if(rows[i]['statusUuid'] != CANCEL_STATUS_CD){
+                    return;
+                }
+            }
+            for(var i=0;i<rows.length;i++){
+                if(!fnObj.gridView01.validate()){
+                    return;
+                }
+            }
+        }else{//cancel 버틈 클릭 시
+            for(var i=0;i<rows.length;i++){
+                if(rows[i]['statusUuid'] != CONFIRM_STATUS_CD){
+                    return;
+                }
+            }
+        }
 
+        var params = rows.filter(function (item) {
+            item.changeStatus = state;
+            return item.recordScheduleResultUuid !== "";
+        });
         axboot.ajax({
             type: "PUT",
-            url: "/api/v1/rs003/",
+            url: "/api/v1/rs/rs004/02/confirm",
             data: JSON.stringify(params),
             callback: function (res) {
                 ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
@@ -79,10 +84,12 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     },
 
     PAGE_CONFIRM: function (caller, act, data) {
-        ACTIONS.dispatch(ACTIONS.STATUS_UPATE,CONFIRM_STATUS);
+        fnObj.gridView01.gridObj.commit();
+        ACTIONS.dispatch(ACTIONS.STATUS_UPDATE,CONFIRM_STATUS);
     },
     PAGE_CANCEL: function (caller, act, data) {
-        ACTIONS.dispatch(ACTIONS.STATUS_UPATE,CANCEL_STATUS);
+        fnObj.gridView01.gridObj.commit();
+        ACTIONS.dispatch(ACTIONS.STATUS_UPDATE,CANCEL_STATUS);
     },
     PAGE_SAVE: function (caller, act, data) {
         if(!this.gridView01.gridObj.validate()){
@@ -128,11 +135,52 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             }
         });
     },
+    SEARCH_RSCODE_SCH : function(caller, act, data)
+    {
+        axboot.modal.open({
+            modalType: "COMMON_POPUP",
+            preSearch : data["preSearch"],
+            sendData: function () {
+                return data;
+            },
+            callback: function (data) {
+                $("input[data-ax-path='rsCode']").val(data["RS_CODE"])
+                $("input[data-ax-path='rsCode']").attr("rsCode",data["RS_CODE"])
+                $("input[data-ax-path='rsName']").val(data["RS_NAME"])
+                $("input[data-ax-path='rsName']").attr("rsName",data["RS_NAME"])
+                recordScheduleUuid = data["RECORD_SCHEDULE_UUID"]
+                if(this.close)
+                    this.close();
+                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH,data);
+            }
+        });
+    },
     CLOSE_TAB: function (caller, act, data) {
         ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
     },
     MENU_OPEN: function (caller,act, data){
 
+    },
+    PAGE_SCHEDULING: function(caller,act,data){
+        axboot.modal.open({
+            modalType: "SCHEDULING_RECORD_POPUP",
+            width: 1600,
+            height: 800,
+            header: {
+                title: "SCHEDULING"
+            },
+            sendData: function () {
+                return {
+
+                };
+            },
+            callback: function (data) {
+                if(this) this.close();
+                if(data){
+                    ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1,data);
+                }
+            }
+        });
     },
     dispatch: function (caller, act, data) {
         var result = ACTIONS.exec(caller, act, data);
@@ -179,6 +227,30 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
     },
     initEvent: function () {
         var _this = this;
+
+        CONFIRM_STATUS_CD = axboot.commonCodeValueByCodeName("CD137", CONFIRM_STATUS);
+        CANCEL_STATUS_CD = axboot.commonCodeValueByCodeName("CD137", CANCEL_STATUS);
+
+        $("input[data-ax-path='rsCode']").parents().eq(1).find("a").click(function(){
+            var data = {
+                popupCode : "PU140",
+                searchData : $("input[data-ax-path='rsCode']").val().trim(),
+                preSearch : false
+            };
+            ACTIONS.dispatch(ACTIONS.SEARCH_RSCODE_SCH,data);
+        });
+        $("input[data-ax-path='rsCode']").focusout(function(){
+
+            if("" != $(this).val().trim())
+            {
+                var data = {
+                    popupCode : "PU140",
+                    searchData : $(this).val().trim()
+                };
+                ACTIONS.dispatch(ACTIONS.SEARCH_RSCODE_SCH,data);
+            }
+
+        });
     },
     getData: function () {
         var data = this.modelFormatter.getClearData(this.model.get()); // 모델의 값을 포멧팅 전 값으로 치환.
@@ -225,14 +297,16 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
         })
         this.makeGrid();
         this.gridObj.itemClick(this.itemClick);
+        this.gridObj.on
     },
+
     getSelectedData : function(){
         return this.gridObj.getSelectedData()
     },
     disabledColumn : function()
     {
-        var codes = axboot.commonCodeFilter("CD134").codeArr;
-        var names = axboot.commonCodeFilter("CD134").nameArr;
+        var codes = axboot.commonCodeFilter("CD137").codeArr;
+        var names = axboot.commonCodeFilter("CD137").nameArr;
         var state = undefined;
         for(var i = 0; i < names.length; i++)
         {
@@ -248,7 +322,11 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
                 return true;
             else
                 return false;
-        },["grsName","retentionPeriodUuid","disposalTypeUuid","basedOn","description","notes"]);
+        },["rsCode","description"]);
+    },
+    onImageButtonClicked :function (grid, itemIndex, column, buttonIndex, name) {
+
+        alert("onImageButtonClicked: " + itemIndex + ", " + column.name + ", " + buttonIndex + ", " + name);
     },
     itemClick: function (data) {
         /*if (data.classificationSchemeUuid != null && data.classificationSchemeUuid != "") {

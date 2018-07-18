@@ -5,9 +5,7 @@ var selectedItem ; //선택된 그리드 아이템
 var classList = new Object();
 var CONFIRM_STATUS = "Confirm";
 var CANCEL_STATUS = "Draft";
-var isDetailChanged = false;
 var currentContainerUuid = "";
-var currentAggregationUuid = "";
 
 var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH: function (caller, act, data) {

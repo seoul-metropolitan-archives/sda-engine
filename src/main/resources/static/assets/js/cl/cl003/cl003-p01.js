@@ -53,20 +53,20 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             parent.axboot.modal.callback(data);
         }
     },
-    PAGE_ARRANGE: function (caller, act, data) {
+    PAGE_CLASSIFY: function (caller, act, data) {
         if(fnObj.gridView03.getData().length  < 1){
-            alert("Select Arrange Item List")
+            alert("Select Classify Item List")
             return
         }
         for(var i=0;i<fnObj.gridView03.getData().length;i++){
-            fnObj.gridView03.gridObj.setValue(i, "containerUuid", parentsData.containerUuid)
+            fnObj.gridView03.gridObj.setValue(i, "classUuid", parentsData.classUuid)
         }
         axboot.ajax({
             type: "PUT",
-            url: "/api/v1/st/st003/03/save",
+            url: "/api/v1/cl/cl003/02/save",
             data: JSON.stringify(fnObj.gridView03.getData()),
             callback: function (res) {
-                ACTIONS.dispatch(ACTIONS.PAGE_CLOSE,{containerUuid:parentsData.containerUuid});
+                ACTIONS.dispatch(ACTIONS.PAGE_CLOSE,{classUuid:parentsData.classUuid});
             },
             options: {
                 onError: axboot.viewError
@@ -147,8 +147,8 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
         $(".btn_include").click(function(){
             importItemList();
         });
-        $(".btn_arrange").click(function(){
-            ACTIONS.dispatch(ACTIONS.PAGE_ARRANGE);
+        $(".btn_classify").click(function(){
+            ACTIONS.dispatch(ACTIONS.PAGE_CLASSIFY);
         });
 
         $(".close_popup").click(function(){

@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.sql.Timestamp;
+
 /**
  * The type Cl 00101 vo.
  */
@@ -13,21 +15,30 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(callSuper = false)
 public class Rs00501VO extends BaseVO {
 
+    private String recordScheduleResultUuid;
     private String recordScheduleUuid;
-    private String generalRecordScheduleUuid;
-    private String triggerUuid;
     private String statusUuid;
-    private String rsCode ;
-    private String rsName;
-    private String grsCode;
-    private String grsName;
-    private String retentionPeriodUuid;
+    private String itemUuid;
     private String disposalTypeUuid;
-    private String basedOn;
-    private String triggerName;
-    private String triggerDate;
-    private String useYn;
+    private String initialDate;
+    private String disposalDueDate;
+    private String disposalFromDueDate;
+    private String disposalToDueDate;;
+    private String disposalFromConfirmDate;
+    private String disposalToConfirmDate;
+    private String disposalConfirmDate;
+    private String disposalConfirmReason;
+    private Timestamp disposalCompleteDate;
+    private String disposalFromCompleteDate;
+    private String disposalToCompleteDate;
+    private String aggregationTree;
+    private String itemTitle;
     private String changeStatus;
-    private String triggerYn; //just input
-    private String recalculationYn;
+    private String disposalStatus;
+    private String itemTypeUuid;
+    private String rsCode;
+    private String rsName;
+    private String retentionPeriodUuid;
+    private String disposalFreeze;
+    private String itemCode;
 }

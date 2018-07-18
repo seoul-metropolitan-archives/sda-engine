@@ -1,0 +1,23 @@
+package rmsoft.ams.seoul.st.st004.vo;
+
+import io.onsemiro.core.vo.BaseVO;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.sql.Timestamp;
+
+
+@Data
+@NoArgsConstructor
+public class St00401VO extends BaseVO {
+	private String arrangeContainersResultUuid;
+	private String locationUuid;
+	private String containerUuid;
+	private String statusUuid;
+	private String containerName;
+	private String containerType;
+	private String controlNumber;
+	private String containerTree;
+	private String changeStatus;
+	private Timestamp arrangedDate;
+}

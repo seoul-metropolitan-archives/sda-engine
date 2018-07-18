@@ -13,6 +13,7 @@ import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.sql.Timestamp;
 
 /**
  * The type Cl classified records.
@@ -23,15 +24,15 @@ import java.io.Serializable;
 @DynamicUpdate
 @Entity
 @EqualsAndHashCode(callSuper = true)
-@Table(name = "CL_CLASSIFIED_RECORDS")
-@IdClass(ClClassifiedRecords.ClClassifiedRecordsId.class)
-@Alias("ClClassifiedRecords")
-public class ClClassifiedRecords extends BaseJpaModel<ClClassifiedRecords.ClClassifiedRecordsId> {
+@Table(name = "CL_CLASSIFY_RECORDS_RESULT")
+@IdClass(ClClassifyRecordsResult.ClClassifyRecordsId.class)
+@Alias("ClClassifyRecordsResult")
+public class ClClassifyRecordsResult extends BaseJpaModel<ClClassifyRecordsResult.ClClassifyRecordsId> {
 
     @Id
-    @Column(name = "CLASSIFIED_RECORDS_UUID", length = 36, nullable = false)
+    @Column(name = "CLASSIFY_RECORDS_UUID", length = 36, nullable = false)
     @Comment(value = "분류기록UUID")
-    private String classifiedRecordsUuid;
+    private String classifyRecordsUuid;
 
     @Column(name = "STATUS_UUID", length = 36, nullable = false)
     @Comment(value = "상태UUID")
@@ -51,10 +52,10 @@ public class ClClassifiedRecords extends BaseJpaModel<ClClassifiedRecords.ClClas
 
     @Column(name = "CLASSIFIED_DATE")
     @Comment(value = "분류날짜")
-    private String classifiedDate;
+    private Timestamp classifiedDate;
 
     @Override
-    public ClClassifiedRecordsId getId() { return ClClassifiedRecordsId.of(classifiedRecordsUuid); }
+    public ClClassifyRecordsId getId() { return ClClassifyRecordsId.of(classifyRecordsUuid); }
 
     /**
      * The type Cl classified records id.
@@ -63,8 +64,8 @@ public class ClClassifiedRecords extends BaseJpaModel<ClClassifiedRecords.ClClas
     @Data
     @NoArgsConstructor
     @RequiredArgsConstructor(staticName = "of")
-    public static class ClClassifiedRecordsId implements Serializable {
+    public static class ClClassifyRecordsId implements Serializable {
         @NonNull
-        private String classifiedRecordsUuid;
+        private String classifyRecordsUuid;
     }
 }

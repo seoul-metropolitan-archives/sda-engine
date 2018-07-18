@@ -9,13 +9,11 @@ import io.onsemiro.core.parameter.RequestParams;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
-import rmsoft.ams.seoul.rs.rs003.vo.Rs00301VO;
 import rmsoft.ams.seoul.rs.rs005.service.Rs005Service;
-import rmsoft.ams.seoul.rs.rs005.vo.Rs005;
-import rmsoft.ams.seoul.rs.rs005.vo.Rs005VO;
-
+import rmsoft.ams.seoul.rs.rs005.vo.Rs00501VO;
 import javax.inject.Inject;
 import java.util.List;
+
 
 @RestController
 @RequestMapping(value = "/api/v1/rs/rs005")
@@ -24,29 +22,19 @@ public class Rs005Controller extends BaseController {
     @Inject
     private Rs005Service rs005Service;
 
-//    @GetMapping("/01/list")
-//    public Responses.PageResponse getRsRecordScheduleList(Pageable pageable, RequestParams<Rs00501VO> requestParams) {
-//        Page<Rs00301VO> pages = rs003Service.getRsRecordScheduleList(pageable, requestParams);
-//        return Responses.PageResponse.of(pages.getContent(), pages);
-//    }
-//
-//    @PutMapping("/02/confirm")
-//    @PostMapping
-//    public ApiResponse updateStatus(@RequestBody List<Rs00301VO> requestParams) {
-//        ApiResponse apiResponse = rs003Service.updateStatus(requestParams);
-//        if(apiResponse.getStatus() == -1) {
-//            throw new ApiException(ApiStatus.SYSTEM_ERROR, apiResponse.getMessage());
-//        }
-//        return apiResponse;
-//    }
+    @GetMapping("/01/list")
+    public Responses.PageResponse getDisposalRecordList(Pageable pageable, RequestParams<Rs00501VO> requestParams) {
+        Page<Rs00501VO> pages = rs005Service.getDisposalRecordList(pageable, requestParams);
+        return Responses.PageResponse.of(pages.getContent(), pages);
+    }
 
-    /*@PutMapping("/03/save")
+    @PutMapping("/02/confirm")
     @PostMapping
-    public ApiResponse updateRsRecordScheduleList(@RequestBody List<Rs00301VO> requestParams) {
-        ApiResponse apiResponse = rs003Service.updateRsRecordScheduleList(requestParams);
+    public ApiResponse updateRecordScheduleResultList(@RequestBody List<Rs00501VO> requestParams) {
+        ApiResponse apiResponse = rs005Service.updateRecordScheduleResultList(requestParams);
         if(apiResponse.getStatus() == -1) {
             throw new ApiException(ApiStatus.SYSTEM_ERROR, apiResponse.getMessage());
         }
         return apiResponse;
-    }*/
+    }
 }

@@ -33,51 +33,56 @@ var rs00501 =
                 {
                     sortNo: 2,
                     width:50,
-                    name: "statusUuid",
+                    name: "disposalStatus",
                     text: "Status",
                     editable: false,
-                    dataType: "code",
+                    dataType: "combo",
                     values: axboot.commonCodeFilter("CD137").codeArr,
                     labels: axboot.commonCodeFilter("CD137").nameArr,
-                    required: true
+                    disable: true
                 },
                 {
                     sortNo: 3,
-                    width: 150,
+                    width: 250,
                     name: "aggregationTree",
                     text: "Aggregation Tree",
                     editable: false,
                     dataType:"text",
-                    required: false
+                    required: false,
+                    disable: true
                 },
                 {
                     sortNo: 4,
-                    width: 150,
+                    width: 250,
                     name: "itemTitle",
                     text: "Item Title",
                     editable: false,
                     dataType:"text",
-                    required: false
+                    required: false,
+                    disable: true
                 },
                 {
                     sortNo: 5,
-                    name: "type",
+                    name: "itemTypeUuid",
                     text: "Type",
-                    width: 150,
-                    dataType: "text",
-                    editable: true,
-                    required: true
+                    width: 50,
+                    editable: false,
+                    dataType: "combo",
+                    values: axboot.commonCodeFilter("CD136").codeArr,
+                    labels: axboot.commonCodeFilter("CD136").nameArr,
+                    disable: true
                 },
                 {
                     sortNo: 6,
-                    name: "disposalType",
+                    name: "disposalTypeUuid",
                     text: "Disposal Type",
-                    width: 120,
-                    editable: true,
-                    dataType: "code",
-                    values: axboot.commonCodeFilter("CD134").codeArr,
-                    labels: axboot.commonCodeFilter("CD134").nameArr,
-                    required: true
+                    width: 80,
+                    editable: false,
+                    dataType: "combo",
+                    values: axboot.commonCodeFilter("CD135").codeArr,
+                    labels: axboot.commonCodeFilter("CD135").nameArr,
+                    required: false,
+                    disable: true
                 },
                 {
                     sortNo: 7,
@@ -102,22 +107,22 @@ var rs00501 =
                     name: "disposalConfirmDate",
                     text: "Disposal Confirm Date",
                     width: 120,
-                    editable: false,
-                    disable: true,
-                    dataType: "date"
+                    dataType: "date",
+                    format:'yyyy-mm-dd',
+                    required:true
                 },
                 {
                     sortNo: 10,
                     name: "disposalConfirmReason",
                     text: "Disposal Confirm Reason",
                     width: 150,
-                    editable: false,
-                    disable: true,
-                    dataType: "text"
+                    editable: true,
+                    dataType: "multiline",
+                    required:true
                 },
                 {
                     sortNo: 11,
-                    name: "disposalCompleteDateTime",
+                    name: "disposalCompleteDate",
                     text: "Disposal Complete Date/Time",
                     width: 200,
                     editable: false,
@@ -129,7 +134,8 @@ var rs00501 =
                     name: "description",
                     text: "Description",
                     width: 200,
-                    editable: true,
+                    editable: false,
+                    disable: true,
                     datType: "multiline"
                 },
                 {
@@ -137,8 +143,65 @@ var rs00501 =
                     name: "notes",
                     text: "Notes",
                     width: 120,
-                    editable: true,
+                    editable: false,
+                    disable: true,
                     dataType: "text"
+                },
+                {
+                    sortNo: 14,
+                    name: "insertUuid",
+                    text: "Created By",
+                    width: 80,
+                    dataType: "text",
+                    editable : false,
+                    readonly : true,
+                    visible: true,
+                    required: false,
+                    disable: true
+                },
+                {
+                    sortNo: 15,
+                    name: "insertDate",
+                    text: "Date/Time Created",
+                    width: 140,
+                    dataType: "timestamp",
+                    required: false,
+                    disable: true
+                },
+                {
+                    sortNo: 16,
+                    name: "updateUuid",
+                    text: "Modified By",
+                    width: 80,
+                    visible: true,
+                    dataType: "text",
+                    required: false,
+                    disable: true
+                },
+                {
+                    sortNo: 17,
+                    name: "updateDate",
+                    text: "Date/Time Modified",
+                    width: 140,
+                    dataType: "timestamp",
+                    required: false,
+                    disable: true
+                },
+                {
+                    sortNo: 18,
+                    name: "itemUuid",
+                    text: "Item UUID",
+                    width: 140,
+                    required: false,
+                    visible: false
+                },
+                {
+                    sortNo: 18,
+                    name: "statusUuid",
+                    text: "statusUuid",
+                    width: 140,
+                    required: false,
+                    visible: false
                 }
             ]
     }

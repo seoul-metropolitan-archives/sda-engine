@@ -85,6 +85,15 @@ var st00301_p01_02 =
                 editable: false,
                 visible: false,
                 dataType: "text"
+            },
+            {
+                sortNo: 12,
+                name: "classUuid",
+                text: "classUuid",
+                width: 100,
+                editable: false,
+                visible: false,
+                dataType: "text"
             }
          ]
 }
