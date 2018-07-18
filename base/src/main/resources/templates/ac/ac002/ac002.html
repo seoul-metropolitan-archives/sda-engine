@@ -1,0 +1,329 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1"/>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+
+    <title th:text="${@environment.getProperty('config.title')}">title</title>
+
+    <link rel="shortcut icon" type="image/x-icon" th:href="@{/assets/images/ams/favicon00.png}"/>
+    <link rel="icon" type="image/x-icon" th:href="@{/assets/images/ams/favicon00.png}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{${@environment.getProperty('config.extendedCss')}}"/>
+
+    <link layout:fragment="css"/>
+    <link rel="stylesheet" type="text/css" href="/assets/css/common.css">
+    <link rel="stylesheet" type="text/css" href="/assets/css/button.css">
+    <link rel="stylesheet" type="text/css" href="/assets/css/ams_layout.css">
+    <link rel="stylesheet" type="text/css" href="/assets/css/popup.css">
+    <link rel="stylesheet" type="text/css" href="/assets/css/ax5uploader.css"/>
+
+
+
+    <script type="text/javascript">
+        /* $(function() {
+             var images = ['bg_login02.jpg', 'bg_login01.jpg', 'bg_login03.jpg'];
+             $('.background').css({'background': 'url(assets/images/' + images[Math.floor(Math.random() * images.length)] + ')'});
+         });*/
+
+        var sessionJson = convertJsonObj('[[${scriptSession}]]');
+        var menuJson = convertJsonObj('[[${menuJson}]]');
+        var commonCodeJson = convertJsonObj('[[${commonCodeJson}]]');
+        var commonMessageJson = convertJsonObj('[[${commonMessageJson}]]');
+        var commonConfigJson = convertJsonObj('[[${commonConfigJson}]]');
+
+        var CONTEXT_PATH = 'http://[[${#httpServletRequest.serverName}]]:[[${#httpServletRequest.serverPort}]]';
+        /*var CONTEXT_PATH   = 'http://[[@{${@environment.getProperty("server.url")}}]]:[[@{${@environment.getProperty("server.port")}}]]';*/
+        var SCRIPT_SESSION = (function (json) {
+            return json;
+        })(sessionJson);
+        var TOP_MENU_DATA = (function (json) {
+            return json;
+        })(menuJson);
+        var COMMON_CODE = (function (json) {
+            return json;
+        })(commonCodeJson);
+
+        var COMMON_MESSAGE = (function (json) {
+            return json;
+        })(commonMessageJson);
+
+        var COMMON_CONFIG = (function (json) {
+            return json;
+        })(commonConfigJson);
+
+        function convertJsonObj(jsonStr) {
+            return jsonStr == null || jsonStr == '' ? null : JSON.parse(jsonStr.replace(/&quot;/gi, '"').replace(/\r\n|\n/gi, "<br />"));
+        }
+
+
+    </script>
+    <script type="text/javascript" th:src="@{/assets/js/libs/realgrid/realgridjs-lic.js}"></script>
+    <script type="text/javascript" th:src="@{/assets/js/libs/realgrid/realgridjs_eval.1.1.27.min.js}"></script>
+    <!--<script type="text/javascript" th:src="@{/assets/js/libs/realgrid/realgridjs.1.1.26.min.js}"></script>-->
+    <script type="text/javascript" th:src="@{/assets/js/libs/realgrid/realgridjs-api.1.1.27.js}"></script>
+    <script type="text/javascript" th:src="@{/assets/js/libs/realgrid/jszip.min.js}"></script>
+    <script type="text/javascript" th:src="@{/assets/js/libs/realgrid/util/GridWrapper.js}"></script>
+    <script type="text/javascript" th:src="@{/assets/js/libs/realgrid/util/TreeGridWrapper.js}"></script>
+    <script type="text/javascript" th:src="@{/assets/js/libs/realgrid/util/SimpleGridWrapper.js}"></script>
+
+    <script type="text/javascript" th:src="@{/assets/js/plugins.js}"></script>
+    <script type="text/javascript" th:src="@{/assets/js/axboot.js}"></script>
+    <script type="text/javascript" th:src="@{/assets/js/jquery.backstretch.min.js}"></script>
+    <script type="text/javascript" th:src="@{/assets/js/libs/ajax-cross-origin/js/jquery.ajax-cross-origin.min.js}"></script>
+
+    <script type="text/javascript" th:src="@{/axboot.config.js}"></script>
+    <script layout:fragment="js"></script>
+    <script layout:fragment="script"></script>
+    <script>
+        $("docuemnt").ready(function () {
+            var setupFontFamily = "";
+            for (var i = 0; i < parent.COMMON_CONFIG.length; i++) {
+                if (
+                    "SYS_FORM_FONT" == parent.COMMON_CONFIG[i]["configurationCode"]
+                )
+                    setupFontFamily += parent.COMMON_CONFIG[i]["configurationValue"] + ",";
+
+            }
+            if (setupFontFamily != "") {
+                $("#commonStyle")
+                    .html(
+                        "<style>*,body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, code, form, fieldset, legend, textarea, p, blockquote, th, td, input, select, textarea, button, table td{font-family : " + setupFontFamily.substring(0, setupFontFamily.length - 1) + " !important;</style>"
+                    );
+            }
+        });
+
+
+    </script>
+    <style id="commonStyle">
+
+    </style>
+    <style>
+        @media screen and (max-width: 1279px) {
+            .header {
+                height: 30px;
+                width: 1280px;
+            }
+
+            .cssBody {
+                padding-left: 220px;
+                width: 1280px;
+            }
+
+            .left {
+                width: 220px;
+            }
+
+            .left_close_open_btn a {
+                left: 220px;
+            }
+
+        }
+
+        @media screen and (max-height: 681px) {
+            .header {
+                height: 30px;
+                /*width:1280px;*/
+            }
+
+            .cssBody {
+                /*left: 190px;*/
+                /*width:1090px;*/
+                height: 984px;
+            }
+
+            .left {
+                /*width: 190px;*/
+                height: 984px;
+            }
+
+            .left_close_open_btn a {
+                /*left: 190px;*/
+            }
+
+            /*.bottom_close{ margin-bottom: -3px}*/
+
+        }
+    </style>
+</head>
+<body class="ax-body" th:classappend="${axbody_class}" onselectstart="return false;">
+<script>
+    $.backstretch([
+        "assets/images/bg_login02.jpg"
+        //"assets/images/bg_login01.jpg"
+//        ,"assets/images/bg_login02.jpg"
+//        ,"assets/images/bg_login03.jpg"
+    ], {duration: 3000, fade: 1000});
+</script>
+<div id="ax-frame-root" class="visible show-aside" data-root-container="true">
+    <!-- header-tool -->
+    <div class="ax-frame-header-tool">
+        <div class="ax-split-col" style="height: 100%;">
+            <div class="ax-split-panel text-align-left">
+                <div class="ax-split-col ax-frame-logo-info">
+                    <div class="ax-split-panel">Seoul Metropolitan Archives</div>
+                </div>
+            </div>
+            <div class="ax-split-panel text-align-right">
+                <div class="ax-split-col ax-frame-user-info">
+                    <div class="ax-split-panel">
+                        <a href="#ax" id="userNm">
+                            <i class="ion-android-person"></i>
+                            <span th:text="#{axboot.admin.login.status.message(${loginUser.userNm})}"></span>
+                        </a>
+                    </div>
+                    <div class="panel-split"></div>
+                    <div class="ax-split-panel">
+                        <a th:href="@{#}" id="logout">
+                            <span th:text="#{axboot.admin.logout}"></span>
+                            <!--<span>Sign Out</span>-->
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- header -->
+    <div id="cssBody" style="width: 100%;height: 100%;position: fixed; top: 30px;">
+        <div class="ax-frame-header">
+            <div class="ax-split-col" style="height: 100%;">
+                <div class="ax-split-panel cell-logo">
+                    <a th:href="@{/main}">
+                        <img th:src="@{${@environment.getProperty('config.logo.amsheader')}}"/>
+                    </a>
+                </div>
+                <div id="ax-top-menu" class="ax-split-panel ax-split-flex" style="padding-left:10px;width:100% ">
+                    <span id="ax-top-menu-text"><i class="cqc-home"></i></span>
+                </div>
+                <div class="ax-split-panel cell-aside-handle"></div>
+                <div style="" class="bigsmall_btn">
+                    <a href="#" onclick="bigView()" class="big_close">
+                        <img th:src="@{/assets/images/btn_big.jpg}" alt="grid big show">
+                    </a>
+                    <a href="#" onclick="smallView()" class="small_open">
+                        <img th:src="@{/assets/images/btn_small.jpg}" alt="grid normal show">
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- header-tab -->
+        <div class="ax-frame-header-tab">
+            <div id="ax-frame-header-tab-container"></div>
+        </div>
+
+        <!-- contents -->
+        <div class="left bdr" style="top:50px">
+            <div class="left_top1 bdb"><!--height: 3.7%;-->
+                <ul>
+                    <li class="left-all-menu bdr">
+                        <a href="#" onclick="allmenuView()">Full Menu</a></li>
+                    <li class="left-my-menu">
+                        <a href="#" onclick="mymenuView()">My Menu</a></li>
+                </ul>
+            </div><!--전체메뉴 나의 메뉴 탭부분-->
+            <div class="left_top2"><!--height: 3.7%;-->
+                <ul>
+                    <li style="padding:0 1%;width:76%">
+                        <input type="text" style="width:100%;vertical-align:middle;font-size:12px;" id="leftMenuParam">
+                    </li>
+                    <li style="width:24%">
+                        <button class="btn_small" id="searchLeftMenu">Search</button>
+                    </li>
+                </ul>
+            </div><!--메인 좌측 검색부분-->
+            <div class="left_top3 bdt bdb">
+                <ul>
+                    <li class="bdr">
+                        <a href="#" class="open_close expendAll" id="rg_tree_allopen_m1">Expand All</a></li>
+                    <li>
+                        <a href="#" class="open_close collapseAll" id="rg_tree_allclose_m1">Collapse All</a></li>
+                </ul>
+            </div>
+            <div class="left_bottom1">
+                <div style="width:100%; height:100%;" class="bdb">
+                    <div id="realgridM1" style="width: 100%; height: 100%;"></div>
+                </div>
+            </div>
+        </div><!--메인좌측-->
+
+        <div class="left_close_open_btn">
+            <a href="#" onclick="leftcloseView()" class="leftmenu_close">◀</a>
+            <a href="#" onclick="leftopenView()" class="leftmenu_open">▶</a>
+
+            <a href="#" onclick="left7closeView()" class="leftmenu7_close">◀</a>
+            <a href="#" onclick="left7openView()" class="leftmenu7_open"> ▶</a>
+        </div>
+        <!--나의 메뉴인 즐겨찾기와 최근메뉴-->
+
+        <div layout:fragment="contents"></div>
+        <!-- footer -->
+        <div class="ax-frame-foot">
+            <div class="ax-split-col" style="height: 100%;">
+                <div class="ax-split-panel text-align-left"
+                     th:text="${@environment.getProperty('config.copyrights')}"></div>
+                <div class="ax-split-panel text-align-right">
+                    Last account activity <b id="account-activity-timer">00</b> ago.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 사용자 설정 팝업창 시작 popup.css-->
+<div class="user_edit">
+    <table style="width:100%; height:100%">
+        <colgroup>
+            <col style="width:50%">
+            <col style="width:50%">
+        </colgroup>
+        <thead>
+        <tr>
+            <th class="right_title2 bdb" colspan="2" style="text-align:left;font-size:12px;">
+                <img src="/assets/images/ams/img_dot1.png" style="vertical-align: middle; margin-right:5px;" alt="">User
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td class="pdl_10">User ID</td>
+            <td><input type="text" class="onlyread"
+                       th:placeholder="#{axboot.admin.login.status.message(${loginUser.userId})}" readonly></td>
+        </tr>
+        <tr>
+            <td class="pdl_10">User Name</td>
+            <td><input type="text" class="onlyread"
+                       th:placeholder="#{axboot.admin.login.status.message(${loginUser.userNm})}" readonly></td>
+        </tr>
+        <tr>
+            <td class="pdl_10">Current Password</td>
+            <td>
+                <input id="crntPwd" type="password"></td>
+        </tr>
+        <tr>
+            <td class="pdl_10">New Password</td>
+            <td><input id="newPwd" type="password"></td>
+        </tr>
+        <tr>
+            <td class="pdl_10">Re-enter New Password</td>
+            <td><input id="reNewPwd" type="password"></td>
+        </tr>
+        </tbody>
+        <tfoot>
+        <tr>
+            <td colspan="2" class="userfoot">
+                <button id="btnOk" class="btn_3txt">Ok</button>
+                <button id="btnCancel" class="btn_3txt">Cancel</button>
+            </td>
+        </tr>
+        </tfoot>
+    </table>
+</div>
+<!-- 사용자 설정 팝업창 시작 popup.css-->
+<!-- 사용자 설정 팝업창 끝-->
+</body>
+</html>

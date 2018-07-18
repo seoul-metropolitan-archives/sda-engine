@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1"/>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+
+    <title th:text="${@environment.getProperty('config.amstitle')}">title</title>
+    <link rel="stylesheet" type="text/css" href="/assets/css/common.css">
+    <link rel="stylesheet" type="text/css" href="/assets/css/button.css">
+    <link rel="stylesheet" type="text/css" href="/assets/css/rg_style.css"><link rel="stylesheet" type="text/css" href="/assets/css/rg_style.css">
+    <link rel="stylesheet" type="text/css" href="/assets/css/ax5uploader.css"/>
+    <!--<link rel="stylesheet" type="text/css" href="/assets/css/ams_layout.css">-->
+    <link rel="shortcut icon" type="image/x-icon" th:href="@{/assets/favicon.ico/}"/>
+    <link rel="icon"          type="image/x-icon" th:href="@{/assets/favicon.ico/}"/>
+    <link rel="stylesheet"    type="text/css"     th:href="@{${@environment.getProperty('config.extendedCss')}}"/>
+</head>
+
+<body class="ax-body" th:classappend="${axbody_class}" th:attr="data-page-auto-height=${auto_height == null ? 'true' : 'false'}">
+<div id="ax-base-root" data-root-container="true">
+    <div layout:fragment="base-title"></div>
+    <div layout:fragment="base-content"></div>
+</div>
+
+</body>
+
+<script type="text/javascript" th:src="@{/assets/js/libs/realgrid/realgridjs-lic.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/libs/realgrid/realgridjs_eval.1.1.27.min.js}"></script>
+<!--<script type="text/javascript" th:src="@{/assets/js/libs/realgrid/realgridjs.1.1.26.min.js}"></script>-->
+<script type="text/javascript" th:src="@{/assets/js/libs/realgrid/realgridjs-api.1.1.27.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/libs/realgrid/jszip.min.js}"></script>
+
+
+<script type="text/javascript" th:src="@{/assets/js/libs/realgrid/util/GridWrapper.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/libs/realgrid/util/TreeGridWrapper.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/libs/realgrid/util/SimpleGridWrapper.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/plugins.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/axboot.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/ax5uploader.js}"></script>
+
+<script type="text/javascript" th:src="@{/assets/js/libs/zTree_v3-master/js/jquery.ztree.all.js}"></script>
+
+<script type="text/javascript">
+    /* $(function() {
+         var images = ['bg_login02.jpg', 'bg_login01.jpg', 'bg_login03.jpg'];
+         $('.background').css({'background': 'url(assets/images/' + images[Math.floor(Math.random() * images.length)] + ')'});
+     });*/
+
+    var sessionJson = convertJsonObj('[[${scriptSession}]]');
+
+    var CONTEXT_PATH = 'http://[[${#httpServletRequest.serverName}]]:[[${#httpServletRequest.serverPort}]]';
+    /*var CONTEXT_PATH   = 'http://[[@{${@environment.getProperty("server.url")}}]]:[[@{${@environment.getProperty("server.port")}}]]';*/
+    var COMMON_CODE = window.parent.COMMON_CODE;
+
+    var COMMON_MESSAGE = window.parent.COMMON_MESSAGE;
+    /**/
+    var COMMON_CONFIG = window.parent.COMMON_CONFIG;
+
+    function convertJsonObj(jsonStr) {
+        return jsonStr == null || jsonStr == '' ? null : JSON.parse(jsonStr.replace(/&quot;/gi, '"').replace(/\r\n|\n/gi, "<br />"));
+    }
+
+
+</script>
+<script>
+    $("docuemnt").ready(function(){
+        $("docuemnt").ready(function(){
+            var setupFontFamily = "";
+            for(var i = 0; i < parent.COMMON_CONFIG.length; i++)
+            {
+                if(
+                    "SYS_FORM_FONT" == parent.COMMON_CONFIG[i]["configurationCode"]
+                )
+                    setupFontFamily += parent.COMMON_CONFIG[i]["configurationValue"]+",";
+
+            }
+            if(setupFontFamily != "")
+            {
+                $("#frameStyle")
+                    .html(
+                        "<style>*,body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, code, form, fieldset, legend, textarea, p, blockquote, th, td, input, select, textarea, button, table td{font-family : "+setupFontFamily.substring(0,setupFontFamily.length-1)+" !important;</style>"
+                    );
+            }
+        });
+    });
+
+
+
+</script>
+<style id="frameStyle">
+
+</style>
+<script type="text/javascript" th:src="@{/axboot.config.js}"></script>
+<script layout:fragment="js"></script>
+<script layout:fragment="script"></script>
+</html>
