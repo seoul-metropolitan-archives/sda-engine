@@ -15,7 +15,7 @@ import java.sql.Timestamp;
 @EqualsAndHashCode(callSuper = false)
 public class Cl00301VO extends BaseVO
 {
-    private String classifiedRecordsUuid ;
+    private String classifyRecordsUuid ;
     private String classUuid;
     private String statusUuid;
     private String title;

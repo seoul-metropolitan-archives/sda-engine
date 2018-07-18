@@ -3,93 +3,37 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="rmsoft.ams.seoul..St004Mapper">
-
-    <select id="findAll" resultType="st004" parameterType="st004" statementType="PREPARED">
+<mapper namespace="rmsoft.ams.seoul.st.st004.dao.St004Mapper">
+    <select id="getStArrangeContainersResult" resultType="St00401VO" parameterType="St00401VO" statementType="PREPARED">
         SELECT
-            ARRANGE_CONTAINERS_RESULT_UUID AS arrangeContainersResultUuid,
-            LOCATION_UUID AS locationUuid,
-            CONTAINER_UUID AS containerUuid,
-            STATUS_UUID AS statusUuid,
-            ARRANGED_DATE AS arrangedDate,
-            DESCRIPTION AS description,
-            NOTES AS notes,
-            UPDATE_DATE AS updateDate,
-            INSERT_UUID AS insertUuid,
-            INSERT_DATE AS insertDate,
-            UPDATE_UUID AS updateUuid
-        FROM
-            ST_ARRANGE_CONTAINERS_RESULT
+            S1.ARRANGE_CONTAINERS_RESULT_UUID as arrangeContainersResultUuid,
+            S1.LOCATION_UUID as locationUuid,
+            S1.CONTAINER_UUID as containerUuid,
+            S1.STATUS_UUID as statusUuid,
+            S1.ARRANGED_DATE as arrangedDate,
+            S2.CONTAINER_NAME as containerName,
+            S2.CONTROL_NUMBER as controlNumber,
+            S1.DESCRIPTION as description,
+            S1.NOTES as notes,
+            (
+              SELECT
+                SUBSTR(SYS_CONNECT_BY_PATH(CONTAINER_NAME,' >> '),4) path
+              FROM
+                ST_CONTAINER S3
+              WHERE S3.CONTAINER_UUID = S1.CONTAINER_UUID
+              START WITH PARENT_CONTAINER_UUID IS NULL
+              CONNECT BY PRIOR CONTAINER_UUID = PARENT_CONTAINER_UUID
+            ) as containerPath,
+            <include refid="Common.UserName"><property name="userUuid" value="S1.INSERT_UUID"/></include> as insertUuid,
+            S1.INSERT_DATE as insertDate,
+            <include refid="Common.UserName"><property name="userUuid" value="S1.UPDATE_UUID"/></include> as updateUuid,
+            S1.UPDATE_DATE as updateDate
+        FROM ST_ARRANGE_CONTAINERS_RESULT S1, ST_CONTAINER S2
+        <where>
+            S1.CONTAINER_UUID = S2.CONTAINER_UUID
+            <if test="locationUuid != null">
+                AND S1.LOCATION_UUID = #{locationUuid}
+            </if>
+        </where>
     </select>
-
-    <select id="findOne" resultType="st004" parameterType="st004" statementType="PREPARED">
-        SELECT
-            ARRANGE_CONTAINERS_RESULT_UUID AS arrangeContainersResultUuid,
-            LOCATION_UUID AS locationUuid,
-            CONTAINER_UUID AS containerUuid,
-            STATUS_UUID AS statusUuid,
-            ARRANGED_DATE AS arrangedDate,
-            DESCRIPTION AS description,
-            NOTES AS notes,
-            UPDATE_DATE AS updateDate,
-            INSERT_UUID AS insertUuid,
-            INSERT_DATE AS insertDate,
-            UPDATE_UUID AS updateUuid
-        FROM
-            ST_ARRANGE_CONTAINERS_RESULT
-        WHERE
-            ARRANGE_CONTAINERS_RESULT_UUID = #{arrangeContainersResultUuid}
-    </select>
-
-   <update id="delete" parameterType="st004" statementType="PREPARED">
-        DELETE FROM
-            ST_ARRANGE_CONTAINERS_RESULT
-        WHERE
-            ARRANGE_CONTAINERS_RESULT_UUID = #{arrangeContainersResultUuid}
-    </update>
-
-   <update id="update" parameterType="st004" statementType="PREPARED">
-        UPDATE ST_ARRANGE_CONTAINERS_RESULT
-        SET
-            LOCATION_UUID = #{locationUuid},
-            CONTAINER_UUID = #{containerUuid},
-            STATUS_UUID = #{statusUuid},
-            ARRANGED_DATE = #{arrangedDate},
-            DESCRIPTION = #{description},
-            NOTES = #{notes},
-            UPDATE_DATE = #{updateDate},
-            INSERT_UUID = #{insertUuid},
-            INSERT_DATE = #{insertDate},
-            UPDATE_UUID = #{updateUuid}
-        WHERE
-            ARRANGE_CONTAINERS_RESULT_UUID = #{arrangeContainersResultUuid}
-    </update>
-
-   <update id="insert" parameterType="st004" statementType="PREPARED">
-        INSERT INTO ST_ARRANGE_CONTAINERS_RESULT (
-            ARRANGE_CONTAINERS_RESULT_UUID,
-            LOCATION_UUID,
-            CONTAINER_UUID,
-            STATUS_UUID,
-            ARRANGED_DATE,
-            DESCRIPTION,
-            NOTES,
-            UPDATE_DATE,
-            INSERT_UUID,
-            INSERT_DATE,
-            UPDATE_UUID
-        ) VALUES (
-            #{arrangeContainersResultUuid},
-            #{locationUuid},
-            #{containerUuid},
-            #{statusUuid},
-            #{arrangedDate},
-            #{description},
-            #{notes},
-            #{updateDate},
-            #{insertUuid},
-            #{insertDate},
-            #{updateUuid}
-        )
-    </update>
 </mapper>

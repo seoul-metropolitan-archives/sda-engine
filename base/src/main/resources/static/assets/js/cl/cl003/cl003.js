@@ -2,9 +2,13 @@ var fnObj = {};
 var selectedItem ; //선택된 그리드 아이템
 var classificationSchemeUuid = "";
 var crntClassUuid = "";
-
+var CONFIRM_STATUS = "Confirm";
+var CANCEL_STATUS = "Draft";
 var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH: function (caller, act, data) {
+        ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1);
+    },
+    PAGE_SEARCH2: function (caller, act, data) {
         axboot.ajax({ //트리 리스트
             type: "GET",
             url: "/api/v1/cl002/03/getClassHierarchyList",
@@ -21,25 +25,10 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         return false;
     },
     PAGE_SEARCH1: function (caller, act, data) {
-        axboot.ajax({
-            type: "GET",
-            url: "/api/v1/cl/cl003/01/list01",
-            data: $.extend({}, {pageSize: 1000}, {classUuid:data.classUuid}),
-            callback: function (res) {
-                fnObj.gridView02.clearData();
-                fnObj.gridView02.setData(res.list);
-            },
-            options: {
-                onError: axboot.viewError
-            }
-        });
-        return false;
-    },
-    PAGE_SEARCH2: function (caller, act, data) {
         axboot.ajax({ //트리 리스트
             type: "GET",
             url: "/api/v1/cl/cl003/01/list02",
-            data: $.extend({}, {pageSize: 1000}, {classUuid:data.classUuid}),
+            data: $.extend({}, {pageSize: 1000}, {classUuid:crntClassUuid}),
             callback: function (res) {
                 fnObj.gridView03.clearData();
                 fnObj.gridView03.setData(res.list);
@@ -50,12 +39,36 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         });
         return false;
     },
+    STATUS_UPDATE: function (caller, act, data) {
+
+        var rows = fnObj.gridView03.gridObj.getCheckedList();
+
+        if(!rows || rows.length < 1) return;
+
+        var params = rows.filter(function (item) {
+            item.changeStatus = data;
+            return item.classifyRecordsResultUuid !== "";
+        });
+
+        axboot.ajax({
+            type: "PUT",
+            url: "/api/v1/cl/cl003/02/confirm",
+            data: JSON.stringify(params),
+            callback: function (res) {
+                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1);
+            },
+            options: {
+                onError: axboot.viewError
+            }
+        });
+    },
     ERROR_SEARCH: function (caller, act, data) {
     },
     PAGE_CONFIRM: function (caller, act, data) {
+        ACTIONS.dispatch(ACTIONS.STATUS_UPDATE,CONFIRM_STATUS);
     },
     PAGE_CANCEL: function (caller, act, data) {
-
+        ACTIONS.dispatch(ACTIONS.STATUS_UPDATE,CANCEL_STATUS);
     },
     PAGE_SAVE: function (caller, act, data) {
         ACTIONS.dispatch(ACTIONS.TOP_GRID_SAVE);
@@ -65,11 +78,10 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         var result = false;
         axboot.call({
             type: "PUT",
-            url: "/api/v1/cl003/03/saveList",
-            data: JSON.stringify(this.gridView01.getData()),
+            url: "/api/v1/cl/cl003/02/save",
+            data: JSON.stringify(this.gridView03.getData()),
             callback: function (res) {
-                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
-                result = true;
+                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1);
             }
         })
             .done(function () {
@@ -101,6 +113,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             callback: function (data) {
                 if(this) this.close();
                 if(data){
+                    crntClassUuid = data.classUuid
                     ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1,data);
                 }
             }
@@ -121,7 +134,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 selectedTreeItem = {orderKey:"", classTreeName:"",classificationSchemeUuid:"",orderNo:"",parentClassUuid:""};
                 if(this.close)
                     this.close();
-                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH,data);
+                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH2,data);
             }
         });
     },
@@ -151,13 +164,13 @@ fnObj.pageStart = function () {
         success: function () {
         }
     });
-    $.ajax({
-        url: "/assets/js/column_info/cl00301.js",
-        dataType: "script",
-        async: false,
-        success: function () {
-        }
-    });
+    // $.ajax({
+    //     url: "/assets/js/column_info/cl00301.js",
+    //     dataType: "script",
+    //     async: false,
+    //     success: function () {
+    //     }
+    // });
     $.ajax({
         url: "/assets/js/column_info/cl00302.js",
         dataType: "script",
@@ -168,10 +181,10 @@ fnObj.pageStart = function () {
 
     _this.formView.initView();
     _this.gridView01.initView();
-    _this.gridView02.initView();
+    // _this.gridView02.initView();
     _this.gridView03.initView();
 
-    ACTIONS.dispatch(ACTIONS.PAGE_SEARCH, this.formView.getData());
+    ACTIONS.dispatch(ACTIONS.PAGE_SEARCH2, this.formView.getData());
 };
 
 fnObj.formView = axboot.viewExtend(axboot.formView, {
@@ -294,9 +307,9 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     },
     itemClick: function (data, index) {
         if(data != null){
-            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, data);
-            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH2,data);
             crntClassUuid = data.classUuid;
+            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1);
+
         }
     },
     getData: function () {
@@ -305,25 +318,25 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
 
 });
 
-fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
-    tagId: "realgrid02",
-    primaryKey : "classifiedRecordsUuid",
-    entityName : "classifiedRecordsUuid",
-    initView: function () {
-        this.initInstance();
-        this.setColumnInfo(cl00301.column_info);
-        this.gridObj.setOption({
-            checkBar: {visible: true},
-            indicator: {visible: true}
-        })
-        this.makeGrid();
-        this.gridObj.itemClick(this.itemClick);
-    },
-    isChangeData: function () {
-    },
-    itemClick: function (data) {
-    }
-});
+// fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
+//     tagId: "realgrid02",
+//     primaryKey : "classifiedRecordsUuid",
+//     entityName : "classifiedRecordsUuid",
+//     initView: function () {
+//         this.initInstance();
+//         this.setColumnInfo(cl00301.column_info);
+//         this.gridObj.setOption({
+//             checkBar: {visible: true},
+//             indicator: {visible: true}
+//         })
+//         this.makeGrid();
+//         this.gridObj.itemClick(this.itemClick);
+//     },
+//     isChangeData: function () {
+//     },
+//     itemClick: function (data) {
+//     }
+// });
 fnObj.gridView03 = axboot.viewExtend(axboot.gridView, {
     tagId: "realgrid03",
     primaryKey : "classifiedRecordsUuid",

@@ -362,7 +362,7 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
             indicator: {visible: true}
         })
         this.makeGrid();
-        this.gridObj.itemClick(this.itemClick);
+        // this.gridObj.itemClick(this.itemClick);
     },
     disabledColumn : function()
     {

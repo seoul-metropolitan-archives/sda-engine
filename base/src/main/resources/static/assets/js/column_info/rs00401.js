@@ -22,20 +22,21 @@ var rs00401 =
                 },
                 {
                     sortNo: 2,
+                    width:50,
                     name: "statusUuid",
                     text: "Status",
                     editable: false,
-                    dataType: "code",
-                    values: axboot.commonCodeFilter("CD134").codeArr,
-                    labels: axboot.commonCodeFilter("CD134").nameArr,
-                    required: true
+                    dataType: "combo",
+                    values: axboot.commonCodeFilter("CD137").codeArr,
+                    labels: axboot.commonCodeFilter("CD137").nameArr,
+                    disable: true
                 },
                 {
                     sortNo: 3,
                     name: "recordSchedule",
                     text: "Record Schedule",
                     editable: false,
-                    width : 400,
+                    width : 700,
                     dataType: "text",
                     header :{styles:{
                             background: "linear,#f2f2f2",
@@ -46,21 +47,22 @@ var rs00401 =
                             borderBottom: "#cccccc, 1",
                             fontBold: false
                         }},
-                    columnList : [{
-                        sortNo: 0,
-                        name: "recordScheduleCode",
-                        text: "RS Code",
-                        width : 150,
-                        editable: false,
-                        dataType: "text",
-                        visible: true,
-                        disable: true
-                    },
+                        columnList : [{
+                            sortNo: 0,
+                            name: "rsCode",
+                            text: "RS Code",
+                            width : 80,
+                            dataType: "popup",
+                            popupCode : "PU140",
+                            sqlColumn : {RS_NAME :"rsName", RS_CODE:"rsCode" ,RETENTION_PERIOD_NM: "retentionPeriodNm", DISPOSAL_TYPE_NM: "disposalTypeNm", RETENTION_PERIOD_NM: "retentionPeriodUuid", DISPOSAL_TYPE_NM: "disposalTypeUuid"},
+                            disable : false,
+                            required:true
+                        },
                         {
                             sortNo: 1,
-                            name: "recordScheduleName",
+                            name: "rsName",
                             text: "RS Name",
-                            width : 150,
+                            width : 250,
                             editable: false,
                             dataType: "text",
                             visible: true,
@@ -68,29 +70,43 @@ var rs00401 =
                         },
                         {
                             sortNo: 2,
-                            name: "retentionPeriod",
+                            name: "retentionPeriodUuid",
                             text: "Retention Period",
-                            width : 200,
+                            width : 90,
                             editable: false,
                             dataType: "combo",
-                            visible: true,
+                            textAlignment:"center",
+                            values: axboot.commonCodeFilter("CD133").codeArr,
+                            labels: axboot.commonCodeFilter("CD133").nameArr,
                             disable: true
                         },
                         {
                             sortNo: 3,
-                            name: "disposalType",
+                            name: "disposalTypeUuid",
                             text: "Disposal Type",
-                            width : 180,
+                            width : 90,
                             editable: false,
                             dataType: "combo",
-                            visible: true,
+                            textAlignment:"center",
+                            values: axboot.commonCodeFilter("CD135").codeArr,
+                            labels: axboot.commonCodeFilter("CD135").nameArr,
                             disable: true
                         },
                         {
                             sortNo: 4,
-                            name: "disposalFreezeYn",
+                            name: "disposalDueDate",
+                            text: "Disposal Due Date",
+                            width: 100,
+                            editable: false,
+                            dataType: "text",
+                            visible: true,
+                            disable: true
+                        },
+                        {
+                            sortNo: 5,
+                            name: "disposalFreeze",
                             text: "Disposal Freeze",
-                            width : 220,
+                            width : 90,
                             editable: false,
                             dataType: "check",
                             visible: true,
@@ -103,7 +119,7 @@ var rs00401 =
                     text: "Item",
                     editable: false,
                     dataType: "text",
-                    width : 310,
+                    width : 620,
                     header :{styles:{
                             background: "linear,#f2f2f2",
                             fontSize: 12,
@@ -111,14 +127,13 @@ var rs00401 =
                             foreground: "#000000",
                             borderRight: "#cccccc, 1",
                             borderBottom: "#cccccc, 1",
-                            fontBold: false
                         }},
                     columnList: [
                         {
                             sortNo: 6,
                             name: "aggregationTree",
                             text: "Aggregation Tree",
-                            width : 220,
+                            width : 250,
                             editable: false,
                             dataType: "text",
                             visible: true,
@@ -128,7 +143,7 @@ var rs00401 =
                             sortNo: 7,
                             name: "itemCode",
                             text: "Item Code",
-                            width : 150,
+                            width : 120,
                             editable: false,
                             dataType: "text",
                             visible: true,
@@ -136,9 +151,9 @@ var rs00401 =
                         },
                         {
                             sortNo: 8,
-                            name: "title",
+                            name: "itemTitle",
                             text: "Title",
-                            width : 100,
+                            width : 200,
                             editable: false,
                             dataType: "text",
                             visible: true,
@@ -146,35 +161,36 @@ var rs00401 =
                         },
                         {
                             sortNo: 9,
-                            name: "initialDate",
-                            text: "Initial Date",
-                            width : 100,
+                            name: "itemTypeUuid",
+                            text: "Type",
+                            width: 50,
                             editable: false,
-                            dataType: "text",
-                            visible: true,
-                            disable: true
-                        },
-                        {
-                            sortNo: 10,
-                            name: "disposalDueDate",
-                            text: "Disposal Due Date",
-                            width: 220,
-                            editable: false,
-                            dataType: "text",
-                            visible: true,
+                            dataType: "combo",
+                            values: axboot.commonCodeFilter("CD136").codeArr,
+                            labels: axboot.commonCodeFilter("CD136").nameArr,
                             disable: true
                         }
+                        // {
+                        //     sortNo: 9,
+                        //     name: "initialDate",
+                        //     text: "Initial Date",
+                        //     width : 100,
+                        //     editable: false,
+                        //     dataType: "text",
+                        //     visible: true,
+                        //     disable: true
+                        // },
+                        // {
+                        //     sortNo: 10,
+                        //     name: "disposalDueDate",
+                        //     text: "Disposal Due Date",
+                        //     width: 100,
+                        //     editable: false,
+                        //     dataType: "text",
+                        //     visible: true,
+                        //     disable: true
+                        // }
                     ]
-                },
-                {
-                    sortNo: 10,
-                    name: "type",
-                    text: "Type",
-                    width: 50,
-                    editable: false,
-                    dataType: "text",
-                    visible: true,
-                    disable: true
                 },
                 {
                     sortNo: 11,
@@ -191,17 +207,6 @@ var rs00401 =
                     width: 250,
                     editable: true,
                     dataType: "text"
-                },
-                {
-                    sortNo: 13,
-                    name: "useYn",
-                    text: "Use",
-                    width: 50,
-                    editable: true,
-                    dataType: "check",
-                    textAlignment: "center",
-                    defaultValue : "Y",
-                    required: false
                 },
                 {
                     sortNo: 14,
@@ -242,6 +247,18 @@ var rs00401 =
                     dataType: "timestamp",
                     required: false,
                     disable: true
+                },
+                {
+                    sortNo: 19,
+                    name: "itemUuid",
+                    text: "Item Uuid",
+                    visible: false
+                },
+                {
+                    sortNo: 20,
+                    name: "disposalStatus",
+                    text: "Disposal Status",
+                    visible: false
                 }
             ]
     }

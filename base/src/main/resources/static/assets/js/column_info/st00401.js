@@ -3,9 +3,9 @@ var st00401 =
         column_info:
             [
                 {
-                    sortNo: 1,
-                    name: "userUuid",
-                    text: "userUuid",
+                    sortNo: 0,
+                    name: "locationUuid",
+                    text: "Location UUID",
                     width: 120,
                     editable: true,
                     dataType: "code",
@@ -14,8 +14,8 @@ var st00401 =
                 },
                 {
                     sortNo: 1,
-                    name: "startProgramUuid",
-                    text: "startProgramUuid",
+                    name: "shelfUuid",
+                    text: "Shelf UUID",
                     width: 120,
                     editable: true,
                     dataType: "code",
@@ -24,21 +24,41 @@ var st00401 =
                 },
                 {
                     sortNo: 2,
-                    name: "userId",
-                    text: "User ID",
+                    name: "rowNo",
+                    text: "Row",
                     width: 120,
-                    editable: true,
+                    editable: false,
                     dataType: "text",
-                    required: true
+                    required: true,
+                    disable: true
                 },
                 {
                     sortNo: 3,
-                    name: "userNm",
-                    text: "User Name",
+                    name: "columnNo",
+                    text: "Column",
                     width: 120,
-                    editable: true,
+                    editable: false,
                     dataType: "text",
-                    required: true
+                    required: true,
+                    disable: true
+                },
+                {
+                    sortNo: 4,
+                    name: "description",
+                    text: "Description",
+                    width: 250,
+                    editable: false,
+                    datType: "multiline",
+                    disable: true
+                },
+                {
+                    sortNo: 5,
+                    name: "notes",
+                    text: "Notes",
+                    width: 150,
+                    editable: false,
+                    dataType: "text",
+                    disable: true
                 }
             ]
     }

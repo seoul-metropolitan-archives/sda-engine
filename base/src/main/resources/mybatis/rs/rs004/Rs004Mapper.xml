@@ -3,118 +3,75 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="rmsoft.ams.seoul..Rs004Mapper">
-
-    <select id="findAll" resultType="rs004" parameterType="rs004" statementType="PREPARED">
+<mapper namespace="rmsoft.ams.seoul.rs.rs004.dao.Rs004Mapper">
+    <select id="getRecordScheduleResultList" resultType="Rs00501VO"  statementType="PREPARED">
         SELECT
-            RECORD_SCHEDULE_RESULT_UUID AS recordScheduleResultUuid,
-            RECORD_SCHEDULE_UUID AS recordScheduleUuid,
-            STATUS_UUID AS statusUuid,
-            ITEM_UUID AS itemUuid,
-            DISPOSAL_TYPE_UUID AS disposalTypeUuid,
-            INITIAL_DATE AS initialDate,
-            DISPOSAL_DUE_DATE AS disposalDueDate,
-            DISPOSAL_CONFIRM_DATE AS disposalConfirmDate,
-            DISPOSAL_CONFIRM_REASON AS disposalConfirmReason,
-            DISPOSAL_COMPLETE_DATE AS disposalCompleteDate,
-            DESCRIPTION AS description,
-            NOTES AS notes,
-            INSERT_UUID AS insertUuid,
-            INSERT_DATE AS insertDate,
-            UPDATE_UUID AS updateUuid,
-            UPDATE_DATE AS updateDate
-        FROM
-            RS_RECORD_SCHEDULE_RESULT
-    </select>
-
-    <select id="findOne" resultType="rs004" parameterType="rs004" statementType="PREPARED">
+        A3.RS_CODE AS rsCode,
+        A3.RS_NAME AS rsName,
+        A3.RETENTION_PERIOD_UUID AS retentionPeriodUuid,
+        CASE WHEN (SELECT COUNT(*) FROM DF_DISPOSAL_FREEZE_RESULT WHERE ITEM_UUID = A1.ITEM_UUID) = '0' THEN 'N' ELSE 'Y' END
+        AS disposalFreeze,
+        A1.RECORD_SCHEDULE_RESULT_UUID AS recordScheduleResultUuid,
+        A1.RECORD_SCHEDULE_UUID AS recordScheduleUuid,
+        A1.ITEM_UUID AS itemUuid,
+        A1.STATUS_UUID AS statusUuid,
+        A1.DISPOSAL_TYPE_UUID AS disposalTypeUuid,
+        TO_CHAR(A1.INITIAL_DATE,'YYYY-MM-DD') AS initialDate,
+        TO_CHAR(A1.DISPOSAL_DUE_DATE,'YYYY-MM-DD') AS disposalDueDate,
+        TO_CHAR(A1.DISPOSAL_CONFIRM_DATE,'YYYY-MM-DD') AS disposalConfirmDate,
+        A1.DISPOSAL_CONFIRM_REASON AS disposalConfirmReason,
+        A1.DISPOSAL_COMPLETE_DATE AS disposalCompleteDate,
+        A1.DISPOSAL_STATUS as disposalStatus,
+        A1.DESCRIPTION AS description,
+        A1.NOTES AS notes,
+        A2.ITEM_CODE AS itemCode,
+        A2.TYPE_UUID AS itemTypeUuid,
+        A4.CREATION_END_DATE AS creationEndDate,
+        A2.TITLE AS itemTitle,
+        (
         SELECT
-            RECORD_SCHEDULE_RESULT_UUID AS recordScheduleResultUuid,
-            RECORD_SCHEDULE_UUID AS recordScheduleUuid,
-            STATUS_UUID AS statusUuid,
-            ITEM_UUID AS itemUuid,
-            DISPOSAL_TYPE_UUID AS disposalTypeUuid,
-            INITIAL_DATE AS initialDate,
-            DISPOSAL_DUE_DATE AS disposalDueDate,
-            DISPOSAL_CONFIRM_DATE AS disposalConfirmDate,
-            DISPOSAL_CONFIRM_REASON AS disposalConfirmReason,
-            DISPOSAL_COMPLETE_DATE AS disposalCompleteDate,
-            DESCRIPTION AS description,
-            NOTES AS notes,
-            INSERT_UUID AS insertUuid,
-            INSERT_DATE AS insertDate,
-            UPDATE_UUID AS updateUuid,
-            UPDATE_DATE AS updateDate
+        SUBSTR(SYS_CONNECT_BY_PATH(TITLE,' >> '),4) path
         FROM
-            RS_RECORD_SCHEDULE_RESULT
-        WHERE
-            RECORD_SCHEDULE_RESULT_UUID = #{recordScheduleResultUuid}
+        RC_AGGREGATION C
+        WHERE A2.AGGREGATION_UUID = C.AGGREGATION_UUID
+        START WITH PARENT_AGGREGATION_UUID IS NULL
+        CONNECT BY PRIOR AGGREGATION_UUID = PARENT_AGGREGATION_UUID
+        ) AS aggregationTree,
+        <include refid="Common.UserName"><property name="userUuid" value="A1.INSERT_UUID"/></include> as insertUuid,
+        A1.INSERT_DATE as insertDate,
+        <include refid="Common.UserName"><property name="userUuid" value="A1.UPDATE_UUID"/></include> as updateUuid,
+        A1.UPDATE_DATE as updateDate
+        FROM RS_RECORD_SCHEDULE_RESULT A1, RC_ITEM A2, RS_RECORD_SCHEDULE A3, RC_ITEM_CON A4
+        <where>
+            A1.ITEM_UUID = A2.ITEM_UUID
+            AND A1.RECORD_SCHEDULE_UUID = A3.RECORD_SCHEDULE_UUID
+            AND A1.ITEM_UUID = A4.ITEM_UUID
+            AND FC_AD_CODE(A1.DISPOSAL_STATUS) = 'DRAFT'
+            <if test="statusUuid != null">
+                AND  A1.STATUS_UUID = #{statusUuid}
+            </if>
+            <if test="retentionPeriodUuid != null">
+                AND  A3.RETENTION_PERIOD_UUID = #{retentionPeriodUuid}
+            </if>
+            <if test="disposalTypeUuid != null">
+                AND  A1.DISPOSAL_TYPE_UUID = #{disposalTypeUuid}
+            </if>
+            <if test="recordScheduleUuid != null">
+                AND  A1.RECORD_SCHEDULE_UUID = #{recordScheduleUuid}
+            </if>
+            <if test="rsCode != null">
+                AND  A3.RS_CODE = #{rsCode}
+            </if>
+            <if test="null != disposalFromDueDate and '' != disposalToDueDate">
+                <![CDATA[
+            AND
+                A1.DISPOSAL_DUE_DATE  BETWEEN to_date(#{disposalFromDueDate},'YYYY-MM-DD') AND to_date(#{disposalToDueDate},'YYYY-MM-DD')
+            ]]>
+            </if>
+            <if test="disposalFreeze != null">
+                AND #{disposalFreeze} = CASE WHEN (SELECT COUNT(*) FROM DF_DISPOSAL_FREEZE_RESULT WHERE ITEM_UUID = A1.ITEM_UUID) = '0' THEN 'N' ELSE 'Y' END
+            </if>
+        </where>
+        ORDER BY A3.RS_CODE, A2.ITEM_CODE
     </select>
-
-   <update id="delete" parameterType="rs004" statementType="PREPARED">
-        DELETE FROM
-            RS_RECORD_SCHEDULE_RESULT
-        WHERE
-            RECORD_SCHEDULE_RESULT_UUID = #{recordScheduleResultUuid}
-    </update>
-
-   <update id="update" parameterType="rs004" statementType="PREPARED">
-        UPDATE RS_RECORD_SCHEDULE_RESULT
-        SET
-            RECORD_SCHEDULE_UUID = #{recordScheduleUuid},
-            STATUS_UUID = #{statusUuid},
-            ITEM_UUID = #{itemUuid},
-            DISPOSAL_TYPE_UUID = #{disposalTypeUuid},
-            INITIAL_DATE = #{initialDate},
-            DISPOSAL_DUE_DATE = #{disposalDueDate},
-            DISPOSAL_CONFIRM_DATE = #{disposalConfirmDate},
-            DISPOSAL_CONFIRM_REASON = #{disposalConfirmReason},
-            DISPOSAL_COMPLETE_DATE = #{disposalCompleteDate},
-            DESCRIPTION = #{description},
-            NOTES = #{notes},
-            INSERT_UUID = #{insertUuid},
-            INSERT_DATE = #{insertDate},
-            UPDATE_UUID = #{updateUuid},
-            UPDATE_DATE = #{updateDate}
-        WHERE
-            RECORD_SCHEDULE_RESULT_UUID = #{recordScheduleResultUuid}
-    </update>
-
-   <update id="insert" parameterType="rs004" statementType="PREPARED">
-        INSERT INTO RS_RECORD_SCHEDULE_RESULT (
-            RECORD_SCHEDULE_RESULT_UUID,
-            RECORD_SCHEDULE_UUID,
-            STATUS_UUID,
-            ITEM_UUID,
-            DISPOSAL_TYPE_UUID,
-            INITIAL_DATE,
-            DISPOSAL_DUE_DATE,
-            DISPOSAL_CONFIRM_DATE,
-            DISPOSAL_CONFIRM_REASON,
-            DISPOSAL_COMPLETE_DATE,
-            DESCRIPTION,
-            NOTES,
-            INSERT_UUID,
-            INSERT_DATE,
-            UPDATE_UUID,
-            UPDATE_DATE
-        ) VALUES (
-            #{recordScheduleResultUuid},
-            #{recordScheduleUuid},
-            #{statusUuid},
-            #{itemUuid},
-            #{disposalTypeUuid},
-            #{initialDate},
-            #{disposalDueDate},
-            #{disposalConfirmDate},
-            #{disposalConfirmReason},
-            #{disposalCompleteDate},
-            #{description},
-            #{notes},
-            #{insertUuid},
-            #{insertDate},
-            #{updateUuid},
-            #{updateDate}
-        )
-    </update>
 </mapper>
