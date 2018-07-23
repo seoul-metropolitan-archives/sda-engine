@@ -267,6 +267,60 @@ function exp_gridView() {
 
 }
 
+/**
+ * Drop 완료 시 Aggregation 및 Record 영역 Update
+ * @param targetUi Drag요소
+ * @param parentNode 옮겨질 Aggregation
+ * @returns {boolean}
+ */
+function updateRecord(targetUi, parentNode){
+    var targetNode = null;
+
+    var targetUuid = targetUi.attr("uuid");
+    var targetNodeType = targetUi.attr("nodeType");
+    var parentUuid = parentNode["uuid"];
+    var reqList = null;
+    var selectedData = fnObj.iconView.getSelectedData();
+
+    //현재 Record 화면에 로딩된 Aggregation UUID를 가져옴
+    var currentUuid = $("#navigatorArea .navigator").last().attr("uuid");
+    if(targetUuid == parentUuid){
+        axWarningToast.push("Aggregation 코드가 같습니다.");
+        return false;
+    }else if(parentUuid == currentUuid){
+        axWarningToast.push("동일한 Aggregation으로 이동할 수 없습니다.");
+        return false;
+    }
+
+    if(selectedData.length == 0){
+        reqList = [{
+            uuid: targetUuid,
+            parentUuid: parentUuid,
+            nodeType: targetNodeType
+        }];
+
+        targetUi.remove();
+    }else{
+        reqList = [];
+        $.each(selectedData, function(idx, item){
+            reqList.push({
+                uuid: item.uuid,
+                parentUuid: parentUuid,
+                nodeType: item.nodeType
+            });
+        });
+        $("#iconListArea >div.selected").remove();
+    }
+
+    if(targetUi.attr("nodetype") != "item") {
+        targetNode = fnObj.treeView01.getNodeByParam("uuid", targetUi.attr("uuid"));
+        fnObj.treeView01.moveNode(parentNode, targetNode);
+    }
+    ACTIONS.dispatch(ACTIONS.PAGE_SAVE, reqList);
+
+    return true;
+}
+
 
 var fnObj = {
     pageStart : function () {
@@ -286,6 +340,7 @@ var fnObj = {
             async : false,
             success: function(){}
         });
+
 
         $(function () {
             $(".zeta-menu li").hover(function () {
@@ -843,6 +898,7 @@ fnObj.detailView = axboot.viewExtend({
 fnObj.iconView = axboot.viewExtend({
     pressedCtrl : false,
     isdbClk : false,
+    selectedItem : null,
     initView : function()
     {
         this.initEvent();
@@ -867,65 +923,25 @@ fnObj.iconView = axboot.viewExtend({
 
 
 
-        $("#iconListArea").delegate("div","click",function(event){
+        $("#iconListArea").delegate(">div","click",function(event){
 
             event.stopPropagation();
-            var index = 0;
-            var imgSrc= "";
-            var uuid = "";
 
-            if(undefined != $(this).attr("uuid")) {
-                uuid = $(this).attr("uuid")
-                //imgSrc = $(this).find(".imageTag").find("img").prop("src");
-                if(fnObj.iconView.pressedCtrl)
-                {
-                    if($(this).attr("class").indexOf("selected")>-1)
-                        $(this).removeClass("selected")
-                    else
-                        $(this).addClass("selected")
-                }
-            }else if(undefined == $(this).parents().eq(index).attr("uuid")){
-                index++;
-            }
-            if("" == uuid)
+            if(fnObj.iconView.pressedCtrl)
             {
-                uuid = $(this).parents().eq(index).attr("uuid")
-                //imgSrc = $(this).parents().eq(index).find(".imageTag").find("img").prop("src")
-                //컨트롤 누르고 클릭 시 해당 아이템들이 다중으로 선택되어야된다
-                if(fnObj.iconView.pressedCtrl)
-                {
-                    //$(this).parents().eq(index).addClass("selected")
-                    if($(this).parents().eq(index).attr("class").indexOf("selected")>-1)
-                    {
-                        $(this).parents().eq(index).removeClass("selected")
-                    }
-                    else
-                        $(this).parents().eq(index).addClass("selected")
-                }
-                else {
-                    //컨트롤 누르지 않고 클릭 시 해당 아이템만 선택되어야된다
-                    $("#iconListArea .selected").each(function(){
-                        $(this).removeClass("selected");
-                    });
-                    $(this).parents().eq(index).addClass("selected")
-                }
+                $(this).toggleClass("selected");
+            }
+            else {
+                //컨트롤 누르지 않고 클릭 시 해당 아이템만 선택되어야된다
+                $("#iconListArea >div").removeClass("selected");
+                $(this).toggleClass("selected");
             }
 
-            //$("#archiveType").prop("src",imgSrc);
-
-            var reqData = {uuid : uuid};
             fnObj.pageView.resetPage();
-            //setTimeout(function(){
-                //if(fnObj.iconView.isdbClk) {  return ;}
-                //if(imgSrc.indexOf("file")>-1)
-                //    ACTIONS.dispatch(ACTIONS.GET_ITEM_INFO,reqData);
-                //else
-                    //ACTIONS.dispatch(ACTIONS.GET_AGGREGATION_INFO,reqData);
-
-            //},250);
 
         });
-        $("#iconListArea").delegate("div","dblclick",function(event){
+
+        $("#iconListArea").delegate(">div","dblclick",function(event){
             event.stopPropagation();
             fnObj.iconView.isdbClk = true;
             var index = 0;
@@ -933,14 +949,14 @@ fnObj.iconView = axboot.viewExtend({
             if(undefined != $(this).attr("uuid")) {
                 imgSrc = $(this).find(".imageTag").find("img").prop("src");
                 uuid = $(this).attr("uuid");
-            }else if(undefined == $(this).parents().eq(index).attr("uuid")){
+            }else if(undefined == $(this).attr("uuid")){
                 index++;
             }
-            if(undefined == $(this).parents().eq(index).attr("uuid"))
+            if(undefined == $(this).attr("uuid"))
                 index++;
 
             if(uuid == "")
-                imgSrc = $(this).parents().eq(index).find(".imageTag").find("img").prop("src")
+                imgSrc = $(this).find(".imageTag").find("img").prop("src")
 
             var getMenu = function(searchData)
             {
@@ -993,10 +1009,10 @@ fnObj.iconView = axboot.viewExtend({
             }
 
 
-            fnObj.naviView.setData({uuid : $(this).parents().eq(index).attr("uuid"),name : $(this).parents().eq(index).find(".titleTag").children().eq(0).text()});
+            fnObj.naviView.setData({uuid : $(this).attr("uuid"),name : $(this).find(".titleTag").children().eq(0).text()});
             ACTIONS.dispatch(ACTIONS.GET_SUBDATA,{
-                    uuid:$(this).parents().eq(index).attr("uuid"),
-                    nodeType : $(this).parents().eq(index).attr("nodeType")}
+                    uuid:$(this).attr("uuid"),
+                    nodeType : $(this).attr("nodeType")}
                 );
             //fnObj.detailView.setData({});
             //setTimeout(function(){
@@ -1091,15 +1107,120 @@ fnObj.iconView = axboot.viewExtend({
 
             cloneTag.find(".titleTag").append($("<div>").attr("class", data["name"].length > 15 ? "explorer_4line" : "explorer_text").text(data["name"]));
             cloneTag.attr("level",data["level"]);
+            //cloneTag.css("position", "absolute");
             targetTag.append(cloneTag);
             fullStr = "";
             cloneTag = undefined;
             imgTag = undefined;
             data = undefined;
 
-
         }
 
+        /**
+         * Drag and Drop 테스트
+         */
+        $('#iconListArea >div').draggable({
+            containment : "window",
+            opacity: 0.7,
+            delay : 10,
+            stack : "#iconListArea >div",
+            scroll : false,
+            helper : function (event) {
+                var wrapper = "<div id='explorerDragWrpper'></div>";
+                $('#ax-base-root').append(wrapper);
+
+                if(fnObj.iconView.getSelectedData().length > 0) {
+                    return $('#explorerDragWrpper').append($('#iconListArea >div.selected').clone());
+                }else {
+                    return $('#explorerDragWrpper').append($(this).clone());
+                }
+            }
+        });
+
+        $('#iconListArea .explorer_folder_full, #iconListArea .explorer_folder_empty').droppable({
+            tolerance: "pointer",
+
+            drop: function( event, ui ) {
+                var parentNode = fnObj.treeView01.getNodeByParam("uuid", $(this).attr("uuid"));
+
+                if(!updateRecord(ui.draggable, parentNode)){
+                    return;
+                }
+            }
+        });
+
+        /**
+         * Contextmenu 테스트
+         */
+
+        /* Menu 1: init by passing an array of entries. */
+        $('#iconListArea >div').contextmenu({
+            autoFocus: true,
+            delegate: "",
+            preventContextMenuForPopup: true,
+            preventSelect: true,
+            taphold: true,
+            menu: [],
+            // Handle menu selection to implement a fake-clipboard
+            select: function(event, ui) {
+                var $target = ui.target;
+
+                switch(ui.cmd){
+                    case "mergeItem":
+                        axDialog.confirm({
+                            msg: "Merge를 진행 하시겠습니까?\nComponent들은 하나의 Item에 귀속됩니다."
+                        }, function () {
+                            if (this.key == "ok") {
+
+                                axToast.push("Item이 Merge되었습니다.");
+                            }
+                        });
+                        break;
+                    case "paste":
+                        break;
+                }
+                // Optionally return false, to prevent closing the menu now
+            },
+            // Implement the beforeOpen callback to dynamically change the entries
+            beforeOpen: function(event, ui) {
+                var menu = null;
+
+                //컨트롤 누르고 클릭 시 해당 아이템들이 다중으로 선택되어야된다
+                if(fnObj.iconView.pressedCtrl)
+                {
+                    $(this).addClass("selected");
+                }
+                else {
+                    //컨트롤 누르지 않고 클릭 시 해당 아이템만 선택되어야된다
+                    $("#iconListArea >div").removeClass("selected");
+                    $(this).toggleClass("selected");
+                }
+
+                fnObj.pageView.resetPage();
+
+                fnObj.iconView.selectedItems = fnObj.iconView.getSelectedData();
+
+                if(fnObj.iconView.selectedItems && fnObj.iconView.selectedItems.length > 1){
+                    menu = [
+                        {title: "Merge Item", cmd: "mergeItem", uiIcon: "ui-icon-transferthick-e-w" }
+                    ];
+                }else{
+                    if($(this).attr("nodetype") == "item"){
+                        menu = [
+                            {title: "Cut Item", cmd: "cutItem", uiIcon: "ui-icon-scissors" }
+                        ];
+                    }else{
+                        menu = [
+                            {title: "Cut Aggregation", cmd: "cutAgg", uiIcon: "ui-icon-scissors" }
+                        ];
+                    }
+                }
+
+                $(this).contextmenu({
+                    menu: menu
+                });
+            }
+        });
     },
     getSelectedData : function()
     {
@@ -1273,6 +1394,17 @@ fnObj.treeView01 = axboot.viewExtend(axboot.commonView, {
                             zTree.reAsyncChildNodes(treeNode, "refresh");
                         }
                     }
+
+                    $('[data-z-tree="tree-view-01"] [treenode_a]').droppable({
+                        tolerance: "pointer",
+                        drop: function( event, ui ) {
+                            var parentNode = fnObj.treeView01.getNodeByTId($(this).parent().attr("id"));
+
+                            if(!updateRecord(ui.draggable, parentNode)){
+                                return;
+                            }
+                        }
+                    });
                 },
                 beforeDrop : function(treeId, treeNodes, targetNode, moveType, isCopy){
 
@@ -1506,6 +1638,7 @@ fnObj.treeView01 = axboot.viewExtend(axboot.commonView, {
         }
 
         this.target.setData(treeList);
+
         /*if (_data && typeof _data.uuid !== "undefined") {
             // selectNode
             (function (_tree, _keyName, _key) {
@@ -1590,6 +1723,21 @@ fnObj.treeView01 = axboot.viewExtend(axboot.commonView, {
     {
         var treeObj = $.fn.zTree.getZTreeObj("ztree");
         return treeObj.getSelectedNodes();
+    },
+    getNodeByTId : function(tId)
+    {
+        var treeObj = $.fn.zTree.getZTreeObj("ztree");
+        return treeObj.getNodeByTId(tId);
+    },
+    moveNode : function(targetNode, treeNode)
+    {
+        var treeObj = $.fn.zTree.getZTreeObj("ztree");
+        return treeObj.moveNode(targetNode, treeNode, "inner", false);
+    },
+    getNodeByParam : function(key, value)
+    {
+        var treeObj = $.fn.zTree.getZTreeObj("ztree");
+        return treeObj.getNodeByParam(key, value, null);
     }
 });
 
