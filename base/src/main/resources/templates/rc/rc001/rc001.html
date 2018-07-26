@@ -11,199 +11,204 @@
 <!-- ===== [ base-content ] ===== -->
 <div layout:fragment="base-content" class="ax-base-content">
     <form name="formView01" id="formView01" method="post" onsubmit="return false">
-    <div class="cssBody" style="top:80px">
-        <div style="display:table; height:100%; width:100%">
+        <div class="cssBody" style="top:80px">
+            <div style="display:table; height:100%; width:100%">
 
-            <div class="contents_wrap">
-                <div style=" height:30px; width:100%" class="bgf7 div_tablerow">
-                    <ul class="bdb">
-                        <th:block layout:insert="~{/fragments/page-buttons :: bookmark}"/>
-                        <th:block layout:insert="~{/fragments/page-buttons :: save-and-inquiry}"/>
-                    </ul>
-                </div>
-                <div class="bdb div_tablerow">
-                   <ul style="height: 30px; width: 100%">
-                       <li style="width: 2%;"><img src="/assets/images/ams/icon/fo.png" alt="folder"></li>
-                       <li style="width: 78%; text-align: left;cursor: pointer;" id="navigatorArea"><span class="navigator" level="0" uuid="">Root</span></li>
-                       <li style="width: 19.5%; padding-right: 0.5%">
-                          <!--  <div class="src_box3" ><input type=text>
-                          <a href="#" id="dialog-link5">
-                          <img src="/assets/images/ams/search_normal.png" alt="search"></a>
-                          </div>-->
-                       </li>
-                   </ul>
-                   
-
-                </div>
-                
-                <div style="height:100%; width:100%" class="div_tablerow">
-
-                <div style="display:table; height:100%; width:16%; float:left" class="bdr">
-                    <ul class="bdb bdt div_tablerow bgf7" style="height:30px;">
-                        <li style="width:80%; text-align:left;">
-                            <img src="/assets/images/ams/img_dot2.png" alt="dot">Aggregation</li>
-                        <li style="text-align:right; width:18%;">
-                        
-                        </li>
-                    </ul>
-                    <ul class="bdb" style="height:30px;width:100%; float:left">
-                        <li style="text-align: left; height: 29px; line-height: 30px;">
-                            <label style="margin-bottom: 0px">
-                                <input type="checkbox" id="isDisplayItem"> Display Item
-                            </label>
-                        </li>
-                    </ul>
-                    <div style="height:100%; width:100%;" class="div_tablerow bdb">
-                        <!--<div id="realgridT1" style="width:100%; height:100%"></div>-->
-                        <div style="width: 100%; height:100%; position: relative;overflow: auto;">
-                        <div data-z-tree="tree-view-01" data-fit-height-content="tree-view-01" style="height: 100%;width : 100%;max-width: 271px; position: absolute" class="ztree" id="ztree"></div>
-                        </div>
+                <div class="contents_wrap">
+                    <div style=" height:30px; width:100%" class="bgf7 div_tablerow">
+                        <ul class="bdb">
+                            <th:block layout:insert="~{/fragments/page-buttons :: bookmark}"/>
+                            <th:block layout:insert="~{/fragments/page-buttons :: save-and-inquiry}"/>
+                        </ul>
                     </div>
-                </div><!--오늘쪽 내용에서 좌측 트리부분-->
-
-                <div style="display:table; height:100%; width:84%; float:left">
-
-                    <ul class="bdt bdb bgf7 div_tablerow" style="height:30px;">
-                        <li style="width:40%; text-align:left;">
-                            <img src="/assets/images/ams/img_dot2.png" alt="dot">Record</li>
-                        <li style="text-align:right; float: right;">
-                           
-                           <ul class="exp-menu" style="width: 376px; height: auto; overflow: hidden; position: absolute; right: 150px;">
-                            <li style="width: 125px"><a href="#">Add</a>
-                              <ul style="">
-                                <li><a href="#">Aggregation</a></li>
-                                <li><a href="#">Item</a></li>
-                              </ul>
+                    <div class="bdb div_tablerow">
+                        <ul style="height: 30px; width: 100%">
+                            <li style="width: 2%;"><img src="/assets/images/ams/icon/fo.png" alt="folder"></li>
+                            <li style="width: 78%; text-align: left;cursor: pointer;" id="navigatorArea"><span class="navigator" level="0" uuid="">Root</span></li>
+                            <li style="width: 19.5%; padding-right: 0.5%">
+                                <!--  <div class="src_box3" ><input type=text>
+                                <a href="#" id="dialog-link5">
+                                <img src="/assets/images/ams/search_normal.png" alt="search"></a>
+                                </div>-->
                             </li>
-                            <li style="width: 125px"><a href="#">View</a>
-                              <ul>
-                                <li><a href="#">Properties</a></li>
-                              </ul>
-                            </li>
-                            <li style="width: 125px"><a href="#">Do</a>
-                              <ul>
-                                <li><a href="#">Edit</a></li>
-                                <li><a href="#">Move</a></li>
-                                <li><a href="#">Update Status</a></li>
-                                <li class="bdb"><a href="#">Delete</a></li>
-                                <!--<li><a href="#">Classify</a></li>-->
-                              </ul>
-                            </li> 
-                           <!-- <li style="width: 125px"><a href="#">Status</a>
-                                <ul>
-                                <li><a href="#">Update Status</a></li>
-                                <li><a href="#">Move</a></li>
-                                <li><a href="#">Lock structure</a></li>
-                              </ul
-                            </li> >-->
-                          </ul>
+                        </ul>
 
-                        </li>
-                        <li style="text-align:right;">
-                            <button onclick="exp_listView()" class="show_grid" >
-                                <img src="/assets/images/ams/btn_show_grid.png" alt="큰아이콘"> Icon
-                            </button>
-                        
-                            <button onclick="exp_gridView()" class="show_list" >
-                                <img src="/assets/images/ams/btn_show_list.png" alt="쟈세히"> Grid
-                            </button>
-                        </li>
-                        
-                       
-                    </ul>
-                    <div style="height:100%; width:100%;" class="div_tablerow">
-                        <div style="width:100%; height:100%;" id="realgrid01" class="explorer_grid"></div>
-                        <div class="explorer_list">
-                            <div style="display:none" id="template">
-                                <div>
-                                    <div class="imageTag"></div>
-                                    <div class="titleTag"></div>
+
+                    </div>
+
+                    <div style="height:100%; width:100%" class="div_tablerow">
+
+                        <div style="display:table; height:100%; width:16%; float:left" class="bdr">
+                            <ul class="bdb bdt div_tablerow bgf7" style="height:30px;">
+                                <li style="width:80%; text-align:left;">
+                                    <img src="/assets/images/ams/img_dot2.png" alt="dot">Aggregation</li>
+                                <li style="text-align:right; width:18%;">
+
+                                </li>
+                            </ul>
+                            <ul class="bdb" style="height:30px;width:100%; float:left">
+                                <li style="text-align: left; height: 29px; line-height: 30px;">
+                                    <label style="margin-bottom: 0px">
+                                        <input type="checkbox" id="isDisplayItem"> Display Item
+                                    </label>
+                                </li>
+                            </ul>
+                            <div style="height:100%; width:100%;" class="div_tablerow bdb">
+                                <!--<div id="realgridT1" style="width:100%; height:100%"></div>-->
+                                <div style="width: 100%; height:100%; position: relative;overflow: auto;">
+                                    <div data-z-tree="tree-view-01" data-fit-height-content="tree-view-01" style="height: 100%;width : 100%;max-width: 271px; position: absolute" class="ztree" id="ztree"></div>
                                 </div>
                             </div>
-                            <div style="width: 100%; height: 100%; position: absolute; float: left" id="iconListArea">
+                        </div><!--오늘쪽 내용에서 좌측 트리부분-->
+
+                        <div style="display:table; height:100%; width:84%; float:left">
+
+                            <ul class="bdt bdb bgf7 div_tablerow" style="height:30px;">
+                                <li style="width:40%; text-align:left;">
+                                    <img src="/assets/images/ams/img_dot2.png" alt="dot">Record</li>
+                                <li style="text-align:right; float: right;">
+
+                                    <ul class="exp-menu" style="width: 376px; height: auto; overflow: hidden; position: absolute; right: 150px;">
+                                        <li style="width: 125px"><a href="#">Add</a>
+                                            <ul style="">
+                                                <li><a href="#">Aggregation</a></li>
+                                                <li><a href="#">Item</a></li>
+                                            </ul>
+                                        </li>
+                                        <li style="width: 125px"><a href="#">View</a>
+                                            <ul>
+                                                <li><a href="#">Properties</a></li>
+                                            </ul>
+                                        </li>
+                                        <li style="width: 125px"><a href="#">Do</a>
+                                            <ul>
+                                                <li><a href="#">Edit</a></li>
+                                                <li><a href="#">Move</a></li>
+                                                <li><a href="#">Update Status</a></li>
+                                                <li class="bdb"><a href="#">Delete</a></li>
+                                                <!--<li><a href="#">Classify</a></li>-->
+                                            </ul>
+                                        </li>
+                                        <!-- <li style="width: 125px"><a href="#">Status</a>
+                                             <ul>
+                                             <li><a href="#">Update Status</a></li>
+                                             <li><a href="#">Move</a></li>
+                                             <li><a href="#">Lock structure</a></li>
+                                           </ul
+                                         </li> >-->
+                                    </ul>
+
+                                </li>
+                                <li style="text-align:right;">
+                                    <button onclick="exp_listView()" class="show_grid" >
+                                        <img src="/assets/images/ams/btn_show_grid.png" alt="큰아이콘"> Icon
+                                    </button>
+
+                                    <button onclick="exp_gridView()" class="show_list" >
+                                        <img src="/assets/images/ams/btn_show_list.png" alt="쟈세히"> Grid
+                                    </button>
+                                </li>
+
+
+                            </ul>
+                            <div style="height:100%; width:100%;" class="div_tablerow">
+                                <div style="width:100%; height:100%;" id="realgrid01" class="explorer_grid"></div>
+                                <div class="explorer_list">
+                                    <div style="display:none" id="template">
+                                        <div>
+                                            <div class="imageTag"></div>
+                                            <div class="titleTag"></div>
+                                        </div>
+                                    </div>
+                                    <div style="width: 100%; height: 100%; position: absolute; float: left" id="iconListArea" data-uploaded-box="upload1">
+
+                                    </div>
+                                    <div data-ax5uploader="upload1" style="display: none">
+                                        <button data-ax5uploader-button="selector" class="btn btn-primary">Select File (*/*)
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="div_tablerow exp_detail">
+                                <div id="templatePage">
+                                    <div class="page_no" style="display:none;">
+                                        <!--<a href="#" class="selec">1</a>-->
+                                        <a href="#"></a>
+                                    </div>
+                                </div>
+                                <div class="page_no" style="">
+                                    <a href="#" title="처음" class="page_start">&lt; &lt;</a>
+                                    <a href="#" title="이전" class="page_prev">&lt;</a>
+                                    <a href="#" title="다음" class="page_next">&gt;</a>
+                                    <a href="#" title="마지막" class="page_end">&gt; &gt;</a>
+                                </div>
+                                <!--
+                                <div style="width:5%; height: 80px; float: left;border-top:1px solid #ddd; text-align: center; line-height: 70px">
+                                    <img src="" id="archiveType" alt="">
+                                </div>
+                                <div style="display:none;" id="templateAggregationInfoArea">
+                                    <div style="width: 100%">
+                                        <span style="width: 48%; " class="info"><b class="title">Title :</b> </span>
+
+                                        <span style="width: 24%;" class="info"><b class="author">Author :</b> </span>
+
+                                        <span style="width: 28%;" class="info"><b class="code">Code :</b> </span>
+                                    </div>
+                                    <div style="width: 100%">
+                                        <span style="width: 30%;" class="info"><b class="level">Level Name :</b> </span>
+
+                                        <span style="width: 18%;" class="info"><b class="type">Type :</b> </span>
+
+                                        <span style="width: 24%;" class="info"><b class="descDate">Date :</b> </span>
+
+                                        <span style="width: 28%;" class="info"><b class="publishedStatus">Published Status :</b> </span>
+                                    </div>
+
+                                    <div style="width: 100%">
+                                        <span style="width: 48%;" class="info"><b class="description">Description :</b> </span>
+                                        <span style="width: 52%;" class="info"><b class="notes">Notes :</b> </span>
+                                    </div>
+
+
+                                </div>
+                                <div style="width:95%; height: 97px; float: left;border-top:1px solid #ddd" id="aggregationInfoArea">
+                                    <div style="width: 100%">
+                                       <span style="width: 48%; " class="info"><b class="title">Title :</b> </span>
+
+                                       <span style="width: 24%;" class="info"><b class="author">Author :</b> </span>
+
+                                       <span style="width: 28%;" class="info"><b class="code">Code :</b> </span>
+                                   </div>
+                                   <div style="width: 100%">
+                                       <span style="width: 30%;" class="info"><b class="level">Level Name :</b> </span>
+
+                                       <span style="width: 18%;" class="info"><b class="type">Type :</b> </span>
+
+                                       <span style="width: 24%;" class="info"><b class="descDate">Date :</b> </span>
+
+                                       <span style="width: 28%;" class="info"><b class="publishedStatus">Published Status :</b> </span>
+                                   </div>
+
+                                   <div style="width: 100%">
+                                       <span style="width: 48%;" class="info"><b class="description">Description :</b> </span>
+                                       <span style="width: 52%;" class="info"><b class="notes">Notes :</b> </span>
+                                   </div>
+
+
+                                </div>
+
+                            -->
+
                             </div>
                         </div>
-                    </div>
-                    <div class="div_tablerow exp_detail">
-                        <div id="templatePage">
-                            <div class="page_no" style="display:none;">
-                                <!--<a href="#" class="selec">1</a>-->
-                                <a href="#"></a>
-                            </div>
-                        </div>
-                        <div class="page_no" style="">
-                            <a href="#" title="처음" class="page_start">&lt; &lt;</a>
-                            <a href="#" title="이전" class="page_prev">&lt;</a>
-                            <a href="#" title="다음" class="page_next">&gt;</a>
-                            <a href="#" title="마지막" class="page_end">&gt; &gt;</a>
-                        </div>
-                        <!--
-                        <div style="width:5%; height: 80px; float: left;border-top:1px solid #ddd; text-align: center; line-height: 70px">
-                            <img src="" id="archiveType" alt="">
-                        </div>
-                        <div style="display:none;" id="templateAggregationInfoArea">
-                            <div style="width: 100%">
-                                <span style="width: 48%; " class="info"><b class="title">Title :</b> </span>
-
-                                <span style="width: 24%;" class="info"><b class="author">Author :</b> </span>
-
-                                <span style="width: 28%;" class="info"><b class="code">Code :</b> </span>
-                            </div>
-                            <div style="width: 100%">
-                                <span style="width: 30%;" class="info"><b class="level">Level Name :</b> </span>
-
-                                <span style="width: 18%;" class="info"><b class="type">Type :</b> </span>
-
-                                <span style="width: 24%;" class="info"><b class="descDate">Date :</b> </span>
-
-                                <span style="width: 28%;" class="info"><b class="publishedStatus">Published Status :</b> </span>
-                            </div>
-
-                            <div style="width: 100%">
-                                <span style="width: 48%;" class="info"><b class="description">Description :</b> </span>
-                                <span style="width: 52%;" class="info"><b class="notes">Notes :</b> </span>
-                            </div>
-
-
-                        </div>
-                        <div style="width:95%; height: 97px; float: left;border-top:1px solid #ddd" id="aggregationInfoArea">
-                            <div style="width: 100%">
-                               <span style="width: 48%; " class="info"><b class="title">Title :</b> </span>
-                               
-                               <span style="width: 24%;" class="info"><b class="author">Author :</b> </span>
-                               
-                               <span style="width: 28%;" class="info"><b class="code">Code :</b> </span>
-                           </div>
-                           <div style="width: 100%">
-                               <span style="width: 30%;" class="info"><b class="level">Level Name :</b> </span>
-                                
-                               <span style="width: 18%;" class="info"><b class="type">Type :</b> </span>
-                               
-                               <span style="width: 24%;" class="info"><b class="descDate">Date :</b> </span>
-                               
-                               <span style="width: 28%;" class="info"><b class="publishedStatus">Published Status :</b> </span>
-                           </div>
-                           
-                           <div style="width: 100%">
-                               <span style="width: 48%;" class="info"><b class="description">Description :</b> </span>
-                               <span style="width: 52%;" class="info"><b class="notes">Notes :</b> </span>
-                           </div>
-
-                
-                        </div>
-
-                    -->
 
                     </div>
                 </div>
-
             </div>
         </div>
-    </div>
-    </div>
     </form>
 </div>
-    <!--오른쪽 내용영역 전체 e -->
+<!--오른쪽 내용영역 전체 e -->
 
 
     

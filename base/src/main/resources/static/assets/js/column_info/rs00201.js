@@ -67,7 +67,7 @@ var rs00201 =
                     text: "Description",
                     width: 70,
                     editable: true,
-                    datType: "multiline"
+                    dataType: "multiline"
                 },
                 {
                     sortNo: 6,

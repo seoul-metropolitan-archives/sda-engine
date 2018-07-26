@@ -83,7 +83,7 @@ var cl00301 =
                     width: 70,
                     editable: true,
                     sortable: true,
-                    datType: "number"
+                    dataType: "number"
                 },
                 {
                     sortNo: 8,

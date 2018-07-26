@@ -50,7 +50,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 {isDisplayItem : true}
                 ,
                 fnObj.pageView.getPageInfo()
-                ),
+            ),
             async: false,
             callback: function (res) {
                 fnObj.iconView.setData(res.list,data.uuid == "");
@@ -400,7 +400,7 @@ var fnObj = {
                         {
                             case "Properties":case "Edit":case "Move":case "Delete":
                             $(this).addClass("inactive");
-                                break;
+                            break;
                             default :
                                 $(this).removeClass("inactive");
                         }
@@ -490,7 +490,7 @@ var fnObj = {
                             selectedData
                             ,{type: "create"}
                             ,{navi : fnObj.naviView.getPathString()+naviStr},{title : ""}
-                            );
+                        );
                         parentsObj.tabView.open(item);
                     }
                     break;
@@ -513,8 +513,8 @@ var fnObj = {
                         var item = getMenu("add item");
                         var naviStr = undefined == selectedData["name"]? "" : " > "+selectedData["name"]
                         item.menuParams = $.extend({},{
-                            aggregationUuid : selectedData.uuid
-                        },{type: "create"},{navi : fnObj.naviView.getPathString()+naviStr},{title : ""},{nodeType : selectedData.nodeType}
+                                aggregationUuid : selectedData.uuid
+                            },{type: "create"},{navi : fnObj.naviView.getPathString()+naviStr},{title : ""},{nodeType : selectedData.nodeType}
                         );
                         parentsObj.tabView.open(item);
                     }
@@ -652,21 +652,21 @@ var fnObj = {
 
 
                     axboot.modal.open({
-                    modalType: "UPDATE_STATE_AGGREGATION_N_ITEM",
-                    param: "",
-                    sendData: function () {
-                        return {
-                            "selectedList": selectedData
-                        };
-                    },
-                    callback: function (data) {
-                        axToast.push(axboot.getCommonMessage("AA007"));
-                        if($(".explorer_grid").css("display")=="none")
-                            ACTIONS.dispatch(ACTIONS.GET_SUBDATA,fnObj.naviView.getCurrent());
-                        else
-                            ACTIONS.dispatch(ACTIONS.GET_GRID_DATA,fnObj.naviView.getCurrent());
-                    }
-                });
+                        modalType: "UPDATE_STATE_AGGREGATION_N_ITEM",
+                        param: "",
+                        sendData: function () {
+                            return {
+                                "selectedList": selectedData
+                            };
+                        },
+                        callback: function (data) {
+                            axToast.push(axboot.getCommonMessage("AA007"));
+                            if($(".explorer_grid").css("display")=="none")
+                                ACTIONS.dispatch(ACTIONS.GET_SUBDATA,fnObj.naviView.getCurrent());
+                            else
+                                ACTIONS.dispatch(ACTIONS.GET_GRID_DATA,fnObj.naviView.getCurrent());
+                        }
+                    });
 
 
                     break;
@@ -686,6 +686,46 @@ var fnObj = {
         fnObj.iconView.initView();
         fnObj.gridView01.initView();
         fnObj.pageView.initView();
+
+        var API_SERVER = CONTEXT_PATH;
+
+        UPLOAD = new ax5.ui.uploader({
+            debug: false,
+            target: $('[data-ax5uploader="upload1"]'),
+            form: {
+                action: "/api/v1/common/upload",
+                fileName: "file"
+            },
+            multiple: true,
+            manualUpload: false,
+            progressBox: true,
+            progressBoxDirection: "left",
+            dropZone: {
+                target: $('[data-uploaded-box="upload1"]')
+            },
+
+            validateSelectedFiles: function () {
+
+                // 1개 이상 업로드 되지 않도록 제한.
+                return true;
+            },
+            onprogress: function () {
+                console.log('progress');
+            },
+            onuploaderror: function () {
+                axDialog.alert({
+                    title: 'Onsemiro Uploader',
+                    theme: "default",
+                    msg: this.error.message
+                });
+            },
+            onuploaded: function () {
+            },
+            onuploadComplete: function () {
+            }
+        });
+
+
         ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
         ACTIONS.dispatch(ACTIONS.GET_SUBDATA,{uuid : ""});
     }
@@ -802,7 +842,7 @@ fnObj.pageView = axboot.viewExtend({
                     if(_this.page.totalPages < 10)
                         _this.page.pageNumber = _this.page.totalPages - 2;
                     else
-                    _this.page.pageNumber = _this.page.pageNumber + 10 - (_this.page.pageNumber % 10);
+                        _this.page.pageNumber = _this.page.pageNumber + 10 - (_this.page.pageNumber % 10);
                     break;
                 case "page_end":
                     _this.page.pageNumber = _this.page.totalPages - 1;
@@ -1011,12 +1051,12 @@ fnObj.iconView = axboot.viewExtend({
 
             fnObj.naviView.setData({uuid : $(this).attr("uuid"),name : $(this).find(".titleTag").children().eq(0).text()});
             ACTIONS.dispatch(ACTIONS.GET_SUBDATA,{
-                    uuid:$(this).attr("uuid"),
-                    nodeType : $(this).attr("nodeType")}
-                );
+                uuid:$(this).attr("uuid"),
+                nodeType : $(this).attr("nodeType")}
+            );
             //fnObj.detailView.setData({});
             //setTimeout(function(){
-                fnObj.iconView.isdbClk = false;
+            fnObj.iconView.isdbClk = false;
             //},300);
 
         });
@@ -1073,7 +1113,7 @@ fnObj.iconView = axboot.viewExtend({
             {
                 cloneTag.addClass("explorer_file");
             }else
-                {
+            {
                 if(data["childCnt"] > 0)
                 {
                     cloneTag.addClass("explorer_folder_full");
@@ -1836,4 +1876,3 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView,{
         return this.gridObj.getSelectionData();
     }
 });
-

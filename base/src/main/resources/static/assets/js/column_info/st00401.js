@@ -48,7 +48,7 @@ var st00401 =
                     text: "Description",
                     width: 250,
                     editable: false,
-                    datType: "multiline",
+                    dataType: "multiline",
                     disable: true
                 },
                 {

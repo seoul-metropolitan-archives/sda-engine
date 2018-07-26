@@ -74,7 +74,7 @@ var cl00301 =
                     text: "Notes",
                     width: 70,
                     editable: true,
-                    datType: "richtext"
+                    dataType: "richtext"
                 },
                 {
                     sortNo: 8,

@@ -67,7 +67,7 @@ var st00103 =
                     text: "Description",
                     width: 70,
                     editable: true,
-                    datType: "multiline"
+                    dataType: "multiline"
                 },
                 {
                     sortNo: 7,

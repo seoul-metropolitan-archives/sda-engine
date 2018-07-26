@@ -107,7 +107,7 @@ var cl00202 =
                     width: 70,
                     editable: true,
                     sortable: true,
-                    datType: "number",
+                    dataType: "number",
                     textAlignment: "far"
                 },
                 {
