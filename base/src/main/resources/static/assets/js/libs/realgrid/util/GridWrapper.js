@@ -1809,10 +1809,10 @@ GridWrapper.prototype.setCustomCellStyleRows = function(type, conditionFunc, col
         if (conditionFunc(rows[i])) {
             applyData.rows.push(i);
 
-            for (var j = 0; j < columnIndexList.length; j++) {
+            //for (var j = 0; j < columnIndexList.length; j++) {
                 //this.gridView.setCellStyle(i, columnIndexList[j], type, true);
                 this.gridView.setCellStyles(i, columns, type, true);
-            }
+            //}
         } else {
             for (var j = 0; j < columnIndexList.length; j++) {
                 this.gridView.setCellStyle(i, columnIndexList[j], this.defaultStyles[columnIndexList[j]], true);
@@ -1835,7 +1835,11 @@ GridWrapper.prototype.setCustomCellStyleRows = function(type, conditionFunc, col
         //setting을 해야되는 경우 진행
         if (doSetting) {
             for (var i = 0; i < applyData.columns.length; i++) {
-                grid.setColumnProperty(applyData.columns[i], "editable", editable);
+                if(_this.getColumnInfo(applyData.columns[i])["dataType"] == "check") {
+                    grid.setColumnProperty(applyData.columns[i], "renderer", $.extend({},grid.getColumnProperty(applyData.columns[i], "renderer"), {editable : editable}));
+                }else{
+                    grid.setColumnProperty(applyData.columns[i], "editable", editable);
+                }
             }
             var sel = {startItem: 1, endItem: 1, style: "block"};
             _this.gridView.setSelection(sel);
@@ -1844,7 +1848,11 @@ GridWrapper.prototype.setCustomCellStyleRows = function(type, conditionFunc, col
         else {
             //setting에 영향을 안받을 경우에는 기본값으로 복원
             for (var column in _this.defaultEditColumnProperties) {
-                grid.setColumnProperty(column, "editable", _this.defaultEditColumnProperties[column]);
+                if(_this.getColumnInfo(column)["dataType"] == "check") {
+                    grid.setColumnProperty(column, "renderer", _this.defaultStyle.data.check);
+                }else{
+                    grid.setColumnProperty(column, "editable", _this.defaultEditColumnProperties[column]);
+                }
                 grid.setCellStyle(curr.dataRow, column, _this.defaultStyles[column], true);
             }
         }
