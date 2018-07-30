@@ -317,6 +317,7 @@ function updateRecord(targetUi, parentNode){
         fnObj.treeView01.moveNode(parentNode, targetNode);
     }
     ACTIONS.dispatch(ACTIONS.PAGE_SAVE, reqList);
+    $('#explorerDragWrapper').remove();
 
     return true;
 }
@@ -939,6 +940,9 @@ fnObj.iconView = axboot.viewExtend({
     pressedCtrl : false,
     isdbClk : false,
     selectedItem : null,
+    timer : 0,
+    delay : 200,
+    prevent : false,
     initView : function()
     {
         this.initEvent();
@@ -949,13 +953,13 @@ fnObj.iconView = axboot.viewExtend({
             ACTIONS.dispatch(ACTIONS.PAGE_SEARCH,fnObj.naviView.getRoot());
         });
 
-        $("body").keydown(function(event){
+        $(window).keydown(function(event){
             fnObj.iconView.pressedCtrl = event.ctrlKey;
         });
-        $("body").keyup(function(event){
+        $(window).keyup(function(event){
             fnObj.iconView.pressedCtrl = event.ctrlKey;
         });
-        $("body").click(function(){
+        $(window).click(function(){
             $("#iconListArea .selected").each(function(){
                 $(this).removeClass("selected");
             });
@@ -975,6 +979,59 @@ fnObj.iconView = axboot.viewExtend({
                 //컨트롤 누르지 않고 클릭 시 해당 아이템만 선택되어야된다
                 $("#iconListArea >div").removeClass("selected");
                 $(this).toggleClass("selected");
+
+                if($(this).attr("nodetype") != "item") return;
+
+                var selectedData= fnObj.iconView.getSelectedData();
+
+                fnObj.iconView.timer = setTimeout(function() {
+                    if(fnObj.iconView.prevent){
+                        fnObj.iconView.prevent = false;
+                        return;
+                    }
+
+                    axboot.ajax({
+                        type: "GET",
+                        url: "/api/v1/rc005/01/list",
+                        data: $.extend({}, {pageSize: 1000}, {
+                            aggregationUuid: selectedData[0].parentUuid,
+                            itemUuid: selectedData[0].uuid
+                        }),
+                        callback: function (res) {
+                            if (res.list != "undefined" && res.list != null && res.list.length > 0) {
+                                var rcList = ax5.util.deepCopy(res.list);
+
+                                var itemIndex = rcList.length - 1;
+
+                                if (rcList[itemIndex].rc00502VoList != "undefined" && rcList[itemIndex].rc00502VoList != null && rcList[itemIndex].rc00502VoList.length > 0) {
+                                    var targetTag = $("#componentView");
+                                    var template = $("#template>div");
+                                    var cloneTag = undefined;
+                                    var imgTag = undefined;
+                                    var imgPath = "/assets/images/ams/";
+                                    targetTag.empty();
+
+                                    $.each(rcList[itemIndex].rc00502VoList, function(idx, data) {
+                                        cloneTag = template.clone();
+                                        imgTag = $("<img>");
+                                        cloneTag.attr("uuid", data["componentUuid"]);
+                                        cloneTag.attr("areaUuid", data["areaUuid"]);
+
+                                        cloneTag.addClass("explorer_file");
+
+                                        imgTag.prop("src", imgPath + "explorer_file_img.png").prop("alt", "folder");
+                                        cloneTag.find(".imageTag").append(imgTag);
+
+                                        cloneTag.find(".titleTag").append($("<div>").attr("class", data["title"].length > 15 ? "explorer_4line" : "explorer_text").text(data["title"]));
+                                        targetTag.append(cloneTag);
+                                        cloneTag = undefined;
+                                        imgTag = undefined;
+                                    });
+                                }
+                            }
+                        }
+                    });
+                }, fnObj.iconView.delay);
             }
 
             fnObj.pageView.resetPage();
@@ -983,7 +1040,12 @@ fnObj.iconView = axboot.viewExtend({
 
         $("#iconListArea").delegate(">div","dblclick",function(event){
             event.stopPropagation();
+
+            clearTimeout(fnObj.iconView.timer);
+            fnObj.iconView.prevent = true;
+
             fnObj.iconView.isdbClk = true;
+
             var index = 0;
             var uuid ="";
             if(undefined != $(this).attr("uuid")) {
@@ -1165,27 +1227,39 @@ fnObj.iconView = axboot.viewExtend({
             delay : 10,
             stack : "#iconListArea >div",
             scroll : false,
+            revert : true,
+            revertDuration : 300,
             helper : function (event) {
-                var wrapper = "<div id='explorerDragWrpper'></div>";
+                var wrapper = "<div id='explorerDragWrapper'></div>";
                 $('#ax-base-root').append(wrapper);
 
-                if(fnObj.iconView.getSelectedData().length > 0) {
-                    return $('#explorerDragWrpper').append($('#iconListArea >div.selected').clone());
-                }else {
-                    return $('#explorerDragWrpper').append($(this).clone());
+                if (fnObj.iconView.getSelectedData().length > 0) {
+                    return $('#explorerDragWrapper').append($('#iconListArea >div.selected').clone());
+                } else {
+                    return $('#explorerDragWrapper').append($(this).clone());
                 }
+            },
+            start : function (event, ui){
+                $('[data-z-tree="tree-view-01"] [treenode_a]').droppable( "option", "accept", "#iconListArea >div" );
             }
         });
 
         $('#iconListArea .explorer_folder_full, #iconListArea .explorer_folder_empty').droppable({
             tolerance: "pointer",
-
             drop: function( event, ui ) {
                 var parentNode = fnObj.treeView01.getNodeByParam("uuid", $(this).attr("uuid"));
 
                 if(!updateRecord(ui.draggable, parentNode)){
                     return;
                 }
+            }
+        });
+
+        // Record 영역에 드랍 될 때 트리영역 드랍되는 것을 방지
+        $('#iconListArea').droppable({
+            tolerance: "pointer",
+            drop: function( event, ui ) {
+                $('[data-z-tree="tree-view-01"] [treenode_a]').droppable( "option", "accept", "#iconListArea .noAccept" );
             }
         });
 
@@ -1211,7 +1285,6 @@ fnObj.iconView = axboot.viewExtend({
                             msg: "Merge를 진행 하시겠습니까?\nComponent들은 하나의 Item에 귀속됩니다."
                         }, function () {
                             if (this.key == "ok") {
-
                                 axToast.push("Item이 Merge되었습니다.");
                             }
                         });
@@ -1247,7 +1320,8 @@ fnObj.iconView = axboot.viewExtend({
                 }else{
                     if($(this).attr("nodetype") == "item"){
                         menu = [
-                            {title: "Cut Item", cmd: "cutItem", uiIcon: "ui-icon-scissors" }
+                            {title: "Cut Item", cmd: "cutItem", uiIcon: "ui-icon-scissors" },
+                            {title: "Item Property", cmd: "item_property", uiIcon: "ui-icon-info" }
                         ];
                     }else{
                         menu = [
@@ -1437,6 +1511,8 @@ fnObj.treeView01 = axboot.viewExtend(axboot.commonView, {
 
                     $('[data-z-tree="tree-view-01"] [treenode_a]').droppable({
                         tolerance: "pointer",
+                        greedy: true,
+                        hoverClass: "curSelectedNode",
                         drop: function( event, ui ) {
                             var parentNode = fnObj.treeView01.getNodeByTId($(this).parent().attr("id"));
 
