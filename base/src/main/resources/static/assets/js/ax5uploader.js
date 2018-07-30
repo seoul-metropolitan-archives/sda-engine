@@ -101,26 +101,72 @@
                 return true;
             }.bind(this);
 
+
+            var fileList;
+            var successCnt = 0;//traverseFileTree
+            var fileCnt = 0;
+            var traverseFileTree = function(item, path) {
+                path = path || "";
+                if (item.isFile) {
+                    // Get file
+                    // 이 부분만 비동기를 동기로 바꾸자.
+                    fileCnt++;
+                    item.file(function(file) {
+                        fileList.push(file);
+                        successCnt++;
+                    });
+                    var uploadInterval = setInterval(function(){
+                        if(successCnt == fileCnt){
+                            upload_file(fileList);
+                            clearInterval(uploadInterval);
+                        }
+                    },100);
+                } else if (item.isDirectory) {
+                    // Get folder contents
+                    var dirReader = item.createReader();
+                    dirReader.readEntries(function(entries) {
+                        for (var i=0; i<entries.length; i++) {
+                            traverseFileTree(entries[i], path + item.name + "/");
+                        }
+                    });
+                }
+            };
+
             var bound_onSelectFile = function (_evt) {
                 var files = void 0;
-
+                fileList = [];
                 if (!ax5.info.supportFileApi) {
                     // file API 지원 안되는 브라우저.
                     // input file에 multiple 지원 안됨 그러므로 단일 파일 처리만 하면 됨.
                     files = { path: _evt.target.value };
+                    upload_file(files);
                 } else if ('dataTransfer' in _evt) {
-                    files = _evt.dataTransfer.files;
+                    var items = event.dataTransfer.items;
+                    for (var i=0; i<items.length; i++) {
+                        // webkitGetAsEntry is where the magic happens
+                        var item = items[i].webkitGetAsEntry();
+                        if (item) {
+                            traverseFileTree(item);
+                        }
+                    }
+                    //files = fileList;
                 } else if ('target' in _evt) {
                     files = _evt.target.files;
+                    upload_file(files);
                 } else if (_evt) {
                     files = _evt;
+                    upload_file(files);
                 }
 
+
+            }.bind(this);
+
+            var upload_file = function(files){
                 if (!files) return false;
 
-                /// selectedFiles에 현재 파일 정보 담아두기
+                // selectedFiles에 현재 파일 정보 담아두기
                 if (length in files) {
-                    this.selectedFiles = U.toArray(files);
+                    this.selectedFiles = files;
                 } else {
                     this.selectedFiles = [files];
                 }

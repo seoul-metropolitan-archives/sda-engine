@@ -136,7 +136,7 @@ var rs00501 =
                     width: 200,
                     editable: false,
                     disable: true,
-                    datType: "multiline"
+                    dataType: "multiline"
                 },
                 {
                     sortNo: 13,

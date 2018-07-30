@@ -56,7 +56,7 @@ var st00402 =
                     name: "description",
                     text: "Description",
                     width: 250,
-                    datType: "multiline"
+                    dataType: "multiline"
                 },
                 {
                     sortNo: 6,

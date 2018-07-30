@@ -65,7 +65,7 @@ var st00102 =
                     text: "Description",
                     width: 70,
                     editable: true,
-                    datType: "multiline"
+                    dataType: "multiline"
                 },
                 {
                     sortNo: 7,
@@ -83,8 +83,7 @@ var st00102 =
                     editable: true,
                     dataType: "check",
                     defaultValue : "Y",
-                    textAlignment: "center",
-                    required: false
+                    textAlignment: "center"
                 },
                 {
                     sortNo: 9,
