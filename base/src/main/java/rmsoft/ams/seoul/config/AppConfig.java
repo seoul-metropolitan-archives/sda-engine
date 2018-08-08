@@ -189,7 +189,7 @@ public class AppConfig implements ApplicationContextAware {
         //sqlSessionFactoryBean.setTypeAliases(typeAliases);
         sqlSessionFactoryBean.setTypeHandlers(axBootContextConfig.getMyBatisTypeHandlers());
         sqlSessionFactoryBean.setTransactionFactory(springManagedTransactionFactory);
-        sqlSessionFactoryBean.setMapperLocations(context.getResources("classpath:mybatis/**/*.xml"));
+        sqlSessionFactoryBean.setMapperLocations(context.getResources("classpath*:mybatis/**/*.xml"));
         sqlSessionFactoryBean.setDatabaseIdProvider(databaseIdProvider());
 
         return sqlSessionFactoryBean.getObject();

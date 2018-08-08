@@ -9,7 +9,6 @@ import io.onsemiro.core.parameter.RequestParams;
 import org.springframework.web.bind.annotation.*;
 import rmsoft.ams.seoul.df.df002.service.Df002Service;
 import rmsoft.ams.seoul.df.df002.vo.Df00201VO;
-import rmsoft.ams.seoul.df.df002.vo.Df00202VO;
 
 import javax.inject.Inject;
 import java.util.List;

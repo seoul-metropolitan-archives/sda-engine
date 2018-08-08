@@ -6,8 +6,6 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import rmsoft.ams.seoul.utils.CommonCodeUtils;
 
-import java.text.AttributedString;
-
 @Controller
 public class Rs001ViewRouter extends BaseController {
 

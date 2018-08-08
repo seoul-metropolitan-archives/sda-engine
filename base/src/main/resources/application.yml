@@ -1,4 +1,5 @@
 #debug: true
+management.endpoint.restart.enabled: true
 
 #개발
 server:
@@ -132,9 +133,12 @@ spring:
 onsemiro:
   #개발
   data-source:
-    url: jdbc:oracle:thin:@//192.168.0.62:1521/amsdb
+    url: jdbc:oracle:thin:@//rmhost.iptime.org:11521/amsdb
     username: ams
     password: ams
+  # File Upload
+  upload.repository:
+    img: /Users/jspark226/workspace/nas
   #개발
   #data-source:
   #url: jdbc:oracle:thin:@//rmhost.iptime.org:1521/amsdb

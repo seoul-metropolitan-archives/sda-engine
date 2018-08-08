@@ -1,4 +1,7 @@
-version '0.0.1'
+jar {
+    baseName = 'process-test'
+    version = '0.0.1'
+}
 
 dependencies {
     //___ compile ___

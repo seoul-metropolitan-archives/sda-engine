@@ -2,12 +2,17 @@ package rmsoft.ams.seoul.rs.rs003.vo;
 
 import io.onsemiro.core.annotations.Comment;
 import io.onsemiro.core.domain.SimpleJpaModel;
-import lombok.*;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.ibatis.type.Alias;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
-import javax.persistence.*;
-import java.io.Serializable;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Setter
 @Getter

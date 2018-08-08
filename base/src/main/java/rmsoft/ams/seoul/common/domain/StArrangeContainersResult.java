@@ -1,8 +1,6 @@
 package rmsoft.ams.seoul.common.domain;
 
-import io.onsemiro.core.annotations.Comment;
 import io.onsemiro.core.domain.BaseJpaModel;
-import io.onsemiro.core.domain.SimpleJpaModel;
 import lombok.*;
 import org.apache.ibatis.type.Alias;
 import org.hibernate.annotations.DynamicInsert;

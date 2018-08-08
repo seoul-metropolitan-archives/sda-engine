@@ -1,7 +1,6 @@
 package rmsoft.ams.seoul.rs.rs002.dao;
 
 import io.onsemiro.core.mybatis.MyBatisMapper;
-import rmsoft.ams.seoul.rs.rs002.vo.Rs002;
 import rmsoft.ams.seoul.rs.rs002.vo.Rs00201VO;
 
 import java.util.List;

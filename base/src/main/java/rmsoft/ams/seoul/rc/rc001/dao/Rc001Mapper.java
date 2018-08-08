@@ -1,7 +1,6 @@
 package rmsoft.ams.seoul.rc.rc001.dao;
 
 import io.onsemiro.core.mybatis.MyBatisMapper;
-import org.apache.ibatis.annotations.Mapper;
 import rmsoft.ams.seoul.common.domain.RcAggregation;
 import rmsoft.ams.seoul.rc.rc001.vo.*;
 

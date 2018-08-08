@@ -1,13 +1,18 @@
 package rmsoft.ams.seoul.df.df001.vo;
 
-import io.onsemiro.core.annotations.ColumnPosition;
-import io.onsemiro.core.domain.SimpleJpaModel;
 import io.onsemiro.core.annotations.Comment;
-import lombok.*;
+import io.onsemiro.core.domain.SimpleJpaModel;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.ibatis.type.Alias;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
-import javax.persistence.*;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.sql.Timestamp;
 
 @Setter

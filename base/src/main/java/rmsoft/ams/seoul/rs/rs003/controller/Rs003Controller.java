@@ -10,9 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 import rmsoft.ams.seoul.rs.rs003.service.Rs003Service;
-import rmsoft.ams.seoul.rs.rs003.vo.Rs003;
 import rmsoft.ams.seoul.rs.rs003.vo.Rs00301VO;
-import rmsoft.ams.seoul.rs.rs003.vo.Rs003VO;
 
 import javax.inject.Inject;
 import java.util.List;

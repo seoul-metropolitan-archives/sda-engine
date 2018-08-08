@@ -1,21 +1,17 @@
 package rmsoft.ams.seoul.rs.rs003.service;
 
-import io.onsemiro.core.api.ApiException;
 import io.onsemiro.core.api.response.ApiResponse;
 import io.onsemiro.core.code.ApiStatus;
+import io.onsemiro.core.domain.BaseService;
 import io.onsemiro.core.parameter.RequestParams;
 import io.onsemiro.utils.ModelMapperUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import io.onsemiro.core.domain.BaseService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import rmsoft.ams.seoul.common.domain.RsGeneralRecordSchedule;
+import org.springframework.stereotype.Service;
 import rmsoft.ams.seoul.common.domain.RsRecordSchedule;
-import rmsoft.ams.seoul.common.repository.RsGeneralRecordScheduleRepository;
 import rmsoft.ams.seoul.common.repository.RsRecordScheduleRepository;
 import rmsoft.ams.seoul.rs.rs003.dao.Rs003Mapper;
-import rmsoft.ams.seoul.rs.rs003.vo.Rs003;
 import rmsoft.ams.seoul.rs.rs003.vo.Rs00301VO;
 import rmsoft.ams.seoul.utils.CommonCodeUtils;
 

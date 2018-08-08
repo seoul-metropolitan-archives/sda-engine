@@ -17,8 +17,6 @@ import rmsoft.ams.seoul.common.repository.DfResultRepository;
 import rmsoft.ams.seoul.df.df003.dao.Df003Mapper;
 import rmsoft.ams.seoul.df.df003.vo.Df00301VO;
 import rmsoft.ams.seoul.df.df003.vo.Df00302VO;
-import rmsoft.ams.seoul.utils.CommonCodeUtils;
-import rmsoft.ams.seoul.utils.CommonMessageUtils;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;

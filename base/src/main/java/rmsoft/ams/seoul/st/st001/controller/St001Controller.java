@@ -11,7 +11,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 import rmsoft.ams.seoul.st.st001.service.St001Service;
-import rmsoft.ams.seoul.st.st001.vo.*;
+import rmsoft.ams.seoul.st.st001.vo.St00101VO;
+import rmsoft.ams.seoul.st.st001.vo.St00102VO;
+import rmsoft.ams.seoul.st.st001.vo.St00103VO;
 
 import java.util.List;
 

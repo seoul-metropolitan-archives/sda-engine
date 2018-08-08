@@ -1,3 +1,4 @@
 rootProject.name = 'seoul-ams'
-include 'base' ,'workflow-modules/process-test'
-
+include 'base'
+include 'workflow-modules/process-test'
+include 'service-modules/long-term-preservation'

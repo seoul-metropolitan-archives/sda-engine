@@ -7,7 +7,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             url: "/api/v1/common/controller",
             data: $.extend({}, {pageSize: 1000, sort: "", serviceId: "ad001", methodName: "getEnviromentList"}, fnObj.searchView.getData()),
             callback: function (res) {
-                fnObj.gridView01.resetCurrent();
+                fnObj.gridView01.resetCurrent();O
                 fnObj.gridView01.setData(res.list);
             },
             options: {
@@ -16,8 +16,20 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         });
     },
     PAGE_SAVE: function (caller, act, data) {
+        axboot.ajax({
+            type: "GET",
+            url: "/api/v1/common/controller",
+            data: $.extend({}, {pageSize: 1000, sort: "", serviceId: "ad001", methodName: "getEnviromentList1"}, fnObj.searchView.getData()),
+            callback: function (res) {
+                fnObj.gridView01.resetCurrent();
+                fnObj.gridView01.setData(res.list);
+            },
+            options: {
+                onError: axboot.viewError
+            }
+        });
 
-        if (!fnObj.gridView01.validate())
+        /*if (!fnObj.gridView01.validate())
             return false;
 
         var list = fnObj.gridView01.getData();
@@ -37,7 +49,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             options: {
                 onError: axboot.viewError
             }
-        });
+        });*/
     },
     CLOSE_TAB: function () {
         return ACTIONS.dispatch(ACTIONS.PAGE_SAVE);

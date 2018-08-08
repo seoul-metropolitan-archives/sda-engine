@@ -8,16 +8,19 @@ import io.onsemiro.utils.SessionUtils;
 import io.onsemiro.utils.UUIDUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import rmsoft.ams.seoul.common.domain.*;
-import rmsoft.ams.seoul.common.repository.*;
+import rmsoft.ams.seoul.common.domain.RcAggregation;
+import rmsoft.ams.seoul.common.domain.RcAggregationCon;
+import rmsoft.ams.seoul.common.domain.RcRecordReference;
+import rmsoft.ams.seoul.common.repository.RcAggregationConRepository;
+import rmsoft.ams.seoul.common.repository.RcAggregationRepository;
+import rmsoft.ams.seoul.common.repository.RcLevelRepository;
+import rmsoft.ams.seoul.common.repository.RcRecordReferenceRepository;
 import rmsoft.ams.seoul.rc.rc002.dao.Rc002Mapper;
-import rmsoft.ams.seoul.rc.rc002.vo.Rc00201VO;
 import rmsoft.ams.seoul.rc.rc002.vo.Rc00204VO;
 import rmsoft.ams.seoul.rc.rc002.vo.Rc00205VO;
 import rmsoft.ams.seoul.rc.rc002.vo.Rc002VO;
 
 import java.sql.Timestamp;
-import java.util.Calendar;
 import java.util.List;
 
 /**

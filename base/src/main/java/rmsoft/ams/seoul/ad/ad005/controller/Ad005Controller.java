@@ -3,7 +3,6 @@ package rmsoft.ams.seoul.ad.ad005.controller;
 import io.onsemiro.core.api.response.ApiResponse;
 import io.onsemiro.core.api.response.Responses;
 import io.onsemiro.core.parameter.RequestParams;
-import io.onsemiro.utils.UUIDUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,9 +11,7 @@ import rmsoft.ams.seoul.ad.ad005.service.Ad005Service;
 import rmsoft.ams.seoul.ad.ad005.vo.Ad00501VO;
 import rmsoft.ams.seoul.common.controller.MessageBaseController;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * The type Ad 005 controller.
