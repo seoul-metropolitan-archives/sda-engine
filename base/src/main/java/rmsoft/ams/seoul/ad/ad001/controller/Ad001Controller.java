@@ -103,50 +103,13 @@ public class Ad001Controller extends MessageBaseController {
     @RequestMapping("/getEnviromentList1.do")
     public Responses.ListResponse getEnviromentList1(@RequestBody Ad00101VO param) {
 
+        // Batch 테스트
+        dipBatchExecutor.runDipProcess();
 
 
-        //dipBatchExecutor.runDipProcess()
-        RuntimeJarLoader.removeJarIndDir("/Users/jspark226/IdeaProjects/seoul-ams/service-modules/long-term-preservation/build/libs/long-term-preservation-0.0.1.jar");
-        AppRunner.restart(restartEndpoint);
-        // AppRunner.restart();
-
-
-
-        //RuntimeJarLoader.unloadJarIndDir("/Users/jspark226/IdeaProjects/seoul-ams/service-modules/long-term-preservation/build/libs");
-
-        ///Users/jspark226/IdeaProjects/seoul-ams/service-modules/long-term-preservation/build/libs
-
-        /*String nativeLibrary = "/Users/jspark226/IdeaProjects/seoul-ams/service-modules/long-term-preservation/build/libs/";
-
-        try {
-            // Service Loader Test
-            File[] jarFiles = new File(nativeLibrary).listFiles(
-                    (dir, name) -> {
-                        return name.toLowerCase().endsWith(".jar");
-                    }
-            );
-
-            // Create a new JavaClassLoader
-            URL[] classLoaderUrls = new URL[jarFiles.length];
-
-            for (int i = 0; i < jarFiles.length; i++) {
-                classLoaderUrls[i] = new URL("file:///" + jarFiles[i].getPath());
-            }
-
-            URLClassLoader urlClassLoader = new URLClassLoader(classLoaderUrls);
-            Class loadedMyClass = urlClassLoader.loadClass(wf00302VO.getApi());
-
-            System.out.println("Loaded class name: " + loadedMyClass.getName());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-*/
-//        ClassPathResource resource = new ClassPathResource("pluginContext.xml", loader);
-//        GenericApplicationContext ctx = new GenericApplicationContext(parentApplicationContext);
-//        ctx.setClassLoader(loader);
-//        XmlBeanDefinitionReader xmlReader = new XmlBeanDefinitionReader(ctx);
-//        xmlReader.setBeanClassLoader(loader);
-//        xmlReader.loadBeanDefinitions(resource);
+        // Jar module unlading
+        //RuntimeJarLoader.removeJarIndDir("/Users/jspark226/IdeaProjects/seoul-ams/service-modules/long-term-preservation/build/libs/long-term-preservation-0.0.1.jar");
+        //AppRunner.restart(restartEndpoint);
 
 
         return Responses.ListResponse.of(service.getEnviromentList(param));
