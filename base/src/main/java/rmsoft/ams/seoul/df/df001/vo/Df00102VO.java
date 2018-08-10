@@ -4,8 +4,6 @@ import io.onsemiro.core.vo.BaseVO;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import java.sql.Timestamp;
-
 
 @Data
 @EqualsAndHashCode(callSuper = false)

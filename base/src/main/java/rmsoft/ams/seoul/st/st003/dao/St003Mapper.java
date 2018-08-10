@@ -1,7 +1,6 @@
 package rmsoft.ams.seoul.st.st003.dao;
 
 import io.onsemiro.core.mybatis.MyBatisMapper;
-import rmsoft.ams.seoul.st.st003.vo.St003;
 import rmsoft.ams.seoul.st.st003.vo.St00301VO;
 import rmsoft.ams.seoul.st.st003.vo.St00302VO;
 import rmsoft.ams.seoul.st.st003.vo.St00303VO;

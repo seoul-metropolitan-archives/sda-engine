@@ -4,7 +4,6 @@ import io.onsemiro.core.mybatis.MyBatisMapper;
 import org.apache.ibatis.annotations.Mapper;
 import rmsoft.ams.seoul.ad.ad005.vo.Ad00501VO;
 import rmsoft.ams.seoul.ad.ad005.vo.Ad00502VO;
-import rmsoft.ams.seoul.common.domain.AdEntityColumn;
 
 import java.util.List;
 

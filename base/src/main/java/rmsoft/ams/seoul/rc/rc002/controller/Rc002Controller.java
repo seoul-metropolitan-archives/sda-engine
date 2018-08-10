@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import rmsoft.ams.seoul.common.controller.MessageBaseController;
 import rmsoft.ams.seoul.rc.rc002.service.Rc002Service;
-import rmsoft.ams.seoul.rc.rc002.vo.Rc00201VO;
 import rmsoft.ams.seoul.rc.rc002.vo.Rc00204VO;
 import rmsoft.ams.seoul.rc.rc002.vo.Rc002VO;
 

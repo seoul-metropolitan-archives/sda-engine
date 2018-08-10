@@ -1,15 +1,8 @@
 package rmsoft.ams.seoul.st.st003.vo;
 
 import io.onsemiro.core.vo.BaseVO;
-import io.onsemiro.utils.ModelMapperUtils;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.domain.Page;
-
-import java.sql.Timestamp;
-import java.util.List;
-
-import static java.util.stream.Collectors.toList;
 
 
 @Data

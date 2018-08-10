@@ -1,6 +1,5 @@
 package rmsoft.ams.seoul.common.controller;
 
-import com.jcraft.jsch.Logger;
 import io.onsemiro.controller.BaseController;
 import io.onsemiro.core.api.response.Responses;
 import io.onsemiro.utils.ModelMapperUtils;

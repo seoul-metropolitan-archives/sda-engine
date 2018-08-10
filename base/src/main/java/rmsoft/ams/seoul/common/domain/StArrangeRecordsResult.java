@@ -1,9 +1,11 @@
 package rmsoft.ams.seoul.common.domain;
+
 import io.onsemiro.core.domain.BaseJpaModel;
 import lombok.*;
 import org.apache.ibatis.type.Alias;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;

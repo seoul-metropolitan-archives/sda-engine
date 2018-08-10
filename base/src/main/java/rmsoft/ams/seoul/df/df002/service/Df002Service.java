@@ -16,7 +16,6 @@ import rmsoft.ams.seoul.common.domain.DfDegree;
 import rmsoft.ams.seoul.common.repository.DfDegreeRepository;
 import rmsoft.ams.seoul.df.df002.dao.Df002Mapper;
 import rmsoft.ams.seoul.df.df002.vo.Df00201VO;
-import rmsoft.ams.seoul.df.df002.vo.Df00202VO;
 import rmsoft.ams.seoul.utils.CommonCodeUtils;
 import rmsoft.ams.seoul.utils.CommonMessageUtils;
 
