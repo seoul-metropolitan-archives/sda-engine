@@ -23,6 +23,7 @@ import javax.inject.Inject;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 /**
  * The type Rc 004 service.
@@ -44,18 +45,18 @@ public class Rc004Service extends BaseService{
      * @param requestParams the request params
      */
     @Transactional
-    public void saveItemDetails(RequestParams<Rc00501VO> requestParams){
+    public Map<String, Object> saveItemDetails(RequestParams<Rc00501VO> requestParams){
         RcItem rcItem = new RcItem(); //RC_ITEM
         RcItem oldRcItem = new RcItem(); //RC_ITEM
         RcItemCon rcItemCon = new RcItemCon(); //RC_ITEM_CON
         RcItemCon oldRcItemCon = new RcItemCon(); //RC_ITEM_CON
+        String itemUuid = UUIDUtils.getUUID();
 
         //RC_ITEM  업데이트
         if(StringUtils.isEmpty(requestParams.getString("itemUuid"))){
-            rcItem.setItemUuid(UUIDUtils.getUUID());
+            rcItem.setItemUuid(itemUuid);
             String itemCode = jdbcTemplate.queryForObject("select fc_rc_item_code from dual", String.class);
             rcItem.setItemCode(itemCode);
-
         }else{
             rcItem.setItemUuid(requestParams.getString("itemUuid"));
             oldRcItem = rcItemRepository.findOne(rcItem.getId());
@@ -109,6 +110,8 @@ public class Rc004Service extends BaseService{
 
         rcItemConRepository.save(rcItemCon);
 
+        requestParams.put("itemUuid", itemUuid);
+        return requestParams.getMap();
     }
 
     /**

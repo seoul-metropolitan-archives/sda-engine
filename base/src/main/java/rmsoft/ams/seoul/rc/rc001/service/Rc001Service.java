@@ -12,9 +12,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import rmsoft.ams.seoul.common.domain.RcAggregation;
+import rmsoft.ams.seoul.common.domain.RcItemComponent;
+import rmsoft.ams.seoul.common.repository.RcItemComponentRepository;
 import rmsoft.ams.seoul.common.vo.ResponseForPaging;
 import rmsoft.ams.seoul.rc.rc001.dao.Rc001Mapper;
 import rmsoft.ams.seoul.rc.rc001.vo.*;
+import rmsoft.ams.seoul.rc.rc005.vo.Rc00502VO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -157,4 +160,20 @@ public class Rc001Service extends BaseService
         return ApiResponse.of(ApiStatus.SUCCESS,"AA007");
     }
 
+    @Autowired
+    private RcItemComponentRepository repository;
+
+    public ApiResponse moveComponent(Rc00502VO param){
+        RcItemComponent item = new RcItemComponent();
+        item.setItemComponentUuid(param.getItemComponentUuid());
+
+        RcItemComponent orgItem = repository.findOne(item.getId());
+        orgItem.setItemUuid(param.getItemUuid());
+        orgItem.setInsertDate(orgItem.getInsertDate());
+        orgItem.setInsertUuid(orgItem.getInsertUuid());
+
+        repository.save(orgItem);
+
+        return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");
+    }
 }

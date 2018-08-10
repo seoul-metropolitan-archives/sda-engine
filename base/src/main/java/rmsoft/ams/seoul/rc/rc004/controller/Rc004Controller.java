@@ -9,6 +9,7 @@ import rmsoft.ams.seoul.rc.rc004.vo.Rc00402VO;
 import rmsoft.ams.seoul.rc.rc005.vo.Rc00501VO;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * The type Rc 004 controller.
@@ -26,8 +27,8 @@ public class Rc004Controller extends MessageBaseController{
      * @param requestParams the request params
      */
     @GetMapping("/01/saveItemDetails")
-    public void saveItemDetails(RequestParams<Rc00501VO> requestParams){
-       rc004Service.saveItemDetails(requestParams);
+    public Map<String, Object> saveItemDetails(RequestParams<Rc00501VO> requestParams){
+        return rc004Service.saveItemDetails(requestParams);
     }
 
     /**

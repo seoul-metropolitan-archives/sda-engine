@@ -33,7 +33,7 @@ public interface Ac007Mapper extends MyBatisMapper {
      * @param roleUuid the role uuid
      * @return the list
      */
-    List<Ac00702VO> findRoleMenu(String roleUuid);
+    List<Ac00702VO> findRoleMenu(Ac00702VO ac00702VO);
 
     /**
      * Find permission list.

@@ -35,7 +35,7 @@
             </if>
         </where>
     </select>
-    <select id="findRoleMenu" resultType="Ac00702VO" parameterType="String"
+    <select id="findRoleMenu" resultType="Ac00702VO" parameterType="Ac00702VO"
             statementType="PREPARED">
         SELECT
             Z1.ROLE_MENU_UUID as roleMenuUuid,
@@ -67,10 +67,15 @@
             Z1.UPDATE_DATE updateDate
         FROM
             AC_ROLE_MENU Z1,
-            AD_MENU Z2
+            AD_MENU Z2,
+            AD_PROGRAM Z3
         WHERE Z1.MENU_UUID(+) = Z2.MENU_UUID
           AND Z1.ROLE_UUID(+) = #{roleUuid}
+          AND Z2.PROGRAM_UUID = Z3.PROGRAM_UUID
           AND Z2.USE_YN = 'Y'
+        <if test="programId != null">
+          AND Z3.PROGRAM_ID = #{programId}
+        </if>
         ORDER BY Z2.MENU_CODE
     </select>
     <select id="findPermission" resultType="Ac00703VO" parameterType="String"

@@ -83,7 +83,11 @@ public class Ac007Service extends BaseService {
     public Page<Ac00702VO> findRoleMenu(Pageable pageable, RequestParams<Ac00702VO> requestParams) {
         String filter = requestParams.getString("filter", "");
 
-        return filter(ac007Mapper.findRoleMenu(requestParams.getString("roleUuid")), pageable, filter, Ac00702VO.class);
+        Ac00702VO ac00702VO = new Ac00702VO();
+        ac00702VO.setRoleUuid(requestParams.getString("roleUuid"));
+        ac00702VO.setProgramId(requestParams.getString("programId"));
+
+        return filter(ac007Mapper.findRoleMenu(ac00702VO), pageable, filter, Ac00702VO.class);
     }
 
     /**

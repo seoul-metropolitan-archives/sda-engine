@@ -31,12 +31,12 @@ public class RcItemComponent extends SimpleJpaModel<RcItemComponent.RcItemCompon
     private String itemComponentUuid;
 
     @Column(name = "ITEM_UUID", length = 36, nullable = true)
-    @Comment(value = "OPEN STATUS UUID")
-    private String openStatusUuid;
+    @Comment(value = "Item UUID")
+    private String itemUuid;
 
     @Column(name = "COMPONENT_UUID", length = 36, nullable = true)
-    @Comment(value = "KEYWORD")
-    private String keyword;
+    @Comment(value = "Component UUID")
+    private String componentUuid;
 
     @Override
     public RcItemComponentId getId() { return RcItemComponentId.of(itemComponentUuid); }
