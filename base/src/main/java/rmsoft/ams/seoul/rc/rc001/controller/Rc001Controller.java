@@ -2,6 +2,7 @@ package rmsoft.ams.seoul.rc.rc001.controller;
 
 import io.onsemiro.core.api.response.ApiResponse;
 import io.onsemiro.core.api.response.Responses;
+import io.onsemiro.core.parameter.RequestParams;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,6 +17,7 @@ import rmsoft.ams.seoul.rc.rc001.service.Rc001Service;
 import rmsoft.ams.seoul.rc.rc001.vo.Rc00101VO;
 import rmsoft.ams.seoul.rc.rc001.vo.Rc00104VO;
 import rmsoft.ams.seoul.rc.rc001.vo.Rc00105VO;
+import rmsoft.ams.seoul.rc.rc005.vo.Rc00501VO;
 import rmsoft.ams.seoul.rc.rc005.vo.Rc00502VO;
 
 import java.util.List;
@@ -111,7 +113,29 @@ public class Rc001Controller extends MessageBaseController
      */
     @PutMapping(value = "/moveComponent")
     @PostMapping
-    public ApiResponse moveComponent(@RequestBody Rc00502VO param){
+    public ApiResponse moveComponent(@RequestBody List<Rc00502VO> param){
         return rc001Service.moveComponent(param);
+    }
+
+    /**
+     *
+     * @param param the request params
+     * @return the api response
+     */
+    @PutMapping(value = "/delItemAndMoveComponent")
+    @PostMapping
+    public ApiResponse delItemAndMoveComponent(@RequestBody List<Rc00502VO> param){
+        return rc001Service.delItemAndMoveComponent(param);
+    }
+
+    /**
+     *
+     * @param params the request params
+     * @return the api response
+     */
+    @PutMapping(value = "/creItemAndMoveComponent")
+    @PostMapping
+    public ApiResponse creItemAndMoveComponent(@RequestBody Rc00501VO params){
+        return rc001Service.creItemAndMoveComponent(params);
     }
 }

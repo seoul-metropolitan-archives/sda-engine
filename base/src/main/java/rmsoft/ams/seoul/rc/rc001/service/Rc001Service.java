@@ -3,20 +3,32 @@ package rmsoft.ams.seoul.rc.rc001.service;
 import io.onsemiro.core.api.response.ApiResponse;
 import io.onsemiro.core.code.ApiStatus;
 import io.onsemiro.core.domain.BaseService;
+import io.onsemiro.core.parameter.RequestParams;
 import io.onsemiro.utils.ModelMapperUtils;
 import io.onsemiro.utils.SessionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import rmsoft.ams.seoul.common.domain.RcAggregation;
+import rmsoft.ams.seoul.common.domain.RcItem;
 import rmsoft.ams.seoul.common.domain.RcItemComponent;
+import rmsoft.ams.seoul.common.domain.RcItemCon;
 import rmsoft.ams.seoul.common.repository.RcItemComponentRepository;
+import rmsoft.ams.seoul.common.repository.RcItemConRepository;
+import rmsoft.ams.seoul.common.repository.RcItemRepository;
 import rmsoft.ams.seoul.common.vo.ResponseForPaging;
 import rmsoft.ams.seoul.rc.rc001.dao.Rc001Mapper;
 import rmsoft.ams.seoul.rc.rc001.vo.*;
+import rmsoft.ams.seoul.rc.rc004.service.Rc004Service;
+import rmsoft.ams.seoul.rc.rc005.dao.Rc005Mapper;
+import rmsoft.ams.seoul.rc.rc005.service.Rc005Service;
+import rmsoft.ams.seoul.rc.rc005.vo.Rc00501VO;
 import rmsoft.ams.seoul.rc.rc005.vo.Rc00502VO;
 
+import javax.inject.Inject;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -25,6 +37,21 @@ public class Rc001Service extends BaseService
 {
     @Autowired
     private Rc001Mapper rc001Mapper;
+
+    @Inject
+    private Rc005Mapper rc005Mapper;
+
+    @Inject
+    private Rc004Service rc004Service;
+
+    @Autowired
+    private RcItemRepository rcItemRepository;
+
+    @Autowired
+    private RcItemConRepository rcItemConRepository;
+
+    @Autowired
+    private RcItemComponentRepository repository;
 
     public List<Rc00101VO> getAllNode(Rc00101VO param)
     {
@@ -157,19 +184,76 @@ public class Rc001Service extends BaseService
         return ApiResponse.of(ApiStatus.SUCCESS,"AA007");
     }
 
-    @Autowired
-    private RcItemComponentRepository repository;
 
-    public ApiResponse moveComponent(Rc00502VO param){
-        RcItemComponent item = new RcItemComponent();
-        item.setItemComponentUuid(param.getItemComponentUuid());
+    @Transactional
+    public ApiResponse moveComponent(List<Rc00502VO> param){
+        List<RcItemComponent> itemList = ModelMapperUtils.mapList(param, RcItemComponent.class);
 
-        RcItemComponent orgItem = repository.findOne(item.getId());
-        orgItem.setItemUuid(param.getItemUuid());
-        orgItem.setInsertDate(orgItem.getInsertDate());
-        orgItem.setInsertUuid(orgItem.getInsertUuid());
+        for (RcItemComponent item : itemList) {
+            item.setItemComponentUuid(item.getItemComponentUuid());
+            RcItemComponent orgItem = repository.findOne(item.getId());
+            orgItem.setItemUuid(item.getItemUuid());
+            orgItem.setInsertDate(orgItem.getInsertDate());
+            orgItem.setInsertUuid(orgItem.getInsertUuid());
 
-        repository.save(orgItem);
+            repository.save(orgItem);
+        }
+
+        return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");
+    }
+
+    /**
+     * Item 2 Item
+     * @param param
+     * @return
+     */
+    @Transactional
+    public ApiResponse delItemAndMoveComponent(List<Rc00502VO> param) {
+        for (Rc00502VO rc00502VO : param){
+            List<Rc00502VO> compList = rc005Mapper.getRecordComponentList(rc00502VO);
+            for (Rc00502VO comp : compList) {
+                comp.setItemUuid(rc00502VO.getTargetItemUuid());
+            }
+            // Component 이동
+            moveComponent(compList);
+
+            // RC_ITEM_CON 삭제
+            RcItemCon rcItemCon = new RcItemCon();
+            rcItemCon.setItemUuid(rc00502VO.getItemUuid());
+            rcItemConRepository.delete(rcItemCon.getId());
+
+            // RC_ITEM 삭제
+            RcItem rcItem = new RcItem();
+            rcItem.setItemUuid(rc00502VO.getItemUuid());
+            rcItemRepository.delete(rcItem.getId());
+        }
+
+        return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");
+    }
+
+    /**
+     * Component 2 Record Window
+     * @param params
+     * @return
+     */
+    @Transactional
+    public ApiResponse creItemAndMoveComponent(Rc00501VO params) {
+        RequestParams<Rc00501VO> requestParams = new RequestParams();
+
+        requestParams.put("title", params.getRaTitle());
+        requestParams.put("publishedStatusUuid", params.getRiPublishedStatusUuid());
+        requestParams.put("raAggregationUuid", params.getRaAggregationUuid());
+
+
+        Map resultMap = rc004Service.saveItemDetails(requestParams);
+
+        List<Rc00502VO> compList = params.getRc00502VoList();
+        for (Rc00502VO comp : compList) {
+            comp.setItemUuid(resultMap.get("itemUuid").toString());
+        }
+
+        // Component 이동
+        moveComponent(compList);
 
         return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");
     }

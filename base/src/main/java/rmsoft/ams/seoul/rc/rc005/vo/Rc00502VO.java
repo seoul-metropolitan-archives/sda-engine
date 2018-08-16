@@ -49,4 +49,6 @@ public class Rc00502VO extends BaseVO {
     private String checksumTypeUuid;
 
     private String checksum;
+
+    private String targetItemUuid;
 }
