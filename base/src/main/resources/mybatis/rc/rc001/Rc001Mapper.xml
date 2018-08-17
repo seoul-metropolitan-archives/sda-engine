@@ -424,12 +424,10 @@
           , LOWER (Z2.CODE) nodeType
         FROM
           RC_AGGREGATION Z1,
-          AD_CODE_DETAIL Z2,
-          RC_LEVEL Z3
-        WHERE
-            Z1.TYPE_UUID = Z2.CODE_DETAIL_UUID
-            AND
-            Z1.LEVEL_UUID = Z3.LEVEL_UUID
+          AD_CODE_DETAIL Z2
+          --RC_LEVEL Z3
+        WHERE Z1.TYPE_UUID = Z2.CODE_DETAIL_UUID
+            --AND Z1.LEVEL_UUID = Z3.LEVEL_UUID
         <choose>
             <when test="null == uuid or '' == uuid">
                 AND
@@ -438,7 +436,8 @@
           <otherwise>
               START WITH          Z1.AGGREGATION_UUID  = #{uuid}
               CONNECT BY PRIOR    Z1.PARENT_AGGREGATION_UUID = Z1.AGGREGATION_UUID
-              ORDER BY Z3.LEVEL_NO ASC
+              --ORDER BY Z3.LEVEL_NO ASC
+              ORDER BY LEVEL DESC
           </otherwise>
         </choose>
     </select>
