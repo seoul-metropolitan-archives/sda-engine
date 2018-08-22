@@ -653,8 +653,18 @@ fnObj.tabView = axboot.viewExtend({
         }
         else {
             _item = this.list[findedIndex];
+
+            if(item.menuParams) {
+                _item.status = "on";
+                _item.menuParams = item.menuParams;
+                _item.url = CONTEXT_PATH + item.progPh + "?menuId=" + item.menuId + "&menuParams=" + item.menuParams;
+                this.list[findedIndex] = _item;
+                this.frameTarget.find('[data-tab-id="' + _item.menuId + '"]').attr("src", _item.url);
+            }
+
             this.target.find('[data-tab-id="' + _item.menuId + '"]').addClass("on");
             this.frameTarget.find('[data-tab-id="' + _item.menuId + '"]').addClass("on");
+
             //window["frame-item-" + _item.menuId].location.reload();
         }
 
