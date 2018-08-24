@@ -495,8 +495,17 @@ function contextMenuClick(ui, treeData){
             axboot.ajax({
                 type: "GET",
                 url: "/rc/rc001/updateAggregationType",
-                data: $.extend({},{uuid : selectedData[0].uuid, nodeType : typeUuid}),
+                data: $.extend({},{uuid : selectedData[0].uuid, nodeType : typeUuid}, null),
                 callback: function (res) {
+                    if(res.list){
+                        $.each(res.list, function(idx, item){
+                            var nodeObj = fnObj.treeView01.getNodeByParam("uuid", item["uuid"]);
+                            nodeObj.iconSkin = "normal";
+
+                            fnObj.treeView01.updateNode(nodeObj);
+                        });
+                    }
+
                     ACTIONS.dispatch(ACTIONS.GET_SUBDATA,fnObj.naviView.getCurrent());
                 },
                 options: {
@@ -2124,37 +2133,43 @@ fnObj.treeView01 = axboot.viewExtend(axboot.commonView, {
         var iconObj = undefined;
         for(var i = 0; i < _tree.length; i++)
         {
-            switch(_tree[i]["nodeType"])
-            {
-                case "normal":
-                    iconObj =
-                        {
-                            open:false, icon:"/assets/images/ams/icon/fo.png", iconOpen:"/assets/images/ams/icon/fo_op.png", iconClose:"/assets/images/ams/icon/fo.png"
-                        };
-                    break;
-                case "virtual":
-                    iconObj =
-                        {
-                            open:false, icon:"/assets/images/ams/icon/fo_v.png", iconOpen:"/assets/images/ams/icon/fo_op_v.png", iconClose:"/assets/images/ams/icon/fo_v.png"
-                        };
-                    break;
-                case "temporary":
-                    iconObj =
-                        {
-                            open:false, icon:"/assets/images/ams/icon/fo_t.png",iconOpen:"/assets/images/ams/icon/fo_op_t.png", iconClose:"/assets/images/ams/icon/fo_t.png"
-                        };
-                    break;
-                case "item":
-                    iconObj =
-                        {
-                            open:false, icon:"/assets/images/ams/icon/fi.png"
-                        };
-                    break;
-            }
+            iconObj = this.getAggregationIcon(_tree[i]["nodeType"])
             _tree[i] = $.extend({},_tree[i],iconObj);
             iconObj = {};
         }
         return _tree;
+    },
+    getAggregationIcon : function(nodeType){
+        var iconObj = {open:false, iconSkin:nodeType};
+        /*switch(nodeType)
+        {
+            case "normal":
+                iconObj =
+                    {
+                        open:false, icon:"/assets/images/ams/icon/fo.png", iconOpen:"/assets/images/ams/icon/fo_op.png", iconClose:"/assets/images/ams/icon/fo.png"
+                    };
+                break;
+            case "virtual":
+                iconObj =
+                    {
+                        open:false, icon:"/assets/images/ams/icon/fo_v.png", iconOpen:"/assets/images/ams/icon/fo_op_v.png", iconClose:"/assets/images/ams/icon/fo_v.png"
+                    };
+                break;
+            case "temporary":
+                iconObj =
+                    {
+                        open:false, icon:"/assets/images/ams/icon/fo_t.png",iconOpen:"/assets/images/ams/icon/fo_op_t.png", iconClose:"/assets/images/ams/icon/fo_t.png"
+                    };
+                break;
+            case "item":
+                iconObj =
+                    {
+                        open:false, icon:"/assets/images/ams/icon/fi.png"
+                    };
+                break;
+        }*/
+
+        return iconObj;
     },
     setData: function (_searchData, _tree, _data) {
         this.param = $.extend({}, _searchData);
@@ -2214,7 +2229,9 @@ fnObj.treeView01 = axboot.viewExtend(axboot.commonView, {
     },
     updateNode : function(treeNode)
     {
-        this.zTree.updateNode(treeNode);
+        var treeObj = $.fn.zTree.getZTreeObj("ztree");
+        treeObj.updateNode(treeNode);
+        treeObj.refresh();
     },
     getData: function () {
         var _this = this;
@@ -2264,12 +2281,12 @@ fnObj.treeView01 = axboot.viewExtend(axboot.commonView, {
         this.deletedList = [];
         return true;
     },
-    updateNode: function (data) {
+    /*updateNode: function (data) {
         var treeNodes = this.target.getSelectedNodes();
         if (treeNodes[0]) {
             treeNodes[0].progCd = data.progCd;
         }
-    },
+    },*/
     deselectNode: function () {
         ACTIONS.dispatch(ACTIONS.TREEITEM_DESELECTE);
     },

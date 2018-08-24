@@ -534,7 +534,8 @@
         SELECT
             Z1.AGGREGATION_UUID uuid,
             Z1.PARENT_AGGREGATION_UUID parentUuid,
-            Z1.TITLE name
+            Z1.TITLE name,
+            LOWER (Z2.CODE) nodeType
         FROM
             RC_AGGREGATION Z1,
             AD_CODE_DETAIL Z2

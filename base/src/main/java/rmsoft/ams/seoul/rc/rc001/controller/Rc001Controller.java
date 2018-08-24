@@ -145,7 +145,7 @@ public class Rc001Controller extends MessageBaseController
      */
     @RequestMapping("/updateAggregationType")
     @ResponseBody
-    public Responses.ListResponse updateAggregationType(@RequestBody Rc00101VO params){
+    public Responses.ListResponse updateAggregationType(Rc00101VO params){
         return Responses.ListResponse.of(rc001Service.updateAggregationType(params));
     }
 

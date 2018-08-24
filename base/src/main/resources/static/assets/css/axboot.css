@@ -27915,3 +27915,16 @@ a.small_open {
     text-align: center;
     padding-top: 4px;
 }
+
+
+/** RC001 Record Explorer Tree **/
+.ztree li span.button.normal_ico_open{margin-right:2px; background: url(/assets/images/ams/icon/fo_op.png) no-repeat scroll 0 0 transparent; vertical-align:top; *vertical-align:middle}
+.ztree li span.button.normal_ico_close{margin-right:2px; background: url(/assets/images/ams/icon/fo.png) no-repeat scroll 0 0 transparent; vertical-align:top; *vertical-align:middle}
+.ztree li span.button.normal_ico_docu{margin-right:2px; background: url(/assets/images/ams/icon/fo.png) no-repeat scroll 0 0 transparent; vertical-align:top; *vertical-align:middle}
+.ztree li span.button.temporary_ico_open{margin-right:2px; background: url(/assets/images/ams/icon/fo_op_t.png) no-repeat scroll 0 0 transparent; vertical-align:top; *vertical-align:middle}
+.ztree li span.button.temporary_ico_close{margin-right:2px; background: url(/assets/images/ams/icon/fo_t.png) no-repeat scroll 0 0 transparent; vertical-align:top; *vertical-align:middle}
+.ztree li span.button.temporary_ico_docu{margin-right:2px; background: url(/assets/images/ams/icon/fo_t.png) no-repeat scroll 0 0 transparent; vertical-align:top; *vertical-align:middle}
+.ztree li span.button.virtual_ico_open{margin-right:2px; background: url(/assets/images/ams/icon/fo_op_v.png) no-repeat scroll 0 0 transparent; vertical-align:top; *vertical-align:middle}
+.ztree li span.button.virtual_ico_close{margin-right:2px; background: url(/assets/images/ams/icon/fo_v.png) no-repeat scroll 0 0 transparent; vertical-align:top; *vertical-align:middle}
+.ztree li span.button.virtual_ico_docu{margin-right:2px; background: url(/assets/images/ams/icon/fo_v.png) no-repeat scroll 0 0 transparent; vertical-align:top; *vertical-align:middle}
+.ztree li span.button.item_ico_docu{margin-right:2px; background: url(/assets/images/ams/icon/fi.png) no-repeat scroll 0 0 transparent; vertical-align:top; *vertical-align:middle}
