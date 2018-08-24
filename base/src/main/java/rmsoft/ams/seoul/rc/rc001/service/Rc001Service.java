@@ -1,6 +1,7 @@
 package rmsoft.ams.seoul.rc.rc001.service;
 
 import io.onsemiro.core.api.response.ApiResponse;
+import io.onsemiro.core.api.response.Responses;
 import io.onsemiro.core.code.ApiStatus;
 import io.onsemiro.core.domain.BaseService;
 import io.onsemiro.core.parameter.RequestParams;
@@ -13,6 +14,7 @@ import rmsoft.ams.seoul.common.domain.RcAggregation;
 import rmsoft.ams.seoul.common.domain.RcItem;
 import rmsoft.ams.seoul.common.domain.RcItemComponent;
 import rmsoft.ams.seoul.common.domain.RcItemCon;
+import rmsoft.ams.seoul.common.repository.RcAggregationRepository;
 import rmsoft.ams.seoul.common.repository.RcItemComponentRepository;
 import rmsoft.ams.seoul.common.repository.RcItemConRepository;
 import rmsoft.ams.seoul.common.repository.RcItemRepository;
@@ -51,7 +53,10 @@ public class Rc001Service extends BaseService
     private RcItemConRepository rcItemConRepository;
 
     @Autowired
-    private RcItemComponentRepository repository;
+    private RcItemComponentRepository rcItemComponentRepository;
+
+    @Autowired
+    private RcAggregationRepository rcAggregationRepository;
 
     public List<Rc00101VO> getAllNode(Rc00101VO param)
     {
@@ -191,7 +196,7 @@ public class Rc001Service extends BaseService
 
         for (RcItemComponent item : itemList) {
             item.setItemComponentUuid(item.getItemComponentUuid());
-            RcItemComponent orgItem = repository.findOne(item.getId());
+            RcItemComponent orgItem = rcItemComponentRepository.findOne(item.getId());
             orgItem.setItemUuid(item.getItemUuid());
             orgItem.setInsertDate(orgItem.getInsertDate());
             orgItem.setInsertUuid(orgItem.getInsertUuid());
@@ -256,5 +261,29 @@ public class Rc001Service extends BaseService
         moveComponent(compList);
 
         return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");
+    }
+
+    /**
+     * uuid에 해당하는 Aggregaiton 및 하위 Aggregation Type 변경
+     * @param param
+     * @return
+     */
+    @Transactional
+    public List<Rc00101VO> updateAggregationType(Rc00101VO param){
+        List<Rc00101VO> aggList = rc001Mapper.getBottomAggregations(param);
+
+        for (Rc00101VO item : aggList) {
+            RcAggregation rcAggregation = new RcAggregation();
+
+            rcAggregation.setAggregationUuid(item.getUuid());
+            RcAggregation orgItem = rcAggregationRepository.findOne(rcAggregation.getId());
+            orgItem.setTypeUuid(param.getNodeType());
+            orgItem.setInsertDate(orgItem.getInsertDate());
+            orgItem.setInsertUuid(orgItem.getInsertUuid());
+
+            rcAggregationRepository.save(orgItem);
+        }
+
+        return aggList;
     }
 }

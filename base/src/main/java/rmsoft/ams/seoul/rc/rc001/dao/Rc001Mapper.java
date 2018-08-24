@@ -35,4 +35,6 @@ public interface Rc001Mapper extends MyBatisMapper {
     int checkPublished(Rc00101VO param);
     int move(Rc00106VO data);
     int updateState(RcAggregation data);
+
+    List<Rc00101VO> getBottomAggregations (Rc00101VO param);
 }

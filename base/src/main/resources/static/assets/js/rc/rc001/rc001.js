@@ -287,7 +287,34 @@ function updateRecord(targetData, parentNode, isTree=false) {
     }else{
         targetUuid = targetData.attr("uuid");
         targetNodeType = targetData.attr("nodeType");
-        currentUuid = $("#navigatorArea .navigator").last().attr("uuid");
+        currentUuid = fnObj.naviView.getCurrent()["uuid"];
+    }
+
+
+    if(parentNode["nodeType"] == "virtual"){
+        axWarningToast.push("Virtual Aggregation으로의 이동은 불가능합니다.");
+        return false;
+    }else if(targetNodeType == "virtual"){
+        axWarningToast.push("Virtual Aggregation은 이동이 불가능합니다.");
+        return false;
+    }
+
+    if(targetNodeType == "item"){
+        if(fnObj.naviView.getCurrent()["nodeType"] == "virtual"){
+            axWarningToast.push("Virtual Aggregation의 Item은 \n이동이 불가능합니다.");
+        }
+
+        if(parentNode["nodeType"] == "normal") {
+            return false;
+        }else if(parentNode["nodeType"] == "normal" && fnObj.naviView.getCurrent()["nodeType"] == "temporary"){
+            return false;
+        }else if(parentNode["nodeType"] == "temporary" && fnObj.naviView.getCurrent()["nodeType"] == "normal"){
+            return false;
+        }
+    }else if(parentNode["nodeType"] == "normal" && targetNodeType == "temporary") {
+        return false;
+    }else if(parentNode["nodeType"] == "temporary" && targetNodeType == "normal") {
+        return false;
     }
 
     if(parentNode["nodeType"] == "normal"){
@@ -347,6 +374,192 @@ function updateRecord(targetData, parentNode, isTree=false) {
     return true;
 }
 
+
+/**
+ * ContextMenu Click 시 동작
+ * @param ui
+ * @param treeData
+ */
+function contextMenuClick(ui, treeData){
+    var selectedData = fnObj.iconView.getSelectedData();
+    var parentsObj = parent.window.fnObj;
+    var item = null;
+    var naviStr = "";
+
+    var getMenu = function(searchData)
+    {
+        var menuObj = undefined;
+        axboot.ajax({
+            url: "/rc/rc001/getMenuInfo",
+            data: JSON.stringify({progNm : searchData}),
+            type : "POST",
+            dataType : "JSON",
+            async : false,
+            callback: function (res) {
+                menuObj = res;
+            },
+            options: {
+                onError: axboot.viewError
+            }
+        });
+        return menuObj;
+    }
+
+    switch(ui.cmd){
+        case "MERGE_ITEM":
+            axDialog.confirm({
+                msg: "Merge를 진행 하시겠습니까?\nComponent들은 하나의 Item에 귀속됩니다."
+            }, function () {
+                if (this.key == "ok") {
+                    axToast.push("Item이 Merge되었습니다.");
+                }
+            });
+            break;
+        case "NODE_DEL":
+            ACTIONS.dispatch(ACTIONS.DELETE_AGGREGATION, fnObj.iconView.getSelectedData());
+            break;
+        case "ITEM_ADD":
+            selectedData = fnObj.naviView.getCurrent();
+
+            if(selectedData["uuid"] == ""){
+                axWarningToast.push("Root위치에는 Item생성이 불가능합니다.");
+                return;
+            }
+
+            item = getMenu("add item");
+            naviStr = undefined == selectedData["name"]? "" : " > "+selectedData["name"]
+            item.menuParams = $.extend({},{
+                    aggregationUuid : selectedData.uuid
+                },{type: "create"},{navi : fnObj.naviView.getPathString()+naviStr},{title : ""},{nodeType : selectedData.nodeType}
+            );
+            parentsObj.tabView.open(item);
+
+            break;
+        case "ITEM_EDIT":
+            selectedData = fnObj.iconView.getSelectedData();
+
+            item = getMenu("add item");
+            item.menuParams = $.extend({},{
+                aggregationUuid : selectedData[0].parentUuid,
+                itemUuid : selectedData[0].uuid
+            },{type: "update"},{navi : fnObj.naviView.getPathString()},{title : selectedData[0]["name"]});
+            parentsObj.tabView.open(item);
+            break;
+        case "ITEM_VIEW":
+            item = getMenu("view item");
+            item.menuParams = $.extend({},selectedData[0],{type: "create"},
+                {navi : fnObj.naviView.getPathString()},
+                {title : selectedData["name"]},{sendData: selectedData}
+            );
+            parentsObj.tabView.open(item);
+            break;
+        case "AGG_ADD":
+            selectedData = fnObj.naviView.getCurrent();
+
+            if(selectedData["uuid"] == ""){
+                axWarningToast.push("Root위치에는 Item생성이 불가능합니다.");
+                return;
+            }
+
+            item = getMenu("add aggregation");
+            naviStr = undefined == selectedData["name"]? "" : " > "+selectedData["name"];
+            item.menuParams = $.extend({},
+                selectedData
+                ,{type: "create"}
+                ,{navi : fnObj.naviView.getPathString()+naviStr},{title : ""}
+            );
+            parentsObj.tabView.open(item);
+            break;
+        case "AGG_EDIT":
+            selectedData = treeData ? [treeData] : fnObj.iconView.getSelectedData();
+
+            item = getMenu("add aggregation");
+            item.menuParams = $.extend({},{
+                parentUuid : selectedData[0].parentUuid,
+                uuid : selectedData[0].uuid
+            },{type: "update"},{navi : fnObj.naviView.getPathString()},{title : selectedData[0]["name"]});
+            parentsObj.tabView.open(item);
+            break;
+        case "AGG_VIEW":
+            selectedData = treeData ? [treeData] : fnObj.iconView.getSelectedData();
+
+            item = getMenu("view aggregation");
+            item.menuParams = $.extend({},selectedData[0],{type: "create"},{navi : fnObj.naviView.getPathString()},{title : selectedData["name"]},{sendData: selectedData});
+            parentsObj.tabView.open(item);
+            break;
+        case "AGG_NORMAL":
+            selectedData = treeData ? [treeData] : fnObj.iconView.getSelectedData();
+
+            var typeUuid = axboot.commonCodeValueByCodeName("CD127", "Normal");
+
+            axboot.ajax({
+                type: "GET",
+                url: "/rc/rc001/updateAggregationType",
+                data: $.extend({},{uuid : selectedData[0].uuid, nodeType : typeUuid}),
+                callback: function (res) {
+                    ACTIONS.dispatch(ACTIONS.GET_SUBDATA,fnObj.naviView.getCurrent());
+                },
+                options: {
+                    onError: axboot.viewError
+                }
+            });
+            break;
+
+    }
+}
+
+
+/**
+ * ContextMenu 생성구분
+ * @param ui
+ * @param nodeType
+ * @returns {*}
+ */
+function getContextMenu(ui, nodeType){
+    var menu = null;
+
+    //컨트롤 누르고 클릭 시 해당 아이템들이 다중으로 선택되어야된다
+    if ($(ui.target).attr("id") != "iconListArea") {
+        if(fnObj.iconView.selectedItems && fnObj.iconView.selectedItems.length > 1){
+            menu = [
+                {title: "Delete Items", cmd: "NODE_DEL", uiIcon: "ui-icon-trash" },
+            ];
+        }else{
+            if(nodeType == "item"){
+                menu = [
+                    {title: "View Item", cmd: "ITEM_VIEW", uiIcon: "ui-icon-info" },
+                    {title: "Edit Item", cmd: "ITEM_EDIT", uiIcon: "ui-icon-wrench"},
+                    {title: "Delete Item", cmd: "NODE_DEL", uiIcon: "ui-icon-trash"},
+                ];
+            }else if(nodeType == "normal"){
+                menu = [
+                    {title: "View Aggregation", cmd: "AGG_VIEW", uiIcon: "ui-icon-info" },
+                    {title: "Edit Aggregation", cmd: "AGG_EDIT", uiIcon: "ui-icon-wrench" },
+                ];
+            }else if(nodeType == "temporary"){
+                menu = [
+                    {title: "View Aggregation", cmd: "AGG_VIEW", uiIcon: "ui-icon-info" },
+                    {title: "Edit Aggregation", cmd: "AGG_EDIT", uiIcon: "ui-icon-wrench" },
+                    {title: "Delete Aggregation", cmd: "NODE_DEL", uiIcon: "ui-icon-closethick" },
+                    {title: "Change Normal Aggregation", cmd: "AGG_NORMAL", uiIcon: "ui-icon-transferthick-e-w" },
+                ];
+            }else if(nodeType == "virtual"){
+                menu = [
+                    {title: "View Aggregation", cmd: "AGG_VIEW", uiIcon: "ui-icon-info" },
+                    {title: "Edit Aggregation", cmd: "AGG_EDIT", uiIcon: "ui-icon-wrench" },
+                    {title: "Delete Aggregation", cmd: "NODE_DEL", uiIcon: "ui-icon-closethick" },
+                ];
+            }
+        }
+    }else{
+        menu = [
+            {title: "Add Item", cmd: "ITEM_ADD", uiIcon: "ui-icon-document" },
+            {title: "Add Aggregation", cmd: "AGG_ADD", uiIcon: "ui-icon-folder-collapsed" },
+        ];
+    }
+
+    return menu;
+}
 
 var fnObj = {
     pageStart : function () {
@@ -505,7 +718,7 @@ var fnObj = {
                         }
                         if(selectedData["nodeType"] == "item")
                         {
-                            alert("Item에는 Aggregation를 추가할 수 없습니다.");
+                            alert("Item에는 Aggregation을 추가할 수 없습니다.");
                             return ;
                         }
                         console.log(selectedData);
@@ -532,7 +745,7 @@ var fnObj = {
 
                         if(selectedData["nodeType"] == "item")
                         {
-                            alert("Item에는 Item를 추가할 수 없습니다.");
+                            alert("Item에는 Item을 추가할 수 없습니다.");
                             return ;
                         }
 
@@ -826,7 +1039,6 @@ fnObj.naviView = axboot.viewExtend({
             }
         });
     }
-
 });
 fnObj.pageView = axboot.viewExtend({
     page : {
@@ -973,6 +1185,7 @@ fnObj.iconView = axboot.viewExtend({
     timer : 0,
     delay : 200,
     prevent : false,
+    isItemDrop : false,
     initView : function()
     {
         this.initEvent();
@@ -983,24 +1196,33 @@ fnObj.iconView = axboot.viewExtend({
             ACTIONS.dispatch(ACTIONS.PAGE_SEARCH,fnObj.naviView.getRoot());
         });
 
-        $(window).keydown(function(event){
+        $(document).keydown(function(event){
             fnObj.iconView.pressedCtrl = event.ctrlKey;
         });
-        $(window).keyup(function(event){
+        $(document).keyup(function(event){
             fnObj.iconView.pressedCtrl = event.ctrlKey;
         });
-        $(window).click(function(){
-            $("#iconListArea .selected").each(function(){
+        $(document).click(function(){
+           /* $("#iconListArea .selected").each(function(){
                 $(this).removeClass("selected");
-            });
+            });*/
+
+            $("#iconListArea .selected").removeClass("selected");
+
+            if($(event.target).closest("#propertyForm").length == 0){
+                $("#componentView").empty();
+            }
         });
 
+        /*$(document).click(function(event){
 
+        });*/
 
         $("#iconListArea").delegate(">div","click",function(event){
 
             event.stopPropagation();
 
+            $("#componentView").empty();
             if(fnObj.iconView.pressedCtrl)
             {
                 $(this).toggleClass("selected");
@@ -1079,6 +1301,8 @@ fnObj.iconView = axboot.viewExtend({
 
         $("#iconListArea").delegate(">div","dblclick",function(event){
             event.stopPropagation();
+
+            $("#componentView").empty();
 
             clearTimeout(fnObj.iconView.timer);
             fnObj.iconView.prevent = true;
@@ -1160,6 +1384,43 @@ fnObj.iconView = axboot.viewExtend({
             fnObj.iconView.isdbClk = false;
             //},300);
 
+        });
+
+        /**
+         * Contextmenu Record Frame/Agg/Item
+         */
+        $('#iconListArea').contextmenu({
+            autoFocus: true,
+            delegate: "",
+            preventContextMenuForPopup: true,
+            preventSelect: true,
+            taphold: true,
+            menu: [],
+            // Handle menu selection to implement a fake-clipboard
+            select: function(event, ui) {
+                contextMenuClick(ui);
+                // Optionally return false, to prevent closing the menu now
+            },
+            // Implement the beforeOpen callback to dynamically change the entries
+            beforeOpen: function(event, ui) {
+                var contextTarget = $(ui.target).closest("#iconListArea >div");
+
+                if (fnObj.iconView.pressedCtrl) {
+                    contextTarget.addClass("selected");
+                }
+                else {
+                    //컨트롤 누르지 않고 클릭 시 해당 아이템만 선택되어야된다
+                    $("#iconListArea >div").removeClass("selected");
+                    contextTarget.toggleClass("selected");
+                }
+
+                fnObj.pageView.resetPage();
+                fnObj.iconView.selectedItems = fnObj.iconView.getSelectedData();
+
+                $(this).contextmenu({
+                    menu: getContextMenu(ui, contextTarget.attr("nodetype"))
+                });
+            }
         });
     },
     setData : function(list, isFirst)
@@ -1261,7 +1522,7 @@ fnObj.iconView = axboot.viewExtend({
         });*/
 
         /**
-         * Draggable Record
+         * Draggable Record Aggregation/Item
          */
         $('#iconListArea >div').draggable({
             containment : "window",
@@ -1269,7 +1530,7 @@ fnObj.iconView = axboot.viewExtend({
             delay : 50,
             stack : "#iconListArea >div",
             scroll : false,
-            revert : true,
+            revert : false,
             revertDuration : 300,
             helper : function (event) {
                 var wrapper = "<div id='explorerDragWrapper'></div>";
@@ -1288,12 +1549,12 @@ fnObj.iconView = axboot.viewExtend({
         });
 
         /**
-         * Droppable Record Aggregation
+         * Droppable Record Tree 2 Aggregation
          */
-        $('#iconListArea .explorer_folder_full, #iconListArea .explorer_folder_empty').droppable({
+        $('#iconListArea [nodetype="temporary"], #iconListArea [nodetype="normal"]').droppable({
             tolerance: "pointer",
             hoverClass: "selected",
-            accept : "#iconListArea .explorer_folder_full, #iconListArea .explorer_folder_empty",
+            accept : "#iconListArea [nodetype='temporary'], #iconListArea [nodetype='normal'], #iconListArea [nodetype='item']",
             drop: function( event, ui ) {
                 var parentNode = fnObj.treeView01.getNodeByParam("uuid", $(this).attr("uuid"));
 
@@ -1304,16 +1565,39 @@ fnObj.iconView = axboot.viewExtend({
         });
 
         /**
-         * Droppable Record Item
+         * Droppable  Item/Component 2 Item
          */
         $('#iconListArea .explorer_file').droppable({
             tolerance: "pointer",
             hoverClass: "selected",
             accept : "#iconListArea .explorer_file, #componentView .explorer_file",
-            drop: function( event, ui ) {
+            over : function( event, ui ) {
+                fnObj.iconView.isItemDrop = true;
+            },
+            out : function( event, ui ) {
+                fnObj.iconView.isItemDrop = false;
+            },
+            drop : function( event, ui ) {
                 // Item to Item
-                var targetItemUuid = $(event.target).attr("uuid");
+                fnObj.iconView.isItemDrop = false;
+
                 var selectedData = fnObj.iconView.getSelectedData();
+
+                // Normal/Virtual Aggregation으로는 Component 2 Item 생성 불가
+                if(fnObj.naviView.getCurrent()["nodeType"] == "normal" || fnObj.naviView.getCurrent()["nodeType"] == "virtual" ){
+                    return;
+                }
+
+                // 멀티 선택시 Aggregation 포함되었을 때
+                for(var i=0; selectedData.length>i; i++){
+                    if(selectedData[i]["nodeType"] != "item"){
+                        axWarningToast.push("Aggregation은 포함될 수 없습니다.");
+                        return;
+                    }
+                }
+
+                var targetItemUuid = $(event.target).attr("uuid");
+
                 var msg = "";
                 var url = "";
 
@@ -1370,10 +1654,16 @@ fnObj.iconView = axboot.viewExtend({
                 // Record 영역에 드랍 될 때 트리영역 드랍되는 것을 방지
                 $('[data-z-tree="tree-view-01"] [treenode_a]').droppable( "option", "accept", "#iconListArea .noAccept" );
 
-                if($(event.toElement).closest('.explorer_file').length > 0) return;
+                // Normal/Virtual Aggregation으로는 Component 2 Item 생성 불가
+                if(fnObj.naviView.getCurrent()["nodeType"] == "normal" || fnObj.naviView.getCurrent()["nodeType"] == "virtual" ){
+                    return;
+                }
 
+                // Item 2 Item 시 드랍방지
+                if(fnObj.iconView.isItemDrop) return;
+
+                // Record Frame은 부모가 componentView 일때만 받아들인다.
                 if(ui.draggable.parent().attr("id") != "componentView") return;
-
 
                 var compUuid = ui.draggable.attr("uuid");
                 axDialog.confirm({
@@ -1383,10 +1673,8 @@ fnObj.iconView = axboot.viewExtend({
                         var data = {
                             raTitle : ui.draggable.attr("label"),
                             riPublishedStatusUuid : axboot.commonCodeValueByCodeName("CD121", "Draft"),
-                            raAggregationUuid : $("#navigatorArea .navigator").last().attr("uuid"),
-                            rc00502VoList : [
-                                    {itemComponentUuid : compUuid}
-                                ]
+                            raAggregationUuid : fnObj.naviView.getCurrent()["uuid"],
+                            rc00502VoList : [{itemComponentUuid : compUuid}]
                         };
 
                         axboot.ajax({
@@ -1403,79 +1691,6 @@ fnObj.iconView = axboot.viewExtend({
 
                         ui.draggable.remove();
                     }
-                });
-            }
-        });
-
-        /**
-         * Contextmenu 테스트
-         */
-        $('#iconListArea >div').contextmenu({
-            autoFocus: true,
-            delegate: "",
-            preventContextMenuForPopup: true,
-            preventSelect: true,
-            taphold: true,
-            menu: [],
-            // Handle menu selection to implement a fake-clipboard
-            select: function(event, ui) {
-                var $target = ui.target;
-
-                switch(ui.cmd){
-                    case "MERGE_ITEM":
-                        axDialog.confirm({
-                            msg: "Merge를 진행 하시겠습니까?\nComponent들은 하나의 Item에 귀속됩니다."
-                        }, function () {
-                            if (this.key == "ok") {
-                                axToast.push("Item이 Merge되었습니다.");
-                            }
-                        });
-                        break;
-                    case "DEL_ITEM":
-                        ACTIONS.dispatch(ACTIONS.DELETE_AGGREGATION, fnObj.iconView.getSelectedData());
-                        break;
-                }
-                // Optionally return false, to prevent closing the menu now
-            },
-            // Implement the beforeOpen callback to dynamically change the entries
-            beforeOpen: function(event, ui) {
-                var menu = null;
-
-                //컨트롤 누르고 클릭 시 해당 아이템들이 다중으로 선택되어야된다
-                if(fnObj.iconView.pressedCtrl)
-                {
-                    $(this).addClass("selected");
-                }
-                else {
-                    //컨트롤 누르지 않고 클릭 시 해당 아이템만 선택되어야된다
-                    $("#iconListArea >div").removeClass("selected");
-                    $(this).toggleClass("selected");
-                }
-
-                fnObj.pageView.resetPage();
-
-                fnObj.iconView.selectedItems = fnObj.iconView.getSelectedData();
-
-                if(fnObj.iconView.selectedItems && fnObj.iconView.selectedItems.length > 1){
-                    menu = [
-                        {title: "Merge Item", cmd: "MERGE_ITEM", uiIcon: "ui-icon-transferthick-e-w" },
-                        {title: "Delete Items", cmd: "DEL_ITEM", uiIcon: "ui-icon-closethick" },
-                    ];
-                }else{
-                    if($(this).attr("nodetype") == "item"){
-                        menu = [
-                            {title: "Delete Item", cmd: "DEL_ITEM", uiIcon: "ui-icon-closethick" },
-                            {title: "View Item", cmd: "VIEW_ITEM", uiIcon: "ui-icon-info" }
-                        ];
-                    }else{
-                        menu = [
-                            {title: "Cut Aggregation", cmd: "cutAgg", uiIcon: "ui-icon-scissors" }
-                        ];
-                    }
-                }
-
-                $(this).contextmenu({
-                    menu: menu
                 });
             }
         });
@@ -1537,6 +1752,32 @@ fnObj.treeView01 = axboot.viewExtend(axboot.commonView, {
         var _this = this;
         this.reloadFlag = false;
         this.checkFlag = false;
+
+        /**
+         * Contextmenu Tree
+         */
+        $("[data-z-tree='tree-view-01']").contextmenu({
+            autoFocus: true,
+            delegate: "[treenode_a]",
+            preventContextMenuForPopup: true,
+            preventSelect: true,
+            taphold: true,
+            menu: [],
+            // Handle menu selection to implement a fake-clipboard
+            select: function(event, ui) {
+                contextMenuClick(ui, fnObj.treeView01.getNodeByTId($(ui.target).closest("[treenode]").attr("id")));
+                // Optionally return false, to prevent closing the menu now
+            },
+            // Implement the beforeOpen callback to dynamically change the entries
+            beforeOpen: function(event, ui) {
+                var objNode = fnObj.treeView01.getNodeByTId($(ui.target).closest("[treenode]").attr("id"));
+
+                $(this).contextmenu({
+                    menu: getContextMenu(ui, objNode["nodeType"])
+                });
+            }
+        });
+
         $('[data-tree-view-01-btn]').click(function () {
             var _act = this.getAttribute("data-tree-view-01-btn");
             switch (_act) {
@@ -1743,7 +1984,7 @@ fnObj.treeView01 = axboot.viewExtend(axboot.commonView, {
 
                         if($(event.target).attr("id") == $('#iconListArea').attr("id") ||
                             $(event.target).closest('.explorer_file').length > 0) {
-                            parentNode = fnObj.treeView01.getNodeByParam("uuid", $("#navigatorArea .navigator").last().attr("uuid"));
+                            parentNode = fnObj.treeView01.getNodeByParam("uuid", fnObj.naviView.getCurrent()["uuid"]);
                         }else{
                             if($(event.target).closest('.explorer_folder_full').length > 0) {
                                 parentNode = fnObj.treeView01.getNodeByParam("uuid", $(event.target).closest('.explorer_folder_full').attr("uuid"));

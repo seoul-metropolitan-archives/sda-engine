@@ -22319,12 +22319,13 @@ input[type="button"].btn-block {
     background-color: transparent;
     text-decoration: none;
     vertical-align: top;
-    display: inline-block
+    display: inline-block;
 }
 
 .ztree li a:hover,
 [data-z-tree] li a:hover {
-    text-decoration: underline
+    text-decoration: underline;
+    background-color: #e5e5e5;
 }
 
 .ztree li a.curSelectedNode,

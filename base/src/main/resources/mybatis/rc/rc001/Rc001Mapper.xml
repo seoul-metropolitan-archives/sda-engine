@@ -530,4 +530,19 @@
         </choose>
     </update>
 
+    <select id="getBottomAggregations" resultType="Rc00101VO" parameterType="Rc00101VO" statementType="PREPARED">
+        SELECT
+            Z1.AGGREGATION_UUID uuid,
+            Z1.PARENT_AGGREGATION_UUID parentUuid,
+            Z1.TITLE name
+        FROM
+            RC_AGGREGATION Z1,
+            AD_CODE_DETAIL Z2
+        WHERE
+            Z1.TYPE_UUID = Z2.CODE_DETAIL_UUID
+            START WITH Z1.AGGREGATION_UUID  = #{uuid}
+            CONNECT BY  PRIOR Z1.AGGREGATION_UUID = Z1.PARENT_AGGREGATION_UUID
+        ORDER BY LEVEL ASC
+    </select>
+
 </mapper>

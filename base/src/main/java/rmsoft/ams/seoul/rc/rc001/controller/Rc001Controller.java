@@ -138,4 +138,15 @@ public class Rc001Controller extends MessageBaseController
     public ApiResponse creItemAndMoveComponent(@RequestBody Rc00501VO params){
         return rc001Service.creItemAndMoveComponent(params);
     }
+    /**
+     *
+     * @param params the request params
+     * @return the api response
+     */
+    @RequestMapping("/updateAggregationType")
+    @ResponseBody
+    public Responses.ListResponse updateAggregationType(@RequestBody Rc00101VO params){
+        return Responses.ListResponse.of(rc001Service.updateAggregationType(params));
+    }
+
 }
