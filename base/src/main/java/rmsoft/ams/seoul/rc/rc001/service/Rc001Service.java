@@ -269,8 +269,25 @@ public class Rc001Service extends BaseService
      * @return
      */
     @Transactional
-    public List<Rc00101VO> updateAggregationType(Rc00101VO param){
+    public Responses.MapResponse updateAggregationType(Rc00101VO param){
         List<Rc00101VO> aggList = rc001Mapper.getBottomAggregations(param);
+
+        String maxLevel = "";
+        Map rtnMap = new HashMap();
+
+
+        if(aggList.size() > 0){
+            maxLevel = aggList.get(0).getLevel();
+        }
+
+        for (Rc00101VO item : aggList) {
+            if(Integer.parseInt(maxLevel) > Integer.parseInt(item.getLevel()) && item.getChildCnt() > 0){
+                rtnMap.put("isSuccess", false);
+                rtnMap.put("message", "Normal Aggregation으로 변경시 Item은 최하위 Aggregation에 위치해야합니다.");
+                return Responses.MapResponse.of(rtnMap);
+            }
+        }
+
 
         for (Rc00101VO item : aggList) {
             RcAggregation rcAggregation = new RcAggregation();
@@ -284,6 +301,9 @@ public class Rc001Service extends BaseService
             rcAggregationRepository.save(orgItem);
         }
 
-        return aggList;
+        rtnMap.put("isSuccess", true);
+        rtnMap.put("list", aggList);
+
+        return Responses.MapResponse.of(rtnMap);
     }
 }

@@ -490,28 +490,48 @@ function contextMenuClick(ui, treeData){
         case "AGG_NORMAL":
             selectedData = treeData ? [treeData] : fnObj.iconView.getSelectedData();
 
-            var typeUuid = axboot.commonCodeValueByCodeName("CD127", "Normal");
+            axDialog.confirm({
+                msg: "Normal Aggregation으로 변경하시겠습니까?"
+            }, function () {
+                if (this.key == "ok") {
+                    var typeUuid = axboot.commonCodeValueByCodeName("CD127", "Normal");
 
-            axboot.ajax({
-                type: "GET",
-                url: "/rc/rc001/updateAggregationType",
-                data: $.extend({},{uuid : selectedData[0].uuid, nodeType : typeUuid}, null),
-                callback: function (res) {
-                    if(res.list){
-                        $.each(res.list, function(idx, item){
-                            var nodeObj = fnObj.treeView01.getNodeByParam("uuid", item["uuid"]);
-                            nodeObj.iconSkin = "normal";
+                    axboot.ajax({
+                        type: "GET",
+                        url: "/rc/rc001/updateAggregationType",
+                        data: $.extend({}, {uuid: selectedData[0].uuid, nodeType: typeUuid}, null),
+                        callback: function (res) {
+                            if(res.map.isSuccess == true) {
+                                if (res.map.list) {
+                                    $.each(res.map.list, function (idx, item) {
+                                        var nodeObj = fnObj.treeView01.getNodeByParam("uuid", item["uuid"]);
+                                        nodeObj.iconSkin = "normal";
+                                        nodeObj.nodeType = "normal";
 
-                            fnObj.treeView01.updateNode(nodeObj);
-                        });
-                    }
+                                        fnObj.treeView01.updateNode(nodeObj);
+                                    });
+                                }
+                            }else{
+                                axDialog.alert({
+                                    title: 'Warning',
+                                    theme: "default",
+                                    msg: res.map.message
+                                });
 
-                    ACTIONS.dispatch(ACTIONS.GET_SUBDATA,fnObj.naviView.getCurrent());
-                },
-                options: {
-                    onError: axboot.viewError
+                                return;
+                            }
+
+                            ACTIONS.dispatch(ACTIONS.GET_SUBDATA, fnObj.naviView.getCurrent());
+                        },
+                        options: {
+                            onError: axboot.viewError
+                        }
+                    });
                 }
             });
+            break;
+        case "REFRESH":
+            ACTIONS.dispatch(ACTIONS.GET_SUBDATA, fnObj.naviView.getCurrent());
             break;
 
     }
@@ -564,6 +584,7 @@ function getContextMenu(ui, nodeType){
         menu = [
             {title: "Add Item", cmd: "ITEM_ADD", uiIcon: "ui-icon-document" },
             {title: "Add Aggregation", cmd: "AGG_ADD", uiIcon: "ui-icon-folder-collapsed" },
+            {title: "Refresh", cmd: "REFRESH", uiIcon: "ui-icon-arrowrefresh-1-w" },
         ];
     }
 
