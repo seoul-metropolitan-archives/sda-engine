@@ -6,6 +6,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 import java.io.*;
+import java.math.BigDecimal;
 import java.nio.file.CopyOption;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
@@ -15,8 +16,8 @@ import java.util.Map;
 @Slf4j
 public class DummyFileMaker {
     private JdbcTemplate jdbcTemplate;
-    private static String dummyFilePath = "/Users/jspark226/data/dip/dummy-img.jpg"; // 더미로 사용할 파일
-    private static String targetDir = "/Users/jspark226/data/dip/tmp/"; //임의의 더미 파일을 저장할 경로
+    private static String dummyFilePath = "D:\\02.DreamAntDev\\git-workspaces\\java\\seoul-ams\\dip\\tmp\\dummy-img.png"; // 더미로 사용할 파일
+    private static String targetDir = "D:\\02.DreamAntDev\\git-workspaces\\java\\seoul-ams\\dip\\tmp\\"; //임의의 더미 파일을 저장할 경로
 
 
     /**
@@ -48,6 +49,11 @@ public class DummyFileMaker {
             File dummyFile = new File(dummyFilePath);
 
             log.info("Get Data Lists");
+
+            String testSql = "SELECT COUNT(*) AS TOTAL_COUNT FROM EX_EXPORT_COMPONENT_FILE";
+            Map<String, Object> returnMap = jdbcTemplate.queryForMap(testSql);
+            BigDecimal dbAliveStr = (BigDecimal)returnMap.get("TOTAL_COUNT");
+
             // SQL Injection
             String tmpSql = "SELECT FILE_PATH, FILE_NAME FROM EX_EXPORT_COMPONENT_FILE";
 

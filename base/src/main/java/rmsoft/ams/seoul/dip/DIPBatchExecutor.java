@@ -106,6 +106,9 @@ public class DIPBatchExecutor {
     private boolean sendFileSuccess = false;
     private boolean sendDigitalFileSuccess = false;
 
+    private String localFtpJsonPath = "";
+    private String localFtpDigitalFilePath = "";
+
     /**
      * Execute.
      */
@@ -118,13 +121,17 @@ public class DIPBatchExecutor {
      * Run dip process.
      */
     public void runDipProcess() {
+        sendFileSuccess = false;
+        sendDigitalFileSuccess = false;
+        localFtpJsonPath = "";
+        localFtpDigitalFilePath = "";
+
         log.info("DIPBatchExecutor-execute DIP Process");
 
         try {
             List<Map<String, Object>> entityList = dipMapper.findAllEntityType();
             List<Map<String, Object>> resultList = new ArrayList<>();
             List<Map<String, Object>> rcComponentFile = new ArrayList<>();
-            ;
 
             String tableName = "";
 
@@ -135,6 +142,7 @@ public class DIPBatchExecutor {
                 log.info("Data Processing : Table Name : {}", tableName);
 
                 List<Map<String, Object>> exportList = dipMapper.findAllEntityTypeData((String) entityInfo.get("entityTypeUuid"));
+                resultList = new ArrayList<>();
 
                 for (int j = 0; j < exportList.size(); j++) {
                     Map<String, Object> tableInfo = exportList.get(j);
@@ -152,11 +160,10 @@ public class DIPBatchExecutor {
                 log.info("Table : {} ,Data Size : {}", tableName, resultList.size());
                 File jsonFile = FileUtils.getFile(jsonTmpDir + tableName + "_" + DateUtils.convertToString(LocalDateTime.now(), "yyyyMMdd") + ".json");
                 FileUtils.write(jsonFile, JsonUtils.toJson(resultList).replace("null", "\"\""), StandardCharsets.UTF_8);
-                resultList.clear();
             }
 
-            ftpJsonPath = uploadPrefix + "/" + DateUtils.getNow("yyyyMMdd") + ftpJsonPath + "/";
-            ftpDigitalFilePath = uploadPrefix + "/" + DateUtils.getNow("yyyyMMdd") + ftpDigitalFilePath + "/";
+            localFtpJsonPath = uploadPrefix + "/" + DateUtils.getNow("yyyyMMdd") + ftpJsonPath + "/";
+            localFtpDigitalFilePath = uploadPrefix + "/" + DateUtils.getNow("yyyyMMdd") + ftpDigitalFilePath + "/";
 
             // Json 파일 전송
             if (entityList.size() > 0) {
@@ -235,14 +242,14 @@ public class DIPBatchExecutor {
         try {
             for (int i = 0; i < jsonFileList.length; i++) {
                 // Change to output directory
-                if (!isDirectoryExists(sftpChannel, ftpJsonPath)) {
+                if (!isDirectoryExists(sftpChannel, localFtpJsonPath)) {
                     /*log.info("Creating Directory : {} ", ftpJsonPath);
                     sftpChannel.mkdir(ftpJsonPath);*/
 
-                    makeDirectory(sftpChannel, ftpJsonPath);
+                    makeDirectory(sftpChannel, localFtpJsonPath);
                 }
 
-                sftpChannel.cd(ftpJsonPath);
+                sftpChannel.cd(localFtpJsonPath);
 
                 // 입력 파일을 가져온다.
                 fis = new FileInputStream(jsonFileList[i]);
@@ -250,7 +257,7 @@ public class DIPBatchExecutor {
                 sftpChannel.put(fis, jsonFileList[i].getName());
 
                 fis.close();
-                log.debug("JSON file is uploaded  : {}", jsonFileList[i].getName());
+                log.info("JSON file is uploaded  : {}", jsonFileList[i].getName());
             }
 
             log.info("{} JSON file is uploaded.", jsonFileList.length);
@@ -289,15 +296,15 @@ public class DIPBatchExecutor {
             for (int i = 0; i < rcComponentFile.size(); i++) {
                 rcComponenMap = rcComponentFile.get(i);
 
-                if (!isDirectoryExists(sftpChannel, ftpDigitalFilePath)) {
+                if (!isDirectoryExists(sftpChannel, localFtpDigitalFilePath)) {
                     /*log.info("Creating Directory : {} ", ftpDigitalFilePath);
                     sftpChannel.mkdir(ftpDigitalFilePath);*/
-                    makeDirectory(sftpChannel, ftpDigitalFilePath);
+                    makeDirectory(sftpChannel, localFtpDigitalFilePath);
 
                 }
 
                 // Change to output directory
-                sftpChannel.cd(ftpDigitalFilePath);
+                sftpChannel.cd(localFtpDigitalFilePath);
 
                 digitalFile = new File(digitalFileDir + (String) rcComponenMap.get("FILE_PATH") + File.separator + (String) rcComponenMap.get("FILE_NAME"));
 
@@ -308,7 +315,7 @@ public class DIPBatchExecutor {
                     sftpChannel.put(fis, digitalFile.getName());
 
                     fis.close();
-                    log.debug("Digital file is uploaded  : {}", digitalFile.getName());
+                    log.info("Digital file is uploaded  : {}", digitalFile.getName());
                 }
             }
 
