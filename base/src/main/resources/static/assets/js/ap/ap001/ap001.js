@@ -15,6 +15,39 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             }
         });
     },
+
+    PAGE_DROP : function (caller, act, e) {
+        e.stopPropagation();
+        e.preventDefault();
+
+        var uploadFile = function(file, path) {
+            console.log(path, file);
+            // handle file uploading
+        };
+
+        var iterateFilesAndDirs = function(filesAndDirs, path) {
+            for (var i = 0; i < filesAndDirs.length; i++) {
+                if (typeof filesAndDirs[i].getFilesAndDirectories === 'function') {
+                    var path = filesAndDirs[i].path;
+
+                    // this recursion enables deep traversal of directories
+                    filesAndDirs[i].getFilesAndDirectories().then(function(subFilesAndDirs) {
+                        // iterate through files and directories in sub-directory
+                        iterateFilesAndDirs(subFilesAndDirs, path);
+                    });
+                } else {
+                    uploadFile(filesAndDirs[i], path);
+                }
+            }
+        };
+
+        // begin by traversing the chosen files and directories
+        if ('getFilesAndDirectories' in e.dataTransfer) {
+            e.dataTransfer.getFilesAndDirectories().then(function(filesAndDirs) {
+                iterateFilesAndDirs(filesAndDirs, '/');
+            });
+        }
+    },
     PAGE_SAVE: function (caller, act, data) {
         axboot.ajax({
             type: "GET",
@@ -75,7 +108,88 @@ fnObj.pageStart = function () {
         });
 
         _this.searchView.initView();
-        _this.gridView01.initView();
+
+        var API_SERVER = CONTEXT_PATH;
+
+        UPLOAD = new ax5.ui.uploader({
+            debug: false,
+            target: $('[data-ax5uploader="upload1"]'),
+            form: {
+                action: "/api/v1/common/upload",
+                fileName: "file"
+            },
+            multiple: true,
+            manualUpload: false,
+            progressBox: true,
+            progressBoxDirection: "left",
+            dropZone: {
+                target: $('[data-uploaded-box="upload1"]')
+            },
+            uploadedBox: {
+                target: $('[data-uploaded-box="upload1"]'),
+                icon: {
+                    "delete": '<i class="cqc-cancel" aria-hidden="true"></i>',
+                    "download": '<i class="cqc-save" aria-hidden="true"></i>'
+                },
+                columnKeys: {
+                    apiServerUrl: API_SERVER,
+                    name: "fileName",
+                    type: "ext",
+                    size: "fileSize",
+                    uploadedName: "saveName",
+                    thumbnail: ""
+                },
+                lang: {
+                    supportedHTML5_emptyListMsg: '<div class="text-center" style="padding-top: 30px;">신분증사진을 선택하세요(필수입력)</div>',
+                    emptyListMsg: '<div class="text-center" style="padding-top: 30px;">Empty of List.</div>'
+                },
+                onchange: function () {
+                    console.log('onchange: ', this);
+                },
+                onclick: function () {
+                    // console.log(this.cellType);
+                    var fileIndex = this.fileIndex;
+                    var file = this.uploadedFiles[fileIndex];
+                    switch (this.cellType) {
+                        case "delete":
+                            axDialog.confirm({
+                                title: "Seoul-AMS",
+                                msg: "선택된 이미지를 삭제하시겠습니까?"
+                            }, function () {
+                                if (this.key == "ok") {
+                                    UPLOAD.removeFile(fileIndex);
+                                }
+                            });
+                            break;
+
+                        case "download":
+                            if (file.download) {
+                                location.href = API_SERVER + file.download;
+                            }
+                            break;
+                    }
+                }
+            },
+            validateSelectedFiles: function () {
+
+                // 1개 이상 업로드 되지 않도록 제한.
+                return true;
+            },
+            onprogress: function () {
+                console.log('progress');
+            },
+            onuploaderror: function () {
+                axDialog.alert({
+                    title: 'Onsemiro Uploader',
+                    theme: "default",
+                    msg: this.error.message
+                });
+            },
+            onuploaded: function () {
+            },
+            onuploadComplete: function () {
+            }
+        });
 };
 
 fnObj.searchView = axboot.viewExtend(axboot.formView, {
@@ -90,6 +204,32 @@ fnObj.searchView = axboot.viewExtend(axboot.formView, {
         this.initEvent();
     },
     initEvent: function () {
+        $( "#dropDiv" ).on("dragover",dragHover)
+        $( "#dropDiv" ).on("dragleave",dragHover)
+        $( "#dropDiv" ).on("drop", function (event){
+            event.preventDefault();
+
+            var items = event.dataTransfer.items;
+            for (var i=0; i<items.length; i++) {
+                // webkitGetAsEntry is where the magic happens
+                var item = items[i].webkitGetAsEntry();
+                if (item) {
+                    traverseFileTree(item);
+                }
+            }
+        }, false);
+        $( "#dropDiv" ).ondrop  = function(e) {
+            var length = e.dataTransfer.items.length;
+            for (var i = 0; i < length; i++) {
+                var entry = e.dataTransfer.items[i].webkitGetAsEntry();
+                if (entry.isFile) {
+
+                } else if (entry.isDirectory) {
+
+                }
+            }
+        };
+
     },
     getData: function () {
         var data = this.modelFormatter.getClearData(this.model.get()); // 모델의 값을 포멧팅 전 값으로 치환.
@@ -138,3 +278,31 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
 
     }
 });
+
+function dragHover(e) {
+    e.stopPropagation();
+    e.preventDefault();
+
+    if (e.type === 'dragover') {
+        e.target.className = 'over';
+    } else {
+        e.target.className = '';
+    }
+}
+function traverseFileTree(item, path) {
+    path = path || "";
+    if (item.isFile) {
+        // Get file
+        item.file(function(file) {
+            console.log("File:", path + file.name);
+        });
+    } else if (item.isDirectory) {
+        // Get folder contents
+        var dirReader = item.createReader();
+        dirReader.readEntries(function(entries) {
+            for (var i=0; i<entries.length; i++) {
+                traverseFileTree(entries[i], path + item.name + "/");
+            }
+        });
+    }
+}
