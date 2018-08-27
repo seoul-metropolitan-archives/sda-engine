@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="rmsoft.ams.seoul.ig.ig003.dao.Ig003Mapper">
+    <select id="getIgAccessionRecordList" resultType="Ig00201VO" statementType="PREPARED">
+        SELECT
+            ACCESSION_RECORD_UUID as accessionRecordUuid,
+            ACCESSION_NO as accessionNo,
+            ACQUISITION_DATE as acquisitionDate,
+            ACQUISITION_SOURCE as acquisitionSource,
+            ACQUISITION_TYPE_UUID as acquisitionTypeUuid,
+            INPUT_CODE_UUID as inputCodeUuid,
+            TITLE as title,
+            <include refid="Common.UserName"><property name="userUuid" value="INSERT_UUID"/></include> as insertUuid,
+            INSERT_DATE as insertDate,
+            <include refid="Common.UserName"><property name="userUuid" value="UPDATE_UUID"/></include> as updateUuid,
+            UPDATE_DATE as updateDate
+        FROM IG_ACCESSION_RECORD
+        <where>
+            <if test="accessionNo != null">
+                ACCESSION_NO LIKE '%' || #{accessionNo} || '%'
+            </if>
+            <if test="null != acquisitionFromDate and '' != acquisitionToDate">
+                <![CDATA[
+            AND
+                A1.DISPOSAL_CONFIRM_DATE  between to_date(#{acquisitionFromDate},'YYYY-MM-DD') and to_date(#{acquisitionToDate},'YYYY-MM-DD')
+            ]]>
+            </if>
+            <if test="accessionRecordUuid != null">
+                AND ACCESSION_RECORD_UUID = #{accessionRecordUuid}
+            </if>
+            <if test="title != null">
+                AND TITLE LIKE '%' || #{title} || '%'
+            </if>
+            <if test="acquisitionSource != null">
+                AND ACQUISITION_SOURCE LIKE '%' || #{acquisitionSource} || '%'
+            </if>
+        </where>
+    </select>
+</mapper>

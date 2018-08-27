@@ -1,0 +1,159 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout/base}">
+
+
+<!-- ===== [ script ] ===== -->
+<script layout:fragment="script" type="text/javascript" th:src="@{/assets/js/ig/ig002/ig002.js}"></script>
+<!--realgrid -->
+
+<!-- ===== [ base-content ] ===== -->
+<div layout:fragment="base-content" class="ax-base-content">
+    <form name="formView01" id="formView01" method="post" onsubmit="return false">
+        <div class="cssBody" style="top:80px">
+            <div style="display:table; height:100%; width:100%">
+                <div class="contents_wrap">
+                    <div style=" height:30px; width:100%" class="bgf7 div_tablerow">
+                        <ul class="bdb">
+                            <th:block layout:insert="~{/fragments/page-buttons :: bookmark}"/>
+                            <th:block layout:insert="~{/fragments/page-buttons :: save-and-inquiry('show','none')}"/>
+                        </ul>
+                    </div>
+                    <div style="height:100%; width:100%" class="div_tablerow">
+                        <div style="display:table; height:100%; width:100%; float:left">
+                            <ul class="bdb bdt div_tablerow bgf7" style="height:30px;">
+                                <th:block
+                                        layout:insert="~{/fragments/page-buttons :: dot('Accession Records Register')}"/>
+                            </ul>
+
+                            <div style="height:100%; width:100%;" class="div_tablerow">
+                                <div class="explorer_list">
+                                    <div class="explorer_list_cont" id="topmove">
+                                        <div class="bdt cont_wrap01" style="width: 86%;">
+                                            <div id="systemMetaArea">
+                                                <div class="serv_title" style="border-top:0; margin-top: 0">
+                                                    <span><b>Essential information</b></span>
+                                                </div>
+                                                <div class="bdb" style="padding: 5px;">
+                                                    <ul>
+                                                        <li style="width: 33%;">
+                                                            <b>Accession No </b>
+                                                            <div data-ax-path="accessionNo">text readonly</div>
+                                                        </li>
+                                                    </ul>
+                                                    <ul style="padding-top: 16px">
+                                                        <li style="width: 33%;">
+                                                            <b>Acquisition Date </b>
+                                                            <dd class="w_auto">
+                                                                <div class="input-group" data-ax5picker="date">
+                                                                    <div class="cld_box">
+                                                                        <input type="text"
+                                                                               data-ax-path="acquisitionDate"
+                                                                               style="ime-mode:disabled;background-color: #fffdd6;"
+                                                                               placeholder="YYYY-MM-DD" maxlength="10">
+                                                                        <img title="calendar"
+                                                                             class="ui-datepicker-trigger" alt="..."
+                                                                             src="/assets/images/ams/calendar.png">
+                                                                    </div>
+                                                                </div>
+                                                            </dd>
+                                                        </li>
+                                                    </ul>
+
+                                                    <ul style="padding-top: 16px">
+                                                        <li style="width: 50%;">
+                                                            <b>Source of acquisition </b>
+                                                            <div>
+                                                                <textarea class="txtar" data-ax-path="acquisitionSource"
+                                                                          style="height: 35px; background-color: #fffdd6; width: 50%"></textarea>
+                                                            </div>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <div id="childrenDnrInfoArea">
+                                                <div class="serv_title">
+                                                    <span><b>Donor Information</b></span>
+                                                </div>
+
+                                                <div class="togl01_show serv_cont childDnrInfo" style="display: block">
+                                                    <ul id="addDnrInfo">
+                                                        <li style="width: 100%;">
+                                                            <a href="#"><b style="color: red">+ Add New</b></a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+
+                                            <div id="childrenMngInfoArea">
+                                                <div class="serv_title">
+                                                    <span><b>Management Information</b></span>
+                                                </div>
+
+                                                <div class="togl01_show serv_cont childMngInfo" style="display: block">
+                                                    <ul>
+                                                        <li style="width: 30%;">
+                                                            <b>Acquisition Type</b>
+                                                            <div>
+                                                                <dd>
+                                                                    <select data-ax-path="acquisitionTypeUuid"
+                                                                            style="width:135px;">
+                                                                        <option value=""></option>
+                                                                        <option th:each="item : ${acquisitionType}"
+                                                                                th:value="${item.codeDetailUUID}"
+                                                                                th:text="${item.codeName}"/>
+                                                                    </select>
+                                                                </dd>
+                                                            </div>
+                                                        </li>
+                                                        <li style='width: 70%;'>
+                                                            <b>Title </b>
+                                                            <div>
+                                                                <input type='text' data-ax-path='title'
+                                                                       style='width: 100%;'>
+                                                            </div>
+                                                        </li>
+                                                    </ul>
+                                                    <ul id="addMngInfo">
+                                                        <li style="width: 100%;">
+                                                            <a href="#"><b style="color: red">+ Add New</b></a>
+                                                        </li>
+                                                    </ul>
+                                                    <ul style="padding-top: 16px">
+                                                        <li style="width: 45%;">
+                                                            <b>Description</b>
+                                                            <div>
+                                                                <textarea class="txtar" data-ax-path="description"
+                                                                          style="height: 70px; width: 100%"></textarea>
+                                                            </div>
+                                                        </li>
+                                                        <li style="width: 10%"></li>
+                                                        <li style="width: 45%;">
+                                                            <b>Note </b>
+                                                            <div>
+                                                                <textarea class="txtar" data-ax-path="notes"
+                                                                          style="height: 70px; width: 100%"></textarea>
+                                                            </div>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="top_move">
+                                            <a href="#topmove">&and;<br>Top</a>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
