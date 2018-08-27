@@ -534,7 +534,10 @@
         SELECT
             Z1.AGGREGATION_UUID uuid,
             Z1.PARENT_AGGREGATION_UUID parentUuid,
-            Z1.TITLE name
+            Z1.TITLE name,
+            LOWER (Z2.CODE) nodeType,
+            LEVEL AS "level",
+            (SELECT COUNT(ITEM_UUID) FROM RC_ITEM WHERE AGGREGATION_UUID = Z1.AGGREGATION_UUID) AS childCnt
         FROM
             RC_AGGREGATION Z1,
             AD_CODE_DETAIL Z2
@@ -542,7 +545,7 @@
             Z1.TYPE_UUID = Z2.CODE_DETAIL_UUID
             START WITH Z1.AGGREGATION_UUID  = #{uuid}
             CONNECT BY  PRIOR Z1.AGGREGATION_UUID = Z1.PARENT_AGGREGATION_UUID
-        ORDER BY LEVEL ASC
+        ORDER BY LEVEL DESC
     </select>
 
 </mapper>
