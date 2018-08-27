@@ -162,7 +162,7 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
 
 /*팝업 헤더*/
 fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
-    delay: 200,
+    delay: 300,
     clicks:0,
     timer:null,
     tagId: "realgrid01",
