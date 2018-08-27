@@ -37,14 +37,17 @@ var ACTIONS = axboot.actionExtend(fnObj, {
          });
     },
     PAGE_DETAIL:function (caller, act, data) {
+        fnObj.formView.clear();
+        fnObj.childrenMngInfo.removeChild();
+        fnObj.childrenDrnInfo.removeChild();
         axboot.ajax({
             type: "GET",
             url: "/api/v1/ig/ig002/01/list02",
             data: $.extend({}, {accessionRecordUuid:data.accessionRecordUuid}),
             callback: function (res) {
                 if(res != null && res != "undefined"){
-                    fnObj.childrenMngInfo.removeChild();
-                    fnObj.childrenDrnInfo.removeChild();
+                    fnObj.formView.setFormData("description",res.accessionRecord["description"]);
+                    fnObj.formView.setFormData("notes",res.accessionRecord["notes"]);
                     fnObj.childrenDrnInfo.setData(res.childrenDrnInfoList);
                     fnObj.childrenMngInfo.setData(res.childrenMngInfoList);
                 }
@@ -159,6 +162,9 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
 
 /*팝업 헤더*/
 fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
+    delay: 200,
+    clicks:0,
+    timer:null,
     tagId: "realgrid01",
     primaryKey : "recordScheduleUuid",
     entityName: "Record Schedule UUID",
@@ -178,12 +184,24 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
         return this.gridObj.getSelectedData()
     },
     itemClick: function (data) {
-        if (data.accessionRecordUuid != null && data.accessionRecordUuid != "") {
-            ACTIONS.dispatch(ACTIONS.PAGE_DETAIL, data);
+        fnObj.gridView01.clicks++;
+        if(fnObj.gridView01.clicks === 1){
+            fnObj.gridView01.timer = setTimeout(function () {
+                fnObj.gridView01.clicks = 0;
+                if (data.accessionRecordUuid != null && data.accessionRecordUuid != "") {
+                    ACTIONS.dispatch(ACTIONS.PAGE_DETAIL, data);
+                }
+            },fnObj.gridView01.delay)
+        }else{
+            clearTimeout(fnObj.gridView01.timer);
+            fnObj.gridView01.clicks = 0;
+            fnObj.gridView01.onDataCellDblClicked(data);
         }
+
 
     },
     onDataCellDblClicked: function (data) {
+        event.stopPropagation();
         var item = getMenu("accession record registration");
         var parentsObj = parent.window.fnObj;
         item.menuParams = $.extend({},{type: "edit",accessionRecordUuid:fnObj.gridView01.getSelectedData().accessionRecordUuid});

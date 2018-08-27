@@ -67,7 +67,7 @@
 
                     <div style="height:100%; width:100%" class="bgf7 div_tablerow">
 
-                        <div style="height:50%; width:100%" class="div_table">
+                        <div style="height:40%; width:100%" class="div_table">
                             <ul class="bdb bdt div_tablerow" style="height:30px;">
                                 <th:block layout:insert="~{/fragments/page-buttons :: dot('Accession Record List')}"/>
                             </ul>
@@ -75,39 +75,39 @@
                                 <div id="realgrid01" style="width:100%; height:100%"></div>
                             </div>
                         </div>
-                        <div style="height:50%; width:100%; background:#ffffff" class="div_table">
-                            <ul class="bdb bdt div_tablerow serv_title" style="height:30px;">
+                        <div style="height:60%; width:100%;" class="div_table">
+                            <ul class="bdb bdt div_tablerow" style="height:30px;">
                                 <th:block layout:insert="~{/fragments/page-buttons :: dot('Management Information')}"/>
                             </ul>
-                            <div class="bdt cont_wrap01" style="width: 86%;">
-                                <div id="childrenDnrInfoArea">
-                                    <div class="togl01_show serv_cont childDnrInfo" style="display: block">
-                                        <ul id="addDnrInfo">
+                            <div style="position:relative;width: 100%;height:100%;background:#ffffff;overflow-y: scroll">
+                                <div class="bdt cont_wrap01" style="width: 86%;position: absolute;padding-bottom: 30px">
+                                    <div id="childrenDnrInfoArea">
+                                        <div class="togl01_show serv_cont childDnrInfo" style="display: block;margin-bottom: 0px">
+                                            <ul id="addDnrInfo">
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div id="childrenMngInfoArea">
+                                        <div class="togl01_show serv_cont childMngInfo" style="display: block;margin-bottom: 0px">
+                                            <ul id="addMngInfo">
+                                            </ul>
+                                        </div>
+                                        <ul style="padding-top: 16px">
+                                            <li style="width: 45%;">
+                                                <b>Description</b>
+                                                <div>
+                                                    <textarea class="txtar" data-ax-path="description" style="height: 70px; width: 100%" readonly></textarea>
+                                                </div>
+                                            </li>
+                                            <li style="width: 10%"></li>
+                                            <li style="width: 45%;">
+                                                <b>Note </b>
+                                                <div>
+                                                    <textarea class="txtar" data-ax-path="notes"  style="height: 70px; width: 100%" readonly></textarea>
+                                                </div>
+                                            </li>
                                         </ul>
                                     </div>
-                                </div>
-                                <div id="childrenMngInfoArea">
-                                    <div class="togl01_show serv_cont childMngInfo" style="display: block">
-                                        <ul id="addMngInfo">
-                                        </ul>
-                                    </div>
-                                    <ul style="padding-top: 16px">
-                                        <li style="width: 45%;">
-                                            <b>Description</b>
-                                            <div>
-                                                <textarea class="txtar" data-ax-path="description"
-                                                          style="height: 70px; width: 100%"></textarea>
-                                            </div>
-                                        </li>
-                                        <li style="width: 10%"></li>
-                                        <li style="width: 45%;">
-                                            <b>Note </b>
-                                            <div>
-                                                <textarea class="txtar" data-ax-path="notes"
-                                                          style="height: 70px; width: 100%"></textarea>
-                                            </div>
-                                        </li>
-                                    </ul>
                                 </div>
                             </div>
                         </div>
