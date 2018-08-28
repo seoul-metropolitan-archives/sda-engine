@@ -8,7 +8,7 @@
         SELECT
             ACCESSION_RECORD_UUID as accessionRecordUuid,
             ACCESSION_NO as accessionNo,
-            ACQUISITION_DATE as acquisitionDate,
+            TO_CHAR(TO_DATE(ACQUISITION_DATE),'YYYY-MM-DD') as acquisitionDate,
             ACQUISITION_SOURCE as acquisitionSource,
             ACQUISITION_TYPE_UUID as acquisitionTypeUuid,
             INPUT_CODE_UUID as inputCodeUuid,
