@@ -233,7 +233,6 @@ $(document.body).ready(function () {
 
     document.createElement("lang");
 });
-
 /**
  * @method axboot.ajax
  * @param {Object} http
@@ -3279,6 +3278,16 @@ axboot.getMenuParams = function(){
         });
     }
     return menuParams;
+};
+axboot.resetMenuParams = function(){
+    if(parent.window.fnObj.tabView)
+    {
+        parent.window.fnObj.tabView.list.forEach(function (_item, idx) {
+            if (_item.status == "on") {
+                _item.menuParams = {};
+            }
+        });
+    }
 }
 axboot.isDataChanged = function (menuId) {
     if (!axboot.gridList || !axboot.gridList[menuId])
