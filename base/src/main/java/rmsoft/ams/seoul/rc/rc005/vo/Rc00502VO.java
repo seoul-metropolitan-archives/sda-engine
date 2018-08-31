@@ -51,4 +51,10 @@ public class Rc00502VO extends BaseVO {
     private String checksum;
 
     private String targetItemUuid;
+
+    private String filePath;
+
+    private String fileName;
+
+    private String originalFileName;
 }
