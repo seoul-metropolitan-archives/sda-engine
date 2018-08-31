@@ -5,8 +5,10 @@ import io.onsemiro.core.api.response.Responses;
 import io.onsemiro.core.code.ApiStatus;
 import io.onsemiro.core.domain.BaseService;
 import io.onsemiro.core.parameter.RequestParams;
+import io.onsemiro.utils.CommonCodeUtils;
 import io.onsemiro.utils.ModelMapperUtils;
 import io.onsemiro.utils.SessionUtils;
+import io.onsemiro.utils.UUIDUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -204,21 +206,6 @@ public class Rc001Service extends BaseService
         return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");
     }
 
-    @Transactional
-    public ApiResponse createComponent(List<Rc00502VO> param){
-        List<RcComponent> itemList = ModelMapperUtils.mapList(param, RcComponent.class);
-
-        for (RcComponent item : itemList) {
-
-            rcComponentRepository.save(item);
-            //rcItemComponentRepository.save(item);
-
-            RcComponent orgItem = rcComponentRepository.findOne(item.getId());
-        }
-
-        return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");
-    }
-
     /**
      * Item 2 Item
      * @param param
@@ -317,5 +304,67 @@ public class Rc001Service extends BaseService
         rtnMap.put("list", aggList);
 
         return Responses.MapResponse.of(rtnMap);
+    }
+
+    /**
+     * 외부파일 Drag & Drop시 Item 생성 및 Component생성
+     * @param params
+     * @return
+     */
+    @Transactional
+    public ApiResponse creItemAndCreComponent(Rc00501VO params) {
+        RequestParams<Rc00501VO> requestParams = new RequestParams();
+
+        requestParams.put("title", params.getRaTitle());
+        requestParams.put("publishedStatusUuid", CommonCodeUtils.getCode("CD121", "Draft"));
+        requestParams.put("raAggregationUuid", params.getRaAggregationUuid());
+
+        Map resultMap = rc004Service.saveItemDetails(requestParams);
+
+        List<Rc00502VO> compList = params.getRc00502VoList();
+        for (Rc00502VO comp : compList) {
+            comp.setItemUuid(resultMap.get("itemUuid").toString());
+            comp.setPublicationStatusUuid(CommonCodeUtils.getCode("CD121", "Draft"));
+            comp.setAreaUuid(CommonCodeUtils.getCode("CD125", "Attachment"));
+            comp.setTypeUuid(CommonCodeUtils.getCode("CD126", "Draft"));
+            comp.setOpenStatusUuid(CommonCodeUtils.getCode("CD123", "Open"));
+            comp.setElectronYn("Y");
+        }
+
+        // Component 생성 및 Item연결
+        createComponent(compList);
+
+        return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");
+    }
+
+    /**
+     * 외부파일 Drag & Drop 시 Component 생성 및 Item에 연결
+     * @param params
+     * @return
+     */
+    @Transactional
+    public ApiResponse createComponent(List<Rc00502VO> param){
+        List<RcComponent> itemList = ModelMapperUtils.mapList(param, RcComponent.class);
+        int idx = 0;
+
+        for (RcComponent rcComponent : itemList) {
+            String componentUuid = UUIDUtils.getUUID();     //component Uuid생성
+            String itemUuid = param.get(idx).getItemUuid();
+
+            rcComponent.setComponentUuid(componentUuid);
+            rcComponentRepository.save(rcComponent);
+
+            rcComponent = rcComponentRepository.findOne(rcComponent.getId());
+
+            RcItemComponent rcItemComponent = new RcItemComponent();
+            rcItemComponent.setItemComponentUuid(UUIDUtils.getUUID());
+            rcItemComponent.setComponentUuid(rcComponent.getComponentUuid());
+            rcItemComponent.setItemUuid(itemUuid);
+            rcItemComponentRepository.save(rcItemComponent);
+
+            idx++;
+        }
+
+        return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");
     }
 }
