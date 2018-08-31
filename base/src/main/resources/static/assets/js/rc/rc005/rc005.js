@@ -112,6 +112,10 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
     initEvent: function () {
         var _this = this;
 
+        this.target.on("focus", function(event){
+            alert(event.type());
+        });
+
         $("#edit,#move,#updateStatus,#delete").click(function(e){
 
             var parentsObj = parent.window.fnObj;

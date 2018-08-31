@@ -38,7 +38,6 @@ var df00101 =
                     width:140,
                     name: "eventCode",
                     text: "Event Code",
-                    width: 140,
                     dataType: "text",
                     required: false,
                     editable : false,

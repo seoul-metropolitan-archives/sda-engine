@@ -285,9 +285,11 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
             function(row){
                 if(row["statusUuid"] == state) {
                     return true;
-                }else
+                }else{
                     return false;
-            },["eventName", "eventTypeUuid", "reviewDate", "description"]);
+                }
+            },
+            ["eventName", "eventTypeUuid", "reviewDate", "description"], true, ["endYN"]);
     },
     onItemChecked: function (grid, itemIndex) {
         var checkData = this.gridView.getDataProvider().getJsonRow(itemIndex);
