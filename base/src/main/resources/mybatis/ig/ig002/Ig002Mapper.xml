@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="rmsoft.ams.seoul.ig.ig002.dao.Ig002Mapper">
+    <select id="getIgAccessionNo" resultType="Ig00201VO" statementType="PREPARED">
+        <![CDATA[
+            SELECT 'ARR'||'-'||TO_CHAR(sysdate,'yyyymmdd')||'-'||NVL(LPAD(TO_NUMBER(SUBSTR(MAX(ACCESSION_NO),14)) + 1,3,'0'),'001') as accessionNo
+            FROM IG_ACCESSION_RECORD
+            WHERE ACCESSION_NO LIKE '%' || TO_CHAR(sysdate,'yyyymmdd') || '%'
+        ]]>
+    </select>
+    <select id="getIgAccessionRecord" resultType="Ig00201VO" statementType="PREPARED">
+      SELECT
+        ACCESSION_RECORD_UUID as accessionRecordUuid,
+        ACCESSION_NO as accessionNo,
+        TO_CHAR(TO_DATE(ACQUISITION_DATE),'YYYY-MM-DD') as acquisitionDate,
+        ACQUISITION_SOURCE as acquisitionSource,
+        ACQUISITION_TYPE_UUID as acquisitionTypeUuid,
+        DESCRIPTION as description,
+        NOTES as notes,
+        TITLE as title,
+        <include refid="Common.UserName"><property name="userUuid" value="INSERT_UUID"/></include> as insertUuid,
+        INSERT_DATE as insertDate,
+        <include refid="Common.UserName"><property name="userUuid" value="UPDATE_UUID"/></include> as updateUuid,
+        UPDATE_DATE as updateDate
+      FROM IG_ACCESSION_RECORD
+      WHERE ACCESSION_RECORD_UUID = #{accessionRecordUuid}
+    </select>
+    <select id="getChildrenDrnInfoList" resultType="Ig00202VO" statementType="PREPARED">
+        SELECT
+        ACCESSION_RECORD_UUID as accessionRecordUuid,
+        ACCESSION_RECORD_ETC_UUID as accessionRecordEtcUuid,
+        TYPE_UUID as typeUuid,
+        AUTHORITY_UUID as authorityUuid,
+        NAME as name,
+        TEL as tel,
+        ADDRESS as address,
+        <include refid="Common.UserName"><property name="userUuid" value="INSERT_UUID"/></include> as insertUuid,
+        INSERT_DATE as insertDate,
+        <include refid="Common.UserName"><property name="userUuid" value="UPDATE_UUID"/></include> as updateUuid,
+        UPDATE_DATE as updateDate
+        FROM IG_ACCESSION_RECORD_DETAIL
+        WHERE ACCESSION_RECORD_UUID = #{accessionRecordUuid}
+        AND AUTHORITY_UUID = 'drn'
+    </select>
+    <select id="getChildrenMngInfoList" resultType="Ig00202VO" statementType="PREPARED">
+        SELECT
+        ACCESSION_RECORD_UUID as accessionRecordUuid,
+        ACCESSION_RECORD_ETC_UUID as accessionRecordEtcUuid,
+        TYPE_UUID as typeUuid,
+        AUTHORITY_UUID as authorityUuid,
+        NAME as name,
+        TEL as tel,
+        ADDRESS as address,
+        <include refid="Common.UserName"><property name="userUuid" value="INSERT_UUID"/></include> as insertUuid,
+        INSERT_DATE as insertDate,
+        <include refid="Common.UserName"><property name="userUuid" value="UPDATE_UUID"/></include> as updateUuid,
+        UPDATE_DATE as updateDate
+        FROM IG_ACCESSION_RECORD_DETAIL
+        WHERE ACCESSION_RECORD_UUID = #{accessionRecordUuid}
+        AND AUTHORITY_UUID = 'mng'
+    </select>
+</mapper>
