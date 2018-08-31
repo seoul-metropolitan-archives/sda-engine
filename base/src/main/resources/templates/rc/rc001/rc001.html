@@ -111,20 +111,89 @@
                             </ul>
                             <div style="height:100%; width:100%;" class="div_tablerow">
                                 <div style="width:100%; height:100%;" id="realgrid01" class="explorer_grid"></div>
-                                <div class="explorer_list">
+                                <div class="explorer_list" style="overflow-y: hidden">
                                     <div style="display:none" id="template">
                                         <div>
                                             <div class="imageTag"></div>
                                             <div class="titleTag"></div>
                                         </div>
                                     </div>
-                                    <div style="width: 85%; height: 100%; position: absolute; overflow-y:auto;  float: left" id="iconListArea" data-uploaded-box="upload1">
+                                    <div style="width: 80%; height: 100%; position: absolute; overflow-y:auto;  float: left" id="iconListArea" data-uploaded-box="upload1">
 
                                     </div>
 
-                                    <div id="propertyForm" style="width: 15%; height: 100%; background-color: #adadad; position: absolute; bottom: 0px;right: 0px;">
+                                    <div id="itemTabs">
+                                        <ul>
+                                            <li><a href="#itemTabs-1">Component</a></li>
+                                            <li><a href="#itemTabs-2">Properties</a></li>
+                                        </ul>
+                                        <div id="itemTabs-1" style="height: 100%;">
+                                            <div id="componentView" style="width: 100%"></div>
+                                        </div>
+                                        <div id="itemTabs-2" style="height: 100%;">
+                                             <form name="formView02" id="formView02" method="post" onsubmit="return false">
+                                                 <div id="propertiesView" style="width: 100%">
+                                                    <ul style="float:left; width: max-content">
+                                                        <li>Title</li>
+                                                        <li><input type="text" data-ax-path="title" style="width: 100%"></input></li>
+                                                    </ul>
+                                                    <ul>
+                                                        <li>Code</li>
+                                                        <li>
+                                                            <label data-ax-path="itemCode"></label>
+                                                            <input type="hidden" data-ax-path="itemUuid">
+                                                        </li>
+                                                    </ul>
+                                                    <ul>
+                                                        <li>Type</li>
+                                                        <li>
+                                                            <select data-ax-path="typeUuid" style="width: 200px;">
+                                                                <option></option>
+                                                                <option th:attr="defaultYN =  ${item.defaultYN}"
+                                                                        th:each="item : ${typeUuid}"
+                                                                        th:value="${item.codeDetailUUID}"
+                                                                        th:text="${item.codeName}" />
+                                                            </select>
+                                                        </li>
+                                                    </ul>
+                                                    <ul>
+                                                        <li>Publish Status</li>
+                                                        <li>
+                                                            <select data-ax-path="publishedStatusUuid" style="width: 200px; background-color: #fffdd6" >
+                                                                <option th:each="item : ${publishedStatusUuid}"
+                                                                        th:value="${item.codeDetailUUID}"
+                                                                        th:text="${item.codeName}"
+                                                                        th:attr="defaultYN =  ${item.defaultYN}"
+                                                                />
+                                                            </select>
+                                                        </li>
+                                                    </ul>
+                                                    <ul>
+                                                        <li>Description</li>
+                                                        <li>
+                                                            <textarea data-ax-path="description" class="txtar" style="height: 162px"></textarea>
+                                                        </li>
+                                                    </ul>
+                                                    <ul>
+                                                        <li>Notes</li>
+                                                        <li>
+                                                            <textarea data-ax-path="notes" class="txtar" style="height: 162px"></textarea>
+                                                        </li>
+                                                    </ul>
+                                                    <ul>
+                                                        <li>Author</li>
+                                                        <li>
+                                                            <input type="text" data-ax-path="author" class="txtar" style="100%"></input>
+                                                        </li>
+                                                    </ul>
+                                                 </div>
+                                             </form>
+                                        </div>
+                                    </div>
+
+                                    <!--<div id="propertyForm" style="width: 15%; height: 100%; background-color: #adadad; position: absolute; bottom: 0px;right: 0px;">
                                         <div id="componentView" style="width: 100%"></div>
-                                    </div>
+                                    </div>-->
 
                                     <!--<div data-ax5uploader="upload1" style="display: none">
                                         <button data-ax5uploader-button="selector" class="btn btn-primary">Select File (*/*)

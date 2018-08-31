@@ -1771,7 +1771,7 @@ GridWrapper.prototype.setCustomCellStyleRow = function(gridWrapper, grid, row, t
 
 }
 
-GridWrapper.prototype.setCustomCellStyleRows = function(type, conditionFunc, columnNames,doCommit)
+GridWrapper.prototype.setCustomCellStyleRows = function(type, conditionFunc, columnNames,doCommit, reverseColumns)
 {
     var styles = undefined;
     var editable = false;
@@ -1795,7 +1795,7 @@ GridWrapper.prototype.setCustomCellStyleRows = function(type, conditionFunc, col
         columnIndexList.push(this.dataProvider.getFieldIndex(columnNames[i]));
     }
 
-    var applyData = {rows: new Array(), columns: columnNames}
+    var applyData = {rows: new Array(), columns: columnNames, conditionFunc : conditionFunc, reverseColumns : reverseColumns}
 
     for (var i = 0; i < rows.length; i++) {
         var columns = null;
@@ -1806,13 +1806,15 @@ GridWrapper.prototype.setCustomCellStyleRows = function(type, conditionFunc, col
             columns = columnNames;
         }
 
-        if (conditionFunc(rows[i])) {
-            applyData.rows.push(i);
+        applyData.rows.push({index : i, data : rows[i]});
 
+        if (conditionFunc(rows[i])) {
             //for (var j = 0; j < columnIndexList.length; j++) {
                 //this.gridView.setCellStyle(i, columnIndexList[j], type, true);
                 this.gridView.setCellStyles(i, columns, type, true);
             //}
+        } else if(reverseColumns && !conditionFunc(rows[i])) {
+            this.gridView.setCellStyles(i, reverseColumns, type, true);
         } else {
             for (var j = 0; j < columnIndexList.length; j++) {
                 this.gridView.setCellStyle(i, columnIndexList[j], this.defaultStyles[columnIndexList[j]], true);
@@ -1827,20 +1829,42 @@ GridWrapper.prototype.setCustomCellStyleRows = function(type, conditionFunc, col
     {
         var curr = grid.getCurrent();
         var doSetting = false;
+        var columns = null;
+
         for (var i = 0; i < applyData.rows.length; i++) {
-            if (applyData.rows[i] == curr.dataRow) {
+            if (applyData.rows[i]["index"] == curr.dataRow) {
+                if(typeof applyData.columns == "function"){
+                    columns = applyData.columns(applyData.rows[i]["data"]);
+                }else{
+                    columns = applyData.columns;
+                }
+
+                editable = !applyData.conditionFunc(applyData.rows[i]["data"]);
+
                 doSetting = true;
+
+                for (var j = 0; j < columns.length; j++) {
+                    if(_this.getColumnInfo(columns[j])["dataType"] == "check") {
+                        grid.setColumnProperty(columns[j], "renderer", $.extend({},grid.getColumnProperty(columns[j], "renderer"), {editable : editable}));
+                    }else{
+                        grid.setColumnProperty(columns[j], "editable", editable);
+                    }
+                }
+
+                if(applyData.reverseColumns) {
+                    for (var j = 0; j < applyData.reverseColumns.length; j++) {
+                        if (_this.getColumnInfo(applyData.reverseColumns[j])["dataType"] == "check") {
+                            grid.setColumnProperty(applyData.reverseColumns[j], "renderer", $.extend({}, grid.getColumnProperty(applyData.reverseColumns[j], "renderer"), {editable: !editable}));
+                        } else {
+                            grid.setColumnProperty(applyData.reverseColumns[j], "editable", !editable);
+                        }
+                    }
+                }
             }
         }
         //setting을 해야되는 경우 진행
         if (doSetting) {
-            for (var i = 0; i < applyData.columns.length; i++) {
-                if(_this.getColumnInfo(applyData.columns[i])["dataType"] == "check") {
-                    grid.setColumnProperty(applyData.columns[i], "renderer", $.extend({},grid.getColumnProperty(applyData.columns[i], "renderer"), {editable : editable}));
-                }else{
-                    grid.setColumnProperty(applyData.columns[i], "editable", editable);
-                }
-            }
+
             var sel = {startItem: 1, endItem: 1, style: "block"};
             _this.gridView.setSelection(sel);
             _this.gridView.resetCurrent();

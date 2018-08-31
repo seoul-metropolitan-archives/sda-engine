@@ -1,5 +1,9 @@
 var fnObj = {};
 
+$( function() {
+    $( "#itemTabs" ).tabs();
+} );
+
 var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH: function (caller, act, data) {
         axboot.ajax({
@@ -557,24 +561,28 @@ function getContextMenu(ui, nodeType){
             if(nodeType == "item"){
                 menu = [
                     {title: "View Item", cmd: "ITEM_VIEW", uiIcon: "ui-icon-info" },
+                    {title: "----"},
                     {title: "Edit Item", cmd: "ITEM_EDIT", uiIcon: "ui-icon-wrench"},
                     {title: "Delete Item", cmd: "NODE_DEL", uiIcon: "ui-icon-trash"},
                 ];
             }else if(nodeType == "normal"){
                 menu = [
                     {title: "View Aggregation", cmd: "AGG_VIEW", uiIcon: "ui-icon-info" },
+                    {title: "----"},
                     {title: "Edit Aggregation", cmd: "AGG_EDIT", uiIcon: "ui-icon-wrench" },
                 ];
             }else if(nodeType == "temporary"){
                 menu = [
                     {title: "View Aggregation", cmd: "AGG_VIEW", uiIcon: "ui-icon-info" },
                     {title: "Edit Aggregation", cmd: "AGG_EDIT", uiIcon: "ui-icon-wrench" },
+                    {title: "----"},
                     {title: "Delete Aggregation", cmd: "NODE_DEL", uiIcon: "ui-icon-closethick" },
                     {title: "Change Normal Aggregation", cmd: "AGG_NORMAL", uiIcon: "ui-icon-transferthick-e-w" },
                 ];
             }else if(nodeType == "virtual"){
                 menu = [
                     {title: "View Aggregation", cmd: "AGG_VIEW", uiIcon: "ui-icon-info" },
+                    {title: "----"},
                     {title: "Edit Aggregation", cmd: "AGG_EDIT", uiIcon: "ui-icon-wrench" },
                     {title: "Delete Aggregation", cmd: "NODE_DEL", uiIcon: "ui-icon-closethick" },
                 ];
@@ -584,6 +592,7 @@ function getContextMenu(ui, nodeType){
         menu = [
             {title: "Add Item", cmd: "ITEM_ADD", uiIcon: "ui-icon-document" },
             {title: "Add Aggregation", cmd: "AGG_ADD", uiIcon: "ui-icon-folder-collapsed" },
+            {title: "----"},
             {title: "Refresh", cmd: "REFRESH", uiIcon: "ui-icon-arrowrefresh-1-w" },
         ];
     }
@@ -609,7 +618,6 @@ var fnObj = {
             async : false,
             success: function(){}
         });
-
 
         $(function () {
             $(".zeta-menu li").hover(function () {
@@ -955,6 +963,7 @@ var fnObj = {
         fnObj.iconView.initView();
         fnObj.gridView01.initView();
         fnObj.pageView.initView();
+        fnObj.formView.initView();
 
         var API_SERVER = CONTEXT_PATH;
 
@@ -1239,7 +1248,7 @@ fnObj.iconView = axboot.viewExtend({
 
             $("#iconListArea .selected").removeClass("selected");
 
-            if($(event.target).closest("#propertyForm").length == 0){
+            if($(event.target).closest("#itemTabs").length == 0){
                 $("#componentView").empty();
             }
         });
@@ -1283,18 +1292,20 @@ fnObj.iconView = axboot.viewExtend({
                         }),
                         callback: function (res) {
                             if (res.list != "undefined" && res.list != null && res.list.length > 0) {
+                                // Component List
+
                                 var rcList = ax5.util.deepCopy(res.list);
 
-                                var itemIndex = rcList.length - 1;
+                                var item = rcList[rcList.length - 1];
 
-                                if (rcList[itemIndex].rc00502VoList != "undefined" && rcList[itemIndex].rc00502VoList != null && rcList[itemIndex].rc00502VoList.length > 0) {
+                                if (item.rc00502VoList != "undefined" && item.rc00502VoList != null && item.rc00502VoList.length > 0) {
                                     var targetTag = $("#componentView");
                                     var template = $("#template>div");
                                     var cloneTag = undefined;
                                     var imgTag = undefined;
                                     var imgPath = "/assets/images/ams/";
 
-                                    $.each(rcList[itemIndex].rc00502VoList, function(idx, data) {
+                                    $.each(item.rc00502VoList, function(idx, data) {
                                         cloneTag = template.clone();
                                         imgTag = $("<img>");
                                         cloneTag.attr("uuid", data["itemComponentUuid"]);
@@ -1319,6 +1330,20 @@ fnObj.iconView = axboot.viewExtend({
                                         opacity : 0.7
                                     });
                                 }
+
+                                // Properties
+                                fnObj.formView.setFormData("title",item.name);
+                                fnObj.formView.setFormData("itemUuid",item.riItemUuid);
+                                fnObj.formView.setFormData("itemCode",item.riItemCode);
+                                fnObj.formView.setFormData("typeUuid",item.riTypeUuid);
+                                fnObj.formView.setFormData("publishedStatusUuid",item.riPublishedStatusUuid);
+                                fnObj.formView.setFormData("description",item.description1);
+                                fnObj.formView.setFormData("author",item.riAuthor);
+                                fnObj.formView.setFormData("rcAggregationCode",item.aggregationCode);
+                                fnObj.formView.setFormData("openStatusUuid",item.openStatusUuid);
+                                fnObj.formView.setFormData("raTitle",item.raTitle);
+                                fnObj.formView.setFormData("raAggregationUuid",item.raAggregationUuid);
+                                fnObj.formView.setFormData("notes",item.notes1);
                             }
                         }
                     });
@@ -2426,5 +2451,179 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView,{
     getSelectedData : function()
     {
         return this.gridObj.getSelectionData();
+    }
+});
+
+fnObj.formView = axboot.viewExtend(axboot.formView, {
+    getDefaultData: function () {
+        return $.extend({}, axboot.formView.defaultData, {useYn: ""});
+    },
+    initView: function () {
+        this.target = $("#formView02");
+        this.model = new ax5.ui.binder();
+        this.model.setModel(this.getDefaultData(), this.target);
+        this.modelFormatter = new axboot.modelFormatter(this.model); // 모델 포메터 시작
+
+        this.target.find('[data-ax5picker="date"]').ax5picker({
+            direction: "auto",
+            config: {
+                pattern: 'data'
+            },
+            content: {
+                type: 'date',
+                formatter: {
+                    pattern: 'number'
+                }
+            },
+
+
+
+        });
+
+        this.initEvent();
+    },
+    initEvent: function () {
+        var _this = this;
+
+        $("input[data-ax-path='descriptionStartDate']").keyup(function () {
+            var date = this.value;
+            if (date.match(/^\d{4}$/) !== null) {
+                this.value = date + '-';
+            } else if (date.match(/^\d{4}\-\d{2}$/) !== null) {
+                this.value = date + '-';
+            }
+        });
+
+        $("input[data-ax-path='descriptionStartDate']").keypress(function () {
+            if ((event.keyCode < 48) || (event.keyCode > 57)) event.returnValue = false;
+        });
+
+        $("input[data-ax-path='descriptionStartDate']").focusout(function () {
+            if (!checkDate(this.value)) {
+                this.value = "";
+                this.focus = true;
+            }
+        });
+
+        $("input[data-ax-path='descriptionEndDate']").keyup(function () {
+            var date = this.value;
+            if (date.match(/^\d{4}$/) !== null) {
+                this.value = date + '-';
+            } else if (date.match(/^\d{4}\-\d{2}$/) !== null) {
+                this.value = date + '-';
+            }
+        });
+
+        $("input[data-ax-path='descriptionEndDate']").keypress(function () {
+            if ((event.keyCode < 48) || (event.keyCode > 57)) event.returnValue = false;
+        });
+
+        $("input[data-ax-path='descriptionEndDate']").focusout(function () {
+            if (!checkDate(this.value)) {
+                this.value = "";
+                this.focus = true;
+            }
+        });
+
+        $("input[data-ax-path='creationStartDate']").keyup(function () {
+            var date = this.value;
+            if (date.match(/^\d{4}$/) !== null) {
+                this.value = date + '-';
+            } else if (date.match(/^\d{4}\-\d{2}$/) !== null) {
+                this.value = date + '-';
+            }
+        });
+
+        $("input[data-ax-path='creationStartDate']").keypress(function () {
+            if ((event.keyCode < 48) || (event.keyCode > 57)) event.returnValue = false;
+        });
+
+        $("input[data-ax-path='creationStartDate']").focusout(function () {
+            if (!checkDate(this.value)) {
+                this.value = "";
+                this.focus = true;
+            }
+        });
+
+        $("input[data-ax-path='creationEndDate']").keyup(function () {
+            var date = this.value;
+            if (date.match(/^\d{4}$/) !== null) {
+                this.value = date + '-';
+            } else if (date.match(/^\d{4}\-\d{2}$/) !== null) {
+                this.value = date + '-';
+            }
+        });
+
+        $("input[data-ax-path='creationEndDate']").keypress(function () {
+            if ((event.keyCode < 48) || (event.keyCode > 57)) event.returnValue = false;
+        });
+
+        $("input[data-ax-path='creationEndDate']").focusout(function () {
+            if (!checkDate(this.value)) {
+                this.value = "";
+                this.focus = true;
+            }
+        });
+
+
+        $("input[data-ax-path='from']").parents().eq(1).find("a").click(function(){
+            var data = {
+                popupCode : "PU123",
+                preSearch : false,
+                searchData : $("input[data-ax-path='from']").val().trim(),
+            };
+            ACTIONS.dispatch(ACTIONS.SEARCH_FROM_SCH,data);
+        });
+        $("input[data-ax-path='from']").focusout(function(){
+
+            if("" != $(this).val().trim())
+            {
+                var data = {
+                    popupCode : "PU123",
+                };
+                ACTIONS.dispatch(ACTIONS.SEARCH_FROM_SCH,data);
+            }
+        });
+
+        /*$("input[data-ax-path='descriptionStartDate'],input[data-ax-path='sdescriptionEndDate']").key (function(){
+            var date = _this.value;
+            if (date.match(/^\d{4}$/) !== null) {
+                _this.value = date + '-';
+            } else if (date.match(/^\d{4}\-\d{2}$/) !== null) {
+                _this.value = date + '-';
+            }
+        });*/
+
+    },
+    getData: function () {
+        var data = this.modelFormatter.getClearData(this.model.get()); // 모델의 값을 포멧팅 전 값으로 치환.
+        data["typeUuid"] = $("select[data-ax-path='typeUuid']").val();
+        return $.extend({}, data);
+    },
+    setFormData: function (dataPath, value) {
+
+        //this.model.set(dataPath, value);
+    },
+    setData: function (data) {
+
+        if (typeof data === "undefined") data = this.getDefaultData();
+        data = $.extend({}, data);
+
+        this.target.find('[data-ax-path="key"]').attr("readonly", "readonly");
+
+        this.model.setModel(data);
+        this.modelFormatter.formatting(); // 입력된 값을 포메팅 된 값으로 변경
+    },
+    validate: function () {
+        if (rs.error) {
+            alert(rs.error[0].jquery.attr("title") + '을(를) 입력해주세요.');
+            rs.error[0].jquery.focus();
+            return false;
+        }
+        return true;
+    },
+    clear: function () {
+        this.model.setModel(this.getDefaultData());
+        this.target.find('[data-ax-path="key"]').removeAttr("readonly");
     }
 });

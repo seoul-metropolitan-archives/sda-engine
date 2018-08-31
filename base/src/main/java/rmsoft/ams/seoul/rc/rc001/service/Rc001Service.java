@@ -10,14 +10,8 @@ import io.onsemiro.utils.SessionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import rmsoft.ams.seoul.common.domain.RcAggregation;
-import rmsoft.ams.seoul.common.domain.RcItem;
-import rmsoft.ams.seoul.common.domain.RcItemComponent;
-import rmsoft.ams.seoul.common.domain.RcItemCon;
-import rmsoft.ams.seoul.common.repository.RcAggregationRepository;
-import rmsoft.ams.seoul.common.repository.RcItemComponentRepository;
-import rmsoft.ams.seoul.common.repository.RcItemConRepository;
-import rmsoft.ams.seoul.common.repository.RcItemRepository;
+import rmsoft.ams.seoul.common.domain.*;
+import rmsoft.ams.seoul.common.repository.*;
 import rmsoft.ams.seoul.common.vo.ResponseForPaging;
 import rmsoft.ams.seoul.rc.rc001.dao.Rc001Mapper;
 import rmsoft.ams.seoul.rc.rc001.vo.*;
@@ -54,6 +48,9 @@ public class Rc001Service extends BaseService
 
     @Autowired
     private RcItemComponentRepository rcItemComponentRepository;
+
+    @Autowired
+    private RcComponentRepository rcComponentRepository;
 
     @Autowired
     private RcAggregationRepository rcAggregationRepository;
@@ -201,7 +198,22 @@ public class Rc001Service extends BaseService
             orgItem.setInsertDate(orgItem.getInsertDate());
             orgItem.setInsertUuid(orgItem.getInsertUuid());
 
-            repository.save(orgItem);
+            rcItemComponentRepository.save(orgItem);
+        }
+
+        return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");
+    }
+
+    @Transactional
+    public ApiResponse createComponent(List<Rc00502VO> param){
+        List<RcComponent> itemList = ModelMapperUtils.mapList(param, RcComponent.class);
+
+        for (RcComponent item : itemList) {
+
+            rcComponentRepository.save(item);
+            //rcItemComponentRepository.save(item);
+
+            RcComponent orgItem = rcComponentRepository.findOne(item.getId());
         }
 
         return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");

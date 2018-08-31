@@ -27928,3 +27928,34 @@ a.small_open {
 .ztree li span.button.virtual_ico_close{margin-right:2px; background: url(/assets/images/ams/icon/fo_v.png) no-repeat scroll 0 0 transparent; vertical-align:top; *vertical-align:middle}
 .ztree li span.button.virtual_ico_docu{margin-right:2px; background: url(/assets/images/ams/icon/fo_v.png) no-repeat scroll 0 0 transparent; vertical-align:top; *vertical-align:middle}
 .ztree li span.button.item_ico_docu{margin-right:2px; background: url(/assets/images/ams/icon/fi.png) no-repeat scroll 0 0 transparent; vertical-align:top; *vertical-align:middle}
+.ztree li span.button.item_ico_docu{margin-right:2px; background: url(/assets/images/ams/icon/fi.png) no-repeat scroll 0 0 transparent; vertical-align:top; *vertical-align:middle}
+
+
+#itemTabs{
+    height: 100%;
+    width: 20%;
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    right: 0px;
+}
+
+#itemTabs >ul, #itemTabs >ul >li, #itemTabs >ul >li >a{
+    height : 30px;
+    font-weight: bold;
+}
+
+#itemTabs ul li{
+    width : auto;
+}
+
+#propertiesView ul{
+    float: none;
+}
+
+#propertiesView ul li{
+    float: none;
+    display: block;
+    text-align: initial;
+    padding-right: 10px;
+}
