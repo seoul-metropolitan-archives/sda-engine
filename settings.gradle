@@ -1,4 +1,5 @@
 rootProject.name = 'seoul-ams'
 include 'base'
 include 'workflow-modules/process-test'
+include 'workflow-modules/ingest_archive'
 include 'service-modules/long-term-preservation'

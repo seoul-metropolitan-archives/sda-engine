@@ -1,0 +1,9 @@
+jar {
+    baseName = 'ingest_archive'
+    version = '0.0.1'
+}
+
+dependencies {
+    //___ compile ___
+    compile project(':base')
+}
