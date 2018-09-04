@@ -124,70 +124,88 @@
 
                                     <div id="itemTabs">
                                         <ul>
-                                            <li><a href="#itemTabs-1">Component</a></li>
-                                            <li><a href="#itemTabs-2">Properties</a></li>
+                                            <li><a href="#itemTabs-1">Properties</a></li>
+                                            <li><a href="#itemTabs-2">Component</a></li>
                                         </ul>
                                         <div id="itemTabs-1" style="height: 100%;">
-                                            <div id="componentView" style="width: 100%"></div>
+                                            <div id="propertiesView" style="width: 100%">
+                                                <ul>
+                                                    <li>Title</li>
+                                                    <li><textarea data-ax-path="title" class="txtar" style="height: 40px"></textarea></li>
+                                                </ul>
+                                                <ul>
+                                                    <li>Code</li>
+                                                    <li>
+                                                        <label data-ax-path="itemCode"></label>
+                                                        <input type="hidden" data-ax-path="itemUuid">
+                                                        <input type="hidden" data-ax-path="aggregationUuid">
+                                                        <input type="hidden" data-ax-path="descriptionStartDate">
+                                                        <input type="hidden" data-ax-path="descriptionEndDate">
+                                                        <input type="hidden" data-ax-path="isItem">
+                                                    </li>
+                                                </ul>
+                                                <ul>
+                                                    <li>Type</li>
+                                                    <li>
+                                                        <select data-ax-path="itemTypeUuid">
+                                                            <option></option>
+                                                            <option th:each="item : ${itemTypeUuid}"
+                                                                    th:value="${item.codeDetailUUID}"
+                                                                    th:text="${item.codeName}" />
+                                                        </select>
+                                                        <select data-ax-path="aggregationTypeUuid" style="display: none">
+                                                            <option></option>
+                                                            <option th:each="item : ${aggregationTypeUuid}"
+                                                                    th:value="${item.codeDetailUUID}"
+                                                                    th:text="${item.codeName}" />
+                                                        </select>
+                                                    </li>
+                                                </ul>
+                                                <ul>
+                                                    <li>Publish Status</li>
+                                                    <li>
+                                                        <select data-ax-path="publishedStatusUuid" style="background-color: #fffdd6" >
+                                                            <option></option>
+                                                            <option th:each="item : ${publishedStatusUuid}"
+                                                                    th:value="${item.codeDetailUUID}"
+                                                                    th:text="${item.codeName}"/>
+                                                        </select>
+                                                    </li>
+                                                </ul>
+                                                <ul id="aggLevel">
+                                                    <li>Level</li>
+                                                    <li>
+                                                        <select data-ax-path="levelUuid">
+                                                            <option value=""></option>
+                                                            <option th:each="item : ${levelList}"
+                                                                    th:value="${item.levelUuid}"
+                                                                    th:text="${item.levelName}"
+                                                            />
+                                                        </select>
+                                                    </li>
+                                                </ul>
+                                                <ul>
+                                                    <li>Description</li>
+                                                    <li>
+                                                        <textarea data-ax-path="description" class="txtar" style="height: 60px"></textarea>
+                                                    </li>
+                                                </ul>
+                                                <ul>
+                                                    <li>Notes</li>
+                                                    <li>
+                                                        <textarea data-ax-path="notes" class="txtar" style="height: 60px"></textarea>
+                                                    </li>
+                                                </ul>
+                                                <ul>
+                                                    <li>Author</li>
+                                                    <li>
+                                                        <input type="text" data-ax-path="author" class="txtar"></input>
+                                                    </li>
+                                                </ul>
+                                            </div>
                                         </div>
                                         <div id="itemTabs-2" style="height: 100%;">
-                                             <form name="formView02" id="formView02" method="post" onsubmit="return false">
-                                                 <div id="propertiesView" style="width: 100%">
-                                                    <ul style="float:left; width: max-content">
-                                                        <li>Title</li>
-                                                        <li><input type="text" data-ax-path="title" style="width: 100%"></input></li>
-                                                    </ul>
-                                                    <ul>
-                                                        <li>Code</li>
-                                                        <li>
-                                                            <label data-ax-path="itemCode"></label>
-                                                            <input type="hidden" data-ax-path="itemUuid">
-                                                        </li>
-                                                    </ul>
-                                                    <ul>
-                                                        <li>Type</li>
-                                                        <li>
-                                                            <select data-ax-path="typeUuid" style="width: 200px;">
-                                                                <option></option>
-                                                                <option th:attr="defaultYN =  ${item.defaultYN}"
-                                                                        th:each="item : ${typeUuid}"
-                                                                        th:value="${item.codeDetailUUID}"
-                                                                        th:text="${item.codeName}" />
-                                                            </select>
-                                                        </li>
-                                                    </ul>
-                                                    <ul>
-                                                        <li>Publish Status</li>
-                                                        <li>
-                                                            <select data-ax-path="publishedStatusUuid" style="width: 200px; background-color: #fffdd6" >
-                                                                <option th:each="item : ${publishedStatusUuid}"
-                                                                        th:value="${item.codeDetailUUID}"
-                                                                        th:text="${item.codeName}"
-                                                                        th:attr="defaultYN =  ${item.defaultYN}"
-                                                                />
-                                                            </select>
-                                                        </li>
-                                                    </ul>
-                                                    <ul>
-                                                        <li>Description</li>
-                                                        <li>
-                                                            <textarea data-ax-path="description" class="txtar" style="height: 162px"></textarea>
-                                                        </li>
-                                                    </ul>
-                                                    <ul>
-                                                        <li>Notes</li>
-                                                        <li>
-                                                            <textarea data-ax-path="notes" class="txtar" style="height: 162px"></textarea>
-                                                        </li>
-                                                    </ul>
-                                                    <ul>
-                                                        <li>Author</li>
-                                                        <li>
-                                                            <input type="text" data-ax-path="author" class="txtar" style="100%"></input>
-                                                        </li>
-                                                    </ul>
-                                                 </div>
-                                             </form>
+                                            <div id="componentView" style="width: 100%"></div>
                                         </div>
                                     </div>
 
@@ -205,71 +223,71 @@
                                 <div id="templatePage">
                                 <div class="page_no" style="display:none;">
                                     <!--<a href="#" class="selec">1</a>-->
-                                    <a href="#"></a>
-                                </div>
+                                <a href="#"></a>
                             </div>
-                                <div class="page_no" style="">
-                                    <a href="#" title="처음" class="page_start">&lt; &lt;</a>
-                                    <a href="#" title="이전" class="page_prev">&lt;</a>
-                                    <a href="#" title="다음" class="page_next">&gt;</a>
-                                    <a href="#" title="마지막" class="page_end">&gt; &gt;</a>
-                                </div>
-                                <!--
-                                <div style="width:5%; height: 80px; float: left;border-top:1px solid #ddd; text-align: center; line-height: 70px">
-                                    <img src="" id="archiveType" alt="">
-                                </div>
-                                <div style="display:none;" id="templateAggregationInfoArea">
-                                    <div style="width: 100%">
-                                        <span style="width: 48%; " class="info"><b class="title">Title :</b> </span>
+                        </div>
+                        <div class="page_no" style="">
+                            <a href="#" title="처음" class="page_start">&lt; &lt;</a>
+                            <a href="#" title="이전" class="page_prev">&lt;</a>
+                            <a href="#" title="다음" class="page_next">&gt;</a>
+                            <a href="#" title="마지막" class="page_end">&gt; &gt;</a>
+                        </div>
+                        <!--
+                        <div style="width:5%; height: 80px; float: left;border-top:1px solid #ddd; text-align: center; line-height: 70px">
+                            <img src="" id="archiveType" alt="">
+                        </div>
+                        <div style="display:none;" id="templateAggregationInfoArea">
+                            <div style="width: 100%">
+                                <span style="width: 48%; " class="info"><b class="title">Title :</b> </span>
 
-                                        <span style="width: 24%;" class="info"><b class="author">Author :</b> </span>
+                                <span style="width: 24%;" class="info"><b class="author">Author :</b> </span>
 
-                                        <span style="width: 28%;" class="info"><b class="code">Code :</b> </span>
-                                    </div>
-                                    <div style="width: 100%">
-                                        <span style="width: 30%;" class="info"><b class="level">Level Name :</b> </span>
+                                <span style="width: 28%;" class="info"><b class="code">Code :</b> </span>
+                            </div>
+                            <div style="width: 100%">
+                                <span style="width: 30%;" class="info"><b class="level">Level Name :</b> </span>
 
-                                        <span style="width: 18%;" class="info"><b class="type">Type :</b> </span>
+                                <span style="width: 18%;" class="info"><b class="type">Type :</b> </span>
 
-                                        <span style="width: 24%;" class="info"><b class="descDate">Date :</b> </span>
+                                <span style="width: 24%;" class="info"><b class="descDate">Date :</b> </span>
 
-                                        <span style="width: 28%;" class="info"><b class="publishedStatus">Published Status :</b> </span>
-                                    </div>
+                                <span style="width: 28%;" class="info"><b class="publishedStatus">Published Status :</b> </span>
+                            </div>
 
-                                    <div style="width: 100%">
-                                        <span style="width: 48%;" class="info"><b class="description">Description :</b> </span>
-                                        <span style="width: 52%;" class="info"><b class="notes">Notes :</b> </span>
-                                    </div>
-
-
-                                </div>
-                                <div style="width:95%; height: 97px; float: left;border-top:1px solid #ddd" id="aggregationInfoArea">
-                                    <div style="width: 100%">
-                                       <span style="width: 48%; " class="info"><b class="title">Title :</b> </span>
-
-                                       <span style="width: 24%;" class="info"><b class="author">Author :</b> </span>
-
-                                       <span style="width: 28%;" class="info"><b class="code">Code :</b> </span>
-                                   </div>
-                                   <div style="width: 100%">
-                                       <span style="width: 30%;" class="info"><b class="level">Level Name :</b> </span>
-
-                                       <span style="width: 18%;" class="info"><b class="type">Type :</b> </span>
-
-                                       <span style="width: 24%;" class="info"><b class="descDate">Date :</b> </span>
-
-                                       <span style="width: 28%;" class="info"><b class="publishedStatus">Published Status :</b> </span>
-                                   </div>
-
-                                   <div style="width: 100%">
-                                       <span style="width: 48%;" class="info"><b class="description">Description :</b> </span>
-                                       <span style="width: 52%;" class="info"><b class="notes">Notes :</b> </span>
-                                   </div>
+                            <div style="width: 100%">
+                                <span style="width: 48%;" class="info"><b class="description">Description :</b> </span>
+                                <span style="width: 52%;" class="info"><b class="notes">Notes :</b> </span>
+                            </div>
 
 
-                                </div>
+                        </div>
+                        <div style="width:95%; height: 97px; float: left;border-top:1px solid #ddd" id="aggregationInfoArea">
+                            <div style="width: 100%">
+                               <span style="width: 48%; " class="info"><b class="title">Title :</b> </span>
 
-                            -->
+                               <span style="width: 24%;" class="info"><b class="author">Author :</b> </span>
+
+                               <span style="width: 28%;" class="info"><b class="code">Code :</b> </span>
+                           </div>
+                           <div style="width: 100%">
+                               <span style="width: 30%;" class="info"><b class="level">Level Name :</b> </span>
+
+                               <span style="width: 18%;" class="info"><b class="type">Type :</b> </span>
+
+                               <span style="width: 24%;" class="info"><b class="descDate">Date :</b> </span>
+
+                               <span style="width: 28%;" class="info"><b class="publishedStatus">Published Status :</b> </span>
+                           </div>
+
+                           <div style="width: 100%">
+                               <span style="width: 48%;" class="info"><b class="description">Description :</b> </span>
+                               <span style="width: 52%;" class="info"><b class="notes">Notes :</b> </span>
+                           </div>
+
+
+                        </div>
+
+                    -->
 
                             </div>
                         </div>

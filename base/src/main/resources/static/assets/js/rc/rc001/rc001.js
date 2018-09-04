@@ -428,25 +428,6 @@ function contextMenuClick(ui, treeData){
     var item = null;
     var naviStr = "";
 
-    var getMenu = function(searchData)
-    {
-        var menuObj = undefined;
-        axboot.ajax({
-            url: "/rc/rc001/getMenuInfo",
-            data: JSON.stringify({progNm : searchData}),
-            type : "POST",
-            dataType : "JSON",
-            async : false,
-            callback: function (res) {
-                menuObj = res;
-            },
-            options: {
-                onError: axboot.viewError
-            }
-        });
-        return menuObj;
-    }
-
     switch(ui.cmd){
         case "MERGE_ITEM":
             axDialog.confirm({
@@ -638,6 +619,26 @@ function getContextMenu(ui, nodeType){
     return menu;
 }
 
+var getMenu = function(searchData)
+{
+    var menuObj = undefined;
+    axboot.ajax({
+        url: "/rc/rc001/getMenuInfo",
+        data: JSON.stringify({progNm : searchData}),
+        type : "POST",
+        dataType : "JSON",
+        async : false,
+        callback: function (res) {
+            menuObj = res;
+        },
+        options: {
+            onError: axboot.viewError
+        }
+    });
+    return menuObj;
+}
+
+
 function setFormData(item, isItem){
     // Properties
     fnObj.formView.setFormData("title", item.name);
@@ -778,26 +779,6 @@ var fnObj = {
             }
 
             //var selectedData = rightObj.getSelectedData();
-
-            var getMenu = function(searchData)
-            {
-                var menuObj = undefined;
-                axboot.ajax({
-                    url: "/rc/rc001/getMenuInfo",
-                    data: JSON.stringify({progNm : searchData}),
-                    type : "POST",
-                    dataType : "JSON",
-                    async : false,
-                    callback: function (res) {
-                        menuObj = res;
-                    },
-                    options: {
-                        onError: axboot.viewError
-                    }
-                });
-                return menuObj;
-            }
-
 
             if(selectedData.length > 0 && !selectedData[0]["name"])
                 selectedData[0]["name"] = selectedData[0]["title"];
@@ -1340,6 +1321,7 @@ fnObj.iconView = axboot.viewExtend({
 
                     if(selectedData[0]["nodeType"] == "item") {
                         $( "#itemTabs" ).tabs( "enable", 1);
+                        //$( "#itemTabs" ).tabs( "option", "active", 1 );
                         $("[data-ax-path='itemTypeUuid']").show();
                         $("[data-ax-path='aggregationTypeUuid']").hide();
                         $("#aggLevel").hide();
@@ -1449,24 +1431,6 @@ fnObj.iconView = axboot.viewExtend({
             if(uuid == "")
                 imgSrc = $(this).find(".imageTag").find("img").prop("src")
 
-            var getMenu = function(searchData)
-            {
-                var menuObj = undefined;
-                axboot.ajax({
-                    url: "/rc/rc001/getMenuInfo",
-                    data: JSON.stringify({progNm : searchData}),
-                    type : "POST",
-                    dataType : "JSON",
-                    async : false,
-                    callback: function (res) {
-                        menuObj = res;
-                    },
-                    options: {
-                        onError: axboot.viewError
-                    }
-                });
-                return menuObj;
-            }
             if(imgSrc.indexOf("file")>-1){
                 var selectedData = undefined;
 
@@ -1936,7 +1900,12 @@ fnObj.treeView01 = axboot.viewExtend(axboot.commonView, {
                 enable: true,
                 editNameSelectAll: false,
                 showRemoveBtn : false,
-                showRenameBtn : false
+                showRenameBtn : false,
+                drag : {
+                    inner : true,
+                    prev : false,
+                    next : false
+                }
             },
             data : {
                 simpleData: {
@@ -2454,13 +2423,21 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView,{
     {
         fnObj.pageView.resetPage();
         var reqData = fnObj.gridView01.gridObj.getSelectedData();
-        fnObj.naviView.setData({uuid : reqData["uuid"],name : reqData["title"],nodeType : reqData["type"]});
         if(reqData["iconType"] == "file")
         {
-            //차후에 뷰어 붙여야된다
-            console.log("여기여기");
+            var item = getMenu("view item");
+            var parentsObj = parent.window.fnObj;
+            reqData["parentUuid"] = fnObj.naviView.getCurrent()["uuid"];
+
+            item.menuParams = $.extend({},reqData,{type: "create"},
+                {navi : fnObj.naviView.getPathString()},
+                {title : reqData["name"]},{sendData: [reqData]}
+            );
+            parentsObj.tabView.open(item);
             return;
         }
+
+        fnObj.naviView.setData({uuid : reqData["uuid"],name : reqData["title"],nodeType : reqData["type"]});
 
         reqData["nodeType"] = reqData["type"].toLowerCase();
         for(var key in reqData)
