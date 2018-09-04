@@ -221,8 +221,8 @@ public class Cl002Service extends BaseService {
                 }
             if (clClass.isCreated()){
 //                clClass.setClassUuid(UUIDUtils.getUUID()); //UUID 생성
-                //ctUuid = jdbcTemplate.queryForObject("select FC_CL_CLS_CLASS_CODE('" + clClass.getClassificationSchemeUuid() + "') from dual", String.class);
-                //clClass.setClassCode(ctUuid);
+                ctUuid = jdbcTemplate.queryForObject("select FC_CL_CLS_CLASS_CODE('" + clClass.getClassificationSchemeUuid() + "') from dual", String.class);
+                clClass.setClassCode(ctUuid);
 
 
                 //clClass.setClassLevelUuid(CommonCodeUtils.getCodeDetailUuid("CD114", clClass.getClassLevelUuid()));
