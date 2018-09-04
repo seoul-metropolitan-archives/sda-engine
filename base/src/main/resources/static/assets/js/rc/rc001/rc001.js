@@ -145,7 +145,46 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             }
         });
     },
+    ITEM_SAVE: function (caller, act, data){
+        axboot.ajax({
+            type: "GET",
+            url: "/api/v1/rc004/01/saveItemDetails",
+            data: $.extend({},  {pageSize: 1000} , data),
+            callback: function (res) {
+                axToast.push(axboot.getCommonMessage("AA007"));
+                ACTIONS.dispatch(ACTIONS.GET_SUBDATA,fnObj.naviView.getCurrent());
+            },
+            options: {
+                onError: axboot.viewError
+            }
+        });
+    },
+    AGG_SAVE: function (caller, act, data) {
+        var saveData  =
+            {
+                systemMeta : data,
+                contextualMeta : null,
+                childrenAggregationList : null,
+                referenceAggregationList : null,
+                referenceItemList : null
+            }
 
+
+        axboot.ajax({
+            url: "/api/v1/rc/rc002/save",
+            dataType : "JSON",
+            type : "POST",
+            data: JSON.stringify(saveData),
+            callback: function (res) {
+                axToast.push(axboot.getCommonMessage("AA007"));
+                ACTIONS.dispatch(ACTIONS.GET_SUBDATA,fnObj.naviView.getCurrent());
+            },
+            options: {
+                onError: axboot.viewError
+            }
+        });
+
+    },
     dispatch: function (caller, act, data) {
         var result = ACTIONS.exec(caller, act, data);
         if (result != "error") {
@@ -293,7 +332,6 @@ function updateRecord(targetData, parentNode, isTree=false) {
         targetNodeType = targetData.attr("nodeType");
         currentUuid = fnObj.naviView.getCurrent()["uuid"];
     }
-
 
     if(parentNode["nodeType"] == "virtual"){
         axWarningToast.push("Virtual Aggregation으로의 이동은 불가능합니다.");
@@ -598,6 +636,28 @@ function getContextMenu(ui, nodeType){
     }
 
     return menu;
+}
+
+function setFormData(item, isItem){
+    // Properties
+    fnObj.formView.setFormData("title", item.name);
+    fnObj.formView.setFormData("itemUuid", item.riItemUuid);
+    fnObj.formView.setFormData("aggregationUuid", item.aggregationUuid);
+    fnObj.formView.setFormData("itemCode", isItem ? item.riItemCode : item.aggregationCode);
+    fnObj.formView.setFormData("itemTypeUuid", item.riTypeUuid);
+    fnObj.formView.setFormData("aggregationTypeUuid", item.typeUuid);
+    fnObj.formView.setFormData("publishedStatusUuid", isItem ? item.riPublishedStatusUuid : item.publishedStatusUuid);
+    fnObj.formView.setFormData("description", isItem ? item.description1 : item.description);
+    fnObj.formView.setFormData("notes", isItem ? item.notes1 : item.notes);
+    fnObj.formView.setFormData("author", item.riAuthor);
+    fnObj.formView.setFormData("rcAggregationCode", item.aggregationCode);
+    fnObj.formView.setFormData("openStatusUuid", item.openStatusUuid);
+    fnObj.formView.setFormData("raTitle", item.raTitle);
+    fnObj.formView.setFormData("raAggregationUuid", item.raAggregationUuid);
+    fnObj.formView.setFormData("levelUuid", item.levelUuid);
+    fnObj.formView.setFormData("descriptionStartDate", item.descriptionStartDate);
+    fnObj.formView.setFormData("descriptionEndDate", item.descriptionEndDate);
+    fnObj.formView.setFormData("isItem", isItem);
 }
 
 var fnObj = {
@@ -1092,10 +1152,6 @@ fnObj.pageView = axboot.viewExtend({
     initEvent : function(){
         var _this = this;
 
-        $(document).on("click", function(event){
-
-        });
-
         $(".page_no").delegate("a:not(.page_start,.page_prev,.page_next,.page_end)","click",function(){
             _this.page.pageNumber = parseInt($(this).text())-1;
             $(".page_no>a:not(.page_start,.page_prev,.page_next,.page_end)").removeClass("selec");
@@ -1250,6 +1306,7 @@ fnObj.iconView = axboot.viewExtend({
 
             if($(event.target).closest("#itemTabs").length == 0){
                 $("#componentView").empty();
+                fnObj.formView.clear();
             }
         });
 
@@ -1271,8 +1328,6 @@ fnObj.iconView = axboot.viewExtend({
                 $("#iconListArea >div").removeClass("selected");
                 $(this).toggleClass("selected");
 
-                if($(this).attr("nodetype") != "item") return;
-
                 var selectedData= fnObj.iconView.getSelectedData();
 
                 fnObj.iconView.timer = setTimeout(function() {
@@ -1283,70 +1338,86 @@ fnObj.iconView = axboot.viewExtend({
 
                     $("#componentView").empty();
 
-                    axboot.ajax({
-                        type: "GET",
-                        url: "/api/v1/rc005/01/list",
-                        data: $.extend({}, {pageSize: 1000}, {
-                            aggregationUuid: selectedData[0].parentUuid,
-                            itemUuid: selectedData[0].uuid
-                        }),
-                        callback: function (res) {
-                            if (res.list != "undefined" && res.list != null && res.list.length > 0) {
-                                // Component List
+                    if(selectedData[0]["nodeType"] == "item") {
+                        $( "#itemTabs" ).tabs( "enable", 1);
+                        $("[data-ax-path='itemTypeUuid']").show();
+                        $("[data-ax-path='aggregationTypeUuid']").hide();
+                        $("#aggLevel").hide();
 
-                                var rcList = ax5.util.deepCopy(res.list);
+                        axboot.ajax({
+                            type: "GET",
+                            url: "/api/v1/rc005/01/list",
+                            data: $.extend({}, {pageSize: 1000}, {
+                                aggregationUuid: selectedData[0].parentUuid,
+                                itemUuid: selectedData[0].uuid
+                            }),
+                            callback: function (res) {
+                                if (res.list != "undefined" && res.list != null && res.list.length > 0) {
+                                    // Component List
 
-                                var item = rcList[rcList.length - 1];
+                                    var rcList = ax5.util.deepCopy(res.list);
 
-                                if (item.rc00502VoList != "undefined" && item.rc00502VoList != null && item.rc00502VoList.length > 0) {
-                                    var targetTag = $("#componentView");
-                                    var template = $("#template>div");
-                                    var cloneTag = undefined;
-                                    var imgTag = undefined;
-                                    var imgPath = "/assets/images/ams/";
+                                    var item = rcList[rcList.length - 1];
 
-                                    $.each(item.rc00502VoList, function(idx, data) {
-                                        cloneTag = template.clone();
-                                        imgTag = $("<img>");
-                                        cloneTag.attr("uuid", data["itemComponentUuid"]);
-                                        cloneTag.attr("componentUuid", data["componentUuid"]);
-                                        cloneTag.attr("areaUuid", data["areaUuid"]);
-                                        cloneTag.attr("label", data["title"]);
-                                        cloneTag.attr("type", "comp");
+                                    if (item.rc00502VoList != "undefined" && item.rc00502VoList != null && item.rc00502VoList.length > 0) {
+                                        var targetTag = $("#componentView");
+                                        var template = $("#template>div");
+                                        var cloneTag = undefined;
+                                        var imgTag = undefined;
+                                        var imgPath = "/assets/images/ams/";
 
-                                        cloneTag.addClass("explorer_file");
+                                        $.each(item.rc00502VoList, function (idx, data) {
+                                            cloneTag = template.clone();
+                                            imgTag = $("<img>");
+                                            cloneTag.attr("uuid", data["itemComponentUuid"]);
+                                            cloneTag.attr("componentUuid", data["componentUuid"]);
+                                            cloneTag.attr("areaUuid", data["areaUuid"]);
+                                            cloneTag.attr("label", data["title"]);
+                                            cloneTag.attr("type", "comp");
 
-                                        imgTag.prop("src", imgPath + "explorer_file_img.png").prop("alt", "folder");
-                                        cloneTag.find(".imageTag").append(imgTag);
+                                            cloneTag.addClass("explorer_file");
 
-                                        cloneTag.find(".titleTag").append($("<div>").attr("class", data["title"].length > 15 ? "explorer_4line" : "explorer_text").text(data["title"]));
-                                        targetTag.append(cloneTag);
-                                        delete cloneTag;
-                                        delete imgTag;
-                                    });
+                                            imgTag.prop("src", imgPath + "explorer_file_img.png").prop("alt", "folder");
+                                            cloneTag.find(".imageTag").append(imgTag);
 
-                                    $('#componentView >div').draggable({
-                                        helper : "clone",
-                                        opacity : 0.7
-                                    });
+                                            cloneTag.find(".titleTag").append($("<div>").attr("class", data["title"].length > 15 ? "explorer_4line" : "explorer_text").text(data["title"]));
+                                            targetTag.append(cloneTag);
+                                            delete cloneTag;
+                                            delete imgTag;
+                                        });
+
+                                        $('#componentView >div').draggable({
+                                            helper: "clone",
+                                            opacity: 0.7
+                                        });
+                                    }
+
+                                    setFormData(item, true);
                                 }
-
-                                // Properties
-                                fnObj.formView.setFormData("title",item.name);
-                                fnObj.formView.setFormData("itemUuid",item.riItemUuid);
-                                fnObj.formView.setFormData("itemCode",item.riItemCode);
-                                fnObj.formView.setFormData("typeUuid",item.riTypeUuid);
-                                fnObj.formView.setFormData("publishedStatusUuid",item.riPublishedStatusUuid);
-                                fnObj.formView.setFormData("description",item.description1);
-                                fnObj.formView.setFormData("author",item.riAuthor);
-                                fnObj.formView.setFormData("rcAggregationCode",item.aggregationCode);
-                                fnObj.formView.setFormData("openStatusUuid",item.openStatusUuid);
-                                fnObj.formView.setFormData("raTitle",item.raTitle);
-                                fnObj.formView.setFormData("raAggregationUuid",item.raAggregationUuid);
-                                fnObj.formView.setFormData("notes",item.notes1);
                             }
-                        }
-                    });
+                        });
+                    }else{
+                        $( "#itemTabs" ).tabs( "option", "disabled", [ 1 ]);
+                        $( "#itemTabs" ).tabs( "option", "active", 0 );
+                        $("[data-ax-path='itemTypeUuid']").hide();
+                        $("[data-ax-path='aggregationTypeUuid']").show();
+                        $("#aggLevel").show();
+
+                        axboot.ajax({
+                            type: "GET",
+                            url: "/api/v1/rc003/01/list",
+                            data: $.extend({}, {pageSize: 1000}, {aggregationUuid :selectedData[0].uuid}),
+                            callback: function (res) {
+                                if(res.list != "undefined" && res.list != null && res.list.length > 0){
+                                    rcList = ax5.util.deepCopy(res.list);
+                                    setFormData(rcList[0], false);
+                                }
+                            },
+                            options: {
+                                onError: axboot.viewError
+                            }
+                        });
+                    }
                 }, fnObj.iconView.delay);
             }
 
@@ -2459,7 +2530,7 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
         return $.extend({}, axboot.formView.defaultData, {useYn: ""});
     },
     initView: function () {
-        this.target = $("#formView02");
+        this.target = $("#formView01");
         this.model = new ax5.ui.binder();
         this.model.setModel(this.getDefaultData(), this.target);
         this.modelFormatter = new axboot.modelFormatter(this.model); // 모델 포메터 시작
@@ -2484,6 +2555,36 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
     },
     initEvent: function () {
         var _this = this;
+
+        $("#formView01 #propertiesView input, #formView01 #propertiesView textarea").on("focusout", function(){
+            if(fnObj.formView.getData()["itemUuid"] == "" || fnObj.formView.getData()["aggregationUuid"] == "" ) return;
+
+            var data = fnObj.formView.getData();
+            if(fnObj.formView.getData()["isItem"]) {
+                data["raAggregationUuid"] = fnObj.naviView.getCurrent()["uuid"];
+                data["typeUuid"] = fnObj.formView.getData()["itemTypeUuid"];
+                ACTIONS.dispatch(ACTIONS.ITEM_SAVE, data);
+            }else {
+                data["parentsAggregationUuid"] = fnObj.naviView.getCurrent()["uuid"];
+                data["typeUuid"] = fnObj.formView.getData()["aggregationTypeUuid"];
+                ACTIONS.dispatch(ACTIONS.AGG_SAVE, data);
+            }
+        });
+
+        $("#formView01 #propertiesView select").on("change", function(){
+            if(fnObj.formView.getData()["itemUuid"] == "" || fnObj.formView.getData()["aggregationUuid"] == "" ) return;
+
+            var data = fnObj.formView.getData();
+            if(fnObj.formView.getData()["isItem"]) {
+                data["raAggregationUuid"] = fnObj.naviView.getCurrent()["uuid"];
+                data["typeUuid"] = fnObj.formView.getData()["itemTypeUuid"];
+                ACTIONS.dispatch(ACTIONS.ITEM_SAVE, data);
+            }else {
+                data["parentsAggregationUuid"] = fnObj.naviView.getCurrent()["uuid"];
+                data["typeUuid"] = fnObj.formView.getData()["aggregationTypeUuid"];
+                ACTIONS.dispatch(ACTIONS.AGG_SAVE, data);
+            }
+        });
 
         $("input[data-ax-path='descriptionStartDate']").keyup(function () {
             var date = this.value;
@@ -2601,8 +2702,7 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
         return $.extend({}, data);
     },
     setFormData: function (dataPath, value) {
-
-        //this.model.set(dataPath, value);
+        this.model.set(dataPath, value);
     },
     setData: function (data) {
 

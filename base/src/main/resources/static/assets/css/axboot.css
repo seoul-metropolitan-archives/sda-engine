@@ -27953,9 +27953,26 @@ a.small_open {
     float: none;
 }
 
-#propertiesView ul li{
+#propertiesView ul >li{
     float: none;
     display: block;
     text-align: initial;
     padding-right: 10px;
+}
+
+#propertiesView ul >li{
+    padding-bottom: 5px;
+}
+
+#propertiesView ul >li:first-child{
+    font-weight: bold;
+}
+
+#propertiesView ul >li:last-child{
+    padding-bottom: 20px;
+}
+
+#propertiesView ul >li >*{
+    width: 100%;
+    padding: 0px;
 }

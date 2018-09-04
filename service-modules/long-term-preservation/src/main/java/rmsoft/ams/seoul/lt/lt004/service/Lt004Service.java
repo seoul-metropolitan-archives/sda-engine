@@ -66,7 +66,7 @@ public class Lt004Service extends BaseService {
                 lt00401VO.setToolUuid(saveItem.getToolUuid());
 
                 if (saveItem.isCreated()) {
-                    // LT_PATHWAY index 무결성 검사 1,2
+                    // LT_PATHWAY index Data integrity Check 1,2
                     if (mapper.checkIndex01(lt00401VO) > 0 || mapper.checkIndex02(lt00401VO) > 0) {
                         return ApiResponse.error(ApiStatus.SYSTEM_ERROR, CommonMessageUtils.getMessage("AA003"));
                     }
@@ -74,14 +74,14 @@ public class Lt004Service extends BaseService {
                 if (saveItem.isModified()) {
                     orgItem = repository.findOne(saveItem.getId());
 
-                    // LT_PATHWAY index 무결성 검사 1
+                    // LT_PATHWAY index Data integrity Check 1
                     if (!saveItem.getPathwayName().equals(orgItem.getPathwayName())) {
                         if (mapper.checkIndex01(lt00401VO) > 0) {
                             return ApiResponse.error(ApiStatus.SYSTEM_ERROR, CommonMessageUtils.getMessage("AA003"));
                         }
                     }
 
-                    // LT_PATHWAY index 무결성 검사 2
+                    // LT_PATHWAY index Data integrity Check 2
                     if( !saveItem.getSourceFileFormatUuid().equals(orgItem.getSourceFileFormatUuid())
                             || !saveItem.getTargetFileFormatUuid().equals(orgItem.getTargetFileFormatUuid())
                             || !saveItem.getToolUuid().equals(orgItem.getToolUuid()) ){

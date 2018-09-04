@@ -73,7 +73,9 @@ public class Rc002Service extends BaseService
         List<RcRecordReference> referenceItem = null;
 
         rcAggregation = ModelMapperUtils.map(data.getSystemMeta(),RcAggregation.class);
-        rcAggregationCon = ModelMapperUtils.map(data.getContextualMeta(),RcAggregationCon.class);
+
+        if(data.getContextualMeta() != null)
+            rcAggregationCon = ModelMapperUtils.map(data.getContextualMeta(),RcAggregationCon.class);
 
         childrenAggregation = ModelMapperUtils.mapList(data.getChildrenAggregationList(),RcAggregation.class);
         referenceAggregation = ModelMapperUtils.mapList(data.getReferenceAggregationList(),RcRecordReference.class);
@@ -155,19 +157,19 @@ public class Rc002Service extends BaseService
         }
         else
         {
-            rcAggregationCon.setAggregationUuid(uuid);
-            RcAggregationCon beforeCon = rcAggregationConRepository.findOne(rcAggregationCon.getId());
-            if(null != beforeCon)
-            {
-                rcAggregationCon.setInsertDate(beforeCon.getInsertDate());
-                rcAggregationCon.setInsertUuid(beforeCon.getInsertUuid());
+            if(rcAggregationCon != null) {
+                rcAggregationCon.setAggregationUuid(uuid);
+                RcAggregationCon beforeCon = rcAggregationConRepository.findOne(rcAggregationCon.getId());
+                if (null != beforeCon) {
+                    rcAggregationCon.setInsertDate(beforeCon.getInsertDate());
+                    rcAggregationCon.setInsertUuid(beforeCon.getInsertUuid());
 
-                rcAggregationCon.setUpdateDate(new Timestamp(System.currentTimeMillis()));
-                rcAggregationCon.setUpdateUuid(SessionUtils.getCurrentLoginUserUuid());
+                    rcAggregationCon.setUpdateDate(new Timestamp(System.currentTimeMillis()));
+                    rcAggregationCon.setUpdateUuid(SessionUtils.getCurrentLoginUserUuid());
 
-                rcAggregationConRepository.save(rcAggregationCon);
+                    rcAggregationConRepository.save(rcAggregationCon);
+                }
             }
-
         }
 
         return ApiResponse.of(ApiStatus.SUCCESS,"SUCCESS");
