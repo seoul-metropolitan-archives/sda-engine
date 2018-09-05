@@ -334,23 +334,23 @@ function updateRecord(targetData, parentNode, isTree=false) {
     }
 
     if(parentNode["nodeType"] == "virtual"){
-        axWarningToast.push("Virtual Aggregation으로의 이동은 불가능합니다.");
+        axDialog.alert("Virtual Aggregation으로의 이동은 불가능합니다.");
         return false;
     }else if(targetNodeType == "virtual"){
-        axWarningToast.push("Virtual Aggregation은 이동이 불가능합니다.");
+        axDialog.alert("Virtual Aggregation은 이동이 불가능합니다.");
         return false;
     }
 
     if(targetNodeType == "item"){
         if(fnObj.naviView.getCurrent()["nodeType"] == "virtual"){
-            axWarningToast.push("Virtual Aggregation의 Item은 \n이동이 불가능합니다.");
+            axDialog.alert("Virtual Aggregation의 Item은 \n이동이 불가능합니다.");
         }
 
-        if(parentNode["nodeType"] == "normal") {
-            return false;
-        }else if(parentNode["nodeType"] == "normal" && fnObj.naviView.getCurrent()["nodeType"] == "temporary"){
+        if(parentNode["nodeType"] == "normal" && fnObj.naviView.getCurrent()["nodeType"] == "temp"){
+            axDialog.alert("Aggregation Type이 다른 \nItem의 이동은 불가능합니다.");
             return false;
         }else if(parentNode["nodeType"] == "temporary" && fnObj.naviView.getCurrent()["nodeType"] == "normal"){
+            axDialog.alert("Aggregation Type이 다른 \nItem의 이동은 불가능합니다.");
             return false;
         }
     }else if(parentNode["nodeType"] == "normal" && targetNodeType == "temporary") {
@@ -361,7 +361,7 @@ function updateRecord(targetData, parentNode, isTree=false) {
 
     if(parentNode["nodeType"] == "normal"){
         if(targetNodeType == "temporary" || targetNodeType == "virtaul" ){
-            axWarningToast.push("Aggregation Type이 동일해야합니다.");
+            axDialog.alert("Aggregation Type이 동일해야합니다.");
             return false;
         }else if(targetNodeType == "item"){
 
@@ -373,10 +373,10 @@ function updateRecord(targetData, parentNode, isTree=false) {
     var selectedData = fnObj.iconView.getSelectedData();
 
     if (targetUuid == parentUuid) {
-        axWarningToast.push("Aggregation 코드가 같습니다.");
+        axDialog.alert("Aggregation 코드가 같습니다.");
         return false;
     } else if (parentUuid == currentUuid) {
-        axWarningToast.push("동일한 Aggregation으로 이동할 수 없습니다.");
+        axDialog.alert("동일한 Aggregation으로 이동할 수 없습니다.");
         return false;
     }
 
@@ -445,7 +445,7 @@ function contextMenuClick(ui, treeData){
             selectedData = fnObj.naviView.getCurrent();
 
             if(selectedData["uuid"] == ""){
-                axWarningToast.push("Root위치에는 Item생성이 불가능합니다.");
+                axDialog.alert("Root위치에는 Item생성이 불가능합니다.");
                 return;
             }
 
@@ -480,7 +480,7 @@ function contextMenuClick(ui, treeData){
             selectedData = fnObj.naviView.getCurrent();
 
             if(selectedData["uuid"] == ""){
-                axWarningToast.push("Root위치에는 Item생성이 불가능합니다.");
+                axDialog.alert("Root위치에는 Item생성이 불가능합니다.");
                 return;
             }
 
@@ -1293,7 +1293,6 @@ fnObj.iconView = axboot.viewExtend({
 
         $(window).resize(function(event){
 
-            console.log($("div.explorer_list").width());
             if($("#iconListArea").width() != "100%")
                 $("#iconListArea").width($("div.explorer_list").width() - $("#itemTabs").width()-7);
         });
@@ -1689,7 +1688,7 @@ fnObj.iconView = axboot.viewExtend({
                 // 멀티 선택시 Aggregation 포함되었을 때
                 for(var i=0; selectedData.length>i; i++){
                     if(selectedData[i]["nodeType"] != "item"){
-                        axWarningToast.push("Aggregation은 포함될 수 없습니다.");
+                        axDialog.alert("Aggregation은 포함될 수 없습니다.");
                         return;
                     }
                 }
@@ -2099,7 +2098,7 @@ fnObj.treeView01 = axboot.viewExtend(axboot.commonView, {
                         if(parentNode == null) return;
 
                         if(checkChildNodes(currentNode.children, parentNode["uuid"])){
-                            axWarningToast.push("하위 Aggregation으로 이동이 불가능합니다.");
+                            axDialog.alert("하위 Aggregation으로 이동이 불가능합니다.");
                             return;
                         }
 
