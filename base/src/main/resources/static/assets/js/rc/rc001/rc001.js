@@ -347,15 +347,17 @@ function updateRecord(targetData, parentNode, isTree=false) {
         }
 
         if(parentNode["nodeType"] == "normal" && fnObj.naviView.getCurrent()["nodeType"] == "temp"){
-            axDialog.alert("Aggregation Type이 다른 \nItem의 이동은 불가능합니다.");
+            axDialog.alert("Aggregation Type이 다른 \nItem 이동은 불가능합니다.");
             return false;
         }else if(parentNode["nodeType"] == "temporary" && fnObj.naviView.getCurrent()["nodeType"] == "normal"){
-            axDialog.alert("Aggregation Type이 다른 \nItem의 이동은 불가능합니다.");
+            axDialog.alert("Aggregation Type이 다른 \nItem 이동은 불가능합니다.");
             return false;
         }
     }else if(parentNode["nodeType"] == "normal" && targetNodeType == "temporary") {
+        axDialog.alert("Aggregation Type이 다른 \nAggregation 이동은 불가능합니다.");
         return false;
     }else if(parentNode["nodeType"] == "temporary" && targetNodeType == "normal") {
+        axDialog.alert("Aggregation Type이 다른 \nAggregation 이동은 불가능합니다.");
         return false;
     }
 
