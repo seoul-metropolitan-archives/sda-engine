@@ -1,0 +1,60 @@
+Manifest-Version: 1.0
+Class-Path: jul-to-slf4j-1.7.22.jar mybatis-spring-1.3.0.jar querydsl-
+ jpa-4.1.4.jar bcprov-jdk15on-1.55.jar spring-boot-autoconfigure-1.5.1
+ .RELEASE.jar tomcat-embed-el-8.5.11.jar bridge-method-annotation-1.13
+ .jar codegen-0.6.8.jar commons-dbutils-1.6.jar spring-boot-actuator-1
+ .5.1.RELEASE.jar spring-security-config-4.2.1.RELEASE.jar poi-ooxml-3
+ .14.jar mysema-commons-lang-0.2.4.jar ibatis-sqlmap-2.3.4.726.jar com
+ mons-io-2.5.jar junit-4.12.jar spring-aop-4.3.6.RELEASE.jar tomcat-em
+ bed-websocket-8.5.11.jar antlr-2.7.7.jar ecj-4.3.1.jar dom4j-1.6.1.ja
+ r tomcat-embed-core-8.5.11.jar egovframework.rte.psl.dataaccess-3.6.0
+ .jar querydsl-core-4.1.4.jar querydsl-apt-4.1.4.jar jcl-over-slf4j-1.
+ 7.22.jar annotations-2.0.1.jar hibernate-validator-5.3.4.Final.jar bc
+ pkix-jdk15on-1.55.jar jdo-api-3.0.1.jar groovy-2.4.7.jar mybatis-3.4.
+ 0.jar spring-data-jpa-1.11.0.RELEASE.jar spring-boot-starter-1.5.1.RE
+ LEASE.jar snakeyaml-1.17.jar jsch-0.1.54.jar jxls-core-1.0.6.jar conc
+ urrentlinkedhashmap-lru-1.4.2.jar commons-digester-2.1.jar logback-cl
+ assic-1.1.9.jar spring-boot-starter-tomcat-1.5.1.RELEASE.jar spring-c
+ ore-4.3.6.RELEASE.jar mariadb-java-client-1.5.7.jar spring-webmvc-4.3
+ .6.RELEASE.jar gson-2.8.0.jar slf4j-api-1.7.22.jar hibernate-core-5.0
+ .11.Final.jar commons-pool2-2.4.2.jar jackson-core-2.8.6.jar thymelea
+ f-layout-dialect-2.1.2.jar spring-expression-4.3.6.RELEASE.jar json-2
+ 0171018.jar javax.transaction-api-1.2.jar slack-webhook-1.2.1.jar spr
+ ing-boot-starter-actuator-1.5.14.RELEASE.jar hibernate-entitymanager-
+ 5.0.11.Final.jar jboss-logging-3.3.0.Final.jar thymeleaf-expression-p
+ rocessor-1.1.2.jar onsemiro-core-rm-0.6.1.jar spring-context-4.3.6.RE
+ LEASE.jar querydsl-codegen-4.1.4.jar reflections-0.9.9.jar poi-ooxml-
+ schemas-3.14.jar spring-beans-4.3.6.RELEASE.jar spring-cloud-commons-
+ 1.2.4.RELEASE.jar spring-aspects-4.3.6.RELEASE.jar javassist-3.21.0-G
+ A.jar validation-api-1.1.0.Final.jar hibernate-commons-annotations-5.
+ 0.1.Final.jar spring-security-rsa-1.0.3.RELEASE.jar lombok-1.16.4.jar
+  jackson-datatype-jsr310-2.8.5.jar ojdbc6-11.2.0.3.jar spring-boot-1.
+ 5.1.RELEASE.jar jackson-annotations-2.8.0.jar spring-boot-starter-dat
+ a-jpa-1.5.1.RELEASE.jar jxls-2.3.0.jar dbunit-2.5.3.jar java-sizeof-0
+ .0.4.jar commons-beanutils-1.9.3.jar orika-core-1.5.0.jar spring-web-
+ 4.3.6.RELEASE.jar commons-dbcp2-2.1.1.jar jsr305-1.3.9.jar jackson-da
+ tabind-2.8.6.jar log4j-over-slf4j-1.7.22.jar janino-2.7.8.jar xmlbean
+ s-2.6.0.jar tomcat-jdbc-8.5.11.jar hamcrest-core-1.3.jar modelmapper-
+ 0.7.7.jar thymeleaf-extras-springsecurity4-3.0.1.RELEASE.jar spring-b
+ oot-starter-aop-1.5.1.RELEASE.jar spring-security-crypto-4.2.1.RELEAS
+ E.jar logback-core-1.1.9.jar spring-orm-4.3.6.RELEASE.jar attoparser-
+ 2.0.2.RELEASE.jar spring-boot-starter-logging-1.5.1.RELEASE.jar sprin
+ g-data-commons-1.13.0.RELEASE.jar commons-codec-1.10.jar spring-cloud
+ -context-1.2.4.RELEASE.jar aspectjweaver-1.8.9.jar spring-boot-starte
+ r-jdbc-1.5.1.RELEASE.jar commons-jexl-2.1.1.jar paranamer-2.8.jar thy
+ meleaf-3.0.3.RELEASE.jar hibernate-jpa-2.1-api-1.0.0.Final.jar common
+ s-exec-1.3.jar tomcat-juli-8.5.11.jar unbescape-1.1.4.RELEASE.jar jan
+ dex-2.0.0.Final.jar thumbnailator-0.4.8.jar stax-api-1.0.1.jar spring
+ -boot-starter-security-1.5.1.RELEASE.jar thymeleaf-spring4-3.0.3.RELE
+ ASE.jar commons-lang3-3.5.jar curvesapi-1.03.jar swagger-annotations-
+ 1.5.12.jar mybatis-spring-boot-autoconfigure-1.1.1.jar spring-tx-4.3.
+ 6.RELEASE.jar mybatis-spring-boot-starter-1.1.1.jar spring-jdbc-4.3.6
+ .RELEASE.jar UserAgentUtils-1.20.jar commons-collections-3.2.2.jar sp
+ ring-security-web-4.2.1.RELEASE.jar ognl-3.1.12.jar poi-3.14.jar spri
+ ng-security-core-4.2.1.RELEASE.jar commons-compiler-2.7.8.jar spring-
+ cloud-starter-1.2.4.RELEASE.jar jta-1.1.jar jackson-datatype-hibernat
+ e5-2.8.5.jar javax.inject-1.jar spring-boot-starter-thymeleaf-1.5.1.R
+ ELEASE.jar spring-boot-starter-web-1.5.1.RELEASE.jar guava-21.0.jar c
+ ommons-logging-1.2.jar classmate-1.3.3.jar
+Main-Class: rmsoft.ams.seoul.ftp.FtpTest
+

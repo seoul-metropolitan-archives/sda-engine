@@ -84,6 +84,25 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             }
         });*/
     },
+    INGEST_ARCHIVE: function (caller, act, data) {
+
+        var uploadFiles = UPLOAD.uploadedFiles;
+
+        axboot
+            .call({
+                type: "PUT",
+                url: "/api/v1/wf999/01/save",
+                data: JSON.stringify(uploadFiles),
+                callback: function (res) {
+                    axToast.push(axboot.getCommonMessage("AA007"));
+                    //fnObj.gridView01.gridObj.commit();
+                }
+            })
+            .done(function () {
+                //ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+                //axToast.push(axboot.getCommonMessage("AA007"));
+            });
+    },
     CLOSE_TAB: function () {
         return ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
     },
@@ -193,10 +212,11 @@ fnObj.pageStart = function () {
                 });
             },
             onuploaded: function () {
-                console.log('onuploaded');
+                //axToast.push("File Upload Completed : onuploaded");
             },
             onuploadComplete: function () {
-                console.log('onuploadComplete');
+                axToast.push("File Upload Completed : onuploadComplete");
+                ACTIONS.dispatch(ACTIONS.INGEST_ARCHIVE);
             }
         });
 };

@@ -1,4 +1,9 @@
-package rmsoft.ams.seoul.zip;
+/*
+ * Copyright (c) 2018. RMSoft Co.,Ltd. All rights reserved
+ *
+ */
+
+package rmsoft.ams.seoul.utils;
 
 import lombok.extern.log4j.Log4j;
 import net.lingala.zip4j.core.ZipFile;
@@ -7,16 +12,13 @@ import net.lingala.zip4j.util.Zip4jConstants;
 
 import java.io.File;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 
 /**
- * The type Zip file test.
+ * The type Archive utils.
  */
 @Log4j
-public class ZipFileTest {
-
-
+public class ArchiveUtils {
     /**
      * Zip.
      *
@@ -24,7 +26,7 @@ public class ZipFileTest {
      * @param destinationFilePath the destination file path
      * @param password            the password
      */
-    public static void zip(String targetPath, String destinationFilePath, String password) {
+    public static void archive(String targetPath, String destinationFilePath, String password) {
         try {
             ZipParameters parameters = new ZipParameters();
             parameters.setCompressionMethod(Zip4jConstants.COMP_DEFLATE);
@@ -58,7 +60,7 @@ public class ZipFileTest {
      * @param destinationFolderPath the destination folder path
      * @param password              the password
      */
-    public static void unzip(String targetZipFilePath, String destinationFolderPath, String password) {
+    public static void extract(String targetZipFilePath, String destinationFolderPath, String password) {
         try {
             ZipFile zipFile = new ZipFile(targetZipFilePath);
             if (zipFile.isEncrypted()) {
@@ -82,8 +84,8 @@ public class ZipFileTest {
                 //File tfile = new File(path.toUri());
                 if (Files.isDirectory(path)) {
                     log.info("Aggregation: " + path.getFileName());
-                    ZipFileTest.getEntrySet(path.toString());
-                }else{
+                    ArchiveUtils.getEntrySet(path.toString());
+                } else {
                     log.info("Item and Component:" + path.getFileName());
                 }
 
@@ -104,22 +106,4 @@ public class ZipFileTest {
             e.printStackTrace();
         }
     }
-
-    /**
-     * The entry point of application.
-     *
-     * @param args the input arguments
-     */
-    /**/ /// for test only
-    public static void main(String[] args) {
-
-        String targetPath = "D:\\02.DreamAntDev\\git-workspaces\\java\\seoul-ams\\archive_temp";
-        String zipFilePath = "D:\\ImageMap.zip";
-        String unzippedFolderPath = "D:\\02.DreamAntDev\\git-workspaces\\java\\seoul-ams\\archive_temp\\ImageMap.zip";
-        String password = "your_password"; // keep it EMPTY<""> for applying no password protection
-
-        //ZipFileTest.zip(targetPath, zipFilePath, password);
-        ZipFileTest.unzip(zipFilePath, unzippedFolderPath, password);
-        ZipFileTest.getEntrySet(unzippedFolderPath);
-    }/**/
 }
