@@ -119,7 +119,7 @@ onsemiro:
     database.enabled: true
     admin-url:
   upload.repository:
-    img: /Users/younghyunshin
+    img: D:\seoul-ams-repo\upload
   #project base path
   project-base-path:
 
@@ -137,8 +137,8 @@ onsemiro:
     username: ams
     password: ams
   # File Upload
-  upload.repository:
-    img: /Users/jspark226/workspace/nas
+  #upload.repository:
+    #img: /Users/jspark226/workspace/nas
   #개발
   #data-source:
   #url: jdbc:oracle:thin:@//rmhost.iptime.org:1521/amsdb

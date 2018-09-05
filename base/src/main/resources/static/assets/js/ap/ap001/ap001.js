@@ -119,11 +119,21 @@ fnObj.pageStart = function () {
                 fileName: "file"
             },
             multiple: true,
-            manualUpload: false,
+            manualUpload: true,
             progressBox: true,
             progressBoxDirection: "left",
             dropZone: {
-                target: $('[data-uploaded-box="upload1"]')
+                target: $('[data-uploaded-box="upload1"]'),
+                ondrop: function () {
+                    axDialog.confirm({
+                        title: "Seoul-AMS",
+                        msg: "입수정보를 작성해야합니다. 작성하셨습니까?"
+                    }, function () {
+                        if (this.key == "ok") {
+                            UPLOAD.send();
+                        }
+                    });
+                },
             },
             uploadedBox: {
                 target: $('[data-uploaded-box="upload1"]'),
@@ -140,7 +150,7 @@ fnObj.pageStart = function () {
                     thumbnail: ""
                 },
                 lang: {
-                    supportedHTML5_emptyListMsg: '<div class="text-center" style="padding-top: 30px;">신분증사진을 선택하세요(필수입력)</div>',
+                    supportedHTML5_emptyListMsg: '<div class="text-center" style="padding-top: 30px;">신분증사진을 선택하세요(필수입력!)</div>',
                     emptyListMsg: '<div class="text-center" style="padding-top: 30px;">Empty of List.</div>'
                 },
                 onchange: function () {
@@ -175,9 +185,6 @@ fnObj.pageStart = function () {
                 // 1개 이상 업로드 되지 않도록 제한.
                 return true;
             },
-            onprogress: function () {
-                console.log('progress');
-            },
             onuploaderror: function () {
                 axDialog.alert({
                     title: 'Onsemiro Uploader',
@@ -186,8 +193,10 @@ fnObj.pageStart = function () {
                 });
             },
             onuploaded: function () {
+                console.log('onuploaded');
             },
             onuploadComplete: function () {
+                console.log('onuploadComplete');
             }
         });
 };
