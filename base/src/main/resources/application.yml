@@ -73,8 +73,8 @@ dip.process:
     cron: "0 0 5 * * *"
   #tmp.dir: D:\02.DreamAntDev\git-workspaces\java\seoul-ams\dip\tmp\
   #digital.file.dir: D:\02.DreamAntDev\git-workspaces\java\seoul-ams\dip\tmp\
-  tmp.dir: /Users/jspark226/data/dip/tmp/
-  digital.file.dir: /Users/jspark226/data/dip/tmp/
+  tmp.dir: /devSpace/data/dip/tmp/
+  digital.file.dir: /devSpace/data/dip/tmp/
 #개발
 #native.library.path: /Users/hyukjunlee/IdeaProjects/seoul-ams/src/main/resources/native-libs/
 #운영
@@ -119,7 +119,7 @@ onsemiro:
     database.enabled: true
     admin-url:
   upload.repository:
-    img: D:\seoul-ams-repo\upload
+    img: C:\devSpace\upload
   #project base path
   project-base-path:
 
@@ -137,8 +137,8 @@ onsemiro:
     username: ams
     password: ams
   # File Upload
-  #upload.repository:
-    #img: /Users/jspark226/workspace/nas
+  upload.repository:
+    img: /devSpace/upload/
   #개발
   #data-source:
   #url: jdbc:oracle:thin:@//rmhost.iptime.org:1521/amsdb
