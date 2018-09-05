@@ -151,7 +151,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             url: "/api/v1/rc004/01/saveItemDetails",
             data: $.extend({},  {pageSize: 1000} , data),
             callback: function (res) {
-                axToast.push(axboot.getCommonMessage("AA007"));
+                //axToast.push(axboot.getCommonMessage("AA007"));
                 ACTIONS.dispatch(ACTIONS.GET_SUBDATA,fnObj.naviView.getCurrent());
             },
             options: {
@@ -176,7 +176,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             type : "POST",
             data: JSON.stringify(saveData),
             callback: function (res) {
-                axToast.push(axboot.getCommonMessage("AA007"));
+                //axToast.push(axboot.getCommonMessage("AA007"));
                 ACTIONS.dispatch(ACTIONS.GET_SUBDATA,fnObj.naviView.getCurrent());
             },
             options: {
@@ -1262,6 +1262,7 @@ fnObj.iconView = axboot.viewExtend({
     delay : 200,
     prevent : false,
     isItemDrop : false,
+    isOver : false,
     initView : function()
     {
         this.initEvent();
@@ -1278,17 +1279,23 @@ fnObj.iconView = axboot.viewExtend({
         $(document).keyup(function(event){
             fnObj.iconView.pressedCtrl = event.ctrlKey;
         });
-        $(document).click(function(){
-           /* $("#iconListArea .selected").each(function(){
-                $(this).removeClass("selected");
-            });*/
-
+        $(document).click(function(event){
             $("#iconListArea .selected").removeClass("selected");
 
-            if($(event.target).closest("#itemTabs").length == 0){
+            if(!fnObj.iconView.isOver && $(event.target).closest("#itemTabs").length == 0){
+                $("#iconListArea").width("100%");
                 $("#componentView").empty();
                 fnObj.formView.clear();
             }
+
+            fnObj.iconView.isOver = false;
+        });
+
+        $(window).resize(function(event){
+
+            console.log($("div.explorer_list").width());
+            if($("#iconListArea").width() != "100%")
+                $("#iconListArea").width($("div.explorer_list").width() - $("#itemTabs").width()-7);
         });
 
         /*$(document).click(function(event){
@@ -1318,6 +1325,7 @@ fnObj.iconView = axboot.viewExtend({
                     }
 
                     $("#componentView").empty();
+                    $("#iconListArea").width($("div.explorer_list").width() - $("#itemTabs").width()-7);
 
                     if(selectedData[0]["nodeType"] == "item") {
                         $( "#itemTabs" ).tabs( "enable", 1);
@@ -2546,6 +2554,13 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
                 data["typeUuid"] = fnObj.formView.getData()["aggregationTypeUuid"];
                 ACTIONS.dispatch(ACTIONS.AGG_SAVE, data);
             }
+        });
+
+        $("#formView01 #propertiesView input, #formView01 #propertiesView textarea").on("focus", function(event){
+            $(event.target).click(function(event){
+                event.stopPropagation();
+            });
+            fnObj.iconView.isOver = true;
         });
 
         $("#formView01 #propertiesView select").on("change", function(){

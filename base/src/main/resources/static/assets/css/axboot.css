@@ -27933,11 +27933,12 @@ a.small_open {
 
 #itemTabs{
     height: 100%;
-    width: 20%;
+    width: 240px;
     position: absolute;
     top: 0px;
     bottom: 0px;
     right: 0px;
+    background-color: #ffffff;
 }
 
 #itemTabs >ul, #itemTabs >ul >li, #itemTabs >ul >li >a{
