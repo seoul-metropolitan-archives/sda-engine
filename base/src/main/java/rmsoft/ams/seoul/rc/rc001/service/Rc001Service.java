@@ -112,9 +112,17 @@ public class Rc001Service extends BaseService
         return gridData;
     }
 
+    @Transactional
     public ApiResponse save(List<Map<String,String>> list)
     {
+        Rc00101VO rc00101VO = new Rc00101VO();
+
         for (Map<String,String> data: list) {
+            rc00101VO.setUuid(data.get("parentUuid"));
+            if(!data.get("parentNodeType").equals("temporary") && rc001Mapper.getAggregationNode(rc00101VO).size() > 0){
+                return ApiResponse.of(ApiStatus.SYSTEM_ERROR,"최하위 Aggregation으로만 이동이 가능합니다.");
+            }
+
             rc001Mapper.save(data);
         }
 

@@ -27939,6 +27939,7 @@ a.small_open {
     bottom: 0px;
     right: 0px;
     background-color: #ffffff;
+    overflow-y: auto;
 }
 
 #itemTabs >ul, #itemTabs >ul >li, #itemTabs >ul >li >a{
@@ -27970,7 +27971,7 @@ a.small_open {
 }
 
 #propertiesView ul >li:last-child{
-    padding-bottom: 20px;
+    padding-bottom: 10px;
 }
 
 #propertiesView ul >li >*{

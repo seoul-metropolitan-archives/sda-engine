@@ -138,7 +138,11 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             dataType : "JSON",
             type : "POST",
             callback: function (res) {
-                axboot.getCommonMessage("AA007");
+                if (res.status == -500) {
+                    axWarningToast.push(res.message);
+                } else {
+                    axboot.getCommonMessage("AA007");
+                }
             },
             options: {
                 onError: axboot.viewError
@@ -386,28 +390,51 @@ function updateRecord(targetData, parentNode, isTree=false) {
         reqList = [{
             uuid: targetUuid,
             parentUuid: parentUuid,
-            nodeType: targetNodeType
+            nodeType: targetNodeType,
+            parentNodeType : parentNode["nodeType"]
         }];
-
-        if(!isTree)
-            targetData.remove();
     } else {
         reqList = [];
         $.each(selectedData, function (idx, item) {
             reqList.push({
                 uuid: item.uuid,
                 parentUuid: parentUuid,
-                nodeType: item.nodeType
+                nodeType: item.nodeType,
+                parentNodeType : parentNode["nodeType"]
             });
         });
-        $("#iconListArea >div.selected").remove();
     }
 
-    if(targetNodeType != "item") {
-        targetNode = fnObj.treeView01.getNodeByParam("uuid", targetUuid);
-        fnObj.treeView01.moveNode(parentNode, targetNode);
-    }
-    ACTIONS.dispatch(ACTIONS.PAGE_SAVE, reqList);
+    axboot.ajax({
+        url: "/rc/rc001/save",
+        data: JSON.stringify(reqList),
+        dataType : "JSON",
+        type : "POST",
+        callback: function (res) {
+            if (res.status == -500) {
+                axDialog.alert(res.message);
+            } else {
+                if (selectedData.length == 0) {
+                    if (!isTree)
+                        targetData.remove();
+                }else{
+                    $("#iconListArea >div.selected").remove();
+                }
+
+                if(targetNodeType != "item") {
+                    targetNode = fnObj.treeView01.getNodeByParam("uuid", targetUuid);
+                    fnObj.treeView01.moveNode(parentNode, targetNode);
+                }
+
+                axboot.getCommonMessage("AA007");
+            }
+        },
+        options: {
+            onError: axboot.viewError
+        }
+    });
+
+
     $('#explorerDragWrapper').remove();
 
     /*if($(".explorer_grid").css("display")=="none")
@@ -941,7 +968,7 @@ var fnObj = {
 
                     if(!canMove)
                     {
-                        axWarningToast.push(axboot.getCommonMessage(errorMsg));
+                        axDialog.alert(axboot.getCommonMessage(errorMsg));
                         return ;
                     }
                     axboot.modal.open({
@@ -2042,8 +2069,14 @@ fnObj.treeView01 = axboot.viewExtend(axboot.commonView, {
                             }
                         }
                     }
+
+                    /*if(targetNode["nodeType"] == "normal" && targetNode["isParent"] == true){
+                        result = false;
+                        msgCode = "RC001_03";
+                    }*/
+
                     if(!result)
-                        axWarningToast.push(axboot.getCommonMessage(msgCode));
+                        axDialog.alert(axboot.getCommonMessage(msgCode));
 
 
                     return result;
@@ -2130,8 +2163,8 @@ fnObj.treeView01 = axboot.viewExtend(axboot.commonView, {
                         reqList.push({
                             uuid :treeNodes[i].uuid,
                             parentUuid :treeNodes[i].parentUuid,
-                            nodeType :treeNodes[i].nodeType
-
+                            nodeType :treeNodes[i].nodeType,
+                            parentNodeType: parentNode["nodeType"]
                         })
                     }
 
@@ -2187,7 +2220,6 @@ fnObj.treeView01 = axboot.viewExtend(axboot.commonView, {
                             }
                         }
                         return retList;
-
                     }
 
                     var treeData = undefined;
