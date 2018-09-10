@@ -15,7 +15,30 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             }
         });
     },
-
+    PAGE_INGEST: function (caller, act, data) {
+        axboot.modal.open({
+            modalType: "INGEST_POPUP",
+            width: 1000,
+            height: 800,
+            header: {
+                title: "INGEST"
+            },
+            sendData: function () {
+                // return {
+                //     confirmBtn:"Arrange",
+                //     crrntAgg: fnObj.formView.getData().aggInContainerName,
+                //     containerUuid :  currentContainerUuid
+                // };
+            },
+            callback: function (data) {
+                if(this) this.close();
+                UPLOAD.send();
+                // if(data){
+                //     ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1,data);
+                // }
+            }
+        });
+    },
     PAGE_DROP : function (caller, act, e) {
         e.stopPropagation();
         e.preventDefault();
@@ -149,6 +172,9 @@ fnObj.pageStart = function () {
                         msg: "입수정보를 작성해야합니다. 작성하셨습니까?"
                     }, function () {
                         if (this.key == "ok") {
+                            ACTIONS.dispatch(ACTIONS.PAGE_INGEST);
+                            // UPLOAD.send();
+                        }else{
                             UPLOAD.send();
                         }
                     });

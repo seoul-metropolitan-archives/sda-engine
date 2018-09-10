@@ -41,19 +41,19 @@ public class FilePersistService  implements InitializingBean {
         ax5File.getMultipartFile().transferTo(file);
 
         // JSON 정보 저장
-        FileUtils.writeStringToFile(new File(fileSavePath + File.separator + ax5File.getJsonName()), JsonUtils.toJson(ax5File), "UTF-8");
+//        FileUtils.writeStringToFile(new File(fileSavePath + File.separator + ax5File.getJsonName()), JsonUtils.toJson(ax5File), "UTF-8");
 
-        String fileType = getFileType(ax5File.getExt());
-
-        if (fileType.equals(Types.FileType.IMAGE)) {
-            try {
-                Thumbnails.of(file)
-                        .crop(Positions.CENTER)
-                        .size(320, 320)
-                        .toFiles(new File(fileSavePath), Rename.SUFFIX_HYPHEN_THUMBNAIL);
-            } catch (Exception e) {
-            }
-        }
+//        String fileType = getFileType(ax5File.getExt());
+//
+//        if (fileType.equals(Types.FileType.IMAGE)) {
+//            try {
+//                Thumbnails.of(file)
+//                        .crop(Positions.CENTER)
+//                        .size(320, 320)
+//                        .toFiles(new File(fileSavePath), Rename.SUFFIX_HYPHEN_THUMBNAIL);
+//            } catch (Exception e) {
+//            }
+//        }
     }
 
 
@@ -100,8 +100,8 @@ public class FilePersistService  implements InitializingBean {
         String fileId = ax5File.getId();
         String fileSavePath = path + File.separator + ax5File.getFilePath();
         FileUtils.deleteQuietly(new File(fileSavePath + File.separator + ax5File.getSaveName()));
-        FileUtils.deleteQuietly(new File(fileSavePath + File.separator + ax5File.getJsonName()));
-        FileUtils.deleteQuietly(new File(fileSavePath + File.separator + ax5File.getThumbnailSaveName()));
+//        FileUtils.deleteQuietly(new File(fileSavePath + File.separator + ax5File.getJsonName()));
+//        FileUtils.deleteQuietly(new File(fileSavePath + File.separator + ax5File.getThumbnailSaveName()));
     }
 
     public void preview(HttpServletResponse response, String id, String type) throws IOException {
@@ -135,9 +135,9 @@ public class FilePersistService  implements InitializingBean {
                 imagePath = ax5File.getSaveName();
                 break;
 
-            case Types.ImagePreviewType.THUMBNAIL:
+            /*case Types.ImagePreviewType.THUMBNAIL:
                 imagePath = ax5File.getThumbnailSaveName();
-                break;
+                break;*/
         }
 
         if (mediaType != null) {

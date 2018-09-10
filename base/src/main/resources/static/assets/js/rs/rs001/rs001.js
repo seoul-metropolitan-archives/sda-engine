@@ -78,6 +78,22 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     MENU_OPEN: function (caller,act, data){
 
     },
+    SEARCH_GRS_CHILD : function(caller, act, data)
+    {
+        axboot.modal.open({
+            modalType: "COMMON_POPUP",
+            preSearch : false,
+            searchData : data,
+            sendData: function () {
+                return data;
+            },
+            callback: function(data){
+                console.log(data);
+                if(this.close)
+                    this.close();
+            }
+        });
+    },
     dispatch: function (caller, act, data) {
         var result = ACTIONS.exec(caller, act, data);
         if (result != "error") {
@@ -168,7 +184,29 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
             checkBar: {visible: true}
         })
         this.makeGrid();
-        this.gridObj.itemClick(this.itemClick);
+        // this.gridObj.itemClick(this.itemClick);
+        this.gridObj.onDataCellDblClicked(this.onDataCellDblClicked)
+        this.removeRowBeforeEvent(this.cancelDelete);
+
+        var _this = this;
+
+        var state = axboot.commonCodeValueByCodeName("CD133", "영구");
+
+        this.gridObj.onCellEdited(function (gridWrapper, grid, itemIndex, dataRow, field) {
+            _this.gridObj.setCustomCellStyleRow(gridWrapper, grid, dataRow,"disable", function (gridWrapper, row) {
+                var result = false;
+                if(!row)
+                    return true;
+                if (row["retentionPeriodUuid"] == state)
+                    result = false;
+                else{
+                    result = true;
+                    grid.setValue(itemIndex,["retentionPeriodUuid"]," ")
+                }
+                return result;
+            }, ["disposalTypeUuid"], true);
+
+        });
     },
     getSelectedData : function(){
         return this.gridObj.getSelectedData()
@@ -195,22 +233,24 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
         },["grsName","retentionPeriodUuid","disposalTypeUuid","basedOn","description","triggerYn"]);
     },
     itemClick: function (data) {
-        /*if (data.classificationSchemeUuid != null && data.classificationSchemeUuid != "") {
-            if (isDetailChanged) {
-                axDialog.confirm({
-                    msg: axboot.getCommonMessage("AA006")
-                }, function () {
-                    if (this.key == "ok") {
-                        ACTIONS.dispatch(ACTIONS.TOP_GRID_DETAIL_PAGE_SAVE);
-                    } else {
-                        isDetailChanged = false;
-                        ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, data);
-                    }
-                });
-            } else {
-                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, data);
-            }
-        }*/
+
+    },
+    cancelDelete: function(){
+        var state = axboot.commonCodeValueByCodeName("CD134", "Confirm");
+        if(fnObj.gridView01.getSelectedData().statusUuid == state){
+            axToast.push(axboot.getCommonMessage("RS001_01"));
+
+            this.setRunDel(false);
+        }else{
+            this.setRunDel(true);
+        }
+    },
+    onDataCellDblClicked: function (item,index) {
+        var data = {
+            popupCode : "PU141",
+            searchData : fnObj.gridView01.gridObj.dataProvider.getJsonRow(index.dataRow).grsCode
+        };
+        ACTIONS.dispatch(ACTIONS.SEARCH_GRS_CHILD,data);
     }
 });
 

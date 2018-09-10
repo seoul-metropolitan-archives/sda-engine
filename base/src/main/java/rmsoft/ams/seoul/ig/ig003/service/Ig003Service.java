@@ -17,6 +17,11 @@ public class Ig003Service extends BaseService {
 
     public Page<Ig00201VO> getIgAccessionRecordList(Pageable pageable, RequestParams<Ig00201VO> requestParams) {
         Ig00201VO ig00201VO = new Ig00201VO();
+        ig00201VO.setAccessionNo(requestParams.getString("accessionNo"));
+        ig00201VO.setAcquisitionFromDate(requestParams.getString("acquisitionFromDate"));
+        ig00201VO.setAcquisitionToDate(requestParams.getString("acquisitionToDate"));
+        ig00201VO.setAcquisitionSource(requestParams.getString("acquisitionSource"));
+        ig00201VO.setTitle(requestParams.getString("title"));
         return filter(ig003Mapper.getIgAccessionRecordList(ig00201VO), pageable, "", Ig00201VO.class);
     }
 }

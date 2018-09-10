@@ -1,4 +1,4 @@
-var st00301_p01_01 =
+var cl00301_p01_02 =
     {
         column_info :
             [
@@ -13,29 +13,27 @@ var st00301_p01_01 =
                 },
                 {
                     sortNo: 1,
-                    name: "publishedStatusUuid",
-                    text: "UUID",
-                    editable: false,
-                    dataType: "code",
-                    required: false,
-                    visible: false
-                },
-                {
-                    sortNo: 2,
-                    name: "aggregationCode",
-                    text: "UUID",
-                    editable: false,
-                    dataType: "code",
-                    required: false,
-                    visible: false
-                },
-                {
-                    sortNo: 3,
                     name: "title",
-                    text: "Level",
+                    text: "Title",
                     width: 110,
                     editable: false,
                     dataType: "text"
+                },
+                {
+                    sortNo: 2,
+                    name: "publishedStatusUuid",
+                    text: "PublishedStatusUuid",
+                    editable: false,
+                    dataType: "code",
+                    required: false,
+                },
+                {
+                    sortNo: 3,
+                    name: "aggregationCode",
+                    text: "AggregationCode",
+                    editable: false,
+                    dataType: "code",
+                    required: false,
                 },
                 {
                     sortNo: 4,
@@ -44,7 +42,6 @@ var st00301_p01_01 =
                     width: 110,
                     editable: false,
                     dataType: "text",
-                    visible : false
                 },
                 {
                     sortNo: 5,
@@ -53,7 +50,6 @@ var st00301_p01_01 =
                     width: 110,
                     editable: false,
                     dataType: "text",
-                    visible : false
                 },
                 {
                     sortNo: 6,

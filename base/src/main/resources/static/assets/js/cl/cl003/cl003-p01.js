@@ -8,10 +8,11 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             type: "GET",
             url: "/api/v1/st/st003/04/list01",
             async : false,
-            data: $.extend({}, {pageSize: 1000}),
+            data: $.extend({}, {pageSize: 1000},{typeUuid:"Normal"}),
             callback: function (res) {
                 fnObj.gridView01.resetCurrent();
                 fnObj.gridView01.setData(res.list);
+                return true;
             },
             options: {
                 onError: axboot.viewError
@@ -104,6 +105,13 @@ fnObj.pageStart = function () {
     });
     $.ajax({
         url: "/assets/js/column_info/st00301_p01_02.js",
+        dataType: "script",
+        async: false,
+        success: function () {
+        }
+    });
+    $.ajax({
+        url: "/assets/js/column_info/cl00301_p01_02.js",
         dataType: "script",
         async: false,
         success: function () {
@@ -249,9 +257,13 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
 
     checkChildren : function(index,checked){
         this.gridObj.checkChildren(index, checked, true, false);
+        this.gridObj.getChildren(index);
+        fnObj.gridView03.clearData();
+        fnObj.gridView03.setData(this.gridObj.getCheckedList())
     },
     onItemChecked: function(grid,itemIndex,checked) {
         fnObj.gridView01.checkChildren(itemIndex,checked);
+        checked ? fnObj.gridView01.gridObj.expand(itemIndex) : fnObj.gridView01.gridObj.collapse(itemIndex)
     }
 });
 
@@ -265,13 +277,7 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
         this.gridObj.setFixedOptions({
             colCount: 3
         });
-        this.gridObj.setOption({
-            checkBar: {visible: true},
-            indicator: {visible: true}
-        })
         this.makeGrid();
-        this.gridObj.itemClick(this.itemClick);
-        this.gridObj.onItemChecked(this.onItemChecked)
     },
     isChangeData: function () {
         if (this.getData().length > 0) {
@@ -294,20 +300,15 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
 
 fnObj.gridView03 = axboot.viewExtend(axboot.gridView, {
     tagId : "realgrid03",
-    entityName : "arrangeRecordsResultUuid",
-    primaryKey : "arrangeRecordsResultUuid",
     initView: function () {
-        this.initInstance();
-        this.setColumnInfo(st00301_p01_02.column_info);
-        this.gridObj.setFixedOptions({
-            colCount: 3
-        });
-        this.gridObj.setOption({
-            checkBar: {visible: true},
-            indicator: {visible: true}
-        })
+        this.gridObj = new TreeGridWrapper("realgrid03", "/assets/js/libs/realgrid", true);
+        this.gridObj.setGridStyle("100%", "100%")
+            .setOption({
+                header: { visible: true },
+                lineVisible:{visible:false}
+            })
+        this.gridObj.setColumnInfo(cl00301_p01_02.column_info);
         this.makeGrid();
-        this.gridObj.itemClick(this.itemClick);
     },
     isChangeData: function () {
         if (this.getData().length > 0) {
@@ -324,6 +325,9 @@ fnObj.gridView03 = axboot.viewExtend(axboot.gridView, {
     getData: function () {
         return this.gridObj.getJsonRows();
     },
+    setData: function (list) {
+        this.gridObj.setTreeDataForArray(list, "orderKey1");
+    }
 });
 /**
  * [필수]

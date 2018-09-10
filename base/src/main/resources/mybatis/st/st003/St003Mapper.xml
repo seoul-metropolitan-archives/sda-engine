@@ -113,9 +113,16 @@
           TYPE_UUID as typeUuid,
           PARENT_AGGREGATION_UUID as parentAggregationUuid,
           LEVEL_UUID as levelUuid,
+          DESCRIPTION as description,
+          NOTES as notes,
           SUBSTR(SYS_CONNECT_BY_PATH(ROWNUM, '.'), 2 , length(SYS_CONNECT_BY_PATH(ROWNUM, '.'))) as orderKey1
         FROM
             RC_AGGREGATION
+        <where>
+            <if test="typeUuid != null">
+              FC_AD_CODE_NM(TYPE_UUID) = #{typeUuid}
+            </if>
+        </where>
         START WITH PARENT_AGGREGATION_UUID IS NULL
         CONNECT BY PRIOR AGGREGATION_UUID = PARENT_AGGREGATION_UUID
     </select>

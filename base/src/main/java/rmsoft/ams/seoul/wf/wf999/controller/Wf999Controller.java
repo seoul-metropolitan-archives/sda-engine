@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 import rmsoft.ams.seoul.common.controller.MessageBaseController;
+import rmsoft.ams.seoul.rc.rc005.vo.Rc00502VO;
 import rmsoft.ams.seoul.wf.wf999.service.Wf999Service;
 import rmsoft.ams.seoul.wf.wf999.vo.Wf99901VO;
 import rmsoft.ams.seoul.wf.wf999.vo.Wf99902VO;
@@ -41,7 +42,7 @@ public class Wf999Controller extends MessageBaseController {
      */
     @PutMapping(value = "/01/save")
     @PostMapping
-    public ApiResponse saveWorkflow(@RequestBody List<Wf99901VO> requestParams) {
+    public ApiResponse saveWorkflow(@RequestBody List<Rc00502VO> requestParams) {
         return wf999Service.saveWorkflow(requestParams);
     }
 

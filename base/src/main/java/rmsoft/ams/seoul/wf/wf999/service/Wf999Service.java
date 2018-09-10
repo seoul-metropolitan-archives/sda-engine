@@ -16,12 +16,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import rmsoft.ams.seoul.common.domain.RcComponent;
 import rmsoft.ams.seoul.common.domain.WfParameter;
 import rmsoft.ams.seoul.common.domain.WfWorkflow;
 import rmsoft.ams.seoul.common.domain.WfWorkflowJob;
 import rmsoft.ams.seoul.common.repository.WfParameterRepository;
 import rmsoft.ams.seoul.common.repository.WfWorkflowJobRepository;
 import rmsoft.ams.seoul.common.repository.WfWorkflowRepository;
+import rmsoft.ams.seoul.rc.rc005.vo.Rc00502VO;
 import rmsoft.ams.seoul.wf.wf999.dao.Wf999Mapper;
 import rmsoft.ams.seoul.wf.wf999.vo.Wf99901VO;
 import rmsoft.ams.seoul.wf.wf999.vo.Wf99902VO;
@@ -86,28 +88,29 @@ public class Wf999Service extends BaseService {
      * @return api response
      */
     @Transactional
-    public ApiResponse saveWorkflow(List<Wf99901VO> Wf99901VOList) {
-        List<WfWorkflow> wfWorkflowList = ModelMapperUtils.mapList(Wf99901VOList, WfWorkflow.class);
-        WfWorkflow orgWfWorkflow = null;
-
-        for (WfWorkflow wfWorkflow : wfWorkflowList) {
-            orgWfWorkflow = wfWorkflowRepository.findOne(wfWorkflow.getId());
-
-            if (orgWfWorkflow == null) {
-                // created
-                //wfWorkflow.setWorkflowUuid(UUIDUtils.getUUID());
-                wfWorkflowRepository.save(wfWorkflow);
-            } else {
-                if (wfWorkflow.isDeleted()) {
-                    wfWorkflowRepository.delete(wfWorkflow);
-                } else {
-                    wfWorkflow.setInsertDate(orgWfWorkflow.getInsertDate());
-                    wfWorkflow.setInsertUuid(orgWfWorkflow.getInsertUuid());
-
-                    wfWorkflowRepository.save(wfWorkflow);
-                }
-            }
-        }
+    public ApiResponse saveWorkflow(List<Rc00502VO> rc00502VOList) {
+        List<RcComponent> rcComponentList = ModelMapperUtils.mapList(rc00502VOList, RcComponent.class);
+//        List<WfWorkflow> wfWorkflowList = ModelMapperUtils.mapList(Wf99901VOList, WfWorkflow.class);
+//        WfWorkflow orgWfWorkflow = null;
+//
+//        for (WfWorkflow wfWorkflow : wfWorkflowList) {
+//            orgWfWorkflow = wfWorkflowRepository.findOne(wfWorkflow.getId());
+//
+//            if (orgWfWorkflow == null) {
+//                // created
+//                //wfWorkflow.setWorkflowUuid(UUIDUtils.getUUID());
+//                wfWorkflowRepository.save(wfWorkflow);
+//            } else {
+//                if (wfWorkflow.isDeleted()) {
+//                    wfWorkflowRepository.delete(wfWorkflow);
+//                } else {
+//                    wfWorkflow.setInsertDate(orgWfWorkflow.getInsertDate());
+//                    wfWorkflow.setInsertUuid(orgWfWorkflow.getInsertUuid());
+//
+//                    wfWorkflowRepository.save(wfWorkflow);
+//                }
+//            }
+//        }
         return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");
     }
 
