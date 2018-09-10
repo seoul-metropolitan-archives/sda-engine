@@ -101,9 +101,13 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             data: JSON.stringify(saveData),
             callback: function (res) {
                 if(res.message == "SUCCESS"){
-                    axToast.push(axboot.getCommonMessage("AA007"));
-                    fnObj.formView.clear()
-                    window.location.reload();
+                    if (parent) {
+                        ACTIONS.dispatch(ACTIONS.PAGE_CLOSE);
+                    }else{
+                        axToast.push(axboot.getCommonMessage("AA007"));
+                        fnObj.formView.clear()
+                        window.location.reload();
+                    }
                 }
             },
             options: {
@@ -111,6 +115,11 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             }
         });
 
+    },
+    PAGE_CLOSE: function (caller, act, data) {
+        if (parent) {
+            parent.axboot.modal.callback(data);
+        }
     },
     dispatch: function (caller, act, data) {
         var result = ACTIONS.exec(caller, act, data);
@@ -133,7 +142,7 @@ fnObj.pageStart = function () {
         axboot.resetMenuParams();
         ACTIONS.dispatch(ACTIONS.PAGE_SEARCH,data);
     }else{
-        ACTIONS.dispatch(ACTIONS.PAGE_SEARCH_ACCNO);
+        // ACTIONS.dispatch(ACTIONS.PAGE_SEARCH_ACCNO);
     }
 };
 //=================================================================
