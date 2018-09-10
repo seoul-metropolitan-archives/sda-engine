@@ -28,9 +28,6 @@
                 A1.DISPOSAL_CONFIRM_DATE  between to_date(#{acquisitionFromDate},'YYYY-MM-DD') and to_date(#{acquisitionToDate},'YYYY-MM-DD')
             ]]>
             </if>
-            <if test="accessionRecordUuid != null">
-                AND ACCESSION_RECORD_UUID = #{accessionRecordUuid}
-            </if>
             <if test="title != null">
                 AND TITLE LIKE '%' || #{title} || '%'
             </if>
@@ -38,5 +35,6 @@
                 AND ACQUISITION_SOURCE LIKE '%' || #{acquisitionSource} || '%'
             </if>
         </where>
+        ORDER BY ACQUISITION_DATE DESC
     </select>
 </mapper>

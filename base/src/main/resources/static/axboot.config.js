@@ -147,6 +147,14 @@
                     title: "Job Parameter"
                 }
             },
+            "INGEST_POPUP" :{
+                width: 1000,
+                height: 700,
+                iframe: {
+                    url: "/ig/ig002/ig002-p01"
+                }
+
+            },
             "ARRANGE_POPUP" :{
                 width: 1600,
                 height: 700,

@@ -44,6 +44,12 @@ public class AX5File implements Comparable {
 
     private long lastModified;
 
+    private String originalFileName;
+
+    private String contentsSize;
+
+    private String fileFormatUuid;
+
     public static AX5File of(MultipartFile multipartFile) {
         AX5File ax5File = new AX5File();
 
@@ -53,7 +59,9 @@ public class AX5File implements Comparable {
         ax5File.setFileSize(multipartFile.getSize());
         ax5File.setCreatedAt(LocalDateTime.now().toString());
         ax5File.setMultipartFile(multipartFile);
-
+        ax5File.setOriginalFileName(ax5File.getSaveName());
+        ax5File.setContentsSize(String.valueOf(ax5File.getFileSize()));
+        ax5File.setFileFormatUuid(ax5File.getExt());
         return ax5File;
     }
 
@@ -75,13 +83,14 @@ public class AX5File implements Comparable {
         return ax5File;
     }
 
+
     public String getSaveName() {
         return String.format("%s.%s", id, ext);
     }
 
-    public String getThumbnailSaveName() {
+    /*public String getThumbnailSaveName() {
         return String.format("%s-thumbnail.%s", id, ext);
-    }
+    }*/
 
     public String getJsonName() {
         return String.format("%s.json", id, ext);
@@ -101,20 +110,20 @@ public class AX5File implements Comparable {
         }
     }
 
-    @JsonProperty("preview")
+    /*@JsonProperty("preview")
     public String preview() {
         return "/api/v1/common/preview?id=" + getId();
-    }
+    }*/
 
-    @JsonProperty("thumbnail")
+  /*  @JsonProperty("thumbnail")
     public String thumbnail() {
         return "/api/v1/common/thumbnail?id=" + getId();
-    }
+    }*/
 
-    @JsonProperty("download")
+    /*@JsonProperty("download")
     public String download() {
         return "/api/v1/common/download?id=" + getId();
-    }
+    }*/
 
     public String makeFileId() {
         String fileId = String.format("%s%s", DateUtils.getNow("yyyyMMdd"), UUID.randomUUID().toString());

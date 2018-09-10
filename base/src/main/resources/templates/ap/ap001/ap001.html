@@ -107,12 +107,11 @@
                         </th:block>
                         <th:block layout:insert="~{/fragments/table :: tr-td(text='신분증사진', style='width: 100%')}">
                             <div layout:fragment="wrap">
-                                <div data-ax5uploader="upload1" style="height: 181px">
-                                    <div data-uploaded-box="upload1"
-                                         data-ax5uploader-uploaded-box="inline">
-                                       <!-- <button data-ax5uploader-button="selector" class="btn btn-primary">Select File (*/*)</button>-->
+                                <div class="DH20"></div>
 
-                                    </div>
+                                <div data-ax5uploader="upload1">
+                                    <button data-ax5uploader-button="selector" style="display: none" class="btn btn-primary">Select File (*/*)</button>
+                                    <div data-uploaded-box="upload1" data-ax5uploader-uploaded-box="inline"></div>
                                 </div>
                             </div>
                         </th:block>
@@ -123,11 +122,9 @@
                         </th:block>
                     </div>
                 </div>
-                <div data-ax5uploader="upload1" style="display: none">
-                    <button data-ax5uploader-button="selector" class="btn btn-primary">Select File (*/*)
-                    </button>
-                </div>
             </div>
         </div>
     </form>
 </div>
+</html>
+
