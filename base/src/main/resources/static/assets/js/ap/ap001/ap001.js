@@ -33,6 +33,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             callback: function (data) {
                 if(this) this.close();
                 UPLOAD.send();
+
                 // if(data){
                 //     ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1,data);
                 // }
@@ -117,8 +118,8 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 url: "/api/v1/wf999/01/save",
                 data: JSON.stringify(uploadFiles),
                 callback: function (res) {
+                    UPLOAD.uploadedFiles = [];
                     axToast.push(axboot.getCommonMessage("AA007"));
-                    //fnObj.gridView01.gridObj.commit();
                 }
             })
             .done(function () {
