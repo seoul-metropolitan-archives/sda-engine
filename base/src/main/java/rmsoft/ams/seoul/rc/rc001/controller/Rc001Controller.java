@@ -73,6 +73,12 @@ public class Rc001Controller extends MessageBaseController
         return rc001Service.save(list);
     }
 
+    @RequestMapping("/saveRecords")
+    public ApiResponse saveRecords(@RequestBody List<Map<String,String>> list)
+    {
+        return rc001Service.saveRecords(list);
+    }
+
     @RequestMapping("/getMenuInfo")
     @ResponseBody
     public Object getMenu(@RequestBody Map<String,String> param)

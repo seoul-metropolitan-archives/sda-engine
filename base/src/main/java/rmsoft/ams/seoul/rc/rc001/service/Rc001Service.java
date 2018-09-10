@@ -119,11 +119,44 @@ public class Rc001Service extends BaseService
 
         for (Map<String,String> data: list) {
             rc00101VO.setUuid(data.get("parentUuid"));
-            if(!data.get("parentNodeType").equals("temporary") && rc001Mapper.getAggregationNode(rc00101VO).size() > 0){
+
+            if(data.get("parentNodeType") != null && !data.get("parentNodeType").equals("temporary") && rc001Mapper.getAggregationNode(rc00101VO).size() > 0){
                 return ApiResponse.of(ApiStatus.SYSTEM_ERROR,"최하위 Aggregation으로만 이동이 가능합니다.");
             }
 
             rc001Mapper.save(data);
+        }
+
+        return ApiResponse.of(ApiStatus.SUCCESS,"SUCCESS");
+    }
+
+    @Transactional
+    public ApiResponse saveRecords(List<Map<String,String>> list)
+    {
+        Rc00101VO rc00101VO = new Rc00101VO();
+
+        RcItem rcItem = null;
+        RcAggregation rcAggregation = null;
+
+        for (Map<String,String> data: list) {
+            if(data.get("type").equals("item")){
+                rcItem = new RcItem();
+                rcItem.setItemUuid(data.get("uuid"));
+                rcItem = rcItemRepository.findOne(rcItem.getId());
+                rcItem.setTitle(data.get("title"));
+                rcItem.setDescription(data.get("description"));
+                rcItem.setNotes(data.get("notes"));
+                rcItemRepository.save(rcItem);
+            }else{
+                rcAggregation = new RcAggregation();
+                rcAggregation.setAggregationUuid(data.get("uuid"));
+                rcAggregation = rcAggregationRepository.findOne(rcAggregation.getId());
+
+                rcAggregation.setTitle(data.get("title"));
+                rcAggregation.setDescription(data.get("description"));
+                rcAggregation.setNotes(data.get("notes"));
+                rcAggregationRepository.save(rcAggregation);
+            }
         }
 
         return ApiResponse.of(ApiStatus.SUCCESS,"SUCCESS");

@@ -131,6 +131,30 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         });
     },
     PAGE_SAVE: function (caller, act, list) {
+        if(!fnObj.gridView01.gridObj.validate()){
+            return false;
+        }else{
+            var data = fnObj.gridView01.getData();
+
+            axboot.ajax({
+                url: "/rc/rc001/saveRecords",
+                data: JSON.stringify(data),
+                dataType : "JSON",
+                type : "POST",
+                callback: function (res) {
+                    if (res.status == -500) {
+                        axWarningToast.push(res.message);
+                    } else {
+                        axboot.getCommonMessage("AA007");
+                    }
+                },
+                options: {
+                    onError: axboot.viewError
+                }
+            });
+        }
+    },
+    ITEMS_SAVE: function (caller, act, list) {
         console.log(JSON.stringify(list));
         axboot.ajax({
             url: "/rc/rc001/save",
@@ -2171,7 +2195,7 @@ fnObj.treeView01 = axboot.viewExtend(axboot.commonView, {
                     if(!validate)
                         return ;
 
-                    ACTIONS.dispatch(ACTIONS.PAGE_SAVE,reqList);
+                    ACTIONS.dispatch(ACTIONS.ITEMS_SAVE,reqList);
                     //오른쪽 데이터 refresh 로직 추가
 
                     console.log(treeNodes);
@@ -2504,6 +2528,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView,{
     ,{criteria : "value='folder_open_t'",styles : "iconIndex=8"}*/
         var data = undefined;
         var iconType = "";
+        var nodeType = "";
         var isOpen = false;
         for(var i = 0; i < list.length ;i++)
         {
@@ -2515,23 +2540,29 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView,{
             switch(data["type"])
             {
                 case "Normal":
-                    iconType = "folder"+(isOpen ? "_open" : "")
+                    iconType = "folder"+(isOpen ? "_open" : "");
+                    nodeType = data["type"].toLowerCase();
                     break;
-                // case "Temporarily":
                 case "Temporary":
                     iconType = "folder"+(isOpen ? "_open" : "")+"_t";
+                    nodeType = data["type"].toLowerCase();
+                    break;
                 case "Virtual":
                     iconType = "folder"+(isOpen ? "_open" : "")+"_v";
+                    nodeType = data["type"].toLowerCase();
                     break;
                 case "item":
                     iconType = "file";
+                    nodeType = "item";
                     break;
                 default:
                     iconType = "file";
+                    nodeType = "item";
                     break;
             }
             isOpen = false;
             data["iconType"] = iconType;
+            data["nodeType"] = nodeType;
 
         }
 
@@ -2540,6 +2571,15 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView,{
     getSelectedData : function()
     {
         return this.gridObj.getSelectionData();
+    },
+    validate: function () {
+        var rs = this.model.validate();
+        if (rs.error) {
+            alert(rs.error[0].jquery.attr("title") + '을(를) 입력해주세요.');
+            rs.error[0].jquery.focus();
+            return false;
+        }
+        return true;
     }
 });
 

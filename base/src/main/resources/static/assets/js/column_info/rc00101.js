@@ -12,6 +12,12 @@ var rc00101 =
                 visible: false
             },
             {
+                sortNo: 0,
+                name: "nodeType",
+                dataType: "text",
+                visible: false
+            },
+            {
                 sortNo: 1,
                 name: "iconType",
                 text: " ",
@@ -47,7 +53,8 @@ var rc00101 =
                 name: "title",
                 text: "Title",
                 width: 500,
-                editable: false,
+                required: true,
+                editable: true,
                 dataType: "text"
             },
             {
@@ -103,7 +110,7 @@ var rc00101 =
                 name: "description",
                 text: "Description",
                 width: 250,
-                editable: false,
+                editable: true,
                 dataType: "richtext"
             },
             {
@@ -111,7 +118,7 @@ var rc00101 =
                 name: "notes",
                 text: "Notes",
                 width: 250,
-                editable: false,
+                editable: true,
                 dataType: "richtext"
             }
          ]
