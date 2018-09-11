@@ -38,21 +38,23 @@ var rc00101 =
                 values : ["file","file_v","folder","folder_t","folder_v","image","image_v","folder_open","folder_open_t","folder_open_v"],
                 labels : ["file","file_v","folder","folder_t","folder_v","image","image_v","folder_open","folder_open_t","folder_open_v"],
                 dataType: "icon",
-                visible: true
+                visible: true,
+                disable: true
             },
             {
                 sortNo: 2,
                 name: "code",
                 text: "Code",
-                width: 130,
+                width: 120,
                 editable: false,
-                dataType: "text"
+                dataType: "text",
+                disable: true
             },
             {
                 sortNo: 3,
                 name: "title",
                 text: "Title",
-                width: 500,
+                width: 400,
                 required: true,
                 editable: true,
                 dataType: "text"
@@ -63,23 +65,26 @@ var rc00101 =
                 text: "Level",
                 width: 110,
                 editable: false,
-                dataType: "text"
+                dataType: "text",
+                disable: true
             },
             {
                 sortNo: 5,
                 name: "type",
                 text: "Type",
-                width: 100,
+                width: 80,
                 editable: false,
-                dataType: "text"
+                dataType: "text",
+                disable: true
             },
             {
                 sortNo: 6,
                 name: "publishedStatus",
                 text: "Published Status",
-                width: 110,
+                width: 100,
                 editable: false,
-                dataType: "text"
+                dataType: "text",
+                disable: true
             },
             {
                 sortNo: 7,
@@ -87,7 +92,8 @@ var rc00101 =
                 text: "Author",
                 width: 70,
                 editable: false,
-                dataType: "text"
+                dataType: "text",
+                disable: true
             },
             {
                 sortNo: 8,
@@ -95,7 +101,8 @@ var rc00101 =
                 text: "Start Date",
                 width: 140,
                 editable: false,
-                dataType: "date"
+                dataType: "date",
+                disable: true
             },
             {
                 sortNo: 9,
@@ -103,7 +110,8 @@ var rc00101 =
                 text: "End Date",
                 width: 140,
                 editable: false,
-                dataType: "date"
+                dataType: "date",
+                disable: true
             },
             {
                 sortNo: 10,

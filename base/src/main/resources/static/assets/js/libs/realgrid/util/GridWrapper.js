@@ -514,7 +514,7 @@ var GridWrapper = function(p_id,p_rootContext) {
             ,"im.png"
             ,"im_v.png"
             ,"fo_op.png"
-            ,"fo.op_t.png"
+            ,"fo_op_t.png"
             ,"fo_op_v.png"
         ]);
         this.gridView.registerImageList(imgs);
