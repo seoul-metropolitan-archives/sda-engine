@@ -8,6 +8,7 @@ import io.onsemiro.utils.SessionUtils;
 import io.onsemiro.utils.UUIDUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import rmsoft.ams.seoul.common.domain.RcAggregation;
 import rmsoft.ams.seoul.common.domain.RcAggregationCon;
 import rmsoft.ams.seoul.common.domain.RcRecordReference;
@@ -171,6 +172,26 @@ public class Rc002Service extends BaseService
                 }
             }
         }
+
+        return ApiResponse.of(ApiStatus.SUCCESS,"SUCCESS");
+    }
+
+
+    /**
+     * Save api response.
+     *
+     * @param data the data
+     * @return the api response
+     */
+    @Transactional
+    public ApiResponse saveIngestAggregation(Rc002VO data) {
+
+        RcAggregation rcAggregation = null;
+        rcAggregation = ModelMapperUtils.map(data.getSystemMeta(), RcAggregation.class);
+
+        String aggregationCode = jdbcTemplate.queryForObject("select fc_rc_aggregation_code from dual", String.class);
+        rcAggregation.setAggregationCode(aggregationCode);
+        rcAggregationRepository.save(rcAggregation);
 
         return ApiResponse.of(ApiStatus.SUCCESS,"SUCCESS");
     }
