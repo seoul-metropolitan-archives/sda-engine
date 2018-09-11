@@ -3,6 +3,7 @@ package rmsoft.ams.seoul.rc.rc002.service;
 import io.onsemiro.core.api.response.ApiResponse;
 import io.onsemiro.core.code.ApiStatus;
 import io.onsemiro.core.domain.BaseService;
+import io.onsemiro.utils.CommonCodeUtils;
 import io.onsemiro.utils.ModelMapperUtils;
 import io.onsemiro.utils.SessionUtils;
 import io.onsemiro.utils.UUIDUtils;
@@ -191,6 +192,8 @@ public class Rc002Service extends BaseService
 
         String aggregationCode = jdbcTemplate.queryForObject("select fc_rc_aggregation_code from dual", String.class);
         rcAggregation.setAggregationCode(aggregationCode);
+        rcAggregation.setPublishedStatusUuid(CommonCodeUtils.getCode("CD121", "Draft"));
+        rcAggregation.setTypeUuid(CommonCodeUtils.getCode("CD127", "Temporary"));
         rcAggregationRepository.save(rcAggregation);
 
         return ApiResponse.of(ApiStatus.SUCCESS,"SUCCESS");
