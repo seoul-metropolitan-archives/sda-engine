@@ -84,10 +84,10 @@ public class ArchiveUtils {
             Files.newDirectoryStream(Paths.get(unzippedFolderPath)).forEach(path -> {
                 //File tfile = new File(path.toUri());
                 if (Files.isDirectory(path)) {
-                    log.info("Aggregation: " + path.getFileName());
+                    log.info(" Directory: " + path.getFileName());
                     ArchiveUtils.getEntrySet(path.toString());
                 } else {
-                    log.info("Item and Component:" + path.getFileName());
+                    log.info("File :" + path.getFileName());
                 }
 
             });
