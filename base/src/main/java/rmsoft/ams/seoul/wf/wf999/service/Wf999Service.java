@@ -96,15 +96,19 @@ public class Wf999Service extends BaseService {
         return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");
     }
 
+    private String aggregationUUID;
+    private String itemAggregationUUID;
+
     @Transactional
     public void saveArchiveIngest(String parentAggregationUUID, String unzippedFolderPath) {
         try {
-            String aggregationUUID = UUIDUtils.getUUID();
+            aggregationUUID = itemAggregationUUID = UUIDUtils.getUUID();
 
             Files.newDirectoryStream(Paths.get(unzippedFolderPath)).forEach(path -> {
                 //File tfile = new File(path.toUri());
-
                 if (Files.isDirectory(path)) {
+                    aggregationUUID = UUIDUtils.getUUID();
+
                     log.info("Aggregation: " + path.getFileName());
 
                     Rc002VO rc002VO = new Rc002VO();
@@ -126,7 +130,7 @@ public class Wf999Service extends BaseService {
                     // item 정보생성
                     Rc00501VO rc00501VO = new Rc00501VO();
                     rc00501VO.setRaTitle(getFileNameNoExt(path.getFileName().toString()));
-                    rc00501VO.setRaAggregationUuid(aggregationUUID);
+                    rc00501VO.setRaAggregationUuid(parentAggregationUUID);
 
                     // component 정보생성
                     List<Rc00502VO> componentsList = new ArrayList<>();
