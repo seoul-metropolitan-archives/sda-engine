@@ -94,8 +94,8 @@ taskExecutor:
 
 # Uploaded Archive File Path & Save Contents Path
 repository:
-  upload: D:\seoul-ams-repo\upload
-  contents: D:\seoul-ams-repo\contents
+  upload: /Users/jspark226/devspace/upload
+  contents: /Users/jspark226/devspace/contents
 
 # ONSEMIRO
 onsemiro:
