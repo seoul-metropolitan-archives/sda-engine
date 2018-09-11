@@ -532,11 +532,6 @@ function contextMenuClick(ui, treeData){
         case "AGG_ADD":
             selectedData = fnObj.naviView.getCurrent();
 
-            if(selectedData["uuid"] == ""){
-                axDialog.alert("Root위치에는 Item생성이 불가능합니다.");
-                return;
-            }
-
             item = getMenu("add aggregation");
             naviStr = undefined == selectedData["name"]? "" : " > "+selectedData["name"];
             item.menuParams = $.extend({},
@@ -622,6 +617,8 @@ function contextMenuClick(ui, treeData){
  */
 function getContextMenu(ui, nodeType){
     var menu = null;
+
+    $("#iconListArea").tooltip("disable");
 
     //컨트롤 누르고 클릭 시 해당 아이템들이 다중으로 선택되어야된다
     if ($(ui.target).attr("id") != "iconListArea") {
@@ -1344,10 +1341,21 @@ fnObj.iconView = axboot.viewExtend({
             fnObj.iconView.isOver = false;
         });
 
+        /**
+         * 화면 Resize 시 iconListArea 크기를 조정
+         */
         $(window).resize(function(event){
 
             if($("#iconListArea").width() != "100%")
                 $("#iconListArea").width($("div.explorer_list").width() - $("#itemTabs").width()-7);
+        });
+
+
+        /**
+         * Record Explorer Item/Aggregation Tooltip
+         */
+        $("#iconListArea").tooltip({
+            track: true
         });
 
         /*$(document).click(function(event){
@@ -1570,6 +1578,9 @@ fnObj.iconView = axboot.viewExtend({
                 $(this).contextmenu({
                     menu: getContextMenu(ui, contextTarget.attr("nodetype"))
                 });
+            },
+            close : function(event, ui){
+                $("#iconListArea").tooltip("enable");
             }
         });
     },
@@ -1658,6 +1669,7 @@ fnObj.iconView = axboot.viewExtend({
 
             cloneTag.find(".titleTag").append($("<div>").attr("class", data["name"].length > 15 ? "explorer_4line" : "explorer_text").text(data["name"]));
             cloneTag.attr("level",data["level"]);
+            cloneTag.attr("title", data["name"].length > 35 ? data["name"] : "");
             //cloneTag.css("position", "absolute");
             targetTag.append(cloneTag);
             fullStr = "";

@@ -27932,7 +27932,6 @@ a.small_open {
 
 
 #itemTabs{
-    height: 100%;
     width: 240px;
     position: absolute;
     top: 0px;
@@ -27959,7 +27958,6 @@ a.small_open {
     float: none;
     display: block;
     text-align: initial;
-    padding-right: 10px;
 }
 
 #propertiesView ul >li{
@@ -27968,6 +27966,7 @@ a.small_open {
 
 #propertiesView ul >li:first-child{
     font-weight: bold;
+    padding-right: 10px;
 }
 
 #propertiesView ul >li:last-child{
