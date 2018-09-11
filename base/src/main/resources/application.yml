@@ -31,7 +31,6 @@ spring:
 
     # HTTP Encoding
     encoding:
-
       charset: UTF-8
       enabled: true
       force: true
@@ -74,8 +73,8 @@ dip.process:
     cron: "0 0 5 31 12 *"
   #tmp.dir: D:\02.DreamAntDev\git-workspaces\java\seoul-ams\dip\tmp\
   #digital.file.dir: D:\02.DreamAntDev\git-workspaces\java\seoul-ams\dip\tmp\
-  tmp.dir: c:\devSpace\data\dip\tmp\
-  digital.file.dir: c:\devSpace\data\dip\tmp\
+  tmp.dir: /Users/jspark226/devspace/upload/dip/tmp/
+  digital.file.dir: /Users/jspark226/devspace/upload/dip/tmp/
 #개발
 #native.library.path: /Users/hyukjunlee/IdeaProjects/seoul-ams/src/main/resources/native-libs/
 #운영
@@ -87,10 +86,16 @@ streaming.param: /v3/documents/sftp?sftpPath=sftp://
 
 streaming.view : /view/sd;streamdocsId=
 
+# workflow TaskExcutor config
 taskExecutor:
   core-pool-size: 3
   max-pool-size: 10
   queue-capacity: 20
+
+# Uploaded Archive File Path & Save Contents Path
+repository:
+  upload: /Users/jspark226/devspace/upload
+  contents: /Users/jspark226/devspace/contents
 
 # ONSEMIRO
 onsemiro:
@@ -119,10 +124,6 @@ onsemiro:
       channel: error_logs
     database.enabled: true
     admin-url:
-  upload.repository:
-    img: c:\devspace\upload
-  #project base path
-  project-base-path:
 
 --- # Profile -------------------- :: local :: --------------------
 spring:
@@ -139,7 +140,7 @@ onsemiro:
     password: ams
   # File Upload
   #upload.repository:
-    img: c:\devSpace\upload\
+    #img: /devSpace/upload/
   #개발
   #data-source:
   #url: jdbc:oracle:thin:@//rmhost.iptime.org:1521/amsdb
