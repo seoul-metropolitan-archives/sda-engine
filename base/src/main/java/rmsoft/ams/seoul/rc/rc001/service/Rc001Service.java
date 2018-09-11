@@ -365,10 +365,10 @@ public class Rc001Service extends BaseService
         List<Rc00502VO> compList = params.getRc00502VoList();
         for (Rc00502VO comp : compList) {
             comp.setItemUuid(resultMap.get("itemUuid").toString());
-            comp.setPublicationStatusUuid(CommonCodeUtils.getCode("CD121", "Draft"));
-            comp.setAreaUuid(CommonCodeUtils.getCode("CD125", "Attachment"));
-            comp.setTypeUuid(CommonCodeUtils.getCode("CD126", "Draft"));
-            comp.setOpenStatusUuid(CommonCodeUtils.getCode("CD123", "Open"));
+            comp.setPublicationStatusUuid(CommonCodeUtils.getCodeDetailUuid("CD121", "Draft"));
+            comp.setAreaUuid(CommonCodeUtils.getCodeDetailUuid("CD125", "Attachment"));
+            comp.setTypeUuid(CommonCodeUtils.getCodeDetailUuid("CD126", "Draft"));
+            comp.setOpenStatusUuid(CommonCodeUtils.getCodeDetailUuid("CD123", "Open"));
             comp.setElectronYn("Y");
         }
 

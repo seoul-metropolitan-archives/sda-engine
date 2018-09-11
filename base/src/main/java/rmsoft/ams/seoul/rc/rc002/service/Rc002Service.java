@@ -192,8 +192,8 @@ public class Rc002Service extends BaseService
 
         String aggregationCode = jdbcTemplate.queryForObject("select fc_rc_aggregation_code from dual", String.class);
         rcAggregation.setAggregationCode(aggregationCode);
-        rcAggregation.setPublishedStatusUuid(CommonCodeUtils.getCode("CD121", "Draft"));
-        rcAggregation.setTypeUuid(CommonCodeUtils.getCode("CD127", "Temporary"));
+        rcAggregation.setPublishedStatusUuid(CommonCodeUtils.getCodeDetailUuid("CD121", "Draft"));
+        rcAggregation.setTypeUuid(CommonCodeUtils.getCodeDetailUuid("CD127", "Temporary"));
         rcAggregationRepository.save(rcAggregation);
 
         return ApiResponse.of(ApiStatus.SUCCESS,"SUCCESS");

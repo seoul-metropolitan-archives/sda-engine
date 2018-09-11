@@ -69,6 +69,7 @@ public class RcComponent extends BaseJpaModel<RcComponent.RcComponentId> {
 
     @Column(name = "THUMBNAIL", length = 36, nullable = true)
     @Comment(value = "THUMBNAIL")
+    @Transient
     private Blob thumbnail;
 
     @Column(name = "CHECKSUM_TYPE_UUID", length = 36, nullable = true)
