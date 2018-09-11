@@ -86,10 +86,16 @@ streaming.param: /v3/documents/sftp?sftpPath=sftp://
 
 streaming.view : /view/sd;streamdocsId=
 
+# workflow TaskExcutor config
 taskExecutor:
   core-pool-size: 3
   max-pool-size: 10
   queue-capacity: 20
+
+# Uploaded Archive File Path & Save Contents Path
+repository:
+  upload: D:\seoul-ams-repo\upload
+  contents: D:\seoul-ams-repo\contents
 
 # ONSEMIRO
 onsemiro:
@@ -118,10 +124,6 @@ onsemiro:
       channel: error_logs
     database.enabled: true
     admin-url:
-  upload.repository:
-    img: /Users/jspark226/devspace/upload
-  #project base path
-  project-base-path:
 
 --- # Profile -------------------- :: local :: --------------------
 spring:

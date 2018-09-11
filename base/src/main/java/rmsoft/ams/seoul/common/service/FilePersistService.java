@@ -29,7 +29,7 @@ import static java.util.stream.Collectors.toList;
 @Service
 public class FilePersistService  implements InitializingBean {
 
-    @Value("${onsemiro.upload.repository.img}")
+    @Value("${repository.upload}")
     private String path;
 
     public void persist(AX5File ax5File) throws IOException {

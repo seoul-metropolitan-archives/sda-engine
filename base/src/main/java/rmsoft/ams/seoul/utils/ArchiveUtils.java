@@ -63,6 +63,7 @@ public class ArchiveUtils {
     public static void extract(String targetZipFilePath, String destinationFolderPath, String password) {
         try {
             ZipFile zipFile = new ZipFile(targetZipFilePath);
+            zipFile.setFileNameCharset("EUC-KR");
             if (zipFile.isEncrypted()) {
                 zipFile.setPassword(password);
             }

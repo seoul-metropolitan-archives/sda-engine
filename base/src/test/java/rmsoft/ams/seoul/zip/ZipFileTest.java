@@ -61,6 +61,7 @@ public class ZipFileTest {
     public static void unzip(String targetZipFilePath, String destinationFolderPath, String password) {
         try {
             ZipFile zipFile = new ZipFile(targetZipFilePath);
+            zipFile.setFileNameCharset("EUC-KR");
             if (zipFile.isEncrypted()) {
                 zipFile.setPassword(password);
             }
@@ -114,8 +115,8 @@ public class ZipFileTest {
     public static void main(String[] args) {
 
         String targetPath = "D:\\02.DreamAntDev\\git-workspaces\\java\\seoul-ams\\archive_temp";
-        String zipFilePath = "D:\\ImageMap.zip";
-        String unzippedFolderPath = "D:\\02.DreamAntDev\\git-workspaces\\java\\seoul-ams\\archive_temp\\ImageMap.zip";
+        String zipFilePath = "D:\\상주시.zip";
+        String unzippedFolderPath = "D:\\seoul-ams-repo\\archive_temp";
         String password = "your_password"; // keep it EMPTY<""> for applying no password protection
 
         //ZipFileTest.zip(targetPath, zipFilePath, password);
