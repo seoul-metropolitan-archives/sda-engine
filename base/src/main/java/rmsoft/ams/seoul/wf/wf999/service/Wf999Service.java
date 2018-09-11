@@ -7,35 +7,27 @@ package rmsoft.ams.seoul.wf.wf999.service;
 import io.onsemiro.core.api.response.ApiResponse;
 import io.onsemiro.core.code.ApiStatus;
 import io.onsemiro.core.domain.BaseService;
-import io.onsemiro.core.parameter.RequestParams;
-import io.onsemiro.utils.ModelMapperUtils;
 import io.onsemiro.utils.UUIDUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import rmsoft.ams.seoul.common.domain.RcComponent;
-import rmsoft.ams.seoul.common.domain.WfParameter;
-import rmsoft.ams.seoul.common.domain.WfWorkflow;
-import rmsoft.ams.seoul.common.domain.WfWorkflowJob;
-import rmsoft.ams.seoul.common.repository.WfParameterRepository;
-import rmsoft.ams.seoul.common.repository.WfWorkflowJobRepository;
-import rmsoft.ams.seoul.common.repository.WfWorkflowRepository;
+import rmsoft.ams.seoul.rc.rc001.service.Rc001Service;
+import rmsoft.ams.seoul.rc.rc002.service.Rc002Service;
+import rmsoft.ams.seoul.rc.rc002.vo.Rc00201VO;
+import rmsoft.ams.seoul.rc.rc002.vo.Rc002VO;
+import rmsoft.ams.seoul.rc.rc005.vo.Rc00501VO;
 import rmsoft.ams.seoul.rc.rc005.vo.Rc00502VO;
 import rmsoft.ams.seoul.utils.ArchiveUtils;
-import rmsoft.ams.seoul.wf.wf999.dao.Wf999Mapper;
-import rmsoft.ams.seoul.wf.wf999.vo.Wf99901VO;
-import rmsoft.ams.seoul.wf.wf999.vo.Wf99902VO;
-import rmsoft.ams.seoul.wf.wf999.vo.Wf99903VO;
+import rmsoft.ams.seoul.utils.CommonCodeUtils;
 
-import javax.inject.Inject;
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -50,28 +42,11 @@ public class Wf999Service extends BaseService {
     @Value("${repository.contents}")
     private String contentsPath;
 
-    @Inject
-    private Wf999Mapper Wf999Mapper;
+    @Autowired
+    private Rc002Service rc002Service;
 
-
-/*public Page<Wf99901VO> findAllWorkflowResult(Pageable pageable, RequestParams<Wf99901VO> requestParams) {
-
-        Wf99901VO Wf99901VO = new Wf99901VO();
-        Wf99901VO.setServiceUuid(requestParams.getString("serviceUuid"));
-        Wf99901VO.setStatusUuid(requestParams.getString("statusUuid"));
-        Wf99901VO.setBatchId(requestParams.getString("batchId"));
-        Wf99901VO.setWorkflowName(requestParams.getString("workflowName"));
-        Wf99901VO.setExecuter(requestParams.getString("executer"));
-        Wf99901VO.setMenu(requestParams.getString("menu"));
-        Wf99901VO.setStartFromDate(requestParams.getString("startFromDate"));
-        Wf99901VO.setStartToDate(requestParams.getString("startToDate"));
-        Wf99901VO.setEndFromDate(requestParams.getString("endFromDate"));
-        Wf99901VO.setEndToDate(requestParams.getString("endToDate"));
-
-
-        return filter(Wf999Mapper.findAllWorkflowResult(Wf99901VO), pageable, "", Wf99901VO.class);
-    }*/
-
+    @Autowired
+    private Rc001Service rc001Service;
 
     /**
      * Extract archive api response.
@@ -87,49 +62,100 @@ public class Wf999Service extends BaseService {
         }
         // 파일이 업로드 되면 일단 파일 확장자 여부에 따라서 압축을 풀지 말지 결정한다.
         Rc00502VO rc00502VO = rc00502VOList.get(0);
+
         if (rc00502VO.getFileFormatUuid().equals("zip")) {
             // 압축파일인 경우
             // Extrace Zip File
-            ArchiveUtils.extract(uploadPath + File.separator + rc00502VO.getFilePath() + File.separator + rc00502VO.getOriginalFileName(), contentsPath + File.separator + getFileName(rc00502VO.getOriginalFileName()), "");
-
             try {
-                Files.newDirectoryStream(Paths.get(contentsPath + File.separator + getFileName(rc00502VO.getOriginalFileName()))).forEach(path -> {
-                    //File tfile = new File(path.toUri());
-                    if (Files.isDirectory(path)) {
-                        log.info("Aggregation: " + path.getFileName());
-                        ArchiveUtils.getEntrySet(path.toString());
-                    } else {
-                        log.info("Item and Component:" + path.getFileName());
-                    }
+                ArchiveUtils.extract(uploadPath + File.separator + rc00502VO.getFilePath() + File.separator + rc00502VO.getOriginalFileName(), contentsPath + File.separator + getFileNameNoExt(rc00502VO.getOriginalFileName()), "");
 
-                });
+                // 최상위 Aggregation 생성
+                String rootAggregationUUID = UUIDUtils.getUUID();
 
-                //Files.walk(Paths.get(unzippedFolderPath)).filter(Files::isRegularFile).forEach(System.out::println);
+                Rc002VO rc002VO = new Rc002VO();
+                Rc00201VO rc00201VO = new Rc00201VO();
+                rc00201VO.setAggregationUuid(rootAggregationUUID);
+                rc00201VO.setTitle(getFileNameNoExt(rc00502VO.getOriginalFileName()));
 
-           /* Files.walk(Paths.get(unzippedFolderPath)).forEach(path -> {
-                if (Files.isDirectory(path)) {
-                    log.info("Aggregation: " + path.getFileName());
-                    ZipFileTest.getEntrySet(path.toString());
-                } else {
-                    log.info("Item and Component:" + path.getFileName());
-                }
-            });*/
+                rc002VO.setSystemMeta(rc00201VO);
+                rc002Service.saveIngestAggregation(rc002VO);
 
+                // 하위 폴더 탐색하면서 집합체/아이템/컴포넌트 정보 생성
+                saveArchiveIngest(rootAggregationUUID, contentsPath + File.separator + getFileNameNoExt(rc00502VO.getOriginalFileName()));
             } catch (Exception e) {
                 e.printStackTrace();
+
                 return ApiResponse.of(ApiStatus.SYSTEM_ERROR, "아카이브 파일 해제중 에러가 발생하였습니다. 관리자에게 문의하세요");
             }
         } else {
             // 일반 파일인 경우
         }
 
-        // 어쩃든 대상 파일을 upload 폴더가 아닌 contents 폴더로 이동시킨다.
 
         // DB에 저장한다.
         return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");
     }
 
-    private String getFileName(String fullFileName) {
+    @Transactional
+    public void saveArchiveIngest(String parentAggregationUUID, String unzippedFolderPath) {
+        try {
+            String aggregationUUID = UUIDUtils.getUUID();
+
+            Files.newDirectoryStream(Paths.get(unzippedFolderPath)).forEach(path -> {
+                //File tfile = new File(path.toUri());
+
+                if (Files.isDirectory(path)) {
+                    log.info("Aggregation: " + path.getFileName());
+
+                    Rc002VO rc002VO = new Rc002VO();
+                    Rc00201VO rc00201VO = new Rc00201VO();
+                    rc00201VO.setAggregationUuid(aggregationUUID);
+                    rc00201VO.setParentsAggregationUuid(parentAggregationUUID);
+                    rc00201VO.setTitle(path.getFileName().toString());
+                    rc00201VO.setPublishedStatusUuid(CommonCodeUtils.getCode("CD121", "Draft"));
+                    rc00201VO.setTypeUuid(CommonCodeUtils.getCode("CD127", "Temporary"));
+
+                    rc002VO.setSystemMeta(rc00201VO);
+                    rc002Service.saveIngestAggregation(rc002VO);
+
+                    saveArchiveIngest(aggregationUUID, path.toString());
+
+                } else {
+                    log.info("Item and Component:" + path.getFileName());
+
+                    // item 정보생성
+                    Rc00501VO rc00501VO = new Rc00501VO();
+                    rc00501VO.setRaTitle(getFileNameNoExt(path.getFileName().toString()));
+                    rc00501VO.setRaAggregationUuid(aggregationUUID);
+
+                    // component 정보생성
+                    List<Rc00502VO> componentsList = new ArrayList<>();
+                    Rc00502VO rc00502VO = new Rc00502VO();
+                    rc00502VO.setTitle(getFileNameNoExt(path.getFileName().toString()));
+
+                    try{
+                        rc00502VO.setContentsSize((int)Files.size(path));
+                    }catch(IOException e){
+                        log.error("Can not check file size. :: {}", e.getMessage());
+                    }
+
+                    rc00502VO.setFilePath(path.toString());
+                    rc00502VO.setFileName(path.getFileName().toString());
+                    rc00502VO.setOriginalFileName(path.getFileName().toString());
+                    componentsList.add(rc00502VO);
+                    rc00501VO.setRc00502VoList(componentsList);
+
+                    // component save
+                    rc001Service.creItemAndCreComponent(rc00501VO);
+                }
+
+            });
+        } catch (Exception e) {
+            log.error("Aggregation, Item , Component 정보 생성중 에러가 발생하였습니다. :: {}", e.getMessage());
+        }
+    }
+
+    private String getFileNameNoExt(String fullFileName) {
         if (StringUtils.isNotEmpty(fullFileName)) {
             return fullFileName.substring(0, fullFileName.lastIndexOf("."));
         }
