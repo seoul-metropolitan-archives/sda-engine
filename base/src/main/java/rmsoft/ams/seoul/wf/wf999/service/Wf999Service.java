@@ -75,7 +75,7 @@ public class Wf999Service extends BaseService {
                 Rc002VO rc002VO = new Rc002VO();
                 Rc00201VO rc00201VO = new Rc00201VO();
                 rc00201VO.setAggregationUuid(rootAggregationUUID);
-                rc00201VO.setTitle(getFileNameNoExt(rc00502VO.getOriginalFileName()));
+                rc00201VO.setTitle(getFileNameNoExt(rc00502VO.getFileName()));
 
                 rc002VO.setSystemMeta(rc00201VO);
                 rc002Service.saveIngestAggregation(rc002VO);

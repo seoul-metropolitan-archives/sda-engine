@@ -5,7 +5,6 @@ import io.onsemiro.core.api.response.Responses;
 import io.onsemiro.core.code.ApiStatus;
 import io.onsemiro.core.domain.BaseService;
 import io.onsemiro.core.parameter.RequestParams;
-import io.onsemiro.utils.CommonCodeUtils;
 import io.onsemiro.utils.ModelMapperUtils;
 import io.onsemiro.utils.SessionUtils;
 import io.onsemiro.utils.UUIDUtils;
@@ -22,6 +21,7 @@ import rmsoft.ams.seoul.rc.rc005.dao.Rc005Mapper;
 import rmsoft.ams.seoul.rc.rc005.service.Rc005Service;
 import rmsoft.ams.seoul.rc.rc005.vo.Rc00501VO;
 import rmsoft.ams.seoul.rc.rc005.vo.Rc00502VO;
+import rmsoft.ams.seoul.utils.CommonCodeUtils;
 
 import javax.inject.Inject;
 import java.lang.reflect.Array;
@@ -380,7 +380,7 @@ public class Rc001Service extends BaseService
 
     /**
      * 외부파일 Drag & Drop 시 Component 생성 및 Item에 연결
-     * @param params
+     * @param param
      * @return
      */
     @Transactional
