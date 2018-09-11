@@ -42,8 +42,8 @@ public class Wf999Controller extends MessageBaseController {
      */
     @PutMapping(value = "/01/save")
     @PostMapping
-    public ApiResponse saveWorkflow(@RequestBody List<Rc00502VO> requestParams) {
-        return wf999Service.saveWorkflow(requestParams);
+    public ApiResponse extractArchive(@RequestBody List<Rc00502VO> requestParams) {
+        return wf999Service.extractArchive(requestParams);
     }
 
 }

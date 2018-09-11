@@ -11,7 +11,9 @@ import io.onsemiro.core.parameter.RequestParams;
 import io.onsemiro.utils.ModelMapperUtils;
 import io.onsemiro.utils.UUIDUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -24,46 +26,35 @@ import rmsoft.ams.seoul.common.repository.WfParameterRepository;
 import rmsoft.ams.seoul.common.repository.WfWorkflowJobRepository;
 import rmsoft.ams.seoul.common.repository.WfWorkflowRepository;
 import rmsoft.ams.seoul.rc.rc005.vo.Rc00502VO;
+import rmsoft.ams.seoul.utils.ArchiveUtils;
 import rmsoft.ams.seoul.wf.wf999.dao.Wf999Mapper;
 import rmsoft.ams.seoul.wf.wf999.vo.Wf99901VO;
 import rmsoft.ams.seoul.wf.wf999.vo.Wf99902VO;
 import rmsoft.ams.seoul.wf.wf999.vo.Wf99903VO;
 
 import javax.inject.Inject;
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 
 /**
- * The type Ac 005 service.
+ * The type Wf 999 service.
  */
 @Slf4j
 @Service
 public class Wf999Service extends BaseService {
+    @Value("${repository.upload}")
+    private String uploadPath;
 
-    @Autowired
-    private WfWorkflowRepository wfWorkflowRepository;
-
-    @Autowired
-    private WfWorkflowJobRepository wfWorkflowJobRepository;
-
-    @Autowired
-    private WfParameterRepository wfParameterRepository;
+    @Value("${repository.contents}")
+    private String contentsPath;
 
     @Inject
     private Wf999Mapper Wf999Mapper;
 
-    /**********************************************************************************************
-     * JOB 관련 Service Methods
-     **********************************************************************************************
-     */
 
-    /**
-     * 모든 Workflow 조회
-     *
-     * @param pageable      the pageable
-     * @param requestParams the request params
-     * @return page page
-     */
-    public Page<Wf99901VO> findAllWorkflowResult(Pageable pageable, RequestParams<Wf99901VO> requestParams) {
+/*public Page<Wf99901VO> findAllWorkflowResult(Pageable pageable, RequestParams<Wf99901VO> requestParams) {
 
         Wf99901VO Wf99901VO = new Wf99901VO();
         Wf99901VO.setServiceUuid(requestParams.getString("serviceUuid"));
@@ -79,139 +70,70 @@ public class Wf999Service extends BaseService {
 
 
         return filter(Wf999Mapper.findAllWorkflowResult(Wf99901VO), pageable, "", Wf99901VO.class);
-    }
+    }*/
+
 
     /**
-     * JOB 정보 저장
+     * Extract archive api response.
      *
-     * @param Wf99901VOList the ac 00501 vo list
-     * @return api response
+     * @param rc00502VOList the rc 00502 vo list
+     * @return the api response
      */
     @Transactional
-    public ApiResponse saveWorkflow(List<Rc00502VO> rc00502VOList) {
-        List<RcComponent> rcComponentList = ModelMapperUtils.mapList(rc00502VOList, RcComponent.class);
-//        List<WfWorkflow> wfWorkflowList = ModelMapperUtils.mapList(Wf99901VOList, WfWorkflow.class);
-//        WfWorkflow orgWfWorkflow = null;
-//
-//        for (WfWorkflow wfWorkflow : wfWorkflowList) {
-//            orgWfWorkflow = wfWorkflowRepository.findOne(wfWorkflow.getId());
-//
-//            if (orgWfWorkflow == null) {
-//                // created
-//                //wfWorkflow.setWorkflowUuid(UUIDUtils.getUUID());
-//                wfWorkflowRepository.save(wfWorkflow);
-//            } else {
-//                if (wfWorkflow.isDeleted()) {
-//                    wfWorkflowRepository.delete(wfWorkflow);
-//                } else {
-//                    wfWorkflow.setInsertDate(orgWfWorkflow.getInsertDate());
-//                    wfWorkflow.setInsertUuid(orgWfWorkflow.getInsertUuid());
-//
-//                    wfWorkflowRepository.save(wfWorkflow);
-//                }
-//            }
-//        }
-        return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");
-    }
+    public ApiResponse extractArchive(List<Rc00502VO> rc00502VOList) {
 
-
-    /**********************************************************************************************
-     * 파라미터 관련  Service Methods
-     **********************************************************************************************
-     */
-
-    /**
-     * Workflow Job 조회
-     *
-     * @param pageable      the pageable
-     * @param requestParams the request params
-     * @return page page
-     */
-    public Page<Wf99902VO> findWorkflowJobResult(Pageable pageable, RequestParams<Wf99902VO> requestParams) {
-        String filter = requestParams.getString("filter", "");
-
-        return filter(Wf999Mapper.findWorkflowJobResult(requestParams.getString("workflowResultUuid")), pageable, filter, Wf99902VO.class);
-    }
-
-    /**
-     * Workflow Job 정보 저장
-     *
-     * @param Wf99902VOList the ac 00502 vo list
-     * @return api response
-     */
-    @Transactional
-    public ApiResponse saveWorkfloeJob(List<Wf99902VO> Wf99902VOList) {
-        List<WfWorkflowJob> wfWorkflowJobList = ModelMapperUtils.mapList(Wf99902VOList, WfWorkflowJob.class);
-        WfWorkflowJob orgWfWorkflowJob = null;
-
-        for (WfWorkflowJob wfWorkflowJob : wfWorkflowJobList) {
-            orgWfWorkflowJob = wfWorkflowJobRepository.findOne(wfWorkflowJob.getId());
-
-            if (orgWfWorkflowJob == null) {
-                // created
-                wfWorkflowJob.setWorkflowJobUuid(UUIDUtils.getUUID());
-                wfWorkflowJobRepository.save(wfWorkflowJob);
-            } else {
-                if (wfWorkflowJob.isDeleted()) {
-                    wfWorkflowJobRepository.delete(wfWorkflowJob);
-                } else {
-                    wfWorkflowJob.setInsertDate(orgWfWorkflowJob.getInsertDate());
-                    wfWorkflowJob.setInsertUuid(orgWfWorkflowJob.getInsertUuid());
-
-                    wfWorkflowJobRepository.save(wfWorkflowJob);
-                }
-            }
+        if (rc00502VOList == null || rc00502VOList.size() == 0) {
+            return ApiResponse.of(ApiStatus.SYSTEM_ERROR, "아카이브할 대상 파일에 대한 정보가 없습니다.");
         }
-        return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");
-    }
+        // 파일이 업로드 되면 일단 파일 확장자 여부에 따라서 압축을 풀지 말지 결정한다.
+        Rc00502VO rc00502VO = rc00502VOList.get(0);
+        if (rc00502VO.getFileFormatUuid().equals("zip")) {
+            // 압축파일인 경우
+            // Extrace Zip File
+            ArchiveUtils.extract(uploadPath + File.separator + rc00502VO.getFilePath() + File.separator + rc00502VO.getOriginalFileName(), contentsPath + File.separator + getFileName(rc00502VO.getOriginalFileName()), "");
 
-    /**********************************************************************************************
-     * 파라미터 관련  Service Methods
-     **********************************************************************************************
-     */
+            try {
+                Files.newDirectoryStream(Paths.get(contentsPath + File.separator + getFileName(rc00502VO.getOriginalFileName()))).forEach(path -> {
+                    //File tfile = new File(path.toUri());
+                    if (Files.isDirectory(path)) {
+                        log.info("Aggregation: " + path.getFileName());
+                        ArchiveUtils.getEntrySet(path.toString());
+                    } else {
+                        log.info("Item and Component:" + path.getFileName());
+                    }
 
-    /**
-     * 파라미터 조회
-     *
-     * @param pageable      the pageable
-     * @param requestParams the request params
-     * @return page page
-     */
-    public Page<Wf99903VO> findParameterResult(Pageable pageable, RequestParams<Wf99903VO> requestParams) {
-        String filter = requestParams.getString("filter", "");
+                });
 
-        return filter(Wf999Mapper.findParameterResult(requestParams.getString("jobResultUuid")), pageable, filter, Wf99903VO.class);
-    }
+                //Files.walk(Paths.get(unzippedFolderPath)).filter(Files::isRegularFile).forEach(System.out::println);
 
-    /**
-     * 파라미터 정보 저장
-     *
-     * @param Wf99903VOList the ac 00502 vo list
-     * @return api response
-     */
-    @Transactional
-    public ApiResponse saveParameter(List<Wf99903VO> Wf99903VOList) {
-        List<WfParameter> wfParameterList = ModelMapperUtils.mapList(Wf99903VOList, WfParameter.class);
-        WfParameter orgWfParameter = null;
-
-        for (WfParameter wfParameter : wfParameterList) {
-            orgWfParameter = wfParameterRepository.findOne(wfParameter.getId());
-
-            if (orgWfParameter == null) {
-                // created
-                wfParameter.setParameterUuid(UUIDUtils.getUUID());
-                wfParameterRepository.save(wfParameter);
-            } else {
-                if (wfParameter.isDeleted()) {
-                    wfParameterRepository.delete(wfParameter);
+           /* Files.walk(Paths.get(unzippedFolderPath)).forEach(path -> {
+                if (Files.isDirectory(path)) {
+                    log.info("Aggregation: " + path.getFileName());
+                    ZipFileTest.getEntrySet(path.toString());
                 } else {
-                    wfParameter.setInsertDate(orgWfParameter.getInsertDate());
-                    wfParameter.setInsertUuid(orgWfParameter.getInsertUuid());
-
-                    wfParameterRepository.save(wfParameter);
+                    log.info("Item and Component:" + path.getFileName());
                 }
+            });*/
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ApiResponse.of(ApiStatus.SYSTEM_ERROR, "아카이브 파일 해제중 에러가 발생하였습니다. 관리자에게 문의하세요");
             }
+        } else {
+            // 일반 파일인 경우
         }
+
+        // 어쩃든 대상 파일을 upload 폴더가 아닌 contents 폴더로 이동시킨다.
+
+        // DB에 저장한다.
         return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");
+    }
+
+    private String getFileName(String fullFileName) {
+        if (StringUtils.isNotEmpty(fullFileName)) {
+            return fullFileName.substring(0, fullFileName.lastIndexOf("."));
+        }
+
+        return "";
     }
 }
