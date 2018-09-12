@@ -97,13 +97,10 @@ public class Wf999Service extends BaseService {
     }
 
     private String aggregationUUID;
-    private String itemAggregationUUID;
 
     @Transactional
     public void saveArchiveIngest(String parentAggregationUUID, String unzippedFolderPath) {
         try {
-            aggregationUUID = itemAggregationUUID = UUIDUtils.getUUID();
-
             Files.newDirectoryStream(Paths.get(unzippedFolderPath)).forEach(path -> {
                 //File tfile = new File(path.toUri());
                 if (Files.isDirectory(path)) {
@@ -116,8 +113,6 @@ public class Wf999Service extends BaseService {
                     rc00201VO.setAggregationUuid(aggregationUUID);
                     rc00201VO.setParentsAggregationUuid(parentAggregationUUID);
                     rc00201VO.setTitle(path.getFileName().toString());
-                    rc00201VO.setPublishedStatusUuid(CommonCodeUtils.getCode("CD121", "Draft"));
-                    rc00201VO.setTypeUuid(CommonCodeUtils.getCode("CD127", "Temporary"));
 
                     rc002VO.setSystemMeta(rc00201VO);
                     rc002Service.saveIngestAggregation(rc002VO);

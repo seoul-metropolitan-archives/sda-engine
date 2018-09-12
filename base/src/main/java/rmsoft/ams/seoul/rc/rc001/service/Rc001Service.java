@@ -357,7 +357,7 @@ public class Rc001Service extends BaseService
         RequestParams<Rc00501VO> requestParams = new RequestParams();
 
         requestParams.put("title", params.getRaTitle());
-        requestParams.put("publishedStatusUuid", CommonCodeUtils.getCode("CD121", "Draft"));
+        requestParams.put("publishedStatusUuid", CommonCodeUtils.getCodeDetailUuid("CD121", "Draft"));
         requestParams.put("raAggregationUuid", params.getRaAggregationUuid());
 
         Map resultMap = rc004Service.saveItemDetails(requestParams);
