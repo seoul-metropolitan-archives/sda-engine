@@ -55,9 +55,10 @@ public class Wf999Service extends BaseService {
      * @return the api response
      */
     @Transactional
-    public ApiResponse extractArchive(List<Rc00502VO> rc00502VOList) {
+    public ApiResponse extractArchive(Rc00501VO rc00501VO) {
+        List<Rc00502VO> rc00502VOList = rc00501VO.getRc00502VoList();
 
-        if (rc00502VOList == null || rc00502VOList.size() == 0) {
+        if (rc00501VO == null || rc00502VOList == null || rc00502VOList.size() == 0) {
             return ApiResponse.of(ApiStatus.SYSTEM_ERROR, "아카이브할 대상 파일에 대한 정보가 없습니다.");
         }
         // 파일이 업로드 되면 일단 파일 확장자 여부에 따라서 압축을 풀지 말지 결정한다.
@@ -75,6 +76,7 @@ public class Wf999Service extends BaseService {
                 Rc002VO rc002VO = new Rc002VO();
                 Rc00201VO rc00201VO = new Rc00201VO();
                 rc00201VO.setAggregationUuid(rootAggregationUUID);
+                rc00201VO.setParentsAggregationUuid(rc00501VO.getRaAggregationUuid());
                 rc00201VO.setTitle(getFileNameNoExt(rc00502VO.getFileName()));
 
                 rc002VO.setSystemMeta(rc00201VO);

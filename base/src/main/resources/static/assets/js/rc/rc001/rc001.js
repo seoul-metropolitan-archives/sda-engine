@@ -213,6 +213,52 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         });
 
     },
+    PAGE_INGEST: function (caller, act, data) {
+        axboot.modal.open({
+            modalType: "INGEST_POPUP",
+            width: 1000,
+            height: 800,
+            header: {
+                title: "INGEST"
+            },
+            sendData: function () {
+                // return {
+                //     confirmBtn:"Arrange",
+                //     crrntAgg: fnObj.formView.getData().aggInContainerName,
+                //     containerUuid :  currentContainerUuid
+                // };
+            },
+            callback: function (data) {
+                if(this) this.close();
+                UPLOAD.send();
+
+                // if(data){
+                //     ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1,data);
+                // }
+            }
+        });
+    },
+    INGEST_ARCHIVE: function (caller, act, data) {
+
+        var uploadFiles = UPLOAD.uploadedFiles;
+
+        axboot
+            .call({
+                type: "PUT",
+                url: "/api/v1/wf999/01/save",
+                data: JSON.stringify({raAggregationUuid : fnObj.naviView.getCurrent()["uuid"], rc00502VoList : uploadFiles}),
+                callback: function (res) {
+                    UPLOAD.uploadedFiles = [];
+                    axToast.push(axboot.getCommonMessage("AA007"));
+                    ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+                    ACTIONS.dispatch(ACTIONS.GET_SUBDATA,{uuid : fnObj.naviView.getCurrent()["uuid"]});
+                }
+            })
+            .done(function () {
+                //ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+                //axToast.push(axboot.getCommonMessage("AA007"));
+            });
+    },
     dispatch: function (caller, act, data) {
         var result = ACTIONS.exec(caller, act, data);
         if (result != "error") {
@@ -1050,11 +1096,17 @@ var fnObj = {
         });
 
         fnObj.treeView01.initView();
-        fnObj.naviView.iintView();
+        fnObj.naviView.initView();
         fnObj.iconView.initView();
         fnObj.gridView01.initView();
         fnObj.pageView.initView();
         fnObj.formView.initView();
+
+        $("#iconListArea").on({
+            "dragenter" : function(event){
+                $('[data-ax5uploader="upload1"]').show();
+            }
+        });
 
         var API_SERVER = CONTEXT_PATH;
 
@@ -1066,22 +1118,83 @@ var fnObj = {
                 fileName: "file"
             },
             multiple: true,
-            manualUpload: false,
+            manualUpload: true,
             progressBox: true,
             progressBoxDirection: "left",
             dropZone: {
-                target: $('[data-uploaded-box="upload1"]')
+                target: $('[data-uploaded-box="upload1"]'),
+                ondrop: function () {
+                    axDialog.confirm({
+                        title: "Seoul-AMS",
+                        msg: "입수정보를 작성해야합니다. 작성하셨습니까?"
+                    }, function () {
+                        if (this.key == "ok") {
+                            ACTIONS.dispatch(ACTIONS.PAGE_INGEST);
+                            // UPLOAD.send();
+                        }else{
+                            UPLOAD.send();
+                        }
+                    });
+                },
+                ondragover: function () {
+                    $('[data-ax5uploader="upload1"]').show();
+                },
+                ondragout: function () {
+                    $('[data-ax5uploader="upload1"]').hide();
+                }
             },
+            uploadedBox: {
+                target: $('[data-ax5uploader="upload1"]'),
+                icon: {
+                    "delete": '<i class="cqc-cancel" aria-hidden="true"></i>',
+                    "download": '<i class="cqc-save" aria-hidden="true"></i>'
+                },
+                columnKeys: {
+                    apiServerUrl: API_SERVER,
+                    name: "fileName",
+                    type: "ext",
+                    size: "fileSize",
+                    uploadedName: "saveName",
+                    thumbnail: ""
+                },
+                lang: {
+                    supportedHTML5_emptyListMsg: '<div class="text-center" style="padding-top: 30px;">신분증사진을 선택하세요(필수입력!)</div>',
+                    emptyListMsg: '<div class="text-center" style="padding-top: 30px;">Empty of List.</div>'
+                },
+                onchange: function () {
+                    console.log('onchange: ', this);
+                },
+                onclick: function () {
+                    // console.log(this.cellType);
+                    var fileIndex = this.fileIndex;
+                    var file = this.uploadedFiles[fileIndex];
+                    switch (this.cellType) {
+                        case "delete":
+                            axDialog.confirm({
+                                title: "Seoul-AMS",
+                                msg: "선택된 이미지를 삭제하시겠습니까?"
+                            }, function () {
+                                if (this.key == "ok") {
+                                    UPLOAD.removeFile(fileIndex);
+                                }
+                            });
+                            break;
 
+                        case "download":
+                            if (file.download) {
+                                location.href = API_SERVER + file.download;
+                            }
+                            break;
+                    }
+                }
+            },
             validateSelectedFiles: function () {
 
                 // 1개 이상 업로드 되지 않도록 제한.
                 return true;
             },
-            onprogress: function () {
-                console.log('progress');
-            },
             onuploaderror: function () {
+                $('[data-ax5uploader="upload1"]').hide();
                 axDialog.alert({
                     title: 'Onsemiro Uploader',
                     theme: "default",
@@ -1089,8 +1202,12 @@ var fnObj = {
                 });
             },
             onuploaded: function () {
+                //axToast.push("File Upload Completed : onuploaded");
             },
             onuploadComplete: function () {
+                $('[data-ax5uploader="upload1"]').hide();
+                axToast.push("File Upload Completed : onuploadComplete");
+                ACTIONS.dispatch(ACTIONS.INGEST_ARCHIVE);
             }
         });
 
@@ -1100,7 +1217,7 @@ var fnObj = {
 };
 
 fnObj.naviView = axboot.viewExtend({
-    iintView : function()
+    initView : function()
     {
         this.initEvent();
     },
@@ -1362,7 +1479,7 @@ fnObj.iconView = axboot.viewExtend({
 
         });*/
 
-        $("#iconListArea").delegate(">div","click",function(event){
+        $("#iconListArea").delegate(">div[nodeType]","click",function(event){
 
             event.stopPropagation();
 
@@ -1475,7 +1592,7 @@ fnObj.iconView = axboot.viewExtend({
 
         });
 
-        $("#iconListArea").delegate(">div","dblclick",function(event){
+        $("#iconListArea").delegate(">div[nodeType]","dblclick",function(event){
             event.stopPropagation();
 
             $("#componentView").empty();
@@ -1592,7 +1709,7 @@ fnObj.iconView = axboot.viewExtend({
         var data = undefined;
         var imgTag = undefined;
         var imgPath = "/assets/images/ams/";
-        targetTag.empty();
+        $("#iconListArea >div").remove("[nodeType]");
         var fullStr = "";
         this.list = list;
         if(list.length < 1)
