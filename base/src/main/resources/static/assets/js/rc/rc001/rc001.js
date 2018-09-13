@@ -1132,6 +1132,7 @@ var fnObj = {
                             ACTIONS.dispatch(ACTIONS.PAGE_INGEST);
                             // UPLOAD.send();
                         }else{
+                            $('[data-ax5uploader="upload1"]').hide();
                             UPLOAD.send();
                         }
                     });
@@ -2316,8 +2317,7 @@ fnObj.treeView01 = axboot.viewExtend(axboot.commonView, {
                         reqList.push({
                             uuid :treeNodes[i].uuid,
                             parentUuid :treeNodes[i].parentUuid,
-                            nodeType :treeNodes[i].nodeType,
-                            parentNodeType: parentNode["nodeType"]
+                            nodeType :treeNodes[i].nodeType
                         })
                     }
 
