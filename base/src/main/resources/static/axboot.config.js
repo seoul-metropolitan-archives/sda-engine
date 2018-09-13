@@ -148,8 +148,8 @@
                 }
             },
             "INGEST_POPUP" :{
-                width: 1000,
-                height: 700,
+                width: 700,
+                height: 650,
                 iframe: {
                     url: "/ig/ig002/ig002-p01"
                 }
@@ -188,8 +188,8 @@
 
             },
             "CLASSIFY_POPUP" :{
-                width: 1600,
-                height: 700,
+                width: 1200,
+                height: 800,
                 iframe: {
                     url: "/cl/cl003/cl003-p01"
                 }
