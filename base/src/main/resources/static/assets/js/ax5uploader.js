@@ -77,6 +77,8 @@
             this.selectedFilesTotal = 0;
             this.__loaded = 0;
 
+            this.abortCallback = null;
+
             cfg = this.config;
 
             /**
@@ -811,6 +813,10 @@
                 bound_bindEvent();
 
                 bound_repaintUploadedBox();
+
+                // abort 클릭시 Callback 함수연결
+                this.abortCallback = cfg.abortCallback;
+
                 return this;
             };
 
@@ -851,6 +857,10 @@
                         return this;
                     }
                     bound_cancelUpload();
+                    if(this.abortCallback){
+                        this.abortCallback.call();
+                    }
+
                     return this;
                 };
             }();

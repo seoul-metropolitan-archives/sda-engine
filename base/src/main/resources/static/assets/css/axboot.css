@@ -27939,11 +27939,16 @@ a.small_open {
     right: 0px;
     background-color: #ffffff;
     overflow-y: auto;
+    border-radius: initial;
+    padding: 0px;
+    border-top : 0px;
+    border-bottom : 0px;
 }
 
 #itemTabs >ul, #itemTabs >ul >li, #itemTabs >ul >li >a{
     height : 30px;
     font-weight: bold;
+    border-radius: initial;
 }
 
 #itemTabs ul li{

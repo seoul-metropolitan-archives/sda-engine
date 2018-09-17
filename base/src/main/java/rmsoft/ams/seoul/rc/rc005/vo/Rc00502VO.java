@@ -36,7 +36,7 @@ public class Rc00502VO extends BaseVO {
 
     private String sourceSystemUuid;
 
-    private int contentsSize;
+    private long contentsSize;
 
     private String fileFormatUuid;
 

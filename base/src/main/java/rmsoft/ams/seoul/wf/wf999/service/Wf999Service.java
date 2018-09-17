@@ -9,6 +9,7 @@ import io.onsemiro.core.code.ApiStatus;
 import io.onsemiro.core.domain.BaseService;
 import io.onsemiro.utils.UUIDUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,7 +22,6 @@ import rmsoft.ams.seoul.rc.rc002.vo.Rc002VO;
 import rmsoft.ams.seoul.rc.rc005.vo.Rc00501VO;
 import rmsoft.ams.seoul.rc.rc005.vo.Rc00502VO;
 import rmsoft.ams.seoul.utils.ArchiveUtils;
-import rmsoft.ams.seoul.utils.CommonCodeUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -51,7 +51,7 @@ public class Wf999Service extends BaseService {
     /**
      * Extract archive api response.
      *
-     * @param rc00502VOList the rc 00502 vo list
+     * @param rc00501VO the rc 00502 vo list
      * @return the api response
      */
     @Transactional
@@ -91,6 +91,32 @@ public class Wf999Service extends BaseService {
             }
         } else {
             // 일반 파일인 경우
+
+            // item 정보생성
+            rc00502VOList.forEach(fileInfo -> {
+                Rc00501VO itemVO = new Rc00501VO();
+
+                itemVO.setRaTitle(getFileNameNoExt(fileInfo.getFileName()));
+                itemVO.setRaAggregationUuid(rc00501VO.getRaAggregationUuid());
+
+                // component 정보생성
+                File file = new File(uploadPath + "\\" + fileInfo.getFilePath() + "\\" + fileInfo.getOriginalFileName());
+                File fileToMove = new File(contentsPath + "\\" + fileInfo.getFilePath());
+                try {
+                    FileUtils.moveToDirectory(file, fileToMove, true);
+                }catch (IOException e){
+                    e.printStackTrace();
+                }
+
+                List<Rc00502VO> componentsList = new ArrayList<>();
+                fileInfo.setTitle(getFileNameNoExt(fileInfo.getFileName().toString()));
+                fileInfo.setFilePath(fileToMove.getAbsolutePath());
+                componentsList.add(fileInfo);
+                itemVO.setRc00502VoList(componentsList);
+
+                // component save
+                rc001Service.creItemAndCreComponent(itemVO);
+            });
         }
 
 
