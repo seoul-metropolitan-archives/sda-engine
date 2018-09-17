@@ -170,6 +170,14 @@ public class Rc002Service extends BaseService
                     rcAggregationCon.setUpdateUuid(SessionUtils.getCurrentLoginUserUuid());
 
                     rcAggregationConRepository.save(rcAggregationCon);
+                }else{
+                    rcAggregationCon.setAggregationUuid(uuid);
+                    String creationStartDate = rcAggregationCon.getCreationStartDate().replace("-","");
+                    rcAggregationCon.setCreationStartDate(creationStartDate);
+                    String creationEndDate = rcAggregationCon.getCreationEndDate().replace("-","");
+                    rcAggregationCon.setCreationEndDate(creationEndDate);
+                    rcAggregationCon.set__created__(true);
+                    rcAggregationConRepository.save(rcAggregationCon);
                 }
             }
         }
