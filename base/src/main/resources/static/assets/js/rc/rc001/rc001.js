@@ -1130,6 +1130,10 @@ var fnObj = {
                     }, function () {
                         if (this.key == "ok") {
                             ACTIONS.dispatch(ACTIONS.PAGE_INGEST);
+
+                            $(["data-pregressbox-btn='abort'"]).click(function(){
+                                $('[data-ax5uploader="upload1"]').hide();
+                            });
                             // UPLOAD.send();
                         }else{
                             $('[data-ax5uploader="upload1"]').hide();
@@ -1141,6 +1145,9 @@ var fnObj = {
                     $('[data-ax5uploader="upload1"]').show();
                 },
                 ondragout: function () {
+                    $('[data-ax5uploader="upload1"]').hide();
+                },
+                onclick: function () {
                     $('[data-ax5uploader="upload1"]').hide();
                 }
             },
@@ -1209,6 +1216,10 @@ var fnObj = {
                 $('[data-ax5uploader="upload1"]').hide();
                 axToast.push("File Upload Completed : onuploadComplete");
                 ACTIONS.dispatch(ACTIONS.INGEST_ARCHIVE);
+            },
+            abortCallback: function(){
+                $('[data-ax5uploader="upload1"]').hide();
+                axToast.push("업로드를 취소하였습니다.");
             }
         });
 
@@ -1424,6 +1435,7 @@ fnObj.detailView = axboot.viewExtend({
 */
 fnObj.iconView = axboot.viewExtend({
     pressedCtrl : false,
+    pressedShift : false,
     isdbClk : false,
     selectedItem : null,
     timer : 0,
@@ -1443,9 +1455,11 @@ fnObj.iconView = axboot.viewExtend({
 
         $(document).keydown(function(event){
             fnObj.iconView.pressedCtrl = event.ctrlKey;
+            fnObj.iconView.pressedShift = event.shiftKey;
         });
         $(document).keyup(function(event){
             fnObj.iconView.pressedCtrl = event.ctrlKey;
+            fnObj.iconView.pressedShift = event.shiftKey;
         });
         $(document).click(function(event){
             $("#iconListArea .selected").removeClass("selected");
@@ -1485,11 +1499,26 @@ fnObj.iconView = axboot.viewExtend({
             event.stopPropagation();
 
             $("#componentView").empty();
-            if(fnObj.iconView.pressedCtrl)
-            {
+            if(fnObj.iconView.pressedCtrl){
                 $(this).toggleClass("selected");
-            }
-            else {
+            }else if(fnObj.iconView.pressedShift){
+                var selectedIdx = $("#iconListArea .selected").index();
+
+                if(selectedIdx == -1){
+                    $(this).toggleClass("selected");
+                }else if(selectedIdx < $(this).index()){
+                    for(var i=selectedIdx; i <= $(this).index(); i++){
+                        $($("#iconListArea >div").get(i)).addClass("selected");
+                    }
+                }else if(selectedIdx > $(this).index()){
+                    for(var i=$(this).index(); i <= selectedIdx; i++){
+                        $($("#iconListArea >div").get(i)).addClass("selected");
+                    }
+                }else{
+                    $(this).toggleClass("selected");
+                }
+
+            } else {
                 //컨트롤 누르지 않고 클릭 시 해당 아이템만 선택되어야된다
                 $("#iconListArea >div").removeClass("selected");
                 $(this).toggleClass("selected");
@@ -1683,8 +1712,24 @@ fnObj.iconView = axboot.viewExtend({
 
                 if (fnObj.iconView.pressedCtrl) {
                     contextTarget.addClass("selected");
-                }
-                else {
+                } else if(fnObj.iconView.pressedShift){
+                    var selectedIdx = $("#iconListArea .selected").index();
+
+                    if(selectedIdx == -1){
+                        contextTarget.toggleClass("selected");
+                    }else if(selectedIdx < contextTarget.index()){
+                        for(var i=selectedIdx; i <= contextTarget.index(); i++){
+                            $($("#iconListArea >div").get(i)).addClass("selected");
+                        }
+                    }else if(selectedIdx > contextTarget.index()){
+                        for(var i=contextTarget.index(); i <= selectedIdx; i++){
+                            $($("#iconListArea >div").get(i)).addClass("selected");
+                        }
+                    }else{
+                        contextTarget.toggleClass("selected");
+                    }
+
+                } else {
                     //컨트롤 누르지 않고 클릭 시 해당 아이템만 선택되어야된다
                     $("#iconListArea >div").removeClass("selected");
                     contextTarget.toggleClass("selected");
