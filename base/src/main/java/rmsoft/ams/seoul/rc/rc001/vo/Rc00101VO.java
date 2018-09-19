@@ -19,5 +19,6 @@ public class Rc00101VO extends BaseVO
     private String nodeType;
     private String level;
     private String name;
+    private String publishedStatus;
     private int childCnt;
 }
