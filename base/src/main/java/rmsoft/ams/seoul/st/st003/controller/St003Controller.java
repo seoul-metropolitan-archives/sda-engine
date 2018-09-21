@@ -56,8 +56,8 @@ public class St003Controller extends BaseController {
         return apiResponse;
     }
     @GetMapping("/04/list01")
-    public Responses.PageResponse getAggregationHierarchyList(Pageable pageable) {
-        Page<St00302VO> pages  = st003Service.getAggregationHierarchyList(pageable);
+    public Responses.PageResponse getAggregationHierarchyList(Pageable pageable,RequestParams<St00301VO> requestParam) {
+        Page<St00302VO> pages  = st003Service.getAggregationHierarchyList(pageable,requestParam);
         return Responses.PageResponse.of(pages.getContent(), pages);
     }
     @GetMapping("/04/list02")

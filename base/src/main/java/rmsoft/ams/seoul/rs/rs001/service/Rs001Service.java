@@ -53,6 +53,9 @@ public class Rs001Service extends BaseService{
             changeStatus = list.get(index).getChangeStatus() == "" ? "Draft" : list.get(index).getChangeStatus();
             orgRsGeneralRecordSchedule = rsGeneralRecordScheduleRepository.findOne(rsGeneralRecordSchedule.getId());
             rsGeneralRecordSchedule.setStatusUuid(CommonCodeUtils.getCodeDetailUuid("CD134",changeStatus));
+            if(changeStatus.equals("Confirm")){
+                rsGeneralRecordSchedule.setUseYn("Y");
+            }
             rsGeneralRecordSchedule.setInsertDate(orgRsGeneralRecordSchedule.getInsertDate());
             rsGeneralRecordSchedule.setInsertUuid(orgRsGeneralRecordSchedule.getInsertUuid());
             rsGeneralRecordScheduleRepository.save(rsGeneralRecordSchedule);
@@ -95,7 +98,7 @@ public class Rs001Service extends BaseService{
         return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");
     }
 
-    public int getRelatedData(String triggerUuid) {
-        return rs001Mapper.getRelatedData(triggerUuid);
+    public int getRelatedData(String generalRecordScheduleUuid) {
+        return rs001Mapper.getRelatedData(generalRecordScheduleUuid);
     }
 }

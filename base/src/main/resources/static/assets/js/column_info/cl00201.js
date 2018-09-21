@@ -72,6 +72,15 @@ var cl00201 =
                     editable: false,
                     dataType: "code",
                     visible : false
+                },
+                {
+                    sortNo: 100,
+                    width:140,
+                    name: "isLeaf",
+                    text: "isLeaf",
+                    editable: false,
+                    dataType: "code",
+                    visible : false
                 }
             ]
     }

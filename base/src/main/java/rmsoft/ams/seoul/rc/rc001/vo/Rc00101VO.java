@@ -20,5 +20,8 @@ public class Rc00101VO extends BaseVO
     private String level;
     private String name;
     private String publishedStatus;
+    private String orderKey1;
+    private String classifyRecordsUuid;
+    private String classUuid;
     private int childCnt;
 }

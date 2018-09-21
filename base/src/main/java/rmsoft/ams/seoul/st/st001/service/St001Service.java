@@ -10,9 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import rmsoft.ams.seoul.common.domain.StLocation;
-import rmsoft.ams.seoul.common.domain.StRepository;
-import rmsoft.ams.seoul.common.domain.StShelf;
+import rmsoft.ams.seoul.common.domain.*;
 import rmsoft.ams.seoul.common.repository.StLocationRepository;
 import rmsoft.ams.seoul.common.repository.StRepositoryRepository;
 import rmsoft.ams.seoul.common.repository.StShelfRepository;
@@ -24,6 +22,9 @@ import rmsoft.ams.seoul.utils.CommonCodeUtils;
 
 import javax.inject.Inject;
 import java.util.List;
+import java.util.Map;
+
+import com.querydsl.core.types.Predicate;
 
 @Service
 public class St001Service extends BaseService {
@@ -126,14 +127,32 @@ public class St001Service extends BaseService {
     public ApiResponse saveRepositoryList(List<St00101VO> list) {
         List<StRepository> stRepositoryList = ModelMapperUtils.mapList(list, StRepository.class);
         StRepository orgStRepository = null;
+        int cnt = 0;
         for (StRepository stRepository : stRepositoryList) {
             if(stRepository.isDeleted()){
                 stRepositoryRepository.delete(stRepository);
+                //연관 데이터 삭제
+                QStShelf qStShelf = QStShelf.stShelf;
+                Predicate predicate = qStShelf.shelfUuid.eq(stRepository.getRepositoryUuid());
+                Iterable<StShelf> delStShelf = stShelfRepository.findAll(predicate);
+                delStShelf.forEach(stShelf -> {
+                    // Shelf 삭제
+                    stShelfRepository.delete(stShelf.getId());
+
+                    // Shelf 관련된 Location 삭제
+                    QStLocation qStLocation = QStLocation.stLocation;
+                    stLocationRepository.delete(stLocationRepository.findAll(qStLocation.shelfUuid.eq(stShelf.getShelfUuid())));
+                });
+
+
+                stShelfRepository.delete(stShelfRepository.findAll(predicate));
+
+
             }else{
                 if(stRepository.isCreated()){
                     String orgCodeSeq = jdbcTemplate.queryForObject("SELECT ST_REPOSITORY_CODE_SEQ.NEXTVAL FROM dual", String.class);
                     String repositoryCodeSeq = orgCodeSeq;
-                    for (int i = 0; i < Math.abs(orgCodeSeq.length() - 3); i++) {
+                    for (cnt = 0; cnt < Math.abs(orgCodeSeq.length() - 3); cnt++) {
                         repositoryCodeSeq = "0" + repositoryCodeSeq;
                     }
                     stRepository.setRepositoryCode(repositoryCodeSeq);
@@ -142,10 +161,17 @@ public class St001Service extends BaseService {
                     orgStRepository = stRepositoryRepository.findOne(stRepository.getId());
                     stRepository.setInsertDate(orgStRepository.getInsertDate());
                     stRepository.setInsertUuid(orgStRepository.getInsertUuid());
+
+                    if(stRepository.getUseYn().equals("N")){
+                        jdbcTemplate.update("UPDATE ST_SHELF SET USE_YN = 'N' WHERE REPOSITORY_UUID = '" + stRepository.getRepositoryUuid() + "' ");
+                        List<Map<String,Object>> results = jdbcTemplate.queryForList("SELECT SHELF_UUID FROM ST_SHELF WHERE REPOSITORY_UUID ='" + stRepository.getRepositoryUuid() + "'");
+                        for (Map m : results){
+                            jdbcTemplate.update("UPDATE ST_LOCATION SET USE_YN = 'N' WHERE SHELF_UUID = '" + m.get("SHELF_UUID") + "' ");
+                        }
+                    }
                 }
                 stRepositoryRepository.save(stRepository);
             }
-
         }
         return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");
     }
@@ -157,12 +183,12 @@ public class St001Service extends BaseService {
         int cnt = 0;
         for (StShelf stShelf : stShelfList) {
             if(stShelf.isDeleted()){
-
+                stShelfRepository.delete(stShelf);
             }else{
                 if(stShelf.isCreated()){
                     String orgCodeSeq = jdbcTemplate.queryForObject("SELECT ST_SHELF_CODE_SEQ.NEXTVAL FROM dual", String.class);
                     String shelfCodeSeq = orgCodeSeq;
-                    for (int i = 0; i < Math.abs(orgCodeSeq.length() - 3); i++) {
+                    for (cnt = 0; cnt < Math.abs(orgCodeSeq.length() - 3); cnt++) {
                         shelfCodeSeq = "0" + shelfCodeSeq;
                     }
                     stShelf.setShelfCode(shelfCodeSeq);
@@ -171,6 +197,10 @@ public class St001Service extends BaseService {
                     orgStShelf = stShelfRepository.findOne(stShelf.getId());
                     stShelf.setInsertDate(orgStShelf.getInsertDate());
                     stShelf.setInsertUuid(orgStShelf.getInsertUuid());
+
+                    if(stShelf.getUseYn().equals("N")){
+                        jdbcTemplate.update("UPDATE ST_SHELF SET USE_YN = 'N' WHERE REPOSITORY_UUID = '" + stShelf.getShelfUuid() + "' ");
+                    }
                 }
                 stShelfRepository.save(stShelf);
             }
@@ -185,7 +215,7 @@ public class St001Service extends BaseService {
         StLocation orgStLocation = null;
         for (StLocation stLocation : stLocationList) {
             if(stLocation.isDeleted()){
-
+                stLocationRepository.delete(stLocation);
             }else{
                 if(stLocation.isCreated()){
                     stLocation.setStatusUuid(CommonCodeUtils.getCodeDetailUuid("CD138","Draft"));

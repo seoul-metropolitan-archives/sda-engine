@@ -744,7 +744,10 @@ GridWrapper.prototype.option = {
             visible : false
         },
         checkBar : {
-            visible : false
+            visible : false,
+            style : {
+                "background": "#ffffffff"
+            }
         },
         stateBar : {
             visible : false
@@ -1758,6 +1761,7 @@ GridWrapper.prototype.setCustomCellStyleRow = function(gridWrapper, grid, row, t
     for (var i = 0; i < columnNames.length; i++) {
         columnIndexList.push(this.dataProvider.getFieldIndex(columnNames[i]));
     }
+
     grid.addCellStyle("customStyle01", styles, true);
     var applyData = {rows: new Array(), columns: columnNames}
 
@@ -1768,6 +1772,32 @@ GridWrapper.prototype.setCustomCellStyleRow = function(gridWrapper, grid, row, t
             gridWrapper.gridView.setCellStyle(row, columnNames[j], this.defaultStyles[columnNames[j]], true);
         }
     }
+
+    // var applyData = {rows: new Array(), columns: columnNames, conditionFunc : conditionFunc, reverseColumns : reverseColumns}
+    //
+    // for (var i = 0; i < rows.length; i++) {
+    //     var columns = null;
+    //
+    //     if(typeof columnNames == "function"){
+    //         columns = columnNames(rows[i]);
+    //     }else{
+    //         columns = columnNames;
+    //     }
+    //
+    //     applyData.rows.push({index : i, data : rows[i]});
+    //
+    //     if (conditionFunc(rows[i])) {
+    //         //for (var j = 0; j < columnIndexList.length; j++) {
+    //         //this.gridView.setCellStyle(i, columnIndexList[j], type, true);
+    //         this.gridView.setCellStyles(i, columns, type, true);
+    //         //}
+    //     } else if(reverseColumns && !conditionFunc(rows[i])) {
+    //         this.gridView.setCellStyles(i, reverseColumns, type, true);
+    //     } else {
+    //         for (var j = 0; j < columnIndexList.length; j++) {
+    //             this.gridView.setCellStyle(i, columnIndexList[j], this.defaultStyles[columnIndexList[j]], true);
+    //         }
+    //     }
 
 }
 

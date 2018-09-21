@@ -44,7 +44,7 @@ public class ClClassifyRecordsResult extends BaseJpaModel<ClClassifyRecordsResul
 
     @Column(name = "AGGREGATION_UUID", length = 36)
     @Comment(value = "집합ID")
-    private String aggregationId;
+    private String aggregationUuid;
 
     @Column(name = "ITEM_UUID")
     @Comment(value = "아이템UUID")
@@ -53,6 +53,10 @@ public class ClClassifyRecordsResult extends BaseJpaModel<ClClassifyRecordsResul
     @Column(name = "CLASSIFIED_DATE")
     @Comment(value = "분류날짜")
     private Timestamp classifiedDate;
+
+    @Column(name = "CHOICE_YN")
+    @Comment(value = "선택구분")
+    private String choiceYn;
 
     @Override
     public ClClassifyRecordsId getId() { return ClClassifyRecordsId.of(classifyRecordsUuid); }

@@ -23,12 +23,20 @@ var st00301_p01_02 =
                 sortNo: 3,
                 name: "itemTitle",
                 text: "Title",
-                width: 500,
+                width: 300,
                 editable: false,
                 dataType: "text"
             },
             {
                 sortNo: 4,
+                name: "catPath",
+                text: "Aggregation Path",
+                width: 300,
+                editable: false,
+                dataType: "text"
+            },
+            {
+                sortNo: 5,
                 name: "itemTypeUuid",
                 text: "Type",
                 width: 110,
@@ -36,7 +44,7 @@ var st00301_p01_02 =
                 dataType: "text"
             },
             {
-                sortNo: 5,
+                sortNo: 6,
                 name: "description",
                 text: "Description",
                 width: 100,
@@ -44,7 +52,7 @@ var st00301_p01_02 =
                 dataType: "text"
             },
             {
-                sortNo: 6,
+                sortNo: 7,
                 name: "notes",
                 text: "Notes",
                 width: 100,
@@ -52,17 +60,9 @@ var st00301_p01_02 =
                 dataType: "text"
             },
             {
-                sortNo: 7,
-                name: "catPath",
-                text: "Aggregation",
-                width: 100,
-                editable: false,
-                dataType: "text"
-            },
-            {
                 sortNo: 8,
                 name: "checked",
-                text: "Aggregation",
+                text: "checked",
                 width: 100,
                 editable: false,
                 visible: false,

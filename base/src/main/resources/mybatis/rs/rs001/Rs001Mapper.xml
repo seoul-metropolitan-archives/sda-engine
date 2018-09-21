@@ -48,4 +48,9 @@
         </where>
         ORDER BY GRS_NAME
     </select>
+    <select id="getRelatedData" resultType="int" parameterType="String" statementType="PREPARED">
+        SELECT count(*)
+        FROM RS_RECORD_SCHEDULE
+        WHERE GENERAL_RECORD_SCHEDULE_UUID = #{generalRecordScheduleUuid}
+    </select>
 </mapper>

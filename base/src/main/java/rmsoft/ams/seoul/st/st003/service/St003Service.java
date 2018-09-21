@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestParam;
 import rmsoft.ams.seoul.common.domain.StArrangeRecordsResult;
 import rmsoft.ams.seoul.common.repository.StArrangeRecordsResultRepository;
 import rmsoft.ams.seoul.st.st003.dao.St003Mapper;
@@ -105,8 +106,10 @@ public class St003Service extends BaseService {
         return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");
     }
 
-    public Page<St00302VO> getAggregationHierarchyList(Pageable pageable) {
-        return filter(st003Mapper.getAggregationHierarchyList(), pageable, "", St00302VO.class);
+    public Page<St00302VO> getAggregationHierarchyList(Pageable pageable, RequestParams<St00301VO> requestParam) {
+        St00301VO st00301VO = new St00301VO();
+        st00301VO.setTypeUuid(requestParam.getString("typeUuid"));
+        return filter(st003Mapper.getAggregationHierarchyList(st00301VO), pageable, "", St00302VO.class);
     }
 
     public Page<St00303VO> getSelectedItem(Pageable pageable, RequestParams<St00303VO> requestParams) {

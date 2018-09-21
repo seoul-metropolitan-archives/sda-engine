@@ -4,6 +4,9 @@ var classificationSchemeUuid = "";
 var crntClassUuid = "";
 var CONFIRM_STATUS = "Confirm";
 var CANCEL_STATUS = "Draft";
+var isLeaf =  "0";
+var gridData = [];
+var deletingList =  [];
 var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH: function (caller, act, data) {
         ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1);
@@ -16,7 +19,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             data: $.extend({}, {pageSize: 1000}, {classificationSchemeUuid:classificationSchemeUuid}),
             callback: function (res) {
                 classList = ax5.util.deepCopy(res.list);
-                ACTIONS.dispatch(fnObj.gridView01.setData(res.list));
+                fnObj.gridView01.setData(res.list);
             },
             options: {
                 onError: axboot.viewError
@@ -27,10 +30,12 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH1: function (caller, act, data) {
         axboot.ajax({ //트리 리스트
             type: "GET",
-            url: "/api/v1/cl/cl003/01/list02",
+            url: "/api/v1/cl/cl003/01/list01",
             data: $.extend({}, {pageSize: 1000}, {classUuid:crntClassUuid}),
             callback: function (res) {
                 fnObj.gridView03.clearData();
+                gridData = [];
+                gridData = ax5.util.deepCopy(res.list);
                 fnObj.gridView03.setData(res.list);
             },
             options: {
@@ -39,16 +44,41 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         });
         return false;
     },
+
     STATUS_UPDATE: function (caller, act, data) {
 
         var rows = fnObj.gridView03.gridObj.getCheckedList();
-
         if(!rows || rows.length < 1) return;
 
-        var params = rows.filter(function (item) {
+        //var items = fnObj.gridView03.gridObj.gridView.getCheckedItems();
+        var _checkedAllList = [];
+
+        var convertList = function (items) {
+            items.forEach(function(n){
+                _checkedAllList.push(fnObj.gridView03.gridObj.getDataProvider().getJsonRow(n));
+                if(fnObj.gridView03.gridObj.getDataProvider().getChildren(n)){
+                    convertList(fnObj.gridView03.gridObj.getDataProvider().getChildren(n));
+                }
+            })
+            return _checkedAllList;
+        };
+
+        var checkedAllList = convertList(fnObj.gridView03.gridObj.gridView.getCheckedRows());
+
+
+        var params = checkedAllList.filter(function (item) {
             item.changeStatus = data;
             return item.classifyRecordsResultUuid !== "";
         });
+
+        /*var params = gridData.filter(function (item) {
+            item.changeStatus = data;
+            var inCnt = 0;
+            rows.forEach(function(n,nidx){
+                if(item["orderKey1"].toString().indexOf(n["orderKey1"])!== -1) inCnt++;
+            })
+            return inCnt > 0 ? true : false;
+        });*/
 
         axboot.ajax({
             type: "PUT",
@@ -79,12 +109,13 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         axboot.call({
             type: "PUT",
             url: "/api/v1/cl/cl003/02/save",
-            data: JSON.stringify(this.gridView03.getData()),
+            data: JSON.stringify({cl00301VOList:deletingList}),
             callback: function (res) {
                 ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1);
             }
         })
             .done(function () {
+                deletingList = [];
                 axToast.push("저장 작업이 완료되었습니다.");
             });
         return result;
@@ -93,15 +124,15 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
     },
     PAGE_CLASSIFY: function (caller, act, data) {
-        if(crntClassUuid == ""){
-            alert("Select Class");
+        if(crntClassUuid == "" || isLeaf != "1"){
+            // alert("Select Class");
             return
         }
 
+        // if(isLeaf != "1") return;
+
         axboot.modal.open({
             modalType: "CLASSIFY_POPUP",
-            width: 1600,
-            height: 800,
             header: {
                 title: "CLASSIFY"
             },
@@ -164,13 +195,6 @@ fnObj.pageStart = function () {
         success: function () {
         }
     });
-    // $.ajax({
-    //     url: "/assets/js/column_info/cl00301.js",
-    //     dataType: "script",
-    //     async: false,
-    //     success: function () {
-    //     }
-    // });
     $.ajax({
         url: "/assets/js/column_info/cl00302.js",
         dataType: "script",
@@ -181,7 +205,6 @@ fnObj.pageStart = function () {
 
     _this.formView.initView();
     _this.gridView01.initView();
-    // _this.gridView02.initView();
     _this.gridView03.initView();
 
     ACTIONS.dispatch(ACTIONS.PAGE_SEARCH2, this.formView.getData());
@@ -265,8 +288,14 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
                 header: { visible: false },
                 checkBar: {visible: false},
                 indicator: {visible: false},
-                stateBar:{visible:false}
+                stateBar:{visible:false},
+                showAll: false,
             })
+        this.gridObj.style.body = {
+            borderRight: "#ccc,1px",
+            borderBottom: "#ccc,1px",
+            line: "#ffaaaaaa,0px"
+        };
         this.gridObj.setColumnInfo(cl00201.column_info).makeGrid();
 
         this.gridObj.setDisplayOptions({
@@ -308,6 +337,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     itemClick: function (data, index) {
         if(data != null){
             crntClassUuid = data.classUuid;
+            isLeaf = data.isLeaf;
             ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1);
 
         }
@@ -318,42 +348,95 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
 
 });
 
-// fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
-//     tagId: "realgrid02",
-//     primaryKey : "classifiedRecordsUuid",
-//     entityName : "classifiedRecordsUuid",
-//     initView: function () {
-//         this.initInstance();
-//         this.setColumnInfo(cl00301.column_info);
-//         this.gridObj.setOption({
-//             checkBar: {visible: true},
-//             indicator: {visible: true}
-//         })
-//         this.makeGrid();
-//         this.gridObj.itemClick(this.itemClick);
-//     },
-//     isChangeData: function () {
-//     },
-//     itemClick: function (data) {
-//     }
-// });
 fnObj.gridView03 = axboot.viewExtend(axboot.gridView, {
-    tagId: "realgrid03",
-    primaryKey : "classifiedRecordsUuid",
-    entityName : "classifiedRecordsUuid",
+    tagId : "realgrid03",
+    uuidFieldName : "classifyRecordsUuid",
     initView: function () {
-        this.initInstance();
-        this.setColumnInfo(cl00302.column_info);
-        this.gridObj.setOption({
-            checkBar: {visible: true},
-            indicator: {visible: true}
-        })
-        this.makeGrid();
+        this.gridObj = new TreeGridWrapper("realgrid03", "/assets/js/libs/realgrid", true);
+        this.gridObj.setGridStyle("100%", "100%")
+            .setOption({
+                header: { visible: true },
+                checkBar: {visible: true},
+                indicator: {visible: true},
+                lineVisible: false
+            });
+        this.gridObj.setColumnInfo(cl00302.column_info).makeGrid();
+        this.gridObj.onItemChecked(this.onItemChecked);
+        this.gridObj.setDisplayOptions({
+            fitStyle:"evenFill"
+        });
+        // this.gridObj.gridView.setSelectOptions({
+        //         style: "none"
+        //     }
+        // )
+        this.gridObj.gridView.setCheckBar({
+                checkableExpression: "values['choiceYn'] match 'Y'"
+        });
+        this.gridObj.gridView.applyCheckables();
         this.gridObj.itemClick(this.itemClick);
+        this.removeRowBeforeEvent(this.cancelDelete);
     },
-    isChangeData: function () {
+    setData: function (list) {
+        this.gridObj.setTreeDataForArray(list, "orderKey1");
     },
-    itemClick: function (data) {
+    cancelDelete: function(){
+        var index = fnObj.gridView03.gridObj.getCurrent().dataRow;
+        var state = axboot.commonCodeValueByCodeName("CD113", "Draft");
+        this.setRunDel(false);
+        if(fnObj.gridView03.gridObj.getSelectedData().statusUuid == state) {
+            // axToast.push(axboot.getCommonMessage("AD011_02"));
+            return;
+        }else if(fnObj.gridView03.gridObj.getSelectedData().choiceYn == "N") {
+            // axToast.push(axboot.getCommonMessage("AD011_02"));
+            return;
+        }else{
+            fnObj.gridView03.gridObj.gridView.commit(true);
+
+            if(fnObj.gridView03.gridObj.getDataProvider().getDescendants(index) != null){ //자식들이 있다면 추가
+                var _deletingList = [];
+                var convertList = function (items) {
+                    items.forEach(function(n){
+                        _deletingList.push(fnObj.gridView03.gridObj.getDataProvider().getJsonRow(n));
+                        if(fnObj.gridView03.gridObj.getDataProvider().getChildren(n)){
+                            convertList(fnObj.gridView03.gridObj.getDataProvider().getChildren(n));
+                        }
+                    })
+                    return _deletingList;
+                };
+
+                deletingList = deletingList.concat(convertList(fnObj.gridView03.gridObj.gridView.getSelectedRows()));
+            }else{
+                deletingList.push(fnObj.gridView03.gridObj.getSelectedData());//최상위 노드 ADD
+            }
+
+            fnObj.gridView03.gridObj.getDataProvider().removeRows(fnObj.gridView03.gridObj.gridView.getSelectedRows(), false);
+            // if(fnObj.gridView03.gridObj.getDataProvider().getDescendants(index) != null){
+            //     fnObj.gridView03.gridObj.getDataProvider().removeRows(fnObj.gridView03.gridObj.getDataProvider().getDescendants(index), false);
+            //
+            // }
+            fnObj.gridView03.gridObj.dispatch("onRemoveRow");
+        }
+    },
+    getData : function(){
+
+    },
+    itemClick: function (data, index) {
+        //시조찾기
+        // var sel = {startItem:-1,endItem:-1,style:"rows"}
+        // if(fnObj.gridView03.gridObj.getDataProvider().getAncestors(index.dataRow).length == 0) {
+        //     var descendants = fnObj.gridView03.gridObj.getDataProvider().getDescendants(index.dataRow)
+        //     if(descendants.length > 0){
+        //         //시조 아이템
+        //         sel.startItem = index.itemIndex;
+        //         sel.endItem = descendants[descendants.length-1]-1;
+        //     }else{
+        //         //독립적 아이템
+        //         sel.endItem = sel.startItem = index.itemIndex;
+        //     }
+        // }else{
+        //
+        // }
+        // fnObj.gridView03.gridObj.gridView.setSelection(sel);
     }
 });
 /**

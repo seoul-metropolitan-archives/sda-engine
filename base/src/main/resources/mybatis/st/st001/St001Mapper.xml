@@ -24,10 +24,10 @@
                 STATUS_UUID = #{statusUuid}
             </if>
             <if test="repositoryCode != null">
-                AND REPOSITORY_CODE = #{repositoryCode}
+                AND REPOSITORY_CODE LIKE '%' || #{repositoryCode} || '%'
             </if>
             <if test="repositoryName != null">
-                AND REPOSITORY_NAME = #{repositoryName}
+                AND REPOSITORY_NAME LIKE '%' || #{repositoryName} || '%'
             </if>
             <if test="useYn != null">
                 AND USE_YN = #{useYn}

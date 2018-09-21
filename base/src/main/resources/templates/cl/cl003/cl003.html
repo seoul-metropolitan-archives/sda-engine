@@ -18,7 +18,7 @@
             <div style=" height:31px; width:100%" class="bgf7 div_tablerow searchFields">
                 <ul class="bdb">
                     <th:block layout:insert="~{/fragments/page-buttons :: bookmark}"/>
-                    <th:block layout:insert="~{/fragments/page-buttons :: classify-and-save-and-inquiry}"/>
+                    <th:block layout:insert="~{/fragments/page-buttons :: save}"/>
                 </ul>
             </div>
             <div style="height:100%; width:100%" class="div_tablerow">
@@ -97,7 +97,7 @@
 
                     <ul class="bdb bgf7 div_tablerow" style="height:30px;">
                         <th:block layout:insert="~{/fragments/page-buttons :: dot('Aggregation')}"/>
-                        <th:block layout:insert="~{/fragments/page-buttons :: inquiry-and-confirm-and-cancel}"/>
+                        <th:block layout:insert="~{/fragments/page-buttons :: inquiry-and-confirm-and-cancel-and-classify-and-delete}"/>
                     </ul>
                     <div class="div_tablerow" style="height:25px; width: 100%">
                         <dl>
@@ -111,7 +111,7 @@
                                     <option value=""></option>
                                     <option th:each="item : ${statusUuid}"
                                             th:value="${item.codeDetailUUID}"
-                                            th:text="${item.codeName}"/>
+                                            th:text="${item.codeName}"/>ㅁㄹㅇ
                                 </select>
                             </dd>
                             <dt>Item</dt>

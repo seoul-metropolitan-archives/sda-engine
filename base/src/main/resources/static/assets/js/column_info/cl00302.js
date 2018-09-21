@@ -23,6 +23,15 @@ var cl00302 =
                 },
                 {
                     sortNo: 1,
+                    width:200,
+                    name: "title",
+                    text: "Title",
+                    editable: false,
+                    dataType: "code",
+                    required: false,
+                },
+                {
+                    sortNo: 2,
                     width: 120,
                     name: "statusUuid",
                     text: "Status",
@@ -30,26 +39,6 @@ var cl00302 =
                     values: axboot.commonCodeFilter("CD111").codeArr,
                     labels: axboot.commonCodeFilter("CD111").nameArr,
                     dataType : "combo",
-                    disable:true
-                },
-                {
-                    sortNo: 2,
-                    width:150,
-                    name: "title",
-                    text: "Item",
-                    editable: false,
-                    dataType: "code",
-                    required: false,
-                    disable:true
-                },
-                {
-                    sortNo: 4,
-                    name: "aggregationTree",
-                    text: "Aggregation Tree",
-                    width: 250,
-                    dataType: "",
-                    editable: false,
-                    sortable: true,
                     disable:true
                 },
                 {
@@ -61,22 +50,6 @@ var cl00302 =
                     editable: false,
                     sortable: true,
                     disable:true
-                },
-                {
-                    sortNo: 6,
-                    name: "description",
-                    text: "Description",
-                    width: 250,
-                    editable: true,
-                    dataType : "richtext"
-                },
-                {
-                    sortNo: 7,
-                    name: "notes",
-                    text: "Notes",
-                    width: 250,
-                    editable: true,
-                    dataType: "richtext"
                 },
                 {
                     sortNo: 8,
@@ -154,6 +127,24 @@ var cl00302 =
                     dataType: "code",
                     required: false,
                     visible: false
+                },
+                {
+                    sortNo: 16,
+                    width:140,
+                    name: "orderKey1",
+                    text: "ORDER_KEY",
+                    editable: false,
+                    dataType: "code",
+                    visible : false
+                },
+                {
+                    sortNo: 17,
+                    width:140,
+                    name: "choiceYn",
+                    text: "choiceYn",
+                    editable: false,
+                    dataType: "code",
+                    visible : false
                 }
             ]
     }

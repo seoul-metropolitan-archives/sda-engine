@@ -63,6 +63,15 @@ var st00301_p01_01 =
                     editable: false,
                     dataType: "text",
                     visible : false
+                },
+                {
+                    sortNo: 7,
+                    name: "useYn",
+                    text: "Type",
+                    width: 100,
+                    editable: false,
+                    dataType: "text",
+                    visible : false
                 }
 
             ]

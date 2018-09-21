@@ -11,16 +11,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import rmsoft.ams.seoul.cl.cl003.dao.Cl003Mapper;
 import rmsoft.ams.seoul.cl.cl003.vo.Cl00301VO;
+import rmsoft.ams.seoul.cl.cl003.vo.Cl00302VO;
 import rmsoft.ams.seoul.common.domain.ClClassifyRecordsResult;
 import rmsoft.ams.seoul.common.repository.ClClassifyRecordResultRepository;
+import rmsoft.ams.seoul.rc.rc001.vo.Rc00101VO;
 import rmsoft.ams.seoul.st.st003.vo.St00303VO;
 import rmsoft.ams.seoul.utils.CommonCodeUtils;
 
 import javax.inject.Inject;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -82,29 +86,27 @@ public class Cl003Service extends BaseService {
         }
         return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");
     }
-
-    public ApiResponse saveClassifiedRecordList(List<Cl00301VO> list) {
-        List<ClClassifyRecordsResult> clClassifiedRecordsList = ModelMapperUtils.mapList(list,ClClassifyRecordsResult.class);
+    @Transactional
+    public ApiResponse saveClassifiedRecordList(Cl00302VO cl00302VO) {
+        List<Cl00301VO> cl00301VOList = cl00302VO.getCl00301VOList();
+        List<ClClassifyRecordsResult> clClassifiedRecordsList = ModelMapperUtils.mapList(cl00301VOList,ClClassifyRecordsResult.class);
         ClClassifyRecordsResult orgClClassifyRecordsResult = null;
+        int i = 0;
         for(ClClassifyRecordsResult clClassifyRecordsResult : clClassifiedRecordsList) {
-            if(clClassifyRecordsResult.isDeleted()){
-
+            if(cl00302VO.getClassUuid()== null){
+                clClassifyRecordResultRepository.delete(clClassifyRecordsResult);
+            }else if(clClassifyRecordsResult.getClassifyRecordsUuid() != null&&!clClassifyRecordsResult.getClassifyRecordsUuid().equals("")){
+                orgClClassifyRecordsResult = clClassifyRecordResultRepository.findOne(clClassifyRecordsResult.getId());
+                orgClClassifyRecordsResult.setChoiceYn(clClassifyRecordsResult.getChoiceYn());
+                orgClClassifyRecordsResult.setStatusUuid(CommonCodeUtils.getCodeDetailUuid("CD111","Confirm"));
+                clClassifyRecordResultRepository.save(orgClClassifyRecordsResult);
             }else{
-                if(clClassifyRecordsResult.isModified()){
-                    orgClClassifyRecordsResult = clClassifyRecordResultRepository.findOne(clClassifyRecordsResult.getId());
-                    clClassifyRecordsResult.setInsertDate(orgClClassifyRecordsResult.getInsertDate());
-                    clClassifyRecordsResult.setInsertUuid(orgClClassifyRecordsResult.getInsertUuid());
-                }
-                else{
-                    clClassifyRecordsResult.setClassifyRecordsUuid(UUIDUtils.getUUID());
-                    clClassifyRecordsResult.setStatusUuid(CommonCodeUtils.getCodeDetailUuid("CD111","Draft"));
-                    clClassifyRecordsResult.setClassifiedDate(Timestamp.valueOf(DateUtils.convertToString(LocalDateTime.now(), DateUtils.DATE_TIME_PATTERN)));
-                    clClassifyRecordsResult.setDescription("");
-                    clClassifyRecordsResult.setNotes("");
-                }
+                clClassifyRecordsResult.setClassifyRecordsUuid(UUIDUtils.getUUID());
+                clClassifyRecordsResult.setClassUuid(cl00302VO.getClassUuid());
+                clClassifyRecordsResult.setStatusUuid(CommonCodeUtils.getCodeDetailUuid("CD111","Confirm"));
+                clClassifyRecordsResult.setClassifiedDate(Timestamp.valueOf(DateUtils.convertToString(LocalDateTime.now(), DateUtils.DATE_TIME_PATTERN)));
                 clClassifyRecordResultRepository.save(clClassifyRecordsResult);
             }
-
         }
         return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");
     }
@@ -115,5 +117,12 @@ public class Cl003Service extends BaseService {
         st00303VO.setClassUuid(requestParams.getString("classUuid"));
 
         return filter(cl003Mapper.getSelectedItem(st00303VO), pageable, "", St00303VO.class);
+    }
+
+    public List<Rc00101VO> getAllNode(Rc00101VO param)
+    {
+        ArrayList<Rc00101VO> nodes = new ArrayList<Rc00101VO>();
+        nodes.addAll(cl003Mapper.getAggregationNode(param));
+        return nodes;
     }
 }

@@ -4,7 +4,7 @@ var cl00301_p01_02 =
             [
                 {
                     sortNo: 0,
-                    name: "aggregationUuid",
+                    name: "uuid",
                     text: "UUID",
                     editable: false,
                     dataType: "code",
@@ -13,33 +13,17 @@ var cl00301_p01_02 =
                 },
                 {
                     sortNo: 1,
-                    name: "title",
+                    name: "name",
                     text: "Title",
-                    width: 110,
+                    width: 200,
                     editable: false,
                     dataType: "text"
-                },
-                {
-                    sortNo: 2,
-                    name: "publishedStatusUuid",
-                    text: "PublishedStatusUuid",
-                    editable: false,
-                    dataType: "code",
-                    required: false,
-                },
-                {
-                    sortNo: 3,
-                    name: "aggregationCode",
-                    text: "AggregationCode",
-                    editable: false,
-                    dataType: "code",
-                    required: false,
                 },
                 {
                     sortNo: 4,
                     name: "description",
                     text: "Description",
-                    width: 110,
+                    width: 200,
                     editable: false,
                     dataType: "text",
                 },
@@ -47,18 +31,16 @@ var cl00301_p01_02 =
                     sortNo: 5,
                     name: "notes",
                     text: "Notes",
-                    width: 110,
                     editable: false,
                     dataType: "text",
                 },
                 {
-                    sortNo: 6,
-                    name: "orderKey1",
-                    text: "Type",
-                    width: 100,
+                    sortNo: 5,
+                    name: "classifyRecordsUuid",
+                    text: "classifyRecordsUuid",
                     editable: false,
                     dataType: "text",
-                    visible : false
+                    visible:false
                 }
 
             ]

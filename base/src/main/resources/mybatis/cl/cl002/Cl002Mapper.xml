@@ -70,6 +70,7 @@
         PARENT_CLASS_UUID as parentClassUuid,
         CLASS_CODE as classCode,
         CLASS_NAME as className,
+        CONNECT_BY_ISLEAF AS isLeaf,
         '[' || FC_AD_CODE_NM(CLASS_LEVEL_UUID) || '] ' || CLASS_NAME as classTreeName,
         CLASS_LEVEL_UUID as classLevelUuid,
         ORDER_NO as orderNo,

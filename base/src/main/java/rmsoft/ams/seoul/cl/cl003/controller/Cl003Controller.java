@@ -12,6 +12,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 import rmsoft.ams.seoul.cl.cl003.service.Cl003Service;
 import rmsoft.ams.seoul.cl.cl003.vo.Cl00301VO;
+import rmsoft.ams.seoul.cl.cl003.vo.Cl00302VO;
+import rmsoft.ams.seoul.rc.rc001.vo.Rc00101VO;
 import rmsoft.ams.seoul.st.st003.vo.St00303VO;
 
 import java.util.List;
@@ -52,7 +54,7 @@ public class Cl003Controller extends BaseController {
     }
     @PutMapping("/02/save")
     @PostMapping
-    public ApiResponse saveClassifiedRecordList(@RequestBody List<Cl00301VO> requestParams) {
+    public ApiResponse saveClassifiedRecordList(@RequestBody Cl00302VO requestParams) {
         ApiResponse apiResponse = cl003Service.saveClassifiedRecordList(requestParams);
         if(apiResponse.getStatus() == -1) {
             throw new ApiException(ApiStatus.SYSTEM_ERROR, apiResponse.getMessage());
@@ -67,5 +69,10 @@ public class Cl003Controller extends BaseController {
             throw new ApiException(ApiStatus.SYSTEM_ERROR, apiResponse.getMessage());
         }
         return apiResponse;
+    }
+    @RequestMapping("/getAllNodes")
+    public Responses.ListResponse getAllNode(Rc00101VO param)
+    {
+        return Responses.ListResponse.of(cl003Service.getAllNode(param));
     }
 }

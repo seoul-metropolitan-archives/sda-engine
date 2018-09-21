@@ -17,4 +17,6 @@ public class St00302VO extends BaseVO {
 	private String parentAggregationUuid;
 	private String levelUuid;
 	private String orderKey1;
+	private String description;
+	private String notes;
 }

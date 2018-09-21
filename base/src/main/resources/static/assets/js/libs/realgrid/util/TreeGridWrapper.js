@@ -9,6 +9,8 @@ var TreeGridWrapper = function(p_id,p_rootContext)
         RealGridJS.setRootContext(_this.rootContext);
         _this.gridView = new RealGridJS.TreeView(_this.i_id);
         _this.dataProvider = new RealGridJS.LocalTreeDataProvider();
+
+        // if(!_this.checkBox)  _this.checkBox.style = {background:"#ff00f2"};
     };
 
     this._initOption = function (gridView, provider) {
@@ -26,6 +28,12 @@ var TreeGridWrapper = function(p_id,p_rootContext)
             "header": option.header === undefined ? {"visible": false} : option.header,
             "footer": option.footer === undefined ? {"visible": false} : option.footer,
             "showCheckBox" : option.checkBox === undefined ? false : option.checkBox,
+            "lineVisible" : option.lineVisible === undefined ? true : option.lineVisible,
+            renderer: {editable: true, falseValues: "N", startEditOnClick: true, trueValues: "Y", type: "check"},
+            styles: {paddingLeft: 8, textAlignment: "center", figureBackground: '#ffff0000', figureSize: '130%'},
+            // "collapseImage":"/resource/image/smallflag/icon_folder_exp.png",
+            // "expandImage":"/resource/image/smallflag/icon_folder_col.png"
+
         });
         console.log(option.header === undefined ? true : option.header);
 
@@ -52,6 +60,7 @@ TreeGridWrapper.prototype.option.summaryMode = "aggregate";
 TreeGridWrapper.prototype.option.stateBar = { "visible": false };
 TreeGridWrapper.prototype.option.header= {"visible": false};
 TreeGridWrapper.prototype.option.footer= {"visible": false};
+
 TreeGridWrapper.prototype.style.header = {
     background: "linear,#f2f2f2",
     fontSize: 12,
@@ -60,6 +69,7 @@ TreeGridWrapper.prototype.style.header = {
     borderRight: "#cccccc,1",
     fontBold: false,
 };
+
 TreeGridWrapper.prototype.style.body = {
     borderRight: "#ff000000,0px",
     borderBottom: "#f0000000,0px",
@@ -70,10 +80,10 @@ TreeGridWrapper.prototype.style.body = {
 
 };
 TreeGridWrapper.prototype.style.grid = {
-    border: "#ffffffff,0"
+    border: "#ffffffff,1px"
 };
 TreeGridWrapper.prototype.style.grid = {
-    border: "#ffffffff,0"
+    border: "#ffffffff,1px"
 };
 TreeGridWrapper.prototype.defaultBind = function(){
     /*
@@ -192,6 +202,7 @@ TreeGridWrapper.prototype.getData = function() {
     {
         delete(data["insertUUID"]);
         delete(data["insertUuid"]);
+        delete(data["insertUuid"]);
         delete(data["insertDate"]);
         delete(data["updateUUID"]);
         delete(data["updateUuid"]);
@@ -212,13 +223,35 @@ TreeGridWrapper.prototype.getData = function() {
     return retList;
 };
 /**
- * 그리드 전체 데이터를 JSON 형식의 데이터로 반환해주는 함수
  * @returns {undefined}
  */
+TreeGridWrapper.prototype.getChildren = function(rowId){
+    // return this.gridView.getTreeChildren(this._dp, rowId);
+    return this.gridView.getChildren(rowId)
+}
+
+TreeGridWrapper.prototype.expand =  function (itemIndex) {
+    this.gridView.expand(itemIndex, true, true)
+}
+TreeGridWrapper.prototype.collapse =  function (itemIndex) {
+    this.gridView.collapse(itemIndex, true, true)
+}
 TreeGridWrapper.prototype.getJsonRows = function () {
     return this.dataProvider.getJsonRows(-1, true, this.childrenProp, "icon");
 };
 
 TreeGridWrapper.prototype.checkChildren = function(itemIndex, checked, recursive, visibleOnly, checkableOnly, checkEvent) {
     this.gridView.checkChildren(itemIndex, checked, recursive, visibleOnly, checkableOnly, checkEvent);
-}
+};
+
+TreeGridWrapper.prototype.getParent = function(index) {
+    return this.gridView.getParent(index);
+};
+
+TreeGridWrapper.prototype.isCheckedRow = function(index) {
+    return this.gridView.isCheckedRow(index);
+};
+
+TreeGridWrapper.prototype.getChildCount = function(index) {
+    return this.gridView.getChildCount(index);
+};

@@ -22,4 +22,7 @@ public class Cl00301VO extends BaseVO
     private String aggregationUuid;
     private String itemUuid;
     private String changeStatus;
+    private String orderKey1;
+    private String choiceYn;
+
 }
