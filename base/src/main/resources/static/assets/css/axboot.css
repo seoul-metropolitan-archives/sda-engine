@@ -27927,6 +27927,9 @@ a.small_open {
 .ztree li span.button.virtual_ico_open{margin-right:2px; background: url(/assets/images/ams/icon/fo_op_v.png) no-repeat scroll 0 0 transparent; vertical-align:top; *vertical-align:middle}
 .ztree li span.button.virtual_ico_close{margin-right:2px; background: url(/assets/images/ams/icon/fo_v.png) no-repeat scroll 0 0 transparent; vertical-align:top; *vertical-align:middle}
 .ztree li span.button.virtual_ico_docu{margin-right:2px; background: url(/assets/images/ams/icon/fo_v.png) no-repeat scroll 0 0 transparent; vertical-align:top; *vertical-align:middle}
+.ztree li span.button.published_ico_open{margin-right:2px; background: url(/assets/images/ams/icon/fo_op_go.png) no-repeat scroll 0 0 transparent; vertical-align:top; *vertical-align:middle}
+.ztree li span.button.published_ico_close{margin-right:2px; background: url(/assets/images/ams/icon/fo_go.png) no-repeat scroll 0 0 transparent; vertical-align:top; *vertical-align:middle}
+.ztree li span.button.published_ico_docu{margin-right:2px; background: url(/assets/images/ams/icon/fo_go.png) no-repeat scroll 0 0 transparent; vertical-align:top; *vertical-align:middle}
 .ztree li span.button.item_ico_docu{margin-right:2px; background: url(/assets/images/ams/icon/fi.png) no-repeat scroll 0 0 transparent; vertical-align:top; *vertical-align:middle}
 .ztree li span.button.item_ico_docu{margin-right:2px; background: url(/assets/images/ams/icon/fi.png) no-repeat scroll 0 0 transparent; vertical-align:top; *vertical-align:middle}
 

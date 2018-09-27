@@ -78,6 +78,11 @@ public class Rc001Controller extends MessageBaseController
     {
         return rc001Service.saveRecords(list);
     }
+    @RequestMapping("/saveRecordsGrid")
+    public ApiResponse saveRecordsGrid(@RequestBody List<Map<String,Object>> list)
+    {
+        return rc001Service.saveRecordsGrid(list);
+    }
 
     @RequestMapping("/getMenuInfo")
     @ResponseBody

@@ -304,7 +304,7 @@ var GridWrapper = function(p_id,p_rootContext) {
             for(var col = 0; col < columnList.length; col++)
             {
                 colData = columnList[col];
-                getColumnLabelsNValues(colData.name)
+                //getColumnLabelsNValues(colData.name)         이건 왜 만든거야???
 
                 if(colData.dataType == "combo")
                 {
@@ -1422,6 +1422,13 @@ GridWrapper.prototype.setColumnInfo = function(list) {
                 break;
             case "date":
                 obj.editor = _this.style.data.date;
+                if(data.includedFormat){
+                    obj.editor.mask  = {
+                        editMask :"9999-99-99", //표시되는 형식
+                        placeHolder :"yyyy-MM-dd", //편집기에 표시될 형식
+                        includedFormat :true //편집기에 표시된 내용이 그대로 셀값으로 전달
+                    }
+                }
                 obj.styles = $.extend({}, _this.defaultStyle.data.date, obj.styles );
                 obj.displayRegExp = "([0-9]{4})([0-9]{4})([0-9]{4})([0-9]{4})";
                 obj.displayReplace = "$1-$2-$3-$4";

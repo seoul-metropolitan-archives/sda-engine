@@ -214,7 +214,14 @@
                 header: {
                     title: "Update State"
                 }
-            }
+            },
+            "ADD_RECORD_ITEM_GRID": {
+                width: 1300,
+                height: 700,
+                iframe: {
+                    url: "/rc/rc001/p_rc00103"
+                }
+            },
         };
     }
 

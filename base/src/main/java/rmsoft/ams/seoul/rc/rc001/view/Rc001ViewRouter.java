@@ -35,5 +35,9 @@ public class Rc001ViewRouter extends BaseController {
         model.addAttribute("updateStateList", CommonCodeUtils.get("CD121"));
         return "/rc/rc001/p_rc00102";
     }
+    @PostMapping("/rc/rc001/p_rc00103")
+    public String addRecordItemAggregation(ModelMap model) {
+        return "/rc/rc001/p_rc00103";
+    }
 }
 

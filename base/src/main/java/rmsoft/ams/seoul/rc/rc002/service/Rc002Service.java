@@ -88,9 +88,9 @@ public class Rc002Service extends BaseService
             rcAggregation.setAggregationUuid(uuid);
             String aggregationCode = jdbcTemplate.queryForObject("select fc_rc_aggregation_code from dual", String.class);
             rcAggregation.setAggregationCode(aggregationCode);
-            String descriptionStartDate = rcAggregation.getDescriptionStartDate().replace("-","");
+            String descriptionStartDate = rcAggregation.getDescriptionStartDate() == null ? null : rcAggregation.getDescriptionStartDate().replace("-","");
             rcAggregation.setDescriptionStartDate(descriptionStartDate);
-            String descriptionEndDate = rcAggregation.getDescriptionEndDate().replace("-","");
+            String descriptionEndDate = rcAggregation.getDescriptionEndDate() == null ? null : rcAggregation.getDescriptionEndDate().replace("-","");
             rcAggregation.setDescriptionEndDate(descriptionEndDate);
             rcAggregation.set__created__(true);
             isCreate = true;
@@ -113,9 +113,9 @@ public class Rc002Service extends BaseService
         if(isCreate)
         {
             rcAggregationCon.setAggregationUuid(uuid);
-            String creationStartDate = rcAggregationCon.getCreationStartDate().replace("-","");
+            String creationStartDate = rcAggregationCon.getCreationStartDate() == null ? null : rcAggregationCon.getCreationStartDate().replace("-","");
             rcAggregationCon.setCreationStartDate(creationStartDate);
-            String creationEndDate = rcAggregationCon.getCreationEndDate().replace("-","");
+            String creationEndDate = rcAggregationCon.getCreationEndDate() == null ? null : rcAggregationCon.getCreationEndDate().replace("-","");
             rcAggregationCon.setCreationEndDate(creationEndDate);
             rcAggregationCon.set__created__(true);
             rcAggregationConRepository.save(rcAggregationCon);

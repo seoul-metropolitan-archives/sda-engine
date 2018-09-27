@@ -5,6 +5,7 @@ import io.onsemiro.core.api.response.Responses;
 import io.onsemiro.core.code.ApiStatus;
 import io.onsemiro.core.domain.BaseService;
 import io.onsemiro.core.parameter.RequestParams;
+import io.onsemiro.utils.JsonUtils;
 import io.onsemiro.utils.ModelMapperUtils;
 import io.onsemiro.utils.SessionUtils;
 import io.onsemiro.utils.UUIDUtils;
@@ -16,6 +17,10 @@ import rmsoft.ams.seoul.common.repository.*;
 import rmsoft.ams.seoul.common.vo.ResponseForPaging;
 import rmsoft.ams.seoul.rc.rc001.dao.Rc001Mapper;
 import rmsoft.ams.seoul.rc.rc001.vo.*;
+import rmsoft.ams.seoul.rc.rc002.service.Rc002Service;
+import rmsoft.ams.seoul.rc.rc002.vo.Rc00201VO;
+import rmsoft.ams.seoul.rc.rc002.vo.Rc00202VO;
+import rmsoft.ams.seoul.rc.rc002.vo.Rc002VO;
 import rmsoft.ams.seoul.rc.rc004.service.Rc004Service;
 import rmsoft.ams.seoul.rc.rc005.dao.Rc005Mapper;
 import rmsoft.ams.seoul.rc.rc005.service.Rc005Service;
@@ -25,10 +30,8 @@ import rmsoft.ams.seoul.utils.CommonCodeUtils;
 
 import javax.inject.Inject;
 import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service("Rc001Service")
 public class Rc001Service extends BaseService
@@ -41,6 +44,9 @@ public class Rc001Service extends BaseService
 
     @Inject
     private Rc004Service rc004Service;
+
+    @Inject
+    private Rc002Service rc002Service;
 
     @Autowired
     private RcItemRepository rcItemRepository;
@@ -133,13 +139,11 @@ public class Rc001Service extends BaseService
     @Transactional
     public ApiResponse saveRecords(List<Map<String,String>> list)
     {
-        Rc00101VO rc00101VO = new Rc00101VO();
-
         RcItem rcItem = null;
         RcAggregation rcAggregation = null;
 
         for (Map<String,String> data: list) {
-            if(data.get("type").equals("item")){
+            if(data.get("nodeType").equals("item")){
                 rcItem = new RcItem();
                 rcItem.setItemUuid(data.get("uuid"));
                 rcItem = rcItemRepository.findOne(rcItem.getId());
@@ -161,6 +165,50 @@ public class Rc001Service extends BaseService
 
         return ApiResponse.of(ApiStatus.SUCCESS,"SUCCESS");
     }
+
+    @Transactional
+    public ApiResponse saveRecordsGrid(List<Map<String,Object>> list){
+        RcAggregation rcAggregation = null;
+
+        for (Map<String,Object> data: list) {
+            if(data.get("nodeType").equals("item")){
+                if(data.get("descriptionStartDate") != null)
+                    data.put("descriptionStartDate", data.get("descriptionStartDate").toString().replace("-","").substring(0,8));
+                if(data.get("descriptionEndDate") != null)
+                    data.put("descriptionEndDate", data.get("descriptionEndDate").toString().replace("-","").substring(0,8));
+                if(data.get("creationStartDate") != null)
+                    data.put("creationStartDate", data.get("creationStartDate").toString().replace("-","").substring(0,8));
+                if(data.get("creationEndDate") != null)
+                    data.put("creationEndDate", data.get("creationEndDate").toString().replace("-","").substring(0,8));
+
+                RequestParams<Rc00501VO> requestParams = new RequestParams();
+
+                requestParams.setParameterMap(stringToStringArray(data));
+                rc004Service.saveItemDetails(requestParams);
+            }else{
+                Rc002VO rc002VO = new Rc002VO();
+                Rc00201VO rc00201VO = ModelMapperUtils.map(data.get("systemMeta"), Rc00201VO.class);
+                if(rc00201VO.getDescriptionStartDate() != null)
+                    rc00201VO.setDescriptionStartDate(rc00201VO.getDescriptionStartDate().replace("-","").substring(0,8));
+                if(rc00201VO.getDescriptionEndDate() != null)
+                    rc00201VO.setDescriptionEndDate(rc00201VO.getDescriptionEndDate().replace("-","").substring(0,8));
+
+                Rc00202VO rc00202VO = ModelMapperUtils.map(data.get("contextualMeta"), Rc00202VO.class);
+                if(rc00202VO.getCreationStartDate() != null)
+                    rc00202VO.setCreationStartDate(rc00202VO.getCreationStartDate().replace("-","").substring(0,8));
+                if(rc00202VO.getCreationEndDate() != null)
+                    rc00202VO.setCreationEndDate(rc00202VO.getCreationEndDate().replace("-","").substring(0,8));
+
+                rc002VO.setSystemMeta(rc00201VO);
+                rc002VO.setContextualMeta(rc00202VO);
+
+                rc002Service.save(rc002VO);
+            }
+        }
+
+        return ApiResponse.of(ApiStatus.SUCCESS,"SUCCESS");
+    }
+
 
     public Object getMenu(Map<String,String> param)
     {
@@ -407,5 +455,19 @@ public class Rc001Service extends BaseService
         }
 
         return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");
+    }
+
+    private Map<String, String[]> stringToStringArray(Map<String, Object> map) {
+        Map<String, String[]> rtnMap = new HashMap<String, String[]>();
+        for (String key : map.keySet()) {
+            if(map.get(key) == null) continue;
+
+            String[] values = new String[1];
+            values[0] = map.get(key).toString();
+
+            rtnMap.put(key, values);
+        }
+
+        return rtnMap;
     }
 }

@@ -526,6 +526,9 @@ function contextMenuClick(ui, treeData){
     var parentsObj = parent.window.fnObj;
     var item = null;
     var naviStr = "";
+    var msg = "";
+    var typeUuid = "";
+    var typeName = "";
 
     switch(ui.cmd){
         case "MERGE_ITEM":
@@ -604,14 +607,24 @@ function contextMenuClick(ui, treeData){
             item.menuParams = $.extend({},selectedData[0],{type: "create"},{navi : fnObj.naviView.getPathString()},{title : selectedData["name"]},{sendData: selectedData});
             parentsObj.tabView.open(item);
             break;
-        case "AGG_NORMAL":
-            selectedData = treeData ? [treeData] : fnObj.iconView.getSelectedData();
+        case "AGG_TYPE_NORMAL":
+        case "AGG_TYPE_TEMP":
+            if(ui.cmd == "AGG_TYPE_NORMAL"){
+                selectedData = treeData ? [treeData] : fnObj.iconView.getSelectedData();
+                msg = "Normal Aggregation으로 변경하시겠습니까?";
+                typeUuid = axboot.commonCodeValueByCodeName("CD127", "Normal");
+                typeName = "normal";
+            }else if(ui.cmd == "AGG_TYPE_TEMP"){
+                selectedData = treeData ? [treeData] : fnObj.iconView.getSelectedData();
+                msg = "Temporay Aggregation으로 변경하시겠습니까?";
+                typeUuid = axboot.commonCodeValueByCodeName("CD127", "Temporary");
+                typeName = "temporary";
+            }
 
             axDialog.confirm({
-                msg: "Normal Aggregation으로 변경하시겠습니까?"
+                msg: msg
             }, function () {
                 if (this.key == "ok") {
-                    var typeUuid = axboot.commonCodeValueByCodeName("CD127", "Normal");
 
                     axboot.ajax({
                         type: "GET",
@@ -622,8 +635,8 @@ function contextMenuClick(ui, treeData){
                                 if (res.map.list) {
                                     $.each(res.map.list, function (idx, item) {
                                         var nodeObj = fnObj.treeView01.getNodeByParam("uuid", item["uuid"]);
-                                        nodeObj.iconSkin = "normal";
-                                        nodeObj.nodeType = "normal";
+                                        nodeObj.iconSkin = typeName;
+                                        nodeObj.nodeType = typeName;
 
                                         fnObj.treeView01.updateNode(nodeObj);
                                     });
@@ -644,6 +657,32 @@ function contextMenuClick(ui, treeData){
                             onError: axboot.viewError
                         }
                     });
+                }
+            });
+            break;
+        case "ITEM_ADD_GRID":
+        case "AGG_ADD_GRID":
+            var nodeType = "";
+            if(ui.cmd == "ITEM_ADD_GRID"){
+                nodeType = "item";
+            }else if(ui.cmd == "AGG_ADD_GRID") {
+                nodeType = "aggregation";
+            }
+            axboot.modal.open({
+                modalType: "ADD_RECORD_ITEM_GRID",
+                width: 1600,
+                height: 800,
+                header: {
+                    title: nodeType == "item" ? "Add Item" : "Add Aggregation"
+                },
+                sendData: function () {
+                    return {
+                        aggregationUuid : fnObj.naviView.getCurrent().uuid,
+                        nodeType : nodeType
+                    };
+                },
+                callback: function (data) {
+                    ACTIONS.dispatch(ACTIONS.GET_SUBDATA, fnObj.naviView.getCurrent());
                 }
             });
             break;
@@ -685,6 +724,8 @@ function getContextMenu(ui, nodeType){
                     {title: "View Aggregation", cmd: "AGG_VIEW", uiIcon: "ui-icon-info" },
                     {title: "----"},
                     {title: "Edit Aggregation", cmd: "AGG_EDIT", uiIcon: "ui-icon-wrench" },
+                    {title: "Change Temporary Aggregation", cmd: "AGG_TYPE_TEMP", uiIcon: "ui-icon-transferthick-e-w" },
+                    {title: "Publishing Aggregation", cmd: "AGG_PUBLISH", uiIcon: "ui-icon-transferthick-e-w" },
                 ];
             }else if(nodeType == "temporary"){
                 menu = [
@@ -692,7 +733,7 @@ function getContextMenu(ui, nodeType){
                     {title: "Edit Aggregation", cmd: "AGG_EDIT", uiIcon: "ui-icon-wrench" },
                     {title: "----"},
                     {title: "Delete Aggregation", cmd: "NODE_DEL", uiIcon: "ui-icon-closethick" },
-                    {title: "Change Normal Aggregation", cmd: "AGG_NORMAL", uiIcon: "ui-icon-transferthick-e-w" },
+                    {title: "Change Normal Aggregation", cmd: "AGG_TYPE_NORMAL", uiIcon: "ui-icon-transferthick-e-w" },
                 ];
             }else if(nodeType == "virtual"){
                 menu = [
@@ -704,12 +745,24 @@ function getContextMenu(ui, nodeType){
             }
         }
     }else{
-        menu = [
-            {title: "Add Item", cmd: "ITEM_ADD", uiIcon: "ui-icon-document" },
-            {title: "Add Aggregation", cmd: "AGG_ADD", uiIcon: "ui-icon-folder-collapsed" },
-            {title: "----"},
-            {title: "Refresh", cmd: "REFRESH", uiIcon: "ui-icon-arrowrefresh-1-w" },
-        ];
+        if(fnObj.naviView.getCurrent().nodeType == "temp") {
+            menu = [
+                {title: "Add Item", cmd: "ITEM_ADD", uiIcon: "ui-icon-document"},
+                {title: "Add Aggregation", cmd: "AGG_ADD", uiIcon: "ui-icon-folder-collapsed"},
+                {title: "----"},
+                {title: "Add Item Grid", cmd: "ITEM_ADD_GRID", uiIcon: "ui-icon-document"},
+                {title: "Add Aggregation Grid", cmd: "AGG_ADD_GRID", uiIcon: "ui-icon-folder-collapsed"},
+                {title: "----"},
+                {title: "Refresh", cmd: "REFRESH", uiIcon: "ui-icon-arrowrefresh-1-w"},
+            ];
+        }else{
+            menu = [
+                {title: "Add Item", cmd: "ITEM_ADD", uiIcon: "ui-icon-document"},
+                {title: "Add Aggregation", cmd: "AGG_ADD", uiIcon: "ui-icon-folder-collapsed"},
+                {title: "----"},
+                {title: "Refresh", cmd: "REFRESH", uiIcon: "ui-icon-arrowrefresh-1-w"},
+            ];
+        }
     }
 
     return menu;
@@ -1104,7 +1157,9 @@ var fnObj = {
 
         $("#iconListArea").on({
             "dragenter" : function(event){
-                $('[data-ax5uploader="upload1"]').show();
+                if(fnObj.naviView.getCurrent().nodeType == "temp") {
+                    $('[data-ax5uploader="upload1"]').show();
+                }
             }
         });
 
@@ -2458,13 +2513,17 @@ fnObj.treeView01 = axboot.viewExtend(axboot.commonView, {
         var iconObj = undefined;
         for(var i = 0; i < _tree.length; i++)
         {
-            iconObj = this.getAggregationIcon(_tree[i]["nodeType"])
+            iconObj = this.getAggregationIcon(_tree[i]["nodeType"], _tree[i]["publishedStatus"])
             _tree[i] = $.extend({},_tree[i],iconObj);
             iconObj = {};
         }
         return _tree;
     },
-    getAggregationIcon : function(nodeType){
+    getAggregationIcon : function(nodeType, publishedStatus){
+        if(nodeType == "normal" && publishedStatus == "published"){
+            nodeType = publishedStatus;
+        }
+
         var iconObj = {open:false, iconSkin:nodeType};
         /*switch(nodeType)
         {
@@ -2812,6 +2871,8 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
 
         $("#formView01 #propertiesView select").on("change", function(){
             if(fnObj.formView.getData()["itemUuid"] == "" || fnObj.formView.getData()["aggregationUuid"] == "" ) return;
+
+            fnObj.formView.setFormData($(this).attr("data-ax-path"), $(this).val());
 
             var data = fnObj.formView.getData();
             if(fnObj.formView.getData()["isItem"]) {

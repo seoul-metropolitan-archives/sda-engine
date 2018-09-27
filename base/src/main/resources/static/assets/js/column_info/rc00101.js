@@ -97,7 +97,7 @@ var rc00101 =
             },
             {
                 sortNo: 8,
-                name: "descStartDate",
+                name: "descStrDate",
                 text: "Start Date",
                 width: 140,
                 editable: false,
@@ -106,7 +106,7 @@ var rc00101 =
             },
             {
                 sortNo: 9,
-                name: "descEndDate",
+                name: "descEdDate",
                 text: "End Date",
                 width: 140,
                 editable: false,

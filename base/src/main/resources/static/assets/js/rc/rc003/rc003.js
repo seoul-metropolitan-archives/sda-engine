@@ -455,7 +455,13 @@ setFormData = function(data){
     fnObj.formView.setFormData("rcProvenance",data.provenance);
     fnObj.formView.setFormData("rcReferenceCode",data.referenceCode);
     fnObj.formView.setFormData("rcCreator",data.creator);
-    fnObj.formView.setFormData("rcDateOfCreation",data.creationStartDate+"~"+data.creationEndDate);
+    if(data.creationStartDate != "undefined" || data.creationStartDate != null) {
+        if (data.creationStartDate == data.creationEndDate || data.creationEndDate == "undefined" || data.creationEndDate == null) {
+            fnObj.formView.setFormData("rcDateOfCreation", dateFormatter(data.creationStartDate));
+        } else {
+            fnObj.formView.setFormData("rcDateOfCreation", dateFormatter(data.creationStartDate) + ' ~ ' + dateFormatter(data.creationEndDate));
+        }
+    }
 
     fnObj.formView.setFormData("rcAddMetadata01",data.addMetadata01);
     fnObj.formView.setFormData("rcAddMetadata02",data.addMetadata02);
