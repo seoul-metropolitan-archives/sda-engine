@@ -54,7 +54,10 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 // };
             },
             callback: function (data) {
-                if(this) this.close()
+                //if(this) this.close();
+                window.axModal.activeModal.remove();
+                window.axModal.activeModal = null;
+
                 ACTIONS.dispatch(ACTIONS.PAGE_TEST);
                 // setTimeout(function () {
                 //
