@@ -155,6 +155,14 @@
                 }
 
             },
+            "INGEST_LIST_POPUP" :{
+                width: 1150,
+                height: 650,
+                iframe: {
+                    url: "/ig/ig003/ig003-p01"
+                }
+
+            },
             "ARRANGE_POPUP" :{
                 width: 1600,
                 height: 700,

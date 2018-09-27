@@ -1,0 +1,123 @@
+<!DOCTYPE HTML>
+<!--
+  ~ Copyright (c) 2017. RMSoft Co.,Ltd. All rights reserved
+  -->
+
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout/modal}">
+<!-- ===== [ script ] ===== -->
+<script layout:fragment="script" type="text/javascript" th:src="@{/assets/js/ig/ig003/ig003-p01.js}"></script>
+<div layout:fragment="base-content" class="ax-base-content">
+    <form name="formView01" id="formView01" method="post" onsubmit="return false">
+        <div class="cssBody" style="top:80px">
+            <div style="display:table; height:100%; width:100%">
+                <div class="contents_wrap">
+                    <div style="height:100%; width:100%" class="div_tablerow">
+                        <div style="display:table; height:100%; width:100%; float:left">
+                            <ul class="bdb bdt div_tablerow bgf7" style="height:30px;">
+                                <th:block layout:insert="~{/fragments/page-buttons :: dot('Accession Records Register')}"/>
+                                <th:block layout:insert="~{/fragments/page-buttons :: save-and-inquiry('none','show')}"/>
+                            </ul>
+                            <div class="bdb div_tablerow searchFields">
+                                <dl>
+                                    <dt class="mgl_5 w150">Accession No</dt>
+                                    <dd>
+                                        <input type=text style="width:135px" data-ax-path="accessionNo">
+                                    </dd>
+                                    <dt class="mgl_5 w150">Source of Acquisition</dt>
+                                    <dd>
+                                        <input type=text style="width:135px" data-ax-path="acquisitionSource">
+                                    </dd>
+                                    <dt class="mgl_5 w150">Acquisition Date</dt>
+                                    <dd class="w_auto">
+                                        <div class="input-group" data-ax5picker="date">
+                                            <div class="cld_box" style="background-color: #fffdd6">
+                                                <input type="text" data-ax-path="acquisitionFromDate"
+                                                       style="background-color: #fffdd6;ime-mode:disabled;"
+                                                       placeholder="YYYY-MM-DD" maxlength="10">
+                                                <img title="calendar" class="ui-datepicker-trigger" alt="..."
+                                                     src="/assets/images/ams/calendar.png">
+                                            </div>
+                                            ~
+                                            <div class="cld_box" style="background-color: #fffdd6">
+                                                <input type="text" data-ax-path="acquisitionToDate"
+                                                       style="background-color: #fffdd6;ime-mode:disabled;"
+                                                       placeholder="YYYY-MM-DD" maxlength="10">
+                                                <img title="calendar" class="ui-datepicker-trigger" alt="..."
+                                                     src="/assets/images/ams/calendar.png">
+                                            </div>
+                                        </div>
+                                    </dd>
+                                </dl>
+                                <dl>
+                                    <dt class="mgl_5 w150">Title</dt>
+                                    <dd>
+                                        <input type=text style="width:135px" data-ax-path="title">
+                                    </dd>
+                                    <th:block
+                                            layout:insert="~{/fragments/page-buttons :: searchInputYellow ('Contact Person','contactPerson')}"/>
+                                    <th:block
+                                            layout:insert="~{/fragments/page-buttons :: searchInputYellow ('Creator','creator')}"/>
+                                    <th:block
+                                            layout:insert="~{/fragments/page-buttons :: searchInputYellow ('Records','record')}"/>
+                                    </dd>
+                                </dl>
+                            </div>
+
+                            <div style="height:100%; width:100%" class="bgf7 div_tablerow">
+
+                                <div style="height:40%; width:100%" class="div_table">
+                                    <ul class="bdb bdt div_tablerow" style="height:30px;">
+                                        <th:block layout:insert="~{/fragments/page-buttons :: dot('Accession Record List')}"/>
+                                    </ul>
+                                    <div style="height:100%; width:100%" class="div_tablerow bdb">
+                                        <div id="realgrid01" style="width:100%; height:100%"></div>
+                                    </div>
+                                </div>
+                                <div style="height:60%; width:100%;" class="div_table">
+                                    <ul class="bdb bdt div_tablerow" style="height:30px;">
+                                        <th:block layout:insert="~{/fragments/page-buttons :: dot('Management Information')}"/>
+                                    </ul>
+                                    <div style="position:relative;width: 100%;height:100%;background:#ffffff;overflow-y: scroll">
+                                        <div class="bdt cont_wrap01" style="width: 86%;position: absolute;padding-bottom: 30px">
+                                            <div id="childrenDnrInfoArea">
+                                                <div class="togl01_show serv_cont childDnrInfo" style="display: block;margin-bottom: 0px">
+                                                    <ul id="addDnrInfo">
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <div id="childrenMngInfoArea">
+                                                <div class="togl01_show serv_cont childMngInfo" style="display: block;margin-bottom: 0px">
+                                                    <ul id="addMngInfo">
+                                                    </ul>
+                                                </div>
+                                                <ul style="padding-top: 16px">
+                                                    <li style="width: 45%;">
+                                                        <b>Description</b>
+                                                        <div>
+                                                            <textarea class="txtar" data-ax-path="description" style="height: 70px; width: 100%" readonly></textarea>
+                                                        </div>
+                                                    </li>
+                                                    <li style="width: 10%"></li>
+                                                    <li style="width: 45%;">
+                                                        <b>Note </b>
+                                                        <div>
+                                                            <textarea class="txtar" data-ax-path="notes"  style="height: 70px; width: 100%" readonly></textarea>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<!-- ===== [ base-content ] _END_ ===== -->
+</html>

@@ -15,9 +15,32 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             }
         });
     },
+    PAGE_TEST: function (caller, act, data) {
+        ACTIONS.dispatch(ACTIONS.PAGE_INGEST,data);
+    },
     PAGE_INGEST: function (caller, act, data) {
         axboot.modal.open({
             modalType: "INGEST_POPUP",
+            width: 1000,
+            height: 800,
+            header: {
+                title: "INGEST"
+            },
+            sendData: function () {
+               return data;
+            },
+            callback: function (data) {
+                // if(this) this.close();
+                // UPLOAD.send();
+                // if(data){
+                //     ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1,data);
+                // }
+            }
+        });
+    },
+    PAGE_INGEST_LIST: function (caller, act, data) {
+        axboot.modal.open({
+            modalType: "INGEST_LIST_POPUP",
             width: 1000,
             height: 800,
             header: {
@@ -31,12 +54,12 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 // };
             },
             callback: function (data) {
-                if(this) this.close();
-                UPLOAD.send();
+                if(this) this.close()
+                ACTIONS.dispatch(ACTIONS.PAGE_TEST);
+                // setTimeout(function () {
+                //
+                // }, 500);
 
-                // if(data){
-                //     ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1,data);
-                // }
             }
         });
     },
@@ -123,8 +146,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 }
             })
             .done(function () {
-                //ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
-                //axToast.push(axboot.getCommonMessage("AA007"));
+
             });
     },
     CLOSE_TAB: function () {
@@ -163,7 +185,7 @@ fnObj.pageStart = function () {
             },
             multiple: true,
             manualUpload: true,
-            progressBox: true,
+            progressBox: false,
             progressBoxDirection: "left",
             dropZone: {
                 target: $('[data-uploaded-box="upload1"]'),
@@ -176,7 +198,8 @@ fnObj.pageStart = function () {
                             ACTIONS.dispatch(ACTIONS.PAGE_INGEST);
                             // UPLOAD.send();
                         }else{
-                            UPLOAD.send();
+                            ACTIONS.dispatch(ACTIONS.PAGE_INGEST_LIST);
+                            // UPLOAD.send();
                         }
                     });
                 },

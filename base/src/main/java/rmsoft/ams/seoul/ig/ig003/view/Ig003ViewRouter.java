@@ -8,6 +8,7 @@ import io.onsemiro.controller.BaseController;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import rmsoft.ams.seoul.utils.CommonCodeUtils;
 
 /**
@@ -30,6 +31,12 @@ public class Ig003ViewRouter extends BaseController {
     public String view(ModelMap model) {
         model.addAttribute("acquisitionType", CommonCodeUtils.get("CD150"));
         return "/ig/ig003/ig003";
+    }
+
+    @PostMapping("/ig/ig003/ig003-p01")
+    public String viewPopup(ModelMap model) {
+        model.addAttribute("acquisitionType", CommonCodeUtils.get("CD150"));
+        return "/ig/ig003/ig003-p01";
     }
 }
 

@@ -133,6 +133,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
 fnObj.pageStart = function () {
     var _this = this;
     var data = axboot.getMenuParams();
+    parentsData = parent.axboot.modal.getData();
 
     _this.formView.initView();
     _this.childrenDrnInfo.initView();
