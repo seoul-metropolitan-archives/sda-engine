@@ -13,6 +13,7 @@
 
 <!-- ===== [ base-content ] ===== -->
 <div layout:fragment="base-content" class="ax-base-content">
+    <form name="formView01" id="formView01" method="post" onsubmit="return false">
     <div class="cssBody" style="top:80px">
         <div class="contents_wrap">
             <div style="height:100%; width:100%" class="div_tablerow">
@@ -23,7 +24,8 @@
 
                     <ul class="bdb div_tablerow" style="height:29px;">
                         <li style="width:100%; text-align:left;">
-                            <div style="float: left; width: 100%;padding-top: 3px" class="pdl_5">Class</div>
+                            <!--<input style="float: left; width: 100%;padding-top: 3px" class="pdl_5" data-ax-path="className"></input>-->
+                            <input data-ax-path="className" type=text  value="Class Name" readonly style="width:99.5%; margin-left: 0.5%;border:0px">
                         </li>
                     </ul>
 
@@ -126,6 +128,8 @@
             </div>
         </div><!--오른쪽 내용영역 전체 e -->
     </div>
+    </form>
 </div>
+
 <!-- ===== [ base-content ] _END_ ===== -->
 </html>

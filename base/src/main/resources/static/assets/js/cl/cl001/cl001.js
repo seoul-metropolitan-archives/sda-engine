@@ -118,7 +118,6 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                     if(isDetailChanged){
                         isDetailChanged = false;
                         ACTIONS.dispatch(ACTIONS.TOP_GRID_DETAIL_PAGE_SAVE);
-                        fnObj.gridView01.commit();
                     }
                     result = true;
                 }
@@ -284,7 +283,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
                 return true;
             else
                 return false;
-        },["classificationName","classificationTypeUuid","orderNo","useYn"]);
+        },["classificationName","classificationTypeUuid","orderNo","useYn","description"]);
     },
     itemClick: function (data) {
         if (data.classificationSchemeUuid != null && data.classificationSchemeUuid != "") {

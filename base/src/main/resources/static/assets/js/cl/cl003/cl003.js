@@ -138,7 +138,8 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             },
             sendData: function () {
                 return {
-                    classUuid :  crntClassUuid
+                    classUuid :  crntClassUuid,
+                    className : "Class Name : " + fnObj.gridView01.gridObj.getSelectedData().classTreeName
                 };
             },
             callback: function (data) {

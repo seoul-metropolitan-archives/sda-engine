@@ -7,6 +7,9 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             url: "/api/v1/cl/cl003/getAllNodes",
             data: $.extend({},data,{nodeType:"normal",classUuid:parentsData.classUuid}),
             callback: function (res) {
+                if(parentsData.className){
+                    fnObj.formView.setFormData("className" , parentsData.className);
+                }
                 fnObj.treeView01.setData({}, res.list, data);
             },
             options: {

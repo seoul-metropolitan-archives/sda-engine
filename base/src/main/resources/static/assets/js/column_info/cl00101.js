@@ -49,7 +49,7 @@ var cl00101 =
                     name: "classificationName",
                     text: "Classification Name",
                     width: 160,
-                    dataType: "code",
+                    dataType: "text",
                     required : true,
                 },
                 {
