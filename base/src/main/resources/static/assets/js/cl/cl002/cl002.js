@@ -21,7 +21,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 $("input[data-ax-path='classificationCode']").attr("classificationCode",res.map.classificationCode);
                 fnObj.formView.setFormData("classificationCode",res.map.classificationName);
                 fnObj.formView.setFormData("classificationName",res.map.classificationName);
-                classificationSchemeUuid = res.map.classificationSchemeUuid;
+                fnObj.gridView02.defaultParentsUuid = classificationSchemeUuid = res.map.classificationSchemeUuid;
                 ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1,res.map);
             },
             options: {
@@ -211,7 +211,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             callback: function (data) {
                 $("input[data-ax-path='classificationCode']").val(data["CLASSIFICATION_NAME"])
                 $("input[data-ax-path='classificationCode']").attr("classificationCode",data["CLASSIFICATION_CODE"])
-                classificationSchemeUuid = data['CLASSIFICATION_SCHEME_UUID'];
+                fnObj.gridView02.defaultParentsUuid = classificationSchemeUuid = data['CLASSIFICATION_SCHEME_UUID'];
                 selectedTreeItem = {orderKey:"", classTreeName:"",classificationSchemeUuid:"",orderNo:"",parentClassUuid:""};
                 if(this.close)
                     this.close();
@@ -490,6 +490,7 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
     uuidFieldName : "classUuid",
     parentsUuidFieldName : "classificationSchemeUuid",
     parentsGrid : fnObj.gridView01,
+    defaultParentsUuid : classificationSchemeUuid,
     initView: function () {
         this.initInstance();
         this.setColumnInfo(cl00202.column_info);

@@ -2825,9 +2825,12 @@ axboot.gridView = {
     addRowBeforeEventForChildGrid: function (wrapperObj, _this) {
         if (_this.parentsGrid) {
             var key = _this.parentsUuidFieldName;
-
             var column = wrapperObj.columnByName(key);
-            column.defaultValue = _this.parentsGrid.getUUID();
+            if(wrapperObj.makeObj.hasOwnProperty("defaultParentsUuid") && wrapperObj.makeObj["defaultParentsUuid"] != ""){
+                column.defaultValue = wrapperObj.makeObj["defaultParentsUuid"];
+            }else{
+                column.defaultValue = _this.parentsGrid.getUUID();
+            }
             wrapperObj.setColumn(column);
         }
     },
