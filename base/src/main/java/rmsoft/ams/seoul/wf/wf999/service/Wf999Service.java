@@ -100,8 +100,8 @@ public class Wf999Service extends BaseService {
                 itemVO.setRaAggregationUuid(rc00501VO.getRaAggregationUuid());
 
                 // component 정보생성
-                File file = new File(uploadPath + "\\" + fileInfo.getFilePath() + "\\" + fileInfo.getOriginalFileName());
-                File fileToMove = new File(contentsPath + "\\" + fileInfo.getFilePath());
+                File file = new File(uploadPath + File.separator + fileInfo.getFilePath() + File.separator + fileInfo.getOriginalFileName());
+                File fileToMove = new File(contentsPath + File.separator + fileInfo.getFilePath());
                 try {
                     FileUtils.moveToDirectory(file, fileToMove, true);
                 }catch (IOException e){
@@ -111,6 +111,9 @@ public class Wf999Service extends BaseService {
                 List<Rc00502VO> componentsList = new ArrayList<>();
                 fileInfo.setTitle(getFileNameNoExt(fileInfo.getFileName().toString()));
                 fileInfo.setFilePath(fileToMove.getAbsolutePath().replace(contentsPath, ""));
+                if(isWindows()){
+                    fileInfo.setFilePath(fileInfo.getFilePath().replace(File.separator, "/"));
+                }
                 componentsList.add(fileInfo);
                 itemVO.setRc00502VoList(componentsList);
 
@@ -167,6 +170,9 @@ public class Wf999Service extends BaseService {
                     }
 
                     rc00502VO.setFilePath(path.getParent().toString().replace(contentsPath, ""));
+                    if(isWindows()){
+                        rc00502VO.setFilePath(rc00502VO.getFilePath().replace(File.separator, "/"));
+                    }
                     rc00502VO.setFileName(path.getFileName().toString());
                     rc00502VO.setOriginalFileName(path.getFileName().toString());
                     componentsList.add(rc00502VO);
@@ -188,5 +194,10 @@ public class Wf999Service extends BaseService {
         }
 
         return "";
+    }
+
+    private boolean isWindows() {
+        String os = System.getProperty("os.name").toLowerCase();
+        return (os.indexOf("win") >= 0);
     }
 }
