@@ -120,9 +120,9 @@ public class Wf999Service extends BaseService {
         }
 
 
-    // DB에 저장한다.
+        // DB에 저장한다.
         return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");
-}
+    }
 
     private String aggregationUUID;
 
