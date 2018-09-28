@@ -110,7 +110,7 @@ public class Wf999Service extends BaseService {
 
                 List<Rc00502VO> componentsList = new ArrayList<>();
                 fileInfo.setTitle(getFileNameNoExt(fileInfo.getFileName().toString()));
-                fileInfo.setFilePath(fileToMove.getAbsolutePath());
+                fileInfo.setFilePath(fileToMove.getAbsolutePath().replace(contentsPath, ""));
                 componentsList.add(fileInfo);
                 itemVO.setRc00502VoList(componentsList);
 
@@ -120,9 +120,9 @@ public class Wf999Service extends BaseService {
         }
 
 
-        // DB에 저장한다.
+    // DB에 저장한다.
         return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");
-    }
+}
 
     private String aggregationUUID;
 
@@ -166,7 +166,7 @@ public class Wf999Service extends BaseService {
                         log.error("Can not check file size. :: {}", e.getMessage());
                     }
 
-                    rc00502VO.setFilePath(path.toString());
+                    rc00502VO.setFilePath(path.getParent().toString().replace(contentsPath, ""));
                     rc00502VO.setFileName(path.getFileName().toString());
                     rc00502VO.setOriginalFileName(path.getFileName().toString());
                     componentsList.add(rc00502VO);
