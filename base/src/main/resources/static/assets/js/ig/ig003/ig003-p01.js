@@ -37,9 +37,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
          });
     },
     PAGE_CLOSE: function (caller, act, data) {
-        if (parent) {
-            parent.axboot.modal.callback(data);
-        }
+        if (parent) parent.axboot.modal.callback(data);
     },
     PAGE_DETAIL:function (caller, act, data) {
         fnObj.formView.clear();

@@ -381,7 +381,7 @@ fnObj.gridView03 = axboot.viewExtend(axboot.gridView, {
     },
     cancelDelete: function(){
         var index = fnObj.gridView03.gridObj.getCurrent().dataRow;
-        var state = axboot.commonCodeValueByCodeName("CD113", "Draft");
+        var state = axboot.commonCodeValueByCodeName("CD111", "Confirm");
         this.setRunDel(false);
         if(fnObj.gridView03.gridObj.getSelectedData().statusUuid == state) {
             // axToast.push(axboot.getCommonMessage("AD011_02"));

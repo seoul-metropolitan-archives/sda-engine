@@ -101,8 +101,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             callback: function (res) {
                 if(res.message == "SUCCESS"){
                     axToast.push(axboot.getCommonMessage("AA007"));
-                    fnObj.formView.clear()
-                    window.location.reload();
+                    ACTIONS.dispatch(ACTIONS.PAGE_CLOSE);
                 }
             },
             options: {
@@ -127,14 +126,13 @@ var ACTIONS = axboot.actionExtend(fnObj, {
 });
 fnObj.pageStart = function () {
     var _this = this;
-    var data = axboot.getMenuParams();
+    var data = parent.axboot.modal.getData();
 
     _this.formView.initView();
     _this.childrenDrnInfo.initView();
     _this.childrenMngInfo.initView();
 
     if(data != null && data.type == "edit"){
-        axboot.resetMenuParams();
         ACTIONS.dispatch(ACTIONS.PAGE_SEARCH,data);
     }else{
         // ACTIONS.dispatch(ACTIONS.PAGE_SEARCH_ACCNO);

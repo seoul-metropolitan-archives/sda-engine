@@ -216,25 +216,32 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_INGEST: function (caller, act, data) {
         axboot.modal.open({
             modalType: "INGEST_POPUP",
-            width: 1000,
-            height: 800,
             header: {
                 title: "INGEST"
             },
             sendData: function () {
-                // return {
-                //     confirmBtn:"Arrange",
-                //     crrntAgg: fnObj.formView.getData().aggInContainerName,
-                //     containerUuid :  currentContainerUuid
-                // };
+                return data;
             },
             callback: function (data) {
-                if(this) this.close();
+                if (this) this.close();
                 UPLOAD.send();
+            }
+        });
+    },
+    PAGE_INGEST_LIST: function (caller, act, data) {
+        axboot.modal.open({
+            modalType: "INGEST_LIST_POPUP",
+            header: {
+                title: "INGEST LIST"
+            },
+            sendData: function () {
+            },
+            callback: function (data) {
+                window.axModal.activeModal.remove();
+                window.axModal.activeModal = null;
 
-                // if(data){
-                //     ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1,data);
-                // }
+                ACTIONS.dispatch(ACTIONS.PAGE_INGEST,data);
+
             }
         });
     },
@@ -1185,15 +1192,12 @@ var fnObj = {
                     }, function () {
                         if (this.key == "ok") {
                             ACTIONS.dispatch(ACTIONS.PAGE_INGEST);
-
-                            $(["data-pregressbox-btn='abort'"]).click(function(){
-                                $('[data-ax5uploader="upload1"]').hide();
-                            });
-                            // UPLOAD.send();
                         }else{
-                            $('[data-ax5uploader="upload1"]').hide();
-                            UPLOAD.send();
+                            ACTIONS.dispatch(ACTIONS.PAGE_INGEST_LIST);
                         }
+                        $(["data-pregressbox-btn='abort'"]).click(function(){
+                            $('[data-ax5uploader="upload1"]').hide();
+                        });
                     });
                 },
                 ondragover: function () {
