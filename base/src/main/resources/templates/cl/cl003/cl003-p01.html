@@ -19,17 +19,16 @@
             <div style="height:100%; width:100%" class="div_tablerow">
                 <div style="display:table; height:100%; width:20%; padding-bottom: 28px; float:left" class="bdr">
                     <ul class="bdb sdiv_tablerow bgf7" style="height:30px;">
-                        <th:block layout:insert="~{/fragments/page-buttons :: dot('Aggregation')}"/>
+                        <th:block layout:insert="~{/fragments/page-buttons :: dot('Class Description')}"/>
                     </ul>
 
                     <ul class="bdb div_tablerow" style="height:29px;">
                         <li style="width:100%; text-align:left;">
-                            <!--<input style="float: left; width: 100%;padding-top: 3px" class="pdl_5" data-ax-path="className"></input>-->
-                            <input data-ax-path="className" type=text  value="Class Name" readonly style="width:99.5%; margin-left: 0.5%;border:0px">
+                            <textarea data-ax-path="description" type=text  id="classDescription" rows="3" readonly style="width:99.5%; margin-left: 0.5%;border:0px"></textarea>
                         </li>
                     </ul>
 
-                    <ul class="bdb div_tablerow" style="height:25px;">
+                    <!--<ul class="bdb div_tablerow" style="height:25px;">
                         <li style="width:100%; text-align:left;">
                             <div style="float: right; width: 100%;">
                                 <div class="src_box3" style="background-color: #fffdd6" >
@@ -39,19 +38,19 @@
                                 </div>
                             </div>
                         </li>
-                    </ul>
+                    </ul>-->
 
                     <ul class="bdb" style="height:25px;width:100%; float:left;">
                         <li style="width:80%">
-                            <input type="text" style="width:100%; margin-left: 0.5%;">
+                            <input type="text" style="width:100%; margin-left: 0.5%;" readonly>
                         </li>
                         <li style="width:20%">
-                            <button class="btn_small" style="margin-right: 0">Find</button>
+                            <button class="btn_small" style="margin-right: 0">Edit</button>
                         </li>
                     </ul>
 
-                    <ul class="bdb" style="height:30px;width:100%; float:left">
-
+                    <ul class="bdb sdiv_tablerow bgf7" style="height:30px;">
+                        <th:block layout:insert="~{/fragments/page-buttons :: dot('Aggregation')}"/>
                     </ul>
                     <div style="height:100%; width:100%" class="div_tablerow bdb">
                         <!--<div id="realgrid01" style="width:100%; height:100%"></div>-->

@@ -134,12 +134,12 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         axboot.modal.open({
             modalType: "CLASSIFY_POPUP",
             header: {
-                title: "CLASSIFY"
+                title: "CLASSIFY - " + fnObj.gridView01.gridObj.getSelectedData().classTreeName
             },
             sendData: function () {
                 return {
-                    classUuid :  crntClassUuid,
-                    className : "Class Name : " + fnObj.gridView01.gridObj.getSelectedData().classTreeName
+                    classUuid : crntClassUuid,
+                    description : fnObj.gridView01.gridObj.getSelectedData().description
                 };
             },
             callback: function (data) {

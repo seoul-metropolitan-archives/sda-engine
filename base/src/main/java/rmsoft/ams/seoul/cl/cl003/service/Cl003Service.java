@@ -3,6 +3,7 @@ package rmsoft.ams.seoul.cl.cl003.service;
 import io.onsemiro.core.api.response.ApiResponse;
 import io.onsemiro.core.code.ApiStatus;
 import io.onsemiro.core.domain.BaseService;
+import io.onsemiro.core.model.ModelMapperConverter;
 import io.onsemiro.core.parameter.RequestParams;
 import io.onsemiro.utils.DateUtils;
 import io.onsemiro.utils.ModelMapperUtils;
@@ -12,10 +13,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import rmsoft.ams.seoul.cl.cl002.vo.Cl00201VO;
 import rmsoft.ams.seoul.cl.cl003.dao.Cl003Mapper;
 import rmsoft.ams.seoul.cl.cl003.vo.Cl00301VO;
 import rmsoft.ams.seoul.cl.cl003.vo.Cl00302VO;
+import rmsoft.ams.seoul.common.domain.ClClass;
 import rmsoft.ams.seoul.common.domain.ClClassifyRecordsResult;
+import rmsoft.ams.seoul.common.repository.ClClassRepository;
 import rmsoft.ams.seoul.common.repository.ClClassifyRecordResultRepository;
 import rmsoft.ams.seoul.rc.rc001.vo.Rc00101VO;
 import rmsoft.ams.seoul.st.st003.vo.St00303VO;
@@ -36,7 +40,9 @@ public class Cl003Service extends BaseService {
 
     @Inject
     private Cl003Mapper cl003Mapper;
-    
+    @Autowired
+    private ClClassRepository clClassRepository;
+
     @Autowired
     private ClClassifyRecordResultRepository clClassifyRecordResultRepository;
 
@@ -118,11 +124,31 @@ public class Cl003Service extends BaseService {
 
         return filter(cl003Mapper.getSelectedItem(st00303VO), pageable, "", St00303VO.class);
     }
-
+    public Cl00201VO getClassInfo(Pageable pageable, RequestParams<Cl00201VO> params) {
+        Cl00201VO cl00201VO = new Cl00201VO();
+        cl00201VO.setClassUuid(params.getString("classUuid"));
+        ClClass clClass = ModelMapperUtils.map(cl00201VO, ClClass.class);
+        ClClass orgClClass = clClassRepository.findOne(clClass.getId());
+        return ModelMapperUtils.map(orgClClass,Cl00201VO.class);
+    }
     public List<Rc00101VO> getAllNode(Rc00101VO param)
     {
         ArrayList<Rc00101VO> nodes = new ArrayList<Rc00101VO>();
         nodes.addAll(cl003Mapper.getAggregationNode(param));
         return nodes;
+    }
+
+    public ApiResponse saveClassDescription(Cl00201VO cl00201VO){
+        ClClass clClass = ModelMapperUtils.map(cl00201VO, ClClass.class);
+        String description = cl00201VO.getDescription();
+        ClClass orgClClass = clClassRepository.findOne(clClass.getId());
+        if(orgClClass != null){
+            clClass = orgClClass;
+            clClass.setUpdateDate(null);
+            clClass.setUpdateUuid(null);
+            clClass.setDescription(description);
+            clClassRepository.save(clClass);
+        }
+        return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");
     }
 }

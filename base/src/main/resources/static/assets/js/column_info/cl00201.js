@@ -81,6 +81,15 @@ var cl00201 =
                     editable: false,
                     dataType: "code",
                     visible : false
+                },
+                {
+                    sortNo: 100,
+                    width:140,
+                    name: "description",
+                    text: "description",
+                    editable: false,
+                    dataType: "text",
+                    visible : false
                 }
             ]
     }

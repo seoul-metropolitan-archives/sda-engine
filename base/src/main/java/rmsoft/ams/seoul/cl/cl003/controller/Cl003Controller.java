@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
+import rmsoft.ams.seoul.cl.cl002.vo.Cl00201VO;
 import rmsoft.ams.seoul.cl.cl003.service.Cl003Service;
 import rmsoft.ams.seoul.cl.cl003.vo.Cl00301VO;
 import rmsoft.ams.seoul.cl.cl003.vo.Cl00302VO;
@@ -52,6 +53,10 @@ public class Cl003Controller extends BaseController {
         Page<St00303VO> pages  = cl003Service.getSelectedItem(pageable, requestParam);
         return Responses.PageResponse.of(pages.getContent(), pages);
     }
+    @RequestMapping("/02/list03")
+    public Cl00201VO getClassInfo(Pageable pageable, RequestParams<Cl00201VO> requestParams) {
+        return cl003Service.getClassInfo(pageable, requestParams);
+    }
     @PutMapping("/02/save")
     @PostMapping
     public ApiResponse saveClassifiedRecordList(@RequestBody Cl00302VO requestParams) {
@@ -74,5 +79,15 @@ public class Cl003Controller extends BaseController {
     public Responses.ListResponse getAllNode(Rc00101VO param)
     {
         return Responses.ListResponse.of(cl003Service.getAllNode(param));
+    }
+    @PutMapping("/02/save02")
+    @PostMapping
+    public ApiResponse saveClassDescription(@RequestBody Cl00201VO param)
+    {
+        ApiResponse apiResponse = cl003Service.saveClassDescription(param);
+        if(apiResponse.getStatus() == -1) {
+            throw new ApiException(ApiStatus.SYSTEM_ERROR, apiResponse.getMessage());
+        }
+        return apiResponse;
     }
 }

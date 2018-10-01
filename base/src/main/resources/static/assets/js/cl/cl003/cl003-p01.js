@@ -7,9 +7,6 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             url: "/api/v1/cl/cl003/getAllNodes",
             data: $.extend({},data,{nodeType:"normal",classUuid:parentsData.classUuid}),
             callback: function (res) {
-                if(parentsData.className){
-                    fnObj.formView.setFormData("className" , parentsData.className);
-                }
                 fnObj.treeView01.setData({}, res.list, data);
             },
             options: {
@@ -25,8 +22,22 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             async : false,
             data: $.extend({}, {pageSize: 10000},{aggregationUuid: data.uuid}),
             callback: function (res) {
-                fnObj.gridView02.resetCurrent();
-                fnObj.gridView02.setData(res.list);
+               console.log(res)
+            },
+            options: {
+                onError: axboot.viewError
+            }
+        });
+        return false;
+    },
+    PAGE_SEARCH: function(caller,act,data) {
+        axboot.ajax({//그리드리스트조회
+            type: "GET",
+            url: "/api/v1/cl/cl003/02/list03",
+            async : false,
+            data: $.extend({},{classUuid: parentsData.classUuid}),
+            callback: function (res) {
+                fnObj.formView.setFormData("description",res.description);
             },
             options: {
                 onError: axboot.viewError
@@ -43,8 +54,15 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         ACTIONS.dispatch(ACTIONS.STATUS_UPDATE,CANCEL_STATUS);
     },
     PAGE_SAVE: function (caller, act, data) {
-        ACTIONS.dispatch(ACTIONS.TOP_GRID_SAVE);
-        // ACTIONS.dispatch(ACTIONS.TOP_GRID_DETAIL_PAGE_SAVE);
+        axboot.ajax({
+            type: "PUT",
+            url: "/api/v1/cl/cl003/02/save02",
+            data: JSON.stringify({classUuid:parentsData.classUuid,description:fnObj.formView.getFormData("description")}),
+            callback: function (res) {
+                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+            }
+        });
+        return false
     },
     PAGE_CLOSE: function (caller, act, data) {
         if (parent) {
@@ -424,6 +442,7 @@ fnObj.pageStart = function () {
     fnObj.treeView01.initView();
     _this.gridView02.initView();
     ACTIONS.dispatch(ACTIONS.PAGE_SEARCH_TREE, this.formView.getData());
+    ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
 };
 
 fnObj.formView = axboot.viewExtend(axboot.formView, {
@@ -444,8 +463,17 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
 
         $(".sltCont").text(parentsData.crrntAgg);
 
-        $(".open_close.expendAll").click(function(){
-            _this.gridObj.expandAll();
+        $(".btn_small").click(function(){
+           if(this.textContent == "Save"){
+               ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
+               this.textContent = "Edit";
+               $("#classDescription").prop("readonly",true);
+               $("#classDescription").css("background","#ffffff");
+           }else if(this.textContent == "Edit"){
+               this.textContent = "Save";
+               $("#classDescription").prop("readonly",false);
+               $("#classDescription").css("background","#fffdd6");
+           }
         });
         $(".open_close.collapseAll").click(function(){
             _this.gridObj.collapseAll();
@@ -463,14 +491,6 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
         $(".close_popup").click(function(){
             ACTIONS.dispatch(ACTIONS.PAGE_CLOSE);
         });
-
-        $(".bdb").delegate("#rg_tree_allopen", "click", function () {
-            _this.expandAll();
-        });
-        $(".bdb").delegate("#rg_tree_allclose", "click", function () {
-            _this.collapseAll();
-        });
-
     },
     getData: function () {
         var data = this.modelFormatter.getClearData(this.model.get()); // 모델의 값을 포멧팅 전 값으로 치환.
@@ -478,6 +498,9 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
     },
     setFormData: function (dataPath, value) {
         this.model.set(dataPath, value);
+    },
+    getFormData: function (dataPath) {
+        return this.model.get(dataPath);
     },
     setData: function (data) {
 
