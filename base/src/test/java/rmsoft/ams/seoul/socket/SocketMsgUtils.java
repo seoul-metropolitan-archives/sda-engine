@@ -24,9 +24,8 @@ public class SocketMsgUtils {
      * @return the test resources dir
      */
     public static String getTestResourcesDir() {
-
         StringBuilder jsonDir = new StringBuilder();
-        jsonDir.append("src" + SEPARATOR + "test" + SEPARATOR);
+        jsonDir.append("base" + SEPARATOR + "src" + SEPARATOR + "test" + SEPARATOR);
         jsonDir.append("resources");
         jsonDir.append(SEPARATOR);
 

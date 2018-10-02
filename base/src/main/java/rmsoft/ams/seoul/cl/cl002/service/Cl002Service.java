@@ -112,12 +112,16 @@ public class Cl002Service extends BaseService {
      * @param classificationSchemeUuid the classification scheme uuid
      * @return the class hierarchy list
      */
-    public Page<Cl00201VO> getClassHierarchyList(Pageable pageable, String classificationSchemeUuid) {
+    public Page<Cl00201VO> getClassHierarchyList(Pageable pageable, RequestParams<Cl00201VO> requestParams) {
 
         Cl00201VO cl00201VO = new Cl00201VO();
-        cl00201VO.setClassificationSchemeUuid(classificationSchemeUuid);
+        cl00201VO.setClassificationSchemeUuid(requestParams.getString("classificationSchemeUuid"));
 
-        return filter(cl002Mapper.getClassHierarchyList(cl00201VO), pageable, "", Cl00201VO.class);
+        if(requestParams.getString("className").equals("cl003")){
+            return filter(cl002Mapper.getClassHierarchyListForClassify(cl00201VO), pageable, "", Cl00201VO.class);
+        }else{
+            return filter(cl002Mapper.getClassHierarchyList(cl00201VO), pageable, "", Cl00201VO.class);
+        }
     }
 
     /**
@@ -166,22 +170,33 @@ public class Cl002Service extends BaseService {
      * @return the api response
      */
     @Transactional
-    public ApiResponse updateStatusCancel(List<Cl00201VO> list) {
-        List<ClClass> clClassList = ModelMapperUtils.mapList(list, ClClass.class);
-        ClClass orgClClass = null;
-        int index = 0;
-        String changeStatus = "";
-        for (ClClass clClass : clClassList) {
-            changeStatus = list.get(index).getChangeStatus() == "" ? "Draft" : list.get(index).getChangeStatus();
-            orgClClass = clClassRepository.findOne(clClass.getId());
-            clClass.setStatusUuid(CommonCodeUtils.getCodeDetailUuid("CD113", changeStatus));
-            //clClass.setOrderKey(orgClClass.getOrderKey());
-            clClass.setInsertDate(orgClClass.getInsertDate());
-            clClass.setInsertUuid(orgClClass.getInsertUuid());
-            clClassRepository.save(clClass);
-            index++;
+    public ApiResponse updateStatusCancel(List<Cl00201VO> list)  {
+        try{
+            for (Cl00201VO cl00201VO : list) {
+                if(0 < getClassForClassify(cl00201VO)){
+                   throw new Exception();
+               }
+            }
+            List<ClClass> clClassList = ModelMapperUtils.mapList(list, ClClass.class);
+            ClClass orgClClass = null;
+            int index = 0;
+            String changeStatus = "";
+            for (ClClass clClass : clClassList) {
+                //Classify 체크
+                changeStatus = list.get(index).getChangeStatus() == "" ? "Draft" : list.get(index).getChangeStatus();
+                orgClClass = clClassRepository.findOne(clClass.getId());
+                if(!orgClClass.getStatusUuid().equals(CommonCodeUtils.getCodeDetailUuid("CD113", changeStatus))){
+                    clClass.setStatusUuid(CommonCodeUtils.getCodeDetailUuid("CD113", changeStatus));
+                    clClass.setInsertDate(orgClClass.getInsertDate());
+                    clClass.setInsertUuid(orgClClass.getInsertUuid());
+                    clClassRepository.save(clClass);
+                }
+                index++;
+            }
+            return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");
+        }catch(Exception e){
+            return ApiResponse.of(ApiStatus.SUCCESS, "CLASSIFIED");
         }
-        return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");
     }
 
     /**
@@ -312,5 +327,9 @@ public class Cl002Service extends BaseService {
      */
     public String getMaxClassCode(String classificationSchemeUuid) {
         return cl002Mapper.getMaxClassCode(classificationSchemeUuid);
+    }
+
+    public int getClassForClassify(Cl00201VO cl00201VO){
+        return cl002Mapper.getClassForClassify(cl00201VO);
     }
 }

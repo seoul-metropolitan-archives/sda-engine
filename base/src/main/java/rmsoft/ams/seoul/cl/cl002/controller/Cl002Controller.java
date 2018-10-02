@@ -68,8 +68,8 @@ public class Cl002Controller extends MessageBaseController{
      * @return the class hierarchy list
      */
     @GetMapping("/03/getClassHierarchyList")
-    public Responses.PageResponse getClassHierarchyList(Pageable pageable, String classificationSchemeUuid) {
-        Page<Cl00201VO> pages = cl002Service.getClassHierarchyList(pageable, classificationSchemeUuid);
+    public Responses.PageResponse getClassHierarchyList(Pageable pageable, RequestParams<Cl00201VO> requestParams) {
+        Page<Cl00201VO> pages = cl002Service.getClassHierarchyList(pageable,requestParams );
         return Responses.PageResponse.of(pages.getContent(), pages);
     }
 

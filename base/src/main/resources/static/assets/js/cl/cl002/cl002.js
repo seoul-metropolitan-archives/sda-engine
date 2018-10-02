@@ -37,7 +37,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
              type: "GET",
              url: "/api/v1/cl002/03/getClassHierarchyList",
              async : false,
-             data: $.extend({}, {pageSize: 1000}, {classificationSchemeUuid:classificationSchemeUuid}),
+             data: $.extend({}, {pageSize: 1000}, {classificationSchemeUuid:classificationSchemeUuid,className:"cl002"}),
              callback: function (res) {
                 classList = ax5.util.deepCopy(res.list);
                 ACTIONS.dispatch(fnObj.gridView01.setData(res.list));
@@ -154,6 +154,9 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             url: "/api/v1/cl002/07/updateStatusCancel",
             data: JSON.stringify(params),
             callback: function (res) {
+                if(res.message == "CLASSIFIED"){
+                    alert("상태변경 실패!  연결된 Aggregation 이 존재합니다.")
+                }
                 ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
             },
             options: {

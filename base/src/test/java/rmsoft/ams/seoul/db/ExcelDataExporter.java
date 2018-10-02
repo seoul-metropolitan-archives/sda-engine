@@ -166,7 +166,7 @@ public class ExcelDataExporter {
 
     private static final String DIR_NAME = "C:/dbunit_dataset/";
 
-    private static final String FILE_NAME = "ATMS_01001170_.xls";
+    private static final String FILE_NAME = "ATMS_01001170_.xlxs";
 
     private static final String[] TABLE_NAMES = {"ATMS_01001170"};
 }

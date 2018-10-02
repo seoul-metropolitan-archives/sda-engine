@@ -28,6 +28,7 @@ public interface Cl002Mapper extends MyBatisMapper
      */
     List<Cl00201VO> getSelectedClassList(Cl00201VO cl00201VO);
 
+    int getClassForClassify(Cl00201VO cl00201VO);
     /**
      * Gets class hierarchy list.
      *
@@ -35,6 +36,8 @@ public interface Cl002Mapper extends MyBatisMapper
      * @return the class hierarchy list
      */
     List<Cl00201VO> getClassHierarchyList(Cl00201VO cl00201VO);
+
+    List<Cl00201VO> getClassHierarchyListForClassify(Cl00201VO cl00201VO);
 
     /**
      * Gets classification scheme.

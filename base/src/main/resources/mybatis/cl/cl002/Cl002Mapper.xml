@@ -77,8 +77,9 @@
         CLASS_LEVEL_UUID as classLevelUuid,
         ORDER_NO as orderNo,
         ORDER_KEY as orderKey,
-        SUBSTR(SYS_CONNECT_BY_PATH(ROWNUM, '.'), 2 , length(SYS_CONNECT_BY_PATH(ROWNUM, '.'))) as orderKey1,
+        SUBSTR(SYS_CONNECT_BY_PATH(ROWID, '.'), 2 , length(SYS_CONNECT_BY_PATH(ROWID, '.'))) as orderKey1,
         USE_YN as useYn,
+        DESCRIPTION as description,
         <include refid="Common.UserName"><property name="userUuid" value="INSERT_UUID"/></include> as insertUuid,
         INSERT_DATE as insertDate,
         <include refid="Common.UserName"><property name="userUuid" value="UPDATE_UUID"/></include> as updateUuid,
@@ -92,6 +93,37 @@
         </where>
         START WITH PARENT_CLASS_UUID IS NULL
         CONNECT BY PRIOR CLASS_UUID = PARENT_CLASS_UUID
+        ORDER SIBLINGS BY ORDER_KEY
+    </select>
+    <select id="getClassHierarchyListForClassify" resultType="cl00201VO" parameterType="cl00201VO" statementType="PREPARED">
+        SELECT
+        CLASS_UUID as classUuid,
+        CLASSIFICATION_SCHEME_UUID as classificationSchemeUuid,
+        STATUS_UUID as statusUuid,
+        PARENT_CLASS_UUID as parentClassUuid,
+        CLASS_CODE as classCode,
+        CLASS_NAME as className,
+        CONNECT_BY_ISLEAF AS isLeaf,
+        '[' || FC_AD_CODE_NM(CLASS_LEVEL_UUID) || '] ' || CLASS_NAME as classTreeName,
+        CLASS_LEVEL_UUID as classLevelUuid,
+        ORDER_NO as orderNo,
+        ORDER_KEY as orderKey,
+        SUBSTR(SYS_CONNECT_BY_PATH(ROWID, '.'), 2 , length(SYS_CONNECT_BY_PATH(ROWID, '.'))) as orderKey1,
+        USE_YN as useYn,
+        DESCRIPTION as description,
+        <include refid="Common.UserName"><property name="userUuid" value="INSERT_UUID"/></include> as insertUuid,
+        INSERT_DATE as insertDate,
+        <include refid="Common.UserName"><property name="userUuid" value="UPDATE_UUID"/></include> as updateUuid,
+        UPDATE_DATE as updateDate
+        FROM
+        CL_CLASS
+        <where>
+            <if test="classificationSchemeUuid != null">
+                CLASSIFICATION_SCHEME_UUID = #{classificationSchemeUuid}
+            </if>
+        </where>
+        START WITH PARENT_CLASS_UUID IS NULL AND FC_AD_CODE(STATUS_UUID) = 'CONFIRM'
+        CONNECT BY PRIOR CLASS_UUID = PARENT_CLASS_UUID AND FC_AD_CODE(STATUS_UUID) = 'CONFIRM'
         ORDER SIBLINGS BY ORDER_KEY
     </select>
     <select id="getSelectedClassList" resultType="cl00201VO" parameterType="cl00201VO" statementType="PREPARED">
@@ -133,7 +165,7 @@
             NOTES as notes,
             DESCRIPTION as description,
             SUBSTR(SYS_CONNECT_BY_PATH('[' || FC_AD_CODE_NM(CLASS_LEVEL_UUID) || '] ' || CLASS_NAME,' >> '),4) path,
-            SUBSTR(SYS_CONNECT_BY_PATH(ROWNUM, '.'), 2 , length(SYS_CONNECT_BY_PATH(ROWNUM, '.'))) as orderKey1,
+            SUBSTR(SYS_CONNECT_BY_PATH(ROWID, '.'), 2 , length(SYS_CONNECT_BY_PATH(ROWID, '.'))) as orderKey1,
             USE_YN as useYn,
             <include refid="Common.UserName"><property name="userUuid" value="INSERT_UUID"/></include> as insertUuid,
             INSERT_DATE as insertDate,
@@ -230,6 +262,41 @@
           STATUS_UUID = #{statusUuid},
           UPDATE_UUID = #{updateUuid},
           UPDATE_DATE = to_timestamp(#{updateDate},'yyyy/mm/dd hh24:mi:ss.ff3')
-        WHERE ORDER_KEY LIKE #{orderKey} || '%'
+        WHERE
+          CLASS_UUID IN (
+                          SELECT
+                            CLASS_UUID
+                          FROM
+                            CL_CLASS
+                          START WITH CLASS_UUID = #{classUuid}
+                          CONNECT BY PRIOR CLASS_UUID = PARENT_CLASS_UUID
+                        )
     </update>
+    <select id="getClassForClassify" resultType="int" parameterType="Cl00201VO" statementType="PREPARED">
+        SELECT COUNT(*)
+        FROM CL_CLASSIFY_RECORDS_RESULT
+        WHERE CLASS_UUID IN (
+            SELECT
+                classUuid
+            FROM
+            (
+                SELECT
+                    CLASS_UUID as classUuid,
+                    CONNECT_BY_ISLEAF AS isLeaf,
+                    SUBSTR(SYS_CONNECT_BY_PATH(ROWID,'.'), 2 ,length(SYS_CONNECT_BY_PATH(ROWID,'.'))) as orderKey1
+                FROM
+                    CL_CLASS
+                WHERE
+                    CLASSIFICATION_SCHEME_UUID = #{classificationSchemeUuid}
+                START WITH PARENT_CLASS_UUID IS NULL
+                CONNECT BY PRIOR CLASS_UUID = PARENT_CLASS_UUID
+                ORDER SIBLINGS BY ORDER_KEY
+            )
+            WHERE
+            (
+                orderKey1 LIKE  #{orderKey1} || '.' || '%'
+                OR orderKey1 =  #{orderKey1}
+            ) AND isLeaf = 1
+        )
+    </select>
 </mapper>

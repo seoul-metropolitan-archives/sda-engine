@@ -12,11 +12,12 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1);
     },
     PAGE_SEARCH2: function (caller, act, data) {
+        if(classificationSchemeUuid =='' || classificationSchemeUuid == null) return;
         axboot.ajax({ //트리 리스트
             type: "GET",
             url: "/api/v1/cl002/03/getClassHierarchyList",
             async : false,
-            data: $.extend({}, {pageSize: 1000}, {classificationSchemeUuid:classificationSchemeUuid}),
+            data: $.extend({}, {pageSize: 1000}, {classificationSchemeUuid:classificationSchemeUuid,className:"cl003"}),
             callback: function (res) {
                 classList = ax5.util.deepCopy(res.list);
                 fnObj.gridView01.setData(res.list);

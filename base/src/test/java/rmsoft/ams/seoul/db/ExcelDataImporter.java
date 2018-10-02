@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.IDataSet;
-import org.dbunit.dataset.excel.XlsDataSet;
+import rmsoft.ams.seoul.xls.AMSXlsDataSet;
 import org.dbunit.operation.DatabaseOperation;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
 import org.springframework.jdbc.datasource.DataSourceUtils;
@@ -25,12 +25,12 @@ public class ExcelDataImporter {
 
     private DataSource getDataSource(String userName) {
 
-        return  DataSourceBuilder.create()
-                    .url("jdbc:oracle:thin:@shinhan.cwozeqnjffgl.ap-northeast-2.rds.amazonaws.com:1521:shinhan")
-                    .driverClassName("oracle.jdbc.driver.OracleDriver")
-                    .username(userName)
-                    .password("ParkSt0re!")
-                    .build();
+        return DataSourceBuilder.create()
+                .url("jdbc:oracle:thin:@//192.168.0.62:1521/amsdb")
+                .driverClassName("oracle.jdbc.driver.OracleDriver")
+                .username(userName)
+                .password("ams")
+                .build();
     }
 
     private void execute(String userName, String... fileNames) {
@@ -40,15 +40,15 @@ public class ExcelDataImporter {
 
         try {
 
-            dbUnitCon = new DatabaseConnection(conn);
+            dbUnitCon = new DatabaseConnection(conn, "ams");
 
             //dbUnitCon.getConfig().setProperty(DatabaseConfig.FEATURE_ALLOW_EMPTY_FIELDS, true);
             //config.setProperty(DatabaseConfig.PROPERTY_DATATYPE_FACTORY, new PostgresqlDataTypeFactory());
             //config.setProperty(DatabaseConfig.PROPERTY_DATATYPE_FACTORY, new CustomDataTypeFactory());
 
             for (String fileName : Arrays.asList(fileNames)) {
-                IDataSet dataset = new XlsDataSet(new File(SocketMsgUtils.getDbDatesetDir() + fileName));
-                DatabaseOperation.CLEAN_INSERT.execute(dbUnitCon, dataset);
+                IDataSet dataset = new AMSXlsDataSet(new File(SocketMsgUtils.getDbDatesetDir() + fileName), getDataSource("ams"));
+                DatabaseOperation.INSERT.execute(dbUnitCon, dataset);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -67,14 +67,14 @@ public class ExcelDataImporter {
      * @param args the input arguments
      * @throws Exception the exception
      */
-    public static void main(String[] args) throws Exception{
+    public static void main(String[] args) throws Exception {
 
         String userName = args[0];
 
         String[] files = new String[args.length - 1];
 
         for (int i = 1; i < args.length; i++) {
-            files[i-1] = args[i];
+            files[i - 1] = args[i];
         }
 
         System.out.println("excel import job :: start...!");
@@ -84,9 +84,10 @@ public class ExcelDataImporter {
 
         String fileNames = Arrays.stream(files).collect(Collectors.joining(", "));
 
-        System.out.println("[file names] " +  fileNames);
+        System.out.println("[file names] " + fileNames);
 
         System.out.println("excel import job :: end...!");
+
     }
 
 }
