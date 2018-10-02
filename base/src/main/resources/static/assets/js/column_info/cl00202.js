@@ -204,6 +204,13 @@ var cl00202 =
                     editable: false,
                     dataType: "code",
                     visible : false
+                },
+                {
+                    sortNo: 20,
+                    name: "orderKey1",
+                    text: "ORDER_KEY1",
+                    width: 120,
+                    visible:false
                 }
             ]
     }
