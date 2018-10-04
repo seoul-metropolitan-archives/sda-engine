@@ -1498,7 +1498,7 @@ fnObj.iconView = axboot.viewExtend({
     isdbClk : false,
     selectedItem : null,
     timer : 0,
-    delay : 200,
+    delay : 400,
     prevent : false,
     isItemDrop : false,
     isOver : false,
