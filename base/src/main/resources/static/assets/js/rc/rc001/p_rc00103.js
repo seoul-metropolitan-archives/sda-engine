@@ -102,11 +102,8 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView,{
     entityName : "Record Explorer",
     initView  : function()
     {
-        var _this = this;
         this.initInstance();
-
         this.setColumnInfo(rc00103_p03["column_info_" + nodeType]);
-
         this.makeGrid();
 
         this.gridObj.addRow();

@@ -41,5 +41,5 @@ public interface Ac007Mapper extends MyBatisMapper {
      * @param programUuid the program uuid
      * @return the list
      */
-    List<Ac00703VO> findPermission(String programUuid);
+    List<Ac00703VO> findPermission(Ac00702VO ac00702VO);
 }
