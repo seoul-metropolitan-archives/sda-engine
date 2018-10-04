@@ -87,15 +87,15 @@ public class Ac007Controller extends MessageBaseController {
         return ac007Service.saveRoleMenu(requestParams);
     }
 
-    /**
-     * Save permission api response.
-     *
-     * @param requestParams the request params
-     * @return the api response
-     */
-    @PutMapping(value = "/03/save")
-    @PostMapping
-    public ApiResponse savePermission(@RequestBody List<Ac00703VO> requestParams) {
-        return ac007Service.savePermission(requestParams);
+        /**
+         * Save permission api response.
+         *
+         * @param requestParams the request params
+         * @return the api response
+         */
+        @PutMapping(value = "/03/save")
+        @PostMapping
+        public ApiResponse savePermission(@RequestBody List<Ac00703VO> requestParams) {
+            return ac007Service.savePermission(requestParams);
     }
 }

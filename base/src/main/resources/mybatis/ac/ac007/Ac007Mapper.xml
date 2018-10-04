@@ -78,7 +78,7 @@
         </if>
         ORDER BY Z2.MENU_CODE
     </select>
-    <select id="findPermission" resultType="Ac00703VO" parameterType="String"
+    <select id="findPermission" resultType="Ac00703VO" parameterType="Ac00703VO"
             statementType="PREPARED">
         SELECT
             Z1.PERMISSION_UUID as permissionUuid,
@@ -88,9 +88,11 @@
             Z1.PMS_ENTITY_TYPE_UUID as pmsEntityTypeUuid,
             (SELECT ENTITY_TYPE_NAME FROM AD_ENTITY_TYPE WHERE ENTITY_TYPE_UUID = Z1.PMS_ENTITY_TYPE_UUID) as entityTypeName,
             Z1.PMS_FUNCTION_UUID as pmsFunctionUuid,
-            Z1.DESCRIPTION as description,
-            Z1.NOTES as notes,
-            Z1.USE_YN as useYn,
+            Z2.DESCRIPTION as description,
+            Z2.NOTES as notes,
+            Z2.USE_YN AS useYn,
+            #{roleUuid} AS roleUuid,
+            Z2.ROLE_PERMISSION_UUID AS rolePermissionUuid,
             <include refid="Common.UserName">
                 <property name="userUuid" value="Z1.INSERT_UUID"/>
             </include>
@@ -102,7 +104,13 @@
             as updateUuid,
             Z1.UPDATE_DATE updateDate
         FROM
-            AC_PERMISSION Z1
-        WHERE Z1.PMS_PROGRAM_UUID = #{programUuid}
+            AC_PERMISSION Z1,
+            (
+            SELECT *
+            FROM AC_ROLE_PERMISSION
+            WHERE ROLE_UUID = #{roleUuid}
+            ) Z2
+        WHERE Z1.PERMISSION_UUID = Z2.PERMISSION_UUID(+)
+        AND Z1.PMS_PROGRAM_UUID = #{programUuid}
     </select>
 </mapper>

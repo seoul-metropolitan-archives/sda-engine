@@ -22,11 +22,11 @@ import rmsoft.ams.seoul.ac.ac007.dao.Ac007Mapper;
 import rmsoft.ams.seoul.ac.ac007.vo.Ac00701VO;
 import rmsoft.ams.seoul.ac.ac007.vo.Ac00702VO;
 import rmsoft.ams.seoul.ac.ac007.vo.Ac00703VO;
-import rmsoft.ams.seoul.common.domain.AcPermission;
 import rmsoft.ams.seoul.common.domain.AcRoleMenu;
+import rmsoft.ams.seoul.common.domain.AcRolePermission;
 import rmsoft.ams.seoul.common.domain.AcUser;
-import rmsoft.ams.seoul.common.repository.AcPermissionRepository;
 import rmsoft.ams.seoul.common.repository.AcRoleMenuRepository;
+import rmsoft.ams.seoul.common.repository.AcRolePermissionRepository;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -42,7 +42,7 @@ public class Ac007Service extends BaseService {
     private AcRoleMenuRepository acRoleMenuRepository;
 
     @Autowired
-    private AcPermissionRepository acPermissionRepository;
+    private AcRolePermissionRepository acRolePermissionRepository;
 
     @Inject
     private Ac007Mapper ac007Mapper;
@@ -139,7 +139,8 @@ public class Ac007Service extends BaseService {
     public Page<Ac00703VO> findPermission(Pageable pageable, RequestParams<Ac00702VO> requestParams) {
         String filter = requestParams.getString("filter", "");
 
-        return filter(ac007Mapper.findPermission(requestParams.getString("programUuid")), pageable, filter, Ac00703VO.class);
+        Ac00702VO ac00702VO = ModelMapperUtils.map(requestParams.getMap(), Ac00702VO.class);
+        return filter(ac007Mapper.findPermission(ac00702VO), pageable, filter, Ac00703VO.class);
     }
 
 
@@ -151,24 +152,24 @@ public class Ac007Service extends BaseService {
      */
     @Transactional
     public ApiResponse savePermission(List<Ac00703VO> ac00703VOList) {
-        List<AcPermission> acPermissionList = ModelMapperUtils.mapList(ac00703VOList, AcPermission.class);
-        AcPermission orgAcPermission = null;
+        List<AcRolePermission> itemList = ModelMapperUtils.mapList(ac00703VOList, AcRolePermission.class);
+        AcRolePermission orgItem = null;
 
-        for (AcPermission acPermission : acPermissionList) {
-            orgAcPermission = acPermissionRepository.findOne(acPermission.getId());
-
-            if (orgAcPermission == null) {
+        for (AcRolePermission saveItem : itemList) {
+            if (saveItem.getRolePermissionUuid() == null) {
                 // created
-                acPermission.setPermissionUuid(UUIDUtils.getUUID());
-                acPermissionRepository.save(acPermission);
+                saveItem.setRolePermissionUuid(UUIDUtils.getUUID());
+                acRolePermissionRepository.save(saveItem);
             } else {
-                if (acPermission.isDeleted()) {
-                    acPermissionRepository.delete(acPermission);
-                } else {
-                    acPermission.setInsertDate(orgAcPermission.getInsertDate());
-                    acPermission.setInsertUuid(orgAcPermission.getInsertUuid());
+                orgItem = acRolePermissionRepository.findOne(saveItem.getId());
 
-                    acPermissionRepository.save(acPermission);
+                if (saveItem.isDeleted()) {
+                    acRolePermissionRepository.delete(saveItem);
+                } else {
+                    saveItem.setInsertDate(orgItem.getInsertDate());
+                    saveItem.setInsertUuid(orgItem.getInsertUuid());
+
+                    acRolePermissionRepository.save(saveItem);
                 }
             }
         }
