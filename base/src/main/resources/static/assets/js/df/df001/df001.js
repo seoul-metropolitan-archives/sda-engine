@@ -166,6 +166,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
 
 fnObj.pageStart = function () {
     var _this = this;
+
     $.ajax({
         url: "/assets/js/column_info/df00101.js",
         dataType: "script",

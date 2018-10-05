@@ -8,8 +8,6 @@ import rmsoft.ams.seoul.utils.CommonCodeUtils;
 
 @Controller
 public class Df001ViewRouter extends BaseController {
-
-
     /**
      * View string.
      *
