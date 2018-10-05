@@ -170,29 +170,45 @@ public class Cl002Service extends BaseService {
      * @return the api response
      */
     @Transactional
-    public ApiResponse updateStatusCancel(List<Cl00201VO> list)  {
+    public ApiResponse updateStatusCancel(List<Cl00201VO> lists)  {
         try{
-            for (Cl00201VO cl00201VO : list) {
+            List<ClClass> clClassList = ModelMapperUtils.mapList(lists, ClClass.class);
+            ClClass orgClClass = null;
+            String changeStatusNm = "";
+            String changeStatusCd = "";
+            int index = 0;
+            for (Cl00201VO cl00201VO : lists) {
                 if(0 < getClassForClassify(cl00201VO)){
                    throw new Exception();
-               }
-            }
-            List<ClClass> clClassList = ModelMapperUtils.mapList(list, ClClass.class);
-            ClClass orgClClass = null;
-            int index = 0;
-            String changeStatus = "";
-            for (ClClass clClass : clClassList) {
-                //Classify 체크
-                changeStatus = list.get(index).getChangeStatus() == "" ? "Draft" : list.get(index).getChangeStatus();
-                orgClClass = clClassRepository.findOne(clClass.getId());
-                if(!orgClClass.getStatusUuid().equals(CommonCodeUtils.getCodeDetailUuid("CD113", changeStatus))){
-                    clClass.setStatusUuid(CommonCodeUtils.getCodeDetailUuid("CD113", changeStatus));
-                    clClass.setInsertDate(orgClClass.getInsertDate());
-                    clClass.setInsertUuid(orgClClass.getInsertUuid());
-                    clClassRepository.save(clClass);
+                }else{
+                    orgClClass = clClassRepository.findOne(clClassList.get(index).getId());
+                    changeStatusNm = cl00201VO.getChangeStatus() == "" ? "Draft" : cl00201VO.getChangeStatus();
+                    changeStatusCd = CommonCodeUtils.getCodeDetailUuid("CD113", changeStatusNm);
+                    if (orgClClass.getStatusUuid() != changeStatusCd) {
+                        cl00201VO.setStatusUuid(changeStatusCd);
+                        cl00201VO.setUpdateUuid(SessionUtils.getCurrentLoginUserUuid());
+                        cl00201VO.setUpdateDate(Timestamp.valueOf(DateUtils.convertToString(LocalDateTime.now(), DateUtils.DATE_TIME_PATTERN)));
+                    }
+                    cl002Mapper.updateStatusConfirm(cl00201VO);
+                    index++;
                 }
-                index++;
             }
+//            List<ClClass> clClassList = ModelMapperUtils.mapList(list, ClClass.class);
+//            ClClass orgClClass = null;
+//            int index = 0;
+//            String changeStatus = "";
+//            for (ClClass clClass : clClassList) {
+//                //Classify 체크
+//                changeStatus = list.get(index).getChangeStatus() == "" ? "Draft" : list.get(index).getChangeStatus();
+//                orgClClass = clClassRepository.findOne(clClass.getId());
+//                if(!orgClClass.getStatusUuid().equals(CommonCodeUtils.getCodeDetailUuid("CD113", changeStatus))){
+//                    clClass.setStatusUuid(CommonCodeUtils.getCodeDetailUuid("CD113", changeStatus));
+//                    clClass.setInsertDate(orgClClass.getInsertDate());
+//                    clClass.setInsertUuid(orgClClass.getInsertUuid());
+//                    clClassRepository.save(clClass);
+//                }
+//                index++;
+//            }
             return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");
         }catch(Exception e){
             return ApiResponse.of(ApiStatus.SUCCESS, "CLASSIFIED");
