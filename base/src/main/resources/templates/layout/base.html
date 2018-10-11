@@ -64,10 +64,21 @@
     /**/
     var COMMON_CONFIG = window.parent.COMMON_CONFIG;
 
+    var MENU_DATA = window.parent.TOP_MENU_DATA;
+
+    var PERMISSION_DATA = window.parent.PERMISSION_DATA;
+
     function convertJsonObj(jsonStr) {
         return jsonStr == null || jsonStr == '' ? null : JSON.parse(jsonStr.replace(/&quot;/gi, '"').replace(/\r\n|\n/gi, "<br />"));
     }
 
+    /**
+     * Permission 설정
+     */
+    var programUuid = '[[${programUuid}]]';
+    var permissionList = $.grep(PERMISSION_DATA, function(item){
+        return item["pmsProgramUuid"] == programUuid;
+    });
 
 </script>
 <script>

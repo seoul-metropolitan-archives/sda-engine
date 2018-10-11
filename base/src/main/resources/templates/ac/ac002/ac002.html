@@ -32,6 +32,7 @@
 
         var sessionJson = convertJsonObj('[[${scriptSession}]]');
         var menuJson = convertJsonObj('[[${menuJson}]]');
+        var permissionJson = convertJsonObj('[[${permissionJson}]]');
         var commonCodeJson = convertJsonObj('[[${commonCodeJson}]]');
         var commonMessageJson = convertJsonObj('[[${commonMessageJson}]]');
         var commonConfigJson = convertJsonObj('[[${commonConfigJson}]]');
@@ -44,6 +45,9 @@
         var TOP_MENU_DATA = (function (json) {
             return json;
         })(menuJson);
+        var PERMISSION_DATA = (function (json) {
+            return json;
+        })(permissionJson);
         var COMMON_CODE = (function (json) {
             return json;
         })(commonCodeJson);
