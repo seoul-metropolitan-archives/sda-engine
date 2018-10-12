@@ -32,9 +32,11 @@
 
         var sessionJson = convertJsonObj('[[${scriptSession}]]');
         var menuJson = convertJsonObj('[[${menuJson}]]');
+        var permissionJson = convertJsonObj('[[${permissionJson}]]');
         var commonCodeJson = convertJsonObj('[[${commonCodeJson}]]');
         var commonMessageJson = convertJsonObj('[[${commonMessageJson}]]');
         var commonConfigJson = convertJsonObj('[[${commonConfigJson}]]');
+        var entityListJson = convertJsonObj('[[${entityListJson}]]');
 
         var CONTEXT_PATH = 'http://[[${#httpServletRequest.serverName}]]:[[${#httpServletRequest.serverPort}]]';
         /*var CONTEXT_PATH   = 'http://[[@{${@environment.getProperty("server.url")}}]]:[[@{${@environment.getProperty("server.port")}}]]';*/
@@ -44,6 +46,9 @@
         var TOP_MENU_DATA = (function (json) {
             return json;
         })(menuJson);
+        var PERMISSION_DATA = (function (json) {
+            return json;
+        })(permissionJson);
         var COMMON_CODE = (function (json) {
             return json;
         })(commonCodeJson);
@@ -56,10 +61,13 @@
             return json;
         })(commonConfigJson);
 
+        var ENTITY_LIST = (function (json) {
+            return json;
+        })(entityListJson);
+
         function convertJsonObj(jsonStr) {
             return jsonStr == null || jsonStr == '' ? null : JSON.parse(jsonStr.replace(/&quot;/gi, '"').replace(/\r\n|\n/gi, "<br />"));
         }
-
 
     </script>
     <script type="text/javascript" th:src="@{/assets/js/libs/realgrid/realgridjs-lic.js}"></script>
@@ -94,6 +102,16 @@
                         "<style>*,body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, code, form, fieldset, legend, textarea, p, blockquote, th, td, input, select, textarea, button, table td{font-family : " + setupFontFamily.substring(0, setupFontFamily.length - 1) + " !important;</style>"
                     );
             }
+
+            $.each(PERMISSION_DATA, function (idx, item) {
+                item['pmsFunctionName'] = axboot.commonCodeValueByUuid("CD108", item['pmsFuntionUuid']);
+                $.each(ENTITY_LIST, function (idx, row) {
+                    if (item['pmsEntityTypeUuid'] == row['entityTypeUuid']) {
+                        item['pmsEntityTypeCode'] = row["entityType"];
+                        return false;
+                    }
+                });
+            });
         });
 
 

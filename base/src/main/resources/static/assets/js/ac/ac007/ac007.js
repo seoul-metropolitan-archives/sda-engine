@@ -81,7 +81,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 url: "/api/v1/ac007/02/save",
                 data: JSON.stringify(roleMenuList),
                 callback: function (res) {
-                    fnObj.gridView01.commit();
+                    fnObj.gridView02.commit();
                 }
             })
             .call({
@@ -89,7 +89,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 url: "/api/v1/ac007/03/save",
                 data: JSON.stringify(permissionList),
                 callback: function (res) {
-                    fnObj.gridView02.commit();
+                    fnObj.gridView03.commit();
                 }
             })
             .done(function () {
@@ -320,7 +320,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     },
     tagId: "realgrid01",
     primaryKey: "roleUuid",
-    entityName: "Role",
+    entityName: "AC_ROLE",
     initView: function () {
         this.initInstance();
         this.setColumnInfo(ac00701.column_info);
@@ -359,6 +359,8 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
 });
 
 fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
+    entityName: "AC_ROLE_MENU",
+    tagId: "realgrid02",
     page: {
         pageNumber: 0,
         pageSize: 10000
@@ -440,7 +442,7 @@ fnObj.gridView03 = axboot.viewExtend(axboot.gridView, {
         pageSize: 10000
     },
     tagId: "realgrid03",
-    entityName: "Permission",
+    entityName: "AC_ROLE_PERMISSION",
     primaryKey: "rolePermissionUuid",
     parentsUuidFieldName: "roleUuid",
     parentsGrid: fnObj.gridView01,

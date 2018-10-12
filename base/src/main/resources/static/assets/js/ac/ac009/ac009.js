@@ -162,6 +162,7 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
 fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     tagId : "realgrid01",
     primaryKey : "menuUuid",
+    entityName : "AD_MENU",
     initView: function () {
         this.initInstance()
         this.setColumnInfo(ac00901.column_info);

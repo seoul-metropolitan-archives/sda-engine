@@ -364,7 +364,7 @@ fnObj.sqlView = axboot.viewExtend(axboot.commonView,{
 fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     tagId : "realgrid",
     uuidFieldName : "popupHeaderUuid",
-    entityName : "POPUP_HEADER",
+    entityName : "AD_POPUP_HEADER",
     initView  : function()
     {
         var _this = this;
@@ -421,7 +421,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
 });
 fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
     tagId : "realgrid2",
-    entityName : "POPUP_DETAIL",
+    entityName : "AD_POPUP_DETAIL",
     uuidFieldName : "popupDetailUuid",
     parentsUuidFieldName : "popupHeaderUuid",
     parentsGrid : fnObj.gridView01,

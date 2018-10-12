@@ -220,7 +220,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     },
     tagId: "realgrid01",
     primaryKey: "roleUuid",
-    entityName: "Role",
+    entityName: "AC_ROLE",
     initView: function () {
         this.initInstance();
         this.gridObj.setFixedOptions({
@@ -263,7 +263,7 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
         pageSize: 10000
     },
     tagId: "realgrid02",
-    entityName: "Permission",
+    entityName: "AC_ROLE_PERMISSION",
     primaryKey: "rolePermissionUuid",
     parentsUuidFieldName: "roleUuid",
     parentsGrid: fnObj.gridView01,

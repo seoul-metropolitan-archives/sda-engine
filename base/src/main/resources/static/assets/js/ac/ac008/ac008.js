@@ -162,6 +162,7 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
 // AC008 User Group User GridView
 fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     primaryKey : "programUuid",
+    entityName: "AD_PROGRAM",
     tagId : "realgrid01",
     initView: function () {
         this.initInstance();

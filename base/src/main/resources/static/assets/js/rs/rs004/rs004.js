@@ -288,7 +288,7 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
 fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     tagId: "realgrid01",
     primaryKey : "generalRecordScheduleUuid",
-    entityName: "General Record Schedule UUID",
+    entityName: "RS_GENERAL_RECORD_SCHEDULE",
     initView: function () {
         this.initInstance();
         this.setColumnInfo(rs00401.column_info);
@@ -322,7 +322,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
                 return true;
             else
                 return false;
-        },["rsCode","description"]);
+        },["description"]);
     },
     onImageButtonClicked :function (grid, itemIndex, column, buttonIndex, name) {
 

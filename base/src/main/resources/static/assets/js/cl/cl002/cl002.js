@@ -409,7 +409,7 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
 fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     tagId : "realgrid01",
     uuidFieldName : "classificationSchemeUuid",
-    entityName : "ClassName",
+    entityName : "CL_CLASS",
     initView: function () {
         this.gridObj = new TreeGridWrapper("realgrid01", "/assets/js/libs/realgrid", true);
         this.gridObj.setGridStyle("100%", "100%")
@@ -489,7 +489,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
 
 fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
     tagId : "realgrid02",
-    entityName : "Class Grid",
+    entityName : "CL_CLASS",
     uuidFieldName : "classUuid",
     parentsUuidFieldName : "classificationSchemeUuid",
     parentsGrid : fnObj.gridView01,

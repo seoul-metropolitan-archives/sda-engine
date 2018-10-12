@@ -7,8 +7,8 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             url: "/api/v1/common/controller",
             data: $.extend({}, {pageSize: 1000, sort: "", serviceId: "ad001", methodName: "getEnviromentList"}, fnObj.searchView.getData()),
             callback: function (res) {
-                fnObj.gridView01.resetCurrent();O
-                fnObj.gridView01.setData(res.list);
+                //fnObj.gridView01.resetCurrent();
+                //fnObj.gridView01.setData(res.list);
             },
             options: {
                 onError: axboot.viewError
@@ -104,8 +104,8 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             url: "/api/v1/common/controller",
             data: $.extend({}, {pageSize: 1000, sort: "", serviceId: "ad001", methodName: "getEnviromentList1"}, fnObj.searchView.getData()),
             callback: function (res) {
-                fnObj.gridView01.resetCurrent();
-                fnObj.gridView01.setData(res.list);
+                //fnObj.gridView01.resetCurrent();
+                //fnObj.gridView01.setData(res.list);
             },
             options: {
                 onError: axboot.viewError

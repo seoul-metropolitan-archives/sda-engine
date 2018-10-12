@@ -349,7 +349,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
 
 fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
     tagId : "realgrid02",
-    entityName : "containerUuid",
+    entityName : "ST_CONTAINER",
     primaryKey : "containerUuid",
     initView: function () {
         this.initInstance();

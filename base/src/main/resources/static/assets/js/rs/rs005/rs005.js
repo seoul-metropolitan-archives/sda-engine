@@ -246,6 +246,7 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
 /*팝업 헤더*/
 fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     tagId: "realgrid01",
+    entityName : "RS_RECORD_SCHEDULE_RESULT",
     initView: function () {
         this.initInstance();
         this.setColumnInfo(rs00501.column_info);
