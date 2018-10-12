@@ -68,17 +68,95 @@
 
     var PERMISSION_DATA = window.parent.PERMISSION_DATA;
 
+    var ENTITY_LIST = window.parent.ENTITY_LIST;
+
     function convertJsonObj(jsonStr) {
         return jsonStr == null || jsonStr == '' ? null : JSON.parse(jsonStr.replace(/&quot;/gi, '"').replace(/\r\n|\n/gi, "<br />"));
     }
 
     /**
-     * Permission 설정
+     * Function Code
+     */
+    const FUNCTION_ADD_UUID = axboot.commonCodeValueByCodeName("CD108", "Add");
+    const FUNCTION_EDIT_UUID = axboot.commonCodeValueByCodeName("CD108", "Edit");
+    const FUNCTION_DEL_UUID = axboot.commonCodeValueByCodeName("CD108", "Delete");
+    const FUNCTION_COFIRM_UUID = axboot.commonCodeValueByCodeName("CD108", "Confirm");
+    const FUNCTION_CANCEL_UUID = axboot.commonCodeValueByCodeName("CD108", "Apply");
+    const FUNCTION_POPUP_UUID = axboot.commonCodeValueByCodeName("CD108", "Popup");
+    const FUNCTION__RUN_UUID = axboot.commonCodeValueByCodeName("CD108", "Run");
+    const FUNCTION_UPDATE_UUID = axboot.commonCodeValueByCodeName("CD108", "Update Status");
+    const FUNCTION_VIEW_UUID = axboot.commonCodeValueByCodeName("CD108", "View");
+
+
+    /**
+     * 로딩되는 페이지의 Permission 가져오기
      */
     var programUuid = '[[${programUuid}]]';
     var permissionList = $.grep(PERMISSION_DATA, function(item){
+        item['pmsFunctionName'] = axboot.commonCodeValueByUuid("CD108", item['pmsFuntionUuid']);
+
         return item["pmsProgramUuid"] == programUuid;
     });
+
+    /**
+     * Grid에 매핑되는 Add/Delete 버튼 여부 확인
+     */
+    function isPermission(name, functionUuid){
+        var permission = false;
+
+        $.each(permissionList, function(idx, row){
+            if(name == row['pmsEntityTypeCode'] && functionUuid == row['pmsFuntionUuid']){
+                permission = true;
+                return false;
+            }
+        });
+
+        return permission;
+    }
+
+    $.urlParam = function(name){
+        var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+        if (results==null){
+            return null;
+        }
+        else{
+            return decodeURI(results[1]) || 0;
+        }
+    }
+
+    /**
+     * Save/Inquiry 권한 획득
+     * @param menuList
+     * @param role
+     * @returns {Object}
+     */
+    var getMenuRole = function(menuList){
+        var rtn = null;
+
+        $.each(menuList, function(idx, row){
+            if(row.hasOwnProperty("children")){
+                rtn = getMenuRole(row['children']);
+                if(rtn != null) return false;
+            }
+
+            if(row['menuId'] == $.urlParam("menuId")){
+                rtn = row;
+                return false;
+            }
+        });
+
+        return rtn;
+    };
+
+    var menuRole = getMenuRole(MENU_DATA);
+
+    var hideMenuRole = function(role){
+        if(menuRole[role] == "Y"){
+            return false;
+        }
+
+        return true;
+    }
 
 </script>
 <script>

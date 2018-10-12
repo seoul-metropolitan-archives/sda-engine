@@ -2488,6 +2488,14 @@ axboot.baseView =
             $(".bdb").delegate("#disposal", "click", function () {
                 _this.disposal();
             });
+
+            if(hideMenuRole("saveYn")){
+                $(".bdb").find('#save').hide();
+            }
+
+            if(hideMenuRole("inquiryYn")){
+                $(".bdb").find('#inquiry').hide();
+            }
            /* $(document).delegate(".ax-body .div_tablerow:not(.searchFields) input", "keydown", function (e) {
                 if (e.ctrlKey && e.altKey && e.keyCode == 73) {
                     e.preventDefault();
@@ -2529,36 +2537,37 @@ axboot.baseView =
         }
         , inquiry: function () {
         if (axboot.isDataChanged && axboot.isDataChanged(axboot.getMenuId())) {
-            axDialog.confirm({
-                msg: axboot.getCommonMessage("AA006")
-            }, function () {
-                if (this.key == "ok") {
-                    var result = false;
-                    if (ACTIONS && ACTIONS.PAGE_SAVE) {
-                        result = ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
-                    }
+                axDialog.confirm({
+                    msg: axboot.getCommonMessage("AA006")
+                }, function () {
+                    if (this.key == "ok") {
+                        var result = false;
+                        if (ACTIONS && ACTIONS.PAGE_SAVE) {
+                            result = ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
+                        }
 
-                    if (result && ACTIONS && ACTIONS.PAGE_SEARCH) {
-                        ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+                        if (result && ACTIONS && ACTIONS.PAGE_SEARCH) {
+                            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+                        }
+                    } else {
+                        if (ACTIONS && ACTIONS.PAGE_SEARCH)
+                            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
                     }
-                } else {
-                    if (ACTIONS && ACTIONS.PAGE_SEARCH)
-                        ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
-                }
-            });
-        } else {
-            if (ACTIONS && ACTIONS.PAGE_SEARCH)
-                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+                });
+            } else {
+                if (ACTIONS && ACTIONS.PAGE_SEARCH)
+                    ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+            }
         }
-    }
         , confirm: function () {
-        if (ACTIONS && ACTIONS.PAGE_CONFIRM)
-            ACTIONS.dispatch(ACTIONS.PAGE_CONFIRM);
-    }
+            if (ACTIONS && ACTIONS.PAGE_CONFIRM)
+                ACTIONS.dispatch(ACTIONS.PAGE_CONFIRM);
+        }
         , cancel: function () {
         if (ACTIONS && ACTIONS.PAGE_CANCEL)
             ACTIONS.dispatch(ACTIONS.PAGE_CANCEL);
-    }   , arrange: function () {
+        }
+        , arrange: function () {
             if (ACTIONS && ACTIONS.PAGE_ARRANGE)
                 ACTIONS.dispatch(ACTIONS.PAGE_ARRANGE);
         }
@@ -2981,6 +2990,20 @@ axboot.extend = function (_obj1, _obj2) {
     return $.extend({}, _obj1, _obj2);
 };
 axboot.viewExtend = function (_obj1, _obj2) {
+    /**
+     * Grid Add/Delete Button Permission 처리
+     */
+    try {
+        if (!isPermission(_obj2.entityName, FUNCTION_ADD_UUID)) {
+            $("#"+_obj2.tagId).parents().eq(1).find(".btn_a").hide();
+        }
+        if (!isPermission(_obj2.entityName, FUNCTION_DEL_UUID)) {
+            $("#"+_obj2.tagId).parents().eq(1).find(".btn_d").hide();
+        }
+    }catch(e){
+
+    }
+
     if (typeof _obj2 === "undefined") {
         return $.extend({}, axboot.commonView, _obj1);
     }
@@ -3008,6 +3031,7 @@ axboot.viewExtend = function (_obj1, _obj2) {
             axboot.gridList[menuId] = new Array();
         var margeObj = $.extend({}, _obj1, _obj2);
         axboot.gridList[menuId].push(margeObj);
+
         return margeObj;
     }
     else {
@@ -3080,6 +3104,12 @@ axboot.actionExtend = function () {
         }
 
         myAction["exec"] = function (caller, act, data) {
+            if(ACTIONS.PAGE_SEARCH == act){
+                if (hideMenuRole("inquiryYn")) return;
+            }else if(ACTIONS.PAGE_SAVE == act){
+                if (hideMenuRole("saveYn")) return;
+            }
+
             if (_action[act]) {
                 return _action[act].call(caller, caller, act, data);
             } else {

@@ -164,13 +164,15 @@ public class AXBootTokenAuthenticationService {
 
                 List<Menu> allMenuList = new ArrayList<>();
                 List<Permission> allPermissionList = new ArrayList<>();
-
                 // Role 에 포함된 메뉴,퍼미션 추출
                 userRoleList.forEach(role -> {
                     role.getRoleMenuList().stream().forEach(roleMenu -> {
 
                         if (roleMenu.getMenu().getUseYn().equals(AXBootTypes.Used.YES)) {
-                            allMenuList.add(roleMenu.getMenu());
+                            Menu menu = roleMenu.getMenu();
+                            menu.setSaveYn(roleMenu.getSaveYn().getLabel());
+                            menu.setInquiryYn(roleMenu.getInquiryYn().getLabel());
+                            allMenuList.add(menu);
                         }
                     });
                     role.getRolePermissionList().stream().forEach(rolePermission -> {

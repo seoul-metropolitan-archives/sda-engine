@@ -173,7 +173,7 @@ fnObj.formView = axboot.viewExtend(axboot.formView,{
 fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     tagId : "realgrid01",
     primaryKey : "codeHeaderUuid",
-    entityName : "CODE_HEADER",
+    entityName : "AD_CODE_HEADER",
     initView  : function()
     {
         var _this = this;
@@ -273,7 +273,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
 /*팝업 디테일 ( Column )*/
 fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
     tagId : "realgrid02",
-    entityName : "CODE_DETAIL",
+    entityName : "AD_CODE_DETAIL",
     primaryKey : "codeDetailUuid",
     parentsUuidFieldName : "codeHeaderUuid",
     parentsGrid : fnObj.gridView01,

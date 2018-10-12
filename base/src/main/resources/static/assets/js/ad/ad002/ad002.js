@@ -122,6 +122,7 @@ fnObj.searchView = axboot.viewExtend(axboot.formView,{
 fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     tagId : "realgrid01",
     primaryKey : "messageUuid",
+    entityName: "AD_MESSAGE",
     initView: function ()
     {
         this.initInstance();

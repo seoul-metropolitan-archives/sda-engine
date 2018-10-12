@@ -243,7 +243,7 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
 fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     tagId : "realgrid01",
     uuidFieldName : "permissionUuid",
-    entityName : "Permission",
+    entityName : "AC_PERMISSION",
     initView: function () {
         this.initInstance();
         this.setFixedOptions({

@@ -205,7 +205,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     },
     tagId: "realgrid01",
     primaryKey: "jobUuid",
-    entityName: "Job",
+    entityName: "WF_JOB",
     initView: function () {
         this.initInstance();
         this.gridObj.setFixedOptions({
@@ -243,7 +243,7 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
         pageSize: 10000
     },
     tagId: "realgrid02",
-    entityName: "Parameter",
+    entityName: "WF_PARAMETER",
     primaryKey: "parameterUuid",
     parentsUuidFieldName: "jobUuid",
     parentsGrid: fnObj.gridView01,

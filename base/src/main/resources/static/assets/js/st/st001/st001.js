@@ -338,7 +338,7 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
 fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     tagId: "realgrid01",
     primaryKey: "repositoryUuid",
-    entityName: "Repository UUID",
+    entityName: "ST_REPOSITORY",
     initView: function () {
         this.initInstance();
         this.setColumnInfo(st00101.column_info);
@@ -403,6 +403,7 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
     tagId: "realgrid02",
     primaryKey: "shelfUuid",
     uuidFieldName: "shelfUuid",
+    entityName: "ST_SHELF",
     parentsUuidFieldName: "repositoryUuid",
     parentsGrid: fnObj.gridView01,
     initView: function () {
@@ -473,7 +474,7 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
 fnObj.gridView03 = axboot.viewExtend(axboot.gridView, {
     tagId: "realgrid03",
     primaryKey: "locationUuid",
-    entityName: "Location UUID",
+    entityName: "ST_LOCATION",
     parentsUuidFieldName: "shelfUuid",
     parentsGrid: fnObj.gridView02,
     initView: function () {

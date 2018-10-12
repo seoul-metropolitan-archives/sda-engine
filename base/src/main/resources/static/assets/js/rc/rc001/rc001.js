@@ -21,10 +21,12 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 onError: axboot.viewError
             }
         });
-        return false;
+        return false;Z
     },
     GET_GRID_DATA : function(caller, act, data)
     {
+        if(hideMenuRole('inquiryYn')) return;
+
         axboot.ajax({
             //url: "/rc/rc001/getGridData",
             url: "/rc/rc001/getGridDataForPaging",
@@ -47,6 +49,8 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     },
     GET_SUBDATA : function(caller, act, data)
     {
+        if(hideMenuRole('inquiryYn')) return;
+
         console.log(data);
         axboot.ajax({
             url: "/rc/rc001/getAllNodeForPaging",
@@ -155,7 +159,9 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         }
     },
     ITEMS_SAVE: function (caller, act, list) {
-        console.log(JSON.stringify(list));
+
+        if(hideMenuRole('saveYn')) return;
+
         axboot.ajax({
             url: "/rc/rc001/save",
             data: JSON.stringify(list),
@@ -174,6 +180,9 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         });
     },
     ITEM_SAVE: function (caller, act, data){
+
+        if(hideMenuRole('saveYn')) return;
+
         axboot.ajax({
             type: "GET",
             url: "/api/v1/rc004/01/saveItemDetails",

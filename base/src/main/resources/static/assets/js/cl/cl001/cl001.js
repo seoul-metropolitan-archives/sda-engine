@@ -247,7 +247,7 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
 fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     tagId: "realgrid01",
     primaryKey : "classificationSchemeUuid",
-    entityName: "Classification Scheme",
+    entityName: "CL_CLASSIFICATION_SCHEME",
     initView: function () {
         this.initInstance();
         this.setColumnInfo(cl00101.column_info);

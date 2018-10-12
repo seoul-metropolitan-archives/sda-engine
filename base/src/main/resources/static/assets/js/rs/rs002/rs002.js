@@ -160,6 +160,7 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
 fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     tagId: "realgrid01",
     primaryKey : "triggerUuid",
+    entityName : "RS_TRIGGER",
     initView: function () {
         this.initInstance();
         this.setColumnInfo(rs00201.column_info);

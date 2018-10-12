@@ -250,7 +250,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     },
     tagId: "realgrid01",
     primaryKey: "userUuid",
-    entityName: "User",
+    entityName: "AC_USER",
     initView: function () {
         this.initInstance();
         this.gridObj.setFixedOptions({
@@ -310,7 +310,7 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
         pageSize: 10000
     },
     tagId: "realgrid02",
-    entityName: "UserGroup",
+    entityName: "AC_USER_GROUP_USER",
     primaryKey: "userGroupUserUuid",
     parentsUuidFieldName: "userUuid",
     parentsGrid: fnObj.gridView01,
@@ -332,7 +332,7 @@ fnObj.gridView03 = axboot.viewExtend(axboot.gridView, {
         pageSize: 10000
     },
     tagId: "realgrid03",
-    entityName: "Role",
+    entityName: "AC_ACCESS_CONTROL",
     primaryKey: "accessControlUuid",
     parentsUuidFieldName: "userUuid",
     parentsGrid: fnObj.gridView01,

@@ -360,6 +360,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
 
 fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
     entityName: "AC_ROLE_MENU",
+    tagId: "realgrid02",
     page: {
         pageNumber: 0,
         pageSize: 10000
@@ -441,7 +442,7 @@ fnObj.gridView03 = axboot.viewExtend(axboot.gridView, {
         pageSize: 10000
     },
     tagId: "realgrid03",
-    entityName: "Permission",
+    entityName: "AC_ROLE_PERMISSION",
     primaryKey: "rolePermissionUuid",
     parentsUuidFieldName: "roleUuid",
     parentsGrid: fnObj.gridView01,
