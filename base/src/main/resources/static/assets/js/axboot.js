@@ -2489,12 +2489,16 @@ axboot.baseView =
                 _this.disposal();
             });
 
-            if(hideMenuRole("saveYn")){
-                $(".bdb").find('#save').hide();
-            }
+            try {
+                if (hideMenuRole("saveYn")) {
+                    $(".bdb").find('#save').hide();
+                }
 
-            if(hideMenuRole("inquiryYn")){
-                $(".bdb").find('#inquiry').hide();
+                if (hideMenuRole("inquiryYn")) {
+                    $(".bdb").find('#inquiry').hide();
+                }
+            } catch(e) {
+
             }
            /* $(document).delegate(".ax-body .div_tablerow:not(.searchFields) input", "keydown", function (e) {
                 if (e.ctrlKey && e.altKey && e.keyCode == 73) {
@@ -3104,10 +3108,14 @@ axboot.actionExtend = function () {
         }
 
         myAction["exec"] = function (caller, act, data) {
-            if(ACTIONS.PAGE_SEARCH == act){
-                if (hideMenuRole("inquiryYn")) return;
-            }else if(ACTIONS.PAGE_SAVE == act){
-                if (hideMenuRole("saveYn")) return;
+            try {
+                if (ACTIONS.PAGE_SEARCH == act) {
+                    if (hideMenuRole("inquiryYn")) return;
+                } else if (ACTIONS.PAGE_SAVE == act) {
+                    if (hideMenuRole("saveYn")) return;
+                }
+            }catch(e){
+
             }
 
             if (_action[act]) {
