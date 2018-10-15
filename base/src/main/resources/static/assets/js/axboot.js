@@ -2491,11 +2491,11 @@ axboot.baseView =
 
             try {
                 if (hideMenuRole("saveYn")) {
-                    $(".bdb").find('#save').hide();
+                    $(".bdb").find('#save').attr("disabled", true);
                 }
 
                 if (hideMenuRole("inquiryYn")) {
-                    $(".bdb").find('#inquiry').hide();
+                    $(".bdb").find('#inquiry').attr("disabled", true);
                 }
             } catch(e) {
 
