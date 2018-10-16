@@ -16,7 +16,6 @@ var at00101 =
                     text: "Authority Number",
                     editable: false,
                     dataType: "text",
-                    width:100,
                     required: false
                 },
                 {
@@ -102,6 +101,14 @@ var at00101 =
                 {
                     sortNo: 12,
                     name: "description",
+                    editable: false,
+                    dataType: "text",
+                    required: false,
+                    visible: false
+                },
+                {
+                    sortNo: 13,
+                    name: "descriptorName",
                     editable: false,
                     dataType: "text",
                     required: false,
