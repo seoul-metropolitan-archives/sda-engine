@@ -23,6 +23,7 @@ public class At00101VO extends BaseVO {
     private String mainJob;
     private String descriptionDate;
     private String descriptorUuid;
+    private String descriptorName;
     private String levelOfDetailUuid;
     private String useYn;
 }
