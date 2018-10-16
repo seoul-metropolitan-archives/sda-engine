@@ -27,5 +27,6 @@
                 AND  A.AUTHORITY_NAME = #{authorityName}
             </if>
         </where>
+        ORDER BY AUTHORITY_NO DESC
     </select>
 </mapper>
