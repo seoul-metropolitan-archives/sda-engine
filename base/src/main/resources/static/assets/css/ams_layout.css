@@ -2361,7 +2361,20 @@ a.small_open {
     border: 1px solid #929292;
     font-size: 8px;
 }
-
+.btn_del_left {
+    display: block;
+    width: 15px;
+    height: 15px;
+    text-align: center;
+    background-color: #fff;
+    line-height: 16px;
+    color: #333;
+    font-weight: bold;
+    border-radius: 3px 3px;
+    margin-top: 3px;
+    border: 1px solid #929292;
+    font-size: 8px;
+}
 .comp_list_wrap {
     margin-bottom: 20px;
     width: 100%;

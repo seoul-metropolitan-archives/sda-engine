@@ -195,6 +195,14 @@
                 }
 
             },
+            "AUTHORITY_REGISTER_POPUP" :{
+                width: 900,
+                height: 530,
+                iframe: {
+                    url: "/at/at001/at001-p01"
+                }
+
+            },
             "CLASSIFY_POPUP" :{
                 width: 1200,
                 height: 800,
