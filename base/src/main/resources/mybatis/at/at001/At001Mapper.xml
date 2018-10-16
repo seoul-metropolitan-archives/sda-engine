@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="rmsoft.ams.seoul.at.at001.dao.At001Mapper">
+    <select id="getAuthorityList" resultType="At00101VO"  statementType="PREPARED">
+        SELECT
+          AUTHORITY_UUID AS authorityUuid,
+          AUTHORITY_TYPE_UUID AS authorityTypeUuid ,
+          AUTHORITY_NO AS authorityNo,
+          NVL(AUTHORITY_NAME,'') AS authorityName,
+          NVL(ORG_TYPE_UUID,'') AS orgTypeUuid,
+          NVL(TO_CHAR(START_DATE,'YYYY-MM-DD'),'')  AS startDate,
+          NVL(TO_CHAR(END_DATE,'YYYY-MM-DD'),'')  AS endDate,
+          NVL(MAIN_JOB,'') AS mainJob ,
+          NVL(TO_CHAR(DESCRIPTION_DATE,'YYYY-MM-DD'),'')  AS descriptionDate,
+          NVL(DESCRIPTOR_UUID,'') AS descriptorUuid,
+          NVL(LEVEL_OF_DETAIL_UUID,'') AS levelOfDetailUuid,
+          NVL(DESCRIPTION,'') AS description,
+          NVL(NOTES,'') AS notes
+        FROM AT_AUTHORITY
+        <where>
+            AUTHORITY_TYPE_UUID = #{authorityTypeUuid}
+            <if test="authorityName != null">
+                AND  A.AUTHORITY_NAME = #{authorityName}
+            </if>
+        </where>
+    </select>
+</mapper>
