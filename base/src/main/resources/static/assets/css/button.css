@@ -100,7 +100,7 @@ button.btn_small {
     box-sizing: border-box;
 }
 
-button.btn_a, button.btn_d, button.btn_s, button.btn_i, button.btn_ap, button.btn_co, button.btn_adf{
+button.btn_a, button.btn_d, button.btn_s, button.btn_i, button.btn_ap, button.btn_co, button.btn_adf, button.btn_def{
     background-image: url(/assets/images/ams/icon_main.png);
     border: 1px solid #ddd;
     width: 100px;
@@ -124,13 +124,21 @@ button.btn_a:hover,  button.btn_adf:hover{
     background-position: -97px -6px;
 }
 
+button.btn_a, button.btn_adf, button.btn_a[disabled]{
+    background-position: 0px -6px;
+}
+
 /*오른쪽 상단버튼 - 삭제*/
-button.btn_d{
+button.btn_d, button.btn_def{
     background-position: 0px -40px;
 }
 
-button.btn_d:hover{
+button.btn_d:hover, button.btn_def:hover{
     background-position: -97px -40px;
+}
+
+button.btn_d, button.btn_d[disabled]{
+    background-position: 0px -40px;
 }
 
 /*오른쪽 상단버튼 - 저장*/
@@ -142,12 +150,20 @@ button.btn_s:hover{
     background-position: -98px -74px;
 }
 
+/*오른쪽 상단버튼 - 저장*/
+button.btn_s, button.btn_s[disabled]{
+    background-position: -1px -74px;
+}
+
 /*오른쪽 상단버튼 - 검색*/
 button.btn_i{
     background-position: -1px -108px;
 }
 button.btn_i:hover{
     background-position: -98px -108px;
+}
+button.btn_i, button.btn_i[disabled]{
+    background-position: -1px -108px;
 }
 
 /*오른쪽 상단버튼 - apply*/

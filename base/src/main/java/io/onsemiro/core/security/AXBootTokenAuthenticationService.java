@@ -170,8 +170,8 @@ public class AXBootTokenAuthenticationService {
 
                         if (roleMenu.getMenu().getUseYn().equals(AXBootTypes.Used.YES)) {
                             Menu menu = roleMenu.getMenu();
-                            menu.setSaveYn(roleMenu.getSaveYn().getLabel());
-                            menu.setInquiryYn(roleMenu.getInquiryYn().getLabel());
+                            menu.setSaveYn(roleMenu.getSaveYn());
+                            menu.setInquiryYn(roleMenu.getInquiryYn());
                             allMenuList.add(menu);
                         }
                     });
@@ -190,6 +190,12 @@ public class AXBootTokenAuthenticationService {
                         if (o1.getMenuCode().compareTo(o2.getMenuCode()) == 0) {
                             if (o1.getUseYn().equals(AXBootTypes.Used.NO) && o2.getUseYn().equals(AXBootTypes.Used.YES)) {
                                 o1.setUseYn(AXBootTypes.Used.YES);
+                            }
+                            if (o1.getInquiryYn().equals(AXBootTypes.Used.NO) && o2.getInquiryYn().equals(AXBootTypes.Used.YES)) {
+                                o1.setInquiryYn(AXBootTypes.Used.YES);
+                            }
+                            if (o1.getSaveYn().equals(AXBootTypes.Used.NO) && o2.getSaveYn().equals(AXBootTypes.Used.YES)) {
+                                o1.setSaveYn(AXBootTypes.Used.YES);
                             }
                         }
 

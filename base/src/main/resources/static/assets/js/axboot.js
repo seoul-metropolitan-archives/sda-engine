@@ -2491,11 +2491,11 @@ axboot.baseView =
 
             try {
                 if (hideMenuRole("saveYn")) {
-                    $(".bdb").find('#save').hide();
+                    $(".bdb").find('#save').attr("disabled", true);
                 }
 
                 if (hideMenuRole("inquiryYn")) {
-                    $(".bdb").find('#inquiry').hide();
+                    $(".bdb").find('#inquiry').attr("disabled", true);
                 }
             } catch(e) {
 
@@ -2999,10 +2999,10 @@ axboot.viewExtend = function (_obj1, _obj2) {
      */
     try {
         if (!isPermission(_obj2.entityName, FUNCTION_ADD_UUID)) {
-            $("#"+_obj2.tagId).parents().eq(1).find(".btn_a").hide();
+            $("#"+_obj2.tagId).parents().eq(1).find(".btn_a").attr('disabled', true);
         }
         if (!isPermission(_obj2.entityName, FUNCTION_DEL_UUID)) {
-            $("#"+_obj2.tagId).parents().eq(1).find(".btn_d").hide();
+            $("#"+_obj2.tagId).parents().eq(1).find(".btn_d").attr('disabled', true);
         }
     }catch(e){
 
@@ -3169,13 +3169,13 @@ axboot.commonCodeFilter = function (categoryCode) {
     var codeArr = [];
     var attrArr = [];
     var cCodeArr = [];
-
+    var defaultYNArr = [];
 
     commonCodeArray.forEach(function (item, field) {
         codeArr.push(item['codeDetailUUID']);   // uuid
         nameArr.push(item['codeName']);         // 코드명
         cCodeArr.push(item['code']);            // 코드값
-
+        defaultYNArr.push(item['defaultYN'])
         var attrObj = {};
         for(var prop in item){
             if(prop.indexOf("attribute") > -1){
@@ -3189,7 +3189,7 @@ axboot.commonCodeFilter = function (categoryCode) {
         attrArr.push(attrObj);
     });
 
-    return $.extend({}, {nameArr: nameArr}, {codeArr: codeArr}, {attrArr: attrArr}, {cCodeArr: cCodeArr});
+    return $.extend({}, {nameArr: nameArr}, {codeArr: codeArr}, {attrArr: attrArr}, {cCodeArr: cCodeArr},{defaultYNArr:defaultYNArr});
 }
 /**
  * 공통코드를 Grid에서 사용하기 위해 label과 value를 분리해주는 함수
