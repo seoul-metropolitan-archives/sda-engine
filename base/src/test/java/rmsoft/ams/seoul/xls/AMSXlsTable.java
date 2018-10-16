@@ -20,15 +20,12 @@
  */
 package rmsoft.ams.seoul.xls;
 
-import io.onsemiro.utils.UUIDUtils;
+import lombok.extern.log4j.Log4j;
 import org.apache.poi.ss.usermodel.*;
 import org.dbunit.dataset.*;
 import org.dbunit.dataset.datatype.DataType;
 import org.dbunit.dataset.datatype.DataTypeException;
-import org.dbunit.dataset.excel.XlsDataSetWriter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import rmsoft.ams.seoul.utils.JdbcTemplateSingleton;
+import rmsoft.ams.seoul.db.XlsDataSetWriter;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
@@ -43,14 +40,13 @@ import java.util.List;
  * @version $Revision$ $Date$
  * @since Feb 21, 2003
  */
+@Log4j
 class AMSXlsTable extends AbstractTable
 {
 
     /**
-     * Logger for this class
+     * log for this class
      */
-    private static final Logger logger = LoggerFactory.getLogger(AMSXlsTable.class);
-
     private final ITableMetaData _metaData;
     private final Sheet _sheet;
 
@@ -70,14 +66,14 @@ class AMSXlsTable extends AbstractTable
         }
 
         _sheet = sheet;
-        
+
         // Needed for later "BigDecimal"/"Number" conversion
         symbols.setDecimalSeparator('.');
     }
 
-    static ITableMetaData createMetaData(String tableName, Row sampleRow)//컬럼리스트에 엑셀 컬럼부분 추가하기
+    static ITableMetaData createMetaData(String tableName, Row sampleRow)
     {
-        logger.debug("createMetaData(tableName={}, sampleRow={}) - start", tableName, sampleRow);
+        log.debug("createMetaData(tableName="+tableName+", sampleRow="+sampleRow+") - start");
 
         List columnList = new ArrayList();
         for (int i = 0; ; i++)
@@ -91,31 +87,19 @@ class AMSXlsTable extends AbstractTable
             String columnName = cell.getRichStringCellValue().getString();
             if (columnName != null)
             {
-            	columnName = columnName.trim();
-                JdbcTemplateSingleton.getInstance().execute("ALTER TABLE " + tableName + " ADD (" + columnName +" VARCHAR(80))");
+                columnName = columnName.trim();
             }
-            
+
             // Bugfix for issue ID 2818981 - if a cell has a formatting but no name also ignore it
             if(columnName.length()<=0)
             {
-                logger.debug("The column name of column # {} is empty - will skip here assuming the last column was reached", String.valueOf(i));
+                log.debug("The column name of column # "+String.valueOf(i)+" is empty - will skip here assuming the last column was reached");
                 break;
             }
 
             Column column = new Column(columnName, DataType.UNKNOWN);
             columnList.add(column);
-
-            /*if(columnName.equals("CORNER_NAME")) {
-                Column column = new Column(columnName, DataType.UNKNOWN);
-                columnList.add(column);
-            }*/
         }
-
-//        if(true) { //변경해야댐 RC Aggregation Insert 인 경우 UUID 추가 및 기타정보 생성
-//            Column aggregationUuid = new Column("AGGREGATION_UUID", DataType.UNKNOWN);
-//            columnList.add(aggregationUuid);
-//        }
-
         Column[] columns = (Column[])columnList.toArray(new Column[0]);
         return new DefaultTableMetaData(tableName, columns);
     }
@@ -125,28 +109,24 @@ class AMSXlsTable extends AbstractTable
 
     public int getRowCount()
     {
-        logger.debug("getRowCount() - start");
+        log.debug("getRowCount() - start");
 
         return _sheet.getLastRowNum();
     }
 
     public ITableMetaData getTableMetaData()
     {
-        logger.debug("getTableMetaData() - start");
+        log.debug("getTableMetaData() - start");
 
         return _metaData;
     }
 
     public Object getValue(int row, String column) throws DataSetException
     {
-        if(logger.isDebugEnabled())
-            logger.debug("getValue(row={}, columnName={}) - start", Integer.toString(row), column);
+        if(log.isDebugEnabled())
+            log.debug("getValue(row="+Integer.toString(row)+", columnName="+column+") - start");
 
         assertValidRowIndex(row);
-
-        if(column.equals("AGGREGATION_UUID")){
-            return UUIDUtils.getUUID();
-        }
 
         int columnIndex = getColumnIndex(column);
         Cell cell = _sheet.getRow(row + 1).getCell(columnIndex);
@@ -169,7 +149,7 @@ class AMSXlsTable extends AbstractTable
                     // The special dbunit date format
                     return getDateValueFromJavaNumber(cell);
                 }
-                else 
+                else
                 {
                     return getNumericValue(cell);
                 }
@@ -196,26 +176,26 @@ class AMSXlsTable extends AbstractTable
                         ", column=" + column);
         }
     }
-    
-    protected Object getDateValueFromJavaNumber(Cell cell) 
+
+    protected Object getDateValueFromJavaNumber(Cell cell)
     {
-        logger.debug("getDateValueFromJavaNumber(cell={}) - start", cell);
-        
+        log.debug("getDateValueFromJavaNumber(cell="+cell+") - start");
+
         double numericValue = cell.getNumericCellValue();
         BigDecimal numericValueBd = new BigDecimal(String.valueOf(numericValue));
         numericValueBd = stripTrailingZeros(numericValueBd);
         return new Long(numericValueBd.longValue());
 //        return new Long(numericValueBd.unscaledValue().longValue());
     }
-    
-    protected Object getDateValue(Cell cell) 
+
+    protected Object getDateValue(Cell cell)
     {
-        logger.debug("getDateValue(cell={}) - start", cell);
-        
+        log.debug("getDateValue(cell="+cell+") - start");
+
         double numericValue = cell.getNumericCellValue();
         Date date = DateUtil.getJavaDate(numericValue);
         return new Long(date.getTime());
-        
+
         //TODO use a calendar for XLS Date objects when it is supported better by POI
 //        HSSFCellStyle style = cell.getCellStyle();
 //        HSSFDataFormatter formatter = new HSSFDataFormatter();
@@ -236,13 +216,13 @@ class AMSXlsTable extends AbstractTable
         if(value.scale()<=0){
             return value;
         }
-        
+
         String valueAsString = String.valueOf(value);
         int idx = valueAsString.indexOf(".");
         if(idx==-1){
             return value;
         }
-        
+
         for(int i=valueAsString.length()-1; i>idx; i--){
             if(valueAsString.charAt(i)=='0'){
                 valueAsString = valueAsString.substring(0, i);
@@ -259,10 +239,10 @@ class AMSXlsTable extends AbstractTable
         BigDecimal result = new BigDecimal(valueAsString);
         return result;
     }
-    
+
     protected BigDecimal getNumericValue(Cell cell)
     {
-        logger.debug("getNumericValue(cell={}) - start", cell);
+        log.debug("getNumericValue(cell="+cell+") - start");
 
         String formatString = cell.getCellStyle().getDataFormatString();
         String resultString = null;
@@ -271,19 +251,19 @@ class AMSXlsTable extends AbstractTable
         if((formatString != null))
         {
             if(!formatString.equals("General") && !formatString.equals("@")) {
-                logger.debug("formatString={}", formatString);
+                log.debug("formatString="+formatString);
                 DecimalFormat nf = new DecimalFormat(formatString, symbols);
                 resultString = nf.format(cellValue);
             }
         }
-        
+
         BigDecimal result;
         if(resultString != null) {
             try {
                 result = new BigDecimal(resultString);
             }
             catch(NumberFormatException e) {
-                logger.debug("Exception occurred while trying create a BigDecimal. value={}", resultString);
+                log.debug("Exception occurred while trying create a BigDecimal. value="+resultString);
                 // Probably was not a BigDecimal format retrieved from the excel. Some
                 // date formats are not yet recognized by HSSF as DateFormats so that
                 // we could get here.
@@ -301,7 +281,7 @@ class AMSXlsTable extends AbstractTable
      * @return
      * @since 2.4.6
      */
-    private BigDecimal toBigDecimal(double cellValue) 
+    private BigDecimal toBigDecimal(double cellValue)
     {
         String resultString = String.valueOf(cellValue);
         // To ensure that intergral numbers do not have decimal point and trailing zero
@@ -311,7 +291,7 @@ class AMSXlsTable extends AbstractTable
         }
         BigDecimal result = new BigDecimal(resultString);
         return result;
-        
+
     }
 
     public String toString()

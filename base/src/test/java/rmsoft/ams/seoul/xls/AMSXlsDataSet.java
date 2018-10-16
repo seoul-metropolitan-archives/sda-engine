@@ -1,88 +1,53 @@
+/*
+ * Copyright (c) 2018. RMSoft Co.,Ltd. All rights reserved
+ *
+ */
+
 package rmsoft.ams.seoul.xls;
 
-/*
- *
- * The DbUnit Database Testing Framework
- * Copyright (C)2002-2004, DbUnit.org
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- *
- */
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-
+import lombok.extern.log4j.Log4j;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.sl.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
-import org.dbunit.dataset.AbstractDataSet;
-import org.dbunit.dataset.DataSetException;
-import org.dbunit.dataset.DefaultTableIterator;
-import org.dbunit.dataset.IDataSet;
-import org.dbunit.dataset.ITable;
-import org.dbunit.dataset.ITableIterator;
-import org.dbunit.dataset.OrderedTableNameMap;
-import org.dbunit.dataset.excel.XlsDataSet;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.dbunit.dataset.*;
 import rmsoft.ams.seoul.db.XlsDataSetWriter;
-import rmsoft.ams.seoul.utils.JdbcTemplateSingleton;
 
-import javax.sql.DataSource;
+import java.io.*;
+
 
 /**
- * This dataset implementation can read and write MS Excel documents. Each
- * sheet represents a table. The first row of a sheet defines the columns names
- * and remaining rows contains the data.
- *
- * @author Manuel Laflamme
- * @since Feb 21, 2003
- * @version $Revision$
+ * The type Ams xls data set.
  */
-public class AMSXlsDataSet extends AbstractDataSet
-{
-    private JdbcTemplate jdbcTemplate = new JdbcTemplate();
-    /**
-     * Logger for this class
-     */
-    private static final Logger logger = LoggerFactory.getLogger(AMSXlsDataSet.class);
+@Log4j
+public class AMSXlsDataSet extends AbstractDataSet {
 
     private final OrderedTableNameMap _tables;
 
 
     /**
      * Creates a new XlsDataSet object that loads the specified Excel document.
+     *
+     * @param file the file
+     * @throws IOException      the io exception
+     * @throws DataSetException the data set exception
      */
-    public AMSXlsDataSet(File file, DataSource dataSource) throws IOException, DataSetException
-    {
-        this(new FileInputStream(file),dataSource);
+    public AMSXlsDataSet(File file) throws IOException, DataSetException {
+        this(new FileInputStream(file));
     }
 
     /**
      * Creates a new XlsDataSet object that loads the specified Excel document.
+     *
+     * @param in the in
+     * @throws IOException      the io exception
+     * @throws DataSetException the data set exception
      */
-    public AMSXlsDataSet(InputStream in, DataSource dataSource) throws IOException, DataSetException
-    {
+    public AMSXlsDataSet(InputStream in) throws IOException, DataSetException {
         _tables = super.createTableNameMap();
-//        jdbcTemplate.setDataSource(dataSource);
-        JdbcTemplateSingleton.getInstance(dataSource);
+
         Workbook workbook;
         try {
             workbook = WorkbookFactory.create(in);
@@ -91,25 +56,50 @@ public class AMSXlsDataSet extends AbstractDataSet
         }
 
         int sheetCount = workbook.getNumberOfSheets();
-        for (int i = 0; i < sheetCount; i++)
-        {
-            JdbcTemplateSingleton.getInstance().execute("create table "+ workbook.getSheetName(i)+" (tempNo int)");
-            ITable table = new AMSXlsTable(workbook.getSheetName(i),
-                    workbook.getSheetAt(i));
 
-            _tables.add(table.getTableMetaData().getTableName(), table);
+        String sheetName = "";
+        String tableName = "";
+        ITable table = null;
+
+        for (int i = 0; i < sheetCount; i++) {
+            sheetName = workbook.getSheetName(i);
+
+            if (sheetName.equals("업무관리_기록물철목록") || sheetName.equals("업무관리_기록물건목록") || sheetName.equals("업무관리_전자파일목록")) {
+                if (sheetName.equals("업무관리_기록물철목록")) {
+                    tableName = "rc_aggregation_rms_inf";
+                } else if (sheetName.equals("업무관리_기록물건목록")) {
+                    tableName = "rc_item_rms_inf";
+                } else if (sheetName.equals("업무관리_전자파일목록")) {
+                    tableName = "rc_component_rms_inf";
+                }
+
+                //workbook.getSheetAt(i).removeRow(workbook.getSheetAt(i).getRow(1));
+//                if (workbook.getSheetAt(i).getRow(1).getRowNum() >= 0 && workbook.getSheetAt(i).getRow(1).getRowNum() < workbook.getSheetAt(i).getLastRowNum()) {
+//                    workbook.getSheetAt(i).shiftRows(workbook.getSheetAt(i).getRow(1).getRowNum() + 1, workbook.getSheetAt(i).getLastRowNum(), -1);
+//                }
+
+                //workbook.getSheetAt(i).shiftRows(2, workbook.getSheetAt(i).getLastRowNum()+1,  - 1);
+                table = new AMSXlsTable(tableName, workbook.getSheetAt(i));
+                _tables.add(tableName, table);
+
+            }
         }
     }
 
+
     /**
      * Write the specified dataset to the specified Excel document.
+     *
+     * @param dataSet the data set
+     * @param out     the out
+     * @throws IOException      the io exception
+     * @throws DataSetException the data set exception
      */
     public static void write(IDataSet dataSet, OutputStream out)
-            throws IOException, DataSetException
-    {
-        logger.debug("write(dataSet={}, out={}) - start", dataSet, out);
+            throws IOException, DataSetException {
+        log.debug("write(dataSet=" + dataSet + ", out=" + out + ") - start");
 
-        new AMSXlsDataSetWriter().write(dataSet, out);
+        new XlsDataSetWriter().write(dataSet, out);
     }
 
 
@@ -117,10 +107,9 @@ public class AMSXlsDataSet extends AbstractDataSet
     // AbstractDataSet class
 
     protected ITableIterator createIterator(boolean reversed)
-            throws DataSetException
-    {
-        if(logger.isDebugEnabled())
-            logger.debug("createIterator(reversed={}) - start", String.valueOf(reversed));
+            throws DataSetException {
+        if (log.isDebugEnabled())
+            log.debug("createIterator(reversed=" + String.valueOf(reversed) + ") - start");
 
         ITable[] tables = (ITable[]) _tables.orderedValues().toArray(new ITable[0]);
         return new DefaultTableIterator(tables, reversed);
