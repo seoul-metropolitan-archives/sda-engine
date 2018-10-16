@@ -85,10 +85,10 @@ public class Menu extends BaseJpaModel<String> {
     public String name;
 
     @Transient
-    public String saveYn;
+    private AXBootTypes.Used inquiryYn = AXBootTypes.Used.YES;
 
     @Transient
-    public String inquiryYn;
+    private AXBootTypes.Used saveYn = AXBootTypes.Used.YES;
 
     @Transient
     private List<Menu> children = new ArrayList<>();
