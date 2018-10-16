@@ -63,8 +63,14 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         fnObj.gridView01.registerAuth();
     },
     DEL_AUTHORITY: function(caller, act, data){
-        fnObj.formView.setFormData('__deleted__',true);
-        ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
+        axDialog.confirm({
+            msg: fnObj.formView.getData().authorityName + "을(를) 삭제하시겠습니까?"
+        }, function () {
+            if (this.key == "ok") {
+                fnObj.formView.setFormData('__deleted__',true);
+                ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
+            }
+        });
     },
     dispatch: function (caller, act, data) {
         var result = ACTIONS.exec(caller, act, data);
