@@ -8,5 +8,10 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="Common">
-    <sql id="UserName">(SELECT USER_NAME FROM AC_USER WHERE USER_UUID = ${userUuid})</sql>
+    <sql id="UserName">
+        (SELECT USER_NAME
+        FROM
+        (SELECT USER_NAME, ROWNUM FROM AC_USER WHERE USER_UUID = ${userUuid}) A
+        WHERE ROWNUM = 1)
+    </sql>
 </mapper>
