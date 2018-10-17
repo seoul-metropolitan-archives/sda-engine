@@ -10,7 +10,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         axboot.ajax({ //트리 리스트
             type: "GET",
             url: "/api/v1/at/at001/01/list",
-            data: $.extend({}, {pageSize: 1000}, {authorityTypeUuid:authorityTypeUuid,authorityName:fnObj.formView.getData().sAuthNm}),
+            data: $.extend({}, {pageSize: 1000}, {authorityTypeUuid:authorityTypeUuid,authorityName:$("#AuthNm").val()}),
             callback: function (res) {
                 fnObj.formView.clear();
                 fnObj.gridView01.setData(res.list);
@@ -29,17 +29,28 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         return false;
     },
     SEARCH_AUTH_INFO: function (caller, act, data) {
-        var callback = data["callback"];
-        var reqData = ax5.util.deepCopy(data);
-        delete(reqData["callback"]);
+        // var callback = data["callback"];
+        // var reqData = ax5.util.deepCopy(data);
+        // delete(reqData["callback"]);
+        // axboot.modal.open({
+        //     modalType: "COMMON_POPUP",
+        //     preSearch : reqData["preSearch"],
+        //     sendData: function () {
+        //         return reqData;
+        //     },
+        //     callback: function (data) {
+        //         callback(data);
+        //     }
+        // });
+
         axboot.modal.open({
             modalType: "COMMON_POPUP",
-            preSearch : reqData["preSearch"],
+            preSearch : data["preSearch"],
             sendData: function () {
-                return reqData;
+                return data;
             },
             callback: function (data) {
-                callback(data);
+
             }
         });
     },

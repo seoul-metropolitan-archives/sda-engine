@@ -49,14 +49,14 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         // var callback = data["callback"];
         // var reqData = ax5.util.deepCopy(data);
         // // delete(reqData["callback"]);
-        axboot.modal.open({
+        axboot.commonModal.open({
             modalType: "COMMON_POPUP",
             // preSearch : reqData["preSearch"],
             sendData: function () {
                  return data;
             },
             callback: function (data) {
-                callback(data);
+                // callback(data);
             }
         });
     },

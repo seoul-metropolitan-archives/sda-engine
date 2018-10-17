@@ -3,10 +3,12 @@
  */
 
 var fnObj = {};
+var MODAL_STATUS = "";
+
 var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_CLOSE: function (caller, act, data) {
         if (parent) {
-            parent.axboot.modal.close();
+            "modal" == MODAL_STATUS ? parent.axboot.modal.close() : parent.axboot.commonModal.close()
         }
     },
     PAGE_SEARCH: function (caller, act, data) {
@@ -24,8 +26,8 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     },
     PAGE_CHOICE: function (caller, act, data) {
         var list = caller.gridView01.getData();
-        if (parent && parent.axboot && parent.axboot.modal) {
-            parent.axboot.modal.callback(list); // 부모창에 callback 호출
+        if (parent) {
+            "modal" == MODAL_STATUS ? parent.axboot.modal.callback(list) : parent.axboot.commonModal.callback(list);
         }
     /*else {
         alert("선택된 목록이 없습니다.");
@@ -45,7 +47,14 @@ var ACTIONS = axboot.actionExtend(fnObj, {
 var CODE = {};
 // fnObj 기본 함수 스타트와 리사이즈
 fnObj.pageStart = function () {
-    var parentsData = parent.axboot.modal.getData();
+    var parentsData = "";
+    if(parent.axboot.modal.getData() == undefined){
+        parentsData = parent.axboot.commonModal.getData();
+        MODAL_STATUS = "commonModal"
+    }else{
+        parentsData = parent.axboot.modal.getData();
+        MODAL_STATUS = "modal";
+    }
     this.popupCode = parentsData["popupCode"];
     $("#searchField").val(parentsData["searchData"]);
     fnObj.formView01.initView();
