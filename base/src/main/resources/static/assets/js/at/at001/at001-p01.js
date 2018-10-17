@@ -45,6 +45,21 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             parent.axboot.modal.callback(data);
         }
     },
+    SEARCH_AUTH_INFO: function (caller, act, data) {
+        // var callback = data["callback"];
+        // var reqData = ax5.util.deepCopy(data);
+        // // delete(reqData["callback"]);
+        axboot.modal.open({
+            modalType: "COMMON_POPUP",
+            // preSearch : reqData["preSearch"],
+            sendData: function () {
+                 return data;
+            },
+            callback: function (data) {
+                callback(data);
+            }
+        });
+    },
     dispatch: function (caller, act, data) {
         var result = ACTIONS.exec(caller, act, data);
         if (result != "error") {
@@ -71,7 +86,7 @@ fnObj.pageStart = function () {
         }
     });
     _this.formView.initView();
-    _this.childrenAuthorityInfo.initView();
+    _this.childrenAuthInfo.initView();
 };
 fnObj.formView = axboot.viewExtend(axboot.formView, {
     initView: function () {
@@ -216,11 +231,11 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
 
         fnObj.formView.clear();
         $(".pdb_10").remove();
-        fnObj.childrenAuthorityInfo.addChild($("#addDnrInfo"));
+        fnObj.childrenAuthInfo.addChild($("#addDnrInfo"));
     }
 });
-fnObj.childrenAuthorityInfo = axboot.viewExtend({
-    targetTag  : $("#childrenAuthorityInfoArea"),
+fnObj.childrenAuthInfo = axboot.viewExtend({
+    targetTag  : $("#childrenAuthInfoArea"),
     parentUuid : "",
     nodeType : "",
     popupCode : "",
@@ -234,8 +249,8 @@ fnObj.childrenAuthorityInfo = axboot.viewExtend({
     "                                                            <li style='width: 20%;'>" +
     "                                                                <b>전거 팝업</b>" +
     "                                                            <div class='src_box2'>" +
-    "                                                                <input type=text data-ax-path='name' class='form-control'>" +
-    "                                                                <a href='#' class='searchAggregation' ><img src='/assets/images/ams/search_normal.png' alt='find'></a>" +
+    "                                                                <input type=text data-ax-path='authorityRrelationUuid' class='form-control'>" +
+    "                                                                <a href='#' class='searchAuthority' ><img src='/assets/images/ams/search_normal.png' alt='find'></a>" +
     "                                                            </div>" +
     "                                                            </li>" +
     "                                                            <li style='width: 60%; text-align: center'>" +
@@ -261,24 +276,25 @@ fnObj.childrenAuthorityInfo = axboot.viewExtend({
             _this.addChild(this);
         });
 
-        $("#childrenAuthorityInfoArea").on("change",".cntPrsn",function(){
+        $("#childrenAuthInfoArea").on("change",".cntPrsn",function(){
             $(this).parents().eq(2).find("input[data-ax-path='__modified__']").val(true);
         });
 
-        $("#childrenAuthorityInfoArea").delegate(".searchAggregation","click",function(){
+        $("#childrenAuthInfoArea").delegate(".searchAuthority","click",function(){
             var parentsTag  = $(this).parents().eq(2);
             var data = {
-                popupCode : "PU001",
+                popupCode : "PU142",
                 preSearch : false,
                 searchData : data,
                 callback : function(data){
-                    parentsTag.find("input[data-ax-path='aggregationUuid']").attr("aggregationUuid",data["AGGREGATION_UUID"])
-                    parentsTag.find("input[data-ax-path='aggregationUuid']").val(data["AGGREGATION_CODE"])
-                    parentsTag.find("input[data-ax-path='title']").val(data["TITLE"])
-                    console.log(data);
+                    parentsTag.find("input[data-ax-path='authorityRrelationUuid']").attr("authorityRrelationUuid",data["authorityUuid"])
+                    parentsTag.find("input[data-ax-path='authorityRrelationUuid']").val(data["AGGREGATION_CODE"])
+                    // parentsTag.find("input[data-ax-path='aggregationUuid']").val(data["AGGREGATION_CODE"])
+                    // parentsTag.find("input[data-ax-path='title']").val(data["TITLE"])
+                    // console.log(data);
                 }
             };
-            ACTIONS.dispatch(ACTIONS.SEARCH_DNRINFO,data);
+            ACTIONS.dispatch(ACTIONS.SEARCH_AUTH_INFO,data);
         });
 
         $(".childDnrInfo").delegate(".btn_del_left","click",function(){
