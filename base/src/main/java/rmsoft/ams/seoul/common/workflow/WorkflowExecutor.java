@@ -26,8 +26,8 @@ import java.util.Map;
 @Slf4j
 @Component
 public class WorkflowExecutor extends ClassLoader {
-    @Value("${native.library.path}")
-    private String nativeLibrary;
+    @Value("${workflow.module.path}")
+    private String workflowModulePath;
 
     private Map<String, Object> parameterMap = null;
 
@@ -42,7 +42,7 @@ public class WorkflowExecutor extends ClassLoader {
 
         try {
 
-            File[] jarFiles = new File(nativeLibrary).listFiles(
+            File[] jarFiles = new File(workflowModulePath).listFiles(
                     (dir, name) -> {
                         return name.toLowerCase().endsWith(".jar");
                     }

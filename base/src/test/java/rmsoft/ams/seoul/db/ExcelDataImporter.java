@@ -24,7 +24,7 @@ public class ExcelDataImporter {
     private DataSource getDataSource(String userName) {
 
         return DataSourceBuilder.create()
-                .url("jdbc:oracle:thin:@//192.168.0.62:1521/amsdb")
+                .url("jdbc:oracle:thin:@//rmhost.iptime.org:11521/amsdb")
                 .driverClassName("oracle.jdbc.driver.OracleDriver")
                 .username(userName)
                 .password("ams")
