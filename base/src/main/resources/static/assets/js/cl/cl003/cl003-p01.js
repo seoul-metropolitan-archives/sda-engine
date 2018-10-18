@@ -22,7 +22,8 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             async : false,
             data: $.extend({}, {pageSize: 10000},{aggregationUuid: data.uuid}),
             callback: function (res) {
-               console.log(res)
+                fnObj.gridView02.resetCurrent();
+                fnObj.gridView02.setData(res.list);
             },
             options: {
                 onError: axboot.viewError
