@@ -3,17 +3,13 @@
  *
  */
 
-package rmsoft.ams.seoul.xls;
+package rmsoft.ams.seoul.workflow.xls;
 
 import lombok.extern.log4j.Log4j;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-import org.apache.poi.sl.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.dbunit.dataset.*;
-import rmsoft.ams.seoul.db.XlsDataSetWriter;
 
 import java.io.*;
 
@@ -25,8 +21,7 @@ import java.io.*;
 public class AMSXlsDataSet extends AbstractDataSet {
 
     private final OrderedTableNameMap _tables;
-
-
+    
     /**
      * Creates a new XlsDataSet object that loads the specified Excel document.
      *
@@ -74,20 +69,12 @@ public class AMSXlsDataSet extends AbstractDataSet {
                 }
 
                 workbook.getSheetAt(i).shiftRows(2, workbook.getSheetAt(i).getLastRowNum(), -1);
-
-                //workbook.getSheetAt(i).removeRow(workbook.getSheetAt(i).getRow(1));
-//                if (workbook.getSheetAt(i).getRow(1).getRowNum() >= 0 && workbook.getSheetAt(i).getRow(1).getRowNum() < workbook.getSheetAt(i).getLastRowNum()) {
-//                    workbook.getSheetAt(i).shiftRows(workbook.getSheetAt(i).getRow(1).getRowNum() + 1, workbook.getSheetAt(i).getLastRowNum(), -1);
-//                }
-
-                //workbook.getSheetAt(i).shiftRows(2, workbook.getSheetAt(i).getLastRowNum()+1,  - 1);
                 table = new AMSXlsTable(tableName, workbook.getSheetAt(i));
                 _tables.add(tableName, table);
 
             }
         }
     }
-
 
     /**
      * Write the specified dataset to the specified Excel document.
@@ -101,7 +88,7 @@ public class AMSXlsDataSet extends AbstractDataSet {
             throws IOException, DataSetException {
         log.debug("write(dataSet=" + dataSet + ", out=" + out + ") - start");
 
-        new XlsDataSetWriter().write(dataSet, out);
+        new AMSXlsDataSetWriter().write(dataSet, out);
     }
 
 
