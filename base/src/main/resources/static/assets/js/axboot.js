@@ -1933,6 +1933,236 @@ axboot.modal = function () {
         "getData": getData
     };
 }();
+
+axboot.commonModal = function () {
+    var modalCallback = {};
+
+    var defaultCss = {
+        width: 400,
+        height: 400,
+        position: {
+            left: "center",
+            top: "middle"
+        }
+    };
+
+    var defaultOption = $.extend(true, {}, defaultCss, {
+        iframeLoadingMsg: "",
+        iframe: {
+            method: "post",
+            url: "#"
+        },
+        closeToEsc: true,
+        onStateChanged: function onStateChanged() {
+            // mask
+            if (this.state === "open") {
+                window.axMask.open();
+            } else if (this.state === "close") {
+                window.axMask.close();
+            }
+        },
+        animateTime: 100,
+        zIndex: 5000,
+        absolute: true,
+        fullScreen: false,
+        header: {
+            title: "",
+            btns: {
+                close: {
+                    label: '<i class="cqc-circle-with-cross"></i>', onClick: function onClick() {
+                        window.axCommonModal.close();
+                    }
+                }
+            }
+        }
+    });
+
+    /**
+     * 지정한 조건으로 ax5 modal을 엽니다. modalConfig 를 넘기지 않으면 지정된 기본값으로 엽니다.
+     * @method axboot.modal.open
+     * @param {Object} modalConfig
+     * @param {Number} modalConfig.width
+     * @param {Number} modalConfig.height
+     * @param {Object} modalConfig.position
+     * @param {String} modalConfig.position.left
+     * @param {String} modalConfig.position.top
+     * @param {String} modalConfig.iframeLoadingMsg
+     * @param {String} modalConfig.iframe.method
+     * @param {String} modalConfig.iframe.url
+     * @param {Boolean} modalConfig.closeToEsc
+     * @param {Number} modalConfig.animateTime
+     * @param {Number} modalConfig.zIndex
+     * @param {Boolean} modalConfig.fullScreen
+     * @param {Object} modalConfig.header
+     * @param {String} modalConfig.header.title
+     * @param {Function} modalConfig.sendData - 모달창에서 parent.axboot.modal.getData() 하여 호출합니다. 전달하고 싶은 변수를 return 하면 됩니다
+     * @param {Function} modalConfig.callback - 모달창에서 parant.axboot.modal.callback() 으로 호출합니다.
+     *
+     * @example
+     * ```js
+     *  axboot.modal.open({
+     *      width: 400,
+     *      height: 400,
+     *      header: false,
+     *      iframe: {
+     *          url: "open url"
+     *          param: "param"
+     *      },
+     *      sendData: function(){
+     *
+     *      },
+     *      callback: function(){
+     *          axboot.modal.close();
+     *      }
+     *  });
+     * ```
+     */
+    var open = function open(modalConfig) {
+        var width = 0;
+        if ("COMMON_POPUP" == modalConfig.modalType && modalConfig["sendData"]) {
+            var list = null;
+            var reqData = modalConfig.sendData();
+            var popupName = "";
+            axboot.ajax({
+                url: "/api/v1/common/popup/getPopupInfo",
+                dataType: "JSON",
+                type: "POST",
+                async: false,
+                data: JSON.stringify({
+                    popupCode: reqData["popupCode"],
+                    isTree: false
+                }),
+                callback: function (res) {
+                    console.log(res);
+                    for (var i = 0; i < res.map.columnInfo.length; i++) {
+                        if (parseInt(res.map.columnInfo[i]["width"])) {
+                            width += res.map.columnInfo[i]["width"];
+                        }
+                    }
+                    popupName = res.map.popupInfo["popupName"];
+                }
+            });
+
+
+            if ((undefined == modalConfig.preSearch || modalConfig.preSearch)) {
+                axboot.ajax({
+                    url: "/api/v1/common/popup/search",
+                    dataType: "JSON",
+                    type: "POST",
+                    async: false,
+                    data: JSON.stringify({
+                        popupCode: reqData["popupCode"],
+                        searchField: reqData["searchData"],
+                        isTree: false
+                    }),
+                    callback: function (res) {
+                        list = res.list;
+                    }
+                });
+                if (list && list.length == 1) {
+                    modalConfig.callback(list[0]);
+                    return;
+                }
+            }
+        }
+
+        modalConfig = $.extend(true, {}, defaultOption, modalConfig);
+        if (modalConfig.modalType) {
+
+            if (axboot.def.MODAL && axboot.def.MODAL[modalConfig.modalType]) {
+                if (modalConfig.param) {
+                    $.extend(true, modalConfig, {iframe: {param: modalConfig.param}});
+                }
+                var popupWidth = width;
+                if(popupWidth == 0)
+                    popupWidth = axboot.def.MODAL[modalConfig.modalType].width;
+                else if(popupWidth < 480)
+                {
+                    popupWidth = 480;
+                }
+                modalConfig = $.extend(true, {}, modalConfig, axboot.def.MODAL[modalConfig.modalType], {width: popupWidth + 70},{header : {title : popupName}});
+            }
+        }
+
+        $(document.body).addClass("commonModalOpened");
+
+        this.modalCallback = modalConfig.callback;
+        this.modalSendData = modalConfig.sendData;
+
+        window.axCommonModal.open(modalConfig);
+    };
+
+    /**
+     * ax5 modal css 를 적용합니다.
+     * @method axboot.modal.css
+     * @param modalCss
+     */
+    var css = function css(modalCss) {
+        modalCss = $.extend(true, {}, defaultCss, modalCss);
+        window.axCommonModal.css(modalCss);
+    };
+    /**
+     * ax5 modal을 정렬합니다.
+     * @method axboot.modal.align
+     * @param modalAlign
+     */
+    var align = function align(modalAlign) {
+        window.axCommonModal.align(modalAlign);
+    };
+    /**
+     * ax5 modal을 닫습니다.
+     * @method axboot.modal.close
+     */
+    var close = function close(data) {
+        window.axCommonModal.close();
+        setTimeout(function () {
+            $(document.body).removeClass("commonModalOpened");
+        }, 500);
+    };
+    /**
+     * ax5 modal을 최소화 합니다.
+     * @method axboot.modal.minimize
+     */
+    var minimize = function minimize() {
+        window.axCommonModal.minimize();
+    };
+    /**
+     * ax5 modal을 최대화 합니다.
+     * @methid axboot.modal.maximize
+     */
+    var maximize = function maximize() {
+        window.axCommonModal.maximize();
+    };
+
+    /**
+     * callback 으로 정의된 함수에 전달된 파라메터를 넘겨줍니다.
+     * @method axboot.modal.callback
+     * @param {Object|String} data
+     */
+    var callback = function callback(data) {
+        if (this.modalCallback) {
+            this.modalCallback(data);
+        }
+    };
+
+    var getData = function getData() {
+        if (this.modalSendData) {
+            return this.modalSendData();
+        }
+    };
+
+    return {
+        "open": open,
+        "css": css,
+        "align": align,
+        "close": close,
+        "minimize": minimize,
+        "maximize": maximize,
+        "callback": callback,
+        "modalCallback": modalCallback,
+        "getData": getData
+    };
+}();
 /**
  * @Object {Object} axboot.modelFormatter
  */
@@ -2130,6 +2360,11 @@ axboot.preparePlugin = function () {
          * @var {ax5ui} axModal
          */
         window.axModal = new ax5.ui.modal({
+            absolute: true,
+            iframeLoadingMsg: '<i class="cqc-chequer ax-loading-icon lg"></i>'
+        });
+
+        window.axCommonModal = new ax5.ui.commonModal({
             absolute: true,
             iframeLoadingMsg: '<i class="cqc-chequer ax-loading-icon lg"></i>'
         });

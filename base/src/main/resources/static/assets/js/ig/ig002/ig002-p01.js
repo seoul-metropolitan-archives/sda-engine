@@ -57,14 +57,14 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         });
     },
     SEARCH_DNRINFO: function (caller, act, data) {
-        var callback = data["callback"];
-        var reqData = ax5.util.deepCopy(data);
-        delete(reqData["callback"]);
-        axboot.modal.open({
+        // var callback = data["callback"];
+        // var reqData = ax5.util.deepCopy(data);
+        // delete(reqData["callback"]);
+        axboot.commonModal.open({
             modalType: "COMMON_POPUP",
-            preSearch : reqData["preSearch"],
+            // preSearch : data,
             sendData: function () {
-                return reqData;
+                return data;
             },
             callback: function (data) {
                 callback(data);
@@ -72,14 +72,11 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         });
     },
     SEARCH_ITEM: function (caller, act, data) {
-        var callback = data["callback"];
-        var reqData = ax5.util.deepCopy(data);
-        delete(reqData["callback"]);
-        axboot.modal.open({
+        axboot.commonModal.open({
             modalType: "COMMON_POPUP",
-            preSearch : reqData["preSearch"],
+            // preSearch : data,
             sendData: function () {
-                return reqData;
+                return data;
             },
             callback: function (data) {
                 callback(data);
@@ -253,7 +250,7 @@ fnObj.childrenDrnInfo = axboot.viewExtend({
         $("#childrenDnrInfoArea").delegate(".searchAggregation","click",function(){
             var parentsTag  = $(this).parents().eq(2);
             var data = {
-                popupCode : "PU001",
+                popupCode : "PU142",
                 preSearch : false,
                 searchData : data,
                 callback : function(data){
@@ -377,7 +374,7 @@ fnObj.childrenMngInfo = axboot.viewExtend({
         $("#childrenMngInfoArea").delegate(".searchAggregation","click",function(){
             var parentsTag  = $(this).parents().eq(2);
             var data = {
-                popupCode : "PU001",
+                popupCode : "PU142",
                 preSearch : false,
                 searchData : data,
                 callback : function(data){

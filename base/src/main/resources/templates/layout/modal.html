@@ -43,6 +43,7 @@
     var CONTEXT_PATH   = 'http://[[${#httpServletRequest.serverName}]]:[[${#httpServletRequest.serverPort}]]';
     /*var CONTEXT_PATH   = 'http://[[@{${@environment.getProperty("server.url")}}]]:[[@{${@environment.getProperty("server.port")}}]]';*/
     var SCRIPT_SESSION = (function(json){return json;})(sessionJson);
+    var COMMON_CONFIG = window.parent.COMMON_CONFIG;
     function convertJsonObj(jsonStr) {
         return jsonStr == null || jsonStr == '' ? null : JSON.parse(jsonStr.replace(/&quot;/gi, '"'));
     }
