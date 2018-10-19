@@ -353,6 +353,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
 fnObj.gridView03 = axboot.viewExtend(axboot.gridView, {
     tagId : "realgrid03",
     uuidFieldName : "classifyRecordsUuid",
+    entityName: "CL_CLASSIFY_RECORDS_RESULT",
     initView: function () {
         this.gridObj = new TreeGridWrapper("realgrid03", "/assets/js/libs/realgrid", true);
         this.gridObj.setGridStyle("100%", "100%")
