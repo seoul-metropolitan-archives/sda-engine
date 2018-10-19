@@ -16,9 +16,13 @@ import rmsoft.ams.seoul.common.repository.DfEventRepository;
 import rmsoft.ams.seoul.df.df001.dao.Df001Mapper;
 import rmsoft.ams.seoul.df.df001.vo.Df00101VO;
 import rmsoft.ams.seoul.df.df001.vo.Df00102VO;
+import rmsoft.ams.seoul.df.df002.dao.Df002Mapper;
+import rmsoft.ams.seoul.df.df002.service.Df002Service;
+import rmsoft.ams.seoul.df.df002.vo.Df00201VO;
 import rmsoft.ams.seoul.utils.CommonCodeUtils;
 import rmsoft.ams.seoul.utils.CommonMessageUtils;
 
+import javax.inject.Inject;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -31,6 +35,12 @@ public class Df001Service extends BaseService {
 
     @Autowired
     private DfEventRepository repository;
+
+    @Inject
+    private Df002Service df002Service;
+
+    @Inject
+    private Df002Mapper df002Mapper;
 
     //@Autowired
     //private AdGlossaryRepository addGlossaryRepository;
@@ -98,6 +108,18 @@ public class Df001Service extends BaseService {
                     if(dfEvent.getEndYn().equals("Y")){
                         dfEvent.setTerminatorUuid(SessionUtils.getCurrentLoginUserUuid());
                         dfEvent.setEndDate(Timestamp.valueOf(DateUtils.convertToString(LocalDateTime.now(), DateUtils.DATE_TIME_PATTERN)));
+
+                        Df00201VO df00201VO = new Df00201VO();
+
+                        df00201VO.setEventCode(dfEvent.getEventCode());
+                        List<Df00201VO> listDegree = df002Mapper.searchList(df00201VO);
+
+                        for(Df00201VO degree : listDegree){
+                            degree.setEndYN("Y");
+                            degree.set__modified__(true);
+                        }
+
+                        df002Service.saveItems(listDegree);
                     }else{
                         dfEvent.setTerminatorUuid("");
                         dfEvent.setEndDate(null);
@@ -125,18 +147,26 @@ public class Df001Service extends BaseService {
      * @param list the list
      * @return the api response
      */
+    @Transactional
     public ApiResponse updateStatus(List<Df00101VO> list){
         List<DfEvent> dfList = ModelMapperUtils.mapList(list,DfEvent.class);
         DfEvent orgItem = null;
         int index = 0;
         String changeStatus = "";
         for (DfEvent item : dfList) {
-            changeStatus = list.get(index).getChangeStatus() == "" ?  "Draft" : list.get(index).getChangeStatus();
+            changeStatus = list.get(index).getChangeStatus().equals("") ?  "Draft" : list.get(index).getChangeStatus();
             orgItem = repository.findOne(item.getId());
             item.setStatusUuid(CommonCodeUtils.getCodeDetailUuid("CD115",changeStatus));
             item.setInsertDate(orgItem.getInsertDate());
             item.setInsertUuid(orgItem.getInsertUuid());
+            if(changeStatus.equals("Draft")){
+                item.setTerminatorUuid("");
+                item.setEndDate(null);
+                item.setEndYn("");
+            }
+
             repository.save(item);
+
             index++;
         }
         return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");
@@ -144,19 +174,19 @@ public class Df001Service extends BaseService {
 
     /**
      * Update classification scheme con detail.
-     *
+                *
      * @param requestParams the request params
      */
-    public void saveDetailItem(RequestParams<Df00101VO> requestParams) {
-        DfEvent dfEvent = new DfEvent();
+        public void saveDetailItem(RequestParams<Df00101VO> requestParams) {
+            DfEvent dfEvent = new DfEvent();
 
-        if(StringUtils.isEmpty(requestParams.getString("disposalFreezeEventUuid"))){
-            return;
-        }
+            if(StringUtils.isEmpty(requestParams.getString("disposalFreezeEventUuid"))){
+                return;
+            }
 
-        dfEvent.setDisposalFreezeEventUuid(requestParams.getString("disposalFreezeEventUuid"));
+            dfEvent.setDisposalFreezeEventUuid(requestParams.getString("disposalFreezeEventUuid"));
 
-        DfEvent orgDfEvent = null;
+            DfEvent orgDfEvent = null;
 
         orgDfEvent = repository.findOne(dfEvent.getId());
 

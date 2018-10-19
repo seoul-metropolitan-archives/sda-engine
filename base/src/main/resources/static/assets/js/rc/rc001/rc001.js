@@ -184,9 +184,9 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         if(hideMenuRole('saveYn')) return;
 
         axboot.ajax({
-            type: "GET",
+            type: "PUT",
             url: "/api/v1/rc004/01/saveItemDetails",
-            data: $.extend({},  {pageSize: 1000} , data),
+            data: JSON.stringify(data),
             callback: function (res) {
                 //axToast.push(axboot.getCommonMessage("AA007"));
                 ACTIONS.dispatch(ACTIONS.GET_SUBDATA,fnObj.naviView.getCurrent());
@@ -807,22 +807,32 @@ var getMenu = function(searchData)
 function setFormData(item, isItem){
     // Properties
     fnObj.formView.setFormData("title", item.name);
-    fnObj.formView.setFormData("itemUuid", item.riItemUuid);
+    fnObj.formView.setFormData("riItemUuid", item.riItemUuid);
     fnObj.formView.setFormData("aggregationUuid", item.aggregationUuid);
-    fnObj.formView.setFormData("itemCode", isItem ? item.riItemCode : item.aggregationCode);
-    fnObj.formView.setFormData("itemTypeUuid", item.riTypeUuid);
+    fnObj.formView.setFormData("riItemCode", isItem ? item.riItemCode : item.aggregationCode);
+    fnObj.formView.setFormData("riTypeUuid", item.riTypeUuid);
     fnObj.formView.setFormData("aggregationTypeUuid", item.typeUuid);
     fnObj.formView.setFormData("publishedStatusUuid", isItem ? item.riPublishedStatusUuid : item.publishedStatusUuid);
+
     fnObj.formView.setFormData("description", isItem ? item.description1 : item.description);
     fnObj.formView.setFormData("notes", isItem ? item.notes1 : item.notes);
-    fnObj.formView.setFormData("author", item.riAuthor);
+
+    fnObj.formView.setFormData("author", isItem ? item.riAuthor : item.author);
     fnObj.formView.setFormData("rcAggregationCode", item.aggregationCode);
     fnObj.formView.setFormData("openStatusUuid", item.openStatusUuid);
     fnObj.formView.setFormData("raTitle", item.raTitle);
     fnObj.formView.setFormData("raAggregationUuid", item.raAggregationUuid);
     fnObj.formView.setFormData("levelUuid", item.levelUuid);
-    fnObj.formView.setFormData("descriptionStartDate", item.descriptionStartDate);
-    fnObj.formView.setFormData("descriptionEndDate", item.descriptionEndDate);
+    fnObj.formView.setFormData("provenance",item.provenance);
+    fnObj.formView.setFormData("creator",item.creator);
+    fnObj.formView.setFormData("keyword",item.keyword);
+    fnObj.formView.setFormData("referenceCode",item.referenceCode);
+
+    fnObj.formView.setFormData("descriptionStartDate", isItem ? item.riDescriptionStartDate : item.descriptionStartDate);
+    fnObj.formView.setFormData("descriptionEndDate", isItem ? item.riDescriptionEndDate : item.descriptionEndDate);
+
+    fnObj.formView.setFormData("creationStartDate",item.creationStartDate);
+    fnObj.formView.setFormData("creationEndDate",item.creationEndDate);
     fnObj.formView.setFormData("isItem", isItem);
 }
 
@@ -1605,7 +1615,7 @@ fnObj.iconView = axboot.viewExtend({
                     if(selectedData[0]["nodeType"] == "item") {
                         $( "#itemTabs" ).tabs( "enable", 1);
                         //$( "#itemTabs" ).tabs( "option", "active", 1 );
-                        $("[data-ax-path='itemTypeUuid']").show();
+                        $("[data-ax-path='riTypeUuid']").show();
                         $("[data-ax-path='aggregationTypeUuid']").hide();
                         $("#aggLevel").hide();
 
@@ -1664,7 +1674,7 @@ fnObj.iconView = axboot.viewExtend({
                     }else{
                         $( "#itemTabs" ).tabs( "option", "disabled", [ 1 ]);
                         $( "#itemTabs" ).tabs( "option", "active", 0 );
-                        $("[data-ax-path='itemTypeUuid']").hide();
+                        $("[data-ax-path='riTypeUuid']").hide();
                         $("[data-ax-path='aggregationTypeUuid']").show();
                         $("#aggLevel").show();
 
@@ -2866,11 +2876,16 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
             var data = fnObj.formView.getData();
             if(fnObj.formView.getData()["isItem"]) {
                 data["raAggregationUuid"] = fnObj.naviView.getCurrent()["uuid"];
-                data["typeUuid"] = fnObj.formView.getData()["itemTypeUuid"];
+                data["name"] = data["title"];
+                data["riTypeUuid"] = data["itemTypeUuid"];
+                data["riPublishedStatusUuid"] = data["publishedStatusUuid"];
+                data["riDescriptionStartDate"] = data["descriptionStartDate"];
+                data["riDescriptionEndDate"] = data["descriptionEndDate"];
+                data["riAuthor"] = data["author"];
                 ACTIONS.dispatch(ACTIONS.ITEM_SAVE, data);
             }else {
                 data["parentsAggregationUuid"] = fnObj.naviView.getCurrent()["uuid"];
-                data["typeUuid"] = fnObj.formView.getData()["aggregationTypeUuid"];
+                data["typeUuid"] = data["aggregationTypeUuid"];
                 ACTIONS.dispatch(ACTIONS.AGG_SAVE, data);
             }
         });
@@ -2890,7 +2905,11 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
             var data = fnObj.formView.getData();
             if(fnObj.formView.getData()["isItem"]) {
                 data["raAggregationUuid"] = fnObj.naviView.getCurrent()["uuid"];
-                data["typeUuid"] = fnObj.formView.getData()["itemTypeUuid"];
+                data["name"] = data["title"];
+                data["riPublishedStatusUuid"] = data["publishedStatusUuid"];
+                data["riDescriptionStartDate"] = data["descriptionStartDate"];
+                data["riDescriptionEndDate"] = data["descriptionEndDate"];
+                data["riAuthor"] = data["author"];
                 ACTIONS.dispatch(ACTIONS.ITEM_SAVE, data);
             }else {
                 data["parentsAggregationUuid"] = fnObj.naviView.getCurrent()["uuid"];

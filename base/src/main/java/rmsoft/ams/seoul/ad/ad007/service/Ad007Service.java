@@ -10,9 +10,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import rmsoft.ams.seoul.ad.ad007.dao.Ad007Mapper;
 import rmsoft.ams.seoul.ad.ad007.vo.Ad00701VO;
-import rmsoft.ams.seoul.common.domain.AdContextualMeta;
-import rmsoft.ams.seoul.common.repository.AdContextualMetaRepository;
-import rmsoft.ams.seoul.utils.CommonCodeUtils;
+import rmsoft.ams.seoul.ad.ad007.vo.Ad00702VO;
+import rmsoft.ams.seoul.common.domain.AdConMetaSegment;
+import rmsoft.ams.seoul.common.domain.AdConMetaSetup;
+import rmsoft.ams.seoul.common.repository.AdConMetaSegmentRepository;
+import rmsoft.ams.seoul.common.repository.AdConMetaSetupRepository;
 import rmsoft.ams.seoul.utils.CommonMessageUtils;
 
 import javax.persistence.PersistenceException;
@@ -25,7 +27,10 @@ public class Ad007Service extends BaseService {
     private Ad007Mapper mapper;
 
     @Autowired
-    private AdContextualMetaRepository repository;
+    private AdConMetaSetupRepository adConMetaSetupRepository;
+
+    @Autowired
+    private AdConMetaSegmentRepository adConMetaSegmentRepository;
 
     /**
      * Search entity type list.
@@ -33,17 +38,30 @@ public class Ad007Service extends BaseService {
      * @param param the param
      * @return the list
      */
-    public List<Ad00701VO> searchList(RequestParams<Ad00701VO> param) {
+    public List<Ad00701VO> searchSetup(RequestParams<Ad00701VO> param) {
         Ad00701VO ad00701VO = new Ad00701VO();
 
-        ad00701VO.setStatusUuid(param.getString("statusUuid"));
         ad00701VO.setEntityType(param.getString("entityType"));
-        ad00701VO.setAdditionalColumn(param.getString("additionalColumn"));
-        ad00701VO.setColumnCode(param.getString("columnCode"));
+        ad00701VO.setSetCode(param.getString("setCode"));
+        ad00701VO.setSetName(param.getString("setName"));
         ad00701VO.setUseYN(param.getString("useYN"));
+        ad00701VO.setDefaultYN(param.getString("defaultYN"));
 
-        return mapper.searchList(ad00701VO);
-}
+        return mapper.searchSetup(ad00701VO);
+    }
+
+    /**
+     * Search entity type list.
+     *
+     * @param param the param
+     * @return the list
+     */
+    public List<Ad00702VO> searchSegment(RequestParams<Ad00702VO> param) {
+        Ad00702VO ad00702VO = new Ad00702VO();
+        ad00702VO.setAddMetaTemplateSetUuid(param.getString("addMetaTemplateSetUuid"));
+
+        return mapper.searchSegment(ad00702VO);
+    }
 
     /**
      * Save entity type api response.
@@ -52,38 +70,65 @@ public class Ad007Service extends BaseService {
      * @return the api response
      */
     @Transactional
-    public ApiResponse saveItems(List<Ad00701VO> reqList) {
+    public ApiResponse saveSetup(List<Ad00701VO> reqList) {
 
-        List<AdContextualMeta> itemList = ModelMapperUtils.mapList(reqList, AdContextualMeta.class);
+        List<AdConMetaSetup> itemList = ModelMapperUtils.mapList(reqList, AdConMetaSetup.class);
 
-        AdContextualMeta orgItem = null;
+        AdConMetaSetup orgItem = null;
         int degree = 0;
 
-        for (AdContextualMeta item : itemList) {
+        for (AdConMetaSetup item : itemList) {
             if (item.isCreated() || item.isModified()) {
-
-                if(item.isCreated()){ //disposalFreezeEventUuid 없을때
-                    item.setStatusUuid(CommonCodeUtils.getCodeDetailUuid("CD152","Draft"));
-                }
-
                 if(item.isModified()) {
-                    orgItem = repository.findOne(item.getId());
+                    orgItem = adConMetaSetupRepository.findOne(item.getId());
 
                     item.setInsertDate(orgItem.getInsertDate());
                     item.setInsertUuid(orgItem.getInsertUuid());
                 }
 
                 try {
-                    repository.save(item);
+                    adConMetaSetupRepository.save(item);
                 }catch(PersistenceException err){
                     return ApiResponse.error(ApiStatus.SYSTEM_ERROR, CommonMessageUtils.getMessage("AD003"));
                 }
             } else if (item.isDeleted()) {
-                if (mapper.checkDelete(item.getAddContextualMetaUuid()) > 0) {
-                    return ApiResponse.error(ApiStatus.SYSTEM_ERROR, CommonMessageUtils.getMessage("AD011_02"));
-                } else {
-                    repository.delete(item);
+                adConMetaSetupRepository.delete(item);
+            }
+
+        }
+        return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");
+    }
+
+    /**
+     * Save entity type api response.
+     *
+     * @param  reqList vo list
+     * @return the api response
+     */
+    @Transactional
+    public ApiResponse saveSegment(List<Ad00702VO> reqList) {
+
+        List<AdConMetaSegment> itemList = ModelMapperUtils.mapList(reqList, AdConMetaSegment.class);
+
+        AdConMetaSegment orgItem = null;
+        int degree = 0;
+
+        for (AdConMetaSegment item : itemList) {
+            if (item.isCreated() || item.isModified()) {
+                if(item.isModified()) {
+                    orgItem = adConMetaSegmentRepository.findOne(item.getId());
+
+                    item.setInsertDate(orgItem.getInsertDate());
+                    item.setInsertUuid(orgItem.getInsertUuid());
                 }
+
+                try {
+                    adConMetaSegmentRepository.save(item);
+                }catch(PersistenceException err){
+                    return ApiResponse.error(ApiStatus.SYSTEM_ERROR, CommonMessageUtils.getMessage("AD003"));
+                }
+            } else if (item.isDeleted()) {
+                adConMetaSegmentRepository.delete(item);
             }
 
         }
@@ -97,17 +142,15 @@ public class Ad007Service extends BaseService {
      * @return the api response
      */
     public ApiResponse updateStatus(List<Ad00701VO> list){
-        List<AdContextualMeta> itemList = ModelMapperUtils.mapList(list,AdContextualMeta.class);
-        AdContextualMeta orgItem = null;
+        List<AdConMetaSetup> itemList = ModelMapperUtils.mapList(list,AdConMetaSetup.class);
+        AdConMetaSetup orgItem = null;
         int index = 0;
         String changeStatus = "";
-        for (AdContextualMeta item : itemList) {
-            changeStatus = list.get(index).getChangeStatus() == "" ?  "Draft" : list.get(index).getChangeStatus();
-            orgItem = repository.findOne(item.getId());
-            item.setStatusUuid(CommonCodeUtils.getCodeDetailUuid("CD152",changeStatus));
+        for (AdConMetaSetup item : itemList) {
+            orgItem = adConMetaSetupRepository.findOne(item.getId());
             item.setInsertDate(orgItem.getInsertDate());
             item.setInsertUuid(orgItem.getInsertUuid());
-            repository.save(item);
+            adConMetaSetupRepository.save(item);
             index++;
         }
         return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");

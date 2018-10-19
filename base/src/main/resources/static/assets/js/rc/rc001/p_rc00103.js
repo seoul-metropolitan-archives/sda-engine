@@ -27,6 +27,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                     item["contextualMeta"] = cloneItem;
                 }else if(nodeType == "item"){
                     item["raAggregationUuid"] = aggregationUuid;
+                    item["riPublishedStatusUuid"] = axboot.commonCodeValueByCodeName("CD121", "Draft");
                 }
             });
 

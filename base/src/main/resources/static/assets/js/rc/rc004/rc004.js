@@ -26,12 +26,13 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     },
     PAGE_SAVE: function (caller, act, data) {
         axboot.ajax({
-            type: "GET",
+            type: "PUT",
             url: "/api/v1/rc004/01/saveItemDetails",
-            data: $.extend({},  {pageSize: 1000} ,this.formView.getData()),
+            //data: $.extend({},  {pageSize: 1000} ,this.formView.getData()),
+            data: JSON.stringify(this.formView.getData()),
             callback: function (res) {
                 if(PAGE_MODE != 'create'){
-                    ACTIONS.dispatch(ACTIONS.PAGE_SEARCH,{aggregationUuid : fnObj.formView.getData().raAggregationUuid, itemUuid : fnObj.formView.getData().itemUuid} );
+                    ACTIONS.dispatch(ACTIONS.PAGE_SEARCH,{aggregationUuid : fnObj.formView.getData().raAggregationUuid, itemUuid : fnObj.formView.getData().riItemUuid} );
                 }
                 axToast.push(axboot.getCommonMessage("AA007"));
             },
@@ -494,28 +495,24 @@ fnObj.treeView01 = axboot.viewExtend(axboot.commonView, {
     }
 });
 setFormData = function(data){
-    fnObj.formView.setFormData("title",data.name);
-    fnObj.formView.setFormData("itemUuid",data.riItemUuid);
-    fnObj.formView.setFormData("itemCode",data.riItemCode);
-    fnObj.formView.setFormData("typeUuid",data.riTypeUuid);
-    fnObj.formView.setFormData("publishedStatusUuid",data.riPublishedStatusUuid);
-    fnObj.formView.setFormData("level",data.raLevelNm);
+    fnObj.formView.setFormData("name",data.name);
+    fnObj.formView.setFormData("riItemUuid",data.riItemUuid);
+    fnObj.formView.setFormData("riItemCode",data.riItemCode);
+    fnObj.formView.setFormData("riTypeUuid",data.riTypeUuid);
+    fnObj.formView.setFormData("riPublishedStatusUuid",data.riPublishedStatusUuid);
     fnObj.formView.setFormData("description",data.description1);
-    fnObj.formView.setFormData("author",data.riAuthor);
-    fnObj.formView.setFormData("rcAggregationCode",data.aggregationCode);
+    fnObj.formView.setFormData("riAuthor",data.riAuthor);
     fnObj.formView.setFormData("openStatusUuid",data.openStatusUuid);
-    fnObj.formView.setFormData("raTitle",data.raTitle);
     fnObj.formView.setFormData("raAggregationUuid",data.raAggregationUuid);
     fnObj.formView.setFormData("notes",data.notes1);
     fnObj.formView.setFormData("provenance",data.provenance);
     fnObj.formView.setFormData("creator",data.creator);
     fnObj.formView.setFormData("keyword",data.keyword);
-    fnObj.formView.setFormData("from",data.riTitle);
     fnObj.formView.setFormData("referenceCode",data.referenceCode);
     fnObj.formView.setFormData("raAggregationCode",data.raAggregationCode);
 
-    fnObj.formView.setFormData("descriptionStartDate",dateFormatter(data.riDescriptionStartDate));
-    fnObj.formView.setFormData("descriptionEndDate",dateFormatter(data.riDescriptionEndDate));
+    fnObj.formView.setFormData("riDescriptionStartDate",dateFormatter(data.riDescriptionStartDate));
+    fnObj.formView.setFormData("riDescriptionEndDate",dateFormatter(data.riDescriptionEndDate));
 
     fnObj.formView.setFormData("creationStartDate",dateFormatter(data.creationStartDate));
     fnObj.formView.setFormData("creationEndDate",dateFormatter(data.creationEndDate));

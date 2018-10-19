@@ -5,7 +5,7 @@
 
 <!-- ===== [ script ] ===== -->
 <script layout:fragment="script" type="text/javascript" th:src="@{/assets/js/ad/ad007/ad007.js}"></script>
-<!--realgrid -->
+<!-- ===== [ script ] _END_ ===== -->
 
 <!-- ===== [ base-content ] ===== -->
 <div layout:fragment="base-content" class="ax-base-content">
@@ -13,68 +13,52 @@
         <div class="cssBody" style="top:80px">
             <div style="display:table; height:100%; width:100%">
                 <div class="contents_wrap">
-                    <div style=" height:30px; width:100%" class="bgf7 div_tablerow">
+                    <div style=" height:30px; width:100%" class="bgf7 div_tablerow searchFields">
                         <ul class="bdb">
                             <th:block layout:insert="~{/fragments/page-buttons :: bookmark}"/>
-                            <th:block layout:insert="~{/fragments/page-buttons :: confirm-and-cancel-and-save-and-inquiry}"/>
+                            <th:block layout:insert="~{/fragments/page-buttons :: save-and-inquiry}"/>
                         </ul>
                     </div>
                     <div class="bdb div_tablerow searchFields">
                         <dl>
-                            <dt class="mgl_5 w130">Status</dt>
+                            <dt class="mgl_5">Entity Type</dt>
                             <dd>
-                                <select data-ax-path="statusUuid" style="width:135px;">
-                                    <option value=""></option>
-                                    <option th:each="item : ${statusList}"
-                                            th:value="${item.codeDetailUUID}"
-                                            th:text="${item.codeName}"/>
-                                </select>
-                            </dd>
-                            <dt>Entity Type</dt>
-                            <dd>
-                                <select data-ax-path="entityType" style="width:135px;" id="entityType">
-                                    <option value=""></option>
-                                    <option th:each="item : ${entityTypeList}"
+                                <select data-ax-path="entityType" style="width:180px;" id="entityType">
+                                    <option th:each="item, index : ${entityTypeList}"
                                             th:value="${item.code}"
                                             th:text="${item.codeName}"
-                                            th:data-attr01="${item.attribute01}"/>
+                                            th:if="${index.index} == 0 "/>
                                 </select>
                             </dd>
-                            <dt>Column Code</dt>
-                            <dd>
-                                <input type=text style="width:190px" data-ax-path="columnCode" disabled>
-                            </dd>
                         </dl>
-                        <dl>
-                            <dt class="mgl_5 w130">Additional Column</dt>
-                            <dd>
-                                <select data-ax-path="additionalColumn" style="width:135px;" id="additionalColumn">
-                                    <option value=""></option>
-                                    <option th:each="item : ${addColumnList}"
-                                            th:value="${item.codeName}"
-                                            th:text="${item.codeName}"/>
-                                </select>
-                            </dd>
-                            <dd class="w_auto">
-                                <div class="rdo_box">
-                                    <span class="rdo_box_title">Use</span>
-                                    <label><input type="radio" name="useYN" data-ax-path="useYN" class="no_border" value="Y">Yes</label>
-                                    <label><input type="radio" name="useYN" data-ax-path="useYN" class="no_border" value="N">No</label>
-                                    <label><input type="radio" name="useYN" data-ax-path="useYN" class="no_border" value="" checked>All</label>
-                                </div>
-                            </dd>
-                        </dl>
+
                     </div>
+                    <div style="height:100%; width:100%" class="div_tablerow">
 
-                    <div style="height:100%; width:100%" class="bgf7 div_tablerow">
-
-                        <div style="height:100%; width:100%" class="div_table">
-                            <ul class="bdb bdt div_tablerow" style="height:30px;">
-                                <th:block layout:insert="~{/fragments/page-buttons :: dot('Additional Contextual Metadata')}"/>
+                        <div style="display:table; height:50%; width:100%">
+                            <ul class="bdb bdt div_tablerow bgf7" style="height:30px;">
+                                <th:block layout:insert="~{/fragments/page-buttons :: dot('Setup')}"/>
                                 <th:block layout:insert="~{/fragments/page-buttons :: add-and-delete}"/>
                             </ul>
                             <div style="height:100%; width:100%" class="div_tablerow bdb">
                                 <div id="realgrid01" style="width:100%; height:100%"></div>
+                            </div>
+                        </div>
+
+                        <div style="display:table; height:50%; width:100%">
+                            <ul class="bdb bdt div_tablerow bgf7" style="height:30px;">
+                                <th:block layout:insert="~{/fragments/page-buttons :: dot ('Segment')}"/>
+                                <th:block layout:insert="~{/fragments/page-buttons :: add-and-delete}"/>
+                            </ul>
+                            <ul class="bdb div_tablerow" style="height:24px;">
+                                <li style="width:100%; text-align:left;">
+                                    <input type=text class="yeongye" data-ax-path="termCodeLabel" value="" readonly
+                                           style="width:205px; height: 22px; margin-left: 0.5px">
+                                </li>
+                            </ul>
+
+                            <div style="height:100%; width:100%" class="div_tablerow bdb">
+                                <div id="realgrid02" style="width:100%; height:100%"></div>
                             </div>
                         </div>
 
@@ -83,7 +67,11 @@
                 </div>
 
             </div>
-
         </div>
     </form>
 </div>
+
+<!--오른쪽 내용영역 전체 e -->
+
+
+</html>
