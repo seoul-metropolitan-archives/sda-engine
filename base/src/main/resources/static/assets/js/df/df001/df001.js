@@ -261,6 +261,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     tagId: "realgrid01",
     primaryKey : "disposalFreezeEventUuid",
     entityName: "DF_DISPOSAL_FREEZE_EVENT",
+    isCheckClick: false,
     initView: function () {
         this.initInstance();
         this.setColumnInfo(df00101.column_info);
@@ -290,14 +291,16 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
                     return false;
                 }
             },
-            ["eventName", "eventTypeUuid", "reviewDate", "description"], true, ["endYN"]);
+            ["eventName", "eventTypeUuid", "reviewDate", "description"], false, ["endYN"]);
     },
     onItemChecked: function (grid, itemIndex) {
         var checkData = this.gridView.getDataProvider().getJsonRow(itemIndex);
-        if(checkData["freezeCnt"] > 0){
+        if(checkData["freezeCnt"] > 0 && this.isCheckClick == false){
             axWarningToast.push(axboot.getCommonMessage("DF001_02"));
-
+            this.isCheckClick = true;
             this.gridView.checkItem(itemIndex, false);
+        }else{
+            this.isCheckClick = false;
         }
     },
     itemClick: function (data) {

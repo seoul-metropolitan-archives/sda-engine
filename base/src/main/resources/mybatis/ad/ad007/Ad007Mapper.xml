@@ -5,25 +5,17 @@
 
 <mapper namespace="rmsoft.ams.seoul.ad.ad007.dao.Ad007Mapper">
 
-    <select id="searchList" resultType="Ad00701VO" parameterType="Ad00701VO" statementType="PREPARED">
+    <select id="searchSetup" resultType="Ad00701VO" parameterType="Ad00701VO" statementType="PREPARED">
         <![CDATA[
         SELECT
-            ADD_CONTEXTUAL_META_UUID AS addContextualMetaUuid,
-            STATUS_UUID AS statusUuid,
+            ADD_META_TEMPLATE_SET_UUID AS addMetaTemplateSetUuid,
             ENTITY_TYPE AS entityType,
-            COLUMN_CODE AS columnCode,
-            COLUMN_VALUE AS columnValue,
-            METADATA_ENTITY_TYPE AS metadataEntityType,
-            ADDITIONAL_COLUMN AS additionalColumn,
-            INPUT_METHOD_UUID AS inputMethodUuid,
-            INPUT_VALUE AS inputValue,
-            TITLE AS title,
-            REQUIRED_YN AS requiredYN,
-            DISPLAY_YN AS displayYN,
+            SET_CODE AS setCode,
+            SET_NAME AS setName,
             DESCRIPTION AS description,
             NOTES AS notes,
             USE_YN AS useYN,
-            FC_AD_ADD_METADATA_CNT(ENTITY_TYPE, METADATA_ENTITY_TYPE, COLUMN_CODE, COLUMN_VALUE, ADDITIONAL_COLUMN) AS metaCnt,
+            DEFAULT_YN AS defaultYN,
         ]]>
         <include refid="Common.UserName">
             <property name="userUuid" value="INSERT_UUID"/>
@@ -41,27 +33,17 @@
         <![CDATA[
             UPDATE_DATE AS  updateDate
         FROM
-            AD_CONTEXTUAL_METADATA_SETUP
+            AD_CON_META_SETUP
         WHERE 1=1
         ]]>
-        <if test="null != statusUuid and '' != statusUuid">
+        <if test="null != setCode and '' != setCode">
             <![CDATA[
-            AND STATUS_UUID = #{statusUuid}
+            AND SET_CODE = #{setCode}
           ]]>
         </if>
-        <if test="null != entityType and '' != entityType">
+        <if test="null != setName and '' != setName">
             <![CDATA[
-            AND ENTITY_TYPE = #{entityType}
-          ]]>
-        </if>
-        <if test="null != columnCode and '' != columnCode">
-            <![CDATA[
-            AND COLUMN_CODE = #{columnCode}
-          ]]>
-        </if>
-        <if test="null != additionalColumn and '' != additionalColumn">
-            <![CDATA[
-            AND ADDITIONAL_COLUMN = #{additionalColumn}
+            AND SET_NAME = #{setName}
           ]]>
         </if>
         <if test="null != useYN and '' != useYN">
@@ -70,6 +52,40 @@
           ]]>
         </if>
         ORDER BY ENTITY_TYPE ASC
+    </select>
+    <select id="searchSegment" resultType="Ad00702VO" parameterType="Ad00702VO" statementType="PREPARED">
+        <![CDATA[
+        SELECT
+            ADD_META_SEGMENT_UUID AS addMetaSegmentUuid,
+            ADD_META_TEMPLATE_SET_UUID AS addMetaTemplateSetUuid,
+            ENTITY_TYPE AS entityType,
+            TITLE AS title,
+            ADDITIONAL_COLUMN AS additionalColumn,
+            POPUP_UUID AS popupUuid,
+            DISPLAYED_YN AS displayedYN,
+            REQUIRED_YN AS requiredYN,
+            DISPLAY_SIZE AS displaySize,
+        ]]>
+        <include refid="Common.UserName">
+            <property name="userUuid" value="INSERT_UUID"/>
+        </include>
+        AS insertUuid,
+
+        <![CDATA[
+            INSERT_DATE AS insertDate,
+        ]]>
+
+        <include refid="Common.UserName">
+            <property name="userUuid" value="UPDATE_UUID"/>
+        </include>
+        AS updateUuid,
+        <![CDATA[
+            UPDATE_DATE AS  updateDate
+        FROM
+            AD_CON_META_SEGMENT
+        WHERE ADD_META_TEMPLATE_SET_UUID = #{addMetaTemplateSetUuid}
+        ORDER BY ADDITIONAL_COLUMN ASC
+        ]]>
     </select>
     <select id="checkDelete" resultType="int" parameterType="String" statementType="PREPARED">
         SELECT

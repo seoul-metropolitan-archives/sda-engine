@@ -19,7 +19,7 @@ var rc00103_p03 =
             },
             {
                 sortNo: 1,
-                name: "title",
+                name: "name",
                 text: "Title",
                 width: 300,
                 required: true,
@@ -28,7 +28,7 @@ var rc00103_p03 =
             },
             {
                 sortNo: 2,
-                name: "typeUuid",
+                name: "riTypeUuid",
                 text: "Type",
                 width: 100,
                 dataType: "combo",
@@ -56,7 +56,7 @@ var rc00103_p03 =
             },
             {
                 sortNo: 6,
-                name: "author",
+                name: "riAuthor",
                 text: "Author",
                 width: 100,
                 editable: true,
@@ -80,7 +80,7 @@ var rc00103_p03 =
                 columnList : [
                     {
                         sortNo: 8,
-                        name: "descriptionStartDate",
+                        name: "riDescriptionStartDate",
                         text: "Start",
                         width: 100,
                         dataType: "date",
@@ -92,7 +92,7 @@ var rc00103_p03 =
                     },
                     {
                         sortNo: 9,
-                        name: "descriptionEndDate",
+                        name: "riDescriptionEndDate",
                         text: "End",
                         width: 100,
                         dataType: "date",

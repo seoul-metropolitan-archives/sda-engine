@@ -1,4 +1,4 @@
-var ad00701 =
+var ad00702 =
     {
         column_info:
             [
@@ -14,6 +14,16 @@ var ad00701 =
                 {
                     sortNo: 1,
                     width:30,
+                    name: "addMetaSegmentUuid",
+                    text: "",
+                    dataType: "code",
+                    editable: false,
+                    required: false,
+                    visible: false
+                },
+                {
+                    sortNo: 1,
+                    width:30,
                     name: "addMetaTemplateSetUuid",
                     text: "",
                     dataType: "code",
@@ -22,18 +32,19 @@ var ad00701 =
                     visible: false
                 },
                 {
-                    sortNo: 4,
-                    name: "setCode",
-                    text: "Code",
-                    width: 180,
-                    dataType: "text",
+                    sortNo: 3,
+                    name: "sequence",
+                    text: "Sequence",
+                    width: 70,
+                    dataType: "commanumber",
                     editable: true,
-                    required: true
+                    required: false,
+                    disable: false
                 },
                 {
                     sortNo: 5,
-                    name: "setName",
-                    text: "Name",
+                    name: "title",
+                    text: "Title",
                     width: 120,
                     dataType: "text",
                     editable: true,
@@ -41,25 +52,61 @@ var ad00701 =
                     disable: false
                 },
                 {
-                    sortNo: 13,
-                    name: "description",
-                    text: "Description",
-                    width: 150,
-                    dataType: "richtext",
-                    required: false
+                    sortNo: 7,
+                    name: "additionalColumn",
+                    text: "Column",
+                    width: 130,
+                    dataType: "combo",
+                    values: axboot.commonCodeFilter("CD148").nameArr,
+                    labels: axboot.commonCodeFilter("CD148").nameArr,
+                    editable: true,
+                    required: true,
+                    disable: false
                 },
                 {
-                    sortNo: 14,
-                    name: "notes",
-                    text: "Notes",
-                    width: 150,
-                    dataType: "richtext",
-                    required: false
+                    sortNo: 8,
+                    width:90,
+                    name: "inputMethodUuid",
+                    text: "Input Method",
+                    dataType: "combo",
+                    values: axboot.commonCodeFilter("CD149").codeArr,
+                    labels: axboot.commonCodeFilter("CD149").nameArr,
+                    editable: true,
+                    required: true,
+                    disable: false
                 },
                 {
-                    sortNo: 15,
-                    name: "useYN",
-                    text: "Use",
+                    sortNo: 9,
+                    name: "popupUuid",
+                    text: "Input Value",
+                    width: 100,
+                    dataType: "popup",
+                    popupCode: {
+                        inputMethodUuid: function (checkData) {
+                            var conditionlist = axboot.commonCodeFilter("CD149").codeArr;
+                            var retData = "";
+                            for (var conditionIndex = 0; conditionIndex < conditionlist.length; conditionIndex++) {
+
+                                if (checkData == conditionlist[conditionIndex]) {
+                                    //Input Method의 값에 따라서 동적으로 변경된다.
+                                    if ("Combo" == axboot.commonCodeFilter("CD149").nameArr[conditionIndex]) {
+                                        retData = "PU128";
+                                        break;
+                                    }
+                                }
+                            }
+                            return retData;
+                        }
+                    },
+                    sqlColumn : {CODE : "popupUuid"},
+                    editable: true,
+                    required: true,
+                    disable: false
+                },
+                {
+                    sortNo: 11,
+                    name: "displayYN",
+                    text: "Display",
                     width: 50,
                     dataType: "check",
                     textAlignment: "center",
@@ -71,13 +118,13 @@ var ad00701 =
                         trueValues: "Y",
                         startEditOnClick: true,
                     },
-                    required: false,
+                    required: false
                 },
                 {
-                    sortNo: 15,
-                    name: "defaultYN",
-                    text: "Default",
-                    width: 50,
+                    sortNo: 12,
+                    name: "requiredYN",
+                    text: "Required",
+                    width: 60,
                     dataType: "check",
                     textAlignment: "center",
                     defaultValue : "N",
@@ -89,6 +136,16 @@ var ad00701 =
                         startEditOnClick: true,
                     },
                     required: false,
+                },
+                {
+                    sortNo: 15,
+                    name: "displaySize",
+                    text: "Display Size",
+                    width: 80,
+                    dataType: "commanumber",
+                    editable: true,
+                    required: false,
+                    disable: false
                 },
                 {
                     sortNo: 16,
@@ -129,13 +186,6 @@ var ad00701 =
                     dataType: "timestamp",
                     required: false,
                     disable: true
-                },
-                {
-                    sortNo:20 ,
-                    name: "metaCnt",
-                    text: "",
-                    dataType: "text",
-                    visible: false
                 }
             ]
     }

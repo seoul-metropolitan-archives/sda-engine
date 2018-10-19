@@ -9,6 +9,7 @@ import io.onsemiro.core.parameter.RequestParams;
 import org.springframework.web.bind.annotation.*;
 import rmsoft.ams.seoul.ad.ad007.service.Ad007Service;
 import rmsoft.ams.seoul.ad.ad007.vo.Ad00701VO;
+import rmsoft.ams.seoul.ad.ad007.vo.Ad00702VO;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -26,9 +27,20 @@ public class Ad007Controller extends BaseController {
      * @param param the param
      * @return the responses . list response
      */
-    @GetMapping("/searchList")
-    public Responses.ListResponse searchList(RequestParams<Ad00701VO> param) {
-        return Responses.ListResponse.of(ad007Service.searchList(param));
+    @GetMapping("/list")
+    public Responses.ListResponse searchSetup(RequestParams<Ad00701VO> param) {
+        return Responses.ListResponse.of(ad007Service.searchSetup(param));
+    }
+
+    /**
+     * Search entity type responses . list response.
+     *
+     * @param param the param
+     * @return the responses . list response
+     */
+    @GetMapping("/listSub")
+    public Responses.ListResponse searchSegment(RequestParams<Ad00702VO> param) {
+        return Responses.ListResponse.of(ad007Service.searchSegment(param));
     }
 
     /**
@@ -37,10 +49,21 @@ public class Ad007Controller extends BaseController {
      * @param itemList the ad 00501 vo list
      * @return the api response
      */
-    @PutMapping(value = "/saveItems")
+    @PutMapping(value = "/save")
     @PostMapping
-    public ApiResponse saveItems(@RequestBody List<Ad00701VO> itemList) {
-        return ad007Service.saveItems(itemList);
+    public ApiResponse saveSetup(@RequestBody List<Ad00701VO> itemList) {
+        return ad007Service.saveSetup(itemList);
+    }
+    /**
+     * Save entity type api response.
+     *
+     * @param itemList the ad 00501 vo list
+     * @return the api response
+     */
+    @PutMapping(value = "/saveSub")
+    @PostMapping
+    public ApiResponse saveSegment(@RequestBody List<Ad00702VO> itemList) {
+        return ad007Service.saveSegment(itemList);
     }
 
     /**

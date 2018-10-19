@@ -49,7 +49,7 @@ public class Ad001Controller extends MessageBaseController {
 
         //dipBatchExecutor.runDipProcess()
         RuntimeJarLoader.loadJarIndDir("C:\\devSpace\\seoul-ams\\service-modules\\long-term-preservation\\build\\libs");
-        AppRunner.restart(restartEndpoint);
+        //AppRunner.restart(restartEndpoint);
        // AppRunner.restart();
 
 

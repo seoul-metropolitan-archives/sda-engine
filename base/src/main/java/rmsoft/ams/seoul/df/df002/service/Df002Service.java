@@ -127,6 +127,11 @@ public class Df002Service extends BaseService {
             item.setStatusUuid(CommonCodeUtils.getCodeDetailUuid("CD115",changeStatus));
             item.setInsertDate(orgItem.getInsertDate());
             item.setInsertUuid(orgItem.getInsertUuid());
+            if(changeStatus.equals("Draft")){
+                item.setTerminatorUuid("");
+                item.setEndDate(null);
+                item.setEndYn("");
+            }
             repository.save(item);
             index++;
         }
