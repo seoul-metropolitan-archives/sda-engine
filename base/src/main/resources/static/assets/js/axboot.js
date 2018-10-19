@@ -3233,11 +3233,13 @@ axboot.viewExtend = function (_obj1, _obj2) {
      * Grid Add/Delete Button Permission 처리
      */
     try {
-        if (!isPermission(_obj2.entityName, FUNCTION_ADD_UUID)) {
-            $("#"+_obj2.tagId).parents().eq(1).find(".btn_a").attr('disabled', true);
-        }
-        if (!isPermission(_obj2.entityName, FUNCTION_DEL_UUID)) {
-            $("#"+_obj2.tagId).parents().eq(1).find(".btn_d").attr('disabled', true);
+        if(!_obj2.noPermission){
+            if (!isPermission(_obj2.entityName, FUNCTION_ADD_UUID)) {
+                $("#"+_obj2.tagId).parents().eq(1).find(".btn_a").attr('disabled', true);
+            }
+            if (!isPermission(_obj2.entityName, FUNCTION_DEL_UUID)) {
+                $("#"+_obj2.tagId).parents().eq(1).find(".btn_d").attr('disabled', true);
+            }
         }
     }catch(e){
 
