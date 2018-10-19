@@ -614,7 +614,7 @@ fnObj.gridView03 = axboot.viewExtend(axboot.gridView, {
                 item = {
                     title: n.name,
                     aggregationUuid: n.uuid,
-                    classifyRecordsUuid:n.classifyRecordUuid == undefined ? '' : n.classifyRecordUuid,
+                    classifyRecordsUuid:n.classifyRecordsUuid == undefined ? '' : n.classifyRecordsUuid,
                     choiceYn : n.choiceYn == undefined ? 'N' : n.choiceYn
                 };
                 if(n.rows) convertList(n.rows);
