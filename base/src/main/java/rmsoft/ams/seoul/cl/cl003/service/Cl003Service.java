@@ -99,14 +99,14 @@ public class Cl003Service extends BaseService {
         ClClassifyRecordsResult orgClClassifyRecordsResult = null;
         int i = 0;
         for(ClClassifyRecordsResult clClassifyRecordsResult : clClassifiedRecordsList) {
-            if(cl00302VO.getClassUuid()== null){
+            if(cl00302VO.getClassUuid()== null){ //삭제
                 clClassifyRecordResultRepository.delete(clClassifyRecordsResult);
-            }else if(clClassifyRecordsResult.getClassifyRecordsUuid() != null&&!clClassifyRecordsResult.getClassifyRecordsUuid().equals("")){
+            }else if(null != clClassifyRecordsResult.getClassifyRecordsUuid() && !"".equals(clClassifyRecordsResult.getClassifyRecordsUuid())){ //수정
                 orgClClassifyRecordsResult = clClassifyRecordResultRepository.findOne(clClassifyRecordsResult.getId());
                 orgClClassifyRecordsResult.setChoiceYn(clClassifyRecordsResult.getChoiceYn());
                 orgClClassifyRecordsResult.setStatusUuid(CommonCodeUtils.getCodeDetailUuid("CD111","Confirm"));
                 clClassifyRecordResultRepository.save(orgClClassifyRecordsResult);
-            }else{
+            }else{ //신규
                 clClassifyRecordsResult.setClassifyRecordsUuid(UUIDUtils.getUUID());
                 clClassifyRecordsResult.setClassUuid(cl00302VO.getClassUuid());
                 clClassifyRecordsResult.setStatusUuid(CommonCodeUtils.getCodeDetailUuid("CD111","Confirm"));
