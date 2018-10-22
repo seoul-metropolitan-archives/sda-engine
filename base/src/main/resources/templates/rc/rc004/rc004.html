@@ -74,13 +74,13 @@
                                             <div class="bdb" style="padding: 5px;">
                                                 <ul>
                                                     <li style="width: 33%;">
-                                                        <b>Code </b><div data-ax-path="itemCode">text readonly</div>
-                                                        <input type="hidden" data-ax-path="itemUuid">
+                                                        <b>Code </b><div data-ax-path="riItemCode">text readonly</div>
+                                                        <input type="hidden" data-ax-path="riItemUuid">
                                                     </li>
                                                     <li style="width: 33%;">
                                                         <b>Type </b>
                                                         <div>
-                                                            <select data-ax-path="typeUuid" style="width: 200px;">
+                                                            <select data-ax-path="riTypeUuid" style="width: 200px;">
                                                                 <option></option>
                                                                 <option th:attr="defaultYN =  ${item.defaultYN}"
                                                                         th:each="item : ${typeUuid}"
@@ -92,7 +92,7 @@
                                                     <li style="width: 34%;">
                                                         <b>Published Status</b>
                                                         <div>
-                                                            <select data-ax-path="publishedStatusUuid" style="width: 200px; background-color: #fffdd6" >
+                                                            <select data-ax-path="riPublishedStatusUuid" style="width: 200px; background-color: #fffdd6" >
                                                                 <option th:each="item : ${publishedStatusUuid}"
                                                                         th:value="${item.codeDetailUUID}"
                                                                         th:text="${item.codeName}"
@@ -107,7 +107,7 @@
                                                     <li style="width: 66%;">
                                                         <b>Title </b>
                                                         <div>
-                                                            <textarea data-ax-path="title"  class="txtar" style="height: 35px; background-color: #fffdd6; width: 90%"></textarea>
+                                                            <textarea data-ax-path="name"  class="txtar" style="height: 35px; background-color: #fffdd6; width: 90%"></textarea>
                                                         </div>
                                                     </li>
 
@@ -145,7 +145,7 @@
                                                     <li style="width: 33%;">
                                                         <b>Author </b>
                                                         <div>
-                                                            <textarea data-ax-path="author" class="txtar" style="height: 35px; width: 95%"></textarea>
+                                                            <textarea data-ax-path="riAuthor" class="txtar" style="height: 35px; width: 95%"></textarea>
                                                         </div>
                                                     </li>
 
@@ -170,13 +170,13 @@
                                                         <dd class="w_auto">
                                                             <div class="input-group" data-ax5picker="date">
                                                                 <div class="cld_box">
-                                                                    <input type="text" data-ax-path="descriptionStartDate" style="ime-mode:disabled;"
+                                                                    <input type="text" data-ax-path="riDescriptionStartDate" style="ime-mode:disabled;"
                                                                            placeholder="YYYY-MM-DD" maxlength="10">
                                                                     <img title="calendar" class="ui-datepicker-trigger" alt="..." src="/assets/images/ams/calendar.png" >
                                                                 </div>
                                                                 ~
                                                                 <div class="cld_box">
-                                                                    <input type="text" data-ax-path="descriptionEndDate" style="ime-mode:disabled;"
+                                                                    <input type="text" data-ax-path="riDescriptionEndDate" style="ime-mode:disabled;"
                                                                            placeholder="YYYY-MM-DD" maxlength="10">
                                                                     <img title="calendar" class="ui-datepicker-trigger" alt="..." src="/assets/images/ams/calendar.png" >
 

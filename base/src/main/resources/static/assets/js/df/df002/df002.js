@@ -271,7 +271,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
                 return true;
             else
                 return false;
-        },["eventName","eventCode","degree","keyword"]);
+        },["eventName","eventCode","degree","keyword"], false, ["endYN"]);
     },
     itemClick: function (data) {
     },
