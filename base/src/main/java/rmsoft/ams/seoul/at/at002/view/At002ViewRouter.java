@@ -2,7 +2,7 @@
  * Copyright (c) 2017. RMSoft Co.,Ltd. All rights reserved
  */
 
-package rmsoft.ams.seoul.at.at001.view;
+package rmsoft.ams.seoul.at.at002.view;
 
 import io.onsemiro.controller.BaseController;
 import org.springframework.stereotype.Controller;
@@ -19,7 +19,7 @@ import rmsoft.ams.seoul.utils.CommonCodeUtils;
  * @since 2017 -10-23 오후 2:06
  */
 @Controller
-public class At001ViewRouter extends BaseController {
+public class At002ViewRouter extends BaseController {
 
     /**
      * View string.
@@ -27,17 +27,11 @@ public class At001ViewRouter extends BaseController {
      * @param model the model
      * @return the string
      */
-    @GetMapping("/at/at001/at001")
+    @GetMapping("/at/at002/at002")
     public String view(ModelMap model) {
         model.addAttribute("orgTypeUuid", CommonCodeUtils.get("CD163"));
         model.addAttribute("lvDtlUuid", CommonCodeUtils.get("CD164"));
-        return "/at/at001/at001";
-    }
-    @PostMapping("/at/at001/at001-p01")
-    public String viewPopup(ModelMap model) {
-        model.addAttribute("orgTypeUuid", CommonCodeUtils.get("CD163"));
-        model.addAttribute("lvDtlUuid", CommonCodeUtils.get("CD164"));
-        return "/at/at001/at001-p01";
+        return "/at/at002/at002";
     }
 }
 
