@@ -29,4 +29,43 @@
         </where>
         ORDER BY AUTHORITY_NO
     </select>
+    <select id="getRelAuthorityList" resultType="At00102VO"  statementType="PREPARED">
+        SELECT
+            AUTHORITY_RELATION_UUID as authorityRelationUuid,
+            AUTHORITY_UUID AS authorityUuid,
+            RELATION_TYPE_UUID AS relationTypeUuid ,
+            REL_AUTHORITY_UUID AS relAuthorityUuid,
+            (SELECT AUTHORITY_NAME FROM AT_AUTHORITY WHERE Z.REL_AUTHORITY_UUID = AUTHORITY_UUID) AS relAuthorityName
+        FROM AT_AUTHORITY_RELATION Z
+        <where>
+            Z.AUTHORITY_UUID = #{authorityUuid}
+        </where>
+    </select>
+    <select id="getAuthorityMetaInfoList" resultType="At00103VO"  statementType="PREPARED">
+        SELECT
+            Z2.AGGREGATION_UUID AS aggregationUuid,
+            Z2.AUTHORITY_RECORD_RESULT_UUID AS authorityRecordResultUuid,
+            Z2.AUTHORITY_UUID AS authorityUuid,
+            Z2.ENTITY_COLUMN_UUID AS entityColumnUuid,
+            Z1.AUTHORITY_ENTITY_COLUMN_UUID AS authorityEntityColumnUuid,
+            Z1.ENTITY_COLUMN_TITLE AS entityColumnTitle,
+            (SELECT Z4.TERM_NAME
+             FROM AD_ENTITY_COLUMN Z3, AD_GLOSSARY Z4
+             WHERE Z3.GLOSSARY_UUID = Z4.GLOSSARY_UUID AND Z2.ENTITY_COLUMN_UUID = Z3.ENTITY_COLUMN_UUID) AS termName,
+            (SELECT Z4.TERM_CODE
+             FROM AD_ENTITY_COLUMN Z3, AD_GLOSSARY Z4
+             WHERE Z3.GLOSSARY_UUID = Z4.GLOSSARY_UUID AND Z2.ENTITY_COLUMN_UUID = Z3.ENTITY_COLUMN_UUID) AS termCode,
+            (SELECT ENTITY_TYPE_CODE
+             FROM AD_ENTITY_TYPE
+             WHERE Z1.ENTITY_TYPE_UUID = ENTITY_TYPE_UUID) AS entityTypeCode,
+            (SELECT ENTITY_TYPE_NAME
+             FROM AD_ENTITY_TYPE
+             WHERE Z1.ENTITY_TYPE_UUID = ENTITY_TYPE_UUID) AS entityTypeName
+        FROM
+            AT_AUTHORITY_ENTITY_COLUMN Z1, AT_AUTHORITY_RESULT Z2
+        <where>
+            Z1.ENTITY_COLUMN_UUID = Z2.ENTITY_COLUMN_UUID AND
+            Z2.AUTHORITY_UUID = #{authorityUuid}
+        </where>
+    </select>
 </mapper>

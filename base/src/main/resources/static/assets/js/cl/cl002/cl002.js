@@ -526,7 +526,7 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
                 return true;
             else
                 return false;
-        },["parentClassCode","className","classLevelUuid","orderNo","description"]);
+        },["parentClassCode","className","classLevelUuid","orderNo"]);
     },
     isChangeData: function () {
         if (this.getData().length > 0) {

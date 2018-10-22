@@ -27832,7 +27832,12 @@ a.small_open {
     /*border-left: 1px solid #ddd;
     border-right: 1px solid #ddd*/
 }
-
+.auth_fit {
+    width: fit-content !important;
+    float: left;
+    margin: 5px;
+    padding-right: 10px;
+}
 
 /*aggregation*/
 

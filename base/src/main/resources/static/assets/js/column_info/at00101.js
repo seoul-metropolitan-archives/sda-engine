@@ -13,8 +13,9 @@ var at00101 =
                 {
                     sortNo: 1,
                     name: "authorityNo",
-                    text: "Authority Number",
+                    text: "Authority No",
                     editable: false,
+                    width:170,
                     dataType: "text",
                     required: false
                 },

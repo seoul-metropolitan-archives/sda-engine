@@ -3,7 +3,7 @@ var option = '';
 var authorityTypeUuid = '';
 var authorityTypeNm = '';
 var ORG_TYPE_NM = "Organization";
-
+var relAuthInfoValid = true;
 var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SAVE: function (caller, act, data) {
         //validate
@@ -26,10 +26,19 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 fnObj.formView.setFormData("mainJob",fnObj.formView.getData().mainJob02);
             }
         }
+
+        if(!relAuthInfoValid){
+            return;
+        }
+
+        var saveData  = {
+            relAuthList : fnObj.childrenAuthInfo.getData(),
+            authInfo : $.extend({}, fnObj.formView.getData(), {authorityTypeUuid:authorityTypeUuid})
+        }
         axboot.ajax({
             type: "PUT",
             url: "/api/v1/at/at001/01/save",
-            data: JSON.stringify($.extend({}, fnObj.formView.getData(), {authorityTypeUuid:authorityTypeUuid})),
+            data: JSON.stringify($.extend({}, saveData)),
             callback: function (res) {
                 if(res.message == "SUCCESS"){
                     ACTIONS.dispatch(ACTIONS.PAGE_CLOSE,res.message);
@@ -46,9 +55,9 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         }
     },
     SEARCH_AUTH_INFO: function (caller, act, data) {
-        // var callback = data["callback"];
-        // var reqData = ax5.util.deepCopy(data);
-        // // delete(reqData["callback"]);
+        var callback = data["callback"];
+        var reqData = ax5.util.deepCopy(data);
+        delete(reqData["callback"]);
         axboot.commonModal.open({
             modalType: "COMMON_POPUP",
             // preSearch : reqData["preSearch"],
@@ -56,7 +65,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                  return data;
             },
             callback: function (data) {
-                // callback(data);
+                callback(data);
             }
         });
     },
@@ -101,6 +110,8 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
                 type: 'date'
             }
         });
+
+        $("input[data-ax-path='descriptionDate']").val(getFormattedDate(new Date()));
 
         this.makeRadio();
         this.initEvent();
@@ -211,7 +222,7 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
 
         }
         $(".rdo_box").append(radioTag);
-        fnObj.formView.changeView();
+        // fnObj.formView.changeView();
     },
     clear: function () {
         this.model.setModel(this.getDefaultData());
@@ -230,7 +241,7 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
         }
 
         fnObj.formView.clear();
-        $(".pdb_10").remove();
+        $(".auth_fit").remove();
         fnObj.childrenAuthInfo.addChild($("#addDnrInfo"));
     }
 });
@@ -240,25 +251,24 @@ fnObj.childrenAuthInfo = axboot.viewExtend({
     nodeType : "",
     popupCode : "",
     template :
-    "                                                            <li style='width: 20%; padding: 0 0.5%;'>" +
-    "                                                                <b>관할 기관</b>" +
-    "                                                               <select data-ax-path='lvDtlUuid' style='width:135px;' class='form-control W120'>" +
-    "                                                                   <option value=''></option>" +
+    "                                                            <li style='padding: 0 10px 0 0;'>" +
+    "                                                               <select data-ax-path='relationTypeUuid' style='width:135px;'>" +
+    "                                                                   <option value='' disabled selected>관련기관</option>" +
     "                                                                </select>" +
     "                                                            </li>" +
-    "                                                            <li style='width: 20%;'>" +
-    "                                                                <b>전거 팝업</b>" +
-    "                                                            <div class='src_box2'>" +
-    "                                                                <input type=text data-ax-path='authorityRrelationUuid' class='form-control'>" +
-    "                                                                <a href='#' class='searchAuthority' ><img src='/assets/images/ams/search_normal.png' alt='find'></a>" +
-    "                                                            </div>" +
+    "                                                            <li style='padding: 0 10px 0 0;'>" +
+    "                                                               <div class='src_box2'>" +
+    "                                                                <input type=text data-ax-path='relAuthorityName' class='form-control' placeholder='관련전거'>" +
+    "                                                                <input type=text data-ax-path='relAuthorityUuid' style='width: 0; display: none'>" +
+        "                                                                <a href='#' class='searchAuthority' ><img src='/assets/images/ams/search_normal.png' alt='find'></a>" +
+        "                                                            </div>" +
     "                                                            </li>" +
-    "                                                            <li style='width: 60%; text-align: center'>" +
-    "                                                                <b>&nbsp; </b>" +
+    "                                                            <li style='text-align: center'>" +
     "                                                                <div><a href='#' class='btn_del_left' style=''>X</a></div>" +
-    "                                                            </li>",
+    "                                                          </li>",
     initView: function () {
-        this.initEvent();
+        var _this = this;
+        _this.initEvent();
 
         var codes = axboot.commonCodeFilter("CD162").codeArr;
         var names = axboot.commonCodeFilter("CD162").nameArr;
@@ -268,11 +278,11 @@ fnObj.childrenAuthInfo = axboot.viewExtend({
 
         }
 
-        // this.addChild($("#addDnrInfo"));
+        _this.addChild($("#addAuthInfo"));
     },
     initEvent: function () {
         var _this = this;
-        $("#addDnrInfo").click(function(){
+        $("#addAuthInfo").click(function(){
             _this.addChild(this);
         });
 
@@ -285,32 +295,21 @@ fnObj.childrenAuthInfo = axboot.viewExtend({
             var data = {
                 popupCode : "PU142",
                 preSearch : false,
-                searchData : data,
+                searchData : ' ',
                 callback : function(data){
-                    parentsTag.find("input[data-ax-path='authorityRrelationUuid']").attr("authorityRrelationUuid",data["authorityUuid"])
-                    parentsTag.find("input[data-ax-path='authorityRrelationUuid']").val(data["AGGREGATION_CODE"])
-                    // parentsTag.find("input[data-ax-path='aggregationUuid']").val(data["AGGREGATION_CODE"])
-                    // parentsTag.find("input[data-ax-path='title']").val(data["TITLE"])
-                    // console.log(data);
+                    parentsTag.find("input[data-ax-path='relAuthorityUuid']").val(data["AUTHORITY_UUID"])
+                    parentsTag.find("input[data-ax-path='relAuthorityName']").val(data["AUTHORITY_NAME"])
                 }
             };
             ACTIONS.dispatch(ACTIONS.SEARCH_AUTH_INFO,data);
         });
 
         $(".childDnrInfo").delegate(".btn_del_left","click",function(){
-            if("create" == $(this).parents().eq(2).attr("saveType"))
-            {
                 $(this).parents().eq(2).remove();
-            }
-            else
-            {
-                $(this).parents().eq(2).hide();
-                $(this).parents().eq(2).find("input[data-ax-path='__deleted__']").val(false)
-            }
         });
     },
     addChild : function(_this,data){
-        var cloneTag = $("<ul>").addClass("pdb_10").attr("data-ax-path","saveType").attr("saveType","saved").html(this.template).clone();
+        var cloneTag = $("<ul>").addClass("auth_fit").attr("data-ax-path","__created__").html(this.template).clone();
         cloneTag.find("select").append($(option))
         $(_this).before(cloneTag);
         cloneTag.show();
@@ -320,9 +319,8 @@ fnObj.childrenAuthInfo = axboot.viewExtend({
         var data = {};
         if(this.targetTag.css("display") != "none")
         {
-            $(this.targetTag).find(".childDnrInfo>ul:not(#addDnrInfo)").each(function(){
+            $(this.targetTag).find(".childDnrInfo>ul:not(#addAuthInfo)").each(function(){
                 data = {};
-                data["saveType"] = $(this).attr("saveType");
                 $(this).children("li").find("input,select,textarea").each(function(){
 
                     if($(this).attr("data-ax-path")) {
@@ -333,8 +331,14 @@ fnObj.childrenAuthInfo = axboot.viewExtend({
                     }
 
                 });
-                if(data["name"] && data["name"] != "")
+                if(data["relAuthorityUuid"] != "" && data["relationTypeUuid"] != null){
                     retData.push(data);
+                }else if(data["relAuthorityUuid"] == "" && data["relationTypeUuid"] == null){
+
+                }else{
+                    authInfoValid = false;
+                }
+
             });
         }
         return retData;
@@ -366,4 +370,21 @@ function checkDate(date) {
 
     }
     return result;
+}
+function getFormattedDate(date, isStart) {
+    var day;
+    var tempDate;
+    if (isStart) {
+        date.setDate(date.getDate() - 10);
+        tempDate = date.getDate();
+    } else {
+        tempDate = date.getDate();
+    }
+    day = tempDate.toString();
+
+    var year = date.getFullYear();
+    var month = (1 + date.getMonth()).toString();
+    month = month.length > 1 ? month : '0' + month;
+    day = day.length > 1 ? day : '0' + day;
+    return year + '-' + month + '-' + day;
 }

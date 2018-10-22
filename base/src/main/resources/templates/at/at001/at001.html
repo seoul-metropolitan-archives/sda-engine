@@ -170,14 +170,29 @@
                                                     layout:insert="~{/fragments/table :: tr-td(text='관련정보', style='width: 100%')}">
                                                 <div layout:fragment="wrap">
                                                     <div id="childrenAuthInfoArea">
-                                                        <div class="togl01_show serv_cont childDnrInfo" style="display: block">
-                                                            <ul id="addDnrInfo">
+                                                        <div class="togl01_show childDnrInfo" style="display: block">
+                                                            <ul id="addAuthInfo">
                                                                 <li style="width: 100%;">
                                                                     <a href="#"><b style="color: red">+ Add New</b></a>
                                                                 </li>
                                                             </ul>
                                                         </div>
                                                     </div>
+                                                </div>
+                                            </th:block>
+                                        </div>
+                                    </div>
+                                    <div style="width:100%" class="bgf7 div_tablerow" >
+                                        <div data-ax-tbl class="ax-search-tbl" minWidth="500px" style="border-top: 0px">
+                                            <th:block
+                                                    layout:insert="~{/fragments/table :: tr-td(text='관력기록', style='width: 100%')}">
+                                                <div layout:fragment="wrap">
+                                                    <ul>
+                                                        <li style="width: 100%;">
+                                                            <b style="color: blue">Aggregation : </b>
+                                                            <b style="color: blue">Item : </b>
+                                                        </li>
+                                                    </ul>
                                                 </div>
                                             </th:block>
                                         </div>
