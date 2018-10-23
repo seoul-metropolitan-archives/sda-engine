@@ -36,9 +36,9 @@
             AD_CON_META_SETUP
         WHERE 1=1
         ]]>
-        <if test="null != setCode and '' != setCode">
+        <if test="null != entityType and '' != entityType">
             <![CDATA[
-            AND SET_CODE = #{setCode}
+            AND ENTITY_TYPE = #{entityType}
           ]]>
         </if>
         <if test="null != setName and '' != setName">
@@ -58,6 +58,7 @@
         SELECT
             ADD_META_SEGMENT_UUID AS addMetaSegmentUuid,
             ADD_META_TEMPLATE_SET_UUID AS addMetaTemplateSetUuid,
+            SEQUENCE AS sequence,
             ENTITY_TYPE AS entityType,
             TITLE AS title,
             ADDITIONAL_COLUMN AS additionalColumn,
@@ -84,7 +85,7 @@
         FROM
             AD_CON_META_SEGMENT
         WHERE ADD_META_TEMPLATE_SET_UUID = #{addMetaTemplateSetUuid}
-        ORDER BY ADDITIONAL_COLUMN ASC
+        ORDER BY SEQUENCE, ADDITIONAL_COLUMN ASC
         ]]>
     </select>
     <select id="checkDelete" resultType="int" parameterType="String" statementType="PREPARED">
