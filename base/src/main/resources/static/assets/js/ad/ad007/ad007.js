@@ -259,19 +259,19 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     itemClick: function (data, index) {
         var rowData = fnObj.gridView01.gridObj.getJsonRows();
 
+        // 체크박스 렌더러 radio 기능 동작
         if(index['column'] == "defaultYN"){
             $.each(rowData, function (idx, item) {
-                fnObj.gridView01.gridObj.gridView.commit(true);
                 if(item["addMetaTemplateSetUuid"] != data["addMetaTemplateSetUuid"]){
+                    fnObj.gridView01.gridObj.gridView.commit(true);
                     fnObj.gridView01.gridObj.setValue(idx, 'defaultYN', 'N');
                     fnObj.gridView01.gridObj.dataProvider.setRowState(idx, "updated", true);
                 }
             });
         }
 
-
         if (data.addMetaTemplateSetUuid != null && data.addMetaTemplateSetUuid != "") {
-            if(fnObj.gridView02.getData().length > 0){
+            if(fnObj.gridView02.getData().length > 0) {
                 axDialog.confirm({
                     msg: axboot.getCommonMessage("AA006")
                 }, function () {
@@ -282,9 +282,9 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
                         ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, data);
                     }
                 });
-            } else {
-                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, data);
             }
+        } else {
+            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, data);
         }
     }
 });
