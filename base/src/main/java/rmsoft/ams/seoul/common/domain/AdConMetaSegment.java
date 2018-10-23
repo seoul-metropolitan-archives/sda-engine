@@ -27,7 +27,7 @@ public class AdConMetaSegment extends SimpleJpaModel<AdConMetaSegment.AdConMetaS
 	@Column(name = "ADD_META_TEMPLATE_SET_UUID", length = 36, nullable = false)
 	private String addMetaTemplateSetUuid;
 
-	@Column(name = "SEQUENCE", length = 1, nullable = false)
+	@Column(name = "SEQUENCE", length = 22, nullable = false)
 	private int sequence;
 
 	@Column(name = "ENTITY_TYPE", length = 100, nullable = false)
