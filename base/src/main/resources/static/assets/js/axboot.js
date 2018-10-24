@@ -3549,8 +3549,9 @@ axboot.getMenuParams = function(){
     if(parent.window.fnObj.tabView)
     {
         parent.window.fnObj.tabView.list.forEach(function (_item, idx) {
-            if (_item.status == "on" && _item.menuParams.type != undefined) {
-                menuParams = _item.menuParams;
+            if (_item.status == "on" && _item.menuParams != null) {
+                if( _item.menuParams.type != undefined)
+                    menuParams = _item.menuParams;
             }
         });
     }
