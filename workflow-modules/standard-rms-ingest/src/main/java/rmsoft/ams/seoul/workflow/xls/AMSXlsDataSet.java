@@ -68,7 +68,7 @@ public class AMSXlsDataSet extends AbstractDataSet {
                     tableName = "rc_component_rms_inf";
                 }
 
-                workbook.getSheetAt(i).shiftRows(2, workbook.getSheetAt(i).getLastRowNum(), -1);
+                //workbook.getSheetAt(i).shiftRows(2, workbook.getSheetAt(i).getLastRowNum(), -1);
                 table = new AMSXlsTable(tableName, workbook.getSheetAt(i));
                 _tables.add(tableName, table);
 

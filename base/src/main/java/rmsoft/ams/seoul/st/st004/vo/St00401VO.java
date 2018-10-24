@@ -2,13 +2,14 @@ package rmsoft.ams.seoul.st.st004.vo;
 
 import io.onsemiro.core.vo.BaseVO;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
 
 
 @Data
-@NoArgsConstructor
+@EqualsAndHashCode(callSuper=true)
 public class St00401VO extends BaseVO {
 	private String arrangeContainersResultUuid;
 	private String locationUuid;

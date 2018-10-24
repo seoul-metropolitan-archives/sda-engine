@@ -6,15 +6,11 @@ package rmsoft.ams.seoul.workflow;
 
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.LineIterator;
-import org.apache.commons.lang3.StringUtils;
 import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.operation.DatabaseOperation;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.stereotype.Service;
 import rmsoft.ams.seoul.common.workflow.WorkflowResponse;
@@ -22,15 +18,7 @@ import rmsoft.ams.seoul.utils.SocketMsgUtils;
 import rmsoft.ams.seoul.workflow.xls.AMSXlsDataSet;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 
 @Slf4j
@@ -64,7 +52,7 @@ public class ProcessStndRmsIngest {
         ProcessStndRmsIngest test = new ProcessStndRmsIngest();
         test.setJdbcTemplate(new JdbcTemplate(test.getDataSource()));
 
-        test.setXlsFilePath(SocketMsgUtils.getDbDatesetDir());
+        test.setXlsFilePath(SocketMsgUtils.getDbDatasetDir());
         test.setXlsFileName("20181008_업무관리시스템_철건파일목록.xlsx");
         test.setSchemeName("ams");
 

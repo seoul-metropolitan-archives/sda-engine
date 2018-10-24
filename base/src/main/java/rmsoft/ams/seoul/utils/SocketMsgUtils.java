@@ -35,9 +35,9 @@ public class SocketMsgUtils {
     /**
      * Gets db dateset dir.
      *
-     * @return the db dateset dir
+     * @return the db dateset dirß
      */
-    public static String getDbDatesetDir() {
+    public static String getDbDatasetDir() {
 
         StringBuilder dir = new StringBuilder();
         dir.append("db" + SEPARATOR + "dataset" + SEPARATOR);

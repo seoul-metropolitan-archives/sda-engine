@@ -1,7 +1,5 @@
 package rmsoft.ams.seoul.utils;
 
-import sun.misc.URLClassPath;
-
 import java.io.File;
 import java.io.FileFilter;
 import java.lang.reflect.Field;
@@ -11,6 +9,7 @@ import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("all")
 public class RuntimeJarLoader {
     public static void loadJarIndDir(String dir) {
         try {
@@ -63,7 +62,7 @@ public class RuntimeJarLoader {
 
             URL[] newArray = urlLists.toArray(new URL[urlLists.size()]);
 
-            ucpField.set(ClassLoader.getSystemClassLoader(), new URLClassPath(newArray));
+            ucpField.set(ClassLoader.getSystemClassLoader(), new sun.misc.URLClassPath(newArray));
 
 
             //URLClassPath ucp = (URLClassPath) ucpField.get(urlClassLoader);
