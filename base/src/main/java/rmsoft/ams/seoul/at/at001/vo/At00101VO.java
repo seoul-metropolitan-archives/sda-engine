@@ -26,4 +26,5 @@ public class At00101VO extends BaseVO {
     private String descriptorName;
     private String levelOfDetailUuid;
     private String useYn;
+    private String antiAuthorityUuid;
 }

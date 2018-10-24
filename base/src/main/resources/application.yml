@@ -69,7 +69,7 @@ dip.process:
     #json-file-path: /root/DATA
     #digital-file-path: /root/dip/images/
   batch:
-    enable: true
+    enable: false
     cron: "0 0 5 31 12 *"
   tmp.dir: D:\seoul-ams-repo\dip\tmp\
   digital.file.dir: D:\seoul-ams-repo\dip\tmp\
@@ -94,9 +94,9 @@ taskExecutor:
 
 # Uploaded Archive File Path & Save Contents Path
 repository:
-  upload: /Users/jspark226/devspace/upload
-  contents: /Users/jspark226/devspace/contents
-
+  upload: /Users/younghyunshin/Downloads/upload
+  contents: /Users/younghyunshin/Downloads/contents
+        
 # ONSEMIRO
 onsemiro:
   # App Name

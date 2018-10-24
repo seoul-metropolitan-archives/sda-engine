@@ -7,10 +7,13 @@ var isDetailChanged = false;
 
 var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH: function (caller, act, data) {
+        var sendData = fnObj.formView.getData();
+        sendData["entityType"] = fnObj.formView.getFormData("entityType");
+
         axboot.ajax({
             type: "GET",
             url: "/api/v1/ad/ad007/list",
-            data: $.extend({}, {pageSize: 1000, sort: "eventCode"}, this.formView.getData()),
+            data: $.extend({}, {pageSize: 1000, sort: "eventCode"}, sendData),
             callback: function (res) {
                 if(res.list == null || res.list.length <= 0){
                     fnObj.gridView01.setData([]);
@@ -86,18 +89,25 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             return false;
         }else{
             ACTIONS.dispatch(ACTIONS.TOP_GRID_SAVE);
+            ACTIONS.dispatch(ACTIONS.BOTTOM_GRID_SAVE);
         }
         // ACTIONS.dispatch(ACTIONS.TOP_GRID_DETAIL_PAGE_SAVE);
     },
     TOP_GRID_SAVE: function (caller, act, data) {
         var result = false;
 
+        if(fnObj.gridView01.getData().length == 0) return;
+
+        var sendData = fnObj.gridView01.getData();
+        $.each(sendData, function(idx, item){
+            item["entityType"] = fnObj.formView.getFormData("entityType");
+        });
+
         axboot.call({
             type: "PUT",
             url: "/api/v1/ad/ad007/save",
-            data: JSON.stringify(this.gridView01.getData()),
+            data: JSON.stringify(sendData),
             callback: function (res) {
-                ACTIONS.dispatch(ACTIONS.BOTTOM_GRID_SAVE);
                 result = true;
             }
         })
@@ -110,10 +120,12 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     BOTTOM_GRID_SAVE: function (caller, act, data) {
         var result = false;
 
+        if(fnObj.gridView02.getData().length == 0) return;
+
         axboot.call({
             type: "PUT",
             url: "/api/v1/ad/ad007/saveSub",
-            data: JSON.stringify(this.gridView02.getData()),
+            data: JSON.stringify(fnObj.gridView02.getData()),
             callback: function (res) {
                 fnObj.gridView02.commit();
                 result = true;
@@ -244,9 +256,22 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     {
 
     },
-    itemClick: function (data) {
+    itemClick: function (data, index) {
+        var rowData = fnObj.gridView01.gridObj.getJsonRows();
+
+        // 체크박스 렌더러 radio 기능 동작
+        if(index['column'] == "defaultYN"){
+            $.each(rowData, function (idx, item) {
+                if(item["addMetaTemplateSetUuid"] != data["addMetaTemplateSetUuid"]){
+                    fnObj.gridView01.gridObj.gridView.commit(true);
+                    fnObj.gridView01.gridObj.setValue(idx, 'defaultYN', 'N');
+                    fnObj.gridView01.gridObj.dataProvider.setRowState(idx, "updated", true);
+                }
+            });
+        }
+
         if (data.addMetaTemplateSetUuid != null && data.addMetaTemplateSetUuid != "") {
-            if(fnObj.gridView02.getData().length > 0){
+            if(fnObj.gridView02.getData().length > 0) {
                 axDialog.confirm({
                     msg: axboot.getCommonMessage("AA006")
                 }, function () {
@@ -257,9 +282,9 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
                         ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, data);
                     }
                 });
-            } else {
-                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, data);
             }
+        } else {
+            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, data);
         }
     }
 });

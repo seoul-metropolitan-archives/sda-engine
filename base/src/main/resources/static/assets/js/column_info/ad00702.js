@@ -37,6 +37,7 @@ var ad00702 =
                     text: "Sequence",
                     width: 70,
                     dataType: "commanumber",
+                    textAlignment: "far",
                     editable: true,
                     required: false,
                     disable: false
@@ -72,7 +73,7 @@ var ad00702 =
                     values: axboot.commonCodeFilter("CD149").codeArr,
                     labels: axboot.commonCodeFilter("CD149").nameArr,
                     editable: true,
-                    required: true,
+                    required: false,
                     disable: false
                 },
                 {
@@ -81,8 +82,9 @@ var ad00702 =
                     text: "Input Value",
                     width: 100,
                     dataType: "popup",
-                    popupCode: {
-                        inputMethodUuid: function (checkData) {
+                    popupCode: "PU128",
+                    /*popupCode: {
+                        popupUuid: function (checkData) {
                             var conditionlist = axboot.commonCodeFilter("CD149").codeArr;
                             var retData = "";
                             for (var conditionIndex = 0; conditionIndex < conditionlist.length; conditionIndex++) {
@@ -97,15 +99,15 @@ var ad00702 =
                             }
                             return retData;
                         }
-                    },
+                    },*/
                     sqlColumn : {CODE : "popupUuid"},
                     editable: true,
-                    required: true,
+                    required: false,
                     disable: false
                 },
                 {
                     sortNo: 11,
-                    name: "displayYN",
+                    name: "displayedYN",
                     text: "Display",
                     width: 50,
                     dataType: "check",
@@ -143,6 +145,7 @@ var ad00702 =
                     text: "Display Size",
                     width: 80,
                     dataType: "commanumber",
+                    textAlignment: "far",
                     editable: true,
                     required: false,
                     disable: false

@@ -430,16 +430,24 @@ fnObj.childrenAuthInfo = axboot.viewExtend({
 
         $("#childrenAuthInfoArea").delegate(".searchAuthority","click",function(){
             var parentsTag  = $(this).parents().eq(2);
-            var data = {
-                popupCode : "PU142",
-                preSearch : false,
-                searchData : fnObj.gridView01.getSelectedData().authorityUuid,
-                callback : function(data){
-                    parentsTag.find("input[data-ax-path='relAuthorityUuid']").val(data["AUTHORITY_UUID"])
-                    parentsTag.find("input[data-ax-path='relAuthorityName']").val(data["AUTHORITY_NAME"])
+            axboot.modal.open({
+                modalType: "AUTHORITY_POPUP",
+                header: {
+                    title: "Authority List"
+                },
+                sendData: function () {
+                    return {
+                        antiAuthorityUuid : fnObj.gridView01.getSelectedData().authorityUuid
+                    };
+                },
+                callback: function (data) {
+                    if(this) this.close();
+                    if(data){
+                        parentsTag.find("input[data-ax-path='relAuthorityUuid']").val(data["authorityUuid"])
+                        parentsTag.find("input[data-ax-path='relAuthorityName']").val(data["authorityName"])
+                    }
                 }
-            };
-            ACTIONS.dispatch(ACTIONS.SEARCH_AUTH_INFO,data);
+            });
         });
 
 

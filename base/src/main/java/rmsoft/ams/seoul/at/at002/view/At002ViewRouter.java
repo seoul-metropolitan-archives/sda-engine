@@ -33,5 +33,10 @@ public class At002ViewRouter extends BaseController {
         model.addAttribute("lvDtlUuid", CommonCodeUtils.get("CD164"));
         return "/at/at002/at002";
     }
+    @PostMapping("/at/at002/at002-p01")
+    public String viewPopup(ModelMap model) {
+        model.addAttribute("orgTypeUuid", CommonCodeUtils.get("CD163"));
+        return "/at/at002/at002-p01";
+    }
 }
 

@@ -26,7 +26,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         axboot.ajax({
             type: "GET",
             url: "/api/v1/ig/ig003/01/list01",
-            data: $.extend({},this.formView.getData()),
+            data: $.extend({pageSize:1000},this.formView.getData()),
             callback: function (res) {
                 fnObj.gridView01.resetCurrent();
                 fnObj.gridView01.setData(res.list);

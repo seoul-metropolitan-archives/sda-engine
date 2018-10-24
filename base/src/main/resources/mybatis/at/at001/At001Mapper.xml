@@ -26,6 +26,9 @@
             <if test="authorityName != null">
                 AND  UPPER(Z.AUTHORITY_NAME) LIKE  UPPER('%' || #{authorityName} || '%')
             </if>
+            <if test="antiAuthorityUuid != null">
+                AND  AUTHORITY_UUID != #{antiAuthorityUuid}
+            </if>
         </where>
         ORDER BY AUTHORITY_NO
     </select>
