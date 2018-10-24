@@ -27,7 +27,7 @@
                                     <option th:each="item, index : ${entityTypeList}"
                                             th:value="${item.code}"
                                             th:text="${item.codeName}"
-                                            th:if="${index.index} == 0 "/>
+                                            th:selected="${index.index} == 0"/>
                                 </select>
                             </dd>
                         </dl>
