@@ -27,6 +27,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                     item["contextualMeta"] = cloneItem;
                 }else if(nodeType == "item"){
                     item["raAggregationUuid"] = aggregationUuid;
+                    item["riPublishedStatusUuid"] = axboot.commonCodeValueByCodeName("CD121", "Draft");
                 }
             });
 
@@ -99,7 +100,8 @@ fnObj.popupView = axboot.viewExtend({
 fnObj.gridView01 = axboot.viewExtend(axboot.gridView,{
     tagId : "realgrid01",
     uuidFieldName : "uuid",
-    entityName : "Record Explorer",
+    entityName : "RC_ITEM",
+    noPermission : true,
     initView  : function()
     {
         this.initInstance();

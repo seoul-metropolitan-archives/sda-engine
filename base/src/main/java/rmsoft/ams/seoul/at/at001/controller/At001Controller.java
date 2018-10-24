@@ -12,6 +12,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 import rmsoft.ams.seoul.at.at001.service.At001Service;
 import rmsoft.ams.seoul.at.at001.vo.At00101VO;
+import rmsoft.ams.seoul.at.at001.vo.At00103VO;
+import rmsoft.ams.seoul.at.at001.vo.At001VO;
 import rmsoft.ams.seoul.cl.cl002.vo.Cl00201VO;
 import rmsoft.ams.seoul.cl.cl003.service.Cl003Service;
 import rmsoft.ams.seoul.cl.cl003.vo.Cl00301VO;
@@ -40,18 +42,30 @@ public class At001Controller extends BaseController {
      */
     @GetMapping("/01/list")
     public Responses.PageResponse getAuthorityList(Pageable pageable, RequestParams<At00101VO> requestParams) {
-        Page<At00101VO> pages = at001Service.getAuthorityList(pageable, requestParams);
+        Page<At001VO> pages = at001Service.getAuthorityList(pageable, requestParams);
+        return Responses.PageResponse.of(pages.getContent(), pages);
+    }
 
+    @GetMapping("/02/list")
+    public Responses.PageResponse getAuthorityListForMetaInfo(Pageable pageable, RequestParams<At00101VO> requestParams) {
+        Page<At001VO> pages = at001Service.getAuthorityListForMetaInfo(pageable, requestParams);
+        return Responses.PageResponse.of(pages.getContent(), pages);
+    }
+
+    @GetMapping("/03/list")
+    public Responses.PageResponse getAuthorityMetaInfoList(Pageable pageable, RequestParams<At00103VO> requestParams) {
+        Page<At001VO> pages = at001Service.getAuthorityMetaInfoList(pageable, requestParams);
         return Responses.PageResponse.of(pages.getContent(), pages);
     }
 
     @PutMapping("/01/save")
     @PostMapping
-    public ApiResponse saveAuthority(@RequestBody At00101VO requestParams) {
+    public ApiResponse saveAuthority(@RequestBody At001VO requestParams) {
         ApiResponse apiResponse = at001Service.saveAuthority(requestParams);
         if(apiResponse.getStatus() == -1) {
             throw new ApiException(ApiStatus.SYSTEM_ERROR, apiResponse.getMessage());
         }
         return apiResponse;
     }
+
 }

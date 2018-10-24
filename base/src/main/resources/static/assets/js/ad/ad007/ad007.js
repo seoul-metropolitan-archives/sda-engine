@@ -3,13 +3,17 @@ var selectedItem ; //선택된 그리드 아이템
 var CONFIRM_STATUS = "Confirm";
 var CANCEL_STATUS = "Draft";
 var eventCode = "";
+var isDetailChanged = false;
 
 var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH: function (caller, act, data) {
+        var sendData = fnObj.formView.getData();
+        sendData["entityType"] = fnObj.formView.getFormData("entityType");
+
         axboot.ajax({
             type: "GET",
-            url: "/api/v1/ad/ad007/searchList",
-            data: $.extend({}, {pageSize: 1000, sort: "eventCode"}, this.formView.getData()),
+            url: "/api/v1/ad/ad007/list",
+            data: $.extend({}, {pageSize: 1000, sort: "eventCode"}, sendData),
             callback: function (res) {
                 if(res.list == null || res.list.length <= 0){
                     fnObj.gridView01.setData([]);
@@ -19,6 +23,8 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 fnObj.gridView01.setData(res.list);
                 fnObj.gridView01.resetCurrent();
                 fnObj.gridView01.disabledColumn();
+
+                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1);
             },
             options: {
                 onError: axboot.viewError
@@ -33,20 +39,13 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             return;
 
         fnObj.formView.setFormData("eventNameTxt", selectedData.eventName);
-        fnObj.formView.setFormData("reason", selectedData.reason);
 
         axboot.ajax({
             type: "GET",
-            url: "/api/v1/ad/ad007/detail",
+            url: "/api/v1/ad/ad007/listSub",
             data: $.extend({}, {pageSize: 1000}, fnObj.gridView01.getSelectedData()),
             callback: function (res) {
-                if(!selectedData)
-                    return ;
-
-                fnObj.formView.setFormData("freezeCnt",res.freezeCnt);
-                fnObj.formView.setFormData("aggregationCnt",res.aggregationCnt);
-                fnObj.formView.setFormData("itemCnt",res.itemCnt);
-
+                fnObj.gridView02.setData(res.list);
             },
             options: {
                 onError: axboot.viewError
@@ -90,29 +89,53 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             return false;
         }else{
             ACTIONS.dispatch(ACTIONS.TOP_GRID_SAVE);
+            ACTIONS.dispatch(ACTIONS.BOTTOM_GRID_SAVE);
         }
         // ACTIONS.dispatch(ACTIONS.TOP_GRID_DETAIL_PAGE_SAVE);
     },
     TOP_GRID_SAVE: function (caller, act, data) {
         var result = false;
 
+        if(fnObj.gridView01.getData().length == 0) return;
+
+        var sendData = fnObj.gridView01.getData();
+        $.each(sendData, function(idx, item){
+            item["entityType"] = fnObj.formView.getFormData("entityType");
+        });
+
         axboot.call({
             type: "PUT",
-            url: "/api/v1/ad/ad007/saveItems",
-            data: JSON.stringify(this.gridView01.getData()),
+            url: "/api/v1/ad/ad007/save",
+            data: JSON.stringify(sendData),
             callback: function (res) {
-                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
                 result = true;
             }
         })
-            .done(function () {
-                fnObj.gridView01.commit();
-                axToast.push(axboot.getCommonMessage("AA007"));
-            });
+        .done(function () {
+            fnObj.gridView01.commit();
+            axToast.push(axboot.getCommonMessage("AA007"));
+        });
         return result;
     },
-    TOP_GRID_DETAIL_PAGE_SAVE :function () {
+    BOTTOM_GRID_SAVE: function (caller, act, data) {
+        var result = false;
 
+        if(fnObj.gridView02.getData().length == 0) return;
+
+        axboot.call({
+            type: "PUT",
+            url: "/api/v1/ad/ad007/saveSub",
+            data: JSON.stringify(fnObj.gridView02.getData()),
+            callback: function (res) {
+                fnObj.gridView02.commit();
+                result = true;
+            }
+        })
+        .done(function () {
+            fnObj.gridView02.commit();
+            axToast.push(axboot.getCommonMessage("AA007"));
+        });
+        return result;
     },
     CLOSE_TAB: function (caller, act, data) {
         ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
@@ -140,16 +163,17 @@ fnObj.pageStart = function () {
         }
     });
 
-    $(document).delegate(".under.dfCondition", "click", function () {
-        ACTIONS.dispatch(ACTIONS.MENU_OPEN);
-    });
-
-    $(document).delegate(".under.classRecordCondition", "click", function () {
-        ACTIONS.dispatch(ACTIONS.MENU_OPEN);
+    $.ajax({
+        url: "/assets/js/column_info/ad00702.js",
+        dataType: "script",
+        async: false,
+        success: function () {
+        }
     });
 
     _this.formView.initView();
     _this.gridView01.initView();
+    _this.gridView02.initView();
     ACTIONS.dispatch(ACTIONS.PAGE_SEARCH, this.formView.getData());
 };
 
@@ -175,9 +199,6 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
         var data = this.modelFormatter.getClearData(this.model.get()); // 모델의 값을 포멧팅 전 값으로 치환.
         return $.extend({}, data);
     },
-    setFormData: function (dataPath, value) {
-        this.model.set(dataPath, value);
-    },
     setData: function (data) {
 
         if (typeof data === "undefined") data = this.getDefaultData();
@@ -187,6 +208,12 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
 
         this.model.setModel(data);
         this.modelFormatter.formatting(); // 입력된 값을 포메팅 된 값으로 변경
+    },
+    getFormData: function (dataPath) {
+        return this.model.get(dataPath);
+    },
+    setFormData: function (dataPath, value) {
+        this.model.set(dataPath, value);
     },
     validate: function () {
         var rs = this.model.validate();
@@ -203,69 +230,94 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
     }
 });
 
-/*팝업 헤더*/
+/* Additional Meta Segment Grid*/
 fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     tagId: "realgrid01",
-    primaryKey : "addContextualMetaUuid",
-    entityName: "AD_CONTEXTUAL_METADATA_SETUP",
+    primaryKey : "addMetaTemplateSetUuid",
+    entityName: "AD_CON_META_SETUP",
     initView: function () {
         this.initInstance();
         this.setColumnInfo(ad00701.column_info);
         this.setFixedOptions({
-            colCount: 4
+            colCount: 0
         });
         this.gridObj.setOption({
-            checkBar: {visible: true},
+            //checkBar: {visible: true},
             indicator: {visible: true}
         })
         this.makeGrid();
         this.gridObj.setValidations([]);
-        this.removeRowBeforeEvent(this.cancelDelete);
-        this.gridObj.onCellEdited(this.rowEditHandler);
-        //this.gridObj.itemClick(this.itemClick);
+        this.gridObj.itemClick(this.itemClick);
     },
     getSelectedData : function(){
         return this.gridObj.getSelectedData();
     },
     disabledColumn : function()
     {
-        var state = axboot.commonCodeValueByCodeName("CD152", CONFIRM_STATUS);
-        var isDisable = false;
-        var columns = ["entityType","columnCode","columnValue","metadataEntityType","additionalColumn","inputMethodUuid","inputValue","title","requiredYN","displayYN","useYN"];
 
-        this.gridObj.setCustomCellStyleRows("disable",
-            function(row){
-                if(row["statusUuid"] == state) {
-                    return true;
-                }else {
-                    if(row['metaCnt'] > 0){
-                        return true;
-                    }else{
-                        return false;
+    },
+    itemClick: function (data, index) {
+        var rowData = fnObj.gridView01.gridObj.getJsonRows();
+
+        // 체크박스 렌더러 radio 기능 동작
+        if(index['column'] == "defaultYN"){
+            $.each(rowData, function (idx, item) {
+                if(item["addMetaTemplateSetUuid"] != data["addMetaTemplateSetUuid"]){
+                    fnObj.gridView01.gridObj.gridView.commit(true);
+                    fnObj.gridView01.gridObj.setValue(idx, 'defaultYN', 'N');
+                    fnObj.gridView01.gridObj.dataProvider.setRowState(idx, "updated", true);
+                }
+            });
+        }
+
+        if (data.addMetaTemplateSetUuid != null && data.addMetaTemplateSetUuid != "") {
+            if(fnObj.gridView02.getData().length > 0) {
+                axDialog.confirm({
+                    msg: axboot.getCommonMessage("AA006")
+                }, function () {
+                    if (this.key == "ok") {
+                        ACTIONS.dispatch(ACTIONS.BOTTOM_GRID_SAVE);
+                    } else {
+                        isDetailChanged = false;
+                        ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, data);
                     }
-                }
-            },function(row){
-                if(row["statusUuid"] == state) {
-                    return ["entityType","columnCode","columnValue","metadataEntityType","additionalColumn","inputMethodUuid","inputValue","title","requiredYN","displayYN","useYN"];
-                }else {
-                    return ["entityType","columnCode","columnValue","metadataEntityType","additionalColumn","inputMethodUuid","inputValue"];
-                }
+                });
             }
-        );
+        } else {
+            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, data);
+        }
+    }
+});
+
+/* Additional Meta Setup Grid*/
+fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
+    tagId: "realgrid02",
+    primaryKey : "addMetaSegmentUuid",
+    entityName: "AD_CON_META_SEGMENT",
+    parentsGrid : fnObj.gridView01,
+    parentsUuidFieldName : "addMetaTemplateSetUuid",
+    initView: function () {
+        this.initInstance();
+        this.setColumnInfo(ad00702.column_info);
+        this.setFixedOptions({
+            colCount: 0
+        });
+        this.gridObj.setOption({
+            checkBar: {visible: false},
+            indicator: {visible: true}
+        })
+        this.makeGrid();
+        this.gridObj.setValidations([]);
+        this.gridObj.onCellEdited(this.rowEditHandler);
+    },
+    getSelectedData : function(){
+        return this.gridObj.getSelectedData();
+    },
+    disabledColumn : function()
+    {
     },
     itemClick: function (data) {
 
-    },
-    cancelDelete: function(){
-        var state = axboot.commonCodeValueByCodeName("CD152", CONFIRM_STATUS);
-
-        if(fnObj.gridView01.getSelectedData().statusUuid == state) {
-            axToast.push(axboot.getCommonMessage("AD011_02"));
-
-            this.setRunDel(false);
-        }else{
-            this.setRunDel(true);
-        }
     },
     rowEditHandler: function(gridWrapper,grid){
         var cellInfo = grid.getCurrent();
@@ -290,18 +342,6 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
         }else if(cellInfo.column == 'inputMethodUuid'){
             //gridWrapper.commit();
             gridWrapper.setValue(cellInfo.itemIndex, 'inputValue', "");
-
-            /*if (name == "Text") {
-                gridWrapper.gridView.setColumnProperty("inputValue", "required", false);
-                gridWrapper.gridView.setCellStyles(cellInfo.itemIndex, ["inputValue"], "_default", true);
-
-                delete gridWrapper.requiredColumnList["inputValue"];
-            } else {
-                gridWrapper.gridView.setColumnProperty("inputValue", "required", true);
-                gridWrapper.gridView.setCellStyles(cellInfo.itemIndex, ["inputValue"], "required", true);
-
-                gridWrapper.requiredColumnList["inputValue"] = {name : "inputValue", title : "Input Value"};
-            }*/
         }
     }
 

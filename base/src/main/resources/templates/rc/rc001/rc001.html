@@ -133,18 +133,24 @@
                                                 <ul>
                                                     <li>Code</li>
                                                     <li>
-                                                        <label data-ax-path="itemCode"></label>
-                                                        <input type="hidden" data-ax-path="itemUuid">
+                                                        <label data-ax-path="riItemCode"></label>
+                                                        <input type="hidden" data-ax-path="riItemUuid">
                                                         <input type="hidden" data-ax-path="aggregationUuid">
                                                         <input type="hidden" data-ax-path="descriptionStartDate">
                                                         <input type="hidden" data-ax-path="descriptionEndDate">
+                                                        <input type="hidden" data-ax-path="creationStartDate">
+                                                        <input type="hidden" data-ax-path="creationEndDate">
+                                                        <input type="hidden" data-ax-path="provenance">
+                                                        <input type="hidden" data-ax-path="creator">
+                                                        <input type="hidden" data-ax-path="keyword">
+                                                        <input type="hidden" data-ax-path="referenceCode">
                                                         <input type="hidden" data-ax-path="isItem">
                                                     </li>
                                                 </ul>
                                                 <ul>
                                                     <li>Type</li>
                                                     <li>
-                                                        <select data-ax-path="itemTypeUuid">
+                                                        <select data-ax-path="riTypeUuid">
                                                             <option></option>
                                                             <option th:each="item : ${itemTypeUuid}"
                                                                     th:value="${item.codeDetailUUID}"

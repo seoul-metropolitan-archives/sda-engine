@@ -28,12 +28,6 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 callback: function (res) {
                     if(res != null && res != "undefined")
                     fnObj.formView.setData(res.accessionRecord);
-                    /*fnObj.formView.setFormData("accessionNo",res.accessionRecord["accessionNo"]);
-                    fnObj.formView.setFormData("acquisitionDate",res.accessionRecord["acquisitionDate"]);
-                    fnObj.formView.setFormData("acquisitionSource",res.accessionRecord["acquisitionSource"]);
-                    fnObj.formView.setFormData("acquisitionTypeUuid",res.accessionRecord["acquisitionTypeUuid"]);
-                    fnObj.formView.setFormData("description",res.accessionRecord["description"]);
-                    fnObj.formView.setFormData("notes",res.accessionRecord["notes"]);*/
                     fnObj.childrenDrnInfo.setData(res.childrenDrnInfoList);
                     fnObj.childrenMngInfo.setData(res.childrenMngInfoList);
                 },
@@ -53,36 +47,6 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             },
             options: {
                 onError: axboot.viewError
-            }
-        });
-    },
-    SEARCH_DNRINFO: function (caller, act, data) {
-        var callback = data["callback"];
-        var reqData = ax5.util.deepCopy(data);
-        delete(reqData["callback"]);
-        axboot.modal.open({
-            modalType: "COMMON_POPUP",
-            preSearch : reqData["preSearch"],
-            sendData: function () {
-                return reqData;
-            },
-            callback: function (data) {
-                callback(data);
-            }
-        });
-    },
-    SEARCH_ITEM: function (caller, act, data) {
-        var callback = data["callback"];
-        var reqData = ax5.util.deepCopy(data);
-        delete(reqData["callback"]);
-        axboot.modal.open({
-            modalType: "COMMON_POPUP",
-            preSearch : reqData["preSearch"],
-            sendData: function () {
-                return reqData;
-            },
-            callback: function (data) {
-                callback(data);
             }
         });
     },
@@ -136,8 +100,6 @@ fnObj.pageStart = function () {
     if(data != null && data.type == "edit"){
         axboot.resetMenuParams();
         ACTIONS.dispatch(ACTIONS.PAGE_SEARCH,data);
-    }else{
-        // ACTIONS.dispatch(ACTIONS.PAGE_SEARCH_ACCNO);
     }
 };
 //=================================================================
@@ -213,6 +175,7 @@ fnObj.childrenDrnInfo = axboot.viewExtend({
     "                                                                <input type=text data-ax-path='name' class='cntPrsn'>" +
     "                                                                <input type=text data-ax-path='accessionRecordEtcUuid' style='width: 0px'>" +
     "                                                                <input type=text data-ax-path='accessionRecordUuid' style='width: 0px'>" +
+    "                                                                <input type=text data-ax-path='authorityUuid' style='width: 0px'>" +
     "                                                                <input type=text data-ax-path='typeUuid' style='width: 0px'>" +
     "                                                                <input type=text data-ax-path='__created__' style='width: 0px'>" +
     "                                                                <input type=text data-ax-path='__deleted__' style='width: 0px'>" +
@@ -254,18 +217,26 @@ fnObj.childrenDrnInfo = axboot.viewExtend({
 
         $("#childrenDnrInfoArea").delegate(".searchAggregation","click",function(){
             var parentsTag  = $(this).parents().eq(2);
-            var data = {
-                popupCode : "PU001",
-                preSearch : false,
-                searchData : data,
-                callback : function(data){
-                    parentsTag.find("input[data-ax-path='aggregationUuid']").attr("aggregationUuid",data["AGGREGATION_UUID"])
-                    parentsTag.find("input[data-ax-path='aggregationUuid']").val(data["AGGREGATION_CODE"])
-                    parentsTag.find("input[data-ax-path='title']").val(data["TITLE"])
-                    console.log(data);
+            axboot.modal.open({
+                modalType: "AUTHORITY_POPUP",
+                header: {
+                    title: "Authority List"
+                },
+                sendData: function () {
+                    return {
+                    };
+                },
+                callback: function (data) {
+                    if(this) this.close();
+                    if(data){
+                        parentsTag.find("input[data-ax-path='authorityUuid']").val(data["authorityUuid"]);
+                        parentsTag.find("input[data-ax-path='name']").val(data["authorityName"]);
+                        if("saved" == parentsTag.attr("saveType")){
+                            parentsTag.find("input[data-ax-path='__modified__']").val(true);
+                        }
+                    }
                 }
-            };
-            ACTIONS.dispatch(ACTIONS.SEARCH_DNRINFO,data);
+            });
         });
 
         $(".childDnrInfo").delegate(".btn_del","click",function(){
@@ -276,7 +247,8 @@ fnObj.childrenDrnInfo = axboot.viewExtend({
             else
             {
                 $(this).parents().eq(2).hide();
-                $(this).parents().eq(2).find("input[data-ax-path='__deleted__']").val(false)
+                $(this).parents().eq(2).find("input[data-ax-path='__deleted__']").val(true);
+                $(this).parents().eq(2).find("input[data-ax-path='__modified__']").val(false);
             }
         });
     },
@@ -287,13 +259,13 @@ fnObj.childrenDrnInfo = axboot.viewExtend({
             cloneTag.find("input[data-ax-path='name']").val(data["name"]);
             cloneTag.find("input[data-ax-path='tel']").val(data["tel"]);
             cloneTag.find("input[data-ax-path='address']").val(data["address"]);
+            cloneTag.find("input[data-ax-path='authorityUuid']").val(data["authorityUuid"]);
             cloneTag.find("input[data-ax-path='accessionRecordEtcUuid']").val(data["accessionRecordEtcUuid"]);
             cloneTag.find("input[data-ax-path='accessionRecordUuid']").val(data["accessionRecordUuid"]);
             cloneTag.find("input[data-ax-path='typeUuid']").val(data["typeUuid"]);
             cloneTag.find("input[data-ax-path='__created__']").val(data["__created__"]);
             cloneTag.find("input[data-ax-path='__deleted__']").val(data["__deleted__"]);
             cloneTag.find("input[data-ax-path='__modified__']").val(data["__modified__"]);
-            type = "saved";
         }else{
             cloneTag = $("<ul>").addClass("pdb_10").attr("data-ax-path","saveType").attr("saveType","create").html(this.template);
             cloneTag.find("input[data-ax-path='__created__']").val(true);
@@ -346,6 +318,7 @@ fnObj.childrenMngInfo = axboot.viewExtend({
     "                                                                <input type=text data-ax-path='name' class='crtr'>" +
     "                                                                <input type=text data-ax-path='accessionRecordEtcUuid' style='width: 0px'>" +
     "                                                                <input type=text data-ax-path='accessionRecordUuid' style='width: 0px'>" +
+    "                                                                <input type=text data-ax-path='authorityUuid' style='width: 0px'>" +
     "                                                                <input type=text data-ax-path='typeUuid' style='width: 0px'>" +
     "                                                                <input type=text data-ax-path='tel' style='width: 0px'>" +
     "                                                                <input type=text data-ax-path='address' style='width: 0px'>" +
@@ -378,18 +351,26 @@ fnObj.childrenMngInfo = axboot.viewExtend({
 
         $("#childrenMngInfoArea").delegate(".searchAggregation","click",function(){
             var parentsTag  = $(this).parents().eq(2);
-            var data = {
-                popupCode : "PU001",
-                preSearch : false,
-                searchData : data,
-                callback : function(data){
-                    parentsTag.find("input[data-ax-path='aggregationUuid']").attr("aggregationUuid",data["AGGREGATION_UUID"])
-                    parentsTag.find("input[data-ax-path='aggregationUuid']").val(data["AGGREGATION_CODE"])
-                    parentsTag.find("input[data-ax-path='title']").val(data["TITLE"])
-                    console.log(data);
+            axboot.modal.open({
+                modalType: "AUTHORITY_POPUP",
+                header: {
+                    title: "Authority List"
+                },
+                sendData: function () {
+                    return {
+                    };
+                },
+                callback: function (data) {
+                    if(this) this.close();
+                    if(data){
+                        parentsTag.find("input[data-ax-path='authorityUuid']").val(data["authorityUuid"]);
+                        parentsTag.find("input[data-ax-path='name']").val(data["authorityName"]);
+                        if("saved" == parentsTag.attr("saveType")){
+                            parentsTag.find("input[data-ax-path='__modified__']").val(true);
+                        }
+                    }
                 }
-            };
-            ACTIONS.dispatch(ACTIONS.SEARCH_DNRINFO,data);
+            });
         });
 
         $(".childMngInfo").delegate(".btn_del","click",function(){
@@ -400,6 +381,8 @@ fnObj.childrenMngInfo = axboot.viewExtend({
             else
             {
                 $(this).parents().eq(2).hide();
+                $(this).parents().eq(2).find("input[data-ax-path='__deleted__']").val(true);
+                $(this).parents().eq(2).find("input[data-ax-path='__modified__']").val(false);
             }
         });
     },
@@ -410,6 +393,7 @@ fnObj.childrenMngInfo = axboot.viewExtend({
             cloneTag.find("input[data-ax-path='name']").val(data["name"]);
             cloneTag.find("input[data-ax-path='tel']").val(data["tel"]);
             cloneTag.find("input[data-ax-path='address']").val(data["address"]);
+            cloneTag.find("input[data-ax-path='authorityUuid']").val(data["authorityUuid"]);
             cloneTag.find("input[data-ax-path='accessionRecordEtcUuid']").val(data["accessionRecordEtcUuid"]);
             cloneTag.find("input[data-ax-path='accessionRecordUuid']").val(data["accessionRecordUuid"]);
             cloneTag.find("input[data-ax-path='typeUuid']").val(data["typeUuid"]);
@@ -442,8 +426,10 @@ fnObj.childrenMngInfo = axboot.viewExtend({
                     }
 
                 });
-                if(data["name"] && data["name"] != "")
+                if(data["name"] && data["name"] != ""){
                     retData.push(data);
+                }
+
             });
         }
         return retData;

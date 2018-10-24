@@ -26,8 +26,9 @@ public class Rc004Controller extends MessageBaseController{
      *
      * @param requestParams the request params
      */
-    @GetMapping("/01/saveItemDetails")
-    public Map<String, Object> saveItemDetails(RequestParams<Rc00501VO> requestParams){
+    @PutMapping("/01/saveItemDetails")
+    @PostMapping
+    public Rc00501VO saveItemDetails(@RequestBody Rc00501VO requestParams){
         return rc004Service.saveItemDetails(requestParams);
     }
 

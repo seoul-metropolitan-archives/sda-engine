@@ -172,19 +172,18 @@ public class Rc001Service extends BaseService
 
         for (Map<String,Object> data: list) {
             if(data.get("nodeType").equals("item")){
-                if(data.get("descriptionStartDate") != null)
-                    data.put("descriptionStartDate", data.get("descriptionStartDate").toString().replace("-","").substring(0,8));
-                if(data.get("descriptionEndDate") != null)
-                    data.put("descriptionEndDate", data.get("descriptionEndDate").toString().replace("-","").substring(0,8));
+                if(data.get("riDescriptionStartDate") != null)
+                    data.put("riDescriptionStartDate", data.get("riDescriptionStartDate").toString().replace("-","").substring(0,8));
+                if(data.get("riDescriptionEndDate") != null)
+                    data.put("riDescriptionEndDate", data.get("riDescriptionEndDate").toString().replace("-","").substring(0,8));
                 if(data.get("creationStartDate") != null)
                     data.put("creationStartDate", data.get("creationStartDate").toString().replace("-","").substring(0,8));
                 if(data.get("creationEndDate") != null)
                     data.put("creationEndDate", data.get("creationEndDate").toString().replace("-","").substring(0,8));
 
-                RequestParams<Rc00501VO> requestParams = new RequestParams();
+                Rc00501VO rc00501VO = ModelMapperUtils.map(data, Rc00501VO.class);
 
-                requestParams.setParameterMap(stringToStringArray(data));
-                rc004Service.saveItemDetails(requestParams);
+                rc004Service.saveItemDetails(rc00501VO);
             }else{
                 Rc002VO rc002VO = new Rc002VO();
                 Rc00201VO rc00201VO = ModelMapperUtils.map(data.get("systemMeta"), Rc00201VO.class);
@@ -331,18 +330,17 @@ public class Rc001Service extends BaseService
      */
     @Transactional
     public ApiResponse creItemAndMoveComponent(Rc00501VO params) {
-        RequestParams<Rc00501VO> requestParams = new RequestParams();
+        Rc00501VO rc00501VO = new Rc00501VO();
 
-        requestParams.put("title", params.getRaTitle());
-        requestParams.put("publishedStatusUuid", params.getRiPublishedStatusUuid());
-        requestParams.put("raAggregationUuid", params.getRaAggregationUuid());
+        rc00501VO.setName(params.getRaTitle());
+        rc00501VO.setRiPublishedStatusUuid(params.getRiPublishedStatusUuid());
+        rc00501VO.setRaAggregationUuid(params.getRaAggregationUuid());
 
-
-        Map resultMap = rc004Service.saveItemDetails(requestParams);
+        rc00501VO = rc004Service.saveItemDetails(rc00501VO);
 
         List<Rc00502VO> compList = params.getRc00502VoList();
         for (Rc00502VO comp : compList) {
-            comp.setItemUuid(resultMap.get("itemUuid").toString());
+            comp.setItemUuid(rc00501VO.getRiItemUuid());
         }
 
         // Component 이동
@@ -402,17 +400,17 @@ public class Rc001Service extends BaseService
      */
     @Transactional
     public ApiResponse creItemAndCreComponent(Rc00501VO params) {
-        RequestParams<Rc00501VO> requestParams = new RequestParams();
+        Rc00501VO rc00501VO = new Rc00501VO();
 
-        requestParams.put("title", params.getRaTitle());
-        requestParams.put("publishedStatusUuid", CommonCodeUtils.getCodeDetailUuid("CD121", "Draft"));
-        requestParams.put("raAggregationUuid", params.getRaAggregationUuid());
+        rc00501VO.setName(params.getRaTitle());
+        rc00501VO.setRiPublishedStatusUuid(CommonCodeUtils.getCodeDetailUuid("CD121", "Draft"));
+        rc00501VO.setRaAggregationUuid(params.getRaAggregationUuid());
 
-        Map resultMap = rc004Service.saveItemDetails(requestParams);
+        rc00501VO = rc004Service.saveItemDetails(rc00501VO);
 
         List<Rc00502VO> compList = params.getRc00502VoList();
         for (Rc00502VO comp : compList) {
-            comp.setItemUuid(resultMap.get("itemUuid").toString());
+            comp.setItemUuid(rc00501VO.getRiItemUuid());
             comp.setPublicationStatusUuid(CommonCodeUtils.getCodeDetailUuid("CD121", "Draft"));
             comp.setAreaUuid(CommonCodeUtils.getCodeDetailUuid("CD125", "Attachment"));
             comp.setTypeUuid(CommonCodeUtils.getCodeDetailUuid("CD126", "Draft"));

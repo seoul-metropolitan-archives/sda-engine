@@ -197,7 +197,7 @@
             },
             "AUTHORITY_REGISTER_POPUP" :{
                 width: 900,
-                height: 530,
+                height: 600,
                 iframe: {
                     url: "/at/at001/at001-p01"
                 }
@@ -238,6 +238,12 @@
                     url: "/rc/rc001/p_rc00103"
                 }
             },
+            "AUTHORITY_POPUP": {
+                width: 450,
+                iframe: {
+                    url: "/at/at002/at002-p01"
+                }
+            }
         };
     }
 
