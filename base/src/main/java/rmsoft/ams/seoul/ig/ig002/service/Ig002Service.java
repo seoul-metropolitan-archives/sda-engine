@@ -20,6 +20,7 @@ import rmsoft.ams.seoul.ig.ig002.dao.Ig002Mapper;
 import rmsoft.ams.seoul.ig.ig002.vo.Ig00201VO;
 import rmsoft.ams.seoul.ig.ig002.vo.Ig00202VO;
 import rmsoft.ams.seoul.ig.ig002.vo.Ig002VO;
+import rmsoft.ams.seoul.utils.CommonCodeUtils;
 
 
 import javax.inject.Inject;
@@ -40,6 +41,7 @@ public class Ig002Service extends BaseService {
     public Ig00201VO getIgAccessionNo() {
         return ig002Mapper.getIgAccessionNo();
     }
+
     @Transactional
     public Ig002VO getIgAccessionRecord(RequestParams<Ig00201VO> requestParams) {
         Ig002VO ig002VO = new Ig002VO();
@@ -85,13 +87,12 @@ public class Ig002Service extends BaseService {
 
         }else{
             uuid = igAccessionRecord.getAccessionRecordUuid();
-            if(igAccessionRecord.isModified()){
-                IgAccessionRecord before = igAccessionRecordRepository.findOne(igAccessionRecord.getId());
-                igAccessionRecord.setInsertDate(before.getInsertDate());
-                igAccessionRecord.setInsertUuid(before.getInsertUuid());
-                igAccessionRecord.setAcquisitionDate(acquisitionDate);
-                igAccessionRecordRepository.save(igAccessionRecord);
-            }
+            IgAccessionRecord before = igAccessionRecordRepository.findOne(igAccessionRecord.getId());
+            igAccessionRecord.setInsertDate(before.getInsertDate());
+            igAccessionRecord.setInsertUuid(before.getInsertUuid());
+            igAccessionRecord.setAcquisitionDate(acquisitionDate);
+            igAccessionRecordRepository.save(igAccessionRecord);
+
         }
         if(isCreate){
             if(null != childrenDrnInfoList){
@@ -99,7 +100,7 @@ public class Ig002Service extends BaseService {
                 {
                     child.setAccessionRecordEtcUuid(UUIDUtils.getUUID());
                     child.setAccessionRecordUuid(uuid);
-                    child.setAuthorityUuid("drn");
+                    child.setTypeUuid(CommonCodeUtils.getCodeDetailUuid("CD151", "Donor"));
                     igAccessionRecordDetailRepository.save(child);
                 }
             }
@@ -108,14 +109,14 @@ public class Ig002Service extends BaseService {
                 {
                     child.setAccessionRecordEtcUuid(UUIDUtils.getUUID());
                     child.setAccessionRecordUuid(uuid);
-                    child.setAuthorityUuid("mng");
+                    child.setTypeUuid(CommonCodeUtils.getCodeDetailUuid("CD151", "Creator"));
                     igAccessionRecordDetailRepository.save(child);
                 }
             }
         }else{
             if(null != childrenDrnInfoList){
                 IgAccessionRecordDetail before = null;
-                for(IgAccessionRecordDetail child : childrenMngInfoList)
+                for(IgAccessionRecordDetail child : childrenDrnInfoList)
                 {
                     if(child.isDeleted()){
                         igAccessionRecordDetailRepository.delete(child.getId());
@@ -123,10 +124,9 @@ public class Ig002Service extends BaseService {
                         if(child.isCreated()){
                             child.setAccessionRecordEtcUuid(UUIDUtils.getUUID());
                             child.setAccessionRecordUuid(uuid);
-                            child.setAuthorityUuid("drn");
+                            child.setTypeUuid(CommonCodeUtils.getCodeDetailUuid("CD151", "Donor"));
                         }else if(child.isModified()){
                             before = igAccessionRecordDetailRepository.findOne(child.getId());
-                            child.setAuthorityUuid("drn");
                             child.setInsertDate(before.getInsertDate());
                             child.setInsertUuid(before.getInsertUuid());
                         }
@@ -144,10 +144,9 @@ public class Ig002Service extends BaseService {
                         if(child.isCreated()){
                             child.setAccessionRecordEtcUuid(UUIDUtils.getUUID());
                             child.setAccessionRecordUuid(uuid);
-                            child.setAuthorityUuid("mng");
+                            child.setTypeUuid(CommonCodeUtils.getCodeDetailUuid("CD151", "Creator"));
                         }else if(child.isModified()){
                             before = igAccessionRecordDetailRepository.findOne(child.getId());
-                            child.setAuthorityUuid("mng");
                             child.setInsertDate(before.getInsertDate());
                             child.setInsertUuid(before.getInsertUuid());
                         }

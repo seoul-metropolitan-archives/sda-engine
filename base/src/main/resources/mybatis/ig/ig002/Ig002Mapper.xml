@@ -43,7 +43,7 @@
         UPDATE_DATE as updateDate
         FROM IG_ACCESSION_RECORD_DETAIL
         WHERE ACCESSION_RECORD_UUID = #{accessionRecordUuid}
-        AND AUTHORITY_UUID = 'drn'
+        AND FC_AD_CODE_NM (TYPE_UUID) = 'Donor'
     </select>
     <select id="getChildrenMngInfoList" resultType="Ig00202VO" statementType="PREPARED">
         SELECT
@@ -60,6 +60,6 @@
         UPDATE_DATE as updateDate
         FROM IG_ACCESSION_RECORD_DETAIL
         WHERE ACCESSION_RECORD_UUID = #{accessionRecordUuid}
-        AND AUTHORITY_UUID = 'mng'
+        AND FC_AD_CODE_NM (TYPE_UUID) = 'Creator'
     </select>
 </mapper>

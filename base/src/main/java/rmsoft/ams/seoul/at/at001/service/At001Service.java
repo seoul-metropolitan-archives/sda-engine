@@ -86,9 +86,12 @@ public class At001Service extends BaseService {
         List<At00101VO> at00101VOList = null;
         at00101VO.setAuthorityTypeUuid(requestParams.getString("authorityTypeUuid"));
         at00101VO.setAuthorityName(requestParams.getString("authorityName"));
+        at00101VO.setAntiAuthorityUuid(requestParams.getString("antiAuthorityUuid"));
+
         at00101VOList = at001Mapper.getAuthorityList(at00101VO);
         return filter(at00101VOList, pageable, "", At001VO.class);
     }
+
 
     @Transactional
     public Page<At001VO> getAuthorityMetaInfoList(Pageable pageable, RequestParams<At00103VO> requestParams) {
