@@ -29,8 +29,8 @@ public class Ad001Controller extends MessageBaseController {
     @Qualifier("AD001ServiceImpl")
     private Ad001Service service;
 
-//    @Autowired
-//    private DIPBatchExecutor dipBatchExecutor;
+    @Autowired
+    private DIPBatchExecutor dipBatchExecutor;
 
     @Autowired
     private RestartEndpoint restartEndpoint;
@@ -104,7 +104,7 @@ public class Ad001Controller extends MessageBaseController {
     public Responses.ListResponse getEnviromentList1(@RequestBody Ad00101VO param) {
 
         // Batch 테스트
-//        dipBatchExecutor.runDipProcess();
+        dipBatchExecutor.runDipProcess();
 
 
         // Jar module unlading

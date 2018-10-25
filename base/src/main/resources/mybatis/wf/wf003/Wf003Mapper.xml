@@ -14,6 +14,7 @@
             <case resultType="rmsoft.ams.seoul.common.vo.ComboColumnVO" value="combo"></case>
             <case resultType="rmsoft.ams.seoul.common.vo.DateColumnVO" value="date"></case>
             <case resultType="rmsoft.ams.seoul.common.vo.PopupColumnVO" value="popup"></case>
+            <case resultType="rmsoft.ams.seoul.common.vo.FileColumnVO" value="file"></case>
         </discriminator>
     </resultMap>
 

@@ -1490,6 +1490,11 @@ GridWrapper.prototype.setColumnInfo = function(list) {
                 obj.button = "image";
                 obj.imageButtons = $.extend({},_this.defaultStyle.data.imageButtons,data.imageButtons);
                 break;
+            case "file":
+                obj.button = "image";
+                obj.imageButtons = $.extend({},_this.defaultStyle.data.imageButtons,data.imageButtons);
+                obj.buttonVisibility = "always";
+                break;
             case "icon":
                 obj.renderer = {type : "icon",textVisible : false}
                 obj.dynamicStyles = data.dynamicStyles;
@@ -1651,7 +1656,7 @@ GridWrapper.prototype.setAppendValiate = function(func) {
 GridWrapper.prototype.removeRow = function()
 {
     if(runDel)
-        thisÎ.gridView.getDataProvider().removeRow(this.gridView.getCurrent().dataRow);
+        this.gridView.getDataProvider().removeRow(this.gridView.getCurrent().dataRow);
 }
 
 /**

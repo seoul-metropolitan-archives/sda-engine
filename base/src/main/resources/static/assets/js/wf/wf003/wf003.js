@@ -196,6 +196,89 @@ fnObj.pageStart = function () {
         ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
     }
 
+    var API_SERVER = CONTEXT_PATH;
+
+    UPLOAD = new ax5.ui.uploader({
+        debug: false,
+        target: $('[data-ax5uploader="upload1"]'),
+        form: {
+            action: "/api/v1/common/upload",
+            fileName: "file"
+        },
+        multiple: false,
+        manualUpload: false,
+        progressBox: true,
+        progressBoxDirection: "left",
+        dropZone: {
+            target: $('[data-uploaded-box="upload1"]'),
+            ondrop: function () {
+                axDialog.confirm({
+                    title: "Seoul-AMS",
+                    msg: "입수정보를 작성해야합니다. 작성하셨습니까?"
+                }, function () {
+                    if (this.key == "ok") {
+                        ACTIONS.dispatch(ACTIONS.PAGE_INGEST);
+                    }else{
+                        ACTIONS.dispatch(ACTIONS.PAGE_INGEST_LIST);
+                    }
+                    $(["data-pregressbox-btn='abort'"]).click(function(){
+                        $('[data-ax5uploader="upload1"]').hide();
+                    });
+                });
+            },
+            ondragover: function () {
+                $('[data-ax5uploader="upload1"]').show();
+            },
+            ondragout: function () {
+                $('[data-ax5uploader="upload1"]').hide();
+            },
+            onclick: function () {
+                $('[data-ax5uploader="upload1"]').hide();
+            }
+        },
+        validateSelectedFiles: function () {
+
+            if (this.uploadedFiles.length + this.selectedFiles.length > 1) {
+                axDialog.alert({
+                    theme: "primary",
+                    msg: "파일은 1개이상 업로드할 수 없습니다."
+                });
+                return false;
+            }
+            return true;
+        },
+        onuploaderror: function () {
+            $('[data-ax5uploader="upload1"]').hide();
+            axDialog.alert({
+                title: 'Onsemiro Uploader',
+                theme: "default",
+                msg: this.error.message
+            });
+        },
+        onuploaded: function () {
+        },
+        onuploadComplete: function () {
+            $('[data-ax5uploader="upload1"]').hide();
+            fnObj.gridView03.gridObj.setValue(0,'tempFile',UPLOAD.uploadedFiles[0].fileName)
+            axToast.push("File Upload Completed : onuploadComplete");
+            UPLOAD.removeFileAll();
+        },
+        abortCallback: function(){
+            $('[data-ax5uploader="upload1"]').hide();
+            axToast.push("업로드를 취소하였습니다.");
+        },
+        onprogress: function () {
+            if( $('[data-ax5uploader="upload1"]').is($('[data-ax5uploader="upload1"]').show()) ) {
+                return
+            }else{
+                $('[data-ax5uploader="upload1"]').show();
+            }
+        },
+        onDrop: function(){
+            $('[data-ax5uploader="upload1"]').show();
+        }
+    });
+
 };
 
 fnObj.formView = axboot.viewExtend(axboot.formView, {
@@ -349,7 +432,6 @@ fnObj.gridView03 = axboot.viewExtend(axboot.gridView, {
         var _this = this;
 
         this.clearData();
-
         if (defaultParameter[jobUuid]) {
             // 이미 저장되어 있는 값이 있는 경우 해당 값으로 grid를 만들어준다.
             drawParameterGrid(defaultParameter[fnObj.gridView02.getCurrentData().jobUuid]);
@@ -385,12 +467,27 @@ fnObj.gridView03 = axboot.viewExtend(axboot.gridView, {
     getData: function () {
         return this.gridObj.getJsonRows();
     },
+    itemClick: function (data,index){
+        if(index.fieldName == "tempFile"){
+            // event.preventDefault();
+            var aa = $('.btn-primary').trigger('click');
+            // if(UPLOAD.selectedFiles)
+            // $('[data-ax5uploader="upload1"]').show();
+            //
+            // setInterval(function () {
+            //     fnObj.activityTimerView.print();
+            // }, 1000);
+
+        }
+    },
     clearData: function () {
         $("#realgrid03").empty();
     }
 });
 
 drawParameterGrid = function (res) {
+    var obj =  {renderer: {type: "imageButton", text: "Run",imageUrl: "/assets/images/ams/btn_run_normal.png",hoverUrl: "/assets/images/ams/btn_run_hover.png", activeUrl: "/assets/images/ams/btn_run_hover.png"}}
+    var data = {schemeName :"D",tempFile :"",xlsFileName : "",xlsFilePath:""}
     if (res.columnInfo.length > 0) {
         for (var i = 0; i < res.columnInfo.length; i++) {
             if (res.columnInfo[i]["dataType"] == "combo") {
@@ -405,7 +502,7 @@ drawParameterGrid = function (res) {
         fnObj.gridView03.gridObj.setColumnInfo(res.columnInfo);
         fnObj.gridView03.gridObj.makeGrid();
         fnObj.gridView03.gridObj.addRow();
-
+        fnObj.gridView03.gridObj.itemClick(fnObj.gridView03.itemClick);
         fnObj.gridView03.gridObj.gridView.resetSize();
         fnObj.gridView03.gridObj.gridView.commit(true);
         fnObj.gridView03.commit();

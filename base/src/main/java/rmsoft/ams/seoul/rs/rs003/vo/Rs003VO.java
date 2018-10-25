@@ -3,6 +3,7 @@ package rmsoft.ams.seoul.rs.rs003.vo;
 import io.onsemiro.core.vo.BaseVO;
 import io.onsemiro.utils.ModelMapperUtils;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Page;
 
@@ -13,7 +14,7 @@ import static java.util.stream.Collectors.toList;
 
 
 @Data
-@NoArgsConstructor
+@EqualsAndHashCode(callSuper=true)
 public class Rs003VO extends BaseVO {
 
 	private String recordScheduleUuid;
