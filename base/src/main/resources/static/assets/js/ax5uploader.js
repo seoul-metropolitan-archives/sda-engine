@@ -168,7 +168,8 @@
 
                 // selectedFiles에 현재 파일 정보 담아두기
                 if (length in files) {
-                    this.selectedFiles = files;
+                    // this.selectedFiles = files;
+                    this.selectedFiles = U.toArray(files);
                 } else {
                     this.selectedFiles = [files];
                 }
