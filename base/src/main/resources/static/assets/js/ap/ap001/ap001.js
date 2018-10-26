@@ -312,6 +312,21 @@ fnObj.searchView = axboot.viewExtend(axboot.formView, {
             }
         };
 
+        $('#excelIngest').on("click", function(){
+            axboot
+                .call({
+                    type: "PUT",
+                    url: "/api/v1/wf999/01/excel",
+                    data: JSON.stringify({}),
+                    callback: function (res) {
+                        UPLOAD.uploadedFiles = [];
+                        axToast.push(axboot.getCommonMessage("AA007"));
+                    }
+                })
+                .done(function () {
+
+                });
+        });
     },
     getData: function () {
         var data = this.modelFormatter.getClearData(this.model.get()); // 모델의 값을 포멧팅 전 값으로 치환.

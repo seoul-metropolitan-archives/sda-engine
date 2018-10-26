@@ -405,6 +405,7 @@ public class Rc001Service extends BaseService
         rc00501VO.setName(params.getRaTitle());
         rc00501VO.setRiPublishedStatusUuid(CommonCodeUtils.getCodeDetailUuid("CD121", "Draft"));
         rc00501VO.setRaAggregationUuid(params.getRaAggregationUuid());
+        rc00501VO.setExtraMetadata(params.getExtraMetadata());
 
         rc00501VO = rc004Service.saveItemDetails(rc00501VO);
 

@@ -30,8 +30,8 @@ public class AdConMetaSegment extends SimpleJpaModel<AdConMetaSegment.AdConMetaS
 	@Column(name = "SEQUENCE", length = 22, nullable = false)
 	private int sequence;
 
-	@Column(name = "ENTITY_TYPE", length = 100, nullable = false)
-	private String entityType;
+	@Column(name = "NAME", length = 500, nullable = false)
+	private String name;
 
 	@Column(name = "TITLE", length = 500, nullable = false)
 	private String title;

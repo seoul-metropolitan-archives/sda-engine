@@ -89,6 +89,9 @@ public class RcItemCon extends SimpleJpaModel<RcItemCon.RcItemConId> {
     @Column(name = "ADD_METADATA10", length = 100, nullable = true)
     @Comment(value = "")
     private String addMetadata10;
+    @Column(name = "EXTRA_METADATA", length = 4000, nullable = true)
+    @Comment(value = "")
+    private String extraMetadata;
 
     @Override
     public RcItemCon.RcItemConId getId() { return RcItemCon.RcItemConId.of(itemUuid); }

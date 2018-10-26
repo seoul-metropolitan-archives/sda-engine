@@ -195,14 +195,17 @@ public class Rc002Service extends BaseService
     @Transactional
     public ApiResponse saveIngestAggregation(Rc002VO data) {
 
-        RcAggregation rcAggregation = null;
-        rcAggregation = ModelMapperUtils.map(data.getSystemMeta(), RcAggregation.class);
-
+        RcAggregation rcAggregation = ModelMapperUtils.map(data.getSystemMeta(), RcAggregation.class);
         String aggregationCode = jdbcTemplate.queryForObject("select fc_rc_aggregation_code from dual", String.class);
         rcAggregation.setAggregationCode(aggregationCode);
         rcAggregation.setPublishedStatusUuid(CommonCodeUtils.getCodeDetailUuid("CD121", "Draft"));
         rcAggregation.setTypeUuid(CommonCodeUtils.getCodeDetailUuid("CD127", "Temporary"));
         rcAggregationRepository.save(rcAggregation);
+
+        if(data.getContextualMeta() != null){
+            RcAggregationCon rcAggregationCon = ModelMapperUtils.map(data.getContextualMeta(), RcAggregationCon.class);
+            rcAggregationConRepository.save(rcAggregationCon);
+        }
 
         return ApiResponse.of(ApiStatus.SUCCESS,"SUCCESS");
     }

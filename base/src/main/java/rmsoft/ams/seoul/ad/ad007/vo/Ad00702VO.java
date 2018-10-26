@@ -15,7 +15,7 @@ public class Ad00702VO extends BaseVO {
 
 	private int sequence;
 
-	private String entityType;
+	private String name;
 
 	private String title;
 
