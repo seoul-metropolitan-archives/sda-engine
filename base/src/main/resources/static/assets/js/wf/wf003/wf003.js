@@ -260,7 +260,7 @@ fnObj.pageStart = function () {
         onuploadComplete: function () {
             $('[data-ax5uploader="upload1"]').hide();
             fnObj.gridView03.gridObj.setValue(0,'tempFile',UPLOAD.uploadedFiles[0].fileName)
-            axToast.push("File Upload Completed : onuploadComplete");
+            axToast.push("File Upload Complete");
             UPLOAD.removeFileAll();
         },
         abortCallback: function(){
@@ -268,14 +268,12 @@ fnObj.pageStart = function () {
             axToast.push("업로드를 취소하였습니다.");
         },
         onprogress: function () {
-            if( $('[data-ax5uploader="upload1"]').is($('[data-ax5uploader="upload1"]').show()) ) {
-                return
-            }else{
+
+            if(!($('[data-ax5uploader="upload1"]').is($('[data-ax5uploader="upload1"]').show()))) {
                 $('[data-ax5uploader="upload1"]').show();
+            }else{
+                //$('[data-ax5uploader="upload1"]').show();
             }
-        },
-        onDrop: function(){
-            $('[data-ax5uploader="upload1"]').show();
         }
     });
 
