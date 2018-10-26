@@ -97,6 +97,8 @@ public class Rc00501VO extends BaseVO {
 
     private String notes1;
 
+    private String extraMetadata;
+
     private List<Rc00502VO> rc00502VoList;
 
     /**

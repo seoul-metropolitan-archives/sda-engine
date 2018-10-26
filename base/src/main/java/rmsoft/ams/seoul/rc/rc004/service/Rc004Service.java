@@ -107,6 +107,7 @@ public class Rc004Service extends BaseService{
         rcItemCon.setKeyword(requestParams.getKeyword());
         rcItemCon.setUpdateDate(Timestamp.valueOf(DateUtils.convertToString(LocalDateTime.now(), DateUtils.DATE_TIME_PATTERN)));
         rcItemCon.setUpdateUuid(SessionUtils.getCurrentLoginUserUuid());
+        rcItemCon.setExtraMetadata(requestParams.getExtraMetadata());
 
         rcItemConRepository.save(rcItemCon);
 

@@ -282,6 +282,9 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
                         ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, data);
                     }
                 });
+            }else{
+                isDetailChanged = false;
+                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, data);
             }
         } else {
             ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, data);

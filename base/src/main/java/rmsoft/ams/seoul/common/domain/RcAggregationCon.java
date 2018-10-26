@@ -37,15 +37,19 @@ public class RcAggregationCon extends SimpleJpaModel<RcAggregationCon.RcAggregat
     @Column(name = "PROVENANCE", length = 500, nullable = true)
     @Comment(value = "")
     private String provenance;
+
     @Column(name = "CREATOR", length = 500, nullable = true)
     @Comment(value = "")
     private String creator;
+
     @Column(name = "CREATION_START_DATE", length = 8, nullable = true)
     @Comment(value = "")
     private String creationStartDate;
+
     @Column(name = "CREATION_END_DATE", length = 8, nullable = true)
     @Comment(value = "")
     private String creationEndDate;
+
     /*@Column(name = "ADD_METADATA01", length = 100, nullable = true)
     @Comment(value = "")
     private String addMetadata01;
@@ -76,6 +80,9 @@ public class RcAggregationCon extends SimpleJpaModel<RcAggregationCon.RcAggregat
     @Column(name = "ADD_METADATA10", length = 100, nullable = true)
     @Comment(value = "")
     private String addMetadata10;*/
+    @Column(name = "EXTRA_METADATA", length = 4000, nullable = true)
+    @Comment(value = "extraMetadata")
+    private String extraMetadata;
 
     @Override
     public RcAggregationCon.RcAggregationConId getId() { return RcAggregationCon.RcAggregationConId.of(aggregationUuid); }

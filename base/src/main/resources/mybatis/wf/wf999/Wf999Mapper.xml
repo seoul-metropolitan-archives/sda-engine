@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  ~ Copyright (c) 2017. RMSoft Co.,Ltd. All rights reserved
+  -->
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="rmsoft.ams.seoul.wf.wf999.dao.Wf999Mapper">
+    <select id="findAllAggregationInf" resultType="Map" parameterType="String" statementType="PREPARED">
+        SELECT
+            *
+        FROM
+            RC_AGGREGATION_RMS_INF
+       <where>
+            <if test="titleYN != null">
+                TITLE_YN = #{titleYN}
+            </if>
+       </where>
+        ORDER BY TITLE_YN DESC, FOLDER_ID ASC
+    </select>
+
+    <select id="findAllItemInf" resultType="Map" parameterType="String" statementType="PREPARED">
+        SELECT
+            *
+        FROM
+          RC_ITEM_RMS_INF
+        <where>
+            <if test="folderId != null">
+                FOLDER_ID = #{folderId}
+            </if>
+        </where>
+        ORDER BY TITLE_YN DESC, FOLDER_ID ASC, RECORD_ID ASC
+    </select>
+
+    <select id="findAllComponentInf" resultType="Map" parameterType="String" statementType="PREPARED">
+        SELECT
+          *
+        FROM
+          RC_COMPONENT_RMS_INF
+        <where>
+            <if test="recordId != null">
+                RECORD_ID = #{recordId}
+            </if>
+        </where>
+        ORDER BY TITLE_YN DESC, RECORD_ID ASC
+    </select>
+</mapper>

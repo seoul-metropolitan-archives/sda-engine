@@ -53,6 +53,16 @@ var ad00702 =
                     disable: false
                 },
                 {
+                    sortNo: 5,
+                    name: "name",
+                    text: "Name",
+                    width: 120,
+                    dataType: "text",
+                    editable: true,
+                    required: true,
+                    disable: false
+                },
+                {
                     sortNo: 7,
                     name: "additionalColumn",
                     text: "Column",
@@ -65,41 +75,12 @@ var ad00702 =
                     disable: false
                 },
                 {
-                    sortNo: 8,
-                    width:90,
-                    name: "inputMethodUuid",
-                    text: "Input Method",
-                    dataType: "combo",
-                    values: axboot.commonCodeFilter("CD149").codeArr,
-                    labels: axboot.commonCodeFilter("CD149").nameArr,
-                    editable: true,
-                    required: false,
-                    disable: false
-                },
-                {
                     sortNo: 9,
                     name: "popupUuid",
                     text: "Input Value",
                     width: 100,
                     dataType: "popup",
                     popupCode: "PU128",
-                    /*popupCode: {
-                        popupUuid: function (checkData) {
-                            var conditionlist = axboot.commonCodeFilter("CD149").codeArr;
-                            var retData = "";
-                            for (var conditionIndex = 0; conditionIndex < conditionlist.length; conditionIndex++) {
-
-                                if (checkData == conditionlist[conditionIndex]) {
-                                    //Input Method의 값에 따라서 동적으로 변경된다.
-                                    if ("Combo" == axboot.commonCodeFilter("CD149").nameArr[conditionIndex]) {
-                                        retData = "PU128";
-                                        break;
-                                    }
-                                }
-                            }
-                            return retData;
-                        }
-                    },*/
                     sqlColumn : {CODE : "popupUuid"},
                     editable: true,
                     required: false,

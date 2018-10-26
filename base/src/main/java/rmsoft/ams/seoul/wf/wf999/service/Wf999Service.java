@@ -7,6 +7,8 @@ package rmsoft.ams.seoul.wf.wf999.service;
 import io.onsemiro.core.api.response.ApiResponse;
 import io.onsemiro.core.code.ApiStatus;
 import io.onsemiro.core.domain.BaseService;
+import io.onsemiro.utils.DateUtils;
+import io.onsemiro.utils.JsonUtils;
 import io.onsemiro.utils.UUIDUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
@@ -18,17 +20,22 @@ import org.springframework.transaction.annotation.Transactional;
 import rmsoft.ams.seoul.rc.rc001.service.Rc001Service;
 import rmsoft.ams.seoul.rc.rc002.service.Rc002Service;
 import rmsoft.ams.seoul.rc.rc002.vo.Rc00201VO;
+import rmsoft.ams.seoul.rc.rc002.vo.Rc00202VO;
 import rmsoft.ams.seoul.rc.rc002.vo.Rc002VO;
 import rmsoft.ams.seoul.rc.rc005.vo.Rc00501VO;
 import rmsoft.ams.seoul.rc.rc005.vo.Rc00502VO;
 import rmsoft.ams.seoul.utils.ArchiveUtils;
+import rmsoft.ams.seoul.wf.wf999.dao.Wf999Mapper;
 
+import javax.inject.Inject;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * The type Wf 999 service.
@@ -43,10 +50,13 @@ public class Wf999Service extends BaseService {
     private String contentsPath;
 
     @Autowired
-    private Rc002Service rc002Service;
+    private Rc001Service rc001Service;
 
     @Autowired
-    private Rc001Service rc001Service;
+    private Rc002Service rc002Service;
+
+    @Inject
+    private Wf999Mapper wf999Mapper;
 
     /**
      * Extract archive api response.
@@ -188,6 +198,111 @@ public class Wf999Service extends BaseService {
         }
     }
 
+    /**
+     * 표준RMS Ingest Workflow by Excel
+     * @return
+     */
+    @Transactional
+    public ApiResponse workflowIngestExcel() {
+        ArrayList<Map> aggList = wf999Mapper.findAllAggregationInf();
+        ArrayList<Map> itemList = wf999Mapper.findAllItemInf();
+        ArrayList<Map> compList = wf999Mapper.findAllComponentInf();
+
+        Map aggHeader = aggList.get(0);
+        Map itemHeader = itemList.get(0);
+        Map compHeader = compList.get(0);
+
+        aggList.remove(0);
+        itemList.remove(0);
+        compList.remove(0);
+
+        try {
+            // 최상위 Aggregation 생성
+            String rootAggregationUUID = UUIDUtils.getUUID();
+
+            Rc002VO rc002VO = new Rc002VO();
+            Rc00201VO rc00201VO = new Rc00201VO();
+            rc00201VO.setAggregationUuid(rootAggregationUUID);
+            rc00201VO.setParentsAggregationUuid("");
+            rc00201VO.setTitle("표준RMS_" + DateUtils.getNow(DateUtils.DATE_PATTERN));
+
+            rc002VO.setSystemMeta(rc00201VO);
+            rc002Service.saveIngestAggregation(rc002VO);
+
+            int index = 0;
+
+            for(Map aggregation : aggList){
+                rc002VO = new Rc002VO();
+                rc00201VO = new Rc00201VO();
+
+                String aggregationUUID = UUIDUtils.getUUID();
+                rc00201VO.setAggregationUuid(aggregationUUID);
+                rc00201VO.setParentsAggregationUuid(rootAggregationUUID);
+                rc00201VO.setTitle(aggregation.get("TITLE").toString());
+
+                Rc00202VO rc00202VO = new Rc00202VO();
+                rc00202VO.setAggregationUuid(aggregationUUID);
+                rc00202VO.setExtraMetadata(generateExtraMeta(aggHeader, aggregation, "aggregation"));     //JSON 추출
+
+                rc002VO.setSystemMeta(rc00201VO);
+                rc002VO.setContextualMeta(rc00202VO);
+
+                rc002Service.saveIngestAggregation(rc002VO);
+
+                //if(index != 0) continue;
+
+                for(int itemIdx=0; itemList.size()>itemIdx; itemIdx++){
+                    Map item = itemList.get(itemIdx);
+                    if(item.get("FOLDER_ID").equals(aggregation.get("FOLDER_ID"))){
+                        // item 정보생성
+                        Rc00501VO rc00501VO = new Rc00501VO();
+                        rc00501VO.setRaTitle(item.get("TITLE").toString());
+                        rc00501VO.setRaAggregationUuid(aggregationUUID);
+                        rc00501VO.setExtraMetadata(generateExtraMeta(itemHeader, item, "item"));     //JSON 추출
+
+                        // component 정보생성
+                        List<Rc00502VO> componentsList = new ArrayList<Rc00502VO>();
+                        for(int compIdx=0; compList.size()>compIdx; compIdx++){
+                            Map component = compList.get(compIdx);
+                            if(item.get("RECORD_ID").equals(component.get("RECORD_ID"))) {
+                                Rc00502VO rc00502VO = new Rc00502VO();
+                                rc00502VO.setTitle(getFileNameNoExt(component.get("FILE_NAME").toString()));
+                                rc00502VO.setContentsSize(Integer.parseInt(component.get("FILE_SIZE").toString()));
+                                rc00502VO.setFilePath(component.get("FILE_PATH").toString().replace(component.get("FILE_NAME").toString(), ""));
+                                rc00502VO.setFileName(component.get("FILE_NAME").toString());
+                                rc00502VO.setOriginalFileName(component.get("FILE_NAME").toString());
+                                componentsList.add(rc00502VO);
+                                compList.remove(component);
+                                compIdx--;
+                            }
+                        }
+
+                        rc00501VO.setRc00502VoList(componentsList);
+                        itemList.remove(item);
+                        itemIdx--;
+
+                        // item/component save
+                        rc001Service.creItemAndCreComponent(rc00501VO);
+                    }
+                }
+
+                index++;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            return ApiResponse.of(ApiStatus.SYSTEM_ERROR, "아카이브 파일 해제중 에러가 발생하였습니다. 관리자에게 문의하세요");
+        }
+
+        // DB에 저장한다.
+        return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");
+    }
+
+    /**
+     * File 확장자를 제외한 File명 추출
+     * @param fullFileName
+     * @return String
+     */
     private String getFileNameNoExt(String fullFileName) {
         if (StringUtils.isNotEmpty(fullFileName)) {
             return fullFileName.substring(0, fullFileName.lastIndexOf("."));
@@ -196,8 +311,40 @@ public class Wf999Service extends BaseService {
         return "";
     }
 
+    /**
+     * 서버OS의 Window 여부 리턴
+     * @return Boolean
+     */
     private boolean isWindows() {
         String os = System.getProperty("os.name").toLowerCase();
         return (os.indexOf("win") >= 0);
+    }
+
+    /**
+     * Extra Metadata JSON Generator
+     * @param header
+     * @param item
+     * @param type
+     * @return
+     */
+    private String generateExtraMeta(Map<String, String> header, Map<String, String> item, String type){
+        List<Map> metaList = new ArrayList<>();
+
+        for (Object key : header.keySet()) {
+            Map<String, String> metaMap = new HashMap<>();
+
+            if(StringUtils.isEmpty(item.get(key)))
+                continue;
+
+            metaMap.put("fieldName", key.toString());
+            metaMap.put("title", header.get(key));
+            metaMap.put("value", item.get(key) == null ? "" : item.get(key));
+
+            metaList.add(metaMap);
+        }
+
+        String rtn = JsonUtils.toJson(metaList);
+
+        return rtn;
     }
 }

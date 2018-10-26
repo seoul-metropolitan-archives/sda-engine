@@ -37,4 +37,16 @@ public class Wf999Controller extends MessageBaseController {
         return wf999Service.extractArchive(requestParams);
     }
 
+    /**
+     * Save workflow api response.
+     *
+     * @param requestParams the request params
+     * @return the api response
+     */
+    @PutMapping(value = "/01/excel")
+    @PostMapping
+    public ApiResponse workflowIngestExcel(@RequestBody Rc00501VO requestParams) {
+        return wf999Service.workflowIngestExcel();
+    }
+
 }

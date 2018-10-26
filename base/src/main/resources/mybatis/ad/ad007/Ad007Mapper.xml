@@ -59,7 +59,7 @@
             ADD_META_SEGMENT_UUID AS addMetaSegmentUuid,
             ADD_META_TEMPLATE_SET_UUID AS addMetaTemplateSetUuid,
             SEQUENCE AS sequence,
-            ENTITY_TYPE AS entityType,
+            "NAME" AS "name",
             TITLE AS title,
             ADDITIONAL_COLUMN AS additionalColumn,
             POPUP_UUID AS popupUuid,
