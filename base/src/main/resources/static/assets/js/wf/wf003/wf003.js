@@ -8,6 +8,8 @@ var defaultParameter = {};
 var jobList;
 var selectedJobUuid = "";
 
+var lastUploadFilePath = "";
+
 var ACTIONS = axboot.actionExtend(fnObj, {
     // 워크플로우 조회
     PAGE_SEARCH: function (caller, act, data) {
@@ -259,7 +261,11 @@ fnObj.pageStart = function () {
         },
         onuploadComplete: function () {
             $('[data-ax5uploader="upload1"]').hide();
-            fnObj.gridView03.gridObj.setValue(0,'tempFile',UPLOAD.uploadedFiles[0].fileName)
+            fnObj.gridView03.gridObj.setValue(0,'uploadFilePath',UPLOAD.uploadedFiles[0].fileName);
+
+            // 마지막으로 업로드 된 파일의 실제 경로를 저장한다.
+            lastUploadFilePath = "/" + UPLOAD.uploadedFiles[0].filePath +"/" + UPLOAD.uploadedFiles[0].saveName;
+
             axToast.push("File Upload Complete");
             UPLOAD.removeFileAll();
         },
@@ -466,7 +472,7 @@ fnObj.gridView03 = axboot.viewExtend(axboot.gridView, {
         return this.gridObj.getJsonRows();
     },
     itemClick: function (data,index){
-        if(index.fieldName == "tempFile"){
+        if(index.fieldName == "uploadFilePath"){
             // event.preventDefault();
             var aa = $('.btn-primary').trigger('click');
             // if(UPLOAD.selectedFiles)
@@ -485,7 +491,7 @@ fnObj.gridView03 = axboot.viewExtend(axboot.gridView, {
 
 drawParameterGrid = function (res) {
     var obj =  {renderer: {type: "imageButton", text: "Run",imageUrl: "/assets/images/ams/btn_run_normal.png",hoverUrl: "/assets/images/ams/btn_run_hover.png", activeUrl: "/assets/images/ams/btn_run_hover.png"}}
-    var data = {schemeName :"D",tempFile :"",xlsFileName : "",xlsFilePath:""}
+    var data = {schemeName :"D",uploadFilePath :"",xlsFileName : "",xlsFilePath:""}
     if (res.columnInfo.length > 0) {
         for (var i = 0; i < res.columnInfo.length; i++) {
             if (res.columnInfo[i]["dataType"] == "combo") {
@@ -526,7 +532,11 @@ saveCurrentParameter = function () {
             if (columnInfo && columnInfo.length > 0) {
                 for (var i = 0; i < columnInfo.length; i++) {
                     if (fnObj.gridView03.getData()[0].hasOwnProperty(columnInfo[i].name)) {
-                        columnInfo[i].defaultValue = fnObj.gridView03.getData()[0][columnInfo[i].name];
+                        if(columnInfo[i].dataType == "file"){
+                            columnInfo[i].defaultValue = lastUploadFilePath;
+                        }else{
+                            columnInfo[i].defaultValue = fnObj.gridView03.getData()[0][columnInfo[i].name];
+                        }
                     }
                 }
 
