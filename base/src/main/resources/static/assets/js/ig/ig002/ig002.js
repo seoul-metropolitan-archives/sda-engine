@@ -172,7 +172,7 @@ fnObj.childrenDrnInfo = axboot.viewExtend({
     "                                                            <li style='width: 11%;'>" +
     "                                                                <b>Contact Person</b>" +
     "                                                            <div class='src_box2'>" +
-    "                                                                <input type=text data-ax-path='name' class='cntPrsn'>" +
+    "                                                                <input type=text data-ax-path='name' readonly class='cntPrsn'>" +
     "                                                                <input type=text data-ax-path='accessionRecordEtcUuid' style='width: 0px'>" +
     "                                                                <input type=text data-ax-path='accessionRecordUuid' style='width: 0px'>" +
     "                                                                <input type=text data-ax-path='authorityUuid' style='width: 0px'>" +
@@ -315,7 +315,7 @@ fnObj.childrenMngInfo = axboot.viewExtend({
     "                                                            <li>" +
     "                                                                <b>Creator</b>" +
     "                                                            <div class='src_box2'>" +
-    "                                                                <input type=text data-ax-path='name' class='crtr'>" +
+    "                                                                <input type=text data-ax-path='name' readonly class='crtr'>" +
     "                                                                <input type=text data-ax-path='accessionRecordEtcUuid' style='width: 0px'>" +
     "                                                                <input type=text data-ax-path='accessionRecordUuid' style='width: 0px'>" +
     "                                                                <input type=text data-ax-path='authorityUuid' style='width: 0px'>" +
