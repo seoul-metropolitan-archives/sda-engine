@@ -34,14 +34,16 @@
         ACCESSION_RECORD_ETC_UUID as accessionRecordEtcUuid,
         TYPE_UUID as typeUuid,
         AUTHORITY_UUID as authorityUuid,
-        NAME as name,
+        (SELECT AUTHORITY_NAME
+         FROM AT_AUTHORITY
+         WHERE Z1.AUTHORITY_UUID = AUTHORITY_UUID ) as name,
         TEL as tel,
         ADDRESS as address,
         <include refid="Common.UserName"><property name="userUuid" value="INSERT_UUID"/></include> as insertUuid,
         INSERT_DATE as insertDate,
         <include refid="Common.UserName"><property name="userUuid" value="UPDATE_UUID"/></include> as updateUuid,
         UPDATE_DATE as updateDate
-        FROM IG_ACCESSION_RECORD_DETAIL
+        FROM IG_ACCESSION_RECORD_DETAIL Z1
         WHERE ACCESSION_RECORD_UUID = #{accessionRecordUuid}
         AND FC_AD_CODE_NM (TYPE_UUID) = 'Donor'
     </select>
@@ -51,14 +53,16 @@
         ACCESSION_RECORD_ETC_UUID as accessionRecordEtcUuid,
         TYPE_UUID as typeUuid,
         AUTHORITY_UUID as authorityUuid,
-        NAME as name,
+        (SELECT AUTHORITY_NAME
+        FROM AT_AUTHORITY
+        WHERE Z1.AUTHORITY_UUID = AUTHORITY_UUID ) as name,
         TEL as tel,
         ADDRESS as address,
         <include refid="Common.UserName"><property name="userUuid" value="INSERT_UUID"/></include> as insertUuid,
         INSERT_DATE as insertDate,
         <include refid="Common.UserName"><property name="userUuid" value="UPDATE_UUID"/></include> as updateUuid,
         UPDATE_DATE as updateDate
-        FROM IG_ACCESSION_RECORD_DETAIL
+        FROM IG_ACCESSION_RECORD_DETAIL Z1
         WHERE ACCESSION_RECORD_UUID = #{accessionRecordUuid}
         AND FC_AD_CODE_NM (TYPE_UUID) = 'Creator'
     </select>
