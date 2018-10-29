@@ -1319,6 +1319,10 @@ var fnObj = {
             fnObj.gridView02.gridObj.getGridView().resetSize();
         });
 
+        $("#extraMetaAll").on("change", function () {
+            fnObj.gridView02.setFilter(!$(this).is(":checked"));
+        });
+
         ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
         ACTIONS.dispatch(ACTIONS.GET_SUBDATA,{uuid : ""});
     }
@@ -2876,10 +2880,20 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView,{
             visible: false
         });
         this.makeGrid();
+        this.setFilter(true);
     },
     getSelectedData : function()
     {
         return this.gridObj.getSelectionData();
+    },
+    setFilter: function(value){
+        var filters = [{
+            name: "NULL_VALUE",
+            criteria: "value != ''",
+            active: value
+        }];
+
+        this.gridObj.getGridView().addColumnFilters('value', filters, true);
     },
     validate: function () {
         var rs = this.model.validate();

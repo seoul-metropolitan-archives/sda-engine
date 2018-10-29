@@ -204,7 +204,7 @@ public class Wf999Service extends BaseService {
      * @return
      */
     @Transactional(rollbackFor = Exception.class)
-    public ApiResponse workflowIngestExcel() {
+    public ApiResponse workflowIngestExcel(String rootFilePath) {
         ArrayList<Map> aggList = wf999Mapper.findAllAggregationInf();
         ArrayList<Map> itemList = wf999Mapper.findAllItemInf();
         ArrayList<Map> compList = wf999Mapper.findAllComponentInf();
@@ -269,7 +269,8 @@ public class Wf999Service extends BaseService {
                                 Rc00502VO rc00502VO = new Rc00502VO();
                                 rc00502VO.setTitle(getFileNameNoExt(component.get("FILE_NAME").toString()));
                                 rc00502VO.setContentsSize(Integer.parseInt(component.get("FILE_SIZE").toString()));
-                                rc00502VO.setFilePath(component.get("FILE_PATH").toString().replace(component.get("FILE_NAME").toString(), ""));
+                                //rc00502VO.setFilePath(component.get("FILE_PATH").toString().replace(component.get("FILE_NAME").toString(), ""));
+                                rc00502VO.setFilePath("/STND_RMS/" + rootFilePath + "/");
                                 rc00502VO.setFileName(component.get("FILE_NAME").toString());
                                 rc00502VO.setOriginalFileName(component.get("FILE_NAME").toString());
                                 componentsList.add(rc00502VO);
@@ -334,8 +335,9 @@ public class Wf999Service extends BaseService {
         for (Object key : header.keySet()) {
             Map<String, String> metaMap = new HashMap<>();
 
-            if(StringUtils.isEmpty(item.get(key)))
-                continue;
+            //값이 없을 때는 지나간다.
+            //if(StringUtils.isEmpty(item.get(key)))
+            //    continue;
 
             metaMap.put("fieldName", key.toString());
             metaMap.put("title", header.get(key));
