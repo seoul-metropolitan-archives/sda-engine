@@ -1,0 +1,130 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout/base}">
+
+<!-- ===== [ script ] ===== -->
+<script layout:fragment="script" type="text/javascript" th:src="@{/assets/js/lc/lc001/lc001.js}"></script>
+<!--realgrid -->
+
+<!-- ===== [ base-content ] ===== -->
+<div layout:fragment="base-content" class="ax-base-content">
+    <form name="formView01" id="formView01" method="post" onsubmit="return false">
+        <div class="cssBody" style="top:80px">
+            <div style="display:table; height:100%; width:100%">
+                <div class="contents_wrap">
+                    <div style=" height:30px; width:100%" class="bgf7 div_tablerow">
+                        <ul class="bdb">
+                            <th:block layout:insert="~{/fragments/page-buttons :: bookmark}"/>
+                            <th:block layout:insert="~{/fragments/page-buttons :: save-and-inquiry}"/>
+                        </ul>
+                    </div>
+                    <div class="bdb div_tablerow searchFields">
+                        <dl>
+                            <dt class="mgl_5">Category Code</dt>
+                            <dd>
+                                <input type=text style="width:135px" data-ax-path="categoryCode">
+                            </dd>
+                            <dt>Category Name</dt>
+                            <dd>
+                                <input type=text style="width:135px" data-ax-path="categoryName">
+                            </dd>
+                            <dt>Service</dt>
+                            <dd>
+                                <select data-ax-path="serviceUuid" style="width:135px;" id="serviceList">
+                                    <option value=""></option>
+                                    <option th:each="item : ${serviceList}"
+                                            th:value="${item.codeDetailUUID}"
+                                            th:text="${item.codeName}"/>
+                                </select>
+                            </dd>
+                            <dt>Code Type</dt>
+                            <dd>
+                                <select data-ax-path="codeTypeUuid" style="width:135px;" id="codeList">
+                                    <option value=""></option>
+                                    <option th:each="item : ${codeList}"
+                                            th:value="${item.codeDetailUUID}"
+                                            th:text="${item.codeName}"/>
+                                </select>
+                            </dd>
+                        </dl>
+                        <dl>
+                            <dt class="none">Use</dt>
+                            <dd class="w_auto mgl_5">
+                                <div class="rdo_box">
+                                    <span class="rdo_box_title">Use</span>
+                                    <label>
+                                        <input type="radio" name="radio" data-ax-path="useYN" class="no_border" value="Y" >Yes</label>
+                                    <label>
+                                        <input type="radio" name="radio" data-ax-path="useYN" class="no_border" value="N">No</label>
+                                    <label>
+                                        <input type="radio" name="radio" data-ax-path="useYN" class="no_border" value="" checked>All</label>
+                                </div>
+                            </dd>
+                        </dl>
+
+
+                    </div>
+                    <div style="height:100%; width:100%" class="bgf7 div_tablerow">
+
+                        <div style="display:table; height:50%; width:100%">
+                            <div style="display:table; height:100%; width:75%; float:left" class="bdr">
+                                <ul class="bdb bdt div_tablerow" style="height:30px;">
+                                    <th:block layout:insert="~{/fragments/page-buttons :: dot('Category')}"/>
+                                    <th:block layout:insert="~{/fragments/page-buttons :: add-and-delete}"/>
+                                </ul>
+                                <div style="height:100%; width:100%" class="div_tablerow bdb">
+                                    <div id="realgrid01" style="width:100%; height:100%"></div>
+                                </div>
+                            </div>
+                            <div style="display:table; height:100%; width:25%; float:right">
+                                <ul class="bdb bdt div_tablerow bgf7" style="height:30px;">
+                                    <th:block layout:insert="~{/fragments/page-buttons :: dot('리드정보 - 보유자료(예상)')}"/>
+                                </ul>
+                                <div style="height:100%; width:100%;" class="div_tablerow bdb">
+                                    <div class="detail_wrap">
+                                        <div class="detail_conts">
+                                            <ul style="width: 100%; height: 100px;">
+                                                <li style="width: 100%; height: 100%"><textarea data-ax-path="basedOn" rows="10" cols="1" class="txtar" style="width: 97%"></textarea></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="display:table; height:50%; width:100%">
+                            <div style="display:table; height:100%; width:75%; float:left" class="bdr">
+                                <ul class="bdb bdt div_tablerow" style="height:30px;">
+                                    <th:block layout:insert="~{/fragments/page-buttons :: dot('Code')}"/>
+                                    <th:block layout:insert="~{/fragments/page-buttons :: add-and-delete}"/>
+                                </ul>
+                                <div style="height:100%; width:100%" class="div_tablerow bdb">
+                                    <div id="realgrid02" style="width:100%; height:100%"></div>
+                                </div>
+                            </div>
+                            <div style="display:table; height:100%; width:25%; float:right">
+                                <ul class="bdb bdt div_tablerow bgf7" style="height:30px;">
+                                    <th:block layout:insert="~{/fragments/page-buttons :: dot('리드정보 - 수집내용')}"/>
+                                </ul>
+                                <div style="height:100%; width:100%;" class="div_tablerow bdb">
+                                    <div class="detail_wrap">
+                                        <div class="detail_conts">
+                                            <ul style="width: 100%; height: 100px;">
+                                                <li style="width: 100%; height: 100%"><textarea data-ax-path="basedOn" rows="10" cols="1" class="txtar" style="width: 97%"></textarea></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </form>
+</div>

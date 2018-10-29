@@ -159,6 +159,15 @@ var wf00302 =
                     dataType: "timestamp",
                     required: false,
                     visible: false
+                },
+                {
+                    sortNo: 14,
+                    name: "refUploadFilePath",
+                    width: 140,
+                    editable: false,
+                    disable: true,
+                    required: false,
+                    visible: false
                 }
             ]
     }

@@ -261,6 +261,7 @@ fnObj.pageStart = function () {
         },
         onuploadComplete: function () {
             $('[data-ax5uploader="upload1"]').hide();
+            fnObj.gridView02.gridObj.setValue(fnObj.gridView02.gridObj.gridView.getSelectedItems()[0],'refUploadFilePath',UPLOAD.uploadedFiles[0].fileName);
             fnObj.gridView03.gridObj.setValue(0,'uploadFilePath',UPLOAD.uploadedFiles[0].fileName);
 
             // 마지막으로 업로드 된 파일의 실제 경로를 저장한다.
@@ -421,6 +422,12 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
 
             selectedJobUuid = data.jobUuid;
             fnObj.gridView03.initGrid(data.jobUuid);
+
+            var tempFileName = fnObj.gridView02.gridObj.getSelectedData().refUploadFilePath;
+            if(tempFileName == undefined) {
+                tempFileName = "";
+            }
+            fnObj.gridView03.gridObj.setValue(0,'uploadFilePath',tempFileName);
         } else {
             fnObj.gridView03.clearData();
         }

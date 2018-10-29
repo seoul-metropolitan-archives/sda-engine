@@ -43,6 +43,8 @@ public class Wf00302VO extends BaseVO {
 
     private String jobResultUuid;
 
+    private String refUploadFilePath;
+
     private boolean checkParameter = false;
 
     private List<Wf00301_P0102VO> parameterList;
