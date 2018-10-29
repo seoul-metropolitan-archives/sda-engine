@@ -16,6 +16,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import rmsoft.ams.seoul.rc.rc001.service.Rc001Service;
 import rmsoft.ams.seoul.rc.rc002.service.Rc002Service;
@@ -202,7 +203,7 @@ public class Wf999Service extends BaseService {
      * 표준RMS Ingest Workflow by Excel
      * @return
      */
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public ApiResponse workflowIngestExcel() {
         ArrayList<Map> aggList = wf999Mapper.findAllAggregationInf();
         ArrayList<Map> itemList = wf999Mapper.findAllItemInf();
@@ -279,7 +280,7 @@ public class Wf999Service extends BaseService {
 
                         rc00501VO.setRc00502VoList(componentsList);
                         itemList.remove(item);
-                        itemIdx--;
+                        //itemIdx--;
 
                         // item/component save
                         rc001Service.creItemAndCreComponent(rc00501VO);

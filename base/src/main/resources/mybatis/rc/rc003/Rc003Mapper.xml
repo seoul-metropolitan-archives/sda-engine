@@ -3,7 +3,46 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="rmsoft.ams.seoul.rc.rc003.dao.Rc003Mapper">
-    <select id="getRecordAggregationList" resultType="RC00301VO" statementType="PREPARED">
+    <resultMap id="getAggInfoMap" type="Rc00301VO">
+        <result property="aggregationUuid" column="aggregationUuid" />
+        <result property="publishedStatusUuid" column="publishedStatusUuid" />
+        <result property="aggregationCode" column="aggregationCode" />
+        <result property="parentAggregationName" column="parentAggregationName" />
+        <result property="name" column="name" />
+        <result property="publishedStatusName" column="publishedStatusName" />
+        <result property="levelCode" column="levelCode" />
+        <result property="parentAggregationUuid" column="parentAggregationUuid" />
+        <result property="levelUuid" column="levelUuid" />
+        <result property="author" column="author" />
+        <result property="descriptionStartDate" column="descriptionStartDate" />
+        <result property="descriptionEndDate" column="descriptionEndDate" />
+        <result property="headTitle" column="headTitle" />
+        <result property="typeUuid" column="typeUuid" />
+        <result property="description" column="description" />
+        <result property="notes" column="notes" />
+        <result property="typeNm" column="typeNm" />
+        <result property="provenance" column="provenance" />
+        <result property="referenceCode" column="referenceCode" />
+        <result property="creator" column="creator" />
+        <result property="creationStartDate" column="creationStartDate" />
+        <result property="creationEndDate" column="creationEndDate" />
+        <result property="addMetadata01" column="addMetadata01" />
+        <result property="addMetadata02" column="addMetadata02" />
+        <result property="addMetadata03" column="addMetadata03" />
+        <result property="addMetadata04" column="addMetadata04" />
+        <result property="addMetadata05" column="addMetadata05" />
+        <result property="addMetadata06" column="addMetadata06" />
+        <result property="addMetadata07" column="addMetadata07" />
+        <result property="addMetadata08" column="addMetadata08" />
+        <result property="addMetadata09" column="addMetadata09" />
+        <result property="addMetadata10" column="addMetadata10" />
+        <result property="extraMetadata" column="extraMetadata" jdbcType="CLOB" javaType="java.lang.String" />
+        <result property="insertUuid" column="insertUuid" />
+        <result property="insertDate" column="insertDate" />
+        <result property="updateUuid" column="updateUuid" />
+        <result property="updateDate" column="updateDate" />
+    </resultMap>
+    <select id="getRecordAggregationList" resultMap="getAggInfoMap" statementType="PREPARED">
         SELECT
           Z1.AGGREGATION_UUID as aggregationUuid,
           Z1.AGGREGATION_CODE as aggregationCode,
@@ -42,6 +81,7 @@
           Z2.ADD_METADATA08 as addMetadata08,
           Z2.ADD_METADATA09 as addMetadata09,
           Z2.ADD_METADATA10 as addMetadata10,
+          Z2.EXTRA_METADATA as extraMetadata,
           <include refid="Common.UserName"><property name="userUuid" value="INSERT_UUID"/></include> as insertUuid,
           Z1.INSERT_DATE as insertDate,
           <include refid="Common.UserName"><property name="userUuid" value="UPDATE_UUID"/></include> as updateUuid,

@@ -42,4 +42,5 @@ public class Rc00301VO extends BaseVO {
     private String addMetadata08;
     private String addMetadata09;
     private String addMetadata10;
+    private String extraMetadata;
 }

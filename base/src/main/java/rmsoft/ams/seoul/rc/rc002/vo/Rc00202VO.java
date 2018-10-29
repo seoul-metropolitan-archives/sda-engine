@@ -1,6 +1,9 @@
 package rmsoft.ams.seoul.rc.rc002.vo;
 
 import lombok.Data;
+import oracle.sql.CLOB;
+
+import java.sql.Clob;
 
 /**
  * The type Rc 00202 vo.
@@ -25,4 +28,5 @@ public class Rc00202VO {
     private String addMetadata09;
     private String addMetadata10;
     private String extraMetadata;
+    private CLOB extraMetadataClob;
 }
