@@ -168,6 +168,15 @@ var wf00302 =
                     disable: true,
                     required: false,
                     visible: false
+                },
+                {
+                    sortNo: 15,
+                    name: "lastUploadFilePath",
+                    width: 140,
+                    editable: false,
+                    disable: true,
+                    required: false,
+                    visible: false
                 }
             ]
     }
