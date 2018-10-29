@@ -1,6 +1,6 @@
 jar {
-    baseName = 'standard-rms-ingest'
-    version = '0.0.3'
+    baseName = 'standard-rms-contents'
+    version = '0.0.1'
     destinationDir = file("${project.rootDir}/base/src/main/resources/workflow-modules")
 }
 
