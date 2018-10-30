@@ -11,6 +11,8 @@ import rmsoft.ams.seoul.common.controller.MessageBaseController;
 import rmsoft.ams.seoul.rc.rc005.vo.Rc00501VO;
 import rmsoft.ams.seoul.wf.wf999.service.Wf999Service;
 
+import java.io.File;
+
 /**
  * Wf999Controller
  *
@@ -46,7 +48,7 @@ public class Wf999Controller extends MessageBaseController {
     @PutMapping(value = "/01/excel")
     @PostMapping
     public ApiResponse workflowIngestExcel(@RequestBody Rc00501VO requestParams) {
-        return wf999Service.workflowIngestExcel("upmu");
+        return wf999Service.workflowIngestExcel(File.separator + "stnd_rms" + File.separator + "upmu");
     }
 
 }
