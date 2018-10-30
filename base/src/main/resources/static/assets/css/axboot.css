@@ -27962,7 +27962,7 @@ a.small_open {
 
 
 #itemTabs{
-    width: 240px;
+    width: 300px;
     position: absolute;
     top: 0px;
     bottom: 0px;
@@ -27982,6 +27982,14 @@ a.small_open {
 
 #itemTabs ul li{
     width : auto;
+}
+
+#itemTabs .ui-tabs, #itemTabs .ui-tabs-panel {
+    padding: 0px;
+}
+
+#itemTabs .padding-tab{
+    padding: 10px;
 }
 
 #propertiesView ul{

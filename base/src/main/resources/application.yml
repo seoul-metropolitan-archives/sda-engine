@@ -69,7 +69,7 @@ dip.process:
     #json-file-path: /root/DATA
     #digital-file-path: /root/dip/images/
   batch:
-    enable: true
+    enable: false
     cron: "0 0 5 31 12 *"
   #tmp.dir: D:\seoul-ams-repo\dip\tmp\
   #digital.file.dir: D:\seoul-ams-repo\dip\tmp\

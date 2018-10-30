@@ -21,7 +21,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 onError: axboot.viewError
             }
         });
-        return false;Z
+        return false;
     },
     GET_GRID_DATA : function(caller, act, data)
     {
@@ -834,6 +834,12 @@ function setFormData(item, isItem){
     fnObj.formView.setFormData("creationStartDate",item.creationStartDate);
     fnObj.formView.setFormData("creationEndDate",item.creationEndDate);
     fnObj.formView.setFormData("isItem", isItem);
+
+    if(item.extraMetadata) {
+        fnObj.gridView02.setData(JSON.parse(item.extraMetadata));
+    }else{
+        fnObj.gridView02.setData([]);
+    }
 }
 
 var fnObj = {
@@ -850,6 +856,13 @@ var fnObj = {
 
         $.ajax({
             url: "/assets/js/column_info/rc00101.js",
+            dataType: "script",
+            async : false,
+            success: function(){}
+        });
+
+        $.ajax({
+            url: "/assets/js/column_info/rc00102.js",
             dataType: "script",
             async : false,
             success: function(){}
@@ -1178,6 +1191,7 @@ var fnObj = {
         fnObj.naviView.initView();
         fnObj.iconView.initView();
         fnObj.gridView01.initView();
+        fnObj.gridView02.initView();
         fnObj.pageView.initView();
         fnObj.formView.initView();
 
@@ -1299,6 +1313,14 @@ var fnObj = {
                 $('[data-ax5uploader="upload1"]').hide();
                 axToast.push("업로드를 취소하였습니다.");
             }
+        });
+
+        $( "[href='#itemTabs-3']" ).on("click", function(){
+            fnObj.gridView02.gridObj.getGridView().resetSize();
+        });
+
+        $("#extraMetaAll").on("change", function () {
+            fnObj.gridView02.setFilter(!$(this).is(":checked"));
         });
 
         ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
@@ -1673,7 +1695,9 @@ fnObj.iconView = axboot.viewExtend({
                         });
                     }else{
                         $( "#itemTabs" ).tabs( "option", "disabled", [ 1 ]);
-                        $( "#itemTabs" ).tabs( "option", "active", 0 );
+                        if($( "#itemTabs" ).tabs( "option", "active") == 1) {
+                            $("#itemTabs").tabs("option", "active", 0);
+                        }
                         $("[data-ax-path='riTypeUuid']").hide();
                         $("[data-ax-path='aggregationTypeUuid']").show();
                         $("#aggLevel").show();
@@ -2827,6 +2851,49 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView,{
     getSelectedData : function()
     {
         return this.gridObj.getSelectionData();
+    },
+    validate: function () {
+        var rs = this.model.validate();
+        if (rs.error) {
+            alert(rs.error[0].jquery.attr("title") + '을(를) 입력해주세요.');
+            rs.error[0].jquery.focus();
+            return false;
+        }
+        return true;
+    }
+});
+
+fnObj.gridView02 = axboot.viewExtend(axboot.gridView,{
+    tagId : "realgrid02",
+    uuidFieldName : "fieldName",
+    entityName: "RC_ITEM",
+    initView  : function()
+    {
+        var _this = this;
+        this.initInstance();
+        this.setColumnInfo(rc00102.column_info);
+
+        this.setFixedOptions({
+            colCount: 0
+        });
+        this.gridObj.setIndicator({
+            visible: false
+        });
+        this.makeGrid();
+        this.setFilter(true);
+    },
+    getSelectedData : function()
+    {
+        return this.gridObj.getSelectionData();
+    },
+    setFilter: function(value){
+        var filters = [{
+            name: "NULL_VALUE",
+            criteria: "value != ''",
+            active: value
+        }];
+
+        this.gridObj.getGridView().addColumnFilters('value', filters, true);
     },
     validate: function () {
         var rs = this.model.validate();

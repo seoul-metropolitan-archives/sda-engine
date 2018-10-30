@@ -261,13 +261,14 @@ fnObj.pageStart = function () {
         },
         onuploadComplete: function () {
             $('[data-ax5uploader="upload1"]').hide();
+            fnObj.gridView02.gridObj.setValue(fnObj.gridView02.gridObj.gridView.getSelectedItems()[0],'refUploadFilePath',UPLOAD.uploadedFiles[0].fileName);
             fnObj.gridView03.gridObj.setValue(0,'uploadFilePath',UPLOAD.uploadedFiles[0].fileName);
-
             // 마지막으로 업로드 된 파일의 실제 경로를 저장한다.
-            lastUploadFilePath = "/" + UPLOAD.uploadedFiles[0].filePath +"/" + UPLOAD.uploadedFiles[0].saveName;
-
+            var lastUploadFilePath = "/" + UPLOAD.uploadedFiles[0].filePath +"/" + UPLOAD.uploadedFiles[0].saveName;
+            fnObj.gridView02.gridObj.setValue(fnObj.gridView02.gridObj.gridView.getSelectedItems()[0],'lastUploadFilePath',lastUploadFilePath);
             axToast.push("File Upload Complete");
             UPLOAD.removeFileAll();
+            saveCurrentParameter(fnObj.gridView02.gridObj.gridView.getSelectedItems()[0]);
         },
         abortCallback: function(){
             $('[data-ax5uploader="upload1"]').hide();
@@ -360,8 +361,6 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
                 }, function () {
                     if (this.key == "ok") {
                         if (checkParameter()) {
-                            saveCurrentParameter();
-
                             if (data) {
                                 data.menuUuid = axboot.getMenuId();
 
@@ -417,10 +416,14 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
         }
 
         if (data.jobUuid != null && data.jobUuid != "") {
-            saveCurrentParameter();
-
             selectedJobUuid = data.jobUuid;
             fnObj.gridView03.initGrid(data.jobUuid);
+
+            var tempFileName = fnObj.gridView02.gridObj.getSelectedData().refUploadFilePath;
+            if(tempFileName == undefined) {
+                tempFileName = "";
+            }
+            fnObj.gridView03.gridObj.setValue(0,'uploadFilePath',tempFileName);
         } else {
             fnObj.gridView03.clearData();
         }
@@ -520,7 +523,7 @@ drawParameterGrid = function (res) {
     }
 }
 
-saveCurrentParameter = function () {
+saveCurrentParameter = function (index) {
     // job 클릭시 parameter 정보가 바뀌기 전에 값을 저장한다.
 
     if (axboot.isUndefined(fnObj.gridView03.gridObj) === false) {
@@ -533,7 +536,7 @@ saveCurrentParameter = function () {
                 for (var i = 0; i < columnInfo.length; i++) {
                     if (fnObj.gridView03.getData()[0].hasOwnProperty(columnInfo[i].name)) {
                         if(columnInfo[i].dataType == "file"){
-                            columnInfo[i].defaultValue = lastUploadFilePath;
+                            columnInfo[i].defaultValue = fnObj.gridView02.gridObj.getJsonRows()[index].lastUploadFilePath ;
                         }else{
                             columnInfo[i].defaultValue = fnObj.gridView03.getData()[0][columnInfo[i].name];
                         }
@@ -585,14 +588,15 @@ getSavedParameter = function (jobUuid) {
 }
 
 checkParameter = function () {
+    var returnVal = true;
     jobList.forEach(function (job) {
         if (job.checkParameter === false) {
-            axboot.viewError({message: "체크되지 않은 파라미터 값이 있습니다.\nJob의 파라미터를 확인하시기 바랍니다."});
-            return false;
+            returnVal = false;
         }
     });
+    if(!returnVal) axboot.viewError({message: "체크되지 않은 파라미터 값이 있습니다.\nJob의 파라미터를 확인하시기 바랍니다."});
 
-    return true;
+    return returnVal;
 }
 
 

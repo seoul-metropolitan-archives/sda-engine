@@ -16,6 +16,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import rmsoft.ams.seoul.rc.rc001.service.Rc001Service;
 import rmsoft.ams.seoul.rc.rc002.service.Rc002Service;
@@ -202,8 +203,8 @@ public class Wf999Service extends BaseService {
      * 표준RMS Ingest Workflow by Excel
      * @return
      */
-    @Transactional
-    public ApiResponse workflowIngestExcel() {
+    @Transactional(rollbackFor = Exception.class)
+    public ApiResponse workflowIngestExcel(String rootFilePath) {
         ArrayList<Map> aggList = wf999Mapper.findAllAggregationInf();
         ArrayList<Map> itemList = wf999Mapper.findAllItemInf();
         ArrayList<Map> compList = wf999Mapper.findAllComponentInf();
@@ -268,7 +269,8 @@ public class Wf999Service extends BaseService {
                                 Rc00502VO rc00502VO = new Rc00502VO();
                                 rc00502VO.setTitle(getFileNameNoExt(component.get("FILE_NAME").toString()));
                                 rc00502VO.setContentsSize(Integer.parseInt(component.get("FILE_SIZE").toString()));
-                                rc00502VO.setFilePath(component.get("FILE_PATH").toString().replace(component.get("FILE_NAME").toString(), ""));
+                                //rc00502VO.setFilePath(component.get("FILE_PATH").toString().replace(component.get("FILE_NAME").toString(), ""));
+                                rc00502VO.setFilePath("/STND_RMS/" + rootFilePath + "/");
                                 rc00502VO.setFileName(component.get("FILE_NAME").toString());
                                 rc00502VO.setOriginalFileName(component.get("FILE_NAME").toString());
                                 componentsList.add(rc00502VO);
@@ -279,7 +281,7 @@ public class Wf999Service extends BaseService {
 
                         rc00501VO.setRc00502VoList(componentsList);
                         itemList.remove(item);
-                        itemIdx--;
+                        //itemIdx--;
 
                         // item/component save
                         rc001Service.creItemAndCreComponent(rc00501VO);
@@ -333,8 +335,9 @@ public class Wf999Service extends BaseService {
         for (Object key : header.keySet()) {
             Map<String, String> metaMap = new HashMap<>();
 
-            if(StringUtils.isEmpty(item.get(key)))
-                continue;
+            //값이 없을 때는 지나간다.
+            //if(StringUtils.isEmpty(item.get(key)))
+            //    continue;
 
             metaMap.put("fieldName", key.toString());
             metaMap.put("title", header.get(key));

@@ -9,6 +9,7 @@ import io.onsemiro.utils.UUIDUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import rmsoft.ams.seoul.common.domain.RcComponent;
 import rmsoft.ams.seoul.common.domain.RcItem;
@@ -107,7 +108,8 @@ public class Rc004Service extends BaseService{
         rcItemCon.setKeyword(requestParams.getKeyword());
         rcItemCon.setUpdateDate(Timestamp.valueOf(DateUtils.convertToString(LocalDateTime.now(), DateUtils.DATE_TIME_PATTERN)));
         rcItemCon.setUpdateUuid(SessionUtils.getCurrentLoginUserUuid());
-        rcItemCon.setExtraMetadata(requestParams.getExtraMetadata());
+        if(requestParams.getExtraMetadata() != null)
+            rcItemCon.setExtraMetadata(requestParams.getExtraMetadata().toString());
 
         rcItemConRepository.save(rcItemCon);
 

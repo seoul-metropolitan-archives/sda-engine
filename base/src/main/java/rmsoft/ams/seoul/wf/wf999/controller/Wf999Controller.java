@@ -46,7 +46,7 @@ public class Wf999Controller extends MessageBaseController {
     @PutMapping(value = "/01/excel")
     @PostMapping
     public ApiResponse workflowIngestExcel(@RequestBody Rc00501VO requestParams) {
-        return wf999Service.workflowIngestExcel();
+        return wf999Service.workflowIngestExcel("upmu");
     }
 
 }

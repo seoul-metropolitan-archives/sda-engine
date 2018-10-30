@@ -3,64 +3,124 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="rmsoft.ams.seoul.rc.rc005.dao.Rc005Mapper">
-    <select id="getRecordItemList" resultType="RC00501VO" statementType="PREPARED">
+    <resultMap id="getItemInfoMap" type="Rc00501VO">
+        <result property="raTitle" column="raTitle" />
+        <result property="raAggregationUuid" column="raAggregationUuid" />
+        <result property="raPublishedStatusUuid" column="raPublishedStatusUuid" />
+        <result property="raAggregationCode" column="raAggregationCode" />
+        <result property="raTypeUuid" column="raTypeUuid" />
+        <result property="raParentAggregationUuid" column="raParentAggregationUuid" />
+        <result property="raLevelUuid" column="raLevelUuid" />
+        <result property="raLevelNm" column="raLevelNm" />
+        <result property="raAuthor" column="raAuthor" />
+        <result property="raDescriptionStartDate" column="raDescriptionStartDate" />
+        <result property="raDescriptionEndDate" column="raDescriptionEndDate" />
+        <result property="description" column="description" />
+        <result property="notes" column="notes" />
+        <result property="insertUuid" column="insertUuid" />
+        <result property="insertDate" column="insertDate" />
+        <result property="updateUuid" column="updateUuid" />
+        <result property="updateDate" column="updateDate" />
+        <result property="riItemUuid" column="riItemUuid" />
+        <result property="riPublishedStatusNm" column="riPublishedStatusNm" />
+        <result property="riPublishedStatusUuid" column="riPublishedStatusUuid" />
+        <result property="riItemCode" column="riItemCode" />
+        <result property="riTypeUuid" column="riTypeUuid" />
+        <result property="name" column="name" />
+        <result property="riTypeNm" column="riTypeNm" />
+        <result property="riAggregationUuid" column="riAggregationUuid" />
+        <result property="riAuthor" column="riAuthor" />
+        <result property="riDescriptionStartDate" column="riDescriptionStartDate" />
+        <result property="riDescriptionEndDate" column="riDescriptionEndDate" />
+        <result property="description1" column="description1" />
+        <result property="notes1" column="notes1" />
+        <!--<result property="insertUuid1" column="insertUuid1" />
+        <result property="insertDate1" column="insertDate1" />
+        <result property="updateUuid1" column="updateUuid1" />
+        <result property="updateDate1" column="updateDate1" />-->
+        <result property="openStatusUuid" column="openStatusUuid" />
+        <result property="keyword" column="keyword" />
+        <result property="referenceCode" column="referenceCode" />
+        <result property="provenance" column="provenance" />
+        <result property="creator" column="creator" />
+        <result property="creationStartDate" column="creationStartDate" />
+        <result property="creationEndDate" column="creationEndDate" />
+        <result property="addMetadata01" column="addMetadata01" />
+        <result property="addMetadata02" column="addMetadata02" />
+        <result property="addMetadata03" column="addMetadata03" />
+        <result property="addMetadata04" column="addMetadata04" />
+        <result property="addMetadata05" column="addMetadata05" />
+        <result property="addMetadata06" column="addMetadata06" />
+        <result property="addMetadata07" column="addMetadata07" />
+        <result property="addMetadata08" column="addMetadata08" />
+        <result property="addMetadata09" column="addMetadata09" />
+        <result property="addMetadata10" column="addMetadata10" />
+        <result property="extraMetadata" column="extraMetadata" jdbcType="CLOB" javaType="java.lang.String" />
+        <!--<result property="insertUuid2" column="insertUuid2" />
+        <result property="insertDate2" column="insertDate2" />
+        <result property="updateUuid2" column="updateUuid2" />
+        <result property="updateDate2" column="updateDate2" />-->
+    </resultMap>
+
+    <select id="getRecordItemList" resultMap="getItemInfoMap" statementType="PREPARED">
         SELECT
-        ZZ1.LEVEL_VALUE,
-        ZZ1.TITLE as raTitle,
-        ZZ1.AGGREGATION_UUID as raAggregationUuid,
-        ZZ1.PUBLISHED_STATUS_UUID as raPublishedStatusUuid,
-        ZZ1.AGGREGATION_CODE as raAggregationCode,
-        ZZ1.TYPE_UUID as raTypeUuid,
-        ZZ1.PARENT_AGGREGATION_UUID as raParentAggregationUuid,
-        ZZ1.LEVEL_UUID as raLevelUuid,
-        FC_AD_CODE_NM(ZZ1.LEVEL_UUID) as raLevelNm,
-        ZZ1.AUTHOR as raAuthor,
-        ZZ1.DESCRIPTION_START_DATE as raDescriptionStartDate,
-        ZZ1.DESCRIPTION_END_DATE as raDescriptionEndDate,
-        ZZ1.DESCRIPTION as description,
-        ZZ1.NOTES as notes,
-        ZZ1.INSERT_UUID as insertUuid,
-        ZZ1.INSERT_DATE as insertDate,
-        ZZ1.UPDATE_UUID as updateUuid,
-        ZZ1.UPDATE_DATE as updateDate,
-        ZZ1.ITEM_UUID as riItemUuid,
-        FC_AD_CODE_NM(ZZ1.PUBLISHED_STATUS_UUID1) as riPublishedStatusNm,
-        ZZ1.PUBLISHED_STATUS_UUID1 as riPublishedStatusUuid,
-        ZZ1.ITEM_CODE as riItemCode,
-        NVL(ZZ1.TITLE1 ,ZZ1.TITLE) as name,
-        ZZ1.TYPE_UUID1 as riTypeUuid,
-        FC_AD_CODE_NM(ZZ1.TYPE_UUID1) as riTypeNm,
-        ZZ1.AGGREGATION_UUID1 as riAggregationUuid,
-        ZZ1.AUTHOR1 as riAuthor,
-        ZZ1.DESCRIPTION_START_DATE1 as riDescriptionStartDate,
-        ZZ1.DESCRIPTION_END_DATE1 as riDescriptionEndDate,
-        ZZ1.DESCRIPTION1 as description1,
-        ZZ1.NOTES1 as notes1,
-        ZZ1.INSERT_UUID1 as insertUuid1,
-        ZZ1.INSERT_DATE1 as insertDate1,
-        ZZ1.UPDATE_UUID1 as updateUuid1,
-        ZZ1.UPDATE_DATE1 as updateDate1,
-        FC_AD_CODE_NM(ZZ1.OPEN_STATUS_UUID) as openStatusUuid,
-        ZZ1.KEYWORD as keyword,
-        ZZ1.REFERENCE_CODE as referenceCode,
-        ZZ1.PROVENANCE as provenance,
-        ZZ1.CREATOR as creator ,
-        ZZ1.CREATION_START_DATE as creationStartDate,
-        ZZ1.CREATION_END_DATE as creationEndDate,
-        ZZ1.ADD_METADATA01 as addMetadata01,
-        ZZ1.ADD_METADATA02 as addMetadata02,
-        ZZ1.ADD_METADATA03 as addMetadata03,
-        ZZ1.ADD_METADATA04 as addMetadata04,
-        ZZ1.ADD_METADATA05 as addMetadata05,
-        ZZ1.ADD_METADATA06 as addMetadata06,
-        ZZ1.ADD_METADATA07 as addMetadata07,
-        ZZ1.ADD_METADATA08 as addMetadata08,
-        ZZ1.ADD_METADATA09 as addMetadata09,
-        ZZ1.ADD_METADATA10 as addMetadata10,
-        ZZ1.INSERT_UUID2 as insertUuid2,
-        ZZ1.INSERT_DATE2 as insertDate2,
-        ZZ1.UPDATE_UUID2 as updateUuid2,
-        ZZ1.UPDATE_DATE2 as updateDate2
+            ZZ1.LEVEL_VALUE,
+            ZZ1.TITLE as raTitle,
+            ZZ1.AGGREGATION_UUID as raAggregationUuid,
+            ZZ1.PUBLISHED_STATUS_UUID as raPublishedStatusUuid,
+            ZZ1.AGGREGATION_CODE as raAggregationCode,
+            ZZ1.TYPE_UUID as raTypeUuid,
+            ZZ1.PARENT_AGGREGATION_UUID as raParentAggregationUuid,
+            ZZ1.LEVEL_UUID as raLevelUuid,
+            FC_AD_CODE_NM(ZZ1.LEVEL_UUID) as raLevelNm,
+            ZZ1.AUTHOR as raAuthor,
+            ZZ1.DESCRIPTION_START_DATE as raDescriptionStartDate,
+            ZZ1.DESCRIPTION_END_DATE as raDescriptionEndDate,
+            ZZ1.DESCRIPTION as description,
+            ZZ1.NOTES as notes,
+            ZZ1.INSERT_UUID as insertUuid,
+            ZZ1.INSERT_DATE as insertDate,
+            ZZ1.UPDATE_UUID as updateUuid,
+            ZZ1.UPDATE_DATE as updateDate,
+            ZZ1.ITEM_UUID as riItemUuid,
+            FC_AD_CODE_NM(ZZ1.PUBLISHED_STATUS_UUID1) as riPublishedStatusNm,
+            ZZ1.PUBLISHED_STATUS_UUID1 as riPublishedStatusUuid,
+            ZZ1.ITEM_CODE as riItemCode,
+            NVL(ZZ1.TITLE1 ,ZZ1.TITLE) as name,
+            ZZ1.TYPE_UUID1 as riTypeUuid,
+            FC_AD_CODE_NM(ZZ1.TYPE_UUID1) as riTypeNm,
+            ZZ1.AGGREGATION_UUID1 as riAggregationUuid,
+            ZZ1.AUTHOR1 as riAuthor,
+            ZZ1.DESCRIPTION_START_DATE1 as riDescriptionStartDate,
+            ZZ1.DESCRIPTION_END_DATE1 as riDescriptionEndDate,
+            ZZ1.DESCRIPTION1 as description1,
+            ZZ1.NOTES1 as notes1,
+            ZZ1.INSERT_UUID1 as insertUuid1,
+            ZZ1.INSERT_DATE1 as insertDate1,
+            ZZ1.UPDATE_UUID1 as updateUuid1,
+            ZZ1.UPDATE_DATE1 as updateDate1,
+            FC_AD_CODE_NM(ZZ1.OPEN_STATUS_UUID) as openStatusUuid,
+            ZZ1.KEYWORD as keyword,
+            ZZ1.REFERENCE_CODE as referenceCode,
+            ZZ1.PROVENANCE as provenance,
+            ZZ1.CREATOR as creator ,
+            ZZ1.CREATION_START_DATE as creationStartDate,
+            ZZ1.CREATION_END_DATE as creationEndDate,
+            ZZ1.ADD_METADATA01 as addMetadata01,
+            ZZ1.ADD_METADATA02 as addMetadata02,
+            ZZ1.ADD_METADATA03 as addMetadata03,
+            ZZ1.ADD_METADATA04 as addMetadata04,
+            ZZ1.ADD_METADATA05 as addMetadata05,
+            ZZ1.ADD_METADATA06 as addMetadata06,
+            ZZ1.ADD_METADATA07 as addMetadata07,
+            ZZ1.ADD_METADATA08 as addMetadata08,
+            ZZ1.ADD_METADATA09 as addMetadata09,
+            ZZ1.ADD_METADATA10 as addMetadata10,
+            ZZ1.EXTRA_METADATA as extraMetadata,
+            ZZ1.INSERT_UUID2 as insertUuid2,
+            ZZ1.INSERT_DATE2 as insertDate2,
+            ZZ1.UPDATE_UUID2 as updateUuid2,
+            ZZ1.UPDATE_DATE2 as updateDate2
         FROM
          (  SELECT
                 LEVEL AS LEVEL_VALUE,
@@ -112,6 +172,7 @@
                 '' as ADD_METADATA08,
                 '' as ADD_METADATA09,
                 '' as ADD_METADATA10,
+                TO_CLOB('')as EXTRA_METADATA,
                 '' as INSERT_UUID2,
                 SYSDATE as INSERT_DATE2,
                 '' as UPDATE_UUID2,
@@ -123,7 +184,7 @@
             </if>
         CONNECT   BY
             Z1.AGGREGATION_UUID= PRIOR Z1.PARENT_AGGREGATION_UUID
-        UNION
+        UNION ALL
                 SELECT
                     99 AS LEVEL_VALUE,
                     '' as TITLE,
@@ -174,6 +235,7 @@
                     Z02.ADD_METADATA08,
                     Z02.ADD_METADATA09,
                     Z02.ADD_METADATA10,
+                    Z02.EXTRA_METADATA,
                     Z02.INSERT_UUID AS INSERT_UUID2,
                     Z02.INSERT_DATE AS INSERT_DATE2,
                     Z02.UPDATE_UUID AS UPDATE_UUID2,
