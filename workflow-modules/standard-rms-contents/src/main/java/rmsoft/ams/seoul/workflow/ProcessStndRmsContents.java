@@ -13,12 +13,12 @@ import rmsoft.ams.seoul.utils.ArchiveUtils;
 @Slf4j
 @Service
 public class ProcessStndRmsContents {
-    private String contentsUploadFilePath = "";
+    private String uploadFilePath = "";
     private String contentsUploadServerPath = "";
     private String contentsRootPath = "";
 
-    public void setContentsUploadFilePath(String contentsUploadFilePath) {
-        this.contentsUploadFilePath = contentsUploadFilePath;
+    public void setUploadFilePath(String uploadFilePath) {
+        this.uploadFilePath = uploadFilePath;
     }
 
     public void setContentsUploadServerPath(String contentsUploadServerPath) {
@@ -38,7 +38,7 @@ public class ProcessStndRmsContents {
         WorkflowResponse workflowResult = new WorkflowResponse();
 
         try {
-            ArchiveUtils.extract(contentsUploadServerPath + contentsUploadFilePath, contentsRootPath, "");
+            ArchiveUtils.extract(contentsUploadServerPath + uploadFilePath, contentsRootPath, "");
 
             workflowResult.setSuccess(true);
             workflowResult.setMessage("Success");
