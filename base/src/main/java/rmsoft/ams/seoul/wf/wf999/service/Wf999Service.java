@@ -270,7 +270,7 @@ public class Wf999Service extends BaseService {
                                 rc00502VO.setTitle(getFileNameNoExt(component.get("FILE_NAME").toString()));
                                 rc00502VO.setContentsSize(Integer.parseInt(component.get("FILE_SIZE").toString()));
                                 //rc00502VO.setFilePath(component.get("FILE_PATH").toString().replace(component.get("FILE_NAME").toString(), ""));
-                                rc00502VO.setFilePath("/STND_RMS/" + rootFilePath + "/");
+                                rc00502VO.setFilePath(rootFilePath + "/");
                                 rc00502VO.setFileName(component.get("FILE_NAME").toString());
                                 rc00502VO.setOriginalFileName(component.get("FILE_NAME").toString());
                                 componentsList.add(rc00502VO);

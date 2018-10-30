@@ -15,6 +15,12 @@ import rmsoft.ams.seoul.wf.wf999.service.Wf999Service;
 @Slf4j
 @Service
 public class ProcessStndRmsIngest {
+    private String contentsRootPath = "";
+
+    public void setContentsRootPath(String contentsRootPath) {
+        this.contentsRootPath = contentsRootPath;
+    }
+
     /******************************************************
      * Main Threads
      * @return the workflow response
@@ -26,7 +32,7 @@ public class ProcessStndRmsIngest {
             Wf999Service wf999Service = AppContextManager.getBean(Wf999Service.class);
 
             if(wf999Service != null){
-                wf999Service.workflowIngestExcel();
+                wf999Service.workflowIngestExcel(contentsRootPath);
 
                 workflowResult.setSuccess(true);
                 workflowResult.setMessage("Success");
