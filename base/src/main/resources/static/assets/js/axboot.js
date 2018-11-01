@@ -3445,8 +3445,12 @@ axboot.commonCodeVO = function (categoryCode) {
  * @param value
  * @returns {*}
  */
-axboot.commonCodeValueByCodeName = function (categoryCode, nameValue, field="codeDetailUUID") {
+axboot.commonCodeValueByCodeName = function (categoryCode, nameValue, field) {
     var rtn = null;
+
+    if(field == null){
+        field="codeDetailUUID";
+    }
 
     parent.COMMON_CODE[categoryCode].some(function(value){
         if(value['codeName'] == nameValue)
@@ -3466,8 +3470,12 @@ axboot.commonCodeValueByCodeName = function (categoryCode, nameValue, field="cod
  * @param value
  * @returns {*}
  */
-axboot.commonCodeValueByUuid = function (categoryCode, uuid, field="codeName") {
+axboot.commonCodeValueByUuid = function (categoryCode, uuid, field) {
     var rtn = null;
+
+    if(field == null){
+        field="codeName";
+    }
 
     parent.COMMON_CODE[categoryCode].some(function(value){
         if(value['codeDetailUUID'] == uuid)
