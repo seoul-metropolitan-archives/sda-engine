@@ -406,8 +406,12 @@ function exp_gridView() {
  * @param parentNode 옮겨질 Aggregation
  * @returns {boolean}
  */
-function updateRecord(targetData, parentNode, isTree=false) {
+function updateRecord(targetData, parentNode, isTree) {
     var targetNode = null;
+
+    if(isTree == null){
+        isTree = false;
+    }
 
     var targetUuid = "";
     var targetNodeType = "";
@@ -2879,6 +2883,8 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView,{
         this.gridObj.setIndicator({
             visible: false
         });
+
+        this.setEntityName("ExtraMetadata");
         this.makeGrid();
         this.setFilter(true);
     },
