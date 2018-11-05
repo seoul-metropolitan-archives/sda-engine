@@ -196,12 +196,13 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
             _this.gridObj.setCustomCellStyleRow(gridWrapper, grid, dataRow,"disable", function (gridWrapper, row) {
                 var result = false;
                 if(!row)
-                    return true;
-                if (row["retentionPeriodUuid"] == state)
-                    result = false;
-                else{
+                    return false;
+                if (row["retentionPeriodUuid"] == state){
+                    fnObj.gridView01.gridObj.setValue(itemIndex,"disposalTypeUuid"," ");
+                    // fnObj.gridView01.commit();
                     result = true;
-                    grid.setValue(itemIndex,["retentionPeriodUuid"]," ")
+                }else{
+                    result = false;
                 }
                 return result;
             }, ["disposalTypeUuid"], true);
