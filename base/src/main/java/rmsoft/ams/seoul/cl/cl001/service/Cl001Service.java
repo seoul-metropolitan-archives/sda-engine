@@ -71,13 +71,7 @@ public class Cl001Service extends BaseService {
     public Cl00102VO getClassificationSchemeDetail(RequestParams<Cl00101VO> requestParams) {
         Cl00102VO cl00102VO = new Cl00102VO();
         cl00102VO.setClassificationSchemeUuid(requestParams.getString("classificationSchemeUuid"));
-
-        ClClassificationSchemeCon clClassificationSchemeCon = new ClClassificationSchemeCon();
-        clClassificationSchemeCon.setClassificationSchemeUuid(requestParams.getString("classificationSchemeUuid"));
-        ClClassificationSchemeCon clClassCon = null;
-        clClassCon = clClassificationSchemeConRepository.findOne(clClassificationSchemeCon.getId());
-
-        return clClassCon == null  ? cl001Mapper.getClassificationSchemeDetailNull(cl00102VO) : cl001Mapper.getClassificationSchemeDetail(cl00102VO);
+        return  cl001Mapper.getClassificationSchemeDetail(cl00102VO);
     }
      /**
      * Update classification scheme list api response.

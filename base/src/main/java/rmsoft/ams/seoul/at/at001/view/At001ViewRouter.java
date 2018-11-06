@@ -37,6 +37,7 @@ public class At001ViewRouter extends BaseController {
     public String viewPopup(ModelMap model) {
         model.addAttribute("orgTypeUuid", CommonCodeUtils.get("CD163"));
         model.addAttribute("authorityTypeUuid", CommonCodeUtils.get("CD161"));
+        model.addAttribute("lvDtlUuid", CommonCodeUtils.get("CD164"));
         return "/at/at001/at001-p01";
     }
 }

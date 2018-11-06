@@ -83,8 +83,10 @@ workflow.module.path: /Users/jspark226/IdeaProjects/seoul-ams/base/src/main/reso
 
 #운영
 #workflow.module.path: /app/www/WEB-INF/classes/native-libs/
-streaming.url: http://98.33.1.163
-streaming.port: 18080
+#streaming.url: http://98.33.1.163
+streaming.url: http://192.168.0.5
+streaming.port: 18088
+#streaming.port: 18080
 streaming.context: /streamdocs
 streaming.param: /v3/documents/sftp?sftpPath=sftp://
 
@@ -98,10 +100,10 @@ taskExecutor:
 
 # Uploaded Archive File Path & Save Contents Path
 repository:
-  #upload: /Users/younghyunshin/Downloads/upload
-  #contents: /Users/younghyunshin/Downloads/contents
-  upload: /Users/jspark226/devspace/upload
-  contents: /Users/jspark226/devspace/contents
+  upload: /Users/younghyunshin/Downloads/upload
+  contents: /Users/younghyunshin/Downloads/contents
+  #upload: /Users/jspark226/devspace/upload
+  #contents: /Users/jspark226/devspace/contents
 
 # ONSEMIRO
 onsemiro:
