@@ -131,9 +131,9 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     TOP_GRID_DETAIL_PAGE_SAVE :function () {
 
         axboot.ajax({
-            type: "GET",
+            type: "PUT",
             url: "/api/v1/cl001/05/updateClassificationSchemeConDetail",
-            data: $.extend({},  {pageSize: 1000},fnObj.gridView01.getSelectedData() ,this.formView.getData()),
+            data: JSON.stringify($.extend({}, {classificationSchemeUuid:fnObj.gridView01.getSelectedData()["classificationSchemeUuid"]}, this.formView.getData())) ,
             callback: function (res) {
                 isDetailChanged = false;
                 ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);

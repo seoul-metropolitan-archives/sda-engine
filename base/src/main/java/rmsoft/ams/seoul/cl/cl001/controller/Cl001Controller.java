@@ -89,8 +89,9 @@ public class Cl001Controller extends MessageBaseController {
      *
      * @param requestParams the request params
      */
-    @GetMapping("/05/updateClassificationSchemeConDetail")
-    public void updateClassificationSchemeConDetail(RequestParams<Cl00102VO> requestParams) {
+    @PutMapping(value = "/05/updateClassificationSchemeConDetail")
+    @PostMapping
+    public void updateClassificationSchemeConDetail(@RequestBody Cl00102VO requestParams) {
         cl001Service.updateClassificationSchemeConDetail(requestParams);
     }
 }

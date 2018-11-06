@@ -25,7 +25,13 @@ public interface Cl001Mapper extends MyBatisMapper {
      * @return the classification scheme detail
      */
     Cl00102VO getClassificationSchemeDetail(Cl00102VO cl00102VO);
-
+    /**
+     * Gets classification scheme detail.
+     *
+     * @param cl00102VO the cl 00102 vo
+     * @return the classification scheme detail
+     */
+    Cl00102VO getClassificationSchemeDetailNull(Cl00102VO cl00102VO);
     /**
      * Gets max classification code.
      *

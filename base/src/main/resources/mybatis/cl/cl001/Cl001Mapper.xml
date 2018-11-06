@@ -40,6 +40,66 @@
         </where>
         ORDER BY CLASSIFICATION_CODE,ORDER_NO
     </select>
+    <select id="getClassificationSchemeDetailNull" resultType="Cl00102VO" parameterType="Cl00102VO" statementType="PREPARED">
+        SELECT
+        '' as classificationSchemeUuid ,
+        '' as managerOrganization ,
+        '' as manager ,
+        '' as basedOn,
+        (
+          SELECT COUNT(K2.AGGREGATION_UUID)
+          FROM CL_CLASS K1, CL_CLASSIFY_RECORDS_RESULT K2
+            <where>
+                <if test="classificationSchemeUuid != null">
+                    K1.CLASSIFICATION_SCHEME_UUID = #{classificationSchemeUuid} AND
+                </if>
+                K1.CLASS_UUID = K2.CLASS_UUID
+            </where>
+        ) as aggregationCnt,
+        (
+          SELECT
+            COUNT(USE_YN)
+          FROM
+            CL_CLASS
+          <where>
+              <if test="classificationSchemeUuid != null">
+                CLASSIFICATION_SCHEME_UUID = #{classificationSchemeUuid} AND
+              </if>
+            USE_YN = 'Y'
+          </where>
+        ) as useYes ,
+        (
+          SELECT
+            COUNT(USE_YN)
+          FROM
+            CL_CLASS
+          <where>
+              <if test="classificationSchemeUuid != null">
+                CLASSIFICATION_SCHEME_UUID = #{classificationSchemeUuid} AND
+              </if>
+                USE_YN = 'N'
+          </where>
+        ) as useNo
+        FROM DUAL
+        UNION ALL
+        SELECT
+            Z1.CLASSIFICATION_SCHEME_UUID as classificationSchemeUuid ,
+            Z2.MANAGER_ORGANIZATION as managerOrganization ,
+            Z2.MANAGER as manager ,
+            Z2.BASED_ON as basedOn,
+            99 AS aggregationCnt,
+            99 AS useYes,
+            99 AS useNo
+        FROM
+            CL_CLASSIFICATION_SCHEME Z1,
+            CL_CLASSIFICATION_SCHEME_CON Z2
+        <where>
+            <if test="classificationSchemeUuid != null">
+                Z1.CLASSIFICATION_SCHEME_UUID = #{classificationSchemeUuid} AND
+            </if>
+            Z1.CLASSIFICATION_SCHEME_UUID = Z2.CLASSIFICATION_SCHEME_UUID
+        </where>
+    </select>
     <select id="getClassificationSchemeDetail" resultType="Cl00102VO" parameterType="Cl00102VO" statementType="PREPARED">
         SELECT
           Z1.CLASSIFICATION_SCHEME_UUID as classificationSchemeUuid ,
@@ -47,26 +107,48 @@
           Z2.MANAGER as manager ,
           Z2.BASED_ON as basedOn ,
           (
+            SELECT COUNT(K2.AGGREGATION_UUID)
+            FROM CL_CLASS K1, CL_CLASSIFY_RECORDS_RESULT K2
+            <where>
+                <if test="classificationSchemeUuid != null">
+                  K1.CLASSIFICATION_SCHEME_UUID = #{classificationSchemeUuid} AND
+                </if>
+                K1.CLASS_UUID = K2.CLASS_UUID
+            </where>
+          ) as aggregationCnt,
+          (
             SELECT
               COUNT(USE_YN)
             FROM
               CL_CLASS
-            WHERE
-              USE_YN = 'Y'
+            <where>
+                <if test="classificationSchemeUuid != null">
+                    CLASSIFICATION_SCHEME_UUID = #{classificationSchemeUuid} AND
+                </if>
+                USE_YN = 'Y'
+            </where>
            ) as useYes ,
           (
             SELECT
               COUNT(USE_YN)
             FROM
               CL_CLASS
-            WHERE
-              USE_YN = 'n'
+            <where>
+                <if test="classificationSchemeUuid != null">
+                    CLASSIFICATION_SCHEME_UUID = #{classificationSchemeUuid} AND
+                </if>
+                USE_YN = 'N'
+            </where>
            ) as useNo,
           (
-            SELECT
-              COUNT(AGGREGATION_UUID)
-            FROM
-              CL_CLASSIFY_RECORDS_RESULT
+            SELECT COUNT(K2.AGGREGATION_UUID)
+            FROM CL_CLASS K1, CL_CLASSIFY_RECORDS_RESULT K2
+            <where>
+                <if test="classificationSchemeUuid != null">
+                    K1.CLASSIFICATION_SCHEME_UUID = #{classificationSchemeUuid} AND
+                </if>
+                 K1.CLASS_UUID = K2.CLASS_UUID
+            </where>
            ) as aggregationCnt,
           (
             SELECT

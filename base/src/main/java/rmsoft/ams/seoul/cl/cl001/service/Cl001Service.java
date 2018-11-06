@@ -71,10 +71,15 @@ public class Cl001Service extends BaseService {
     public Cl00102VO getClassificationSchemeDetail(RequestParams<Cl00101VO> requestParams) {
         Cl00102VO cl00102VO = new Cl00102VO();
         cl00102VO.setClassificationSchemeUuid(requestParams.getString("classificationSchemeUuid"));
-        return  cl001Mapper.getClassificationSchemeDetail(cl00102VO);
-    }
 
-    /**
+        ClClassificationSchemeCon clClassificationSchemeCon = new ClClassificationSchemeCon();
+        clClassificationSchemeCon.setClassificationSchemeUuid(requestParams.getString("classificationSchemeUuid"));
+        ClClassificationSchemeCon clClassCon = null;
+        clClassCon = clClassificationSchemeConRepository.findOne(clClassificationSchemeCon.getId());
+
+        return clClassCon == null  ? cl001Mapper.getClassificationSchemeDetailNull(cl00102VO) : cl001Mapper.getClassificationSchemeDetail(cl00102VO);
+    }
+     /**
      * Update classification scheme list api response.
      *
      * @param list the list
@@ -171,17 +176,17 @@ public class Cl001Service extends BaseService {
      *
      * @param requestParams the request params
      */
-    public void updateClassificationSchemeConDetail(RequestParams<Cl00102VO> requestParams) {
+    public void updateClassificationSchemeConDetail(Cl00102VO requestParams) {
         ClClassificationSchemeCon clClassificationSchemeCon = new ClClassificationSchemeCon();
 
-        if(StringUtils.isEmpty(requestParams.getString("classificationSchemeUuid"))){
+        if(StringUtils.isEmpty(requestParams.getClassificationSchemeUuid())){
             return;
         }
 
-        clClassificationSchemeCon.setClassificationSchemeUuid(requestParams.getString("classificationSchemeUuid"));
-        clClassificationSchemeCon.setBasedOn(requestParams.getString("basedOn"));
-        clClassificationSchemeCon.setManager(requestParams.getString("manager"));
-        clClassificationSchemeCon.setManagerOrganization(requestParams.getString("managerOrganization"));
+        clClassificationSchemeCon.setClassificationSchemeUuid(requestParams.getClassificationSchemeUuid());
+        clClassificationSchemeCon.setBasedOn(requestParams.getBasedOn());
+        clClassificationSchemeCon.setManager(requestParams.getManager());
+        clClassificationSchemeCon.setManagerOrganization(requestParams.getManagerOrganization());
 
         ClClassificationSchemeCon orgClClassCon = null;
 
