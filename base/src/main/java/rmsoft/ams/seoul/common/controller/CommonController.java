@@ -8,16 +8,17 @@ import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import rmsoft.ams.seoul.ad.ad001.service.Ad001Service;
 import rmsoft.ams.seoul.ad.ad001.vo.Ad00101VO;
 import rmsoft.ams.seoul.common.domain.RcComponent;
 import rmsoft.ams.seoul.common.service.CommonService;
+import rmsoft.ams.seoul.common.service.MultipartFileSender;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -44,6 +45,8 @@ public class CommonController extends BaseController {
     private String streamingParam;
     @Value("${streaming.view}")
     private String streamingView;
+    @Value("${repository.contents}")
+    private String contentsPath;
 
     @Autowired
     private CommonService commonService;
@@ -117,6 +120,7 @@ public class CommonController extends BaseController {
 
         } catch (Exception ex) {
             log.error(ex.getMessage());
+
         }finally
         {
             if(null != conn)
@@ -132,6 +136,26 @@ public class CommonController extends BaseController {
         response.put("url", streamingUrl + ":" + streamingPort + streamingContext + streamingView + obj.getString("streamdocsId") + ";currentPage=1");
         System.out.println(streamingUrl+":"+streamingPort+streamingContext+streamingView+obj.getString("streamdocsId")+";currentPage=1");
         return response;
+    }
+
+    @RequestMapping(value = "/video/{id}", method = RequestMethod.GET)
+    public void getVideo(HttpServletRequest req, HttpServletResponse res, @PathVariable String id) {
+        String filePath = contentsPath;
+
+        File getFile = new File(contentsPath + "/2018/11/01/" + "id_36617.mp4");
+
+        try {
+            // 미디어 처리
+            MultipartFileSender
+                    .fromFile(getFile)
+                    .with(req)
+                    .with(res)
+                    .serveResource();
+
+        } catch (Exception e) {
+            // 사용자 취소 Exception 은 콘솔 출력 제외
+            if (!e.getClass().getName().equals("org.apache.catalina.connector.ClientAbortException")) e.printStackTrace();
+        }
     }
 
 }

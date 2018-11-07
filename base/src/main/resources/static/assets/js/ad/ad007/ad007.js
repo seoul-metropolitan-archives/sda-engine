@@ -8,7 +8,7 @@ var isDetailChanged = false;
 var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH: function (caller, act, data) {
         var sendData = fnObj.formView.getData();
-        sendData["entityType"] = fnObj.formView.getFormData("entityType");
+        sendData["entityType"] = $.trim(fnObj.formView.getFormData("entityType"));
 
         axboot.ajax({
             type: "GET",
@@ -100,7 +100,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
 
         var sendData = fnObj.gridView01.getData();
         $.each(sendData, function(idx, item){
-            item["entityType"] = fnObj.formView.getFormData("entityType");
+            item["entityType"] = $.trim(fnObj.formView.getFormData("entityType"));
         });
 
         axboot.call({
