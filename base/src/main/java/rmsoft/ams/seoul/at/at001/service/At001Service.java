@@ -45,6 +45,10 @@ public class At001Service extends BaseService {
 
     @Autowired
     private AtAuthorityRelationRepository atAuthorityRelationRepository;
+
+    private AtAuthorityRelation relAuthrelAuth;
+
+    private At00102VO at00102VO;
     /**
      * Gets classified record list.
      *
@@ -116,6 +120,7 @@ public class At001Service extends BaseService {
                     for(AtAuthorityRelation child : relAuthList)
                     {
                         atAuthorityRelationRepository.delete(child);
+                        atAuthorityRelationRepository.delete(atAuthorityRelationRepository.findOne(getRelAuthId(child,at00101VO).getId()));
                     }
                 }
             }else{//modify
@@ -126,6 +131,10 @@ public class At001Service extends BaseService {
                 atAuthority.setInsertUuid(orgAtAuthority.getInsertUuid());
                 atAuthorityRepository.save(atAuthority);
                 if(null != relAuthList){
+                    AtAuthorityRelation orgAtAuthorityRelation;
+                    AtAuthorityRelation orgRelAtAuthorityRelation;
+                    String orgRelationTypeUuid = "";
+                    String orgRelAuthorityUuid = "";
                     for(AtAuthorityRelation child : relAuthList)
                     {
                         child.setAuthorityUuid(atAuthority.getAuthorityUuid());
@@ -134,15 +143,25 @@ public class At001Service extends BaseService {
                             child.setAuthorityRelationUuid(UUIDUtils.getUUID());
                             child.setAuthorityUuid(atAuthority.getAuthorityUuid());
                             atAuthorityRelationRepository.save(child);
+                            saveRelAuthOfRelAuth(child);
                         }
                         else if(child.isModified()){
-                            AtAuthorityRelation orgAtAuthorityRelation = atAuthorityRelationRepository.findOne(child.getId());
+                            orgAtAuthorityRelation =  atAuthorityRelationRepository.findOne(child.getId());
+                            orgRelationTypeUuid = orgAtAuthorityRelation.getRelationTypeUuid();
+                            orgRelAuthorityUuid = orgAtAuthorityRelation.getRelAuthorityUuid();
+
                             child.setInsertDate(orgAtAuthorityRelation.getInsertDate());
                             child.setInsertUuid(orgAtAuthorityRelation.getInsertUuid());
                             atAuthorityRelationRepository.save(child);
+
+                            orgRelAtAuthorityRelation = atAuthorityRelationRepository.findOne(getRelAuthId(child,orgRelationTypeUuid,orgRelAuthorityUuid).getId());
+
+                            saveRelAuthOfRelAuth(child,orgRelAtAuthorityRelation);
+
                         }
                         else if(child.isDeleted()){
                             atAuthorityRelationRepository.delete(child);
+                            atAuthorityRelationRepository.delete(atAuthorityRelationRepository.findOne(getRelAuthId(child,at00101VO).getId()));
                         }
                     }
                 }
@@ -166,14 +185,74 @@ public class At001Service extends BaseService {
 
             //relation authority
             if(null != relAuthList){
+//                AtAuthorityRelation relAuthrelAuth;
                 for(AtAuthorityRelation child : relAuthList)
                 {
                     child.setAuthorityRelationUuid(UUIDUtils.getUUID());
                     child.setAuthorityUuid(atAuthority.getAuthorityUuid());
                     atAuthorityRelationRepository.save(child);
+                    saveRelAuthOfRelAuth(child);
+
                 }
             }
         }
         return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");
+    }
+
+    public void saveRelAuthOfRelAuth(AtAuthorityRelation child){
+
+        relAuthrelAuth = new AtAuthorityRelation();
+        relAuthrelAuth.setAuthorityRelationUuid(UUIDUtils.getUUID());
+        relAuthrelAuth.setAuthorityUuid(child.getRelAuthorityUuid());
+        relAuthrelAuth.setRelAuthorityUuid(child.getAuthorityUuid());
+
+        if(!"미등록코드".equals(CommonCodeUtils.getAttr01Code("CD162",child.getRelationTypeUuid()))){
+            relAuthrelAuth.setRelationTypeUuid(CommonCodeUtils.getCodeDetailUuidByCode("CD162",CommonCodeUtils.getAttr01Code("CD162",child.getRelationTypeUuid())));
+        }else{
+            relAuthrelAuth.setRelationTypeUuid(child.getRelationTypeUuid());
+        }
+        atAuthorityRelationRepository.save(relAuthrelAuth);
+    }
+
+    public void saveRelAuthOfRelAuth(AtAuthorityRelation child, AtAuthorityRelation old){
+
+        relAuthrelAuth = new AtAuthorityRelation();
+        relAuthrelAuth.setAuthorityRelationUuid(old.getAuthorityRelationUuid());
+        relAuthrelAuth.setAuthorityUuid(child.getRelAuthorityUuid());
+        relAuthrelAuth.setRelAuthorityUuid(child.getAuthorityUuid());
+        relAuthrelAuth.setInsertDate(old.getInsertDate());
+        relAuthrelAuth.setInsertUuid(old.getInsertUuid());
+
+        if(!"미등록코드".equals(CommonCodeUtils.getAttr01Code("CD162",child.getRelationTypeUuid()))){
+            relAuthrelAuth.setRelationTypeUuid(CommonCodeUtils.getCodeDetailUuidByCode("CD162",CommonCodeUtils.getAttr01Code("CD162",child.getRelationTypeUuid())));
+        }else{
+            relAuthrelAuth.setRelationTypeUuid(child.getRelationTypeUuid());
+        }
+        atAuthorityRelationRepository.save(relAuthrelAuth);
+    }
+
+    public AtAuthorityRelation getRelAuthId(AtAuthorityRelation child, At00101VO at00101VO){
+        relAuthrelAuth = new AtAuthorityRelation();
+        at00102VO = new At00102VO();
+        at00102VO.setAuthorityUuid(child.getRelAuthorityUuid());
+        at00102VO.setRelAuthorityUuid(at00101VO.getAuthorityUuid());
+        if(!"미등록코드".equals(CommonCodeUtils.getAttr01Code("CD162",child.getRelationTypeUuid()))) {
+            at00102VO.setRelationTypeUuid(CommonCodeUtils.getCodeDetailUuidByCode("CD162", CommonCodeUtils.getAttr01Code("CD162", child.getRelationTypeUuid())));
+        }else{
+            at00102VO.setRelationTypeUuid(child.getRelationTypeUuid());
+        }
+        return ModelMapperUtils.map(at001Mapper.getAuthorityRelation(at00102VO),AtAuthorityRelation.class);
+    }
+
+    public AtAuthorityRelation getRelAuthId(AtAuthorityRelation child,String orgRelationTypeUuid, String orgRelAuthorityUuid){
+        at00102VO = new At00102VO();
+        at00102VO.setAuthorityUuid(orgRelAuthorityUuid);
+        at00102VO.setRelAuthorityUuid(child.getAuthorityUuid());
+        if(!"미등록코드".equals(CommonCodeUtils.getAttr01Code("CD162",orgRelationTypeUuid))) {
+            at00102VO.setRelationTypeUuid(CommonCodeUtils.getCodeDetailUuidByCode("CD162", CommonCodeUtils.getAttr01Code("CD162", orgRelationTypeUuid)));
+        }else{
+            at00102VO.setRelationTypeUuid(orgRelationTypeUuid);
+        }
+        return ModelMapperUtils.map(at001Mapper.getAuthorityRelation(at00102VO),AtAuthorityRelation.class);
     }
 }

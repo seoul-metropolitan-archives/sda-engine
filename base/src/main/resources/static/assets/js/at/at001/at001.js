@@ -81,6 +81,10 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         fnObj.gridView01.registerAuth();
     },
     DEL_AUTHORITY: function(caller, act, data){
+        if(fnObj.gridView01.gridObj.getSelectedData() == undefined
+            || fnObj.gridView01.gridObj.getSelectedData() == null){
+            return;
+        }
         axDialog.confirm({
             msg: fnObj.formView.getData().authorityName + "을(를) 삭제하시겠습니까?"
         }, function () {
@@ -139,6 +143,11 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
         });
     },
     initEvent: function(){
+
+        $('.split-panel-vertical').on("dragend",function(){
+            alert("adfasdfadsfafd");
+        });
+
         $('input:radio[name="radio"]').change(function(){
             var tempAuthorityTypeUuid = event.currentTarget.value;
             if(isChanged){
@@ -421,7 +430,7 @@ fnObj.childrenAuthInfo = axboot.viewExtend({
         });
 
         $(".childDnrInfo").on("change",".relAuthorityUuid",function(){
-            if("saved" == $(this).parents().eq(1).attr("saveType"))
+            if("saved" == $(this).parents().eq(2).attr("saveType"))
             {
                 $(this).parents().eq(2).find("input[data-ax-path='__modified__']").val(true);
                 isChanged = true;
@@ -443,8 +452,9 @@ fnObj.childrenAuthInfo = axboot.viewExtend({
                 callback: function (data) {
                     if(this) this.close();
                     if(data){
-                        parentsTag.find("input[data-ax-path='relAuthorityUuid']").val(data["authorityUuid"])
-                        parentsTag.find("input[data-ax-path='relAuthorityName']").val(data["authorityName"])
+                        parentsTag.find("input[data-ax-path='relAuthorityUuid']").val(data["authorityUuid"]);
+                        parentsTag.find("input[data-ax-path='relAuthorityName']").val(data["authorityName"]);
+                        parentsTag.find("input[data-ax-path='relAuthorityUuid']").trigger('change');
                     }
                 }
             });
