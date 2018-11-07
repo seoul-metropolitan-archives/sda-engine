@@ -184,6 +184,8 @@ fnObj.pageStart = function () {
         ACTIONS.dispatch(ACTIONS.MENU_OPEN);
     });
 
+    //alert(templateList);
+
     _this.formView.initView();
     _this.gridView01.initView();
     ACTIONS.dispatch(ACTIONS.PAGE_SEARCH, this.formView.getData());
