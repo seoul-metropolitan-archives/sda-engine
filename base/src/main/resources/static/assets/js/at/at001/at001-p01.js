@@ -111,8 +111,8 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
             }
         });
 
-        $("input[data-ax-path='descriptionDate']").val(getFormattedDate(new Date()));
-
+        // $("input[data-ax-path='descriptionDate']").val(getFormattedDate(new Date()));
+        fnObj.formView.setFormData("descriptionDate",getFormattedDate(new Date()));
         this.makeRadio();
         this.initEvent();
     },
