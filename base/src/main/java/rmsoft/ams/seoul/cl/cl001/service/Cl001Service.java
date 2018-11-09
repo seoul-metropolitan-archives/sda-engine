@@ -12,6 +12,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
+import rmsoft.ams.seoul.ad.ad007.dao.Ad007Mapper;
+import rmsoft.ams.seoul.ad.ad007.vo.Ad00702VO;
 import rmsoft.ams.seoul.cl.cl001.dao.Cl001Mapper;
 import rmsoft.ams.seoul.cl.cl001.vo.Cl00101VO;
 import rmsoft.ams.seoul.cl.cl001.vo.Cl00102VO;
@@ -40,6 +42,9 @@ public class Cl001Service extends BaseService {
 
     @Autowired
     private ClClassificationSchemeRepository clClassificationSchemeRepository;
+
+    @Inject
+    private Ad007Mapper ad007Mapper;
 
     /**
      * Gets classification scheme list.
@@ -71,7 +76,19 @@ public class Cl001Service extends BaseService {
     public Cl00102VO getClassificationSchemeDetail(RequestParams<Cl00101VO> requestParams) {
         Cl00102VO cl00102VO = new Cl00102VO();
         cl00102VO.setClassificationSchemeUuid(requestParams.getString("classificationSchemeUuid"));
-        return  cl001Mapper.getClassificationSchemeDetail(cl00102VO);
+
+        cl00102VO = cl001Mapper.getClassificationSchemeDetail(cl00102VO);
+
+        Ad00702VO ad00702VO = new Ad00702VO();
+
+        if(requestParams.getString("classificationSchemeUuid") != null) {
+            ad00702VO.setAddMetaTemplateSetUuid(requestParams.getString("addMetaTemplateSetUuid"));
+        }else{
+            ad00702VO.setAddMetaTemplateSetUuid(cl00102VO.getAddMetaTemplateSetUuid());
+        }
+
+        cl00102VO.setSegmentList(ad007Mapper.searchSegment(ad00702VO));
+        return cl00102VO;
     }
      /**
      * Update classification scheme list api response.
@@ -171,16 +188,12 @@ public class Cl001Service extends BaseService {
      * @param requestParams the request params
      */
     public void updateClassificationSchemeConDetail(Cl00102VO requestParams) {
-        ClClassificationSchemeCon clClassificationSchemeCon = new ClClassificationSchemeCon();
+        //ClClassificationSchemeCon clClassificationSchemeCon = new ClClassificationSchemeCon();
+        ClClassificationSchemeCon clClassificationSchemeCon = ModelMapperUtils.map(requestParams,ClClassificationSchemeCon.class);
 
         if(StringUtils.isEmpty(requestParams.getClassificationSchemeUuid())){
             return;
         }
-
-        clClassificationSchemeCon.setClassificationSchemeUuid(requestParams.getClassificationSchemeUuid());
-        clClassificationSchemeCon.setBasedOn(requestParams.getBasedOn());
-        clClassificationSchemeCon.setManager(requestParams.getManager());
-        clClassificationSchemeCon.setManagerOrganization(requestParams.getManagerOrganization());
 
         ClClassificationSchemeCon orgClClassCon = null;
 

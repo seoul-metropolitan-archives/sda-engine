@@ -4,6 +4,10 @@ var CONFIRM_STATUS = "Confirm";
 var CANCEL_STATUS = "Draft";
 var isDetailChanged = false;
 
+$( function() {
+    $('.detail_wrap').accordion();
+});
+
 var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH: function (caller, act, data) {
         if (isDetailChanged) {
@@ -41,10 +45,16 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         return false;
     },
     PAGE_SEARCH1: function (caller, act, data) {
+        var sendData = fnObj.gridView01.getSelectedData();
+
+        if(data){
+            sendData["addMetaTemplateSetUuid"] = data;
+        }
+
         axboot.ajax({
             type: "GET",
             url: "/api/v1/cl001/02/detail",
-            data: $.extend({}, {pageSize: 1000}, fnObj.gridView01.getSelectedData()),
+            data: $.extend({}, {pageSize: 1000}, sendData),
             callback: function (res) {
                 var selectedData = fnObj.gridView01.getSelectedData();
 
@@ -62,6 +72,89 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 fnObj.formView.setFormData("aggregationCnt",res.aggregationCnt);
                 fnObj.formView.setFormData("itemCnt",res.itemCnt);
 
+                if(data) {
+                    fnObj.formView.setFormData("addMetaTemplateSetUuid", data);
+                }else{
+                    fnObj.formView.setFormData("addMetaTemplateSetUuid", res.addMetaTemplateSetUuid);
+                }
+
+                var segmentList = res.segmentList;
+                var targetTag = $('#addConMetaArea');
+                var cloneTag = null;
+                var dataPath = "";
+                var option = "";
+
+                    $(".meta-ui").remove();
+
+                segmentList.forEach(function(item, idx){
+                    dataPath = "addMetadata" + item.additionalColumn.replace("ADD_METADATA", "");
+
+                    cloneTag = $('#addConMetaArea #template').clone();
+                    cloneTag.addClass("meta-ui");
+                    cloneTag.attr("id", item.additionalColumn);
+                    cloneTag.find(".meta-label").html(item.name);
+
+                    targetTag.append(cloneTag);
+
+                    if(item.hasOwnProperty("popupUuid")) {
+                        cloneTag.find(".meta-input").hide();
+                        cloneTag.find(".meta-combo").show();
+
+                        cloneTag.find(".meta-combo").attr("data-ax-path", dataPath);
+
+                        axboot.commonCodeVO(item.popupCode).forEach(function(codeVO, idx) {
+                            option = $("<option value='"+ codeVO["codeDetailUUID"] +"'>"+codeVO["codeName"]+"</option>");
+                            cloneTag.find(".meta-combo").append(option);
+                        });
+
+                        cloneTag.find(".meta-combo").change(function(){
+                            isDetailChanged = true;
+                        });
+                    }else {
+                        cloneTag.find(".meta-input").show();
+                        cloneTag.find(".meta-combo").hide();
+
+                        cloneTag.find(".meta-input").attr("data-ax-path", dataPath);
+                        cloneTag.find(".meta-input").keyup(function(){
+                            isDetailChanged = true;
+                        });
+                    }
+                        /*
+                    cloneTag.find(".meta-popup-link").show();
+
+                    var btnSearch = $("input[data-ax-path='"+ dataPath +"']").parents().eq(1).find("a");
+
+                    btnSearch.attr("dataPath", dataPath);
+                    btnSearch.attr("field", field);
+                    btnSearch.attr("popupCode", item.popupCode);
+
+                    btnSearch.on("click", function(){
+                        var data = {
+                            popupCode : btnSearch.attr("popupCode"),
+                            searchData : $("input[data-ax-path='"+ btnSearch.attr("dataPath") +"']").val().trim(),
+                            preSearch : false
+                        };
+                        fnObj.formView.addMetaPopupOpen(btnSearch.attr("dataPath"), btnSearch.attr("field"), data);
+                    });
+                    */
+                    /*$("input[data-ax-path='"+ dataPath +"']").focusout(function(){
+
+                        if("" != $(this).val().trim())
+                        {
+                            var data = {
+                                popupCode : item.popupUuid,
+                                searchData : $(this).val().trim()
+                            };
+                            fnObj.formView.addMetaPopupOpen(dataPath, field, data);
+                        }
+                    });*/
+
+                    fnObj.formView.setFormData(dataPath, res[dataPath]);
+
+                    cloneTag.show();
+                });
+
+                fnObj.formView.setData(fnObj.formView.getData());
             },
             options: {
                 onError: axboot.viewError
@@ -136,7 +229,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             data: JSON.stringify($.extend({}, {classificationSchemeUuid:fnObj.gridView01.getSelectedData()["classificationSchemeUuid"]}, this.formView.getData())) ,
             callback: function (res) {
                 isDetailChanged = false;
-                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+                //ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
             },
             options: {
                 onError: axboot.viewError
@@ -185,9 +278,13 @@ fnObj.pageStart = function () {
     });
 
     //alert(templateList);
+    $("[data-ax-path='addMetaTemplateSetUuid']").on("change", function(){
+        ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, $("[data-ax-path='addMetaTemplateSetUuid']").val());
+    });
 
     _this.formView.initView();
     _this.gridView01.initView();
+
     ACTIONS.dispatch(ACTIONS.PAGE_SEARCH, this.formView.getData());
 };
 
@@ -242,6 +339,22 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
     clear: function () {
         this.model.setModel(this.getDefaultData());
         this.target.find('[data-ax-path="key"]').removeAttr("readonly");
+    },
+    addMetaPopupOpen: function(path, field, sendData){
+        axboot.modal.open({
+            modalType: "COMMON_POPUP",
+            preSearch : sendData["preSearch"],
+            sendData: function () {
+                return sendData;
+            },
+            callback: function (data) {
+                fnObj.formView.setFormData(path, data[field]);
+                //fnObj.formView.setData(fnObj.formView.getData());
+                isDetailChanged = true;
+                if(this.close)
+                    this.close();
+            }
+        });
     }
 });
 
@@ -297,11 +410,11 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
                         ACTIONS.dispatch(ACTIONS.TOP_GRID_DETAIL_PAGE_SAVE);
                     } else {
                         isDetailChanged = false;
-                        ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, data);
+                        ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1);
                     }
                 });
             } else {
-                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, data);
+                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1);
             }
         }
     }
