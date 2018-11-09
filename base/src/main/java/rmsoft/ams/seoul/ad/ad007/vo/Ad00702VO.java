@@ -23,6 +23,10 @@ public class Ad00702VO extends BaseVO {
 
 	private String popupUuid;
 
+	private String popupName;
+
+	private String popupCode;
+
 	private String displayedYN;
 
 	private String requiredYN;
