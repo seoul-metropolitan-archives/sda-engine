@@ -84,25 +84,32 @@ public class CommonController extends BaseController {
             //System.out.println(streamingUrl+":"+streamingPort+streamingContext+streamingParam+prefix+"/"]] +path+rcComponent.getFileName());
             String path = rcComponent.getFilePath().replaceAll("\\\\\\\\", "/");
 
+            if("mp4,mkv,avi,mov,wmv".indexOf(rcComponent.getFileFormatUuid().toLowerCase()) > -1){
+                Map<String, Object> response = new HashMap<String, Object>();
+                response.put("componentUuid", rcComponent.getComponentUuid());
+
+                return response;
+            }
+
             if (!path.substring(0,1).equals("/"))
-                path = "/"+path;
+                        path = "/"+path;
 
-            if (!path.substring(path.length()-1,path.length()).equals("/"))
-                path += "/";
+                if (!path.substring(path.length()-1,path.length()).equals("/"))
+                    path += "/";
 
 
-            URL url = new URL(
-                    streamingUrl + ":" + streamingPort + streamingContext + streamingParam + prefix + path + rcComponent.getOriginalFileName()
-            );
-            System.out.println("Stream URL => "+url);
-            conn = (HttpURLConnection) url.openConnection();
-            conn.setDoOutput(true);
-            conn.setRequestMethod("GET");
-            conn.setRequestProperty("Content-Type", "application/json");
-            // Write data
-            // Read response
-            try {
-                br = new BufferedReader(new InputStreamReader(
+                URL url = new URL(
+                        streamingUrl + ":" + streamingPort + streamingContext + streamingParam + prefix + path + rcComponent.getOriginalFileName()
+                );
+                System.out.println("Stream URL => "+url);
+                conn = (HttpURLConnection) url.openConnection();
+                conn.setDoOutput(true);
+                conn.setRequestMethod("GET");
+                conn.setRequestProperty("Content-Type", "application/json");
+                // Write data
+                // Read response
+                try {
+                    br = new BufferedReader(new InputStreamReader(
                         conn.getInputStream()));
 
                 String line;
@@ -142,7 +149,11 @@ public class CommonController extends BaseController {
     public void getVideo(HttpServletRequest req, HttpServletResponse res, @PathVariable String id) {
         String filePath = contentsPath;
 
-        File getFile = new File(contentsPath + "/2018/11/01/" + "id_36617.mp4");
+        Map<String, String> param = new HashMap<String, String>();
+        param.put("componentUuid", id);
+        RcComponent rcComponent = commonService.getComponentData(param);
+
+        File getFile = new File(contentsPath + rcComponent.getFilePath() + File.separator + rcComponent.getOriginalFileName());
 
         try {
             // 미디어 처리

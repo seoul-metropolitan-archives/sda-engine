@@ -81,10 +81,11 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 var segmentList = res.segmentList;
                 var targetTag = $('#addConMetaArea');
                 var cloneTag = null;
+                var cloneInput = null;
                 var dataPath = "";
                 var option = "";
 
-                    $(".meta-ui").remove();
+                $(".meta-ui").remove();
 
                 segmentList.forEach(function(item, idx){
                     dataPath = "addMetadata" + item.additionalColumn.replace("ADD_METADATA", "");
@@ -97,57 +98,35 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                     targetTag.append(cloneTag);
 
                     if(item.hasOwnProperty("popupUuid")) {
-                        cloneTag.find(".meta-input").hide();
-                        cloneTag.find(".meta-combo").show();
+                        cloneInput = cloneTag.find(".meta-combo");
 
-                        cloneTag.find(".meta-combo").attr("data-ax-path", dataPath);
+                        cloneInput.show();
+                        cloneTag.find(".meta-input").hide();
 
                         axboot.commonCodeVO(item.popupCode).forEach(function(codeVO, idx) {
                             option = $("<option value='"+ codeVO["codeDetailUUID"] +"'>"+codeVO["codeName"]+"</option>");
-                            cloneTag.find(".meta-combo").append(option);
+                            cloneInput.append(option);
                         });
 
-                        cloneTag.find(".meta-combo").change(function(){
+                        cloneInput.change(function(){
                             isDetailChanged = true;
                         });
                     }else {
-                        cloneTag.find(".meta-input").show();
+                        cloneInput = cloneTag.find(".meta-input");
+
+                        cloneInput.show();
                         cloneTag.find(".meta-combo").hide();
 
-                        cloneTag.find(".meta-input").attr("data-ax-path", dataPath);
-                        cloneTag.find(".meta-input").keyup(function(){
+                        cloneInput.keyup(function(){
                             isDetailChanged = true;
                         });
                     }
-                        /*
-                    cloneTag.find(".meta-popup-link").show();
 
-                    var btnSearch = $("input[data-ax-path='"+ dataPath +"']").parents().eq(1).find("a");
-
-                    btnSearch.attr("dataPath", dataPath);
-                    btnSearch.attr("field", field);
-                    btnSearch.attr("popupCode", item.popupCode);
-
-                    btnSearch.on("click", function(){
-                        var data = {
-                            popupCode : btnSearch.attr("popupCode"),
-                            searchData : $("input[data-ax-path='"+ btnSearch.attr("dataPath") +"']").val().trim(),
-                            preSearch : false
-                        };
-                        fnObj.formView.addMetaPopupOpen(btnSearch.attr("dataPath"), btnSearch.attr("field"), data);
-                    });
-                    */
-                    /*$("input[data-ax-path='"+ dataPath +"']").focusout(function(){
-
-                        if("" != $(this).val().trim())
-                        {
-                            var data = {
-                                popupCode : item.popupUuid,
-                                searchData : $(this).val().trim()
-                            };
-                            fnObj.formView.addMetaPopupOpen(dataPath, field, data);
-                        }
-                    });*/
+                    cloneInput.attr("title", item.name);
+                    cloneInput.attr("data-ax-path", dataPath);
+                    if(item.requiredYN == "Y"){
+                        cloneInput.attr("data-ax-validate", "required");
+                    }
 
                     fnObj.formView.setFormData(dataPath, res[dataPath]);
 
@@ -222,6 +201,9 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         return result;
     },
     TOP_GRID_DETAIL_PAGE_SAVE :function () {
+        if(!fnObj.formView.validate()){
+            //return;
+        }
 
         axboot.ajax({
             type: "PUT",
@@ -280,6 +262,7 @@ fnObj.pageStart = function () {
     //alert(templateList);
     $("[data-ax-path='addMetaTemplateSetUuid']").on("change", function(){
         ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, $("[data-ax-path='addMetaTemplateSetUuid']").val());
+        isDetailChanged = true;
     });
 
     _this.formView.initView();
