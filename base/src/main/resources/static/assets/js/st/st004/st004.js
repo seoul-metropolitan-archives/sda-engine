@@ -66,6 +66,14 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         // if(fnObj.formView.getData().aggInContainerName == "" ||fnObj.formView.getData().aggInContainerName == undefined ){
         //     return
         // }
+
+        //체크 안하면 Arrange 클릭이 되면 안된다.
+        if(fnObj.gridView01.getSelectedData() == undefined){
+            return;
+        }
+
+        debugger
+
         axboot.modal.open({
             modalType: "ARRANGE_CONTAINER_POPUP",
             width: 1600,
@@ -76,14 +84,17 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             sendData: function () {
                 return {
                     confirmBtn:"Arrange",
-                    crrntAgg: fnObj.formView.getData().aggInContainerName,
-                    containerUuid :  currentContainerUuid
+                    locationUuid : fnObj.gridView01.getSelectedData().locationUuid,
+                    repositoryName : $("input[data-ax-path='repositoryName']").val(),
+                    shelfName : $("input[data-ax-path='shelfName']").val(),
+                    rowNo : fnObj.gridView01.getSelectedData().rowNo,
+                    columnNo : fnObj.gridView01.getSelectedData().columnNo
                 };
             },
             callback: function (data) {
                 if(this) this.close();
                 if(data){
-                    ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1,data);
+                    ACTIONS.dispatch(ACTIONS.PAGE_SEARCH01,data);
                 }
             }
         });
@@ -274,6 +285,9 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     },
     getData: function () {
         return this.gridObj.getData();
+    },
+    getSelectedData: function () {
+        return this.gridObj.getSelectedData()
     },
 
 });

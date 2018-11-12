@@ -74,7 +74,6 @@ public class St004Service extends BaseService {
                     stArrangeContainersResult.setStatusUuid(CommonCodeUtils.getCodeDetailUuid("CD138","Draft"));
                     stArrangeContainersResult.setArrangedDate(Timestamp.valueOf(DateUtils.convertToString(LocalDateTime.now(), DateUtils.DATE_TIME_PATTERN)));
                     stArrangeContainersResult.setDescription("");
-                    stArrangeContainersResult.setDescription("");
                 }
                 stArrangeContainersResultRepository.save(stArrangeContainersResult);
             }

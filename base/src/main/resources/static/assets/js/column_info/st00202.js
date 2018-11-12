@@ -100,7 +100,7 @@ var st00202 =
                     width: 100,
                     editable: true,
                     dataType : "date",
-                    required : true
+                    required : false
                 },
                 {
                     sortNo: 10,
@@ -109,7 +109,7 @@ var st00202 =
                     width: 100,
                     editable: true,
                     dataType : "date",
-                    required : true,
+                    required : false,
                 },
                 {
                     sortNo: 11,

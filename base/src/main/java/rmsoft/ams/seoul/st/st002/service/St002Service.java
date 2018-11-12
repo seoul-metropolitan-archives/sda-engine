@@ -129,6 +129,11 @@ public class St002Service extends BaseService {
         st00201VO.setUseYn(requestParams.getString("useYn"));
         st00201VO.setOrderKey1(requestParams.getString("orderKey1"));
 
+        //검색 조건 추가
+        st00201VO.setContainerName(requestParams.getString("containerName"));
+        st00201VO.setContainerTypeUuid(requestParams.getString("containerTypeUuid"));
+
+
 
         return filter(st002Mapper.getSelectedContainerList(st00201VO), pageable, "", St00201VO.class);
     }

@@ -43,18 +43,6 @@ public class StArrangeContainersResult extends BaseJpaModel<StArrangeContainersR
 	@Column(name = "NOTES", length = 4000)
 	private String notes;
 
-	@Column(name = "UPDATE_DATE", nullable = false)
-	private Timestamp updateDate;
-
-	@Column(name = "INSERT_UUID", length = 36, nullable = false)
-	private String insertUuid;
-
-	@Column(name = "INSERT_DATE", nullable = false)
-	private Timestamp insertDate;
-
-	@Column(name = "UPDATE_UUID", length = 36, nullable = false)
-	private String updateUuid;
-
 
 	@Override
 	public StArrangeContainersResultId getId() {

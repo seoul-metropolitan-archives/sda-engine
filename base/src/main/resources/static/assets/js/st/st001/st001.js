@@ -360,7 +360,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
                 return true;
             else
                 return false;
-        }, ["statusUuid", "repositoryCode", "repositoryName", "description","useYn"]);
+        }, ["statusUuid", "repositoryCode", "repositoryName", "description"]);
     },
     itemClick: function (data) {
         if (fnObj.gridView02.isChangeData() == true || fnObj.gridView03.isChangeData() == true) {
@@ -374,6 +374,28 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
                 }
             });
         } else {
+
+            var codes = axboot.commonCodeFilter("CD138").codeArr;
+            var names = axboot.commonCodeFilter("CD138").nameArr;
+            var state = undefined;
+            for (var i = 0; i < codes.length; i++) {
+                if (codes[i] == fnObj.gridView01.getSelectedData().statusUuid) {
+                    state = names[i];
+                    break;
+                }
+            }
+
+            //confirm confirm
+            if(state == CONFIRM_STATUS){
+                if(fnObj.gridView01.getSelectedData().useYn == "Y"){
+                    fnObj.gridView02.gridObj.setRunAdd(true);
+                }else{
+                    fnObj.gridView02.gridObj.setRunAdd(false);
+                }
+            }else{
+                fnObj.gridView02.gridObj.setRunAdd(false);
+            }
+
             ACTIONS.dispatch(ACTIONS.PAGE_SEARCH02);
         }
 
@@ -395,6 +417,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
             this.setRunDel(false);
         }else{
             this.setRunDel(true);
+            this.setConfirmYn(true,"ST001_01");
         }
     }
 
@@ -429,7 +452,7 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
             else return false;
         },function(row){
             if(row["statusUuid"] == state) {
-                return ["statusUuid", "shelfCode", "shelfName", "maxContainer", "description","useYn"];
+                return ["statusUuid", "shelfCode", "shelfName", "maxContainer", "description"];
             }else {
                 return ["useYn"];
             }
@@ -447,6 +470,29 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
                 }
             });
         } else {
+
+            var codes = axboot.commonCodeFilter("CD138").codeArr;
+            var names = axboot.commonCodeFilter("CD138").nameArr;
+            var state = undefined;
+            for (var i = 0; i < codes.length; i++) {
+                if (codes[i] == fnObj.gridView02.getSelectedData().statusUuid) {
+                    state = names[i];
+                    break;
+                }
+            }
+
+            //confirm confirm
+            if(state == CONFIRM_STATUS){
+                if(fnObj.gridView02.getSelectedData().useYn == "Y"){
+                    fnObj.gridView03.gridObj.setRunAdd(true);
+                }else{
+                    fnObj.gridView03.gridObj.setRunAdd(false);
+                }
+            }else{
+                fnObj.gridView03.gridObj.setRunAdd(false);
+            }
+
+
             ACTIONS.dispatch(ACTIONS.PAGE_SEARCH03);
         }
     },
@@ -467,6 +513,7 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
             this.setRunDel(false);
         }else{
             this.setRunDel(true);
+            this.setConfirmYn(true,"ST001_01");
         }
     },
 });
@@ -521,7 +568,14 @@ fnObj.gridView03 = axboot.viewExtend(axboot.gridView, {
 
             this.setRunDel(false);
         }else{
-            this.setRunDel(true);
+            if(this.getSelectedData().rowNo == ""){
+                this.setRunDel(true);
+            }else{
+                this.setRunDel(true);
+                this.setConfirmYn(true,"ST001_01");
+            }
+
+
         }
     }
 });
