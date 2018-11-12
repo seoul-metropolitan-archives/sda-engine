@@ -149,7 +149,26 @@ public class CommonCodeUtils {
 
         return StringUtils.isEmpty(commonCode.getCode()) ? "미등록코드" : commonCode.getCode();
     }
+    /**
+     * Gets detail code.
+     *
+     * @param groupCd the group cd
+     * @param cdUuid  the cd uuid
+     * @return the detail code
+     */
+    public static String getAttr01Code(String groupCd, String cdUuid) {
 
+        if(commonCodeMap == null){
+            commonCodeMap =  getAllByMap();
+        }
+
+        List<Ad00303VO> commonCodes = commonCodeMap.get(groupCd);
+        Ad00303VO commonCode = commonCodes.stream()
+                .filter(e -> e.getCodeDetailUUID().equals(cdUuid.trim()))
+                .findFirst().get();
+
+        return StringUtils.isEmpty(commonCode.getAttribute01()) ? "미등록코드" : commonCode.getAttribute01();
+    }
     /**
      * Gets all by map.
      *

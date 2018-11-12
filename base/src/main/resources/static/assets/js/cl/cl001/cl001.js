@@ -4,6 +4,10 @@ var CONFIRM_STATUS = "Confirm";
 var CANCEL_STATUS = "Draft";
 var isDetailChanged = false;
 
+$( function() {
+    $('.detail_wrap').accordion();
+});
+
 var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH: function (caller, act, data) {
         if (isDetailChanged) {
@@ -41,10 +45,16 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         return false;
     },
     PAGE_SEARCH1: function (caller, act, data) {
+        var sendData = fnObj.gridView01.getSelectedData();
+
+        if(data){
+            sendData["addMetaTemplateSetUuid"] = data;
+        }
+
         axboot.ajax({
             type: "GET",
             url: "/api/v1/cl001/02/detail",
-            data: $.extend({}, {pageSize: 1000}, fnObj.gridView01.getSelectedData()),
+            data: $.extend({}, {pageSize: 1000}, sendData),
             callback: function (res) {
                 var selectedData = fnObj.gridView01.getSelectedData();
 
@@ -62,6 +72,68 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 fnObj.formView.setFormData("aggregationCnt",res.aggregationCnt);
                 fnObj.formView.setFormData("itemCnt",res.itemCnt);
 
+                if(data) {
+                    fnObj.formView.setFormData("addMetaTemplateSetUuid", data);
+                }else{
+                    fnObj.formView.setFormData("addMetaTemplateSetUuid", res.addMetaTemplateSetUuid);
+                }
+
+                var segmentList = res.segmentList;
+                var targetTag = $('#addConMetaArea');
+                var cloneTag = null;
+                var cloneInput = null;
+                var dataPath = "";
+                var option = "";
+
+                $(".meta-ui").remove();
+
+                segmentList.forEach(function(item, idx){
+                    dataPath = "addMetadata" + item.additionalColumn.replace("ADD_METADATA", "");
+
+                    cloneTag = $('#addConMetaArea #template').clone();
+                    cloneTag.addClass("meta-ui");
+                    cloneTag.attr("id", item.additionalColumn);
+                    cloneTag.find(".meta-label").html(item.name);
+
+                    targetTag.append(cloneTag);
+
+                    if(item.hasOwnProperty("popupUuid")) {
+                        cloneInput = cloneTag.find(".meta-combo");
+
+                        cloneInput.show();
+                        cloneTag.find(".meta-input").hide();
+
+                        axboot.commonCodeVO(item.popupCode).forEach(function(codeVO, idx) {
+                            option = $("<option value='"+ codeVO["codeDetailUUID"] +"'>"+codeVO["codeName"]+"</option>");
+                            cloneInput.append(option);
+                        });
+
+                        cloneInput.change(function(){
+                            isDetailChanged = true;
+                        });
+                    }else {
+                        cloneInput = cloneTag.find(".meta-input");
+
+                        cloneInput.show();
+                        cloneTag.find(".meta-combo").hide();
+
+                        cloneInput.keyup(function(){
+                            isDetailChanged = true;
+                        });
+                    }
+
+                    cloneInput.attr("title", item.name);
+                    cloneInput.attr("data-ax-path", dataPath);
+                    if(item.requiredYN == "Y"){
+                        cloneInput.attr("data-ax-validate", "required");
+                    }
+
+                    fnObj.formView.setFormData(dataPath, res[dataPath]);
+
+                    cloneTag.show();
+                });
+
+                fnObj.formView.setData(fnObj.formView.getData());
             },
             options: {
                 onError: axboot.viewError
@@ -129,14 +201,17 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         return result;
     },
     TOP_GRID_DETAIL_PAGE_SAVE :function () {
+        if(!fnObj.formView.validate()){
+            //return;
+        }
 
         axboot.ajax({
-            type: "GET",
+            type: "PUT",
             url: "/api/v1/cl001/05/updateClassificationSchemeConDetail",
-            data: $.extend({},  {pageSize: 1000},fnObj.gridView01.getSelectedData() ,this.formView.getData()),
+            data: JSON.stringify($.extend({}, {classificationSchemeUuid:fnObj.gridView01.getSelectedData()["classificationSchemeUuid"]}, this.formView.getData())) ,
             callback: function (res) {
                 isDetailChanged = false;
-                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+                //ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
             },
             options: {
                 onError: axboot.viewError
@@ -184,8 +259,15 @@ fnObj.pageStart = function () {
         ACTIONS.dispatch(ACTIONS.MENU_OPEN);
     });
 
+    //alert(templateList);
+    $("[data-ax-path='addMetaTemplateSetUuid']").on("change", function(){
+        ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, $("[data-ax-path='addMetaTemplateSetUuid']").val());
+        isDetailChanged = true;
+    });
+
     _this.formView.initView();
     _this.gridView01.initView();
+
     ACTIONS.dispatch(ACTIONS.PAGE_SEARCH, this.formView.getData());
 };
 
@@ -240,6 +322,22 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
     clear: function () {
         this.model.setModel(this.getDefaultData());
         this.target.find('[data-ax-path="key"]').removeAttr("readonly");
+    },
+    addMetaPopupOpen: function(path, field, sendData){
+        axboot.modal.open({
+            modalType: "COMMON_POPUP",
+            preSearch : sendData["preSearch"],
+            sendData: function () {
+                return sendData;
+            },
+            callback: function (data) {
+                fnObj.formView.setFormData(path, data[field]);
+                //fnObj.formView.setData(fnObj.formView.getData());
+                isDetailChanged = true;
+                if(this.close)
+                    this.close();
+            }
+        });
     }
 });
 
@@ -295,11 +393,11 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
                         ACTIONS.dispatch(ACTIONS.TOP_GRID_DETAIL_PAGE_SAVE);
                     } else {
                         isDetailChanged = false;
-                        ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, data);
+                        ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1);
                     }
                 });
             } else {
-                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, data);
+                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1);
             }
         }
     }

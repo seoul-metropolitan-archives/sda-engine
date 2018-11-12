@@ -56,37 +56,48 @@
     <select id="searchSegment" resultType="Ad00702VO" parameterType="Ad00702VO" statementType="PREPARED">
         <![CDATA[
         SELECT
-            ADD_META_SEGMENT_UUID AS addMetaSegmentUuid,
-            ADD_META_TEMPLATE_SET_UUID AS addMetaTemplateSetUuid,
-            SEQUENCE AS sequence,
-            "NAME" AS "name",
-            TITLE AS title,
-            ADDITIONAL_COLUMN AS additionalColumn,
-            POPUP_UUID AS popupUuid,
-            DISPLAYED_YN AS displayedYN,
-            REQUIRED_YN AS requiredYN,
-            DISPLAY_SIZE AS displaySize,
+            T2.ADD_META_SEGMENT_UUID AS addMetaSegmentUuid,
+            T2.ADD_META_TEMPLATE_SET_UUID AS addMetaTemplateSetUuid,
+            T2.SEQUENCE AS sequence,
+            T2."NAME" AS "name",
+            T2.TITLE AS title,
+            T2.ADDITIONAL_COLUMN AS additionalColumn,
+            T2.POPUP_UUID AS popupUuid,
+            (SELECT CATEGORY_NAME FROM AD_CODE_HEADER WHERE CODE_HEADER_UUID  = T2.POPUP_UUID) AS popupName,
+            (SELECT CATEGORY_CODE FROM AD_CODE_HEADER WHERE CODE_HEADER_UUID  = T2.POPUP_UUID) AS popupCode,
+            T2.DISPLAYED_YN AS displayedYN,
+            T2.REQUIRED_YN AS requiredYN,
+            T2.DISPLAY_SIZE AS displaySize,
         ]]>
         <include refid="Common.UserName">
-            <property name="userUuid" value="INSERT_UUID"/>
+            <property name="userUuid" value="T2.INSERT_UUID"/>
         </include>
         AS insertUuid,
 
         <![CDATA[
-            INSERT_DATE AS insertDate,
+            T2.INSERT_DATE AS insertDate,
         ]]>
 
         <include refid="Common.UserName">
-            <property name="userUuid" value="UPDATE_UUID"/>
+            <property name="userUuid" value="T2.UPDATE_UUID"/>
         </include>
         AS updateUuid,
         <![CDATA[
-            UPDATE_DATE AS  updateDate
-        FROM
-            AD_CON_META_SEGMENT
-        WHERE ADD_META_TEMPLATE_SET_UUID = #{addMetaTemplateSetUuid}
-        ORDER BY SEQUENCE, ADDITIONAL_COLUMN ASC
+            T2.UPDATE_DATE AS  updateDate
         ]]>
+        FROM
+            AD_CON_META_SETUP T1,
+            AD_CON_META_SEGMENT T2
+        WHERE T1.ADD_META_TEMPLATE_SET_UUID = T2.ADD_META_TEMPLATE_SET_UUID
+        <choose>
+            <when test="null != addMetaTemplateSetUuid and '' != addMetaTemplateSetUuid">
+                AND T1.ADD_META_TEMPLATE_SET_UUID = #{addMetaTemplateSetUuid}
+            </when>
+            <otherwise>
+                AND T1.DEFAULT_YN = 'Y'
+            </otherwise>
+        </choose>
+        ORDER BY T2.SEQUENCE, T2.ADDITIONAL_COLUMN ASC
     </select>
     <select id="checkDelete" resultType="int" parameterType="String" statementType="PREPARED">
         SELECT

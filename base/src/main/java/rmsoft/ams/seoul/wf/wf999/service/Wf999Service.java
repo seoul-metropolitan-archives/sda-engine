@@ -267,10 +267,8 @@ public class Wf999Service extends BaseService {
                             Map component = compList.get(compIdx);
                             if(item.get("RECORD_ID").equals(component.get("RECORD_ID"))) {
                                 Rc00502VO rc00502VO = new Rc00502VO();
-                                rc00502VO.setTitle(getFileNameNoExt(component.get("FILE_NAME").toString()));
+                                rc00502VO.setTitle(getFileNameNoExt(component.get("FILE_TITLE").toString()));
                                 rc00502VO.setContentsSize(Integer.parseInt(component.get("FILE_SIZE").toString()));
-                                //rc00502VO.setFilePath(component.get("FILE_PATH").toString().replace(component.get("FILE_NAME").toString(), ""));
-                                rc00502VO.setFilePath(rootFilePath + File.separator);
                                 rc00502VO.setFilePath(rootFilePath + "/");
                                 rc00502VO.setFileName(component.get("FILE_NAME").toString());
                                 rc00502VO.setOriginalFileName(component.get("FILE_NAME").toString());

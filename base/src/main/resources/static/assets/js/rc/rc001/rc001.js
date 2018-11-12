@@ -1,4 +1,5 @@
 var fnObj = {};
+var isDetailChange = false;
 
 $( function() {
     $( "#itemTabs" ).tabs();
@@ -110,6 +111,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         });
     },
     DELETE_AGGREGATION : function(caller, act, list){
+        if(hideMenuRole('saveYn')) return;
 
         axboot.ajax({
             url: "/rc/rc001/deleteAggregation",
@@ -135,6 +137,8 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         });
     },
     PAGE_SAVE: function (caller, act, list) {
+        if(hideMenuRole('saveYn')) return;
+
         if(!fnObj.gridView01.gridObj.validate()){
             return false;
         }else{
@@ -161,6 +165,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     ITEMS_SAVE: function (caller, act, list) {
 
         if(hideMenuRole('saveYn')) return;
+        if(!isDetailChange) return;
 
         axboot.ajax({
             url: "/rc/rc001/save",
@@ -182,6 +187,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     ITEM_SAVE: function (caller, act, data){
 
         if(hideMenuRole('saveYn')) return;
+        if(!isDetailChange) return;
 
         axboot.ajax({
             type: "PUT",
@@ -406,8 +412,12 @@ function exp_gridView() {
  * @param parentNode 옮겨질 Aggregation
  * @returns {boolean}
  */
-function updateRecord(targetData, parentNode, isTree=false) {
+function updateRecord(targetData, parentNode, isTree) {
     var targetNode = null;
+
+    if(isTree == null){
+        isTree = false;
+    }
 
     var targetUuid = "";
     var targetNodeType = "";
@@ -2879,6 +2889,8 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView,{
         this.gridObj.setIndicator({
             visible: false
         });
+
+        this.setEntityName("ExtraMetadata");
         this.makeGrid();
         this.setFilter(true);
     },

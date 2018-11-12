@@ -33,6 +33,7 @@ var cl00101 =
                     required: true,
                     disable: true
                 },
+
                 {
                     sortNo: 2,
                     width:140,

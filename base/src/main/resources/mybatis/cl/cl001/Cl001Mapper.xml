@@ -42,46 +42,61 @@
     </select>
     <select id="getClassificationSchemeDetail" resultType="Cl00102VO" parameterType="Cl00102VO" statementType="PREPARED">
         SELECT
-          Z1.CLASSIFICATION_SCHEME_UUID as classificationSchemeUuid ,
-          Z2.MANAGER_ORGANIZATION as managerOrganization ,
-          Z2.MANAGER as manager ,
-          Z2.BASED_ON as basedOn ,
-          (
-            SELECT
-              COUNT(USE_YN)
-            FROM
-              CL_CLASS
-            WHERE
-              USE_YN = 'Y'
-           ) as useYes ,
-          (
-            SELECT
-              COUNT(USE_YN)
-            FROM
-              CL_CLASS
-            WHERE
-              USE_YN = 'n'
-           ) as useNo,
-          (
-            SELECT
-              COUNT(AGGREGATION_UUID)
-            FROM
-              CL_CLASSIFY_RECORDS_RESULT
-           ) as aggregationCnt,
-          (
-            SELECT
-              COUNT(ITEM_UUID)
-            FROM
-              CL_CLASSIFY_RECORDS_RESULT
-          ) as itemCnt
+            Z1.CLASSIFICATION_SCHEME_UUID as classificationSchemeUuid ,
+            Z2.MANAGER_ORGANIZATION as managerOrganization ,
+            Z2.MANAGER as manager ,
+            Z2.BASED_ON as basedOn,
+            Z2.ADD_METADATA01 as addMetadata01,
+            Z2.ADD_METADATA02 as addMetadata02,
+            Z2.ADD_METADATA03 as addMetadata03,
+            Z2.ADD_METADATA04 as addMetadata04,
+            Z2.ADD_METADATA05 as addMetadata05,
+            Z2.ADD_METADATA06 as addMetadata06,
+            Z2.ADD_METADATA07 as addMetadata07,
+            Z2.ADD_METADATA08 as addMetadata08,
+            Z2.ADD_METADATA09 as addMetadata09,
+            Z2.ADD_METADATA10 as addMetadata10,
+            Z2.ADD_META_TEMPLATE_SET_UUID as addMetaTemplateSetUuid,
+            (
+                SELECT COUNT(K2.AGGREGATION_UUID)
+                FROM CL_CLASS K1, CL_CLASSIFY_RECORDS_RESULT K2
+                <where>
+                    <if test="classificationSchemeUuid != null">
+                        K1.CLASSIFICATION_SCHEME_UUID = #{classificationSchemeUuid} AND
+                    </if>
+                    K1.CLASS_UUID = K2.CLASS_UUID
+                </where>
+            ) as aggregationCnt,
+            (
+                SELECT COUNT(USE_YN)
+                FROM CL_CLASS
+                <where>
+                    <if test="classificationSchemeUuid != null">
+                        CLASSIFICATION_SCHEME_UUID = #{classificationSchemeUuid} AND
+                    </if>
+                    USE_YN = 'Y'
+                </where>
+            ) as useYes ,
+            (
+                SELECT COUNT(USE_YN)
+                FROM CL_CLASS
+                <where>
+                    <if test="classificationSchemeUuid != null">
+                        CLASSIFICATION_SCHEME_UUID = #{classificationSchemeUuid} AND
+                    </if>
+                    USE_YN = 'N'
+                </where>
+            ) as useNo
         FROM
-          CL_CLASSIFICATION_SCHEME Z1, CL_CLASSIFICATION_SCHEME_CON Z2
+            CL_CLASSIFICATION_SCHEME Z1,
+            CL_CLASSIFICATION_SCHEME_CON Z2
         <where>
+            Z1.CLASSIFICATION_SCHEME_UUID = Z2.CLASSIFICATION_SCHEME_UUID(+)
             <if test="classificationSchemeUuid != null">
-                Z1.CLASSIFICATION_SCHEME_UUID = #{classificationSchemeUuid}
+                AND Z1.CLASSIFICATION_SCHEME_UUID = #{classificationSchemeUuid}
             </if>
-            AND Z1.CLASSIFICATION_SCHEME_UUID = Z2.CLASSIFICATION_SCHEME_UUID
         </where>
+
     </select>
     <select id="getMaxClassificationCode" resultType="String" parameterType="Cl00101VO" statementType="PREPARED">
         SELECT CLASSIFICATION_CODE

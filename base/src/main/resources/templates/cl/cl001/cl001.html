@@ -4,7 +4,9 @@
       layout:decorate="~{/layout/base}">
 
 <!-- ===== [ script ] ===== -->
-<!--realgrid -->
+<script type="text/javascript">
+    var templateList = convertJsonObj('[[${templateList}]]');
+</script>
 <script layout:fragment="script" type="text/javascript" th:src="@{/assets/js/cl/cl001/cl001.js}"></script>
 <!-- ===== [ script ] _END_ ===== -->
 <!-- ===== [ base-content ] ===== -->
@@ -28,7 +30,7 @@
                                 <option th:each="item : ${statusUuid}"
                                         th:value="${item.codeDetailUUID}"
                                         th:text="${item.codeName}"/>
-                            </select>
+                                </select>
                         </dd>
                         <dt class="w130">Classification Code</dt>
                         <dd><input type=text style="width:135px" data-ax-path="classificationCode"></dd>
@@ -70,15 +72,15 @@
 
 
                     <div style="display:table; height:100%; width:25%; float:right">
-                        <ul class="bdb bdt div_tablerow bgf7" style="height:30px;">
+                        <!--<ul class="bdb bdt div_tablerow bgf7" style="height:30px;">
                             <th:block layout:insert="~{/fragments/page-buttons :: dot('Classification Scheme Details')}"/>
-                        </ul>
+                        </ul>-->
                         <div style="height:100%; width:100%;" class="div_tablerow bdb">
                             <!--<div style="height: 100%; width: 100%; overflow-y: scroll; overflow-x: hidden; ">
                                 <div style="height: 100%; width: 98%; float: right" dataPath>-->
                             <div class="detail_wrap">
+                                <h3>Classification Scheme Details</h3>
                                 <div class="detail_conts" dataPath>
-
                                     <ul style="width: 100%; height: 30px; ">
                                         <li style="width: 35%;text-align: left">Classification Name</li>
                                         <li style="width: 65%"><input data-ax-path="classificationNameTxt" type=text style="width:97%" class="bgf7" readonly></li>
@@ -120,11 +122,34 @@
                                         <li style="width: 30%;text-align: left">Item</li>
                                         <li style="width: 35%"><input data-ax-path="itemCnt" type=text style="width:96%" class="bgf7" readonly></li>
                                     </ul>
-
-
-
                                 </div>
-
+                                <h3>Classification Scheme Additional Metadata</h3>
+                                <div id="addConMetaArea" class="detail_conts">
+                                    <ul style="width: 100%; height: 30px;" id="templateListContainer">
+                                        <li style="width: 55%;text-align: left">Additional Metadata Template</li>
+                                        <li style="width: 10%;">&nbsp;</li>
+                                        <li style="width: 35%">
+                                            <select data-ax-path="addMetaTemplateSetUuid" style="width:96%;">
+                                                <option value=""></option>
+                                                <option th:each="item : ${templateList}"
+                                                        th:value="${item.addMetaTemplateSetUuid}"
+                                                        th:text="${item.setName}"/>
+                                            </select>
+                                        </li>
+                                    </ul>
+                                    <ul style="width: 100%; height: 30px; display: none" id="template"  >
+                                        <li style="width: 35%;text-align: left" class="meta-label"></li>
+                                        <li style="width: 65%;" class="meta-comp">
+                                            <div style="width: 96%">
+                                                <input class="meta-input" type="text" style="width: 100%">
+                                                <select class="meta-combo" style="width:100%;">
+                                                    <option value=""></option>
+                                                </select>
+                                                <!--<a href="#" class="meta-popup-link" style="display: none"><img src="/assets/images/ams/search_normal.png" alt="find"></a>-->
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                     </div>

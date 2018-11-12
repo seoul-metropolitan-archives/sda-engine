@@ -71,4 +71,21 @@
             Z2.AUTHORITY_UUID = #{authorityUuid}
         </where>
     </select>
+    <select id="getAuthorityRelation" resultType="At00102VO"  statementType="PREPARED">
+        SELECT
+            AUTHORITY_RELATION_UUID as authorityRelationUuid,
+            AUTHORITY_UUID as authorityUuid,
+            RELATION_TYPE_UUID as relationTypeUuid,
+            REL_AUTHORITY_UUID as relAuthorityUuid,
+            <include refid="Common.UserName"><property name="userUuid" value="INSERT_UUID"/></include> as insertUuid,
+            INSERT_DATE as insertDate,
+            <include refid="Common.UserName"><property name="userUuid" value="UPDATE_UUID"/></include> as updateUuid,
+            UPDATE_DATE as updateDate
+        FROM AT_AUTHORITY_RELATION
+        <where>
+            AUTHORITY_UUID = #{authorityUuid} AND
+            RELATION_TYPE_UUID = #{relationTypeUuid} AND
+            REL_AUTHORITY_UUID = #{relAuthorityUuid}
+        </where>
+    </select>
 </mapper>

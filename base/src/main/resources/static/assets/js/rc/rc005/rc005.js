@@ -1,3 +1,4 @@
+
 var fnObj = {};
 var selectedItem = {};
 var from = "";
@@ -252,6 +253,8 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
                 success : function(res){
                     if(res.url != undefined && res.url != null){
                         window.open(res.url, "", "");
+                    }else if(res.componentUuid != undefined && res.componentUuid != null){
+                        window.open("/api/v1/common/video/" + res.componentUuid, "", "");
                     }
                 },
                 error : function (a,b,c)
