@@ -541,24 +541,28 @@ drawParameterGrid = function (res) {
                     CODE : column["name"] + "Code"
                 };
 
-                var uuidColumn = {
-                    name: sqlColumnObj["UUID"],
-                    dataType : "text",
-                    visible : true,
-                    editable : false
-                };
-                var codeColumn = {
-                    name: sqlColumnObj["CODE"],
-                    dataType : "text",
-                    visible : true,
-                    editable : false
-                };
-                column["text"] = column["name"];
-                column["name"] =  sqlColumnObj["NAME"];
-                column["sqlColumn"] = sqlColumnObj;
-                column["popupCallback"] = fnObj.gridView03.popupCallback;
-                columnInfo.push(uuidColumn);
-                columnInfo.push(codeColumn);
+                if(!column.isDummy) {
+
+                    column["isDummy"] = true;
+                    column["text"] = column["name"];
+                    column["name"] = sqlColumnObj["NAME"];
+                    column["sqlColumn"] = sqlColumnObj;
+                    column["popupCallback"] = fnObj.gridView03.popupCallback;
+
+                    var uuidColumn = {
+                        name: sqlColumnObj["UUID"],
+                        dataType: "text",
+                        visible: false,
+                    };
+                    var codeColumn = {
+                        name: sqlColumnObj["CODE"],
+                        dataType: "text",
+                        visible: false,
+                    };
+
+                    columnInfo.push(uuidColumn);
+                    columnInfo.push(codeColumn);
+                }
             }
             columnInfo.push(column);
         }
