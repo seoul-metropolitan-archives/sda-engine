@@ -423,7 +423,9 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
             if(tempFileName == undefined) {
                 tempFileName = "";
             }
-            fnObj.gridView03.gridObj.setValue(0,'uploadFilePath',tempFileName);
+            if (fnObj.gridView03.gridObj.getColumnInfo("uploadFilePath") != null) {
+                fnObj.gridView03.gridObj.setValue(0, 'uploadFilePath', tempFileName);
+            }
         } else {
             fnObj.gridView03.clearData();
         }
@@ -455,6 +457,20 @@ fnObj.gridView03 = axboot.viewExtend(axboot.gridView, {
                 }
             });
         }
+        this.gridObj.onCellEdited(function(gridWrapper,grid){
+            var columnInfo = defaultParameter[selectedJobUuid].columnInfo;
+
+            if (columnInfo && columnInfo.length > 0) {
+                for (var i = 0; i < columnInfo.length; i++) {
+                    if (fnObj.gridView03.getData()[0].hasOwnProperty(columnInfo[i].name)) {
+                        if(columnInfo[i].dataType != "file"){
+                            columnInfo[i].defaultValue = fnObj.gridView03.gridObj.gridView.getDisplayValues(fnObj.gridView01.gridObj.getCurrent()["dataRow"])[columnInfo[i].name];
+                        }
+                    }
+                }
+                defaultParameter[selectedJobUuid].columnInfo = columnInfo;
+            }
+        });
     },
     initEvent: function () {
         /*fnObj.gridView01.gridObj.onKeydown(function (grid, key, ctrl, shift, alt) {
@@ -487,6 +503,7 @@ fnObj.gridView03 = axboot.viewExtend(axboot.gridView, {
 
         }
     },
+
     clearData: function () {
         $("#realgrid03").empty();
     }
@@ -590,11 +607,15 @@ getSavedParameter = function (jobUuid) {
 checkParameter = function () {
     var returnVal = true;
     jobList.forEach(function (job) {
+        if(job.skipYn == "Y"){
+            return true;
+        }
+
         if (job.checkParameter === false) {
             returnVal = false;
         }
     });
-    if(!returnVal) axboot.viewError({message: "체크되지 않은 파라미터 값이 있습니다.\nJob의 파라미터를 확인하시기 바랍니다."});
+    if (!returnVal) axboot.viewError({message: "체크되지 않은 파라미터 값이 있습니다.\nJob의 파라미터를 확인하시기 바랍니다."});
 
     return returnVal;
 }
@@ -611,6 +632,10 @@ isDataChanged = function () {
         return true;
     } else {
         return false;
+    }
+
+    if(fnObj.gridView03.isChangeData() == true){
+        alert("adsf");
     }
 }
 
