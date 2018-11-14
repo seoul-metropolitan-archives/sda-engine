@@ -1,0 +1,14 @@
+jar {
+    baseName = 'missing-file-check'
+    version = '0.0.2'
+    destinationDir = file("${project.rootDir}/base/src/main/resources/workflow-modules")
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+dependencies {
+    //___ compile ___
+    compile project(':base')
+}
