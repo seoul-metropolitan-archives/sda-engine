@@ -85,7 +85,12 @@ var GridWrapper = function(p_id,p_rootContext) {
     this.columnInfo = new Array();
     this.comboFields = new Array();
 
-
+    this.confirmYn = false;
+    this.msg = "";
+    this.setConfirmYn = function(_confirmYn,_msg){
+        _this.confirmYn = _confirmYn;
+        _this.msg = _msg;
+    };
 
     this.setAddBtnName = function(_name){this.addBtnName = _name;}
     this.setDelBtnName = function(_name){this.delBtnName = _name;}
@@ -106,6 +111,7 @@ var GridWrapper = function(p_id,p_rootContext) {
     {
         return defaultStyles;
     }
+
 
 
 
@@ -220,9 +226,23 @@ var GridWrapper = function(p_id,p_rootContext) {
             _this.dispatch("onRemoveRowBefore");
 
             if(_this.runDel) {
-                _this.gridView.commit(true);
-                _this.gridView.getDataProvider().removeRows(_this.gridView.getSelectedRows(), false);
-                _this.dispatch("onRemoveRow");
+                if(_this.confirmYn){
+                    axDialog.confirm({
+                        msg: axboot.getCommonMessage(_this.msg)
+                    }, function () {
+                        if (this.key == "ok") {
+                            _this.gridView.commit(true);
+                            _this.gridView.getDataProvider().removeRows(_this.gridView.getSelectedRows(), false);
+                            _this.dispatch("onRemoveRow");
+                        }
+                    });
+
+                }else{
+                    _this.gridView.commit(true);
+                    _this.gridView.getDataProvider().removeRows(_this.gridView.getSelectedRows(), false);
+                    _this.dispatch("onRemoveRow");
+                }
+
             }
         });
         $("#"+_this.i_id).parents().eq(1).delegate(_this.delBtnName+","+_this.addBtnName,"keydown",function(event){

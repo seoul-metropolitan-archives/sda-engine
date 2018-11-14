@@ -77,11 +77,24 @@ var ad00702 =
                 {
                     sortNo: 9,
                     name: "popupUuid",
-                    text: "Input Value",
                     width: 100,
                     dataType: "popup",
-                    popupCode: "PU128",
-                    sqlColumn : {CODE : "popupUuid"},
+                    editable: true,
+                    required: false,
+                    disable: false,
+                    visible:false
+                },
+                {
+                    sortNo: 9,
+                    name: "popupName",
+                    text: "Input Value",
+                    width: 200,
+                    dataType: "popup",
+                    popupCode: "PU002",
+                    sqlColumn : {
+                        UUID : "popupUuid",
+                        NAME : "popupName"
+                    },
                     editable: true,
                     required: false,
                     disable: false

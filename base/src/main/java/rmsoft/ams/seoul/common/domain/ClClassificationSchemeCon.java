@@ -84,6 +84,10 @@ public class ClClassificationSchemeCon extends SimpleJpaModel<ClClassificationSc
     @Comment(value = "추가메타데이터10")
     private String addMetadata10;
 
+    @Column(name = "ADD_META_TEMPLATE_SET_UUID", length = 36)
+    @Comment(value = "추가메타데이터탬플릿코드")
+    private String addMetaTemplateSetUuid;
+
     @Override
     public ClClassificationSchemeId getId() { return ClClassificationSchemeId.of(classificationSchemeUuid); }
 

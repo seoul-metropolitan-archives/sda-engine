@@ -51,6 +51,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             callback: function (res) {
                 fnObj.gridView02.resetCurrent();
                 fnObj.gridView02.setData(res.list);
+                fnObj.gridView02.disabledColumn();
             },
             options: {
                 onError: axboot.viewError
@@ -337,6 +338,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     },
     itemClick: function (data, index) {
         if(data != null){
+            $("input[data-ax-path='treeName']").val(data.containerTreeName);
             ACTIONS.dispatch(ACTIONS.PAGE_SEARCH2, data);
         }
 
@@ -363,6 +365,10 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
         })
         this.makeGrid();
         // this.gridObj.itemClick(this.itemClick);
+        this.removeRowBeforeEvent(this.cancelDelete);
+    },
+    getSelectedData: function () {
+        return this.gridObj.getSelectedData()
     },
     disabledColumn : function()
     {
@@ -394,6 +400,25 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
     },
     getRowData: function (){
         return this.gridObj.getSelectedData();
+    },
+    cancelDelete: function(){
+        var codes = axboot.commonCodeFilter("CD138").codeArr;
+        var names = axboot.commonCodeFilter("CD138").nameArr;
+        var state = undefined;
+        for (var i = 0; i < codes.length; i++) {
+            if (codes[i] == fnObj.gridView02.getSelectedData().statusUuid) {
+                state = names[i];
+                break;
+            }
+        }
+
+        if(state == CONFIRM_STATUS){
+            axToast.push(axboot.getCommonMessage("DF001_01"));
+
+            this.setRunDel(false);
+        }else{
+            this.setRunDel(true);
+        }
     }
 });
 /**

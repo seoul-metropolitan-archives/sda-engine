@@ -138,19 +138,19 @@
                 AND  PARENT_CONTAINER_UUID = #{parentContainerUuid}
             </if>
             <if test="containerName != null">
-                AND UPPER(CONTAINER_NAME) LIKE '%'||#{containerName}||'%'
+                AND UPPER(containerName) LIKE '%'||#{containerName}||'%'
             </if>
             <if test="statusUuid != null">
-                AND STATUS_UUID = #{statusUuid}
+                AND statusUuid = #{statusUuid}
             </if>
             <if test="controlNumber != null">
                 AND CONTROL_NUMBER = #{controlNumber}
             </if>
             <if test="containerTypeUuid != null">
-                AND CONTAINER_TYPE_UUID = #{containerTypeUuid}
+                AND containerTypeUuid = #{containerTypeUuid}
             </if>
             <if test="useYn != null">
-                AND USE_YN = #{useYn}
+                AND useYn = #{useYn}
             </if>
         </where>
     </select>
