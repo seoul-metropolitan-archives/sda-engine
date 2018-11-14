@@ -495,18 +495,44 @@ fnObj.gridView03 = axboot.viewExtend(axboot.gridView, {
 drawParameterGrid = function (res) {
     var obj =  {renderer: {type: "imageButton", text: "Run",imageUrl: "/assets/images/ams/btn_run_normal.png",hoverUrl: "/assets/images/ams/btn_run_hover.png", activeUrl: "/assets/images/ams/btn_run_hover.png"}}
     var data = {schemeName :"D",uploadFilePath :"",xlsFileName : "",xlsFilePath:""}
+    var columnInfo = [];
+
     if (res.columnInfo.length > 0) {
         for (var i = 0; i < res.columnInfo.length; i++) {
             if (res.columnInfo[i]["dataType"] == "combo") {
                 res.columnInfo[i]["dataType"]["labels"] = eval(res.columnInfo[i]["dataType"]["labels"]);
                 res.columnInfo[i]["dataType"]["values"] = eval(res.columnInfo[i]["dataType"]["values"]);
+            }else if (res.columnInfo[i]["dataType"] == "popup") {
+                var sqlColumnObj = {
+                    UUID : res.columnInfo[i]["name"],
+                    NAME : res.columnInfo[i]["name"] + "Name",
+                    CODE : res.columnInfo[i]["name"] + "Code"
+                };
 
+                var uuidColumn = {
+                    name: sqlColumnObj["UUID"],
+                    dataType : "text",
+                    visible : false,
+                    editable : false
+                };
+                var codeColumn = {
+                    name: sqlColumnObj["CODE"],
+                    dataType : "text",
+                    visible : false,
+                    editable : false
+                };
+                res.columnInfo[i]["text"] = res.columnInfo[i]["name"];
+                res.columnInfo[i]["name"] =  sqlColumnObj["NAME"];
+                res.columnInfo[i]["sqlColumn"] = sqlColumnObj;
+                columnInfo.push(uuidColumn);
+                columnInfo.push(codeColumn);
             }
+            columnInfo.push(res.columnInfo[i]);
         }
 
         fnObj.gridView03.gridObj = new SimpleGridWrapper(fnObj.gridView03.tagId, "/assets/js/libs/realgrid");
         fnObj.gridView03.gridObj.setGridStyle("100%", "100%");
-        fnObj.gridView03.gridObj.setColumnInfo(res.columnInfo);
+        fnObj.gridView03.gridObj.setColumnInfo(columnInfo);
         fnObj.gridView03.gridObj.makeGrid();
         fnObj.gridView03.gridObj.addRow();
         fnObj.gridView03.gridObj.itemClick(fnObj.gridView03.itemClick);
