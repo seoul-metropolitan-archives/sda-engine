@@ -659,10 +659,6 @@ isDataChanged = function () {
     } else {
         return false;
     }
-
-    if(fnObj.gridView03.isChangeData() == true){
-        alert("adsf");
-    }
 }
 
 
