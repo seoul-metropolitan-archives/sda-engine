@@ -503,7 +503,20 @@ fnObj.gridView03 = axboot.viewExtend(axboot.gridView, {
 
         }
     },
+    popupCallback: function(grid,data) {
+        var columnInfo = fnObj.gridView03.gridObj.columnInfo;
 
+        if (columnInfo && columnInfo.length > 0) {
+            for (var i = 0; i < columnInfo.length; i++) {
+                if (fnObj.gridView03.getData()[0].hasOwnProperty(columnInfo[i].name)) {
+                    if(columnInfo[i].dataType != "file"){
+                        columnInfo[i].defaultValue = fnObj.gridView03.gridObj.gridView.getDisplayValues(fnObj.gridView01.gridObj.getCurrent()["dataRow"])[columnInfo[i].name];
+                    }
+                }
+            }
+            defaultParameter[selectedJobUuid].columnInfo = columnInfo;
+        }
+    },
     clearData: function () {
         $("#realgrid03").empty();
     }
@@ -516,35 +529,38 @@ drawParameterGrid = function (res) {
 
     if (res.columnInfo.length > 0) {
         for (var i = 0; i < res.columnInfo.length; i++) {
-            if (res.columnInfo[i]["dataType"] == "combo") {
-                res.columnInfo[i]["dataType"]["labels"] = eval(res.columnInfo[i]["dataType"]["labels"]);
-                res.columnInfo[i]["dataType"]["values"] = eval(res.columnInfo[i]["dataType"]["values"]);
-            }else if (res.columnInfo[i]["dataType"] == "popup") {
+            var column = JSON.parse(JSON.stringify(res.columnInfo[i]));
+
+            if (column["dataType"] == "combo") {
+                column["dataType"]["labels"] = eval(column["dataType"]["labels"]);
+                column["dataType"]["values"] = eval(column["dataType"]["values"]);
+            }else if (column["dataType"] == "popup") {
                 var sqlColumnObj = {
-                    UUID : res.columnInfo[i]["name"],
-                    NAME : res.columnInfo[i]["name"] + "Name",
-                    CODE : res.columnInfo[i]["name"] + "Code"
+                    UUID : column["name"],
+                    NAME : column["name"] + "Name",
+                    CODE : column["name"] + "Code"
                 };
 
                 var uuidColumn = {
                     name: sqlColumnObj["UUID"],
                     dataType : "text",
-                    visible : false,
+                    visible : true,
                     editable : false
                 };
                 var codeColumn = {
                     name: sqlColumnObj["CODE"],
                     dataType : "text",
-                    visible : false,
+                    visible : true,
                     editable : false
                 };
-                res.columnInfo[i]["text"] = res.columnInfo[i]["name"];
-                res.columnInfo[i]["name"] =  sqlColumnObj["NAME"];
-                res.columnInfo[i]["sqlColumn"] = sqlColumnObj;
+                column["text"] = column["name"];
+                column["name"] =  sqlColumnObj["NAME"];
+                column["sqlColumn"] = sqlColumnObj;
+                column["popupCallback"] = fnObj.gridView03.popupCallback;
                 columnInfo.push(uuidColumn);
                 columnInfo.push(codeColumn);
             }
-            columnInfo.push(res.columnInfo[i]);
+            columnInfo.push(column);
         }
 
         fnObj.gridView03.gridObj = new SimpleGridWrapper(fnObj.gridView03.tagId, "/assets/js/libs/realgrid");
