@@ -8,6 +8,20 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="rmsoft.ams.seoul.wf.wf004.dao.Wf004Mapper">
+    <resultMap id="getJobResultInfoMap" type="Wf00402VO">
+        <result property="jobResultUuid" column="jobResultUuid" />
+        <result property="workflowResultUuid" column="workflowResultUuid" />
+        <result property="statusUuid" column="statusUuid" />
+        <result property="sequence" column="sequence" />
+        <result property="jobUuid" column="jobUuid" />
+        <result property="jobName" column="jobName" />
+        <result property="api" column="api" />
+        <result property="skipYn" column="skipYn" />
+        <result property="terminateYn" column="terminateYn" />
+        <result property="startDate" column="startDate" />
+        <result property="endDate" column="endDate" />
+        <result property="message" column="message" jdbcType="CLOB" javaType="java.lang.String" />
+    </resultMap>
     <select id="findAllWorkflowResult" resultType="Wf00401VO" parameterType="Wf00401VO" statementType="PREPARED">
         SELECT
             Z1.WORKFLOW_RESULT_UUID AS workflowResultUuid,
@@ -58,7 +72,7 @@
         ORDER BY Z1.BATCH_ID desc
     </select>
 
-    <select id="findWorkflowJobResult" resultType="Wf00402VO" parameterType="String" statementType="PREPARED">
+    <select id="findWorkflowJobResult" resultMap="getJobResultInfoMap" parameterType="String" statementType="PREPARED">
         SELECT
             Z1.JOB_RESULT_UUID AS jobResultUuid,
             Z1.WORKFLOW_RESULT_UUID AS workflowResultUuid,

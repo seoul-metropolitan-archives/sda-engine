@@ -55,6 +55,8 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     },
     // ParameterResult 정보 조회
     PAGE_SEARCH2: function (caller, act, data) {
+
+        data.message = ""; // 메세지가 너무 길어서 지움
         axboot.ajax({
             type: "GET",
             url: "/api/v1/wf004/03/list",

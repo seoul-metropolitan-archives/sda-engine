@@ -7,6 +7,7 @@ package rmsoft.ams.seoul.workflow;
 
 import io.onsemiro.core.context.AppContextManager;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.IDataSet;
@@ -68,7 +69,24 @@ public class ProcessStndRmsUpload {
      */
     public WorkflowResponse runProcess() {
         WorkflowResponse workflowResult = new WorkflowResponse();
-        //this.jdbcTemplate = new JdbcTemplate(getDataSource());
+
+        if (StringUtils.isEmpty(uploadFilePath)) {
+            workflowResult.setSuccess(false);
+            workflowResult.setMessage("uploadFilePath parameter value is empty");
+            return workflowResult;
+        }
+
+        if (StringUtils.isEmpty(uploadServerPath)) {
+            workflowResult.setSuccess(false);
+            workflowResult.setMessage("uploadServerPath parameter value is empty");
+            return workflowResult;
+        }
+
+        if (StringUtils.isEmpty(schemeName)) {
+            workflowResult.setSuccess(false);
+            workflowResult.setMessage("schemeName parameter value is empty");
+            return workflowResult;
+        }
 
         this.jdbcTemplate = AppContextManager.getBean(JdbcTemplate.class);
 
