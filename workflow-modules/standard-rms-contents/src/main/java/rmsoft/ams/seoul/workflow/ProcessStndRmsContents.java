@@ -6,6 +6,7 @@ package rmsoft.ams.seoul.workflow;
 
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import rmsoft.ams.seoul.common.workflow.WorkflowResponse;
 import rmsoft.ams.seoul.utils.ArchiveUtils;
@@ -36,6 +37,24 @@ public class ProcessStndRmsContents {
      */
     public WorkflowResponse runProcess() {
         WorkflowResponse workflowResult = new WorkflowResponse();
+
+        if (StringUtils.isEmpty(uploadFilePath)) {
+            workflowResult.setSuccess(false);
+            workflowResult.setMessage("uploadFilePath parameter value is empty");
+            return workflowResult;
+        }
+
+        if (StringUtils.isEmpty(contentsUploadServerPath)) {
+            workflowResult.setSuccess(false);
+            workflowResult.setMessage("contentsUploadServerPath parameter value is empty");
+            return workflowResult;
+        }
+
+        if (StringUtils.isEmpty(contentsRootPath)) {
+            workflowResult.setSuccess(false);
+            workflowResult.setMessage("contentsRootPath parameter value is empty");
+            return workflowResult;
+        }
 
         try {
             ArchiveUtils.extract(contentsUploadServerPath + uploadFilePath, contentsRootPath, "");

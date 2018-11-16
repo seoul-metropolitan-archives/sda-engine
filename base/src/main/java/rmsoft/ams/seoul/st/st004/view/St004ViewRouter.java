@@ -18,6 +18,8 @@ public class St004ViewRouter extends BaseController {
     }
     @PostMapping("/st/st004/st004-p01")
     public String viewPopup(ModelMap model) {
+        model.addAttribute("statusUuid", CommonCodeUtils.get("CD138"));
+        model.addAttribute("containerTypeUuid", CommonCodeUtils.get("CD139"));
         return "/st/st004/st004-p01";
     }
 }

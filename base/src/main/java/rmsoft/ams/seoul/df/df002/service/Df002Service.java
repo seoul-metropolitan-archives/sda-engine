@@ -130,7 +130,7 @@ public class Df002Service extends BaseService {
             if(changeStatus.equals("Draft")){
                 item.setTerminatorUuid("");
                 item.setEndDate(null);
-                item.setEndYn("");
+                item.setEndYn("N");
             }
             repository.save(item);
             index++;

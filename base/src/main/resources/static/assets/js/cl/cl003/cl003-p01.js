@@ -75,17 +75,40 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             return;
         }
 
-        axboot.ajax({
-            type: "PUT",
-            url: "/api/v1/cl/cl003/02/save",
-            data: JSON.stringify({classUuid:parentsData.classUuid,cl00301VOList:fnObj.gridView03.getData()}),
-            callback: function (res) {
-                ACTIONS.dispatch(ACTIONS.PAGE_CLOSE,{classUuid:parentsData.classUuid});
-            },
-            options: {
-                onError: axboot.viewError
+        if(parentsData.hasOwnProperty('flag')){
+            debugger
+            var send = fnObj.gridView03.getData();
+
+            for(var i=0;i<fnObj.gridView03.getJsonData().length;i++){
+                 send[i]['inoutExceptUuid'] = parentsData.classUuid;
             }
-        });
+
+            axboot.ajax({
+                type: "PUT",
+                url: "/api/v1/st/st011/02/save01",
+                data: JSON.stringify(send),
+                callback: function (res) {
+                    ACTIONS.dispatch(ACTIONS.PAGE_CLOSE,{classUuid:parentsData.classUuid});
+                },
+                options: {
+                    onError: axboot.viewError
+                }
+            });
+        }else{
+            axboot.ajax({
+                type: "PUT",
+                url: "/api/v1/cl/cl003/02/save",
+                data: JSON.stringify({classUuid:parentsData.classUuid,cl00301VOList:fnObj.gridView03.getData()}),
+                callback: function (res) {
+                    ACTIONS.dispatch(ACTIONS.PAGE_CLOSE,{classUuid:parentsData.classUuid});
+                },
+                options: {
+                    onError: axboot.viewError
+                }
+            });
+        }
+
+
         return false;
     },
     dispatch: function (caller, act, data) {
@@ -631,6 +654,9 @@ fnObj.gridView03 = axboot.viewExtend(axboot.gridView, {
         }
         this.gridObj.setTreeDataForJSON(data,"children","","icon")
         // this.gridObj.setTreeDataForArray(list, "orderKey1");
+    },
+    getJsonData: function () {
+        return this.gridObj.getJsonRows();
     }
 });
 /**

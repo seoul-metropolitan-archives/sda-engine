@@ -23,4 +23,5 @@ public interface Cl003Mapper extends MyBatisMapper
     List<Cl003> getClassItemList(Cl00301VO cl00301VO);
     List<St00303VO> getSelectedItem(St00303VO st00303VO);
     List<Rc00101VO> getAggregationNode(Rc00101VO param);
+    List<Rc00101VO> getAggregationNodeSchedule(Rc00101VO param);
 }

@@ -38,8 +38,9 @@ var rs00201 =
                     width: 120,
                     name: "triggerCode",
                     text: "Trigger Code",
-                    editable: true,
+                    editable: false,
                     dataType : "text",
+                    disable : true,
                     required: false
                 },
                 {
@@ -65,7 +66,7 @@ var rs00201 =
                     sortNo: 5,
                     name: "description",
                     text: "Description",
-                    width: 70,
+                    width: 300,
                     editable: true,
                     dataType: "multiline"
                 },
@@ -73,7 +74,7 @@ var rs00201 =
                     sortNo: 6,
                     name: "notes",
                     text: "Notes",
-                    width: 120,
+                    width: 300,
                     editable: true,
                     dataType: "text"
                 },

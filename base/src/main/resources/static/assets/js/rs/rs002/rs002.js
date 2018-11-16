@@ -167,6 +167,9 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
         this.gridObj.setOption({
             checkBar: {visible: true}
         })
+        this.setFixedOptions({
+            colCount: 4
+        });
         this.makeGrid();
         this.gridObj.itemClick(this.itemClick);
     },

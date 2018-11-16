@@ -40,10 +40,10 @@ public class St001VO extends BaseVO {
 	private Timestamp updateDate;
 
 
-    public static St001VO of(St001 st001) {
-        St001VO st001VO = ModelMapperUtils.map(st001, St001VO.class);
-        return st001VO;
-    }
+	public static St001VO of(St001 st001) {
+		St001VO st001VO = ModelMapperUtils.map(st001, St001VO.class);
+		return st001VO;
+	}
 
     public static List<St001VO> of(List<St001> st001List) {
         return st001List.stream().map(st001 -> of(st001)).collect(toList());

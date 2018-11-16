@@ -21,4 +21,5 @@ public class St00303VO extends BaseVO {
 	private String catPath;
 	private String containerUuid;
 	private String classUuid;
+	private String recordScheduleUuid;
 }
