@@ -423,7 +423,9 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
             if(tempFileName == undefined) {
                 tempFileName = "";
             }
-            fnObj.gridView03.gridObj.setValue(0,'uploadFilePath',tempFileName);
+            if (fnObj.gridView03.gridObj.getColumnInfo("uploadFilePath") != null) {
+                fnObj.gridView03.gridObj.setValue(0, 'uploadFilePath', tempFileName);
+            }
         } else {
             fnObj.gridView03.clearData();
         }
@@ -455,6 +457,20 @@ fnObj.gridView03 = axboot.viewExtend(axboot.gridView, {
                 }
             });
         }
+        this.gridObj.onCellEdited(function(gridWrapper,grid){
+            var columnInfo = defaultParameter[selectedJobUuid].columnInfo;
+
+            if (columnInfo && columnInfo.length > 0) {
+                for (var i = 0; i < columnInfo.length; i++) {
+                    if (fnObj.gridView03.getData()[0].hasOwnProperty(columnInfo[i].name)) {
+                        if(columnInfo[i].dataType != "file"){
+                            columnInfo[i].defaultValue = fnObj.gridView03.gridObj.gridView.getDisplayValues(fnObj.gridView01.gridObj.getCurrent()["dataRow"])[columnInfo[i].name];
+                        }
+                    }
+                }
+                defaultParameter[selectedJobUuid].columnInfo = columnInfo;
+            }
+        });
     },
     initEvent: function () {
         /*fnObj.gridView01.gridObj.onKeydown(function (grid, key, ctrl, shift, alt) {
@@ -487,6 +503,20 @@ fnObj.gridView03 = axboot.viewExtend(axboot.gridView, {
 
         }
     },
+    popupCallback: function(grid,data) {
+        var columnInfo = fnObj.gridView03.gridObj.columnInfo;
+
+        if (columnInfo && columnInfo.length > 0) {
+            for (var i = 0; i < columnInfo.length; i++) {
+                if (fnObj.gridView03.getData()[0].hasOwnProperty(columnInfo[i].name)) {
+                    if(columnInfo[i].dataType != "file"){
+                        columnInfo[i].defaultValue = fnObj.gridView03.gridObj.gridView.getDisplayValues(fnObj.gridView01.gridObj.getCurrent()["dataRow"])[columnInfo[i].name];
+                    }
+                }
+            }
+            defaultParameter[selectedJobUuid].columnInfo = columnInfo;
+        }
+    },
     clearData: function () {
         $("#realgrid03").empty();
     }
@@ -495,18 +525,51 @@ fnObj.gridView03 = axboot.viewExtend(axboot.gridView, {
 drawParameterGrid = function (res) {
     var obj =  {renderer: {type: "imageButton", text: "Run",imageUrl: "/assets/images/ams/btn_run_normal.png",hoverUrl: "/assets/images/ams/btn_run_hover.png", activeUrl: "/assets/images/ams/btn_run_hover.png"}}
     var data = {schemeName :"D",uploadFilePath :"",xlsFileName : "",xlsFilePath:""}
+    var columnInfo = [];
+
     if (res.columnInfo.length > 0) {
         for (var i = 0; i < res.columnInfo.length; i++) {
-            if (res.columnInfo[i]["dataType"] == "combo") {
-                res.columnInfo[i]["dataType"]["labels"] = eval(res.columnInfo[i]["dataType"]["labels"]);
-                res.columnInfo[i]["dataType"]["values"] = eval(res.columnInfo[i]["dataType"]["values"]);
+            var column = JSON.parse(JSON.stringify(res.columnInfo[i]));
 
+            if (column["dataType"] == "combo") {
+                column["dataType"]["labels"] = eval(column["dataType"]["labels"]);
+                column["dataType"]["values"] = eval(column["dataType"]["values"]);
+            }else if (column["dataType"] == "popup") {
+                var sqlColumnObj = {
+                    UUID : column["name"],
+                    NAME : column["name"] + "Name",
+                    CODE : column["name"] + "Code"
+                };
+
+                if(!column.isDummy) {
+
+                    column["isDummy"] = true;
+                    column["text"] = column["name"];
+                    column["name"] = sqlColumnObj["NAME"];
+                    column["sqlColumn"] = sqlColumnObj;
+                    column["popupCallback"] = fnObj.gridView03.popupCallback;
+
+                    var uuidColumn = {
+                        name: sqlColumnObj["UUID"],
+                        dataType: "text",
+                        visible: false,
+                    };
+                    var codeColumn = {
+                        name: sqlColumnObj["CODE"],
+                        dataType: "text",
+                        visible: false,
+                    };
+
+                    columnInfo.push(uuidColumn);
+                    columnInfo.push(codeColumn);
+                }
             }
+            columnInfo.push(column);
         }
 
         fnObj.gridView03.gridObj = new SimpleGridWrapper(fnObj.gridView03.tagId, "/assets/js/libs/realgrid");
         fnObj.gridView03.gridObj.setGridStyle("100%", "100%");
-        fnObj.gridView03.gridObj.setColumnInfo(res.columnInfo);
+        fnObj.gridView03.gridObj.setColumnInfo(columnInfo);
         fnObj.gridView03.gridObj.makeGrid();
         fnObj.gridView03.gridObj.addRow();
         fnObj.gridView03.gridObj.itemClick(fnObj.gridView03.itemClick);
@@ -590,11 +653,15 @@ getSavedParameter = function (jobUuid) {
 checkParameter = function () {
     var returnVal = true;
     jobList.forEach(function (job) {
+        if(job.skipYn == "Y"){
+            return true;
+        }
+
         if (job.checkParameter === false) {
             returnVal = false;
         }
     });
-    if(!returnVal) axboot.viewError({message: "체크되지 않은 파라미터 값이 있습니다.\nJob의 파라미터를 확인하시기 바랍니다."});
+    if (!returnVal) axboot.viewError({message: "체크되지 않은 파라미터 값이 있습니다.\nJob의 파라미터를 확인하시기 바랍니다."});
 
     return returnVal;
 }

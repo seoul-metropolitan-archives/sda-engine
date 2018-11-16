@@ -16,6 +16,8 @@
             T1."DEGREE" AS "degree",
             T1.KEYWORD AS keyword,
             T1.END_YN AS endYN,
+            T1.DESCRIPTION as description,
+            T1.NOTES as notes,
         ]]>
         <include refid="Common.UserName">
             <property name="userUuid" value="T1.TERMINATOR_UUID"/>
