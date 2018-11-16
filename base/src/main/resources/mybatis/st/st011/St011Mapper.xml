@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="rmsoft.ams.seoul.st.st011.dao.St011Mapper">
+    <select id="getStInoutExcept" resultType="St01101VO" parameterType="St01101VO" statementType="PREPARED">
+        SELECT
+        INOUT_EXCEPT_UUID as inoutExceptUuid,
+        REQUEST_NAME as requestName,
+        <include refid="Common.UserName"><property name="userUuid" value="REQUESTOR_UUID"/></include> as requestorUuid,
+        REQUEST_DATE as requestDate,
+        EXCEPT_START_DATE as exceptStartDate,
+        EXCEPT_END_DATE as exceptEndDate,
+        EXCEPT_REASON as exceptReason,
+        <include refid="Common.UserName"><property name="userUuid" value="INSERT_UUID"/></include> as insertUuid,
+        INSERT_DATE as insertDate,
+        <include refid="Common.UserName"><property name="userUuid" value="UPDATE_UUID"/></include> as updateUuid,
+        UPDATE_DATE as updateDate
+        FROM
+        ST_INOUT_EXCEPT
+        <where>
+            1=1
+            <if test="requestName != null">
+                AND REQUEST_NAME LIKE '%' || #{requestName} || '%'
+            </if>
+        </where>
+    </select>
+
+    <select id="getStExceptRecordResult" resultType="St01102VO" parameterType="St01102VO" statementType="PREPARED">
+        SELECT EXCEPT_RECORD_RESULT_UUID as exceptRecordResultUuid,
+               INOUT_EXCEPT_UUID as inoutExceptUuid,
+               AGGREGATION_UUID as aggregationUuid,
+               <include refid="Common.UserName"><property name="userUuid" value="INSERT_UUID"/></include> as insertUuid,
+               INSERT_DATE as insertDate,
+               <include refid="Common.UserName"><property name="userUuid" value="UPDATE_UUID"/></include> as updateUuid,
+               UPDATE_DATE
+        FROM ST_EXCEPT_RECORD_RESULT
+        <where>
+            1=1
+            <if test="inoutExceptUuid != null">
+                AND INOUT_EXCEPT_UUID = #{inoutExceptUuid}
+            </if>
+        </where>
+
+    </select>
+</mapper>

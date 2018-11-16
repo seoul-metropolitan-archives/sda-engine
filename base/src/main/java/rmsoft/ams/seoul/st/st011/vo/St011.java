@@ -27,18 +27,41 @@ import java.sql.Timestamp;
 public class St011 extends SimpleJpaModel<String> {
 
 	@Id
-	@Column(name = "test", length = 36, nullable = false)
-	private String test;
+	@Column(name = "INOUT_EXCEPT_UUID", length = 36, nullable = false)
+	private String inoutExceptUuid;
 
-	@Column(name = "test123", length = 36, nullable = false)
-	private String test123;
+	@Column(name = "REQUEST_NAME", length = 500, nullable = false)
+	private String requestName;
 
-	@Column(name = "test321", length = 36, nullable = false)
-	private String test321;
+	@Column(name = "REQUESTOR_UUID", length = 36, nullable = false)
+	private String requestorUuid;
 
+	@Column(name = "REQUEST_DATE", length = 36, nullable = false)
+	private Timestamp requestDate;
+
+	@Column(name = "EXCEPT_START_DATE", length = 36, nullable = false)
+	private Timestamp exceptStartDate;
+
+	@Column(name = "EXCEPT_END_DATE", length = 36, nullable = false)
+	private Timestamp exceptEndDate;
+
+	@Column(name = "EXCEPT_REASON", length = 4000)
+	private String exceptReason;
+
+	@Column(name = "INSERT_UUID", length = 36, nullable = false)
+	private String insertUuid;
+
+	@Column(name = "INSERT_DATE", nullable = false)
+	private Timestamp insertDate;
+
+	@Column(name = "UPDATE_UUID", length = 36, nullable = false)
+	private String updateUuid;
+
+	@Column(name = "UPDATE_DATE", nullable = false)
+	private Timestamp updateDate;
 
     @Override
     public String getId() {
-        return test;
+        return inoutExceptUuid;
     }
 }

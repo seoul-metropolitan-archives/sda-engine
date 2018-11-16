@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.data.domain.Page;
 
+import javax.persistence.Column;
+import javax.persistence.Id;
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -16,12 +18,27 @@ import static java.util.stream.Collectors.toList;
 @EqualsAndHashCode(callSuper=true)
 public class St011VO extends BaseVO {
 
-	private String arrangeContainersResultUuid;
+    private String inoutExceptUuid;
 
-	private String locationUuid;
+    private String requestName;
 
-	private String containerUuid;
+    private String requestorUuid;
 
+    private Timestamp requestDate;
+
+    private Timestamp exceptStartDate;
+
+    private Timestamp exceptEndDate;
+
+    private String exceptReason;
+
+    private String insertUuid;
+
+    private Timestamp insertDate;
+
+    private String updateUuid;
+
+    private Timestamp updateDate;
 
 
     public static St011VO of(St011 st011) {
@@ -33,7 +50,7 @@ public class St011VO extends BaseVO {
         return st011List.stream().map(st011 -> of(st011)).collect(toList());
     }
 
-    public static List<St011VO> of(Page<St011> st004Page) {
-        return st004Page.getContent().stream().map(st011 -> of(st011)).collect(toList());
+    public static List<St011VO> of(Page<St011> st011Page) {
+        return st011Page.getContent().stream().map(st011 -> of(st011)).collect(toList());
     }
 }
