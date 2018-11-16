@@ -15,7 +15,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             callback: function (res) {
                 if(res.list == null || res.list.length <= 0){
                     fnObj.gridView01.setData([]);
-                    fnObj.gridView01.disabledColumn();
+                    // fnObj.gridView01.disabledColumn();
                     return;
                 }
                 fnObj.gridView01.setData(res.list);

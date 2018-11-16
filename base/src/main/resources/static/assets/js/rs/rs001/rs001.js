@@ -183,8 +183,18 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
         this.gridObj.setOption({
             checkBar: {visible: true}
         })
+        this.setFixedOptions({
+            colCount: 7
+        });
         this.makeGrid();
-        // this.gridObj.itemClick(this.itemClick);
+        this.gridObj.gridView.addCellStyle("style01", {
+            "foreground": "#ffffffff",
+            "background": "#ff333333",
+            "fontSize": 13,
+            "fontBold": true,
+            "editable": false
+        });
+        this.gridObj.itemClick(this.itemClick);
         this.gridObj.onDataCellDblClicked(this.onDataCellDblClicked)
         this.removeRowBeforeEvent(this.cancelDelete);
 
@@ -193,20 +203,17 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
         var state = axboot.commonCodeValueByCodeName("CD133", "영구");
 
         this.gridObj.onCellEdited(function (gridWrapper, grid, itemIndex, dataRow, field) {
-            _this.gridObj.setCustomCellStyleRow(gridWrapper, grid, dataRow,"disable", function (gridWrapper, row) {
+            _this.gridObj.setCustomCellStyleRow(fnObj.gridView01.gridObj, fnObj.gridView01.gridObj.gridView, fnObj.gridView01.gridObj.getCurrent()["dataRow"],"disable", function () {
                 var result = false;
-                if(!row)
-                    return false;
-                if (row["retentionPeriodUuid"] == state){
-                    fnObj.gridView01.gridObj.setValue(itemIndex,"disposalTypeUuid"," ");
-                    // fnObj.gridView01.commit();
+                if(!fnObj.gridView01.getCurrentData()) return false;
+                if (fnObj.gridView01.getCurrentData()["retentionPeriodUuid"] == state){
+                    fnObj.gridView01.gridObj.setValue(fnObj.gridView01.gridObj.getCurrent()["dataRow"], "disposalTypeUuid", " ");
                     result = true;
                 }else{
                     result = false;
                 }
                 return result;
             }, ["disposalTypeUuid"], true);
-
         });
     },
     getSelectedData : function(){
@@ -216,6 +223,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     {
         var codes = axboot.commonCodeFilter("CD134").codeArr;
         var names = axboot.commonCodeFilter("CD134").nameArr;
+        var cd133State = axboot.commonCodeValueByCodeName("CD133", "영구");
         var state = undefined;
         for(var i = 0; i < names.length; i++)
         {
@@ -225,13 +233,29 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
                 break;
             }
         }
+
         this.gridObj.setCustomCellStyleRows("disable",function(row){
 
-            if(row["statusUuid"] == state)
+            if(row["statusUuid"] == state || row["retentionPeriodUuid"] == cd133State)
                 return true;
             else
                 return false;
-        },["grsName","retentionPeriodUuid","disposalTypeUuid","basedOn","description","triggerYn"]);
+        },function(row){
+            if(row["statusUuid"] == state) {
+                return ["grsName","retentionPeriodUuid","disposalTypeUuid","basedOn","description","triggerYn"];
+            }else if(row["statusUuid"] != state && row["retentionPeriodUuid"] == cd133State){
+                return ["disposalTypeUuid"];
+            }else if(row["statusUuid"] != state){
+                return ["grsName","retentionPeriodUuid","disposalTypeUuid","basedOn","description","triggerYn"];
+            }
+        },true,function(row){
+            if(row["statusUuid"] != state && row["retentionPeriodUuid"] == cd133State){
+                return ["grsName","retentionPeriodUuid","basedOn","description","triggerYn"];
+            }else{
+                return [];
+            }
+        });
+
     },
     itemClick: function (data) {
 

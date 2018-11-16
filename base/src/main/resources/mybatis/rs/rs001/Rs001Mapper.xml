@@ -46,7 +46,7 @@
                 AND TRIGGER_YN = #{triggerYn}
             </if>
         </where>
-        ORDER BY GRS_NAME
+        ORDER BY GRS_CODE
     </select>
     <select id="getRelatedData" resultType="int" parameterType="String" statementType="PREPARED">
         SELECT count(*)

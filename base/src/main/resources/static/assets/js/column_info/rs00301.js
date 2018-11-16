@@ -28,22 +28,25 @@ var rs00301 =
                     text: "Status",
                     editable: false,
                     dataType: "combo",
+                    disable: true,
                     values: axboot.commonCodeFilter("CD134").codeArr,
                     labels: axboot.commonCodeFilter("CD134").nameArr
                 },
                 {
                     sortNo: 2,
-                    width: 120,
+                    width: 80,
                     name: "recalculationYn",
                     text: "Recalculation",
+                    editable: false,
                     dataType: "check",
-                    textAlignment: "center",
                     defaultValue : "N",
-                    editable: true
+                    textAlignment: "center",
+                    required: false,
+                    disable: true
                 },
                 {
                     sortNo: 3,
-                    width: 150,
+                    width: 80,
                     name: "rsCode",
                     text: "RS Code",
                     disable: true,
@@ -88,38 +91,32 @@ var rs00301 =
                     sortNo: 7,
                     name: "retentionPeriodUuid",
                     text: "Retention Period",
-                    width: 120,
-                    editable: true,
+                    width: 100,
                     dataType: "combo",
                     values: axboot.commonCodeFilter("CD133").codeArr,
-                    labels: axboot.commonCodeFilter("CD133").nameArr,
-                    required: true
+                    labels: axboot.commonCodeFilter("CD133").nameArr
                 },
                 {
                     sortNo: 8,
                     name: "disposalTypeUuid",
                     text: "Disposal Type",
-                    width: 120,
-                    editable: true,
+                    width: 80,
                     dataType: "combo",
                     values: axboot.commonCodeFilter("CD135").codeArr,
-                    labels: axboot.commonCodeFilter("CD135").nameArr,
-                    required: true
+                    labels: axboot.commonCodeFilter("CD135").nameArr
                 },
                 {
                     sortNo: 9,
                     name: "basedOn",
                     text: "Based On",
-                    width: 120,
-                    editable: true,
-                    required: true,
+                    width: 200,
                     dataType: "multiline"
                 },
                 {
                     sortNo: 10,
                     name: "triggerName",
                     text: "Trigger Name",
-                    width: 120,
+                    width: 200,
                     editable: true,
                     dataType: "popup",
                     popupCode : "PU131",
@@ -142,7 +139,7 @@ var rs00301 =
                     sortNo: 12,
                     name: "description",
                     text: "Description",
-                    width: 70,
+                    width: 300,
                     editable: true,
                     dataType: "multiline"
                 },
@@ -150,7 +147,7 @@ var rs00301 =
                     sortNo: 13,
                     name: "notes",
                     text: "Notes",
-                    width: 120,
+                    width: 300,
                     editable: true,
                     dataType: "text"
                 },

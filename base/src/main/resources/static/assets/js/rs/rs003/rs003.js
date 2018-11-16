@@ -12,7 +12,6 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 fnObj.gridView01.resetCurrent();
                 fnObj.gridView01.setData(res.list);
                 fnObj.gridView01.disabledColumn();
-                setTimeout(fnObj.gridView01.selectiveDisabledColumn(),30000)
             },
             options: {
                 onError: axboot.viewError
@@ -208,12 +207,16 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
             checkBar: {visible: true}
         })
         this.makeGrid();
+        this.setFixedOptions({
+            colCount: 6
+        });
         //this.gridObj.itemClick(this.itemClick);
 
         var _this = this;
         this.gridObj.onCellEdited(function(gridWrapper,grid){
             fnObj.gridView01.selectiveDisabledColumn();
         });
+        this.removeRowBeforeEvent(this.cancelDelete);
     },
     popupCallback: function(grid,data) {
         grid.commit(true);
@@ -223,31 +226,49 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
         return this.gridObj.getSelectedData()
     },
     selectiveDisabledColumn: function(){
-        this.gridObj.setCustomCellStyleRows("disable",function(row){
-            var codes = axboot.commonCodeFilter("CD134").codeArr;
-            var names = axboot.commonCodeFilter("CD134").nameArr;
-            var state = undefined;
-            for(var i = 0; i < names.length; i++)
-            {
-                if(names[i] == "Confirm")
+        if(fnObj.gridView01.gridObj.getCurrent().column == "grsCode"){
+            this.gridObj.setCustomCellStyleRows("disable",function(row){
+                var codes = axboot.commonCodeFilter("CD134").codeArr;
+                var names = axboot.commonCodeFilter("CD134").nameArr;
+                var state = undefined;
+                for(var i = 0; i < names.length; i++)
                 {
-                    state = codes[i];
-                    break;
+                    if(names[i] == "Confirm")
+                    {
+                        state = codes[i];
+                        break;
+                    }
                 }
-            }
-            if(row["statusUuid"] != state) {//Draft 일때
-                if (row["grsCode"] == "" || row["grsCode"] == undefined)
-                    return false;
-                else
+                if(row["statusUuid"] != state) {//Draft 일때
+                    if (row["grsCode"] == "" || row["grsCode"] == undefined)
+                        return false;
+                    else
+                        return true;
+                }else
                     return true;
-            }else
-                return true;
-        },["retentionPeriodUuid","disposalTypeUuid","basedOn"]);
+            },["retentionPeriodUuid","disposalTypeUuid","basedOn"]);
+        }else if(fnObj.gridView01.gridObj.getCurrent().column == "retentionPeriodUuid"){
+            var state = axboot.commonCodeValueByCodeName("CD133", "영구");
+            this.gridObj.setCustomCellStyleRow(fnObj.gridView01.gridObj, fnObj.gridView01.gridObj.gridView, fnObj.gridView01.gridObj.getCurrent()["dataRow"],"disable", function () {
+                var result = false;
+                if(!fnObj.gridView01.getCurrentData()) return false;
+                if (fnObj.gridView01.getCurrentData()["retentionPeriodUuid"] == state){
+                    fnObj.gridView01.gridObj.setValue(fnObj.gridView01.gridObj.getCurrent()["dataRow"], "disposalTypeUuid", " ");
+                    result = true;
+                }else{
+                    result = false;
+                }
+                return result;
+            }, ["disposalTypeUuid"], true);
+        }
+
     },
     disabledColumn : function()
     {
         var codes = axboot.commonCodeFilter("CD134").codeArr;
         var names = axboot.commonCodeFilter("CD134").nameArr;
+        var cd133State = axboot.commonCodeValueByCodeName("CD133", "영구");
+
         var state = undefined;
         for(var i = 0; i < names.length; i++)
         {
@@ -257,42 +278,45 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
                 break;
             }
         }
+        var reverse = null;
+
         this.gridObj.setCustomCellStyleRows("disable",function(row){
-
-            if(row["statusUuid"] == state) //Confirm 일때
-                return true;
-            else
-                return false;
-        },["grsCode","retentionPeriodUuid","disposalTypeUuid","basedOn","triggerName","description"],false);
-
-        // this.gridObj.setCustomCellStyleRows("disable",function(row){
-        //    if(row["statusUuid"] != state) {//Draft 일때
-        //        if (row["grsCode"] == "" || row["grsCode"] == undefined)
-        //            return false;
-        //        else
-        //             return true;
-        //     }else return true;
-        // },["retentionPeriodUuid","disposalTypeUuid","basedOn"]);
-
+            return row["statusUuid"] == state || (row["grsCode"] != "" && row["grsCode"] != undefined) || row["retentionPeriodUuid"] == cd133State //Confirm 일때
+        },function(row){
+            if(row["statusUuid"] == state) {
+                return ["grsCode", "rsName", "retentionPeriodUuid", "disposalTypeUuid", "basedOn", "triggerName", "description"];
+            }else if(row["statusUuid"] != state && row["grsCode"] != "" && row["grsCode"] != undefined){
+                return ["retentionPeriodUuid","disposalTypeUuid","basedOn"];
+            }else if(row["statusUuid"] != state && row["retentionPeriodUuid"] == cd133State){
+                return ["disposalTypeUuid"];
+            }else{
+                return ["grsCode", "rsName", "retentionPeriodUuid", "disposalTypeUuid", "basedOn", "triggerName", "description"];
+            }
+        },true,function(row){
+            if(row["statusUuid"] != state){
+                if(row["grsCode"] != "" && row["grsCode"] != undefined){
+                    return ["grsCode", "rsName","triggerName", "description"];
+                }else if(row["retentionPeriodUuid"] == cd133State){
+                    return ["grsCode", "rsName","triggerName", "description","retentionPeriodUuid","basedOn"];
+                }else{
+                    return [];
+                }
+            }else{
+                return [];
+            }
+        });
     },
     itemClick: function (data) {
-        /*if (data.classificationSchemeUuid != null && data.classificationSchemeUuid != "") {
-            if (isDetailChanged) {
-                axDialog.confirm({
-                    msg: axboot.getCommonMessage("AA006")
-                }, function () {
-                    if (this.key == "ok") {
-                        ACTIONS.dispatch(ACTIONS.TOP_GRID_DETAIL_PAGE_SAVE);
-                    } else {
-                        isDetailChanged = false;
-                        ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, data);
-                    }
-                });
-            } else {
-                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, data);
-            }
-        }*/
-    }
+    },
+    cancelDelete: function(){
+        var index = fnObj.gridView01.gridObj.getCurrent().dataRow;
+        var state = axboot.commonCodeValueByCodeName("CD134", "Confirm");
+
+        if(fnObj.gridView01.gridObj.getSelectedData().statusUuid == state) {
+            this.setRunDel(false);
+        }
+    },
+
 });
 /**
  * [필수]

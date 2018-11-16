@@ -124,6 +124,14 @@ public class Cl003Service extends BaseService {
 
         return filter(cl003Mapper.getSelectedItem(st00303VO), pageable, "", St00303VO.class);
     }
+    public Page<St00303VO> getSelectedItemSchedule(Pageable pageable, RequestParams<St00303VO> requestParams) {
+
+        St00303VO st00303VO = new St00303VO();
+        st00303VO.setAggregationUuid(requestParams.getString("aggregationUuid"));
+        st00303VO.setRecordScheduleUuid(requestParams.getString("recordScheduleUuid"));
+
+        return filter(cl003Mapper.getSelectedItem(st00303VO), pageable, "", St00303VO.class);
+    }
     public Cl00201VO getClassInfo(Pageable pageable, RequestParams<Cl00201VO> params) {
         Cl00201VO cl00201VO = new Cl00201VO();
         cl00201VO.setClassUuid(params.getString("classUuid"));
@@ -137,7 +145,12 @@ public class Cl003Service extends BaseService {
         nodes.addAll(cl003Mapper.getAggregationNode(param));
         return nodes;
     }
-
+    public List<Rc00101VO> getAllNodeSchedule(Rc00101VO param)
+    {
+        ArrayList<Rc00101VO> nodes = new ArrayList<Rc00101VO>();
+        nodes.addAll(cl003Mapper.getAggregationNodeSchedule(param));
+        return nodes;
+    }
     public ApiResponse saveClassDescription(Cl00201VO cl00201VO){
         ClClass clClass = ModelMapperUtils.map(cl00201VO, ClClass.class);
         String description = cl00201VO.getDescription();

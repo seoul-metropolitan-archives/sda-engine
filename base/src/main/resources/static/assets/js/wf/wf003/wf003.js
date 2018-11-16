@@ -464,7 +464,7 @@ fnObj.gridView03 = axboot.viewExtend(axboot.gridView, {
                 for (var i = 0; i < columnInfo.length; i++) {
                     if (fnObj.gridView03.getData()[0].hasOwnProperty(columnInfo[i].name)) {
                         if(columnInfo[i].dataType != "file"){
-                            columnInfo[i].defaultValue = fnObj.gridView03.gridObj.gridView.getDisplayValues(fnObj.gridView01.gridObj.getCurrent()["dataRow"])[columnInfo[i].name];
+                            columnInfo[i].defaultValue = fnObj.gridView03.gridObj.gridView.getDisplayValues(fnObj.gridView03.gridObj.getCurrent()["dataRow"])[columnInfo[i].name];
                         }
                     }
                 }
@@ -510,7 +510,7 @@ fnObj.gridView03 = axboot.viewExtend(axboot.gridView, {
             for (var i = 0; i < columnInfo.length; i++) {
                 if (fnObj.gridView03.getData()[0].hasOwnProperty(columnInfo[i].name)) {
                     if(columnInfo[i].dataType != "file"){
-                        columnInfo[i].defaultValue = fnObj.gridView03.gridObj.gridView.getDisplayValues(fnObj.gridView01.gridObj.getCurrent()["dataRow"])[columnInfo[i].name];
+                        columnInfo[i].defaultValue = fnObj.gridView03.gridObj.gridView.getDisplayValues(fnObj.gridView03.gridObj.getCurrent()["dataRow"])[columnInfo[i].name];
                     }
                 }
             }

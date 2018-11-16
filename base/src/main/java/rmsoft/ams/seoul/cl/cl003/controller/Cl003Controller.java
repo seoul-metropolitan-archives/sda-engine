@@ -57,6 +57,11 @@ public class Cl003Controller extends BaseController {
     public Cl00201VO getClassInfo(Pageable pageable, RequestParams<Cl00201VO> requestParams) {
         return cl003Service.getClassInfo(pageable, requestParams);
     }
+    @GetMapping("/02/list04")
+    public Responses.PageResponse getSelectedItemSchedule(Pageable pageable, RequestParams<St00303VO> requestParam) {
+        Page<St00303VO> pages  = cl003Service.getSelectedItemSchedule(pageable, requestParam);
+        return Responses.PageResponse.of(pages.getContent(), pages);
+    }
     @PutMapping("/02/save")
     @PostMapping
     public ApiResponse saveClassifiedRecordList(@RequestBody Cl00302VO requestParams) {
@@ -80,6 +85,13 @@ public class Cl003Controller extends BaseController {
     {
         return Responses.ListResponse.of(cl003Service.getAllNode(param));
     }
+
+    @RequestMapping("/getAllNodeSchedule")
+    public Responses.ListResponse getAllNodeSchedule(Rc00101VO param)
+    {
+        return Responses.ListResponse.of(cl003Service.getAllNodeSchedule(param));
+    }
+
     @PutMapping("/02/save02")
     @PostMapping
     public ApiResponse saveClassDescription(@RequestBody Cl00201VO param)

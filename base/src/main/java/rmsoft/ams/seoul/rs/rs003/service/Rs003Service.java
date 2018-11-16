@@ -52,7 +52,7 @@ public class Rs003Service extends BaseService {
             rsRecordSchedule.setStatusUuid(CommonCodeUtils.getCodeDetailUuid("CD134",changeStatus));
             rsRecordSchedule.setInsertDate(orgRsRecordSchedule.getInsertDate());
             rsRecordSchedule.setInsertUuid(orgRsRecordSchedule.getInsertUuid());
-            rsRecordScheduleRepository.save(rsRecordSchedulesList);
+            rsRecordScheduleRepository.save(rsRecordSchedule);
             index++;
         }
         return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");

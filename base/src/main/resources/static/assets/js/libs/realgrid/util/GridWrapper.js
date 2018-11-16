@@ -1876,7 +1876,11 @@ GridWrapper.prototype.setCustomCellStyleRows = function(type, conditionFunc, col
                 this.gridView.setCellStyles(i, columns, type, true);
             //}
         } else if(reverseColumns && !conditionFunc(rows[i])) {
-            this.gridView.setCellStyles(i, reverseColumns, type, true);
+            if(typeof reverseColumns == "function"){
+                this.gridView.setCellStyles(i, reverseColumns(rows[i]), type, true);
+            }else{
+                this.gridView.setCellStyles(i, reverseColumns, type, true);
+            }
         } else {
             for (var j = 0; j < columnIndexList.length; j++) {
                 this.gridView.setCellStyle(i, columnIndexList[j], this.defaultStyles[columnIndexList[j]], true);
@@ -1892,6 +1896,7 @@ GridWrapper.prototype.setCustomCellStyleRows = function(type, conditionFunc, col
         var curr = grid.getCurrent();
         var doSetting = false;
         var columns = null;
+        var allColumns = grid.getColumnNames();
 
         for (var i = 0; i < applyData.rows.length; i++) {
             if (applyData.rows[i]["index"] == curr.dataRow) {
@@ -1906,6 +1911,7 @@ GridWrapper.prototype.setCustomCellStyleRows = function(type, conditionFunc, col
                 doSetting = true;
 
                 for (var j = 0; j < columns.length; j++) {
+                    allColumns.splice(allColumns.indexOf(columns[j]),1);
                     if(_this.getColumnInfo(columns[j])["dataType"] == "check") {
                         grid.setColumnProperty(columns[j], "renderer", $.extend({},grid.getColumnProperty(columns[j], "renderer"), {editable : editable}));
                     }else{
@@ -1913,7 +1919,15 @@ GridWrapper.prototype.setCustomCellStyleRows = function(type, conditionFunc, col
                     }
                 }
 
-                if(applyData.reverseColumns) {
+                if(typeof applyData.reverseColumns == "function"){
+                    for (var j = 0; j < applyData.reverseColumns(rows[i]).length; j++) {
+                        if (_this.getColumnInfo(applyData.reverseColumns(rows[i])[j])["dataType"] == "check") {
+                            grid.setColumnProperty(applyData.reverseColumns(rows[i])[j], "renderer", $.extend({}, grid.getColumnProperty(applyData.reverseColumns(rows[i])[j], "renderer"), {editable: !editable}));
+                        } else {
+                            grid.setColumnProperty(applyData.reverseColumns(rows[i])[j], "editable", !editable);
+                        }
+                    }
+                }else if(applyData.reverseColumns) {
                     for (var j = 0; j < applyData.reverseColumns.length; j++) {
                         if (_this.getColumnInfo(applyData.reverseColumns[j])["dataType"] == "check") {
                             grid.setColumnProperty(applyData.reverseColumns[j], "renderer", $.extend({}, grid.getColumnProperty(applyData.reverseColumns[j], "renderer"), {editable: !editable}));
@@ -1926,7 +1940,6 @@ GridWrapper.prototype.setCustomCellStyleRows = function(type, conditionFunc, col
         }
         //setting을 해야되는 경우 진행
         if (doSetting) {
-
             var sel = {startItem: 1, endItem: 1, style: "block"};
             _this.gridView.setSelection(sel);
             _this.gridView.resetCurrent();

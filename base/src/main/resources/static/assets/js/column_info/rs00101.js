@@ -28,7 +28,6 @@ var rs00101 =
                     text: "Status",
                     editable: false,
                     disable : true,
-                    required : true,
                     dataType: "combo",
                     values: axboot.commonCodeFilter("CD134").codeArr,
                     labels: axboot.commonCodeFilter("CD134").nameArr
@@ -71,8 +70,7 @@ var rs00101 =
                     dataType: "combo",
                     values: axboot.commonCodeFilter("CD135").codeArr,
                     labels: axboot.commonCodeFilter("CD135").nameArr,
-                    editable: true,
-                    required: true
+                    editable: true
                 },
                 {
                     sortNo: 6,
@@ -98,7 +96,7 @@ var rs00101 =
                     sortNo: 8,
                     name: "description",
                     text: "Description",
-                    width: 70,
+                    width: 300,
                     editable: true,
                     dataType: "multiline"
                 },
@@ -106,7 +104,7 @@ var rs00101 =
                     sortNo: 9,
                     name: "notes",
                     text: "Notes",
-                    width: 120,
+                    width: 300,
                     editable: true,
                     dataType: "text"
                 },
