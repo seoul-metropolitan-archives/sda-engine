@@ -312,20 +312,18 @@ fnObj.searchView = axboot.viewExtend(axboot.formView, {
             }
         };
 
-        $('#excelIngest').on("click", function(){
-            axboot
-                .call({
-                    type: "PUT",
-                    url: "/api/v1/wf999/01/excel",
-                    data: JSON.stringify({}),
-                    callback: function (res) {
-                        UPLOAD.uploadedFiles = [];
-                        axToast.push(axboot.getCommonMessage("AA007"));
-                    }
-                })
-                .done(function () {
+        $('#openPopup').on("click", function(){
+            window.parent.axboot.modal.open({
+                modalType: "UPDATE_STATE_AGGREGATION_N_ITEM",
+                param: "",
+                sendData: function () {
+                    return {
+                        "selectedList": {}
+                    };
+                },
+            });
 
-                });
+            console.log(parent);
         });
     },
     getData: function () {

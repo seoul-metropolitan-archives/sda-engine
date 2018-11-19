@@ -88,6 +88,8 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 $(".meta-ui").remove();
 
                 segmentList.forEach(function(item, idx){
+                    if(item.displayedYN != "Y") return true;
+
                     dataPath = "addMetadata" + item.additionalColumn.replace("ADD_METADATA", "");
 
                     cloneTag = $('#addConMetaArea #template').clone();

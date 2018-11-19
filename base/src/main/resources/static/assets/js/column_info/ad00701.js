@@ -81,13 +81,7 @@ var ad00701 =
                     dataType: "check",
                     textAlignment: "center",
                     defaultValue : "N",
-                    renderer: {
-                        type: "check",
-                        shape: "",
-                        falseValues: "N",
-                        trueValues: "Y",
-                        startEditOnClick: true,
-                    },
+                    selectType : "single",
                     required: false,
                 },
                 {

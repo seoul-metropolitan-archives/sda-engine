@@ -243,6 +243,13 @@
                 iframe: {
                     url: "/at/at002/at002-p01"
                 }
+            },
+            "RECORD_EXPLORER_CLASSIFY_RECORDS": {
+                width: 600,
+                height: 700,
+                iframe: {
+                    url: "/rc/rc001/p_rc00104"
+                }
             }
         };
     }
