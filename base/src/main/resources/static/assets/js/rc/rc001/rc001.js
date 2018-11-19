@@ -732,6 +732,23 @@ function contextMenuClick(ui, treeData){
             treeData = treeData ? treeData : fnObj.treeView01.getNodeByParam("uuid", selectedData[0].uuid);
             treeData.choiceYn = "Y";
 
+            var rootInfo = treeData.getPath();
+            var enableClassify = true;
+
+            if(rootInfo.length > 0){
+                rootInfo.forEach(function(item, idx){
+                    if(item.nodeType != "normal"){
+                        enableClassify = false;
+                        return false;
+                    }
+                });
+
+                if(!enableClassify){
+                    axDialog.alert("상위 Aggregation을 확인하세요.");
+                    return;
+                }
+            }
+
             var nodeType = "";
             if(ui.cmd == "ITEM_ADD_GRID"){
                 nodeType = "item";
@@ -765,7 +782,7 @@ function contextMenuClick(ui, treeData){
                     selectedData = [];
                     getFlatData([treeData]);
 
-                    return selectedData;
+                    return {aggregationUuid : treeData.uuid, classifyList : selectedData};
                 },
                 callback: function (data) {
                     //ACTIONS.dispatch(ACTIONS.GET_SUBDATA, fnObj.naviView.getCurrent());

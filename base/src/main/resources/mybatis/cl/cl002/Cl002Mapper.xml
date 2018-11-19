@@ -115,8 +115,15 @@
         INSERT_DATE as insertDate,
         <include refid="Common.UserName"><property name="userUuid" value="UPDATE_UUID"/></include> as updateUuid,
         UPDATE_DATE as updateDate
+        <if test="aggregationUuid != null">
+        ,(
+            SELECT COUNT(CLASS_UUID) FROM CL_CLASSIFY_RECORDS_RESULT
+            WHERE CLASS_UUID = T1.CLASS_UUID
+            AND AGGREGATION_UUID = #{aggregationUuid}
+        ) AS ClassifyCount
+        </if>
         FROM
-        CL_CLASS
+        CL_CLASS T1
         <where>
             <if test="classificationSchemeUuid != null">
                 CLASSIFICATION_SCHEME_UUID = #{classificationSchemeUuid}

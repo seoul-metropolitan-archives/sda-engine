@@ -116,6 +116,7 @@ public class Cl002Service extends BaseService {
 
         Cl00201VO cl00201VO = new Cl00201VO();
         cl00201VO.setClassificationSchemeUuid(requestParams.getString("classificationSchemeUuid"));
+        cl00201VO.setAggregationUuid(requestParams.getString("aggregationUuid"));
 
         if(requestParams.getString("className").equals("cl003")){
             return filter(cl002Mapper.getClassHierarchyListForClassify(cl00201VO), pageable, "", Cl00201VO.class);
