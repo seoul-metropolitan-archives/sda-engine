@@ -165,7 +165,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     ITEMS_SAVE: function (caller, act, list) {
 
         if(hideMenuRole('saveYn')) return;
-        if(!isDetailChange) return;
+        //if(!isDetailChange) return;
 
         axboot.ajax({
             url: "/rc/rc001/save",
@@ -187,7 +187,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     ITEM_SAVE: function (caller, act, data){
 
         if(hideMenuRole('saveYn')) return;
-        if(!isDetailChange) return;
+        //if(!isDetailChange) return;
 
         axboot.ajax({
             type: "PUT",
@@ -567,7 +567,9 @@ function contextMenuClick(ui, treeData){
             });
             break;
         case "NODE_DEL":
-            ACTIONS.dispatch(ACTIONS.DELETE_AGGREGATION, fnObj.iconView.getSelectedData());
+            selectedData = treeData ? [treeData] : fnObj.iconView.getSelectedData();
+
+            ACTIONS.dispatch(ACTIONS.DELETE_AGGREGATION, selectedData);
             break;
         case "ITEM_ADD":
             selectedData = fnObj.naviView.getCurrent();
@@ -661,6 +663,17 @@ function contextMenuClick(ui, treeData){
                                 if (res.map.list) {
                                     $.each(res.map.list, function (idx, item) {
                                         var nodeObj = fnObj.treeView01.getNodeByParam("uuid", item["uuid"]);
+                                        if(!nodeObj){
+                                            axDialog.alert({
+                                                title: 'Information',
+                                                theme: "default",
+                                                msg: "정보가 갱신되었습니다.\nAggregation 정보를 다시 가져옵니다."
+                                            }, function(){
+                                                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+                                            });
+                                            return;
+                                        }
+
                                         nodeObj.iconSkin = typeName;
                                         nodeObj.nodeType = typeName;
 
@@ -715,6 +728,50 @@ function contextMenuClick(ui, treeData){
         case "REFRESH":
             ACTIONS.dispatch(ACTIONS.GET_SUBDATA, fnObj.naviView.getCurrent());
             break;
+        case "AGG_CLASSIFY_RECORDS":
+            treeData = treeData ? treeData : fnObj.treeView01.getNodeByParam("uuid", selectedData[0].uuid);
+            treeData.choiceYn = "Y";
+
+            var nodeType = "";
+            if(ui.cmd == "ITEM_ADD_GRID"){
+                nodeType = "item";
+            }else if(ui.cmd == "AGG_CLASSIFY_RECORDS") {
+                nodeType = "aggregation";
+            }
+
+            function getFlatData(listData){
+                listData.forEach(function(item, idx){
+                    if(item.nodeType == "normal") {
+                        item.aggregationUuid = item.uuid;
+                        selectedData.push(item);
+                    }else{
+                        return true;
+                    }
+
+                    if(item.children.length > 0){
+                        getFlatData(item.children);
+                    }
+                });
+            }
+
+            axboot.modal.open({
+                modalType: "RECORD_EXPLORER_CLASSIFY_RECORDS",
+                width: 1600,
+                height: 800,
+                header: {
+                    title: nodeType == "item" ? "Add Item" : "Add Aggregation"
+                },
+                sendData: function () {
+                    selectedData = [];
+                    getFlatData([treeData]);
+
+                    return selectedData;
+                },
+                callback: function (data) {
+                    //ACTIONS.dispatch(ACTIONS.GET_SUBDATA, fnObj.naviView.getCurrent());
+                }
+            });
+            break;
 
     }
 }
@@ -752,6 +809,8 @@ function getContextMenu(ui, nodeType){
                     {title: "Edit Aggregation", cmd: "AGG_EDIT", uiIcon: "ui-icon-wrench" },
                     {title: "Change Temporary Aggregation", cmd: "AGG_TYPE_TEMP", uiIcon: "ui-icon-transferthick-e-w" },
                     {title: "Publishing Aggregation", cmd: "AGG_PUBLISH", uiIcon: "ui-icon-transferthick-e-w" },
+                    {title: "----"},
+                    {title: "Classify Records", cmd: "AGG_CLASSIFY_RECORDS", uiIcon: "ui-icon-transferthick-e-w" },
                 ];
             }else if(nodeType == "temporary"){
                 menu = [
@@ -773,14 +832,14 @@ function getContextMenu(ui, nodeType){
     }else{
         if(fnObj.naviView.getCurrent().nodeType == "temp") {
             menu = [
-                {title: "Add Item", cmd: "ITEM_ADD", uiIcon: "ui-icon-document"},
-                {title: "Add Aggregation", cmd: "AGG_ADD", uiIcon: "ui-icon-folder-collapsed"},
-                {title: "----"},
-                {title: "Add Item Grid", cmd: "ITEM_ADD_GRID", uiIcon: "ui-icon-document"},
-                {title: "Add Aggregation Grid", cmd: "AGG_ADD_GRID", uiIcon: "ui-icon-folder-collapsed"},
-                {title: "----"},
-                {title: "Refresh", cmd: "REFRESH", uiIcon: "ui-icon-arrowrefresh-1-w"},
-            ];
+            {title: "Add Item", cmd: "ITEM_ADD", uiIcon: "ui-icon-document"},
+            {title: "Add Aggregation", cmd: "AGG_ADD", uiIcon: "ui-icon-folder-collapsed"},
+            {title: "----"},
+            {title: "Add Item Grid", cmd: "ITEM_ADD_GRID", uiIcon: "ui-icon-document"},
+            {title: "Add Aggregation Grid", cmd: "AGG_ADD_GRID", uiIcon: "ui-icon-folder-collapsed"},
+            {title: "----"},
+            {title: "Refresh", cmd: "REFRESH", uiIcon: "ui-icon-arrowrefresh-1-w"},
+        ];
         }else{
             menu = [
                 {title: "Add Item", cmd: "ITEM_ADD", uiIcon: "ui-icon-document"},
@@ -2363,8 +2422,15 @@ fnObj.treeView01 = axboot.viewExtend(axboot.commonView, {
                     }
                     else
                     {
+                        var itemCnt = targetNode.childCnt - targetNode.children.length;
+
                         for(var i = 0; i < treeNodes.length; i++)
                         {
+                            if(treeNodes[i].nodeType == "normal" && itemCnt > 0){
+                                result = false;
+                                msgCode = "RC001_08";
+                                break;
+                            }
 
                             if(treeNodes[i].nodeType != "item" && targetNode.nodeType != treeNodes[i].nodeType)
                             {
@@ -2474,7 +2540,8 @@ fnObj.treeView01 = axboot.viewExtend(axboot.commonView, {
                         reqList.push({
                             uuid :treeNodes[i].uuid,
                             parentUuid :treeNodes[i].parentUuid,
-                            nodeType :treeNodes[i].nodeType
+                            nodeType :treeNodes[i].nodeType,
+                            parentNodeType :targetNode.nodeType,
                         })
                     }
 

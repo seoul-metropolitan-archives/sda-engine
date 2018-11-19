@@ -4,6 +4,7 @@ import io.onsemiro.core.mybatis.MyBatisMapper;
 import rmsoft.ams.seoul.common.domain.RcAggregation;
 import rmsoft.ams.seoul.rc.rc001.vo.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -37,4 +38,6 @@ public interface Rc001Mapper extends MyBatisMapper {
     int updateState(RcAggregation data);
 
     List<Rc00101VO> getBottomAggregations (Rc00101VO param);
+
+    Map<String, BigDecimal> getItemAggregationCnt(String uuid);
 }

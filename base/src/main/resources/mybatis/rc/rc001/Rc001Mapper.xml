@@ -545,4 +545,12 @@
         ORDER BY LEVEL DESC
     </select>
 
+    <select id="getItemAggregationCnt" resultType="Map" parameterType="String" statementType="PREPARED">
+        SELECT
+            (SELECT COUNT(*) FROM RC_ITEM WHERE AGGREGATION_UUID = #{uuid}) AS itemCnt,
+            (SELECT COUNT(*) FROM RC_AGGREGATION WHERE PARENT_AGGREGATION_UUID = #{uuid}) AS aggregationCnt
+        FROM
+            dual
+    </select>
+
 </mapper>

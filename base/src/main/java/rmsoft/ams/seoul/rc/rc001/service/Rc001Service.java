@@ -28,9 +28,11 @@ import rmsoft.ams.seoul.rc.rc005.service.Rc005Service;
 import rmsoft.ams.seoul.rc.rc005.vo.Rc00501VO;
 import rmsoft.ams.seoul.rc.rc005.vo.Rc00502VO;
 import rmsoft.ams.seoul.utils.CommonCodeUtils;
+import rmsoft.ams.seoul.utils.CommonMessageUtils;
 
 import javax.inject.Inject;
 import java.lang.reflect.Array;
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -122,13 +124,15 @@ public class Rc001Service extends BaseService
     @Transactional
     public ApiResponse save(List<Map<String,String>> list)
     {
-        Rc00101VO rc00101VO = new Rc00101VO();
-
         for (Map<String,String> data: list) {
-            rc00101VO.setUuid(data.get("parentUuid"));
+            Map<String, BigDecimal> cntMap = rc001Mapper.getItemAggregationCnt(data.get("parentUuid"));
 
-            if(data.get("parentNodeType") != null && !data.get("parentNodeType").equals("temporary") && rc001Mapper.getAggregationNode(rc00101VO).size() > 0){
-                return ApiResponse.of(ApiStatus.SYSTEM_ERROR,"최하위 Aggregation으로만 이동이 가능합니다.");
+            if(data.get("parentNodeType").equals("normal")){
+                if(data.get("nodeType").equals("normal") && cntMap.get("ITEMCNT").intValue() > 0){
+                    return ApiResponse.of(ApiStatus.SYSTEM_ERROR, CommonMessageUtils.getMessage("RC001_08"));
+                }else if(data.get("nodeType").equals("item") &&  cntMap.get("AGGREGATIONCNT").intValue() > 0){
+                    return ApiResponse.of(ApiStatus.SYSTEM_ERROR,CommonMessageUtils.getMessage("RC001_08"));
+                }
             }
 
             rc001Mapper.save(data);
