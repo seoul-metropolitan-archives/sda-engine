@@ -76,6 +76,24 @@ public class ClClassCon extends SimpleJpaModel<ClClassCon.ClClassConId> {
     @Comment(value = "추가데이터10")
     private String addMetadata10;
 
+    @Column(name = "CREATION_START_DATE", length = 10)
+    private String creationStartDate;
+
+    @Column(name = "CREATION_END_DATE", length = 10)
+    private String creationEndDate;
+
+    @Column(name = "ACCUMULATION_START_DATE", length = 10)
+    private String accumulationStartDate;
+
+    @Column(name = "ACCUMULATION_END_DATE", length = 10)
+    private String accumulationEndDate;
+
+    @Column(name = "SCOPE_CONTENT", length = 4000)
+    private String scopeContent;
+
+    @Column(name = "RULES_CONVERSION_UUID", length = 36)
+    private String rulesConversionUuid;
+
     @Override
     public ClClassConId getId() { return ClClassConId.of(classUuid); }
 

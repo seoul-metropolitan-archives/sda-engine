@@ -31,6 +31,10 @@ public class Cl00201VO extends BaseVO {
     private String path;
     private String isLeaf;
     private String description;
+    private String creationStartDate;
+    private String creationEndDate;
+    private String accumulationStartDate;
+    private String accumulationEndDate;
     private String aggregationUuid;
     private int classifyCount;
 }

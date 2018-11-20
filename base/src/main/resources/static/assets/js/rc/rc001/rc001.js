@@ -821,7 +821,7 @@ function getContextMenu(ui, nodeType){
                     }, function(){
                         ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
                     });
-                    return;
+                    return [];
                 }
 
                 var rootInfo = treeData.getPath();
@@ -841,7 +841,7 @@ function getContextMenu(ui, nodeType){
                     {title: "----"},
                     {title: "Edit Aggregation", cmd: "AGG_EDIT", uiIcon: "ui-icon-wrench" },
                     {title: "Change Temporary Aggregation", cmd: "AGG_TYPE_TEMP", uiIcon: "ui-icon-transferthick-e-w" },
-                    {title: "Publishing Aggregation", cmd: "AGG_PUBLISH", uiIcon: "ui-icon-transferthick-e-w" },
+                    //{title: "Publishing Aggregation", cmd: "AGG_PUBLISH", uiIcon: "ui-icon-transferthick-e-w" },
                 ];
 
                 // 분류 가능할 조건에만 해당 Context메뉴를 보여줌

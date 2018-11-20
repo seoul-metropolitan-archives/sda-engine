@@ -69,6 +69,12 @@ public class ClClass extends BaseJpaModel<ClClass.ClClassId> {
     @Comment(value = "사용여부")
     private String useYn;
 
+    @Column(name = "STATUS_DESCRIPTION", length = 1, nullable = false)
+    private String statusDescription;
+
+    @Column(name = "LEVEL_OF_DETAIL_UUID", length = 1, nullable = false)
+    private String levelOfDetailUuid;
+
     @Override
     public ClClassId getId() { return ClClassId.of(classUuid); }
 

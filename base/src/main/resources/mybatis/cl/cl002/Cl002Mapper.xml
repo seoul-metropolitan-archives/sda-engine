@@ -135,26 +135,30 @@
     </select>
     <select id="getSelectedClassList" resultType="cl00201VO" parameterType="cl00201VO" statementType="PREPARED">
         SELECT
-        classUuid,
-        classificationSchemeUuid,
-        statusUuid,
-        parentClassUuid,
-        classCode,
-        className,
-        classLevelUuid,
-        orderNo,
-        orderKey,
-        path,
-        orderKey1,
-        parentClassCode,
-        parentClassName,
-        useYn,
-        notes,
-        description,
-        insertUuid,
-        insertDate,
-        updateUuid,
-        updateDate
+        z1.classUuid,
+        z1.classificationSchemeUuid,
+        z1.statusUuid,
+        z1.parentClassUuid,
+        z1.classCode,
+        z1.className,
+        z1.classLevelUuid,
+        z1.orderNo,
+        z1.orderKey,
+        z1.path,
+        z1.orderKey1,
+        z1.parentClassCode,
+        z1.parentClassName,
+        z1.useYn,
+        z1.notes,
+        z1.description,
+        z1.insertUuid,
+        z1.insertDate,
+        z1.updateUuid,
+        z1.updateDate,
+        z2.CREATION_END_DATE AS creationEndDate,
+        z2.CREATION_START_DATE AS creationStartDate,
+        z2.ACCUMULATION_END_DATE AS accumulationEndDate,
+        z2.ACCUMULATION_START_DATE AS accumulationStartDate
         FROM
         (
             SELECT
@@ -188,59 +192,66 @@
             START WITH PARENT_CLASS_UUID IS NULL
             CONNECT BY PRIOR CLASS_UUID = PARENT_CLASS_UUID
             ORDER SIBLINGS BY ORDER_KEY
-        )
+        ) z1, CL_CLASS_CON z2
 
         <where>
+            z2.CLASS_UUID(+) = z1.classUuid
             <if test="orderKey1 != null">
-                (orderKey1 LIKE  #{orderKey1} || '.' || '%'
-                OR orderKey1 =  #{orderKey1})
+              AND  (z1.orderKey1 LIKE  #{orderKey1} || '.' || '%'
+                OR z1.orderKey1 =  #{orderKey1})
             </if>
             <if test="classCode != null">
-                AND UPPER(classCode) LIKE '%' || #{classCode} || '%'
+                AND UPPER(z1.classCode) LIKE '%' || #{classCode} || '%'
             </if>
             <if test="className != null">
-                AND UPPER(className) LIKE '%' || #{className} || '%'
+                AND UPPER(z1.className) LIKE '%' || #{className} || '%'
             </if>
             <if test="useYn != null">
-                AND useYn = #{useYn}
+                AND z1.useYn = #{useYn}
             </if>
             <if test="classLevelUuid != null">
-                AND classLevelUuid = #{classLevelUuid}
+                AND z1.classLevelUuid = #{classLevelUuid}
             </if>
             <if test="statusUuid != null">
-                AND statusUuid = #{statusUuid}
+                AND z1.statusUuid = #{statusUuid}
             </if>
             <if test="parentClassCode != null">
-                AND UPPER(parentClassCode) LIKE '%' || #{parentClassCode} || '%'
+                AND UPPER(z1.parentClassCode) LIKE '%' || #{parentClassCode} || '%'
             </if>
             <if test="parentClassName != null">
-                AND UPPER(parentClassName) LIKE '%' || #{parentClassName} || '%'
+                AND UPPER(z1.parentClassName) LIKE '%' || #{parentClassName} || '%'
             </if>
         </where>
     </select>
     <select id="getSelectedClassDetail" resultType="cl00202VO" parameterType="cl00201VO" statementType="PREPARED">
         SELECT
-        CLASS_UUID as classUuid,
-        RECORD_SCHEDULE_UUID as recordScheduleUuid,
-        ADD_METADATA01 as addMetadata01,
-        ADD_METADATA02 as addMetadata02,
-        ADD_METADATA03 as addMetadata03,
-        ADD_METADATA04 as addMetadata04,
-        ADD_METADATA05 as addMetadata05,
-        ADD_METADATA06 as addMetadata06,
-        ADD_METADATA07 as addMetadata07,
-        ADD_METADATA08 as addMetadata08,
-        ADD_METADATA09 as addMetadata09,
-        ADD_METADATA10 as addMetadata10,
-        <include refid="Common.UserName"><property name="userUuid" value="INSERT_UUID"/></include> as insertUuid,
-        INSERT_DATE as insertDate,
-        <include refid="Common.UserName"><property name="userUuid" value="UPDATE_UUID"/></include> as updateUuid,
-        UPDATE_DATE as updateDate
+            z1.CLASS_UUID as classUuid,
+            z1.RECORD_SCHEDULE_UUID as recordScheduleUuid,
+            z1.ADD_METADATA01 as addMetadata01,
+            z1.ADD_METADATA02 as addMetadata02,
+            z1.ADD_METADATA03 as addMetadata03,
+            z1.ADD_METADATA04 as addMetadata04,
+            z1.ADD_METADATA05 as addMetadata05,
+            z1.ADD_METADATA06 as addMetadata06,
+            z1.ADD_METADATA07 as addMetadata07,
+            z1.ADD_METADATA08 as addMetadata08,
+            z1.ADD_METADATA09 as addMetadata09,
+            z1.ADD_METADATA10 as addMetadata10,
+            z2.DESCRIPTION AS DESCRIPTION,
+            z2.STATUS_DESCRIPTION as statusDescription,
+            z2.LEVEL_OF_DETAIL_UUID AS levelOfDetailUuid,
+            z1.SCOPE_CONTENT AS scopeContent,
+            z1.RULES_CONVERSION_UUID AS rulesConversionUuid,
+            <include refid="Common.UserName"><property name="userUuid" value="z1.INSERT_UUID"/></include> as insertUuid,
+            z1.INSERT_DATE as insertDate,
+            <include refid="Common.UserName"><property name="userUuid" value="z1.UPDATE_UUID"/></include> as updateUuid,
+            z1.UPDATE_DATE as updateDate
         FROM
-        CL_CLASS_CON
+          CL_CLASS_CON z1, CL_CLASS z2
         <where>
+            z2.CLASS_UUID = z1.CLASS_UUID
             <if test="classUuid != null">
-                CLASS_UUID = #{classUuid}
+               AND z1.CLASS_UUID = #{classUuid}
             </if>
         </where>
     </select>

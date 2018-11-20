@@ -110,17 +110,57 @@ var cl00202 =
                     dataType: "number",
                     textAlignment: "far"
                 },
+                // {
+                //     sortNo: 9,
+                //     name: "description",
+                //     text: "Description",
+                //     width: 250,
+                //     editable: true,
+                //     dataType: "richtext",
+                //     required: false
+                // },
                 {
                     sortNo: 9,
-                    name: "description",
-                    text: "Description",
-                    width: 250,
+                    name: "creationStartDate",
+                    text: "Creation Start Date",
+                    width: 150,
+                    dataType: "date",
                     editable: true,
-                    dataType: "richtext",
-                    required: false
+                    required: false,
+                    format:'yyyy-mm-dd'
                 },
                 {
                     sortNo: 10,
+                    name: "creationEndDate",
+                    text: "Creation End Date",
+                    width: 150,
+                    dataType: "date",
+                    editable: true,
+                    required: false,
+                    format:'yyyy-mm-dd'
+                },
+                {
+                    sortNo: 11,
+                    name: "accumulationStartDate",
+                    text: "Accumulation Start Date",
+                    width: 150,
+                    dataType: "date",
+                    editable: true,
+                    required: false,
+                    format:'yyyy-mm-dd'
+                },
+                {
+                    sortNo: 12,
+                    name: "accumulationEndDate",
+                    text: "Accumulation End Date",
+                    width: 150,
+                    dataType: "date",
+                    editable: true,
+                    required: false,
+                    format:'yyyy-mm-dd'
+                },
+                {
+                    sortNo: 13,
                     name: "notes",
                     text: "Notes",
                     width: 250,
@@ -129,7 +169,7 @@ var cl00202 =
                     required: false
                 },
                 {
-                    sortNo: 11,
+                    sortNo: 14,
                     name: "useYn",
                     text: "Use",
                     width: 50,
@@ -140,7 +180,7 @@ var cl00202 =
                     required: false
                 },
                 {
-                    sortNo: 12,
+                    sortNo: 15,
                     name: "insertUuid",
                     text: "Created By",
                     width: 80,
@@ -150,7 +190,7 @@ var cl00202 =
                     required: false
                 },
                 {
-                    sortNo: 13,
+                    sortNo: 16,
                     name: "insertDate",
                     text: "Date/Time Created",
                     width: 140,
@@ -170,7 +210,7 @@ var cl00202 =
                     required: false
                 },
                 {
-                    sortNo: 15,
+                    sortNo: 17,
                     name: "updateDate",
                     text: "Date/Time Modified",
                     width: 140,
@@ -180,19 +220,19 @@ var cl00202 =
                     required: false
                 },
                 {
-                    sortNo: 16,
+                    sortNo: 18,
                     name: "orderKey",
                     text: "ORDER_KEY",
                     width: 120,
                     visible:false
                 },
                 {
-                    sortNo: 17,
+                    sortNo: 19,
                     name: "changeStatus",
                     visible:false
                 },
                 {
-                    sortNo: 18,
+                    sortNo: 20,
                     name: "parentClassUuid",
                     visible:false
                 },
@@ -206,7 +246,7 @@ var cl00202 =
                     visible : false
                 },
                 {
-                    sortNo: 20,
+                    sortNo: 21,
                     name: "orderKey1",
                     text: "ORDER_KEY1",
                     width: 120,

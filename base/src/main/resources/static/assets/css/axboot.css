@@ -27873,7 +27873,7 @@ a.small_open {
 }
 
 .detail_wrap{height: 100%; width: 100%; overflow-y: auto; overflow-x: hidden; position: relative}
-.detail_conts{width: 100%; height: fit-content; margin-left: 1.5%; margin-top: 1.5%; border : 0px;}
+.detail_conts{width: 100%; height: fit-content; margin-left: 1.5%; margin-top: 1.5%; border : 0px;padding-right: 10px;}
 .detail_conts.ui-accordion, .detail_conts.ui-accordion-content{ border : 0px;}
 
 .detail_conts ul{width: 100%}
