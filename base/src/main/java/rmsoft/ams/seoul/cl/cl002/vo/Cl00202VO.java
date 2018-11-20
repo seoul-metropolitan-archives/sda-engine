@@ -23,4 +23,9 @@ public class Cl00202VO extends BaseVO {
     private String addMetadata08;
     private String addMetadata09;
     private String addMetadata10;
+    private String scopeContent;
+    private String rulesConversionUuid;
+    private String description;
+    private String statusDescription;
+    private String levelOfDetailUuid;
 }

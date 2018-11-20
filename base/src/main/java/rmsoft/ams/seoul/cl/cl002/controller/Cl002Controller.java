@@ -141,8 +141,9 @@ public class Cl002Controller extends MessageBaseController{
      *
      * @param requestParams the request params
      */
-    @GetMapping("/09/updateClassCon")
-    public void updateClassCon(RequestParams<Cl00202VO> requestParams) {
+    @PutMapping(value = "/09/updateClassCon")
+    @PostMapping
+    public void updateClassCon(@RequestBody Cl00202VO requestParams) {
         cl002Service.updateClassCon(requestParams);
 
     }

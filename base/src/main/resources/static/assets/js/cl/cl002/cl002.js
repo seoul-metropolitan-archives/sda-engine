@@ -100,10 +100,11 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 if(selectedItem.classLevelUuid != "undefined"){
                     fnObj.formView.setFormData("detailClassLevel",axboot.commonCodeFilter("CD114").nameArr[axboot.commonCodeFilter("CD114").codeArr.indexOf(selectedItem.classLevelUuid)]);
                 }
-                fnObj.formView.setFormData("detailAddMetadata01",res.addMetadata01);
-                fnObj.formView.setFormData("detailAddMetadata02",res.addMetadata02);
-                fnObj.formView.setFormData("detailAddMetadata03",res.addMetadata03);
-                fnObj.formView.setFormData("detailAddMetadata04",res.addMetadata04);
+                fnObj.formView.setFormData("rulesConversionUuid",res.rulesConversionUuid);
+                fnObj.formView.setFormData("description",res.description);
+                fnObj.formView.setFormData("statusDescription",res.statusDescription);
+                fnObj.formView.setFormData("levelOfDetailUuid",res.levelOfDetailUuid);
+                fnObj.formView.setFormData("scopeContent",res.scopeContent);
                 isDetailChanged = false;
             },
             options: {
@@ -179,7 +180,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                     fnObj.gridView02.commit();
                     ACTIONS.dispatch(ACTIONS.TOP_GRID_DETAIL_PAGE_SAVE);
                 }else{
-                    // ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+                    ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
                 }
                 result = true;
             }
@@ -191,9 +192,9 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     },
     TOP_GRID_DETAIL_PAGE_SAVE: function () {
         axboot.ajax({
-            type: "GET",
-            url: "/api/v1/cl002//09/updateClassCon",
-            data: $.extend({},  {pageSize: 1000},selectedItem ,this.formView.getData()),
+            type: "PUT",
+            url: "/api/v1/cl002/09/updateClassCon",
+            data: JSON.stringify($.extend({}, selectedItem, this.formView.getData())),
             callback: function (res) {
                 isDetailChanged = false;
                 // ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
@@ -283,7 +284,7 @@ fnObj.pageStart = function () {
     _this.formView.initView();
     _this.gridView01.initView();
     _this.gridView02.initView();
-    ACTIONS.dispatch(ACTIONS.PAGE_SEARCH0, this.formView.getData());
+    // ACTIONS.dispatch(ACTIONS.PAGE_SEARCH0, this.formView.getData());
 };
 
 fnObj.formView = axboot.viewExtend(axboot.formView, {
@@ -345,7 +346,11 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
             }
         });
 
-        $("input[data-ax-path='detailAddMetadata01'],input[data-ax-path='detailAddMetadata02'],input[data-ax-path='detailAddMetadata03'],input[data-ax-path='detailAddMetadata04']").keyup(function(){
+        $("textarea[data-ax-path='scopeContent'],textarea[data-ax-path='description']").keyup(function(){
+            isDetailChanged = true;
+        });
+
+        $("select[data-ax-path='rulesConversionUuid'],select[data-ax-path='statusDescription'],select[data-ax-path='levelOfDetailUuid']").change(function(){
             isDetailChanged = true;
         });
 
@@ -506,6 +511,7 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
         })
         this.makeGrid();
         this.gridObj.itemClick(this.itemClick);
+        this.removeRowBeforeEvent(this.cancelDelete);
     },
     disabledColumn : function()
     {
@@ -526,7 +532,7 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
                 return true;
             else
                 return false;
-        },["parentClassCode","className","classLevelUuid","orderNo"]);
+        },["parentClassCode","className","classLevelUuid","orderNo","creationStartDate","creationEndDate","accumulationStartDate","accumulationEndDate"]);
     },
     isChangeData: function () {
         if (this.getData().length > 0) {
@@ -538,7 +544,17 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
     getRowData: function (){
         return this.gridObj.getSelectedData();
     },
+    cancelDelete: function(){
+        var state = axboot.commonCodeValueByCodeName("CD113", "Confirm");
+        if(fnObj.gridView02.gridObj.getSelectedData().statusUuid == state){
+            axToast.push(axboot.getCommonMessage("RS001_01"));
+            this.setRunDel(false);
+        }else{
+            this.setRunDel(true);
+        }
+    },
     itemClick: function (data) {
+        if(selectedItem.classUuid == data.classUuid) return;
         selectedItem = data;
         if (fnObj.formView.getData().detailClassName != null && fnObj.formView.getData().detailClassName != "") {
 

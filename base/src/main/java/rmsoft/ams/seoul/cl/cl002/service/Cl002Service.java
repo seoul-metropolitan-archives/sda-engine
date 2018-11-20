@@ -227,15 +227,15 @@ public class Cl002Service extends BaseService {
         List<ClClass> clClassList = ModelMapperUtils.mapList(list, ClClass.class);
         ClClass orgClClass = null;
         ClClassCon clClassCon = null;
+        ClClassCon orgClClassCon = null;
         String ctUuid = "";
         String detailCode = "";
         String maxCode = "";
         String maxDefaultCode = "";
         String orderKey = "";
+        int index = 0;
 
         for (ClClass clClass : clClassList) {
-//            if (StringUtil.isNullOrEmpty(clClass.getClassUuid())) { //Insert
-
                 maxCode = getMaxClassCode(clClass.getClassificationSchemeUuid());
                 if (StringUtils.isNotEmpty(maxCode)) { //분류코드 조합
                     maxDefaultCode = StringUtils.trim(maxCode).substring(0, 7);
@@ -252,15 +252,8 @@ public class Cl002Service extends BaseService {
                     detailCode = maxDefaultCode + ctUuid;
                 }
             if (clClass.isCreated()){
-//                clClass.setClassUuid(UUIDUtils.getUUID()); //UUID 생성
                 ctUuid = jdbcTemplate.queryForObject("select FC_CL_CLS_CLASS_CODE('" + clClass.getClassificationSchemeUuid() + "') from dual", String.class);
                 clClass.setClassCode(ctUuid);
-
-
-                //clClass.setClassLevelUuid(CommonCodeUtils.getCodeDetailUuid("CD114", clClass.getClassLevelUuid()));
-
-                clClass.setClassLevelUuid(clClass.getClassLevelUuid());
-
                 // Oracle Function Call
                 orderKey = jdbcTemplate.queryForObject("select FC_CL_CLASS_SORTKEY('" + clClass.getParentClassUuid() + "' , '" + clClass.getOrderNo() + "') from dual", String.class);
                 clClass.setOrderKey(orderKey);
@@ -268,7 +261,7 @@ public class Cl002Service extends BaseService {
 
             }
 
-            if (clClass.isCreated() || clClass.isModified()) {
+            if (!clClass.isDeleted()) {
                 if (clClass.isModified()) {
                     orgClClass = clClassRepository.findOne(clClass.getId());
                     if(isEmpty(orgClClass.getParentClassUuid())){ orgClClass.setParentClassUuid("");}
@@ -286,13 +279,34 @@ public class Cl002Service extends BaseService {
                     clClass.setInsertUuid(orgClClass.getInsertUuid());
                 }
                 clClassRepository.save(clClass);
+
+                clClassCon = new ClClassCon();
+                clClassCon.setClassUuid(clClass.getClassUuid());
+                orgClClassCon = clClassConRepository.findOne(clClassCon.getId());
+
+                orgClClassCon = orgClClassCon== null ? clClassCon : orgClClassCon;
+
+                orgClClassCon.setCreationStartDate(list.get(index).getCreationStartDate());
+                orgClClassCon.setCreationEndDate(list.get(index).getCreationEndDate());
+                orgClClassCon.setAccumulationStartDate(list.get(index).getAccumulationStartDate());
+                orgClClassCon.setAccumulationEndDate(list.get(index).getAccumulationEndDate());
+                clClassConRepository.save(orgClClassCon);
+
             } else if (clClass.isDeleted()) {
                 if (getChildClass(clClass.getClassUuid()) == 0) {
+
+                    clClassCon = new ClClassCon();
+                    clClassCon.setClassUuid(clClass.getClassUuid());
+                    orgClClassCon = clClassConRepository.findOne(clClassCon.getId());
+                    if(orgClClassCon != null){
+                        clClassConRepository.delete(clClassCon);
+                    }
                     clClassRepository.delete(clClass);
                 }else{
                     throw new ApiException("CL", "002_01");
                 }
             }
+            index++;
         }
 
         return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");
@@ -304,26 +318,27 @@ public class Cl002Service extends BaseService {
      * @param requestParams the request params
      */
     @Transactional
-    public void updateClassCon(RequestParams<Cl00202VO> requestParams) {
+    public ApiResponse updateClassCon(Cl00202VO cl00202Vo) {
+
+
         ClClassCon clClassCon = new ClClassCon();
-        if(StringUtils.isEmpty(requestParams.getString("classUuid"))){
-            return;
-        }
-        clClassCon.setClassUuid(requestParams.getString("classUuid"));
-        clClassCon.setAddMetadata01(requestParams.getString("detailAddMetadata01"));
-        clClassCon.setAddMetadata02(requestParams.getString("detailAddMetadata02"));
-        clClassCon.setAddMetadata03(requestParams.getString("detailAddMetadata03"));
-        clClassCon.setAddMetadata04(requestParams.getString("detailAddMetadata04"));
+        clClassCon.setClassUuid(cl00202Vo.getClassUuid());
+        ClClassCon orgClClassCon = clClassConRepository.findOne(clClassCon.getId());
 
-        ClClassCon orgClClassCon = null;
+        orgClClassCon = orgClClassCon == null ? clClassCon : orgClClassCon;
+        orgClClassCon.setScopeContent(cl00202Vo.getScopeContent());
+        orgClClassCon.setRulesConversionUuid(cl00202Vo.getRulesConversionUuid());
+        clClassConRepository.save(orgClClassCon);
 
-        orgClClassCon = clClassConRepository.findOne(clClassCon.getId());
+        ClClass clClass = new ClClass();
+        clClass.setClassUuid(cl00202Vo.getClassUuid());
+        ClClass orgClClass = clClassRepository.findOne(clClass.getId());
+        orgClClass.setStatusDescription(cl00202Vo.getStatusDescription());
+        orgClClass.setLevelOfDetailUuid(cl00202Vo.getLevelOfDetailUuid());
+        orgClClass.setDescription(cl00202Vo.getDescription());
+        clClassRepository.save(orgClClass);
 
-        if(orgClClassCon != null){
-            clClassCon.setInsertDate(orgClClassCon.getInsertDate());
-            clClassCon.setInsertUuid(orgClClassCon.getInsertUuid());
-        }
-        clClassConRepository.save(clClassCon);
+        return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");
     }
 
     /**
