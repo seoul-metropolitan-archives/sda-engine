@@ -765,7 +765,7 @@ function contextMenuClick(ui, treeData){
                     selectedData = [];
                     getFlatData([treeData]);
 
-                    return selectedData;
+                    return {aggregationUuid : treeData.uuid, classifyList : selectedData};
                 },
                 callback: function (data) {
                     //ACTIONS.dispatch(ACTIONS.GET_SUBDATA, fnObj.naviView.getCurrent());
@@ -803,15 +803,52 @@ function getContextMenu(ui, nodeType){
                     {title: "Delete Item", cmd: "NODE_DEL", uiIcon: "ui-icon-trash"},
                 ];
             }else if(nodeType == "normal"){
+                var treeData = null;
+                var selectedData = null;
+
+                if ($(ui.target).offsetParent().attr("id") == "iconListArea") {
+                    var selectedData = fnObj.iconView.getSelectedData();
+                    treeData = fnObj.treeView01.getNodeByParam("uuid", selectedData[0].uuid);
+                }else{
+                    treeData = fnObj.treeView01.getNodeByTId($(ui.target).closest("[treenode]").attr("id"));
+                }
+
+                if(!treeData){
+                    axDialog.alert({
+                        title: 'Information',
+                        theme: "default",
+                        msg: "정보가 갱신되었습니다.\nAggregation 정보를 다시 가져옵니다."
+                    }, function(){
+                        ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+                    });
+                    return;
+                }
+
+                var rootInfo = treeData.getPath();
+                var enableClassify = true;
+
+                if(rootInfo.length > 0){
+                    rootInfo.forEach(function(item, idx){
+                        if(item.nodeType != "normal"){
+                            enableClassify = false;
+                            return false;
+                        }
+                    });
+                }
+
                 menu = [
                     {title: "View Aggregation", cmd: "AGG_VIEW", uiIcon: "ui-icon-info" },
                     {title: "----"},
                     {title: "Edit Aggregation", cmd: "AGG_EDIT", uiIcon: "ui-icon-wrench" },
                     {title: "Change Temporary Aggregation", cmd: "AGG_TYPE_TEMP", uiIcon: "ui-icon-transferthick-e-w" },
                     {title: "Publishing Aggregation", cmd: "AGG_PUBLISH", uiIcon: "ui-icon-transferthick-e-w" },
-                    {title: "----"},
-                    {title: "Classify Records", cmd: "AGG_CLASSIFY_RECORDS", uiIcon: "ui-icon-transferthick-e-w" },
                 ];
+
+                // 분류 가능할 조건에만 해당 Context메뉴를 보여줌
+                if(enableClassify){
+                    menu.push({title: "----"});
+                    menu.push({title: "Classify Records", cmd: "AGG_CLASSIFY_RECORDS", uiIcon: "ui-icon-transferthick-e-w" });
+                }
             }else if(nodeType == "temporary"){
                 menu = [
                     {title: "View Aggregation", cmd: "AGG_VIEW", uiIcon: "ui-icon-info" },

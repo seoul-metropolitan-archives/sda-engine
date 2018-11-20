@@ -36,7 +36,12 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             type: "GET",
             url: "/api/v1/cl002/03/getClassHierarchyList",
             async : false,
-            data: $.extend({}, {pageSize: 1000}, {classificationSchemeUuid:fnObj.gridView01.getSelectedData()[0]["classificationSchemeUuid"],className:"cl003"}),
+            data: $.extend({}, {pageSize: 1000},
+                {
+                    classificationSchemeUuid:fnObj.gridView01.getSelectedData()[0]["classificationSchemeUuid"],
+                    aggregationUuid : aggregationUuid,
+                    className:"cl003"
+                }),
             callback: function (res) {
                 classList = ax5.util.deepCopy(res.list);
                 fnObj.gridView02.setData(res.list);
@@ -51,6 +56,20 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         var selectedData = fnObj.gridView02.getSelectedData();
 
         if(!selectedData || selectedData.isLeaf != "1"){
+            axDialog.alert({
+                title: 'Classify',
+                theme: "default",
+                msg: "최하위 Class를 선택하세요."
+            });
+            return;
+        }
+
+        if(selectedData.classifyCount > 0){
+            axDialog.alert({
+                title: 'Classify',
+                theme: "default",
+                msg: "해당 Class에 등록되어있는 Aggregation입니다.\n다른 Class를 선택하세요."
+            });
             return;
         }
 
@@ -107,7 +126,8 @@ fnObj.popupView = axboot.viewExtend({
     initView : function(data){
         console.log(data);
 
-        sendData = data;
+        aggregationUuid = data.aggregationUuid;
+        sendData = data.classifyList;
 
         this.initEvent();
     },
@@ -249,11 +269,13 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
         }
     },
     itemClick: function (data, index) {
-        /*if(data != null){
-            crntClassUuid = data.classUuid;
-            isLeaf = data.isLeaf;
-            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1);
-        }*/
+        if(data && data.classifyCount > 0){
+            axDialog.alert({
+                title: 'Classify',
+                theme: "default",
+                msg: "해당 Class에 등록되어있는 Aggregation입니다.\n다른 Class를 선택하세요."
+            });
+        }
     },
     getData: function () {
         return this.gridObj.getData();

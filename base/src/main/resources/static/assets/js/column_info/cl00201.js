@@ -90,6 +90,11 @@ var cl00201 =
                     editable: false,
                     dataType: "text",
                     visible : false
+                },
+                {
+                    name: "classifyCount",
+                    dataType: "number",
+                    visible : false
                 }
             ]
     }
