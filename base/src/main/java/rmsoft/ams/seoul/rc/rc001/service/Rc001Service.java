@@ -4,14 +4,11 @@ import io.onsemiro.core.api.response.ApiResponse;
 import io.onsemiro.core.api.response.Responses;
 import io.onsemiro.core.code.ApiStatus;
 import io.onsemiro.core.domain.BaseService;
-import io.onsemiro.core.parameter.RequestParams;
-import io.onsemiro.utils.JsonUtils;
 import io.onsemiro.utils.ModelMapperUtils;
 import io.onsemiro.utils.SessionUtils;
 import io.onsemiro.utils.UUIDUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import rmsoft.ams.seoul.common.domain.*;
 import rmsoft.ams.seoul.common.repository.*;
@@ -24,17 +21,17 @@ import rmsoft.ams.seoul.rc.rc002.vo.Rc00202VO;
 import rmsoft.ams.seoul.rc.rc002.vo.Rc002VO;
 import rmsoft.ams.seoul.rc.rc004.service.Rc004Service;
 import rmsoft.ams.seoul.rc.rc005.dao.Rc005Mapper;
-import rmsoft.ams.seoul.rc.rc005.service.Rc005Service;
 import rmsoft.ams.seoul.rc.rc005.vo.Rc00501VO;
 import rmsoft.ams.seoul.rc.rc005.vo.Rc00502VO;
 import rmsoft.ams.seoul.utils.CommonCodeUtils;
 import rmsoft.ams.seoul.utils.CommonMessageUtils;
 
 import javax.inject.Inject;
-import java.lang.reflect.Array;
 import java.math.BigDecimal;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service("Rc001Service")
 public class Rc001Service extends BaseService
@@ -370,6 +367,10 @@ public class Rc001Service extends BaseService
                 rtnMap.put("isSuccess", false);
                 rtnMap.put("message", "Normal Aggregation으로 변경시 Item은 최하위 Aggregation에 위치해야합니다.");
                 return Responses.MapResponse.of(rtnMap);
+            }else if(item.getClassifyCnt() > 0){
+                rtnMap.put("isSuccess", false);
+                rtnMap.put("message", "Classify Result에 등록된 정보가 있습니다.");
+                return Responses.MapResponse.of(rtnMap);
             }
         }
 
@@ -453,19 +454,5 @@ public class Rc001Service extends BaseService
         }
 
         return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");
-    }
-
-    private Map<String, String[]> stringToStringArray(Map<String, Object> map) {
-        Map<String, String[]> rtnMap = new HashMap<String, String[]>();
-        for (String key : map.keySet()) {
-            if(map.get(key) == null) continue;
-
-            String[] values = new String[1];
-            values[0] = map.get(key).toString();
-
-            rtnMap.put(key, values);
-        }
-
-        return rtnMap;
     }
 }
