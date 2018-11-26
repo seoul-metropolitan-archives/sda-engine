@@ -369,7 +369,11 @@ fnObj.leftMenuView = axboot.viewExtend({
                 menus: new Array()
             };
         var menu_2_list = new Array();
+        var menu_3_list = new Array();
+
         var secondList = undefined;
+        var thirdList = undefined;
+
         for (var i = 0; i < menuItems.length; i++) {
             this.menus[menuItems[i]["menuUuid"]] = menuItems[i];
             menu_2_list = menuItems[i]["children"];
@@ -377,12 +381,27 @@ fnObj.leftMenuView = axboot.viewExtend({
             secondList = new Array();
             for (var j = 0; j < menu_2_list.length; j++) {
                 this.menus[menu_2_list[j]["menuUuid"]] = menu_2_list[j];
+                menu_3_list = menu_2_list[j]["children"];
+                thirdList = new Array();
+
+                for(var k = 0; k < menu_3_list.length; k++){
+                    this.menus[menu_3_list[k]["menuUuid"]] = menu_3_list[k];
+                    thirdList.push({
+                        icon: 0
+                        , menuUuid: menu_3_list[k]["menuUuid"]
+                        , menuName: menu_3_list[k]["menuName"]
+                        , program: menu_3_list[k]["program"]
+                    });
+                }
+
                 secondList.push({
                     icon: 0
                     , menuUuid: menu_2_list[j]["menuUuid"]
                     , menuName: menu_2_list[j]["menuName"]
                     , program: menu_2_list[j]["program"]
+                    , menus : thirdList
                 });
+                thirdList = undefined;
             }
             leftMenuItems.menus.push({
                 icon: 0
