@@ -20,9 +20,25 @@ public class Rs00401VO extends BaseVO {
     private String statusUuid;
     private String itemUuid;
     private String disposalTypeUuid;
-    private Timestamp initialDate;
-    private Timestamp disposalDueDate;
-    private Timestamp disposalConfirmDate;
+    private String initialDate;
+    private String disposalDueDate;
+    private String disposalFromDueDate;
+    private String disposalToDueDate;;
+    private String disposalFromConfirmDate;
+    private String disposalToConfirmDate;
+    private String disposalConfirmDate;
     private String disposalConfirmReason;
     private Timestamp disposalCompleteDate;
+    private String disposalFromCompleteDate;
+    private String disposalToCompleteDate;
+    private String aggregationTree;
+    private String itemTitle;
+    private String changeStatus;
+    private String disposalStatus;
+    private String itemTypeUuid;
+    private String rsCode;
+    private String rsName;
+    private String retentionPeriodUuid;
+    private String disposalFreeze;
+    private String itemCode;
 }

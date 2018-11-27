@@ -23,13 +23,14 @@ public class Cl003ViewRouter extends BaseController {
     public String view(ModelMap model) {
         model.addAttribute("statusUuid", CommonCodeUtils.get("CD113"));
         model.addAttribute("classLevel", CommonCodeUtils.get("CD114"));
-        model.addAttribute("classLevel", CommonCodeUtils.get("CD111"));
         return "/cl/cl003/cl003";
     }
 
     @PostMapping("/cl/cl003/cl003-p01")
     public String viewPopup(ModelMap model) {
+        model.addAttribute("statusDescription", CommonCodeUtils.get("CD205"));
+        model.addAttribute("levelOfDetail", CommonCodeUtils.get("CD164"));
+        model.addAttribute("rulesConversionUuid", CommonCodeUtils.get("CD206"));
         return "/cl/cl003/cl003-p01";
     }
 }
-

@@ -19,43 +19,12 @@
                 <div style="height:100%; width:100%" class="div_tablerow">
                     <div style="display:table; height:100%; width:20%; padding-bottom: 28px; float:left" class="bdr">
                         <ul class="bdb sdiv_tablerow bgf7" style="height:30px;">
-                            <th:block layout:insert="~{/fragments/page-buttons :: dot('Class Description')}"/>
-                        </ul>
-
-                        <ul class="bdb div_tablerow" style="height:29px;">
-                            <li style="width:100%; text-align:left;">
-                                <textarea data-ax-path="description" type=text  id="classDescription" rows="3" readonly style="width:99.5%; margin-left: 0.5%;border:0px"></textarea>
-                            </li>
-                        </ul>
-
-                        <!--<ul class="bdb div_tablerow" style="height:25px;">
-                            <li style="width:100%; text-align:left;">
-                                <div style="float: right; width: 100%;">
-                                    <div class="src_box3" style="background-color: #fffdd6" >
-                                        <input type=text style="background-color: #fffdd6" data-ax-path="classificationCode">
-                                        <a href="#">
-                                            <img th:src="@{/assets/images/ams/search_normal.png}" alt="search"></a>
-                                    </div>
-                                </div>
-                            </li>
-                        </ul>-->
-
-                        <ul class="bdb" style="height:25px;width:100%; float:left;">
-                            <li style="width:80%">
-                                <input type="text" style="width:100%; margin-left: 0.5%;" readonly>
-                            </li>
-                            <li style="width:20%">
-                                <button class="btn_small" style="margin-right: 0">Edit</button>
-                            </li>
-                        </ul>
-
-                        <ul class="bdb sdiv_tablerow bgf7" style="height:30px;">
                             <th:block layout:insert="~{/fragments/page-buttons :: dot('Aggregation')}"/>
                         </ul>
                         <div style="height:100%; width:100%" class="div_tablerow bdb">
                             <!--<div id="realgrid01" style="width:100%; height:100%"></div>-->
                             <div style="width: 100%; height:100%; position: relative;overflow: auto;">
-                                <div data-z-tree="tree-view-01" data-fit-height-content="tree-view-01" style="height: 100%;width : 100%;max-width: 271px; position: absolute" class="ztree" id="ztree"></div>
+                                <div data-z-tree="tree-view-01" data-fit-height-content="tree-view-01" style="height: 100%;width : 100%;position: absolute" class="ztree" id="ztree"></div>
                             </div>
                         </div>
 

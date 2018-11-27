@@ -188,7 +188,7 @@
 
             },
             "SCHEDULING_RECORD_POPUP" :{
-                width: 1600,
+                width: 1200,
                 height: 700,
                 iframe: {
                     url: "/rs/rs004/rs004-p01"
@@ -204,8 +204,8 @@
 
             },
             "CLASSIFY_POPUP" :{
-                width: 1200,
-                height: 800,
+                width: 1400,
+                height: 700,
                 iframe: {
                     url: "/cl/cl003/cl003-p01"
                 }

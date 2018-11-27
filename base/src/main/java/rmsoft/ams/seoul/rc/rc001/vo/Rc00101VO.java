@@ -23,6 +23,7 @@ public class Rc00101VO extends BaseVO
     private String orderKey1;
     private String classifyRecordsUuid;
     private String classUuid;
+    private String recordScheduleUuid;
     private int childCnt;
     private int aggregationCnt;
     private int classifyCnt;

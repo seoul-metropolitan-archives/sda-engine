@@ -16,39 +16,86 @@
     <form name="formView01" id="formView01" method="post" onsubmit="return false">
     <div class="cssBody" style="top:80px">
         <div class="contents_wrap">
+            <div style=" height:31px; width:100%" class="bgf7 div_tablerow searchFields">
+                <ul class="bdb">
+                    <li style="text-align:right; padding-right:5px;">
+                        <button class="btn_s" th:id="save">
+                            <span class="btn_icon">&nbsp;</span>
+                            <span class="btn_main_txt">Save(S)</span>
+                        </button>
+                        <button class="btn_co" style="line-height: 20px">
+                            <span class="btn_icon_co">&nbsp;</span>
+                            <span class="btn_main_txt">Find</span>
+                        </button>
+                        <button class="btn_co btn_classify" style="line-height: 20px">
+                            <span class="btn_icon_co">&nbsp;</span>
+                            <span class="btn_main_txt01">Classify</span>
+                        </button>
+                        <button class="btn_co close_popup" style="line-height: 20px">
+                            <span class="btn_icon_co">&nbsp;</span>
+                            <span class="btn_main_txt">Close</span>
+                        </button>
+                    </li>
+                </ul>
+            </div>
             <div style="height:100%; width:100%" class="div_tablerow">
                 <div style="display:table; height:100%; width:20%; padding-bottom: 28px; float:left" class="bdr">
                     <ul class="bdb sdiv_tablerow bgf7" style="height:30px;">
                         <th:block layout:insert="~{/fragments/page-buttons :: dot('Class Description')}"/>
                     </ul>
-
-                    <ul class="bdb div_tablerow" style="height:29px;">
-                        <li style="width:100%; text-align:left;">
-                            <textarea data-ax-path="description" type=text  id="classDescription" rows="3" readonly style="width:99.5%; margin-left: 0.5%;border:0px"></textarea>
-                        </li>
-                    </ul>
-
-                    <!--<ul class="bdb div_tablerow" style="height:25px;">
-                        <li style="width:100%; text-align:left;">
-                            <div style="float: right; width: 100%;">
-                                <div class="src_box3" style="background-color: #fffdd6" >
-                                    <input type=text style="background-color: #fffdd6" data-ax-path="classificationCode">
-                                    <a href="#">
-                                        <img th:src="@{/assets/images/ams/search_normal.png}" alt="search"></a>
+                    <div style="padding: 10px 10px 0 10px;">
+                        <ul style="width: 100%; height: 30px;">
+                            <li style="width: 50%;text-align: left">Rules Conversion</li>
+                            <li style="width: 50%;text-align: left">
+                                <select data-ax-path="rulesConversionUuid" style="width:135px;">
+                                    <option value=""></option>
+                                    <option th:each="item : ${rulesConversionUuid}"
+                                            th:value="${item.codeDetailUUID}"
+                                            th:text="${item.codeName}"/>
+                                </select>
+                            </li>
+                        </ul>
+                        <ul style="width: 100%; height: 30px;">
+                            <li style="width: 50%;text-align: left">Status Description</li>
+                            <li style="width: 50%;text-align: left">
+                                <select data-ax-path="statusDescription" style="width:135px;">
+                                    <option value=""></option>
+                                    <option th:each="item : ${statusDescription}"
+                                            th:value="${item.codeDetailUUID}"
+                                            th:text="${item.codeName}"/>
+                                </select>
+                            </li>
+                        </ul>
+                        <ul style="width: 100%; height: 30px;">
+                            <li style="width: 50%;text-align: left">Level of Detail</li>
+                            <li style="width: 50%;text-align: left">
+                                <select data-ax-path="levelOfDetailUuid" style="width:135px;">
+                                    <option value=""></option>
+                                    <option th:each="item : ${levelOfDetail}"
+                                            th:value="${item.codeDetailUUID}"
+                                            th:text="${item.codeName}"/>
+                                </select>
+                            </li>
+                        </ul>
+                        <ul style="width: 100%; height: 30px; padding-top: 10px">
+                            <li style="width: 49%;">
+                                <div style="text-align: left;">Scope Content </div>
+                                <div>
+                                    <textarea class="txtar" style="height: 180px;resize: vertical" data-ax-path="scopeContent"></textarea>
                                 </div>
-                            </div>
-                        </li>
-                    </ul>-->
-
-                    <ul class="bdb" style="height:25px;width:100%; float:left;">
-                        <li style="width:80%">
-                            <input type="text" style="width:100%; margin-left: 0.5%;" readonly>
-                        </li>
-                        <li style="width:20%">
-                            <button class="btn_small" style="margin-right: 0">Edit</button>
-                        </li>
-                    </ul>
-
+                            </li>
+                        </ul>
+                        <ul style="width: 100%; height: 30px;padding-top: 10px">
+                            <li style="width: 49%;">
+                                <div style="text-align: left;">Description </div>
+                                <div>
+                                    <textarea class="txtar" style="height: 262px;resize: vertical" data-ax-path="description"></textarea>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div><!--오늘쪽 내용에서 좌측 트리부분-->
+                <div style="display:table; height:100%; width:20%; padding-bottom: 28px; float:left" class="bdr">
                     <ul class="bdb sdiv_tablerow bgf7" style="height:30px;">
                         <th:block layout:insert="~{/fragments/page-buttons :: dot('Aggregation')}"/>
                     </ul>
@@ -58,26 +105,11 @@
                             <div data-z-tree="tree-view-01" data-fit-height-content="tree-view-01" style="height: 100%;width : 100%;max-width: 271px; position: absolute" class="ztree" id="ztree"></div>
                         </div>
                     </div>
-
                 </div><!--오늘쪽 내용에서 좌측 트리부분-->
-                <div style="display:table; height:50%; width:80%; float:left">
+                <div style="display:table; height:50%; width:60%; float:left">
                     <div style="height:30px; line-height: 28px" class="bgf7 bdb div_tablerow">
-                        <ul>
+                        <ul class="bdb sdiv_tablerow bgf7">
                             <th:block layout:insert="~{/fragments/page-buttons :: dot('item')}"/>
-                            <li style="text-align:right; width:66%; float:right; padding-right:5px;">
-                                <button class="btn_co" style="line-height: 20px">
-                                    <span class="btn_icon_co">&nbsp;</span>
-                                    <span class="btn_main_txt">Find</span>
-                                </button>
-                                <button class="btn_co btn_classify" style="line-height: 20px">
-                                    <span class="btn_icon_co">&nbsp;</span>
-                                    <span class="btn_main_txt01">Classify</span>
-                                </button>
-                                <button class="btn_co close_popup" style="line-height: 20px">
-                                    <span class="btn_icon_co">&nbsp;</span>
-                                    <span class="btn_main_txt">Close</span>
-                                </button>
-                            </li>
                         </ul>
                     </div>
                     <div style="width:100%; height:26px;" class="bdt div_tablerow">
@@ -106,7 +138,7 @@
                         <div id="realgrid02" style="width: 100%; height: 100%;"></div>
                     </div>
                 </div>
-                <div style="display:table; height:50%; width:80%; padding-bottom:28px; float:left">
+                <div style="display:table; height:50%; width:60%; padding-bottom:28px; float:left">
                     <div style="height:30px; line-height: 28px" class="bgf7 bdt div_tablerow">
                         <th:block layout:insert="~{/fragments/page-buttons :: dot('Selected Aggregation List')}"/>
                     </div>
@@ -114,16 +146,20 @@
                         <div id="realgrid03" style="width: 100%; height: 100%;"></div>
                     </div>
                 </div>
-                <div class="footradius">
-                    <button class="btn_co btn_classify">
-                        <span class="btn_icon_co">&nbsp;</span>
-                        <span class="btn_main_txt01">Classify</span>
-                    </button>
-                    <button class="btn_co close_popup">
-                        <span class="btn_icon_co">&nbsp;</span>
-                        <span class="btn_main_txt">Close</span>
-                    </button>
-                </div>
+                <!--<div class="footradius">-->
+                    <!--<button class="btn_s" th:id="save">-->
+                        <!--<span class="btn_icon">&nbsp;</span>-->
+                        <!--<span class="btn_main_txt">Save(S)</span>-->
+                    <!--</button>-->
+                    <!--<button class="btn_co btn_classify">-->
+                        <!--<span class="btn_icon_co">&nbsp;</span>-->
+                        <!--<span class="btn_main_txt01">Classify</span>-->
+                    <!--</button>-->
+                    <!--<button class="btn_co close_popup">-->
+                        <!--<span class="btn_icon_co">&nbsp;</span>-->
+                        <!--<span class="btn_main_txt">Close</span>-->
+                    <!--</button>-->
+                <!--</div>-->
             </div>
         </div><!--오른쪽 내용영역 전체 e -->
     </div>

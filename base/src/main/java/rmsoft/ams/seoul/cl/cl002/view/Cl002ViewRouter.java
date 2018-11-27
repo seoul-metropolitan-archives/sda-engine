@@ -24,7 +24,7 @@ public class Cl002ViewRouter extends MessageBaseController {
         model.addAttribute("classLevel", CommonCodeUtils.get("CD114"));
         model.addAttribute("statusDescription", CommonCodeUtils.get("CD205"));
         model.addAttribute("levelOfDetail", CommonCodeUtils.get("CD164"));
-//        model.addAttribute("levelOfDetail", CommonCodeUtils.get("CD164"));
+        model.addAttribute("rulesConversionUuid", CommonCodeUtils.get("CD206"));
         return "/cl/cl002/cl002";
     }
 }

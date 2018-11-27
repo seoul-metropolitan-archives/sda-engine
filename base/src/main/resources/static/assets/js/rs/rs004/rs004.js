@@ -7,6 +7,24 @@ var CANCEL_STATUS_CD = "";
 var CONFIRM_STATUS_CD = "";
 var recordScheduleUuid = ""
 var ACTIONS = axboot.actionExtend(fnObj, {
+    PAGE_SEARCH_TREE: function (caller, act, data) {
+        axboot.ajax({
+            type: "GET",
+            url: "/api/v1/rs/rs004/02/list",
+            callback: function (res) {
+                if(res.list == null || res.list.length <= 0){
+                    fnObj.gridView02.setData([]);
+                    // fnObj.gridView01.disabledColumn();
+                    return;
+                }
+                fnObj.gridView02.setData(res.list);
+            },
+            options: {
+                onError: axboot.viewError
+            }
+        });
+        return false;
+    },
     PAGE_SEARCH: function (caller, act, data) {
         axboot.ajax({
             type: "GET",
@@ -31,9 +49,10 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH1: function (caller, act, data) {
         axboot.ajax({
             type: "GET",
-            url: "/api/v1/rs004/02",
-            data: $.extend({}, {pageSize: 1000}, fnObj.gridView01.getSelectedData()),
+            url: "/api/v1/rs/rs004/03/list",
+            data: $.extend({}, {pageSize: 1000}, {recordScheduleUuid: data.recordScheduleUuid}),
             callback: function (res) {
+                fnObj.gridView01.setData(res.list);
             },
             options: {
                 onError: axboot.viewError
@@ -170,9 +189,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 title: "SCHEDULING"
             },
             sendData: function () {
-                return {
-
-                };
+                return fnObj.gridView02.gridObj.getSelectedData();
             },
             callback: function (data) {
                 if(this) this.close();
@@ -202,7 +219,14 @@ fnObj.pageStart = function () {
         }
     });
     $.ajax({
-        url: "/assets/js/column_info/rs00401.js",
+        url: "/assets/js/column_info/rs00403.js",
+        dataType: "script",
+        async: false,
+        success: function () {
+        }
+    });
+    $.ajax({
+        url: "/assets/js/column_info/rs00402.js",
         dataType: "script",
         async: false,
         success: function () {
@@ -210,8 +234,10 @@ fnObj.pageStart = function () {
     });
 
     _this.formView.initView();
+    _this.gridView02.initView();
     _this.gridView01.initView();
-    ACTIONS.dispatch(ACTIONS.PAGE_SEARCH, this.formView.getData());
+    ACTIONS.dispatch(ACTIONS.PAGE_SEARCH_TREE, this.formView.getData());
+    // ACTIONS.dispatch(ACTIONS.PAGE_SEARCH, this.formView.getData());
 };
 
 fnObj.formView = axboot.viewExtend(axboot.formView, {
@@ -291,13 +317,12 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     entityName: "RS_GENERAL_RECORD_SCHEDULE",
     initView: function () {
         this.initInstance();
-        this.setColumnInfo(rs00401.column_info);
+        this.setColumnInfo(rs00403.column_info);
         this.gridObj.setOption({
             checkBar: {visible: true}
         })
         this.makeGrid();
         this.gridObj.itemClick(this.itemClick);
-        this.gridObj.on
     },
 
     getSelectedData : function(){
@@ -329,23 +354,67 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
         alert("onImageButtonClicked: " + itemIndex + ", " + column.name + ", " + buttonIndex + ", " + name);
     },
     itemClick: function (data) {
-        /*if (data.classificationSchemeUuid != null && data.classificationSchemeUuid != "") {
-            if (isDetailChanged) {
-                axDialog.confirm({
-                    msg: axboot.getCommonMessage("AA006")
-                }, function () {
-                    if (this.key == "ok") {
-                        ACTIONS.dispatch(ACTIONS.TOP_GRID_DETAIL_PAGE_SAVE);
-                    } else {
-                        isDetailChanged = false;
-                        ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, data);
-                    }
-                });
-            } else {
-                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, data);
-            }
-        }*/
+
     }
+});
+fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
+    tagId : "realgrid02",
+    uuidFieldName : "recordScheduleUuid",
+    entityName : "RS_RECORD_SCHEDULE",
+    initView: function () {
+        this.gridObj = new TreeGridWrapper("realgrid02", "/assets/js/libs/realgrid", true);
+        this.gridObj.setGridStyle("100%", "100%")
+            .setOption({
+                footer:{visible:false},
+                header: { visible: false },
+                checkBar: {visible: false},
+                indicator: {visible: false},
+                stateBar:{visible:false}
+            })
+        this.gridObj.setColumnInfo(rs00402.column_info).makeGrid();
+
+        this.gridObj.setDisplayOptions({
+            fitStyle:"evenFill"
+        });
+        this.gridObj.itemClick(this.itemClick);
+        this.bindEvent();
+    },
+    bindEvent : function()
+    {
+        var _this = this;
+        $(".open_close.expendAll").click(function(){
+            _this.gridObj.expandAll();
+        });
+        $(".open_close.collapseAll").click(function(){
+            _this.gridObj.collapseAll();
+        });
+        $("#leftMenuParam").keydown(function(event){
+            if(13 == event.keyCode)
+                $("#searchLeftMenu").click();
+        })
+        $("#searchLeftMenu").click(function(){
+
+        });
+    },
+    setData: function (list) {
+        this.gridObj.setTreeDataForArray(list, "rsCode");
+    },
+    isChangeData: function () {
+        if (this.getData().length > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    },
+    itemClick: function (data, index) {
+        if(data){
+            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1,data);
+        }
+    },
+    getData: function () {
+        return this.gridObj.getData();
+    },
+
 });
 
 /**

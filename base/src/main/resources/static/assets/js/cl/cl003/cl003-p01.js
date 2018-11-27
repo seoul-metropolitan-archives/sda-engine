@@ -39,6 +39,11 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             data: $.extend({},{classUuid: parentsData.classUuid}),
             callback: function (res) {
                 fnObj.formView.setFormData("description",res.description);
+                fnObj.formView.setFormData("levelOfDetailUuid",res.levelOfDetailUuid);
+                fnObj.formView.setFormData("statusDescription",res.statusDescription);
+                fnObj.formView.setFormData("rulesConversionUuid",res.rulesConversionUuid);
+                fnObj.formView.setFormData("scopeContent",res.scopeContent);
+
             },
             options: {
                 onError: axboot.viewError
@@ -58,7 +63,13 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         axboot.ajax({
             type: "PUT",
             url: "/api/v1/cl/cl003/02/save02",
-            data: JSON.stringify({classUuid:parentsData.classUuid,description:fnObj.formView.getFormData("description")}),
+            data: JSON.stringify({classUuid:parentsData.classUuid,
+                                 description:fnObj.formView.getFormData("description"),
+                                 levelOfDetailUuid:fnObj.formView.getFormData("levelOfDetailUuid"),
+                                 statusDescription:fnObj.formView.getFormData("statusDescription"),
+                                 rulesConversionUuid:fnObj.formView.getFormData("rulesConversionUuid"),
+                                 scopeContent:fnObj.formView.getFormData("scopeContent")
+            }),
             callback: function (res) {
                 ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
             }
@@ -75,39 +86,17 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             return;
         }
 
-        if(parentsData.hasOwnProperty('flag')){
-            debugger
-            var send = fnObj.gridView03.getData();
-
-            for(var i=0;i<fnObj.gridView03.getJsonData().length;i++){
-                 send[i]['inoutExceptUuid'] = parentsData.classUuid;
+        axboot.ajax({
+            type: "PUT",
+            url: "/api/v1/cl/cl003/02/save",
+            data: JSON.stringify({classUuid:parentsData.classUuid,cl00301VOList:fnObj.gridView03.getData()}),
+            callback: function (res) {
+                ACTIONS.dispatch(ACTIONS.PAGE_CLOSE,{classUuid:parentsData.classUuid});
+            },
+            options: {
+                onError: axboot.viewError
             }
-
-            axboot.ajax({
-                type: "PUT",
-                url: "/api/v1/st/st011/02/save01",
-                data: JSON.stringify(send),
-                callback: function (res) {
-                    ACTIONS.dispatch(ACTIONS.PAGE_CLOSE,{classUuid:parentsData.classUuid});
-                },
-                options: {
-                    onError: axboot.viewError
-                }
-            });
-        }else{
-            axboot.ajax({
-                type: "PUT",
-                url: "/api/v1/cl/cl003/02/save",
-                data: JSON.stringify({classUuid:parentsData.classUuid,cl00301VOList:fnObj.gridView03.getData()}),
-                callback: function (res) {
-                    ACTIONS.dispatch(ACTIONS.PAGE_CLOSE,{classUuid:parentsData.classUuid});
-                },
-                options: {
-                    onError: axboot.viewError
-                }
-            });
-        }
-
+        });
 
         return false;
     },
@@ -483,22 +472,26 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
     initEvent: function () {
         var _this = this;
 
-        $(".btn_main_txt01").text(parentsData.confirmBtn);
-
-        $(".sltCont").text(parentsData.crrntAgg);
-
-        $(".btn_small").click(function(){
-           if(this.textContent == "Save"){
-               ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
-               this.textContent = "Edit";
-               $("#classDescription").prop("readonly",true);
-               $("#classDescription").css("background","#ffffff");
-           }else if(this.textContent == "Edit"){
-               this.textContent = "Save";
-               $("#classDescription").prop("readonly",false);
-               $("#classDescription").css("background","#fffdd6");
-           }
-        });
+        // $(".btn_main_txt01").text(parentsData.confirmBtn);
+        //
+        // $(".sltCont").text(parentsData.crrntAgg);
+        //
+        // $(".btn_small").click(function(){
+        //    if(this.textContent == "Save"){
+        //        ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
+        //        this.textContent = "Edit";
+        //        $("#classDescription").prop("readonly",true);
+        //        $("#levelOfDetailUuid").prop("disabled",true);
+        //        $("#statusDescription").prop("disabled", true);
+        //        $("#classDescription").css("background","#ffffff");
+        //    }else if(this.textContent == "Edit"){
+        //        this.textContent = "Save";
+        //        $("#classDescription").prop("readonly",false);
+        //        $("#levelOfDetailUuid").prop("disabled", false);
+        //        $("#statusDescription").prop("disabled", false);
+        //        $("#classDescription").css("background","#fffdd6");
+        //    }
+        // });
         $(".open_close.collapseAll").click(function(){
             _this.gridObj.collapseAll();
         });
@@ -515,6 +508,27 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
         $(".close_popup").click(function(){
             ACTIONS.dispatch(ACTIONS.PAGE_CLOSE);
         });
+
+        var accordion = {
+            click: function(target) {
+                var $target = $(target);
+                $target.on('click', function() {
+
+                    if ($(this).hasClass('on')) {
+                        slideUp($target);
+                    } else {
+                        slideUp($target);
+                        $(this).addClass('on').next().slideDown();
+                    }
+
+                    function slideUp($target) {
+                        $target.removeClass('on').next().slideUp();
+                    }
+
+                });
+            }
+        };
+        accordion.click('.accordion > ul');
     },
     getData: function () {
         var data = this.modelFormatter.getClearData(this.model.get()); // 모델의 값을 포멧팅 전 값으로 치환.

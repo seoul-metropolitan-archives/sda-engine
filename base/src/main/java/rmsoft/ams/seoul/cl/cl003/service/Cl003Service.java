@@ -18,7 +18,9 @@ import rmsoft.ams.seoul.cl.cl003.dao.Cl003Mapper;
 import rmsoft.ams.seoul.cl.cl003.vo.Cl00301VO;
 import rmsoft.ams.seoul.cl.cl003.vo.Cl00302VO;
 import rmsoft.ams.seoul.common.domain.ClClass;
+import rmsoft.ams.seoul.common.domain.ClClassCon;
 import rmsoft.ams.seoul.common.domain.ClClassifyRecordsResult;
+import rmsoft.ams.seoul.common.repository.ClClassConRepository;
 import rmsoft.ams.seoul.common.repository.ClClassRepository;
 import rmsoft.ams.seoul.common.repository.ClClassifyRecordResultRepository;
 import rmsoft.ams.seoul.rc.rc001.vo.Rc00101VO;
@@ -42,7 +44,8 @@ public class Cl003Service extends BaseService {
     private Cl003Mapper cl003Mapper;
     @Autowired
     private ClClassRepository clClassRepository;
-
+    @Autowired
+    private ClClassConRepository clClassConRepository;
     @Autowired
     private ClClassifyRecordResultRepository clClassifyRecordResultRepository;
 
@@ -130,14 +133,21 @@ public class Cl003Service extends BaseService {
         st00303VO.setAggregationUuid(requestParams.getString("aggregationUuid"));
         st00303VO.setRecordScheduleUuid(requestParams.getString("recordScheduleUuid"));
 
-        return filter(cl003Mapper.getSelectedItem(st00303VO), pageable, "", St00303VO.class);
+        return filter(cl003Mapper.getSelectedItemSchedule(st00303VO), pageable, "", St00303VO.class);
     }
     public Cl00201VO getClassInfo(Pageable pageable, RequestParams<Cl00201VO> params) {
         Cl00201VO cl00201VO = new Cl00201VO();
         cl00201VO.setClassUuid(params.getString("classUuid"));
         ClClass clClass = ModelMapperUtils.map(cl00201VO, ClClass.class);
-        ClClass orgClClass = clClassRepository.findOne(clClass.getId());
-        return ModelMapperUtils.map(orgClClass,Cl00201VO.class);
+        clClass = clClassRepository.findOne(clClass.getId());
+        cl00201VO = ModelMapperUtils.map(clClass,Cl00201VO.class);
+
+        ClClassCon clClassCon = ModelMapperUtils.map(cl00201VO, ClClassCon.class);
+        clClassCon = clClassConRepository.findOne(clClassCon.getId());
+
+        cl00201VO.setScopeContent(clClassCon.getScopeContent());
+        cl00201VO.setRulesConversionUuid(clClassCon.getRulesConversionUuid());
+        return cl00201VO;
     }
     public List<Rc00101VO> getAllNode(Rc00101VO param)
     {
@@ -151,17 +161,30 @@ public class Cl003Service extends BaseService {
         nodes.addAll(cl003Mapper.getAggregationNodeSchedule(param));
         return nodes;
     }
+    @Transactional
     public ApiResponse saveClassDescription(Cl00201VO cl00201VO){
         ClClass clClass = ModelMapperUtils.map(cl00201VO, ClClass.class);
-        String description = cl00201VO.getDescription();
         ClClass orgClClass = clClassRepository.findOne(clClass.getId());
         if(orgClClass != null){
             clClass = orgClClass;
-            clClass.setUpdateDate(null);
-            clClass.setUpdateUuid(null);
-            clClass.setDescription(description);
+            clClass.setDescription(cl00201VO.getDescription());
+            clClass.setStatusDescription(cl00201VO.getStatusDescription());
+            clClass.setLevelOfDetailUuid(cl00201VO.getLevelOfDetailUuid());
             clClassRepository.save(clClass);
         }
+        ClClassCon clClassCon = ModelMapperUtils.map(cl00201VO, ClClassCon.class);
+        ClClassCon orgClClassCon = clClassConRepository.findOne(clClassCon.getId());
+
+        if(orgClClassCon != null){
+            orgClClassCon.setScopeContent(clClassCon.getScopeContent());
+            orgClClassCon.setRulesConversionUuid(clClassCon.getRulesConversionUuid());
+            orgClClassCon.setUpdateDate(null);
+            orgClClassCon.setUpdateUuid(null);
+            clClassConRepository.save(orgClClassCon);
+        }else{
+            clClassConRepository.save(clClassCon);
+        }
+
         return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");
     }
 }

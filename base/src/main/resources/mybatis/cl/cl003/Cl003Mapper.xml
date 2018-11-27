@@ -46,22 +46,22 @@
         <![CDATA[
             SELECT
               Z1.AGGREGATION_UUID as uuid
+              , Z3.RECORD_SCHEDULE_UUID as recordScheduleUuid
               , Z1.PARENT_AGGREGATION_UUID as parentUuid
-              , Z1.TITLE as name
+              , Z1.TITLE || (SELECT ' [' || RS_CODE || ']'
+                             FROM RS_RECORD_SCHEDULE
+                             WHERE Z3.RECORD_SCHEDULE_UUID = RECORD_SCHEDULE_UUID )  as name
               , Z1.DESCRIPTION as description
               , Z1.NOTEs as notes
               , SUBSTR(SYS_CONNECT_BY_PATH(ROWNUM, '.'), 2 , length(SYS_CONNECT_BY_PATH(ROWNUM, '.'))) as orderKey1
               , LOWER (Z2.CODE_NAME) as nodeType
               , (SELECT LEVEL_NO FROM RC_LEVEL WHERE LEVEL_UUID = Z1.LEVEL_UUID) as "level"
-              , (
-                (SELECT COUNT(*) FROM RC_AGGREGATION WHERE PARENT_AGGREGATION_UUID = Z1.AGGREGATION_UUID)
-                +(SELECT COUNT(*) FROM RC_ITEM WHERE AGGREGATION_UUID = Z1.AGGREGATION_UUID)
-                )as childCnt
             FROM
-              RC_AGGREGATION Z1
-              , AD_CODE_DETAIL Z2
+              RC_AGGREGATION Z1,
+              AD_CODE_DETAIL Z2,
+              RC_AGGREGATION_CON Z3
             WHERE
-              Z2.CODE_DETAIL_UUID(+) = Z1.TYPE_UUID
+              Z2.CODE_DETAIL_UUID(+) = Z1.TYPE_UUID AND Z1.AGGREGATION_UUID = Z3.AGGREGATION_UUID(+)
         ]]>
         <if test="null != nodeType and '' != nodeType and 'item' != nodeType">
             AND
@@ -223,40 +223,28 @@
         B.NOTES as notes,
         B.AGGREGATION_UUID as parentAggregationUuid,
         (
-        SELECT SYS_CONNECT_BY_PATH((
-        SELECT TITLE FROM RC_AGGREGATION WHERE AGGREGATION_UUID = T1.AGGREGATION_UUID), ' > ')
-        FROM
-        (
-        SELECT CONNECT_BY_ROOT AGGREGATION_UUID AS ROOT, AGGREGATION_UUID, PARENT_AGGREGATION_UUID, TITLE
-        FROM RC_AGGREGATION
-        START WITH PARENT_AGGREGATION_UUID IS NULL
-        CONNECT BY PRIOR AGGREGATION_UUID = PARENT_AGGREGATION_UUID
-        ) T1
-        WHERE AGGREGATION_UUID = A.AGGREGATION_UUID
-        AND ROWNUM = 1
-        START WITH T1.PARENT_AGGREGATION_UUID IS NULL
-        CONNECT BY PRIOR T1.AGGREGATION_UUID = T1.PARENT_AGGREGATION_UUID
+            SELECT SYS_CONNECT_BY_PATH((
+            SELECT TITLE FROM RC_AGGREGATION WHERE AGGREGATION_UUID = T1.AGGREGATION_UUID), ' > ')
+            FROM
+            (
+            SELECT CONNECT_BY_ROOT AGGREGATION_UUID AS ROOT, AGGREGATION_UUID, PARENT_AGGREGATION_UUID, TITLE
+            FROM RC_AGGREGATION
+            START WITH PARENT_AGGREGATION_UUID IS NULL
+            CONNECT BY PRIOR AGGREGATION_UUID = PARENT_AGGREGATION_UUID
+            ) T1
+            WHERE AGGREGATION_UUID = A.AGGREGATION_UUID
+            AND ROWNUM = 1
+            START WITH T1.PARENT_AGGREGATION_UUID IS NULL
+            CONNECT BY PRIOR T1.AGGREGATION_UUID = T1.PARENT_AGGREGATION_UUID
         ) AS catPath
         FROM RC_AGGREGATION A,
-        (
-        SELECT
-        AGGREGATION_UUID, ITEM_UUID, TITLE, ITEM_CODE,DESCRIPTION,NOTES,TYPE_UUID
-        FROM
-        RC_ITEM
-        WHERE AGGREGATION_UUID = #{aggregationUuid}
-        UNION ALL
-        SELECT
-        AGGREGATION_UUID, ITEM_UUID, TITLE, ITEM_CODE,DESCRIPTION,NOTES,TYPE_UUID
-        FROM RC_ITEM
-        WHERE AGGREGATION_UUID IN
-        (
-        SELECT AGGREGATION_UUID
-        FROM RC_AGGREGATION
-        START WITH PARENT_AGGREGATION_UUID = #{aggregationUuid}
-        CONNECT BY PRIOR AGGREGATION_UUID = PARENT_AGGREGATION_UUID
-        )
-        ) B
-        WHERE A.AGGREGATION_UUID = B.AGGREGATION_UUID
+             RC_ITEM B
+        <where>
+            A.AGGREGATION_UUID = B.AGGREGATION_UUID
+            <if test="aggregationUuid != null">
+                AND B.AGGREGATION_UUID = #{aggregationUuid}
+            </if>
+        </where>
         ORDER BY catPath
     </select>
 </mapper>
