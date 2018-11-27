@@ -30,4 +30,5 @@ public class Rs00301VO extends BaseVO {
     private String changeStatus;
     private String triggerYn; //just input
     private String recalculationYn;
+    private String path;
 }

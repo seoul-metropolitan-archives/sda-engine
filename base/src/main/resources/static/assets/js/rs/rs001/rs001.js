@@ -207,7 +207,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
                 var result = false;
                 if(!fnObj.gridView01.getCurrentData()) return false;
                 if (fnObj.gridView01.getCurrentData()["retentionPeriodUuid"] == state){
-                    fnObj.gridView01.gridObj.setValue(fnObj.gridView01.gridObj.getCurrent()["dataRow"], "disposalTypeUuid", " ");
+                    fnObj.gridView01.gridObj.setValue(fnObj.gridView01.gridObj.getCurrent()["dataRow"], "disposalTypeUuid", "보존");
                     result = true;
                 }else{
                     result = false;

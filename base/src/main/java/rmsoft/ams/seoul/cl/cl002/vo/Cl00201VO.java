@@ -36,5 +36,9 @@ public class Cl00201VO extends BaseVO {
     private String accumulationStartDate;
     private String accumulationEndDate;
     private String aggregationUuid;
+    private String statusDescription;
+    private String levelOfDetailUuid;
+    private String rulesConversionUuid;
+    private String scopeContent;
     private int classifyCount;
 }

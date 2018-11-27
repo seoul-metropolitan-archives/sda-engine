@@ -18,27 +18,12 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH1: function (caller, act, data) {
         axboot.ajax({//그리드리스트조회
             type: "GET",
-            url: "/api/v1/cl/cl003/02/list01",
+            url: "/api/v1/cl/cl003/02/list04",
             async : false,
             data: $.extend({}, {pageSize: 10000},{aggregationUuid: data.uuid}),
             callback: function (res) {
                 fnObj.gridView02.resetCurrent();
                 fnObj.gridView02.setData(res.list);
-            },
-            options: {
-                onError: axboot.viewError
-            }
-        });
-        return false;
-    },
-    PAGE_SEARCH: function(caller,act,data) {
-        axboot.ajax({//그리드리스트조회
-            type: "GET",
-            url: "/api/v1/cl/cl003/02/list03",
-            async : false,
-            data: $.extend({},{classUuid: parentsData.classUuid}),
-            callback: function (res) {
-                fnObj.formView.setFormData("description",res.description);
             },
             options: {
                 onError: axboot.viewError
@@ -54,17 +39,6 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_CANCEL: function (caller, act, data) {
         ACTIONS.dispatch(ACTIONS.STATUS_UPDATE,CANCEL_STATUS);
     },
-    PAGE_SAVE: function (caller, act, data) {
-        axboot.ajax({
-            type: "PUT",
-            url: "/api/v1/cl/cl003/02/save02",
-            data: JSON.stringify({classUuid:parentsData.classUuid,description:fnObj.formView.getFormData("description")}),
-            callback: function (res) {
-                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
-            }
-        });
-        return false
-    },
     PAGE_CLOSE: function (caller, act, data) {
         if (parent) {
             parent.axboot.modal.callback(data);
@@ -77,15 +51,16 @@ var ACTIONS = axboot.actionExtend(fnObj, {
 
         axboot.ajax({
             type: "PUT",
-            url: "/api/v1/cl/cl003/02/save",
-            data: JSON.stringify({classUuid:parentsData.classUuid,cl00301VOList:fnObj.gridView03.getData()}),
+            url: "/api/v1/rs/rs004/03/save",
+            data: JSON.stringify(fnObj.gridView03.getData()),
             callback: function (res) {
-                ACTIONS.dispatch(ACTIONS.PAGE_CLOSE,{classUuid:parentsData.classUuid});
+                ACTIONS.dispatch(ACTIONS.PAGE_CLOSE,{recordScheduleUuid:parentsData.recordScheduleUuid});
             },
             options: {
                 onError: axboot.viewError
             }
         });
+
         return false;
     },
     dispatch: function (caller, act, data) {
@@ -125,12 +100,12 @@ fnObj.treeView01 = axboot.viewExtend(axboot.commonView, {
                     rootPId: 0
                 }
             },
-            // check: {
-            //     enable: true,
-            //     chkStyle: "checkbox",
-            //     chkDisabledInherit:true,
-            //     chkboxType: { "Y": "ps", "N": "ps" }
-            // },
+            check: {
+                enable: true,
+                chkStyle: "checkbox",
+                chkDisabledInherit:true,
+                chkboxType: { "Y": "s", "N": "s" }
+            },
 
             callback: {
                 onClick: function (e, treeId, treeNode, isCancel) {
@@ -141,23 +116,25 @@ fnObj.treeView01 = axboot.viewExtend(axboot.commonView, {
                 onCheck: function (e,treeId,treeNode) {
                     var treeObj = $.fn.zTree.getZTreeObj(treeId);
                     if(treeNode.getParentNode()){
-                        if(treeNode.getParentNode().getCheckStatus().checked && !treeNode.getParentNode().getCheckStatus().half){
-                            for (var i=0, l=treeNode.getParentNode().children.length; i < l; i++) {
-                                if(treeNode.getParentNode().children[i]["classifyRecordsUuid"] == undefined || treeNode.getParentNode().children[i]["classifyRecordsUuid"] == null) {
-                                    treeObj.setChkDisabled(treeNode.getParentNode().children[i], true, false, true);
+                        if(treeNode.getParentNode().getCheckStatus()){
+                            if(treeNode.getParentNode().getCheckStatus().checked && !treeNode.getParentNode().getCheckStatus().half){
+                                for (var i=0, l=treeNode.getParentNode().children.length; i < l; i++) {
+                                    if(treeNode.getParentNode().children[i]["recordScheduleUuid"] == undefined || treeNode.getParentNode().children[i]["recordScheduleUuid"] == null) {
+                                        treeObj.setChkDisabled(treeNode.getParentNode().children[i], true, false, true);
+                                    }
                                 }
+                                fnObj.gridView03.clearData();
+                                fnObj.gridView03.setData(treeObj.getNodesByFilter(function(node){
+                                    return !node.chkDisabled && node.getCheckStatus().checked && !node.getCheckStatus().half;
+                                }));
+                                return;
                             }
-                            fnObj.gridView03.clearData();
-                            fnObj.gridView03.setData(treeObj.getNodesByFilter(function(node){
-                                return !node.chkDisabled && node.getCheckStatus().checked && !node.getCheckStatus().half;
-                            }));
-                            return;
                         }
                     }
                     if (treeNode.children) {
                         if(treeNode.getCheckStatus().checked){
                             for (var i=0, l=treeNode.children.length; i < l; i++) {
-                                if(treeNode.children[i]["classifyRecordsUuid"] == undefined || treeNode.children[i]["classifyRecordsUuid"] == null) {
+                                if(treeNode.children[i]["recordScheduleUuid"] == undefined || treeNode.children[i]["recordScheduleUuid"] == null) {
                                     treeObj.setChkDisabled(treeNode.children[i], true, false, true);
                                 }
                             }
@@ -173,7 +150,7 @@ fnObj.treeView01 = axboot.viewExtend(axboot.commonView, {
                     if (treeNode.children) {
                         if(treeNode.getCheckStatus().checked){
                             for (var i=0, l=treeNode.children.length; i < l; i++) {
-                                if(treeNode.children[i]["classifyRecordsUuid"] == undefined || treeNode.children[i]["classifyRecordsUuid"] == null){
+                                if(treeNode.children[i]["recordScheduleUuid"] == undefined || treeNode.children[i]["recordScheduleUuid"] == null){
                                     treeObj.setChkDisabled(treeNode.children[i], false,false,true);
                                 }
                             }
@@ -251,7 +228,7 @@ fnObj.treeView01 = axboot.viewExtend(axboot.commonView, {
         var treeObj = $.fn.zTree.getZTreeObj("ztree");
         nodes = nodes == null ? treeObj.getNodes() : nodes;
         for (var i=0, l=nodes.length; i < l; i++) {
-            if(nodes[i]["classifyRecordsUuid"] != undefined && nodes[i]["classifyRecordsUuid"] != null){
+            if(nodes[i]["recordScheduleUuid"] != undefined && nodes[i]["recordScheduleUuid"] != null){
                 treeObj.checkNode(nodes[i], true);
                 treeObj.setChkDisabled(nodes[i], true,false,false);
             }
@@ -443,7 +420,7 @@ fnObj.pageStart = function () {
     fnObj.treeView01.initView();
     _this.gridView02.initView();
     ACTIONS.dispatch(ACTIONS.PAGE_SEARCH_TREE, this.formView.getData());
-    // ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+    ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
 };
 
 fnObj.formView = axboot.viewExtend(axboot.formView, {
@@ -465,16 +442,20 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
         $(".sltCont").text(parentsData.crrntAgg);
 
         $(".btn_small").click(function(){
-           if(this.textContent == "Save"){
-               ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
-               this.textContent = "Edit";
-               $("#classDescription").prop("readonly",true);
-               $("#classDescription").css("background","#ffffff");
-           }else if(this.textContent == "Edit"){
-               this.textContent = "Save";
-               $("#classDescription").prop("readonly",false);
-               $("#classDescription").css("background","#fffdd6");
-           }
+            if(this.textContent == "Save"){
+                ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
+                this.textContent = "Edit";
+                $("#classDescription").prop("readonly",true);
+                $("#levelOfDetailUuid").prop("disabled",true);
+                $("#statusDescription").prop("disabled", true);
+                $("#classDescription").css("background","#ffffff");
+            }else if(this.textContent == "Edit"){
+                this.textContent = "Save";
+                $("#classDescription").prop("readonly",false);
+                $("#levelOfDetailUuid").prop("disabled", false);
+                $("#statusDescription").prop("disabled", false);
+                $("#classDescription").css("background","#fffdd6");
+            }
         });
         $(".open_close.collapseAll").click(function(){
             _this.gridObj.collapseAll();
@@ -492,6 +473,27 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
         $(".close_popup").click(function(){
             ACTIONS.dispatch(ACTIONS.PAGE_CLOSE);
         });
+
+        var accordion = {
+            click: function(target) {
+                var $target = $(target);
+                $target.on('click', function() {
+
+                    if ($(this).hasClass('on')) {
+                        slideUp($target);
+                    } else {
+                        slideUp($target);
+                        $(this).addClass('on').next().slideDown();
+                    }
+
+                    function slideUp($target) {
+                        $target.removeClass('on').next().slideUp();
+                    }
+
+                });
+            }
+        };
+        accordion.click('.accordion > ul');
     },
     getData: function () {
         var data = this.modelFormatter.getClearData(this.model.get()); // 모델의 값을 포멧팅 전 값으로 치환.
@@ -544,9 +546,6 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
         // this.gridObj.setFixedOptions({
         //     colCount: 3
         // });
-        this.gridObj.setOption({
-            checkBar: {visible: true}
-        })
         this.makeGrid();
     },
     isChangeData: function () {
@@ -583,7 +582,7 @@ fnObj.gridView03 = axboot.viewExtend(axboot.gridView, {
                 lineVisible: false
             });
         this.gridObj.setColumnInfo(cl00301_p01_02.column_info).makeGrid();
-                this.gridObj.setDisplayOptions({
+        this.gridObj.setDisplayOptions({
             fitStyle:"evenFill"
         });
 
@@ -617,7 +616,7 @@ fnObj.gridView03 = axboot.viewExtend(axboot.gridView, {
                 item = {
                     title: n.name,
                     aggregationUuid: n.uuid,
-                    classifyRecordsUuid:n.classifyRecordsUuid == undefined ? '' : n.classifyRecordsUuid,
+                    recordScheduleUuid:parentsData.recordScheduleUuid,
                     choiceYn : n.choiceYn == undefined ? 'N' : n.choiceYn
                 };
                 if(n.rows) convertList(n.rows);
@@ -634,6 +633,9 @@ fnObj.gridView03 = axboot.viewExtend(axboot.gridView, {
         }
         this.gridObj.setTreeDataForJSON(data,"children","","icon")
         // this.gridObj.setTreeDataForArray(list, "orderKey1");
+    },
+    getJsonData: function () {
+        return this.gridObj.getJsonRows();
     }
 });
 /**

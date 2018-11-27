@@ -73,7 +73,7 @@ var rs00301 =
                     dataType: "popup",
                     popupCode : "PU130",
                     popupCallback: fnObj.gridView01.popupCallback,
-                    sqlColumn : {GENERAL_RECORD_SCHEDULE_UUID : "generalRecordScheduleUuid",GRS_CODE : "grsCode",GRS_NAME : "grsName",RETENTION_PERIOD : "retentionPeriodUuid", DISPOSAL_TYPE: "disposalTypeUuid" , BASED_ON:"basedOn"},
+                    sqlColumn : {GENERAL_RECORD_SCHEDULE_UUID : "generalRecordScheduleUuid",GRS_CODE : "grsCode",GRS_NAME : "grsName",RETENTION_PERIOD_UUID : "retentionPeriodUuid", DISPOSAL_TYPE_UUID: "disposalTypeUuid" , BASED_ON:"basedOn"},
                     required: false
                 },
                 {

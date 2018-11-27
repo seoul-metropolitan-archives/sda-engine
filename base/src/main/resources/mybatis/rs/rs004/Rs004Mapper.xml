@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="rmsoft.ams.seoul.rs.rs004.dao.Rs004Mapper">
-    <select id="getRecordScheduleResultList" resultType="Rs00501VO"  statementType="PREPARED">
+    <select id="getRecordScheduleResultList" resultType="Rs00401VO"  statementType="PREPARED">
         SELECT
         A3.RS_CODE AS rsCode,
         A3.RS_NAME AS rsName,
@@ -74,4 +74,47 @@
         </where>
         ORDER BY A3.RS_CODE, A2.ITEM_CODE
     </select>
+    <select id="getRecordScheduleList" resultType="Rs00301VO"  statementType="PREPARED">
+        SELECT
+            RS_NAME as rsName,
+            RS_CODE as rsCode,
+            RECORD_SCHEDULE_UUID as recordScheduleUuid,
+            '[' || RS_CODE || '] ' || RS_NAME AS path
+        FROM RS_RECORD_SCHEDULE
+        WHERE USE_YN = 'Y' AND FC_AD_CODE_NM(STATUS_UUID) = 'Confirm'
+        ORDER BY RS_CODE
+    </select>
+    <select id="getRecordScheduleAggregationList" parameterType="Rs00402VO" resultType="Rs00402VO"  statementType="PREPARED">
+        SELECT
+            DISTINCT(A.AGGREGATION_UUID) AS aggregationUuid,
+            A.TITLE AS title,
+            C.RS_CODE AS rsCode,
+            C.RS_NAME AS rsName,
+            C.RETENTION_PERIOD_UUID AS retentionPeriodUuid,
+            C.DISPOSAL_TYPE_UUID AS disposalTypeUuid,
+            C.RECORD_SCHEDULE_UUID AS recordScheduleUuid,
+            (
+                SELECT SYS_CONNECT_BY_PATH((
+                SELECT TITLE FROM RC_AGGREGATION WHERE AGGREGATION_UUID = T1.AGGREGATION_UUID), ' > ')
+                FROM
+                (
+                    SELECT CONNECT_BY_ROOT AGGREGATION_UUID AS ROOT, AGGREGATION_UUID, PARENT_AGGREGATION_UUID, TITLE
+                    FROM RC_AGGREGATION
+                    START WITH PARENT_AGGREGATION_UUID IS NULL
+                    CONNECT BY PRIOR AGGREGATION_UUID = PARENT_AGGREGATION_UUID
+                ) T1
+                WHERE AGGREGATION_UUID = A.AGGREGATION_UUID
+                AND ROWNUM = 1
+                START WITH T1.PARENT_AGGREGATION_UUID IS NULL
+                CONNECT BY PRIOR T1.AGGREGATION_UUID = T1.PARENT_AGGREGATION_UUID
+             ) AS catPath
+        FROM RC_AGGREGATION A, RC_AGGREGATION_CON B, RS_RECORD_SCHEDULE C
+        WHERE A.AGGREGATION_UUID = B.AGGREGATION_UUID
+              AND B.RECORD_SCHEDULE_UUID = C.RECORD_SCHEDULE_UUID
+              AND CONNECT_BY_ISLEAF = 1
+              AND B.RECORD_SCHEDULE_UUID = #{recordScheduleUuid}
+        START WITH B.RECORD_SCHEDULE_UUID = #{recordScheduleUuid}
+        CONNECT BY PRIOR A.AGGREGATION_UUID = A.PARENT_AGGREGATION_UUID
+    </select>
+
 </mapper>

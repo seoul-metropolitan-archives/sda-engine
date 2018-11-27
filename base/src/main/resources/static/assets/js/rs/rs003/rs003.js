@@ -240,12 +240,14 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
                     }
                 }
                 if(row["statusUuid"] != state) {//Draft 일때
-                    if (row["grsCode"] == "" || row["grsCode"] == undefined)
+                    if (row["grsCode"] == "" || row["grsCode"] == undefined){
+                        // fnObj.gridView01.gridObj.setValue(fnObj.gridView01.gridObj.getCurrent()["dataRow"], "disposalTypeUuid",'');
                         return false;
-                    else
-                        return true;
-                }else
-                    return true;
+                    } else return true;
+
+                } else return true;
+
+
             },["retentionPeriodUuid","disposalTypeUuid","basedOn"]);
         }else if(fnObj.gridView01.gridObj.getCurrent().column == "retentionPeriodUuid"){
             var state = axboot.commonCodeValueByCodeName("CD133", "영구");
@@ -253,15 +255,16 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
                 var result = false;
                 if(!fnObj.gridView01.getCurrentData()) return false;
                 if (fnObj.gridView01.getCurrentData()["retentionPeriodUuid"] == state){
-                    fnObj.gridView01.gridObj.setValue(fnObj.gridView01.gridObj.getCurrent()["dataRow"], "disposalTypeUuid", " ");
+                    fnObj.gridView01.gridObj.setValue(fnObj.gridView01.gridObj.getCurrent()["dataRow"], "disposalTypeUuid",axboot.commonCodeValueByCodeName("CD135", "보존"));
                     result = true;
                 }else{
                     result = false;
                 }
                 return result;
-            }, ["disposalTypeUuid"], true);
+            }, ["disposalTypeUuid"]);
         }
-
+        fnObj.gridView01.gridObj.commit();
+        //fnObj.gridView01.disabledColumn();
     },
     disabledColumn : function()
     {
@@ -314,6 +317,8 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
 
         if(fnObj.gridView01.gridObj.getSelectedData().statusUuid == state) {
             this.setRunDel(false);
+        }else{
+            this.setRunDel(true);
         }
     },
 
