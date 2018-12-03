@@ -46,7 +46,10 @@ var st01101 =
                     width: 100,
                     editable: true,
                     dataType : "date",
-                    required : true
+                    required : true,
+                    styles: {
+                        "datetimeFormat": "yyyy.MM.dd"
+                    }
                 },
                 {
                     sortNo: 5,
@@ -55,7 +58,10 @@ var st01101 =
                     width: 100,
                     editable: true,
                     dataType : "date",
-                    required : true
+                    required : true,
+                    styles: {
+                        "datetimeFormat": "yyyy.MM.dd"
+                    }
                 },
                 {
                     sortNo: 8,

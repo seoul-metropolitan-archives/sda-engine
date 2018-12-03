@@ -16,5 +16,13 @@ public class St011ViewRouter extends BaseController {
         //model.addAttribute("containerTypeUuid", CommonCodeUtils.get("CD139"));
         return "/st/st011/st011";
     }
+
+    @PostMapping("/st/st011/st011-p01")
+    public String viewPopup(ModelMap model) {
+        model.addAttribute("statusDescription", CommonCodeUtils.get("CD205"));
+        model.addAttribute("levelOfDetail", CommonCodeUtils.get("CD164"));
+        model.addAttribute("rulesConversionUuid", CommonCodeUtils.get("CD206"));
+        return "/st/st011/st011-p01";
+    }
 }
 

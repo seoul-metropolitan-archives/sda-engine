@@ -15,6 +15,19 @@ public class St01102VO extends BaseVO{
     private String exceptRecordResultUuid;
     private String inoutExceptUuid;
     private String aggregationUuid;
+    private String uuid;
+    private String publishedStatus;
+    private String code;
+    private String title;
+    private String type;
+    private String level;
+    private String author;
+    private String descStrDate;
+    private String descEdDate;
+    private String description;
+    private String notes;
+    private int childCnt;
+
 
 
 }

@@ -82,9 +82,14 @@ public class St011Service extends BaseService {
     public void saveExceptRecordResult(List<St01102VO> list) {
         List<StExceptRecordResult> stExceptRecordResults = ModelMapperUtils.mapList(list, StExceptRecordResult.class);
 
+
         for(StExceptRecordResult stExceptRecordResult : stExceptRecordResults){
-            stExceptRecordResult.setExceptRecordResultUuid(UUIDUtils.getUUID());
-            stExceptRecordResultRepository.save(stExceptRecordResult);
+            if(stExceptRecordResult.isDeleted()){
+                stExceptRecordResultRepository.delete(stExceptRecordResult);
+            }else{
+                stExceptRecordResult.setExceptRecordResultUuid(UUIDUtils.getUUID());
+                stExceptRecordResultRepository.save(stExceptRecordResult);
+            }
         }
 
 
