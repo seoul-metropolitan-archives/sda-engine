@@ -7,7 +7,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH01: function (caller, act, data) {
        axboot.ajax({
             type: "GET",
-            url: "/api/v1/st/st011/01/list01",
+            url: "/api/v1/st/st013/01/list01",
             data: $.extend({}, this.formView.getData()),
             callback: function (res) {
                 fnObj.gridView01.setData(res.list);
@@ -25,7 +25,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         }
         axboot.ajax({
             type: "GET",
-            url: "/api/v1/st/st011/01/list02",
+            url: "/api/v1/st/st013/01/list02",
             data: $.extend({}, this.formView.getData(),{inoutExceptUuid : fnObj.gridView01.getSelectedData().inoutExceptUuid}),
             callback: function (res) {
                 fnObj.gridView02.setData(res.list);
@@ -146,7 +146,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         var result = false;
         axboot.call({
             type: "PUT",
-            url: "/api/v1/st/st011/01/save01",
+            url: "/api/v1/st/st013/01/save01",
             data: JSON.stringify(this.gridView01.getData()),
             callback: function (res) {
                 ACTIONS.dispatch(ACTIONS.PAGE_SEARCH01);
@@ -164,7 +164,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
 
         axboot.call({
             type: "PUT",
-            url: "/api/v1/st/st011/02/save01",
+            url: "/api/v1/st/st013/02/save01",
             data: JSON.stringify(this.gridView02.getData()),
             callback: function (res) {
                 ACTIONS.dispatch(ACTIONS.PAGE_SEARCH02);
@@ -275,7 +275,7 @@ fnObj.pageStart = function () {
         }
     });
     $.ajax({
-        url: "/assets/js/column_info/st01101.js",
+        url: "/assets/js/column_info/st01301.js",
         dataType: "script",
         async: false,
         success: function () {
@@ -283,7 +283,7 @@ fnObj.pageStart = function () {
     });
 
     $.ajax({
-        url: "/assets/js/column_info/st01102.js",
+        url: "/assets/js/column_info/st01302.js",
         dataType: "script",
         async: false,
         success: function () {
@@ -396,7 +396,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     entityName: "ST_INOUT_EXCEPT",
     initView: function () {
         this.initInstance();
-        this.setColumnInfo(st01101.column_info);
+        this.setColumnInfo(st01301.column_info);
         this.gridObj.setOption({
             checkBar: {visible: true}
         })
@@ -477,7 +477,7 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
     parentsGrid: fnObj.gridView01,
     initView: function () {
         this.initInstance();
-        this.setColumnInfo(st01102.column_info);
+        this.setColumnInfo(st01302.column_info);
         this.gridObj.setOption({
             checkBar: {visible: true}
         })

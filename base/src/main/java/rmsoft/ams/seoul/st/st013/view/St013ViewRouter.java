@@ -1,4 +1,4 @@
-package rmsoft.ams.seoul.st.st011.view;
+package rmsoft.ams.seoul.st.st013.view;
 
 import io.onsemiro.controller.BaseController;
 import org.springframework.stereotype.Controller;
@@ -8,21 +8,21 @@ import org.springframework.web.bind.annotation.PostMapping;
 import rmsoft.ams.seoul.utils.CommonCodeUtils;
 
 @Controller
-public class St011ViewRouter extends BaseController {
+public class St013ViewRouter extends BaseController {
 
-    @GetMapping("/st/st011/st011")
+    @GetMapping("/st/st013/st013")
     public String view(ModelMap model) {
         //model.addAttribute("statusUuid", CommonCodeUtils.get("CD138"));
         //model.addAttribute("containerTypeUuid", CommonCodeUtils.get("CD139"));
-        return "/st/st011/st011";
+        return "/st/st013/st013";
     }
 
-    @PostMapping("/st/st011/st011-p01")
+    @PostMapping("/st/st013/st013-p01")
     public String viewPopup(ModelMap model) {
         model.addAttribute("statusDescription", CommonCodeUtils.get("CD205"));
         model.addAttribute("levelOfDetail", CommonCodeUtils.get("CD164"));
         model.addAttribute("rulesConversionUuid", CommonCodeUtils.get("CD206"));
-        return "/st/st011/st011-p01";
+        return "/st/st013/st013-p01";
     }
 }
 

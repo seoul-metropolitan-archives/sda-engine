@@ -1,4 +1,4 @@
-package rmsoft.ams.seoul.st.st011.vo;
+package rmsoft.ams.seoul.st.st013.vo;
 
 import io.onsemiro.core.vo.BaseVO;
 import io.onsemiro.utils.ModelMapperUtils;
@@ -14,7 +14,7 @@ import static java.util.stream.Collectors.toList;
 
 @Data
 @EqualsAndHashCode(callSuper=true)
-public class St011VO extends BaseVO {
+public class St013VO extends BaseVO {
 
     private String inoutExceptUuid;
 
@@ -39,16 +39,16 @@ public class St011VO extends BaseVO {
     private Timestamp updateDate;
 
 
-    public static St011VO of(St011 st011) {
-        St011VO st011VO = ModelMapperUtils.map(st011, St011VO.class);
-        return st011VO;
+    public static St013VO of(St013 st013) {
+        St013VO st013VO = ModelMapperUtils.map(st013, St013VO.class);
+        return st013VO;
     }
 
-    public static List<St011VO> of(List<St011> st011List) {
-        return st011List.stream().map(st011 -> of(st011)).collect(toList());
+    public static List<St013VO> of(List<St013> st013List) {
+        return st013List.stream().map(st013 -> of(st013)).collect(toList());
     }
 
-    public static List<St011VO> of(Page<St011> st011Page) {
-        return st011Page.getContent().stream().map(st011 -> of(st011)).collect(toList());
+    public static List<St013VO> of(Page<St013> st013Page) {
+        return st013Page.getContent().stream().map(st013 -> of(st013)).collect(toList());
     }
 }

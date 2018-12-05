@@ -1,4 +1,4 @@
-package rmsoft.ams.seoul.st.st011.service;
+package rmsoft.ams.seoul.st.st013.service;
 
 import io.onsemiro.core.api.response.ApiResponse;
 import io.onsemiro.core.code.ApiStatus;
@@ -13,17 +13,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import rmsoft.ams.seoul.common.domain.StArrangeContainersResult;
 import rmsoft.ams.seoul.common.domain.StExceptRecordResult;
 import rmsoft.ams.seoul.common.domain.StInoutExcept;
-import rmsoft.ams.seoul.common.repository.StArrangeContainersResultRepository;
 import rmsoft.ams.seoul.common.repository.StExceptRecordResultRepository;
 import rmsoft.ams.seoul.common.repository.StInoutExceptRepository;
-import rmsoft.ams.seoul.st.st001.vo.St00101VO;
-import rmsoft.ams.seoul.st.st011.dao.St011Mapper;
-import rmsoft.ams.seoul.st.st011.vo.St01101VO;
-import rmsoft.ams.seoul.st.st011.vo.St01102VO;
-import rmsoft.ams.seoul.utils.CommonCodeUtils;
+import rmsoft.ams.seoul.st.st013.dao.St013Mapper;
+import rmsoft.ams.seoul.st.st013.vo.St01301VO;
+import rmsoft.ams.seoul.st.st013.vo.St01302VO;
 
 import javax.inject.Inject;
 import java.sql.Timestamp;
@@ -31,10 +27,10 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
-public class St011Service extends BaseService {
+public class St013Service extends BaseService {
 
     @Inject
-    private St011Mapper st011Mapper;
+    private St013Mapper st013Mapper;
 
     @Autowired
     private StInoutExceptRepository stInoutExceptRepository;
@@ -43,15 +39,15 @@ public class St011Service extends BaseService {
     private StExceptRecordResultRepository stExceptRecordResultRepository;
 
 
-    public Page<St01101VO> getStInoutExcept(Pageable pageable, RequestParams<St01101VO> requestParams) {
-        St01101VO st01101VO = new St01101VO();
-        st01101VO.setRequestName(requestParams.getString("requestName"));
+    public Page<St01301VO> getStInoutExcept(Pageable pageable, RequestParams<St01301VO> requestParams) {
+        St01301VO st01301VO = new St01301VO();
+        st01301VO.setRequestName(requestParams.getString("requestName"));
         //검색조건 추가시
 
-        return filter(st011Mapper.getStInoutExcept(st01101VO), pageable, "", St01101VO.class);
+        return filter(st013Mapper.getStInoutExcept(st01301VO), pageable, "", St01301VO.class);
     }
     @Transactional
-    public ApiResponse saveInoutExcept(List<St01101VO> list) {
+    public ApiResponse saveInoutExcept(List<St01301VO> list) {
         List<StInoutExcept> stInoutExceptList = ModelMapperUtils.mapList(list, StInoutExcept.class);
         StInoutExcept orgStInoutExcept = null;
         int cnt = 0;
@@ -79,7 +75,7 @@ public class St011Service extends BaseService {
         return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");
     }
 
-    public void saveExceptRecordResult(List<St01102VO> list) {
+    public void saveExceptRecordResult(List<St01302VO> list) {
         List<StExceptRecordResult> stExceptRecordResults = ModelMapperUtils.mapList(list, StExceptRecordResult.class);
 
 
@@ -95,10 +91,10 @@ public class St011Service extends BaseService {
 
     }
 
-    public Page<St01102VO> getStExceptRecordResult(Pageable pageable, RequestParams<St01102VO> requestParams) {
-        St01102VO st01102VO = new St01102VO();
-        st01102VO.setInoutExceptUuid(requestParams.getString("inoutExceptUuid"));
-        return filter(st011Mapper.getStExceptRecordResult(st01102VO), pageable, "", St01102VO.class);
+    public Page<St01302VO> getStExceptRecordResult(Pageable pageable, RequestParams<St01302VO> requestParams) {
+        St01302VO st01302VO = new St01302VO();
+        st01302VO.setInoutExceptUuid(requestParams.getString("inoutExceptUuid"));
+        return filter(st013Mapper.getStExceptRecordResult(st01302VO), pageable, "", St01302VO.class);
 
     }
 }

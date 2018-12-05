@@ -1,4 +1,4 @@
-package rmsoft.ams.seoul.st.st011.vo;
+package rmsoft.ams.seoul.st.st013.vo;
 
 import io.onsemiro.core.annotations.Comment;
 import io.onsemiro.core.domain.SimpleJpaModel;
@@ -23,8 +23,8 @@ import java.sql.Timestamp;
 @EqualsAndHashCode(callSuper = true)
 @Table(name = "ST_INOUT_EXCEPT")
 @Comment("")
-@Alias("st011")
-public class St011 extends SimpleJpaModel<String> {
+@Alias("st013")
+public class St013 extends SimpleJpaModel<String> {
 
 	@Id
 	@Column(name = "INOUT_EXCEPT_UUID", length = 36, nullable = false)

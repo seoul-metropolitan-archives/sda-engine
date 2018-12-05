@@ -3,8 +3,8 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="rmsoft.ams.seoul.st.st011.dao.St011Mapper">
-    <select id="getStInoutExcept" resultType="St01101VO" parameterType="St01101VO" statementType="PREPARED">
+<mapper namespace="rmsoft.ams.seoul.st.st013.dao.St013Mapper">
+    <select id="getStInoutExcept" resultType="St01301VO" parameterType="St01301VO" statementType="PREPARED">
         SELECT
         INOUT_EXCEPT_UUID as inoutExceptUuid,
         REQUEST_NAME as requestName,
@@ -27,7 +27,7 @@
         </where>
     </select>
 
-    <select id="getStExceptRecordResult" resultType="St01102VO" parameterType="St01102VO" statementType="PREPARED">
+    <select id="getStExceptRecordResult" resultType="St01302VO" parameterType="St01302VO" statementType="PREPARED">
         SELECT A.EXCEPT_RECORD_RESULT_UUID as exceptRecordResultUuid,
         A.INOUT_EXCEPT_UUID as inoutExceptUuid,
         A.AGGREGATION_UUID as aggregationUuid,

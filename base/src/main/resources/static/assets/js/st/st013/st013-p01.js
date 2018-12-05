@@ -86,17 +86,6 @@ PAGE_SEARCH1: function (caller, act, data) {
             return;
         }
 
-       /* axboot.ajax({
-            type: "PUT",
-            url: "/api/v1/st/st011/02/save01",
-            data: JSON.stringify({classUuid:parentsData.classUuid,cl00301VOList:fnObj.gridView03.getData()}),
-            callback: function (res) {
-                ACTIONS.dispatch(ACTIONS.PAGE_CLOSE,{classUuid:parentsData.classUuid});
-            },
-            options: {
-                onError: axboot.viewError
-            }
-        });*/
 
         var send = fnObj.gridView03.getData();
 
@@ -106,7 +95,7 @@ PAGE_SEARCH1: function (caller, act, data) {
 
         axboot.ajax({
             type: "PUT",
-            url: "/api/v1/st/st011/02/save01",
+            url: "/api/v1/st/st013/02/save01",
             data: JSON.stringify(send),
             callback: function (res) {
                 ACTIONS.dispatch(ACTIONS.PAGE_CLOSE,{classUuid:parentsData.classUuid});

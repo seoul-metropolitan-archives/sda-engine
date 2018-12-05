@@ -1,4 +1,4 @@
-package rmsoft.ams.seoul.st.st011.vo;
+package rmsoft.ams.seoul.st.st013.vo;
 
 import io.onsemiro.core.vo.BaseVO;
 import lombok.Data;
@@ -10,7 +10,7 @@ import java.sql.Timestamp;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class St01101VO extends BaseVO {
+public class St01301VO extends BaseVO {
 
     private String inoutExceptUuid;
     private String requestName;
