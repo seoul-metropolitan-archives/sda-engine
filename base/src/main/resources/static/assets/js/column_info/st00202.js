@@ -50,7 +50,12 @@ var st00202 =
                     editable: true,
                     dataType: "popup",
                     popupCode : "PU135",
-                    sqlColumn : {CONTAINER_NAME:"parentContainerName", PARENT_CONTAINER:"popContainerName" ,CONTAINER_UUID: "parentContainerUuid", CONTAINER_TYPE_UUID: "popContainerType"},
+                    sqlColumn: {
+                        CONTAINER_NAME: "parentContainerName",
+                        PARENT_CONTAINER: "popContainerName",
+                        CONTAINER_UUID: "parentContainerUuid",
+                        CONTAINER_TYPE_UUID: "popContainerType"
+                    },
                     pasteTarget : "popContainerUuid",
                     disable : false,
                     required:false,

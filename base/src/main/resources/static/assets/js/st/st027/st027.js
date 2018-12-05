@@ -1,12 +1,12 @@
 var fnObj = {};
-var parentGateUuid = "";
+
 var ACTIONS = axboot.actionExtend(fnObj, {
     // JOB 조회
     PAGE_SEARCH: function (caller, act, data) {
         axboot.ajax({
             type: "GET",
-            url: "/api/v1/st/st025/01/list01",
-            data: $.extend({}, {pageSize: 1000}, this.formView.getData(),{parentGateUuid: parentGateUuid}),
+            url: "/api/v1/st/st027/01/list01",
+            data: $.extend({}, {pageSize: 1000}, this.formView.getData()),
             callback: function (res) {
                 fnObj.gridView01.setData(res.list);
                 fnObj.gridView01.resetCurrent();
@@ -24,7 +24,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         var result = false;
         axboot.call({
             type: "PUT",
-            url: "/api/v1/st/st025/01/save01",
+            url: "/api/v1/st/st027/01/save01",
             data: JSON.stringify(this.gridView01.getData()),
             callback: function (res) {
                 ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
@@ -52,21 +52,20 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     },
     ITEM_CLICK: function (caller, act, data) {
     },
-    SEARCH_GATE_SCH: function(caller, act, data){
+    MODAL_OPEN: function (caller, act, data) {
         axboot.modal.open({
             modalType: "COMMON_POPUP",
-            preSearch : data["preSearch"],
+            param: "",
             sendData: function () {
-                return data;
+                return {
+                    //jisaCode: fnObj.formView02.getData().jisaCode
+                };
             },
             callback: function (data) {
-                $("input[data-ax-path='parentGateName']").val(data["GATE_NAME"])
-                $("input[data-ax-path='parentGateName']").attr("parentGateName",data["GATE_NAME"])
-                parentGateUuid = data['GATE_UUID'];
+                //$("#calleeEmpName").val(data.empName);
+                //$("#calleeEmpTelno").val(data.empPhoneNo);
 
-                if(this.close)
-                    this.close();
-                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH,data);
+                this.close();
             }
         });
     },
@@ -90,7 +89,7 @@ fnObj.pageStart = function () {
 
     //TODO 추후에 삭제될 내용으로 /실제 Grid의 컬럼 정보는 DB에서 가져올 예정
     $.ajax({
-        url: "/assets/js/column_info/st02501.js",
+        url: "/assets/js/column_info/st02701.js",
         dataType: "script",
         async: false,
         success: function () {
@@ -118,30 +117,6 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
     },
     initEvent: function () {
         var _this = this;
-
-
-        $("input[data-ax-path='parentGateName']").parents().eq(1).find("a").click(function(){
-            var data = {
-                popupCode : "PU144",
-                searchData : $("input[data-ax-path='parentGateName']").val().trim(),
-                preSearch : false
-            };
-            ACTIONS.dispatch(ACTIONS.SEARCH_GATE_SCH,data);
-        });
-        $("input[data-ax-path='parentGateName']").focusout(function(){
-
-            if("" != $(this).val().trim())
-            {
-                var data = {
-                    popupCode : "PU144",
-                    searchData : $(this).val().trim()
-                };
-                ACTIONS.dispatch(ACTIONS.SEARCH_GATE_SCH,data);
-            }
-
-        });
-
-
     },
     getData: function () {
         var data = this.modelFormatter.getClearData(this.model.get()); // 모델의 값을 포멧팅 전 값으로 치환.
@@ -179,14 +154,14 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
 // AC005 User Group User GridView
 fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     tagId: "realgrid01",
-    primaryKey: "readerMachineUuid",
-    entityName: "ST_READER_MACHINE",
+    primaryKey: "zoneUuid",
+    entityName: "ST_ZONE",
     initView: function () {
         this.initInstance();
         this.gridObj.setFixedOptions({
             colCount: 2
         });
-        this.setColumnInfo(st02501.column_info);
+        this.setColumnInfo(st02701.column_info);
         this.makeGrid();
         this.gridObj.itemClick(this.itemClick);
     },

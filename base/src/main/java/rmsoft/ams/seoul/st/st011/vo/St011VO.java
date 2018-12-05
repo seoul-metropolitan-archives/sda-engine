@@ -6,8 +6,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.data.domain.Page;
 
-import javax.persistence.Column;
-import javax.persistence.Id;
 import java.sql.Timestamp;
 import java.util.List;
 

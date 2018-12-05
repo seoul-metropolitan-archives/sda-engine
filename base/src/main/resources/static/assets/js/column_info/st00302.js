@@ -1,21 +1,11 @@
-var st00302 =
+var st00302  =
     {
         column_info :
             [
-                /****************************************************
-                 * sortNo: grid column number
-                 * name: 바인딩명 - VO 변수명과 일치
-                 * text: 그리드 헤더 텍스트
-                 * dataType : 입력방법
-                 * editable : 활성비활성 여유
-                 * required : 필수 여부
-                 * visible  : grid 포함여부
-                 ****************************************************/
                 {
                     sortNo: 0,
-                    width:30,
-                    name: "arrangeRecordsResultUuid",
-                    text: "Arrange Records Result Uuid",
+                    name: "itemUuid",
+                    text: "itemUuid",
                     editable: false,
                     dataType: "code",
                     required: false,
@@ -23,154 +13,78 @@ var st00302 =
                 },
                 {
                     sortNo: 1,
-                    width: 80,
-                    name: "statusUuid",
-                    text: "Status",
+                    name: "itemCode",
+                    text: "Item Code",
+                    width: 130,
                     editable: false,
-                    disable: true,
-                    values: axboot.commonCodeFilter("CD138").codeArr,
-                    labels: axboot.commonCodeFilter("CD138").nameArr,
-                    dataType : "combo",
-                    required : false
+                    dataType: "text"
                 },
                 {
                     sortNo: 2,
-                    width: 100,
-                    name: "itemCode",
-                    text: "Item Code",
-                    disable: true,
+                    name: "itemTitle",
+                    text: "Title",
+                    width: 300,
                     editable: false,
-                    dataType: "text",
-                    required: false,
+                    dataType: "text"
                 },
                 {
                     sortNo: 3,
-                    width: 200,
-                    name: "title",
-                    text: "Title",
-                    disable: true,
+                    name: "catPath",
+                    text: "Aggregation Path",
+                    width: 300,
                     editable: false,
-                    dataType: "text",
-                    required: false
-
+                    dataType: "text"
+                },
+                {
+                    sortNo: 4,
+                    name: "itemTypeUuid",
+                    text: "Type",
+                    width: 110,
+                    editable: false,
+                    dataType: "text"
                 },
                 {
                     sortNo: 5,
-                    width: 80,
-                    name: "typeUuid",
-                    text: "Type",
-                    values: axboot.commonCodeFilter("CD136").codeArr,
-                    labels: axboot.commonCodeFilter("CD136").nameArr,
-                    dataType : "combo",
-                    disable: true,
-                    editable : false
+                    name: "description",
+                    text: "Description",
+                    width: 100,
+                    editable: false,
+                    dataType: "text"
                 },
                 {
                     sortNo: 6,
-                    name: "description",
-                    text: "Description",
-                    width: 250,
-                    editable: true,
-                    dataType: "richtext",
-                    required: false
+                    name: "notes",
+                    text: "Notes",
+                    width: 100,
+                    editable: false,
+                    dataType: "text"
                 },
                 {
                     sortNo: 7,
-                    name: "notes",
-                    text: "Notes",
-                    width: 250,
-                    editable: true,
-                    dataType: "richtext",
-                    required: false
+                    name: "checked",
+                    text: "checked",
+                    width: 100,
+                    editable: false,
+                    visible: false,
+                    dataType: "text"
                 },
                 {
                     sortNo: 8,
-                    name: "aggregationTree",
-                    text: "Aggregation Tree",
-                    width: 50,
-                    type: "text",
-                    disable: true,
-                    editable: false
+                    name: "arrangeRecordsResultUuid",
+                    text: "arrangeRecordsResultUuid",
+                    width: 100,
+                    editable: false,
+                    visible: false,
+                    dataType: "text"
                 },
                 {
                     sortNo: 9,
-                    name: "arrangedDate",
-                    text: "Arranged Date",
-                    width: 50,
-                    type: "text",
-                    disable: true,
-                    editable: false
-                },
-                {
-                    sortNo: 10,
-                    name: "insertUuid",
-                    text: "Created By",
-                    width: 80,
-                    editable: false,
-                    dataType: "text",
-                    disable: true,
-                    required: false
-                },
-                {
-                    sortNo: 11,
-                    name: "insertDate",
-                    text: "Date/Time Created",
-                    width: 140,
-                    editable: false,
-                    dataType: "timestamp",
-                    disable: true,
-                    required: false
-                },
-                {
-                    sortNo: 12,
-                    name: "updateUuid",
-                    text: "Modified By",
-                    width: 80,
-                    editable: false,
-                    dataType: "text",
-                    disable: true,
-                    required: false
-                },
-                {
-                    sortNo: 13,
-                    name: "updateDate",
-                    text: "Date/Time Modified",
-                    width: 140,
-                    editable: false,
-                    dataType: "timestamp",
-                    disable: true,
-                    required: false
-                },
-                {
-                    sortNo: 14,
-                    width:30,
                     name: "containerUuid",
-                    text: "Container UUID",
+                    text: "containerUuid",
+                    width: 100,
                     editable: false,
-                    dataType: "code",
-                    required: false,
-                    disable: true,
-                    visible: false
-                },
-                {
-                    sortNo: 15,
-                    width:30,
-                    name: "aggregationUuid",
-                    text: "Aggregation UUID",
-                    editable: false,
-                    dataType: "code",
-                    required: false,
-                    visible: false
-                },
-                {
-                    sortNo: 16,
-                    width:30,
-                    name: "itemUuid",
-                    text: "Item UUID",
-                    editable: false,
-                    dataType: "code",
-                    required: false,
-                    visible: false
+                    visible: false,
+                    dataType: "text"
                 }
             ]
     }

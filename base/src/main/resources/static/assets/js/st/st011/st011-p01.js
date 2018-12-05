@@ -3,7 +3,6 @@ var fnObj = {};
 var parentsData;
 var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH_TREE: function (caller, act, data) {
-        debugger
         axboot.ajax({
             url: "/api/v1/cl/cl003/getAllNodes",
             data: $.extend({},data,{nodeType:"normal",classUuid:parentsData.classUuid}),
@@ -17,7 +16,6 @@ var ACTIONS = axboot.actionExtend(fnObj, {
 return false;
 },
 PAGE_SEARCH1: function (caller, act, data) {
-        debugger
     axboot.ajax({//그리드리스트조회
         type: "GET",
         url: "/api/v1/cl/cl003/02/list01",

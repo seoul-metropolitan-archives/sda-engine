@@ -3,10 +3,10 @@ var st00301_p01_02 =
     column_info :
         [
             {
-                sortNo: 0,
+                sortNo: 1,
                 name: "itemUuid",
                 text: "itemUuid",
-                editable: false,
+                editable: true,
                 dataType: "code",
                 required: false,
                 visible: false

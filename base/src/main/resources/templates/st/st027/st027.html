@@ -8,7 +8,7 @@
       layout:decorate="~{/layout/base}">
 
 <!-- ===== [ script ] ===== -->
-<script layout:fragment="script" type="text/javascript" th:src="@{/assets/js/st/st025/st025.js}"></script>
+<script layout:fragment="script" type="text/javascript" th:src="@{/assets/js/st/st027/st027.js}"></script>
 <!-- ===== [ script ] _END_ ===== -->
 
 <!-- ===== [ base-content ] ===== -->
@@ -24,20 +24,14 @@
                 </div>
                 <div class="bdb div_tablerow searchFields">
                     <dl>
-                        <dt class="mgl_5">장비 ID</dt>
+                        <dt class="mgl_5">존 ID</dt>
                         <dd>
-                            <input type=text data-ax-path="machineId" style="width:135px">
+                            <input type=text data-ax-path="zoneId" style="width:135px">
                         </dd>
-                        <dt class="mgl_5">장비명D</dt>
+                        <dt class="mgl_5">존명 </dt>
                         <dd>
-                            <input type=text data-ax-path="machineName" style="width:135px">
+                            <input type=text data-ax-path="zoneName" style="width:135px">
                         </dd>
-                        <th:block layout:insert="~{/fragments/page-buttons :: searchInputYellow ('Parent Gate Name','parentGateName')}"/>
-                        <dt class="mgl_5">IP주소</dt>
-                        <dd>
-                            <input type=text data-ax-path="ip" style="width:135px">
-                        </dd>
-
                     </dl>
                 </div>
                 <div style="height:100%; width:100%" class="div_tablerow">

@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestParam;
 import rmsoft.ams.seoul.common.domain.StArrangeRecordsResult;
 import rmsoft.ams.seoul.common.repository.StArrangeRecordsResultRepository;
+import rmsoft.ams.seoul.rc.rc001.vo.Rc00101VO;
 import rmsoft.ams.seoul.st.st003.dao.St003Mapper;
 import rmsoft.ams.seoul.st.st003.vo.St00301VO;
 import rmsoft.ams.seoul.st.st003.vo.St00302VO;
@@ -24,6 +25,7 @@ import rmsoft.ams.seoul.utils.CommonCodeUtils;
 import javax.inject.Inject;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -85,7 +87,7 @@ public class St003Service extends BaseService {
         StArrangeRecordsResult orgStArrangeRecordResult = null;
         for(StArrangeRecordsResult stArrangeRecordsResult : stArrangeRecordsResultList) {
             if(stArrangeRecordsResult.isDeleted()){
-
+                stArrangeRecordsResultRepository.delete(stArrangeRecordsResult);
             }else{
                 if(stArrangeRecordsResult.isModified()){
                     orgStArrangeRecordResult = stArrangeRecordsResultRepository.findOne(stArrangeRecordsResult.getId());
@@ -119,5 +121,12 @@ public class St003Service extends BaseService {
         st00303VO.setContainerUuid(requestParams.getString("containerUuid"));
 
         return filter(st003Mapper.getSelectedItem(st00303VO), pageable, "", St00303VO.class);
+    }
+
+    public List<Rc00101VO> getAllNode(Rc00101VO param)
+    {
+        ArrayList<Rc00101VO> nodes = new ArrayList<Rc00101VO>();
+        nodes.addAll(st003Mapper.getAggregationNode(param));
+        return nodes;
     }
 }

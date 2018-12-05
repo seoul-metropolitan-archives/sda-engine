@@ -218,6 +218,20 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     MENU_OPEN: function (caller, act, data) {
 
     },
+    POP_OPEN: function(caller, act, data){
+        axboot.modal.open({
+            modalType: "COMMON_POPUP",
+            preSearch : false,
+            sendData: function () {
+                return data;
+            },
+            callback: function (data) {
+                if(this.close)
+                    this.close();
+
+            }
+        });
+    },
     dispatch: function (caller, act, data) {
         var result = ACTIONS.exec(caller, act, data);
         if (result != "error") {
@@ -330,6 +344,13 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
         });
         $(".btn_cancel03").click(function(){
             ACTIONS.dispatch(ACTIONS.STATUS_UPDATE03,CANCEL_STATUS);
+        });
+
+        $('.pop_repository').click(function(){
+            var data = {
+                popupCode : "PU145"
+            };
+            ACTIONS.dispatch(ACTIONS.POP_OPEN,data);
         });
     },
 });
