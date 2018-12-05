@@ -24,6 +24,17 @@
                 </div>
                 <div class="bdb div_tablerow searchFields">
                     <dl>
+
+
+                        <dt class="w120 mgl_5">장비 종류</dt>
+                        <dd>
+                            <select data-ax-path="machineTypeUuid" style="width:135px;">
+                                <option value="" ></option>
+                                <option th:each="item : ${machineTypeUuid}"
+                                        th:value="${item.codeDetailUUID}"
+                                        th:text="${item.codeName}"/>
+                            </select>
+                        </dd>
                         <dt class="mgl_5">장비 ID</dt>
                         <dd>
                             <input type=text data-ax-path="machineId" style="width:135px">
@@ -32,7 +43,6 @@
                         <dd>
                             <input type=text data-ax-path="machineName" style="width:135px">
                         </dd>
-                        <th:block layout:insert="~{/fragments/page-buttons :: searchInputYellow ('Parent Gate Name','parentGateName')}"/>
                         <dt class="mgl_5">IP주소</dt>
                         <dd>
                             <input type=text data-ax-path="ip" style="width:135px">
@@ -43,7 +53,7 @@
                 <div style="height:100%; width:100%" class="div_tablerow">
                     <div style="display:table; height:50%; width:100%">
                         <ul class="bdb bdt div_tablerow bgf7" style="height:30px;">
-                            <th:block layout:insert="~{/fragments/page-buttons :: dot('Workflow')}"/>
+                            <th:block layout:insert="~{/fragments/page-buttons :: dot('RFID 장비')}"/>
                             <th:block layout:insert="~{/fragments/page-buttons :: add-and-delete}"/>
                         </ul>
                         <div style="height:100%; width:100%" class="div_tablerow bdb">
