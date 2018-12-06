@@ -222,7 +222,7 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
 
         }
         $(".rdo_box").append(radioTag);
-        // fnObj.formView.changeView();
+        fnObj.formView.changeView();
     },
     clear: function () {
         this.model.setModel(this.getDefaultData());
@@ -243,6 +243,7 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
         fnObj.formView.clear();
         $(".auth_fit").remove();
         fnObj.childrenAuthInfo.addChild($("#addDnrInfo"));
+        fnObj.formView.setFormData("descriptionDate",getFormattedDate(new Date()));
     }
 });
 fnObj.childrenAuthInfo = axboot.viewExtend({
