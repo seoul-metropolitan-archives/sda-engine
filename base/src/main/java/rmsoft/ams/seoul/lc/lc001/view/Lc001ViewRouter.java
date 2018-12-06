@@ -20,6 +20,9 @@ public class Lc001ViewRouter extends BaseController {
      */
     @GetMapping("/lc/lc001/lc001")
     public String view(ModelMap model) {
+        model.addAttribute("majorClassificationUuid", CommonCodeUtils.get("CD211"));
+        model.addAttribute("middleClassificationUuid", CommonCodeUtils.get("CD212"));
+        model.addAttribute("collectStatusUuid", CommonCodeUtils.get("CD213"));
         return "/lc/lc001/lc001";
     }
 }

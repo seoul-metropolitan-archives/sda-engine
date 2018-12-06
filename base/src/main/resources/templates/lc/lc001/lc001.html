@@ -21,45 +21,58 @@
                     </div>
                     <div class="bdb div_tablerow searchFields">
                         <dl>
-                            <dt class="mgl_5">Category Code</dt>
+                            <dt class="mgl_5">관리번호</dt>
                             <dd>
-                                <input type=text style="width:135px" data-ax-path="categoryCode">
+                                <input type=text style="width:135px" data-ax-path="leadCaseNo">
                             </dd>
-                            <dt>Category Name</dt>
+                            <dt>소속/직업</dt>
                             <dd>
-                                <input type=text style="width:135px" data-ax-path="categoryName">
+                                <input type=text style="width:135px" data-ax-path="occupation">
                             </dd>
-                            <dt>Service</dt>
+                            <dt>지역</dt>
                             <dd>
-                                <select data-ax-path="serviceUuid" style="width:135px;" id="serviceList">
-                                    <option value=""></option>
-                                    <option th:each="item : ${serviceList}"
-                                            th:value="${item.codeDetailUUID}"
-                                            th:text="${item.codeName}"/>
-                                </select>
+                                <input type=text style="width:135px" data-ax-path="region">
                             </dd>
-                            <dt>Code Type</dt>
-                            <dd>
-                                <select data-ax-path="codeTypeUuid" style="width:135px;" id="codeList">
-                                    <option value=""></option>
-                                    <option th:each="item : ${codeList}"
-                                            th:value="${item.codeDetailUUID}"
-                                            th:text="${item.codeName}"/>
-                                </select>
-                            </dd>
+                            <!--<dt class="mgl_5">수집일자</dt>-->
+
+                            <!--<dd class="w_auto">-->
+                                <!--<div class="input-group" data-ax5picker="date">-->
+                                    <!--<div class="cld_box" style="background-color: #fffdd6">-->
+                                        <!--<input type="text" data-ax-path="disposalFromDueDate" style="background-color: #fffdd6;ime-mode:disabled;"-->
+                                               <!--placeholder="YYYY-MM-DD" maxlength="10">-->
+                                        <!--<img title="calendar" class="ui-datepicker-trigger" alt="..." src="/assets/images/ams/calendar.png" >-->
+                                    <!--</div>-->
+                                    <!--~-->
+                                    <!--<div class="cld_box" style="background-color: #fffdd6">-->
+                                        <!--<input type="text" data-ax-path="disposalToDueDate" style="background-color: #fffdd6;ime-mode:disabled;"-->
+                                               <!--placeholder="YYYY-MM-DD" maxlength="10">-->
+                                        <!--<img title="calendar" class="ui-datepicker-trigger" alt="..." src="/assets/images/ams/calendar.png">-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                            <!--</dd>-->
                         </dl>
                         <dl>
-                            <dt class="none">Use</dt>
-                            <dd class="w_auto mgl_5">
-                                <div class="rdo_box">
-                                    <span class="rdo_box_title">Use</span>
-                                    <label>
-                                        <input type="radio" name="radio" data-ax-path="useYN" class="no_border" value="Y" >Yes</label>
-                                    <label>
-                                        <input type="radio" name="radio" data-ax-path="useYN" class="no_border" value="N">No</label>
-                                    <label>
-                                        <input type="radio" name="radio" data-ax-path="useYN" class="no_border" value="" checked>All</label>
-                                </div>
+                            <dt class="mgl_5">리드명</dt>
+                            <dd>
+                                <input type=text style="width:135px" data-ax-path="leadCaseName">
+                            </dd>
+                            <dt>구분(대)</dt>
+                            <dd>
+                                <select data-ax-path="majorClassificationUuid" style="width:135px;">
+                                    <option value=""></option>
+                                    <option th:each="item : ${majorClassificationUuid}"
+                                            th:value="${item.codeDetailUUID}"
+                                            th:text="${item.codeName}"/>
+                                </select>
+                            </dd>
+                            <dt>구분(중)</dt>
+                            <dd>
+                                <select data-ax-path="middleClassificationUuid" style="width:135px;">
+                                    <option value=""></option>
+                                    <option th:each="item : ${middleClassificationUuid}"
+                                            th:value="${item.codeDetailUUID}"
+                                            th:text="${item.codeName}"/>
+                                </select>
                             </dd>
                         </dl>
 
@@ -79,13 +92,13 @@
                             </div>
                             <div style="display:table; height:100%; width:25%; float:right">
                                 <ul class="bdb bdt div_tablerow bgf7" style="height:30px;">
-                                    <th:block layout:insert="~{/fragments/page-buttons :: dot('리드정보 - 보유자료(예상)')}"/>
+                                    <th:block layout:insert="~{/fragments/page-buttons :: dot('보유자료(예상)')}"/>
                                 </ul>
                                 <div style="height:100%; width:100%;" class="div_tablerow bdb">
                                     <div class="detail_wrap">
                                         <div class="detail_conts">
                                             <ul style="width: 100%; height: 100px;">
-                                                <li style="width: 100%; height: 100%"><textarea data-ax-path="basedOn" rows="10" cols="1" class="txtar" style="width: 97%"></textarea></li>
+                                                <li style="width: 100%; height: 100%"><textarea data-ax-path="ownMaterial"  rows="18" cols="1" class="txtar" style="width: 97%;height: 100%;resize: none;"></textarea></li>
                                             </ul>
                                         </div>
                                     </div>
@@ -96,7 +109,7 @@
                         <div style="display:table; height:50%; width:100%">
                             <div style="display:table; height:100%; width:75%; float:left" class="bdr">
                                 <ul class="bdb bdt div_tablerow" style="height:30px;">
-                                    <th:block layout:insert="~{/fragments/page-buttons :: dot('Code')}"/>
+                                    <th:block layout:insert="~{/fragments/page-buttons :: dot('수집일지')}"/>
                                     <th:block layout:insert="~{/fragments/page-buttons :: add-and-delete}"/>
                                 </ul>
                                 <div style="height:100%; width:100%" class="div_tablerow bdb">
@@ -105,13 +118,13 @@
                             </div>
                             <div style="display:table; height:100%; width:25%; float:right">
                                 <ul class="bdb bdt div_tablerow bgf7" style="height:30px;">
-                                    <th:block layout:insert="~{/fragments/page-buttons :: dot('리드정보 - 수집내용')}"/>
+                                    <th:block layout:insert="~{/fragments/page-buttons :: dot('수집내용')}"/>
                                 </ul>
                                 <div style="height:100%; width:100%;" class="div_tablerow bdb">
                                     <div class="detail_wrap">
                                         <div class="detail_conts">
                                             <ul style="width: 100%; height: 100px;">
-                                                <li style="width: 100%; height: 100%"><textarea data-ax-path="basedOn" rows="10" cols="1" class="txtar" style="width: 97%"></textarea></li>
+                                                <li style="width: 100%; height: 100%"><textarea data-ax-path="collectionContents" rows="18" cols="1" class="txtar" style="width: 97%;height: 100%;resize: none;"></textarea></li>
                                             </ul>
                                         </div>
                                     </div>

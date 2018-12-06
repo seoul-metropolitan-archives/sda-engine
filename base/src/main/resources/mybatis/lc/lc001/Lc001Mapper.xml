@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="rmsoft.ams.seoul.lc.lc001.dao.Lc001Mapper">
+    <select id="getLeadCaseList" resultType="Lc00101VO" parameterType="Lc00101VO" statementType="PREPARED">
+      SELECT
+        Z.LEAD_CASE_UUID as leadCaseUuid,
+        Z.LEAD_CASE_NO as leadCaseNo,
+        Z.LEAD_CASE_NAME  as leadCaseName,
+        Z.MAJOR_CLASSIFICATION_UUID as majorClassificationUuid,
+        Z.MIDDLE_CLASSIFICATION_UUID as middleClassificationUuid,
+        Z.OCCUPATION as occupation,
+        Z.REGION as region,
+        Z.ADDRESS as address,
+        Z.CONTACT_TARGET as contactTarget,
+        Z.PHONE as phone,
+        Z.PERSON_IN_CHARGE as personInCharge,
+        Z.COLLECT_STATUS_UUID as collectStatusUuid,
+        Z.OWN_MATERIAL as ownMaterial,
+        (
+          SELECT COUNT(LEAD_CASE_SCHEDULE_UUID)
+          FROM LC_LEAD_CASE_SCHEDULE
+          WHERE Z.LEAD_CASE_UUID = LEAD_CASE_UUID
+        ) as childCnt
+      FROM LC_LEAD_CASE Z
+      <where>
+          1=1
+          <if test="leadCaseNo != null">
+            AND Z.LEAD_CASE_NO = #{leadCaseNo}
+          </if>
+          <if test="occupation != null">
+            AND Z.OCCUPATION = #{occupation}
+          </if>
+          <if test="region != null">
+            AND Z.REGION = #{region}
+          </if>
+          <if test="leadCaseName != null">
+            AND Z.LEAD_CASE_NAME = #{leadCaseName}
+          </if>
+          <if test="majorClassificationUuid != null">
+            AND Z.MAJOR_CLASSIFICATION_UUID = #{majorClassificationUuid}
+          </if>
+          <if test="middleClassificationUuid != null">
+            AND Z.MIDDLE_CLASSIFICATION_UUID = #{middleClassificationUuid}
+          </if>
+      </where>
+    </select>
+    <select id="getLeadCaseScheduleList" resultType="Lc00102VO" parameterType="Lc00102VO" statementType="PREPARED">
+        SELECT
+            LEAD_CASE_SCHEDULE_UUID as leadCaseScheduleUuid,
+            LEAD_CASE_UUID as leadCaseUuid,
+            SCHEDULE_NO as scheduleNo,
+            INGEST_ORG_UUID as ingestOrgUuid,
+            CREATOR_UUID as creatorUuid,
+            COLLECTION_TYPE_UUID as collectionTypeUuid,
+            CONTACT_TYPE_UUID as contactTypeUuid,
+            CONTACT_MAKER as contactMaker,
+            COLLECT_MAKER as collectMaker,
+            TO_CHAR(COLLECTION_DATE,'yyyy-MM-dd') as collectionDate,
+            COLLECTION_CONTENTS as collectionContents
+        FROM LC_LEAD_CASE_SCHEDULE
+        <where>
+            <if test="leadCaseUuid != null">
+                LEAD_CASE_UUID = #{leadCaseUuid}
+            </if>
+        </where>
+    </select>
+</mapper>
