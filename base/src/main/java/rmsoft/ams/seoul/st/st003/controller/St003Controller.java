@@ -9,6 +9,7 @@ import io.onsemiro.core.parameter.RequestParams;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
+import rmsoft.ams.seoul.rc.rc001.vo.Rc00101VO;
 import rmsoft.ams.seoul.st.st003.service.St003Service;
 import rmsoft.ams.seoul.st.st003.vo.St00301VO;
 import rmsoft.ams.seoul.st.st003.vo.St00302VO;
@@ -64,5 +65,11 @@ public class St003Controller extends BaseController {
     public Responses.PageResponse getSelectedItem(Pageable pageable, RequestParams<St00303VO> requestParam) {
         Page<St00303VO> pages  = st003Service.getSelectedItem(pageable, requestParam);
         return Responses.PageResponse.of(pages.getContent(), pages);
+    }
+
+    @RequestMapping("/getAllNodes")
+    public Responses.ListResponse getAllNode(Rc00101VO param)
+    {
+        return Responses.ListResponse.of(st003Service.getAllNode(param));
     }
 }

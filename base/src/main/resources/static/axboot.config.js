@@ -211,6 +211,14 @@
                 }
 
             },
+            "CLASSIFY_POPUP2" :{
+                width: 1400,
+                height: 700,
+                iframe: {
+                    url: "/st/st013/st013-p01"
+                }
+
+            },
             "MOVE_AGGREGATION": {
                 width: 600,
                 height: 515,

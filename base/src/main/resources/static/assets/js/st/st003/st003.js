@@ -39,7 +39,9 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 fnObj.gridView02.resetCurrent();
                 fnObj.gridView02.setData(res.list);
                 fnObj.formView.setFormData("itInAggregationName", "");
-                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH2,data)
+
+                //item조회인데 주석친다.
+                //ACTIONS.dispatch(ACTIONS.PAGE_SEARCH2,data)
             },
             options: {
                 onError: axboot.viewError
@@ -47,11 +49,13 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         });
         return false;
     },
-    PAGE_SEARCH2: function (caller, act, data) {//트리에서 선택된 항목
+    PAGE_SEARCH2: function (caller, act, data) {//위에 그리드에서 선택된 항목
+
         axboot.ajax({
             type: "GET",
-            url: "/api/v1/st/st003/01/list02",
-            data: $.extend({}, {pageSize: 1000},this.formView.getData(),{containerUuid: data.containerUuid}),
+            url: "/api/v1/cl/cl003/02/list01",
+            async : false,
+            data: $.extend({}, {pageSize: 10000},{aggregationUuid: data.aggregationUuid}),
             callback: function (res) {
                 fnObj.gridView03.resetCurrent();
                 fnObj.gridView03.setData(res.list);
@@ -64,35 +68,37 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     },
     STATUS_UPDATE: function (caller, act, data) {
 
-        var checkedCnt01 = fnObj.gridView02.gridObj.getCheckedList().length;
-        var checkedCnt02 = fnObj.gridView03.gridObj.getCheckedList().length;
-
-        var rows = fnObj.gridView02.gridObj.getCheckedList();
-        rows = rows.concat(fnObj.gridView03.gridObj.getCheckedList());
-
-        if(!rows || rows.length < 1) return;
-
-        var params = rows.filter(function (item) {
-            item.changeStatus = data;
-            return item.arrangeRecordsResultUuid !== "";
-        });
-
-        axboot.ajax({
-            type: "PUT",
-            url: "/api/v1/st/st003/02/confirm",
-            data: JSON.stringify(params),
-            callback: function (res) {
-                if(checkedCnt01 > 0) {
-                    ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1,{containerUuid:currentContainerUuid});
+        if (fnObj.gridView02.isChangeData() == true) {
+            axDialog.confirm({
+                msg: axboot.getCommonMessage("AA006")
+            }, function () {
+                if (this.key == "ok") {
+                    ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
+                    return;
                 }
-                if(checkedCnt02 > 0) {
-                    ACTIONS.dispatch(ACTIONS.PAGE_SEARCH2,{containerUuid:currentContainerUuid});
+            });
+        }else{
+
+            var rows = fnObj.gridView02.gridObj.getCheckedList();
+            if (!rows || rows.length < 1) return;
+            var params = rows.filter(function (item) {
+                item.changeStatus = data;
+                return item.arrangeRecordsResultUuid != "";
+            });
+
+
+            axboot.ajax({
+                type: "PUT",
+                url: "/api/v1/st/st003/02/confirm",
+                data: JSON.stringify(params),
+                callback: function (res) {
+                    ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1,{containerUuid:params[0].containerUuid});
+                },
+                options: {
+                    onError: axboot.viewError
                 }
-            },
-            options: {
-                onError: axboot.viewError
-            }
-        });
+            });
+        }
     },
     ERROR_SEARCH: function (caller, act, data) {
     },
@@ -107,8 +113,8 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         // ACTIONS.dispatch(ACTIONS.TOP_GRID_DETAIL_PAGE_SAVE);
     },
     TOP_GRID_SAVE: function (caller, act, data) {
+        //여길 고쳐야 한당.
         var lists = fnObj.gridView02.gridObj.getData();
-        lists = lists.concat(fnObj.gridView03.gridObj.getData());
         var result = false;
 
         axboot.call({
@@ -128,9 +134,6 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
     },
     PAGE_ARRANGE: function (caller, act, data) {
-        if(fnObj.formView.getData().aggInContainerName == "" ||fnObj.formView.getData().aggInContainerName == undefined ){
-            return
-        }
         axboot.modal.open({
             modalType: "ARRANGE_POPUP",
             width: 1600,
@@ -141,7 +144,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             sendData: function () {
                 return {
                     confirmBtn:"Arrange",
-                    crrntAgg: fnObj.formView.getData().aggInContainerName,
+                    description: fnObj.formView.getData().aggInContainerName,
                     containerUuid :  currentContainerUuid
                 };
             },
@@ -345,7 +348,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
             ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, data);
             fnObj.gridView03.clearData();
             fnObj.formView.setFormData("aggInContainerName", data.containerTreeName);
-            fnObj.formView.setFormData("itInAggregationName", "");
+            //fnObj.formView.setFormData("itInAggregationName", "");
             currentContainerUuid = data.containerUuid;
         }
 
@@ -372,6 +375,10 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
         })
         this.makeGrid();
         this.gridObj.itemClick(this.itemClick);
+        this.removeRowBeforeEvent(this.cancelDelete);
+    },
+    getSelectedData: function () {
+        return this.gridObj.getSelectedData()
     },
     isChangeData: function () {
         if (this.getData().length > 0) {
@@ -384,11 +391,36 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
         return this.gridObj.getSelectedData();
     },
     itemClick: function (data, index) {
-        // if(data != null){
-        //     ACTIONS.dispatch(ACTIONS.PAGE_SEARCH2, data);
-        //     fnObj.formView.setFormData("itInAggregationName", data.title);
-        //     currentContainerUuid = data.containerUuid;
-        // }
+
+        //여기서 클릭하면
+        //item list가 나와야 한다.
+
+         if(data != null){
+             ACTIONS.dispatch(ACTIONS.PAGE_SEARCH2, data);
+        }
+
+    },
+    cancelDelete: function(){
+        debugger
+        var codes = axboot.commonCodeFilter("CD138").codeArr;
+        var names = axboot.commonCodeFilter("CD138").nameArr;
+        var state = undefined;
+        for (var i = 0; i < codes.length; i++) {
+            if (codes[i] == fnObj.gridView02.getSelectedData().statusUuid) {
+                state = names[i];
+                break;
+            }
+        }
+
+        //confirm인경우 물어보고 삭제
+        if(state == CONFIRM_STATUS){
+            this.setRunDel(true);
+            this.setConfirmYn(true,"ST004_01");
+        }else{
+            //draft인 경우는 그냥 삭제
+            this.setRunDel(true);
+        }
+
 
     }
 });
@@ -401,12 +433,12 @@ fnObj.gridView03 = axboot.viewExtend(axboot.gridView, {
         this.initInstance();
         this.setColumnInfo(st00302.column_info);
         this.gridObj.setFixedOptions({
-            colCount: 3
+            colCount: 2
         });
-        this.gridObj.setOption({
+        /*this.gridObj.setOption({
             checkBar: {visible: true},
             indicator: {visible: true}
-        })
+        })*/
         this.makeGrid();
         this.gridObj.itemClick(this.itemClick);
     },
@@ -431,7 +463,7 @@ fnObj.gridView03 = axboot.viewExtend(axboot.gridView, {
  */
 
 isDataChanged = function () {
-    if (fnObj.gridView01.isChangeData() == true) {
+    if (fnObj.gridView02.isChangeData() == true) {
         return true;
     } else {
         return false;

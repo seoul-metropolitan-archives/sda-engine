@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="rmsoft.ams.seoul.st.st026.dao.St026Mapper">
+    <select id="getStRfidMachine" resultType="st026VO" parameterType="st026VO" statementType="PREPARED">
+        SELECT
+
+        RFID_MACHINE_UUID as rfidMachineUuid,
+        NO as no,
+        MACHINE_TYPE_UUID as machineTypeUuid,
+        MACHINE_ID as machineId,
+        MACHINE_NAME as machineName,
+        MAC_ADDR as macAddr,
+        IP as ip,
+        SUBNETMASK as subnetmask,
+        GATEWAY as gateway,
+        INSERT_DATE as insertDate,
+        UPDATE_DATE as updateDate,
+        <include refid="Common.UserName"><property name="userUuid" value="INSERT_UUID"/></include> as insertUuid,
+        <include refid="Common.UserName"><property name="userUuid" value="UPDATE_UUID"/></include> as updateUuid
+        FROM
+        ST_RFID_MACHINE
+        <where>
+            1=1
+            <if test="machineTypeUuid != null">
+                AND MACHINE_TYPE_UUID = #{machineTypeUuid}
+            </if>
+            <if test="machineId != null">
+                AND MACHINE_ID LIKE '%' || #{machineId} || '%'
+            </if>
+            <if test="machineName != null">
+                AND MACHINE_NAME LIKE '%' || #{machineName} || '%'
+            </if>
+            <if test="ip != null">
+                AND IP LIKE '%' || #{ip} || '%'
+            </if>
+
+        </where>
+    </select>
+
+
+</mapper>

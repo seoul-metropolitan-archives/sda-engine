@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="rmsoft.ams.seoul.st.st025.dao.St025Mapper">
+
+    <select id="getReaderMachine" resultType="St02501VO" parameterType="St02501VO" statementType="PREPARED">
+        SELECT  A.READER_MACHINE_UUID as readerMachineUuid,
+                A.NO as no,
+                A.MACHINE_ID as machineId,
+                A.MACHINE_NAME as machineName,
+                A.GATE_UUID as gateUuid,
+                A.IP as ip,
+                A.SUBNETMASK as subnetmask,
+                A.GATEWAY as gateway,
+                A.PRINT_DECREASE as printDecrease,
+                A.MAC_ADDR as macAddr,
+                A.ANTENNA_CNT as antennaCnt,
+                A.STATUS_UUID as statusUuid,
+                <include refid="Common.UserName"><property name="userUuid" value="INSERT_UUID"/></include> as insertUuid,
+                A.INSERT_DATE as insertDate,
+                <include refid="Common.UserName"><property name="userUuid" value="UPDATE_UUID"/></include> as updateUuid,
+                A.UPDATE_DATE as updateDate,
+                B.GATE_NAME as parentGateName
+        FROM ST_READER_MACHINE A INNER JOIN ST_GATE B
+        ON A.GATE_UUID = B.GATE_UUID
+        <where>
+            1=1
+            <if test="machineId != null">
+                AND A.MACHINE_ID LIKE '%' || #{machineId} || '%'
+            </if>
+            <if test="machineName != null">
+                AND A.MACHINE_NAME LIKE '%' || #{machineName} || '%'
+            </if>
+            <if test="gateUuid != null">
+                AND A.GATE_UUID LIKE '%' || #{gateUuid} || '%'
+            </if>
+            <if test="ip != null">
+                AND A.IP LIKE '%' || #{ip} || '%'
+            </if>
+        </where>
+    </select>
+
+</mapper>

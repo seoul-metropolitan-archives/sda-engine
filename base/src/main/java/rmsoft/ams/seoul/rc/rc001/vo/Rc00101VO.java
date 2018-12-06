@@ -27,4 +27,6 @@ public class Rc00101VO extends BaseVO
     private int childCnt;
     private int aggregationCnt;
     private int classifyCnt;
+    private String electronicRecordStatusUuid;
+    private String arrangeRecordsResultUuid;
 }
