@@ -22,7 +22,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 if(nodeType == "aggregation"){
                     var cloneItem = JSON.parse(JSON.stringify(item));
                     cloneItem["typeUuid"] = axboot.commonCodeValueByCodeName("CD127", "Temporary");
-                    cloneItem["parentsAggregationUuid"] = aggregationUuid;
+                    cloneItem["parentAggregationUuid"] = aggregationUuid;
                     item["systemMeta"] = cloneItem;
                     item["contextualMeta"] = cloneItem;
                 }else if(nodeType == "item"){

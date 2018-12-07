@@ -33,5 +33,21 @@ public class Rc002VO extends BaseVO
      * The Reference item list.
      */
     List<Rc00206VO> referenceItemList;
+    /**
+     * The Creator list.
+     */
+    List<Rc00207VO> creatorList;
+    /**
+     * The Material list.
+     */
+    List<Rc00208VO> materialList;
+    /**
+     * The Related Authority list.
+     */
+    List<Rc00209VO> relatedAuthorityList;
+    /**
+     * The Related Record list.
+     */
+    List<Rc00210VO> relatedRecordList;
 
 }

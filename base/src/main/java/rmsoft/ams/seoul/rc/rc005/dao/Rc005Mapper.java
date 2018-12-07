@@ -3,6 +3,8 @@ package rmsoft.ams.seoul.rc.rc005.dao;
 import io.onsemiro.core.mybatis.MyBatisMapper;
 import rmsoft.ams.seoul.rc.rc005.vo.Rc00501VO;
 import rmsoft.ams.seoul.rc.rc005.vo.Rc00502VO;
+import rmsoft.ams.seoul.rc.rc005.vo.Rc00503VO;
+import rmsoft.ams.seoul.rc.rc005.vo.Rc00505VO;
 
 import java.util.List;
 
@@ -25,4 +27,8 @@ public interface Rc005Mapper extends MyBatisMapper {
      * @return the record component list
      */
     List<Rc00502VO> getRecordComponentList(Rc00502VO rc00502VO);
+
+    List<Rc00503VO> getCreatorList(String itemUuid);
+
+    List<Rc00505VO> getRelatedAuthorityList(String itemUuid);
 }

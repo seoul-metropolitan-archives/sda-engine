@@ -2,6 +2,29 @@ var fnObj = {};
 var selectedItem = {};
 var nodeType = "";
 var PAGE_MODE = "create";
+
+var currentData = null;
+const ENTITY_TYPE = "RC_ITEM_CON";
+
+$( function() {
+    var icons = {
+        header: "ui-icon-circle-arrow-e",
+        activeHeader: "ui-icon-circle-arrow-s"
+    };
+    $('.detail_wrap').accordion({
+        icons: icons,
+        collapsible: true,
+        heightStyle: "content",
+        //onlyStyle : true,
+        activate : function(event, ui){
+            fnObj.gridView01.gridObj.getGridView().resetSize();
+        }
+    });
+
+    //$( ".detail_wrap" ).accordion( "destroy" );
+});
+
+
 var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH: function (caller, act, data) {
         axboot.ajax({
@@ -17,6 +40,8 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                     if(rcList[itemIndex].rc00502VoList!= "undefined" && rcList[itemIndex].rc00502VoList != null && rcList[itemIndex].rc00502VoList.length > 0){
                         fnObj.gridView01.setData(rcList[itemIndex].rc00502VoList);
                     }
+
+                    ACTIONS.dispatch(ACTIONS.GET_META_TEMPLATE, rcList[itemIndex].addMetaTemplateSetUuid);
                 }
             },
             options: {
@@ -25,11 +50,14 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         });
     },
     PAGE_SAVE: function (caller, act, data) {
+        var sendData = this.formView.getData();
+        sendData["creatorList"] = fnObj.authorityInfo.getData("creatorArea");
+        sendData["relatedAuthorityList"]  = fnObj.authorityInfo.getData("authorityArea");
+
         axboot.ajax({
             type: "PUT",
             url: "/api/v1/rc004/01/saveItemDetails",
-            //data: $.extend({},  {pageSize: 1000} ,this.formView.getData()),
-            data: JSON.stringify(this.formView.getData()),
+            data: JSON.stringify(sendData),
             callback: function (res) {
                 if(PAGE_MODE != 'create'){
                     ACTIONS.dispatch(ACTIONS.PAGE_SEARCH,{aggregationUuid : fnObj.formView.getData().raAggregationUuid, itemUuid : fnObj.formView.getData().riItemUuid} );
@@ -59,6 +87,20 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             }
         });
     },
+    GET_META_TEMPLATE: function (caller, act, data) {
+        axboot.ajax({
+            type: "GET",
+            url: "/api/v1/ad/ad007/listSub",
+            data: $.extend({}, {pageSize: 1000}, {addMetaTemplateSetUuid : data, entityType : ENTITY_TYPE}),
+            callback: function (res) {
+                setAdditionalMeta(res.list);
+            },
+            options: {
+                onError: axboot.viewError
+            }
+        });
+        return false;
+    },
     dispatch: function (caller, act, data) {
         var result = ACTIONS.exec(caller, act, data);
         if (result != "error") {
@@ -81,6 +123,7 @@ fnObj.pageStart = function () {
     });
 
     _this.formView.initView();
+    _this.authorityInfo.initView();
     _this.treeView01.initView();
     _this.gridView01.initView();
     // Data 조회
@@ -252,6 +295,11 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
             }
         });
 
+        $("[data-ax-path='addMetaTemplateSetUuid']").on("change", function(){
+            ACTIONS.dispatch(ACTIONS.GET_META_TEMPLATE, $("[data-ax-path='addMetaTemplateSetUuid']").val());
+            isDetailChanged = true;
+        });
+
         /*$("input[data-ax-path='descriptionStartDate'],input[data-ax-path='sdescriptionEndDate']").key (function(){
             var date = _this.value;
             if (date.match(/^\d{4}$/) !== null) {
@@ -293,6 +341,174 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
         this.target.find('[data-ax-path="key"]').removeAttr("readonly");
     }
 });
+
+/**
+ * 전거데이터 영역
+ */
+fnObj.authorityInfo = axboot.viewExtend({
+    parentUuid : "",
+    nodeType : "",
+    popupCode : "",
+    template :
+    "                                                            <input type=hidden data-ax-path='__created__'>" +"                                                            " +
+    "                                                            <input type=hidden data-ax-path='__deleted__'>" +
+    "                                                            <input type=hidden data-ax-path='__modified__'>" +
+    "                                                            <input type=hidden data-ax-path='itemAuthorityUuid'>" +
+    "                                                            <li style='padding: 0 10px 0 0;'>" +
+    "                                                               <div class='src_box2'>" +
+    "                                                                   <input type=text data-ax-path='authorityName'  readonly class='form-control' placeholder='관련전거' style='border-radius: 0px'>" +
+    "                                                                   <input type=hidden data-ax-path='authorityUuid' class='authorityUuid' >" +
+    "                                                                   <a href='#' class='searchAuthority' ><img src='/assets/images/ams/search_normal.png' alt='find'></a>" +
+    "                                                               </div>" +
+    "                                                            </li>" +
+    "                                                            <li style='text-align: center'><a href='#' class='btn_del_left' style=''>X</a></li>",
+    initView: function () {
+        this.initEvent();
+    },
+    initEvent: function () {
+        var _this = this;
+        $("#creatorArea, #authorityArea").on("click", ".addAuthoritiesInfo >li a", function(event){
+            _this.addChild($(event.delegateTarget).find(".childDnrInfo"));
+        });
+
+        $(".serv_cont").on("change",".authorityUuid",function(){
+            if("saved" == $(this).parents().eq(2).attr("saveType"))
+            {
+                $(this).parents().eq(2).find("input[data-ax-path='__modified__']").val(true);
+                isChanged = true;
+            }
+        });
+
+        $("#creatorArea, #authorityArea, #repositoriesArea, #sourceAcquisitionArea").on("click",".searchAuthority",function(event){
+            var parentTarget = $(event.target).parents().eq(2);
+            var delegateTarget = $(event.delegateTarget);
+            axboot.modal.open({
+                modalType: "AUTHORITY_POPUP",
+                header: {
+                    title: "Authority List"
+                },
+                sendData: function () {
+                    return null;
+                },
+                callback: function (data) {
+                    if(this) this.close();
+                    if(data){
+                        parentTarget.find("input[data-ax-path='authorityUuid']").val(data["authorityUuid"]);
+                        parentTarget.find("input[data-ax-path='authorityName']").val(data["authorityName"]);
+
+                        if(delegateTarget.attr("id") == "repositoriesArea") {
+                            fnObj.formView.setFormData("repositoriesUuid", data["authorityUuid"]);
+                            fnObj.formView.setFormData("repositoriesName", data["authorityName"]);
+                        }
+
+                        if(delegateTarget.attr("id") == "sourceAcquisitionArea") {
+                            fnObj.formView.setFormData("sourceAcquisitionUuid", data["authorityUuid"]);
+                            fnObj.formView.setFormData("sourceAcquisitionName", data["authorityName"]);
+                        }
+
+                        parentTarget.find("input[data-ax-path='authorityUuid']").trigger('change');
+                    }
+                }
+            });
+        });
+
+
+        $("#creatorArea, #authorityArea, #repositoriesArea, #sourceAcquisitionArea").on("click",".btn_del_left",function(event){
+            var delegateTarget = $(event.delegateTarget);
+
+            if(delegateTarget.attr("id") == "repositoriesArea") {
+                fnObj.formView.setFormData("repositoriesUuid", "");
+                fnObj.formView.setFormData("repositoriesName", "");
+                return;
+            }
+
+            if(delegateTarget.attr("id") == "sourceAcquisitionArea") {
+                fnObj.formView.setFormData("sourceAcquisitionUuid", "");
+                fnObj.formView.setFormData("sourceAcquisitionName", "");
+                return;
+            }
+
+            if("create" == $(this).parents().eq(1).attr("saveType"))
+            {
+                $(this).parents().eq(1).remove();
+            }
+            else
+            {
+                $(this).parents().eq(1).hide();
+                $(this).parents().eq(1).find("input[data-ax-path='__deleted__']").val(true);
+                $(this).parents().eq(1).find("input[data-ax-path='__modified__']").val(false);
+            }
+        });
+    },
+    addChild : function(_this,data){
+        var cloneTag = "";
+        if(data != null && data != undefined) {
+            cloneTag = $("<ul style='margin: 0px 5px 10px 0px;'>").addClass("auth_fit").attr("data-ax-path", "saveType").attr("saveType", "saved").html(fnObj.authorityInfo.template).clone();
+            cloneTag.find("input[data-ax-path='itemAuthorityUuid']").val(data["itemAuthorityUuid"]);
+            cloneTag.find("input[data-ax-path='authorityName']").val(data["authorityName"]);
+            cloneTag.find("input[data-ax-path='authorityUuid']").val(data["authorityUuid"]);
+            cloneTag.find("input[data-ax-path='__created__']").val(data["__created__"]);
+            cloneTag.find("input[data-ax-path='__deleted__']").val(data["__deleted__"]);
+            cloneTag.find("input[data-ax-path='__modified__']").val(data["__modified__"]);
+        }else{
+            cloneTag = $("<ul style='margin: 0px 5px 10px 0px;'>").addClass("auth_fit").attr("data-ax-path","saveType").attr("saveType","created").html(fnObj.authorityInfo.template).clone();
+            cloneTag.find("input[data-ax-path='__created__']").val(true);
+        }
+        $(_this).before(cloneTag);
+        cloneTag.show();
+    },
+    getData : function(target){
+        var retData = new Array();
+        var data = {};
+        var targetTag = $("#"+target);
+
+        if(targetTag.css("display") != "none")
+        {
+            targetTag.find(">ul:not(.addAuthoritiesInfo)").each(function(){
+                data = {};
+                data["saveType"] = $(this).attr("saveType");
+                $(this).find("input,select,textarea").each(function(){
+                    if($(this).attr("data-ax-path")) {
+                        if ($(this).attr($(this).attr("data-ax-path")))
+                            data[$(this).attr("data-ax-path")] = $(this).attr($(this).attr("data-ax-path"));
+                        else
+                            data[$(this).attr("data-ax-path")] = $(this).val();
+                    }
+                });
+
+                if(target == "creatorArea"){
+                    data["itemCreatorUuid"] = data["itemAuthorityUuid"];
+                    data["creatorUuid"] = data["authorityUuid"];
+                }else if(target == "authorityArea"){
+                    data["itemRelatedAuthorityUuid"] = data["itemAuthorityUuid"];
+                }
+
+                // retData.push(data);
+                if(data["authorityUuid"] && data["authorityUuid"] != "" ){
+                    retData.push(data);
+                }
+            });
+        }
+        return retData;
+    },
+    setData : function(target, data){
+        $("#" + target + " .auth_fit").remove();
+
+        if(data != null && data != "undefined" && data.length > 0){
+            data.forEach(function(item, index){
+                if(target == "creatorArea"){
+                    item["itemAuthorityUuid"] = item["itemCreatorUuid"];
+                    item["authorityUuid"] = item["creatorUuid"];
+                    item["authorityName"] = item["creatorName"];
+                }else if(target == "authorityArea"){
+                    item["itemAuthorityUuid"] = item["itemRelatedAuthorityUuid"];
+                }
+                fnObj.authorityInfo.addChild($("#" + target).find(".childDnrInfo"), item);
+            });
+        }
+    }
+});
+
 
 fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     tagId: "realgrid01",
@@ -495,6 +711,8 @@ fnObj.treeView01 = axboot.viewExtend(axboot.commonView, {
     }
 });
 setFormData = function(data){
+    currentData = data;
+
     fnObj.formView.setFormData("name",data.name);
     fnObj.formView.setFormData("riItemUuid",data.riItemUuid);
     fnObj.formView.setFormData("riItemCode",data.riItemCode);
@@ -516,6 +734,40 @@ setFormData = function(data){
 
     fnObj.formView.setFormData("creationStartDate",dateFormatter(data.creationStartDate));
     fnObj.formView.setFormData("creationEndDate",dateFormatter(data.creationEndDate));
+
+    fnObj.formView.setFormData("accumulationStartDate",dateFormatter(data.accumulationStartDate));
+    fnObj.formView.setFormData("accumulationEndDate",dateFormatter(data.accumulationEndDate));
+
+    /** 설계변경 추가 **/
+    fnObj.formView.setFormData("keyword",data.keyword);
+    fnObj.formView.setFormData("referenceCode",data.referenceCode);
+    fnObj.formView.setFormData("raAggregationCode",data.raAggregationCode);
+
+    fnObj.formView.setFormData("languageCode", data.languageCode);
+    fnObj.formView.setFormData("statusDescription", data.statusDescription);
+    fnObj.formView.setFormData("levelOfDetailUuid", data.levelOfDetailUuid);
+    fnObj.formView.setFormData("sourceSystemUuid", data.sourceSystemUuid);
+    fnObj.formView.setFormData("creationSystemUuid", data.creationSystemUuid);
+    fnObj.formView.setFormData("addMetaTemplateSetUuid", data.addMetaTemplateSetUuid);
+    fnObj.formView.setFormData("legalStatusUuid", data.legalStatusUuid);
+    fnObj.formView.setFormData("repositoriesUuid", data.repositoriesUuid);
+    fnObj.formView.setFormData("repositoriesName", data.repositoriesName);
+    fnObj.formView.setFormData("electronicRecordStatusUuid", data.electronicRecordStatusUuid);
+    fnObj.formView.setFormData("accumulationStartDate", data.accumulationStartDate);
+    fnObj.formView.setFormData("accumulationEndDate", data.accumulationEndDate);
+    fnObj.formView.setFormData("scopeContent", data.scopeContent);
+    fnObj.formView.setFormData("custodialHistory", data.custodialHistory);
+    fnObj.formView.setFormData("sourceAcquisitionUuid", data.sourceAcquisitionUuid);
+    fnObj.formView.setFormData("sourceAcquisitionName", data.sourceAcquisitionName);
+    fnObj.formView.setFormData("physicalCondition", data.physicalCondition);
+    fnObj.formView.setFormData("useCondition", data.useCondition);
+    fnObj.formView.setFormData("findingAids", data.findingAids);
+    fnObj.formView.setFormData("rulesConversionUuid", data.rulesConversionUuid);
+    fnObj.formView.setFormData("recordScheduleUuid", data.recordScheduleUuid);
+    fnObj.formView.setFormData("accessCondition", data.accessCondition);
+
+    fnObj.authorityInfo.setData("creatorArea", data.creatorList);
+    fnObj.authorityInfo.setData("authorityArea", data.relatedAuthorityList);
 
 
     ACTIONS.dispatch(ACTIONS.SEARCH_FROM_SCH,{
@@ -540,8 +792,68 @@ setFormData = function(data){
     fnObj.formView.setFormData("AddMetadata10",data.addMetadata10);*/
 }
 
+function setAdditionalMeta(segmentList){
+    var targetTag = $('#addConMetaArea');
+    var cloneTag = null;
+    var cloneInput = null;
+    var dataPath = "";
+    var option = "";
+
+    $("#addConMetaArea .meta-ui").remove();
+
+    segmentList.forEach(function(item, idx){
+        if(item.displayedYN != "Y") return true;
+
+        dataPath = "addMetadata" + item.additionalColumn.replace("ADD_METADATA", "");
+
+        cloneTag = $('#addConMetaArea #metaTemplate').clone();
+        cloneTag.addClass("meta-ui");
+        cloneTag.attr("id", item.additionalColumn);
+        cloneTag.find(".meta-label").html(item.name);
+
+        targetTag.append(cloneTag);
+
+        if(item.hasOwnProperty("popupUuid")) {
+            cloneInput = cloneTag.find(".meta-combo");
+
+            cloneInput.show();
+            cloneTag.find(".meta-input").hide();
+
+            axboot.commonCodeVO(item.popupCode).forEach(function(codeVO, idx) {
+                option = $("<option value='"+ codeVO["codeDetailUUID"] +"'>"+codeVO["codeName"]+"</option>");
+                cloneInput.append(option);
+            });
+        }else {
+            cloneInput = cloneTag.find(".meta-input");
+
+            cloneInput.show();
+            cloneTag.find(".meta-combo").hide();
+        }
+
+        cloneInput.on("keyup change",function(event){
+            isDetailChanged = true;
+            currentData[$(event.target).attr("data-ax-path")] = $(event.target).val();
+            fnObj.formView.setFormData($(event.target).attr("data-ax-path"), $(event.target).val());
+        });
+
+        cloneInput.attr("title", item.name);
+        cloneInput.attr("data-ax-path", dataPath);
+        if(item.requiredYN == "Y"){
+            cloneInput.attr("data-ax-validate", "required");
+        }
+
+        cloneInput.css("width", item.displaySize == 0 ? "100%" : item.displaySize);
+
+        fnObj.formView.setFormData(dataPath, currentData[dataPath]);
+
+        cloneTag.show();
+    });
+
+    //fnObj.formView.setData(currentData);
+}
+
 function dateFormatter(orgDate){
-    if(orgDate == undefined || orgDate == null) return ' ';
+    if(orgDate == undefined || orgDate == null) return '';
     var year = orgDate.substring(0, 4);
     var month = orgDate.substring(4, 6);
     var day = orgDate.substring(6, 8);

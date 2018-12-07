@@ -43,9 +43,6 @@ public class Cl001Service extends BaseService {
     @Autowired
     private ClClassificationSchemeRepository clClassificationSchemeRepository;
 
-    @Inject
-    private Ad007Mapper ad007Mapper;
-
     /**
      * Gets classification scheme list.
      *
@@ -87,7 +84,6 @@ public class Cl001Service extends BaseService {
             ad00702VO.setAddMetaTemplateSetUuid(cl00102VO.getAddMetaTemplateSetUuid());
         }
 
-        cl00102VO.setSegmentList(ad007Mapper.searchSegment(ad00702VO));
         return cl00102VO;
     }
      /**
