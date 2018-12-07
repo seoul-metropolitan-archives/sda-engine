@@ -50,10 +50,6 @@ public class RcAggregationCon extends SimpleJpaModel<RcAggregationCon.RcAggregat
     @Comment(value = "")
     private String creationEndDate;
 
-    @Column(name = "EXTRA_METADATA", length = 4000, nullable = true)
-    @Comment(value = "extraMetadata")
-    private String extraMetadata;
-
     @Column(name = "ADD_METADATA01", length = 100, nullable = true)
     @Comment(value = "")
     private String addMetadata01;
@@ -93,6 +89,10 @@ public class RcAggregationCon extends SimpleJpaModel<RcAggregationCon.RcAggregat
     @Column(name = "ADD_METADATA10", length = 100, nullable = true)
     @Comment(value = "")
     private String addMetadata10;
+
+    @Column(name = "EXTRA_METADATA", length = 4000, nullable = true)
+    @Comment(value = "extraMetadata")
+    private String extraMetadata;
 
     @Column(name = "SOURCE_SYSTEM_UUID", length = 36, nullable = true)
     @Comment(value = "SOURCE_SYSTEM_UUID")

@@ -27872,13 +27872,48 @@ a.small_open {
     overflow:hidden;*/
 }
 
-.detail_wrap{height: 100%; width: 100%; overflow-y: auto; overflow-x: hidden; position: relative}
-.detail_conts{width: 100%; height: fit-content; margin-left: 1.5%; margin-top: 1.5%; border : 0px;padding-right: 10px;}
+.detail_wrap{width: 100%; height:100%; overflow-y: auto; overflow-x: hidden; position: relative}
+.detail_conts{width: 100%; height: fit-content;margin-left: 1.5%; margin-top: 1.5%; border : 0px;padding-right: 10px;}
 .detail_conts.ui-accordion, .detail_conts.ui-accordion-content{ border : 0px;}
 
-.detail_conts ul{width: 100%}
+.detail_conts ul{width: 100%;}
 .detail_conts ul li.title{padding-left: 1%; background-color: #f7f7f7; text-align: left; border-bottom: 1px solid #ddd}
 .detail_conts ul li.conts{text-align: left;padding-left: 1%; border-bottom: 1px solid #ddd}
+
+.rc_contents {width: 100%; margin-left: 1.5%; margin-top: 1.5%; border : 0px;padding-right: 10px;}
+.rc_contents >ul {width: 100%; height: 30px; padding: 10px; display: table; }
+.rc_contents >ul >li {text-align: left;}
+.rc_contents >ul >li >* {padding-right: 20px;}
+.rc_contents >ul >li >div {margin-top: 5px}
+.rc_contents >ul >li >div .addAuthoritiesInfo li{text-align: left}
+
+
+.record_detail{width: 100%; height:100%; overflow-y: auto; overflow-x: hidden; position: relative}
+.ui-widget-content.rc_contents {
+    border: 1px solid #e0e0e0;
+    background: #ffffff;
+    color: #222222;
+}
+.record_detail >h3{
+    border: 1px solid #dbdbdb;
+    background: #dadada url(images/ui-bg_glass_75_dadada_1x400.png) 50% 50% repeat-x;
+    font-weight: normal;
+    color: #212121;
+}
+.record_detail [disabled]{
+    background-color: #f9f9f9;
+    border: 1px solid #e9e9e9;
+    padding: 0px;
+    resize: none;
+    -moz-appearance:none; /* Firefox */
+    -webkit-appearance:none; /* Safari and Chrome */
+    appearance:none;
+}
+.record_detail .cld_box [disabled]{
+    border: 1px solid #ffffff;
+}
+
+
 
 .page_no {
     width: 100%;

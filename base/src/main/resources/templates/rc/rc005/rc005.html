@@ -65,7 +65,7 @@
                                     <div style="width: 100%; height: 100%; position: absolute; float: left"
                                          id="topmove">
 
-                                        <div class="bdt pdb_10 cont_wrap01" style="width: 86%;">
+                                        <div class="cont_wrap01" style="width: 86%;">
 
                                             <!-- Contents display -->
                                             <div class="bdb bgf7 bdr bdl " style="padding: 5px;display:none;">
@@ -82,142 +82,409 @@
                                             </div>
                                             <!-- Contents display -->
 
-
-                                            <!-- system metadata -->
-                                            <div class="serv_title bdt" style="margin-top: 0">
-                                                <span><b>System Metadata</b></span>
-                                            </div>
-                                            <div class="bdb" style="padding: 5px;">
-                                                <ul>
-                                                    <li style="width: 33%;">
-                                                        <b>Code </b>
-                                                        <div data-ax-path="code"></div>
-                                                    </li>
-                                                    <li style="width: 33%;">
-                                                        <b>Type </b>
-                                                        <div data-ax-path="type"></div>
-                                                    </li>
-                                                    <li style="width: 34%;">
-                                                        <b>Published Status </b>
-                                                        <div data-ax-path="publishedStatus"></div>
-                                                    </li>
-                                                </ul>
-
-                                                <ul class="pdt_20">
-                                                    <li style="width: 66%;">
-                                                        <b>Title </b>
-                                                        <div data-ax-path="title">
-                                                        </div>
-                                                    </li>
-
-                                                    <!--<li style="width: 34%;">
-                                                        <b>Level </b>
-                                                        <div data-ax-path="level">Record Group</div>
-                                                    </li>-->
-                                                </ul>
-
-                                                <ul style="padding-top: 32px">
-                                                    <li style="width: 49%;">
-                                                        <b>Description </b>
-                                                        <div data-ax-path="description">
-                                                        </div>
-                                                    </li>
-                                                    <li style="width: 2%;">
-                                                    </li>
-                                                    <li style="width: 49%;">
-                                                        <b>Notes </b>
-                                                        <div data-ax-path="notes">
-                                                        </div>
-                                                    </li>
-                                                </ul>
-
-                                                <ul class="pdt_20">
-                                                    <li style="width: 33%;">
-                                                        <b>Author </b>
-                                                        <div data-ax-path="author"></div>
-                                                    </li>
-                                                    <li style="width: 67%;">
-                                                        <b>From </b>
-                                                        <div data-ax-path="from"></div>
-                                                    </li>
-
-                                                </ul>
-
-                                                <ul class="pdt_20">
-                                                    <li style="width: 33%;">
-                                                        <b>Date of Description </b>
-                                                        <div data-ax-path="rcDateOfDescription" style="height: 18px;"></div>
-                                                    </li>
-                                                    <!--<li style="width: 67%;">-->
-                                                        <!--<b>Includes </b>-->
-                                                        <!--<div>시리즈(140)을 포함하고 있습니다.-->
-                                                            <!--<br> 파일(80)을 포함하고 있습니다.-->
-                                                        <!--</div>-->
-                                                    <!--</li>-->
-
-                                                </ul>
-
-                                            </div>
-                                            <!-- system metadata -->
-
-                                            <!-- Contextual Metadata  -->
-                                            <div class="bdb bdt mgt_10 bgf7 bdr bdl " style="padding: 5px;">
-                                                <span><b>Contextual Metadata</b></span>
-                                            </div>
-                                            <div class="bdb" style="padding: 5px;">
-
-                                                <ul>
-                                                    <li style="width: 49%">
-                                                        <ol>
-                                                            <li>
-                                                                <b>Provenance </b>
-                                                                <div data-ax-path="provenance"></div>
+                                            <div style="height:100%; width:100%; overflow-y: auto">
+                                                <div class="record_detail">
+                                                    <!-- Identification -->
+                                                    <h3>Identification</h3>
+                                                    <div id="identificationArea" class="rc_contents">
+                                                        <ul>
+                                                            <li style="width: 33%;">
+                                                                <b>Identifier</b>
+                                                                <div>
+                                                                    <input data-ax-path="riItemCode" type="text" style="width: 200px">
+                                                                </div>
                                                             </li>
-                                                            <li class="pdt_20">
-                                                                <b>Creator </b>
-                                                                <div data-ax-path="creator"></div>
+                                                            <li style="width: 33%;">
+                                                                <b>Type </b>
+                                                                <div>
+                                                                    <select data-ax-path="riTypeUuid" style="width: 200px;">
+                                                                        <option th:each="item : ${typeList}"
+                                                                                th:value="${item.codeDetailUUID}"
+                                                                                th:text="${item.codeName}"
+                                                                                th:attr="defaultYN =  ${item.defaultYN}"
+                                                                        />
+                                                                    </select>
+                                                                    <input data-ax-path="raAggregationCode" type="hidden">
+                                                                    <input data-ax-path="raAggregationUuid" type="hidden">
+                                                                </div>
                                                             </li>
-                                                            <li class="pdt_20">
+                                                            <li style="width: 34%;">
+                                                                <b>Published Status</b>
+                                                                <div>
+                                                                    <select data-ax-path="riPublishedStatusUuid" style="width: 200px;" >
+                                                                        <option th:each="item : ${publishedStatusList}"
+                                                                                th:value="${item.codeDetailUUID}"
+                                                                                th:text="${item.codeName}"
+                                                                                th:attr="defaultYN =  ${item.defaultYN}"
+                                                                        />
+                                                                    </select>
+                                                                </div>
+                                                            </li>
+                                                        </ul>
+
+                                                        <ul style="padding-top: 16px">
+                                                            <li style="width: 100%;">
+                                                                <b>Title </b>
+                                                                <div>
+                                                                    <textarea class="txtar" data-ax-path="name" style="height: 35px;"></textarea>
+                                                                </div>
+                                                            </li>
+                                                        </ul>
+                                                        <ul style="padding-top: 16px">
+                                                            <li style="width: 100%;">
+                                                                <b>Creator</b>
+                                                                <div id="creatorArea" style="padding:0px; display: block">
+                                                                    <div class="childDnrInfo" style="display: block">
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+                                                        </ul>
+                                                        <ul>
+                                                            <li style="width: 33%;">
+                                                                <b>Open Status</b>
+                                                                <div>
+                                                                    <select style="width: 200px" data-ax-path="openStatus" id="openStatus">
+                                                                        <option value=""></option>
+                                                                        <option th:each="item : ${openStatusList}"
+                                                                                th:value="${item.codeDetailUUID}"
+                                                                                th:text="${item.codeName}"
+                                                                                th:attr="defaultYN =  ${item.defaultYN}"
+                                                                        />
+                                                                    </select>
+                                                                </div>
+                                                            </li>
+                                                            <li style="width: 33%;">
+                                                                <b>Legal Status</b>
+                                                                <div>
+                                                                    <select style="width: 200px" data-ax-path="legalStatusUuid" id="legalStatus">
+                                                                        <option value=""></option>
+                                                                        <option th:each="item : ${legalStatusList}"
+                                                                                th:value="${item.codeDetailUUID}"
+                                                                                th:text="${item.codeName}"
+                                                                                th:attr="defaultYN =  ${item.defaultYN}"
+                                                                        />
+                                                                    </select>
+                                                                </div>
+                                                            </li>
+                                                            <li style="width: 34%;">
+                                                                <b>Repositories</b>
+                                                                <div id="repositoriesArea">
+                                                                    <input type="text" data-ax-path="repositoriesName" style="width: 200px">
+                                                                </div>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+
+                                                    <!-- Contents & Structure -->
+                                                    <h3>Contents & Structure</h3>
+                                                    <div id="contentsStructureArea" class="rc_contents">
+                                                        <ul>
+                                                            <li style="width: 33%;">
+                                                                <b>Type(s) of Archival Materials</b>
+                                                                <div>
+                                                                    Develop
+                                                                </div>
+                                                            </li>
+                                                        </ul>
+                                                        <ul>
+                                                            <li style="width: 33%;">
+                                                                <b>Format of Archival Materials</b>
+                                                                <div>
+                                                                    <select style="width: 200px" data-ax-path="electronicRecordStatusUuid" id="electronicRecordStatus">
+                                                                        <option value=""></option>
+                                                                        <option th:each="item : ${electronicRecordStatusList}"
+                                                                                th:value="${item.codeDetailUUID}"
+                                                                                th:text="${item.codeName}"
+                                                                                th:attr="defaultYN =  ${item.defaultYN}"
+                                                                        />
+                                                                    </select>
+                                                                </div>
+                                                            </li>
+                                                            <li style="width: 33%;">
                                                                 <b>Date of Creation</b>
-                                                                <div data-ax-path="rcDateOfCreation" style="height: 18px;"></div>
-                                                            </li>
-                                                            <li class="pdt_20">
-                                                                <b>Open Status </b>
-                                                                <div data-ax-path="openStatusUuid"></div>
-                                                            </li>
-                                                        </ol>
-                                                    </li>
-                                                    <li style="width: 2%;">
-                                                    </li>
-                                                    <li style="width: 49%;">
-                                                        <ol>
-                                                            <li>
-                                                                <b>Reference Code </b>
-                                                                <div data-ax-path="referenceCode">
+                                                                <div data-ax5picker="date">
+                                                                    <div class="cld_box" >
+                                                                        <input type="text" data-ax-path="creationStartDate" style="ime-mode:disabled;"
+                                                                               placeholder="YYYY-MM-DD" maxlength="10">
+                                                                        <img title="calendar" class="ui-datepicker-trigger" alt="..." src="/assets/images/ams/calendar.png" >
+                                                                    </div>
+                                                                    ~
+                                                                    <div class="cld_box" >
+                                                                        <input type="text" data-ax-path="creationEndDate" style="ime-mode:disabled;"
+                                                                               placeholder="YYYY-MM-DD" maxlength="10">
+                                                                        <img title="calendar" class="ui-datepicker-trigger" alt="..." src="/assets/images/ams/calendar.png" >
+                                                                    </div>
                                                                 </div>
                                                             </li>
-                                                            <li class="pdt_20">
+                                                            <li style="width: 34%;">
+                                                                <b>Date of Accumulation</b>
+                                                                <div data-ax5picker="date">
+                                                                    <div class="cld_box">
+                                                                        <input type="text" data-ax-path="accumulationStartDate" style="ime-mode:disabled;"
+                                                                               placeholder="YYYY-MM-DD" maxlength="10">
+                                                                        <img title="calendar" class="ui-datepicker-trigger" alt="..." src="/assets/images/ams/calendar.png" >
+                                                                    </div>
+                                                                    ~
+                                                                    <div class="cld_box">
+                                                                        <input type="text" data-ax-path="accumulationEndDate" style="ime-mode:disabled;"
+                                                                               placeholder="YYYY-MM-DD" maxlength="10">
+                                                                        <img title="calendar" class="ui-datepicker-trigger" alt="..." src="/assets/images/ams/calendar.png" >
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+                                                        </ul>
+                                                        <ul>
+                                                            <li style="width: 33%;">
+                                                                <b>Includes</b>
+                                                                <div data-ax-path="includes">Develop</div>
+                                                            </li>
+                                                        </ul>
+                                                        <ul>
+                                                            <li style="width: 33%;">
+                                                                <b>Scope & Content</b>
+                                                                <div style="padding-top: 5px">
+                                                                    <textarea class="txtar" style="height: 100px" data-ax-path="scopeContent"></textarea>
+                                                                </div>
+                                                            </li>
+                                                            <!--<li style="width: 33%;">
+                                                                <b>Arrangement</b>
+                                                                <div style="padding-top: 5px">
+                                                                    <textarea class="txtar" style="height: 100px" data-ax-path="arrangement"></textarea>
+                                                                </div>
+                                                            </li>
+                                                            <li style="width: 34%;">
+                                                                <b>Accruals</b>
+                                                                <div style="padding-top: 5px">
+                                                                    <textarea class="txtar" style="height: 100px" data-ax-path="accruals"></textarea>
+                                                                </div>
+                                                            </li>-->
+                                                        </ul>
+                                                        <ul style="padding-top: 16px">
+                                                            <li style="width: 100%;">
+                                                                <b>Access Points</b>
+                                                                <div id="authorityArea" style="padding:0px; display: block">
+                                                                    <div class="childDnrInfo" style="display: block">
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+
+                                                    <h3>Controls & Access</h3>
+                                                    <div id="controlsAccessArea" class="rc_contents">
+                                                        <ul>
+                                                            <li style="width: 33%;">
+                                                                <b>Immediate Source of Acquisition</b>
+                                                                <div id="sourceAcquisitionArea">
+                                                                    <ul style="width: 200px;vertical-align: middle">
+                                                                        <input type="text" data-ax-path="sourceAcquisitionName" style="width: 200px">
+                                                                    </ul>
+                                                                </div>
+                                                            </li>
+                                                            <li style="width: 33%;">
+                                                                <b>Language</b>
+                                                                <div>
+                                                                    <select style="width: 200px" data-ax-path="languageCode" id="languageCode">
+                                                                        <option value=""></option>
+                                                                        <option th:each="item : ${languageCodeList}"
+                                                                                th:value="${item.codeDetailUUID}"
+                                                                                th:text="${item.codeName}"
+                                                                                th:attr="defaultYN =  ${item.defaultYN}"
+                                                                        />
+                                                                    </select>
+                                                                </div>
+                                                            </li>
+                                                        </ul>
+                                                        <ul>
+                                                            <li style="width: 50%;">
+                                                                <b>Custodial History</b>
+                                                                <div>
+                                                                    <textarea class="txtar" style="height: 100px" data-ax-path="custodialHistory"></textarea>
+                                                                </div>
+                                                            </li>
+                                                            <li style="width: 50%;">
+                                                                <b>Physical Condition</b>
+                                                                <div>
+                                                                    <textarea class="txtar" style="height: 100px" data-ax-path="physicalCondition"></textarea>
+                                                                </div>
+                                                            </li>
+                                                        </ul>
+                                                        <!--<ul>
+                                                            <li style="width: 33%;">
+                                                                <b>Retention</b>
+                                                                <div data-ax-path="recordScheduleUuid">Develop</div>
+                                                            </li>
+                                                        </ul>
+                                                        <ul>
+                                                            <li style="width: 33%;">
+                                                                <b>Freeze</b>
+                                                                <div data-ax-path="disposalFreezeEvent">Develop</div>
+                                                            </li>
+                                                        </ul>-->
+                                                        <ul>
+                                                            <li style="width: 33%;">
+                                                                <b>Access Condition</b>
+                                                                <div style="padding-top: 5px">
+                                                                    <textarea class="txtar" style="height: 100px" data-ax-path="accessCondition"></textarea>
+                                                                </div>
+                                                            </li>
+                                                            <li style="width: 33%;">
+                                                                <b>Use Condition</b>
+                                                                <div style="padding-top: 5px">
+                                                                    <textarea class="txtar" style="height: 100px" data-ax-path="useCondition"></textarea>
+                                                                </div>
+                                                            </li>
+                                                            <li style="width: 34%;">
+                                                                <b>Finding Aids</b>
+                                                                <div style="padding-top: 5px">
+                                                                    <textarea class="txtar" style="height: 100px" data-ax-path="findingAids"></textarea>
+                                                                </div>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+
+                                                    <!--<h3>Archival Copies</h3>
+                                                    <div id="archivalCopiesArea" class="rc_contents">
+                                                        <ul>
+                                                            <li style="width: 33%;">
+                                                                <b>Type(s) of Copy</b>
+                                                                <div data-ax-path="typeOfCopy">Develop</div>
+                                                            </li>
+                                                        </ul>
+                                                    </div>-->
+
+                                                    <h3>Description Control</h3>
+                                                    <div id="descriptionArea" class="rc_contents">
+                                                        <ul>
+                                                            <li style="width: 33%;">
+                                                                <b>Actors of Description</b>
+                                                                <div>
+                                                                    <input type=text style="width: 97%" data-ax-path="riAuthor"/>
+                                                                </div>
+                                                            </li>
+                                                            <li style="width: 33%;">
+                                                                <b>Date of Description</b>
+                                                                <div data-ax5picker="date">
+                                                                    <div class="cld_box">
+                                                                        <input type="text" data-ax-path="riDescriptionStartDate" style="ime-mode:disabled;"
+                                                                               placeholder="YYYY-MM-DD" maxlength="10">
+                                                                        <img title="calendar" class="ui-datepicker-trigger" alt="..." src="/assets/images/ams/calendar.png" >
+                                                                    </div>
+                                                                    ~
+                                                                    <div class="cld_box">
+                                                                        <input type="text" data-ax-path="riDescriptionEndDate" style="ime-mode:disabled;"
+                                                                               placeholder="YYYY-MM-DD" maxlength="10">
+                                                                        <img title="calendar" class="ui-datepicker-trigger" alt="..." src="/assets/images/ams/calendar.png" >
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+                                                            <li style="width: 34%;">
+                                                                <b>Rules or Conventions</b>
+                                                                <div>
+                                                                    <select style="width: 200px" data-ax-path="rulesConversionUuid" id="ruleConversion">
+                                                                        <option value=""></option>
+                                                                        <option th:each="item : ${ruleConversionList}"
+                                                                                th:value="${item.codeDetailUUID}"
+                                                                                th:text="${item.codeName}"
+                                                                                th:attr="defaultYN =  ${item.defaultYN}"
+                                                                        />
+                                                                    </select>
+                                                                </div>
+                                                            </li>
+                                                        </ul>
+                                                        <ul>
+                                                            <li style="width: 33%;">
+                                                                <b>Status of Description</b>
+                                                                <div>
+                                                                    <select style="width: 200px" data-ax-path="statusDescription" id="statusDescription">
+                                                                        <option value=""></option>
+                                                                        <option th:each="item : ${statusDescriptionList}"
+                                                                                th:value="${item.codeDetailUUID}"
+                                                                                th:text="${item.codeName}"
+                                                                                th:attr="defaultYN =  ${item.defaultYN}"
+                                                                        />
+                                                                    </select>
+                                                                </div>
+                                                            </li>
+                                                            <li style="width: 33%;">
+                                                                <b>Level of Detail</b>
+                                                                <div>
+                                                                    <select style="width: 200px" data-ax-path="levelOfDetailUuid" id="levelOfDetail">
+                                                                        <option value=""></option>
+                                                                        <option th:each="item : ${levelOfDetailList}"
+                                                                                th:value="${item.codeDetailUUID}"
+                                                                                th:text="${item.codeName}"
+                                                                                th:attr="defaultYN =  ${item.defaultYN}"
+                                                                        />
+                                                                    </select>
+                                                                </div>
+                                                            </li>
+                                                            <li style="width: 34%"/>
+                                                        </ul>
+                                                        <ul>
+                                                            <li style="width: 50%;">
+                                                                <b>Archivist's Notes</b>
+                                                                <div style="padding-top: 5px">
+                                                                    <textarea class="txtar" style="height: 100px" data-ax-path="description"></textarea>
+                                                                </div>
+                                                            </li>
+                                                            <li style="width: 50%;">
+                                                                <b>Notes</b>
+                                                                <div style="padding-top: 5px">
+                                                                    <textarea class="txtar" style="height: 100px" data-ax-path="notes"></textarea>
+                                                                </div>
+                                                            </li>
+                                                        </ul>
+                                                        <ul>
+                                                            <li style="width: 50%;">
                                                                 <b>Keyword </b>
-                                                                <div data-ax-path="keyword">
+                                                                <div>
+                                                                    <textarea data-ax-path="keyword" class="txtar" style="height: 80px"></textarea>
                                                                 </div>
                                                             </li>
-                                                        </ol>
-                                                    </li>
-                                                </ul>
+                                                        </ul>
+                                                    </div>
 
-                                            </div>
-                                            <!-- Contextual Metadata  -->
+                                                    <!-- Additional Context Metadata -->
+                                                    <h3>Additional Context Metadata</h3>
+                                                    <div id="addConMetaArea" class="rc_contents">
+                                                        <ul id="templateListContainer">
+                                                            <li style="width: 100%;">
+                                                                <b>Additional Metadata Template</b>
+                                                                <div>
+                                                                    <select data-ax-path="addMetaTemplateSetUuid" style="width:200px">
+                                                                        <option value=""></option>
+                                                                        <option th:each="item : ${templateList}"
+                                                                                th:value="${item.addMetaTemplateSetUuid}"
+                                                                                th:text="${item.setName}"/>
+                                                                    </select>
+                                                                </div>
+                                                            </li>
+                                                        </ul>
+                                                        <ul style="display: none" id="metaTemplate">
+                                                            <li>
+                                                                <b class="meta-label"></b>
+                                                                <div class="meta-comp">
+                                                                    <input class="meta-input" type="text">
+                                                                    <select class="meta-combo">
+                                                                        <option value=""></option>
+                                                                    </select>
+                                                                    <!--<a href="#" class="meta-popup-link" style="display: none"><img src="/assets/images/ams/search_normal.png" alt="find"></a>-->
+                                                                </div>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
 
+                                                    <!-- Additional Context Metadata -->
+                                                    <h3>Component List</h3>
+                                                    <div id="componentArea" class="rc_contents">
+                                                        <div class="comp_list_wrap pdt_10">
+                                                            <div id="realgrid01" style="width:100%; height:100%; border: 1px solid #ccc" ></div>
+                                                        </div>
+                                                    </div>
 
-                                            <!-- Component list -->
-                                            <div class="bdb bdt mgt_10 bgf7 bdr bdl " style="padding: 5px;">
-                                                <div><b>Component List</b></div>
+                                                </div>
                                             </div>
-                                            <div class="comp_list_wrap pdt_10">
-                                                <div id="realgrid01"
-                                                     style="width:100%; height:100%; border: 1px solid #ccc"></div>
-                                            </div>
-                                            <!-- Component list -->
 
 
                                         </div>

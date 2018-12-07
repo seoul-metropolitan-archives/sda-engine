@@ -22,7 +22,7 @@ public interface Ad007Mapper extends MyBatisMapper {
      * @param param the param
      * @return the list
      */
-    List<Ad00702VO> searchSegment(Ad00702VO param);
+    List<Ad00702VO> searchSegment(Ad00701VO param);
 
     /**
      * Gets child class.

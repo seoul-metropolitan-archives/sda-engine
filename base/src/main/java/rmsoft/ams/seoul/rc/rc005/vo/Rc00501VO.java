@@ -99,7 +99,69 @@ public class Rc00501VO extends BaseVO {
 
     private String extraMetadata;
 
+    /** 설계변경 신규추가 **/
+    private String languageCode;
+
+    private String statusDescription;
+
+    private String levelOfDetailUuid;
+
+    private String sourceSystemUuid;
+
+    private String creationSystemUuid;
+
+    private String addMetaTemplateSetUuid;
+
+    private String legalStatusUuid;
+
+    private String repositoriesUuid;
+
+    private String repositoriesName;
+
+    private String electronicRecordStatusUuid;
+
+    private String accumulationStartDate;
+
+    private String accumulationEndDate;
+
+    private String scopeContent;
+
+    private String custodialHistory;
+
+    private String sourceAcquisitionUuid;
+
+    private String sourceAcquisitionName;
+
+    private String physicalCondition;
+
+    private String useCondition;
+
+    private String findingAids;
+
+    private String rulesConversionUuid;
+
+    private String recordScheduleUuid;
+
+    private String accessCondition;
+
     private List<Rc00502VO> rc00502VoList;
+
+    /**
+     * The Creator list.
+     */
+    private List<Rc00503VO> creatorList;
+    /**
+     * The Material list.
+     */
+    private List<Rc00504VO> materialList;
+    /**
+     * The Related Authority list.
+     */
+    private List<Rc00505VO> relatedAuthorityList;
+    /**
+     * The Related Record list.
+     */
+    private List<Rc00506VO> relatedRecordList;
 
     /**
      * Sets ra description start date.

@@ -80,6 +80,7 @@ public class Rs004Service extends BaseService {
         }
         return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");
     }
+
     @Transactional
     public ApiResponse saveRecordScheduleResultList(List<Rs00402VO> list) {
         List<RcAggregationCon> rcAggregationConList = ModelMapperUtils.mapList(list,RcAggregationCon.class);
@@ -90,18 +91,27 @@ public class Rs004Service extends BaseService {
         RsRecordSchedule orgRsRecordSchedule = null;
         RsRecordScheduleResult rsRecordScheduleResult = null;
         int index =0;
+        Boolean delMode = false;
         for(RcAggregationCon rcAggregationCon : rcAggregationConList){
+            delMode = list.get(index).isDeleted();
             orgRcAggregationCon = rcAggregationConRepository.findOne(rcAggregationCon.getId());
             //RC_AGGREGATION_CON 에 RS_RECORD_SCHEDULE_UUID 정보 업데이트
             orgRcAggregationCon = orgRcAggregationCon == null ? rcAggregationCon : orgRcAggregationCon;
 
-            orgRcAggregationCon.setRecordScheduleUuid(rcAggregationCon.getRecordScheduleUuid());
+            if(delMode){
+                orgRcAggregationCon.setRecordScheduleUuid(null);
+            }else{
+                orgRcAggregationCon.setRecordScheduleUuid(rcAggregationCon.getRecordScheduleUuid());
+            }
+
+            /* 내년에 해야됨
             rcAggregationConRepository.save(orgRcAggregationCon);
 
             //AGGREGATION 을 참조하는 ITEM 목록
             qRcItem = QRcItem.rcItem;
             predicate = qRcItem.aggregationUuid.eq(orgRcAggregationCon.getAggregationUuid());
             Iterable<RcItem> updateItemList = rcItemRepository.findAll(predicate);
+
 
             rsRecordSchedule = new RsRecordSchedule();
             rsRecordSchedule.setRecordScheduleUuid(rcAggregationCon.getRecordScheduleUuid());
@@ -118,6 +128,7 @@ public class Rs004Service extends BaseService {
                 rsRecordScheduleResult.setStatusUuid(CommonCodeUtils.getCodeDetailUuid("CD137","Draft"));
                 rsRecordScheduleResultRepository.save(rsRecordScheduleResult);
             }
+            */
         }
 
         return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");

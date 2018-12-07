@@ -11,11 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import rmsoft.ams.seoul.common.domain.RcComponent;
-import rmsoft.ams.seoul.common.domain.RcItem;
-import rmsoft.ams.seoul.common.domain.RcItemCon;
-import rmsoft.ams.seoul.common.repository.RcItemConRepository;
-import rmsoft.ams.seoul.common.repository.RcItemRepository;
+import rmsoft.ams.seoul.common.domain.*;
+import rmsoft.ams.seoul.common.repository.*;
 import rmsoft.ams.seoul.rc.rc004.dao.Rc004Mapper;
 import rmsoft.ams.seoul.rc.rc004.vo.Rc00402VO;
 import rmsoft.ams.seoul.rc.rc005.vo.Rc00501VO;
@@ -40,6 +37,18 @@ public class Rc004Service extends BaseService{
     @Autowired
     private RcItemConRepository rcItemConRepository;
 
+    @Autowired
+    private RcItemCreatorRepository rcItemCreatorRepository;
+
+    @Autowired
+    private RcItemMaterialRepository rcItemMaterialRepository;
+
+    @Autowired
+    private RcItemRelatedAuthorityRepository rcItemRelatedAuthorityRepository;
+
+    @Autowired
+    private RcItemRelatedRecordRepository rcItemRelatedRecordRepository;
+
     /**
      * Save item details.
      *
@@ -51,7 +60,17 @@ public class Rc004Service extends BaseService{
         RcItem oldRcItem = new RcItem(); //RC_ITEM
         RcItemCon rcItemCon = new RcItemCon(); //RC_ITEM_CON
         RcItemCon oldRcItemCon = new RcItemCon(); //RC_ITEM_CON
+        List<RcItemCreator> creatorList = null;
+        List<RcItemMaterial> materialList = null;
+        List<RcItemRelatedAuthority> authorityList = null;
+        List<RcItemRelatedRecord> recordList = null;
+
         String itemUuid = UUIDUtils.getUUID();
+
+        creatorList = ModelMapperUtils.mapList(requestParams.getCreatorList(), RcItemCreator.class);
+        materialList = ModelMapperUtils.mapList(requestParams.getMaterialList(), RcItemMaterial.class);
+        authorityList = ModelMapperUtils.mapList(requestParams.getRelatedAuthorityList(), RcItemRelatedAuthority.class);
+        recordList = ModelMapperUtils.mapList(requestParams.getRelatedRecordList(), RcItemRelatedRecord.class);
 
         //RC_ITEM  업데이트
         if(StringUtils.isEmpty(requestParams.getRiItemUuid())){
@@ -75,6 +94,10 @@ public class Rc004Service extends BaseService{
         rcItem.setNotes(requestParams.getNotes());
         rcItem.setAuthor(requestParams.getRiAuthor());
         rcItem.setAggregationUuid(requestParams.getRaAggregationUuid());
+        /** 설계변경 추가 **/
+        rcItem.setLanguageCode(requestParams.getLanguageCode());
+        rcItem.setStatusDescription(requestParams.getStatusDescription());
+        rcItem.setLevelOfDetailUuid(requestParams.getLevelOfDetailUuid());
 
         if(requestParams.getRiDescriptionStartDate() != null)
             rcItem.setDescriptionStartDate(requestParams.getRiDescriptionStartDate().replace("-",""));
@@ -85,18 +108,14 @@ public class Rc004Service extends BaseService{
         rcItemRepository.save(rcItem);
 
         //RC_ITEM  상세 업데이트
-       rcItemCon.setItemUuid(rcItem.getItemUuid());
+        rcItemCon =  ModelMapperUtils.map(requestParams, RcItemCon.class);
+        rcItemCon.setItemUuid(rcItem.getItemUuid());
         oldRcItemCon = rcItemConRepository.findOne(rcItemCon.getId());
 
         if(oldRcItemCon != null){//create
             rcItemCon.setInsertDate(oldRcItemCon.getInsertDate());
             rcItemCon.setInsertUuid(oldRcItemCon.getInsertUuid());
         }
-
-        rcItemCon.setOpenStatusUuid(requestParams.getOpenStatusUuid());
-        rcItemCon.setProvenance(requestParams.getProvenance());
-        rcItemCon.setReferenceCode(requestParams.getReferenceCode());
-        rcItemCon.setCreator(requestParams.getCreator());
 
         if(requestParams.getCreationStartDate() != null) {
             rcItemCon.setCreationStartDate(requestParams.getCreationStartDate().replace("-", ""));
@@ -105,13 +124,80 @@ public class Rc004Service extends BaseService{
         if(requestParams.getCreationEndDate() != null) {
             rcItemCon.setCreationEndDate(requestParams.getCreationEndDate().replace("-",""));
         }
-        rcItemCon.setKeyword(requestParams.getKeyword());
-        rcItemCon.setUpdateDate(Timestamp.valueOf(DateUtils.convertToString(LocalDateTime.now(), DateUtils.DATE_TIME_PATTERN)));
-        rcItemCon.setUpdateUuid(SessionUtils.getCurrentLoginUserUuid());
+
+        if(requestParams.getAccumulationStartDate() != null) {
+            rcItemCon.setAccumulationStartDate(requestParams.getAccumulationStartDate().replace("-", ""));
+        }
+
+        if(requestParams.getAccumulationEndDate() != null) {
+            rcItemCon.setAccumulationEndDate(requestParams.getAccumulationEndDate().replace("-",""));
+        }
+
         if(requestParams.getExtraMetadata() != null)
             rcItemCon.setExtraMetadata(requestParams.getExtraMetadata().toString());
 
         rcItemConRepository.save(rcItemCon);
+
+        if (null != creatorList) {
+            RcItemCreator prevCreator = null;
+            for (RcItemCreator child : creatorList) {
+                if(!child.isCreated() && !child.isModified() && !child.isDeleted())
+                    continue;
+
+                if(child.isDeleted()){
+                    rcItemCreatorRepository.delete(child.getId());
+                    continue;
+                }
+
+                if(child.isCreated()){
+                    child.setItemCreatorUuid(UUIDUtils.getUUID());
+                }else if(child.isModified()){
+                    prevCreator = rcItemCreatorRepository.findOne(child.getId());
+                    child.setInsertDate(prevCreator.getInsertDate());
+                    child.setInsertUuid(prevCreator.getInsertUuid());
+                }
+
+                child.setItemUuid(requestParams.getRiItemUuid());
+                rcItemCreatorRepository.save(child);
+            }
+        }
+        if (null != materialList) {
+            for (RcItemMaterial child : materialList) {
+                child.setItemMaterialUuid(UUIDUtils.getUUID());
+                child.setItemUuid(requestParams.getRiItemUuid());
+                rcItemMaterialRepository.save(child);
+            }
+        }
+        if (null != authorityList) {
+            RcItemRelatedAuthority prevAuthority = null;
+            for (RcItemRelatedAuthority child : authorityList) {
+                if(!child.isCreated() && !child.isModified() && !child.isDeleted())
+                    continue;
+
+                if(child.isDeleted()){
+                    rcItemRelatedAuthorityRepository.delete(child.getId());
+                    continue;
+                }
+
+                if(child.isCreated()){
+                    child.setItemRelatedAuthorityUuid(UUIDUtils.getUUID());
+                }else if(child.isModified()){
+                    prevAuthority = rcItemRelatedAuthorityRepository.findOne(child.getId());
+                    child.setInsertDate(prevAuthority.getInsertDate());
+                    child.setInsertUuid(prevAuthority.getInsertUuid());
+                }
+
+                child.setItemUuid(requestParams.getRiItemUuid());
+                rcItemRelatedAuthorityRepository.save(child);
+            }
+        }
+        if (null != recordList) {
+            for (RcItemRelatedRecord child : recordList) {
+                child.setItemRelatedRecordUuid(UUIDUtils.getUUID());
+                child.setItemUuid(requestParams.getRiItemUuid());
+                rcItemRelatedRecordRepository.save(child);
+            }
+        }
 
         requestParams.setRiItemUuid(itemUuid);
         return requestParams;
