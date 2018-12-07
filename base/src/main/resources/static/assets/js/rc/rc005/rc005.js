@@ -11,7 +11,7 @@ const ENTITY_TYPE = "RC_ITEM_CON";
 $( function() {
     var icons = {
         header: "ui-icon-circle-arrow-e",
-        activeHeader: "ui-icon-circle-arrow-s"
+        activeHeader: "ui-icon-circle-arrow-e"
     };
     $('.record_detail').accordion({
         icons: icons,
@@ -651,7 +651,7 @@ setFormData = function(data){
 
     fnObj.formView.setFormData("itemTitle",'Item - ' + data.name);
     fnObj.formView.setFormData("title",data.name);
-    fnObj.formView.setFormData("code",data.riItemCode);
+    fnObj.formView.setFormData("riItemCode",data.riItemCode);
     fnObj.formView.setFormData("type",data.riTypeNm);
     fnObj.formView.setFormData("publishedStatus",data.riPublishedStatusNm);
     fnObj.formView.setFormData("level",data.raLevelNm);
