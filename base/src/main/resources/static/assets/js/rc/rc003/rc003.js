@@ -5,6 +5,25 @@ var parentAggregationUuid = "";
 var sParam = [];
 var navi = "";
 
+var option = '';
+var authorityTypeUuid = '';
+var isChanged = false;
+var currentData = null;
+const ENTITY_TYPE = "RC_AGGREGATION_CON";
+
+$( function() {
+    var icons = {
+        header: "ui-icon-circle-arrow-e",
+        activeHeader: "ui-icon-circle-arrow-e"
+    };
+    $('.record_detail').accordion({
+        icons: icons,
+        collapsible: true,
+        heightStyle: "content",
+        onlyStyle : true,
+    });
+});
+
 var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH: function (caller, act, data) {
         axboot.ajax({
@@ -46,6 +65,20 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     },
     PAGE_SEARCH1: function (caller, act, data) {},
     PAGE_SAVE: function (caller, act, data) {},
+    GET_META_TEMPLATE: function (caller, act, data) {
+        axboot.ajax({
+            type: "GET",
+            url: "/api/v1/ad/ad007/listSub",
+            data: $.extend({}, {pageSize: 1000}, {addMetaTemplateSetUuid : data, entityType : ENTITY_TYPE}),
+            callback: function (res) {
+                setAdditionalMeta(res.list);
+            },
+            options: {
+                onError: axboot.viewError
+            }
+        });
+        return false;
+    },
     dispatch: function (caller, act, data) {
         var result = ACTIONS.exec(caller, act, data);
         if (result != "error") {
@@ -70,6 +103,8 @@ fnObj.pageStart = function () {
     _this.formView.initView();
     _this.treeView01.initView();
     // Data 조회
+
+    $(".record_detail").find("input,select,textarea").attr("disabled", true);
 
     var data = axboot.getMenuParams();
 
@@ -429,51 +464,263 @@ fnObj.treeView01 = axboot.viewExtend(axboot.commonView, {
         ACTIONS.dispatch(ACTIONS.TREEITEM_DESELECTE);
     }
 });
+
+/**
+ * 전거데이터 영역
+ */
+fnObj.authorityInfo = axboot.viewExtend({
+    parentUuid : "",
+    nodeType : "",
+    popupCode : "",
+    template :
+    "                                                            <li style='padding: 0 10px 0 0;'>" +
+    "                                                                   <input type=text data-ax-path='authorityName' disabled placeholder='관련전거' style='border-radius: 0px'>" +
+    "                                                            </li>",
+    initView: function () {
+        this.initEvent();
+    },
+    initEvent: function () {
+        var _this = this;
+        $("#creatorArea, #authorityArea").on("click", ".addAuthoritiesInfo >li a", function(event){
+            _this.addChild($(event.delegateTarget).find(".childDnrInfo"));
+        });
+
+        $(".serv_cont").on("change",".authorityUuid",function(){
+            if("saved" == $(this).parents().eq(2).attr("saveType"))
+            {
+                $(this).parents().eq(2).find("input[data-ax-path='__modified__']").val(true);
+                isChanged = true;
+            }
+        });
+
+        $("#creatorArea, #authorityArea, #repositoriesArea, #sourceAcquisitionArea").on("click",".searchAuthority",function(event){
+            var parentTarget = $(event.target).parents().eq(2);
+            var delegateTarget = $(event.delegateTarget);
+            axboot.modal.open({
+                modalType: "AUTHORITY_POPUP",
+                header: {
+                    title: "Authority List"
+                },
+                sendData: function () {
+                    return null;
+                },
+                callback: function (data) {
+                    if(this) this.close();
+                    if(data){
+                        parentTarget.find("input[data-ax-path='authorityUuid']").val(data["authorityUuid"]);
+                        parentTarget.find("input[data-ax-path='authorityName']").val(data["authorityName"]);
+
+                        if(delegateTarget.attr("id") == "repositoriesArea") {
+                            fnObj.formView.setFormData("repositoriesUuid", data["authorityUuid"]);
+                            fnObj.formView.setFormData("repositoriesName", data["authorityName"]);
+                        }
+
+                        if(delegateTarget.attr("id") == "sourceAcquisitionArea") {
+                            fnObj.formView.setFormData("sourceAcquisitionUuid", data["authorityUuid"]);
+                            fnObj.formView.setFormData("sourceAcquisitionName", data["authorityName"]);
+                        }
+
+                        parentTarget.find("input[data-ax-path='authorityUuid']").trigger('change');
+                    }
+                }
+            });
+        });
+
+
+        $("#creatorArea, #authorityArea, #repositoriesArea, #sourceAcquisitionArea").on("click",".btn_del_left",function(event){
+            var delegateTarget = $(event.delegateTarget);
+
+            if(delegateTarget.attr("id") == "repositoriesArea") {
+                fnObj.formView.setFormData("repositoriesUuid", "");
+                fnObj.formView.setFormData("repositoriesName", "");
+                return;
+            }
+
+            if(delegateTarget.attr("id") == "sourceAcquisitionArea") {
+                fnObj.formView.setFormData("sourceAcquisitionUuid", "");
+                fnObj.formView.setFormData("sourceAcquisitionName", "");
+                return;
+            }
+
+            if("create" == $(this).parents().eq(1).attr("saveType"))
+            {
+                $(this).parents().eq(1).remove();
+            }
+            else
+            {
+                $(this).parents().eq(1).hide();
+                $(this).parents().eq(1).find("input[data-ax-path='__deleted__']").val(true);
+                $(this).parents().eq(1).find("input[data-ax-path='__modified__']").val(false);
+            }
+        });
+    },
+    addChild : function(_this,data){
+        var cloneTag = "";
+        if(data != null && data != undefined) {
+            cloneTag = $("<ul style='margin: 0px 5px 10px 0px;'>").addClass("auth_fit").attr("data-ax-path", "saveType").attr("saveType", "saved").html(fnObj.authorityInfo.template).clone();
+            cloneTag.find("input[data-ax-path='aggAuthorityUuid']").val(data["aggAuthorityUuid"]);
+            cloneTag.find("input[data-ax-path='authorityName']").val(data["authorityName"]);
+            cloneTag.find("input[data-ax-path='authorityUuid']").val(data["authorityUuid"]);
+            cloneTag.find("input[data-ax-path='__created__']").val(data["__created__"]);
+            cloneTag.find("input[data-ax-path='__deleted__']").val(data["__deleted__"]);
+            cloneTag.find("input[data-ax-path='__modified__']").val(data["__modified__"]);
+        }else{
+            cloneTag = $("<ul style='margin: 0px 5px 10px 0px;'>").addClass("auth_fit").attr("data-ax-path","saveType").attr("saveType","created").html(fnObj.authorityInfo.template).clone();
+            cloneTag.find("input[data-ax-path='__created__']").val(true);
+        }
+        $(_this).before(cloneTag);
+        cloneTag.show();
+    },
+    getData : function(target){
+        var retData = new Array();
+        var data = {};
+        var targetTag = $("#"+target);
+
+        if(targetTag.css("display") != "none")
+        {
+            targetTag.find(">ul:not(.addAuthoritiesInfo)").each(function(){
+                data = {};
+                data["saveType"] = $(this).attr("saveType");
+                $(this).find("input,select,textarea").each(function(){
+                    if($(this).attr("data-ax-path")) {
+                        if ($(this).attr($(this).attr("data-ax-path")))
+                            data[$(this).attr("data-ax-path")] = $(this).attr($(this).attr("data-ax-path"));
+                        else
+                            data[$(this).attr("data-ax-path")] = $(this).val();
+                    }
+                });
+
+                if(target == "creatorArea"){
+                    data["aggregationCreatorUuid"] = data["aggAuthorityUuid"];
+                    data["creatorUuid"] = data["authorityUuid"];
+                }else if(target == "authorityArea"){
+                    data["aggrRelatedAuthorityUuid"] = data["aggAuthorityUuid"];
+                }
+
+                // retData.push(data);
+                if(data["authorityUuid"] && data["authorityUuid"] != "" ){
+                    retData.push(data);
+                }
+            });
+        }
+        return retData;
+    },
+    setData : function(target, data){
+        $("#" + target).remove(".auth_fit");
+
+        if(data != null && data != "undefined" && data.length > 0){
+            data.forEach(function(item, index){
+                if(target == "creatorArea"){
+                    item["aggAuthorityUuid"] = item["aggregationCreatorUuid"];
+                    item["authorityUuid"] = item["creatorUuid"];
+                    item["authorityName"] = item["creatorName"];
+                }else if(target == "authorityArea"){
+                    item["aggAuthorityUuid"] = item["aggrRelatedAuthorityUuid"];
+                }
+                fnObj.authorityInfo.addChild($("#" + target).find(".childDnrInfo"), item);
+            });
+        }
+    }
+});
+
 setFormData = function(data){
+    currentData = data;
+
     aggregationUuid = data.aggregationUuid;
     parentAggregationUuid = data.parentAggregationUuid;
     nodeType = data.typeNm;
 
+    for(var columnName in data)
+    {
+        switch(columnName)
+        {
+            case "name":
+                fnObj.formView.setFormData("title",data[columnName]);
+                break;
+            case "descriptionStartDate":
+            case "descriptionEndDate":
+            case "creationStartDate":
+            case "creationEndDate":
+            case "accumulationStartDate":
+            case "accumulationEndDate":
+                $("input[data-ax-path='"+columnName+"']").val(getFormattedDate(data[columnName]));
+                break;
+            case "creatorList" :
+                fnObj.authorityInfo.setData("creatorArea", data[columnName]);
+                break;
+            case "relatedAuthorityList" :
+                fnObj.authorityInfo.setData("authorityArea", data[columnName]);
+                break;
+            default:
+                fnObj.formView.setFormData(columnName,data[columnName]);
+                break;
+        }
+    }
+
     fnObj.formView.setFormData("rcHeadTitle",data.headTitle);
     fnObj.formView.setFormData("navi",navi);
-    fnObj.formView.setFormData("rcTitle",data.name);
-    fnObj.formView.setFormData("rcPublishedStatus",data.publishedStatusName);
-    fnObj.formView.setFormData("rcLevel",data.levelCode);
-    fnObj.formView.setFormData("rcDescription",data.description);
-    fnObj.formView.setFormData("rcNotes",data.notes);
-    fnObj.formView.setFormData("rcType",data.typeNm);
-    fnObj.formView.setFormData("rcAuthor",data.author);
-    fnObj.formView.setFormData("rcFrom",data.parentAggregationName);
-    fnObj.formView.setFormData("rcAggregationCode",data.aggregationCode);
-    if(data.descriptionStartDate != "undefined" || data.descriptionStartDate != null) {
-        if (data.descriptionStartDate == data.descriptionEndDate || data.descriptionEndDate == "undefined" || data.descriptionEndDate == null) {
-            fnObj.formView.setFormData("rcDateOfDescription", dateFormatter(data.descriptionStartDate));
-        } else {
-            fnObj.formView.setFormData("rcDateOfDescription", dateFormatter(data.descriptionStartDate) + ' ~ ' + dateFormatter(data.descriptionEndDate));
-        }
-    }
-    fnObj.formView.setFormData("rcProvenance",data.provenance);
-    fnObj.formView.setFormData("rcReferenceCode",data.referenceCode);
-    fnObj.formView.setFormData("rcCreator",data.creator);
-    if(data.creationStartDate != "undefined" || data.creationStartDate != null) {
-        if (data.creationStartDate == data.creationEndDate || data.creationEndDate == "undefined" || data.creationEndDate == null) {
-            fnObj.formView.setFormData("rcDateOfCreation", dateFormatter(data.creationStartDate));
-        } else {
-            fnObj.formView.setFormData("rcDateOfCreation", dateFormatter(data.creationStartDate) + ' ~ ' + dateFormatter(data.creationEndDate));
-        }
-    }
 
-    fnObj.formView.setFormData("rcAddMetadata01",data.addMetadata01);
-    fnObj.formView.setFormData("rcAddMetadata02",data.addMetadata02);
-    fnObj.formView.setFormData("rcAddMetadata03",data.addMetadata03);
-    fnObj.formView.setFormData("rcAddMetadata04",data.addMetadata04);
-    fnObj.formView.setFormData("rcAddMetadata05",data.addMetadata05);
-    fnObj.formView.setFormData("rcAddMetadata06",data.addMetadata06);
-    fnObj.formView.setFormData("rcAddMetadata07",data.addMetadata07);
-    fnObj.formView.setFormData("rcAddMetadata08",data.addMetadata08);
-    fnObj.formView.setFormData("rcAddMetadata09",data.addMetadata09);
-    fnObj.formView.setFormData("rcAddMetadata10",data.addMetadata10);
+    ACTIONS.dispatch(ACTIONS.GET_META_TEMPLATE, data.addMetaTemplateSetUuid);
+}
 
+function setAdditionalMeta(segmentList){
+    var targetTag = $('#addConMetaArea');
+    var cloneTag = null;
+    var cloneInput = null;
+    var dataPath = "";
+    var option = "";
+
+    $("#addConMetaArea .meta-ui").remove();
+
+    segmentList.forEach(function(item, idx){
+        if(item.displayedYN != "Y") return true;
+
+        dataPath = "addMetadata" + item.additionalColumn.replace("ADD_METADATA", "");
+
+        cloneTag = $('#addConMetaArea #metaTemplate').clone();
+        cloneTag.addClass("meta-ui");
+        cloneTag.attr("id", item.additionalColumn);
+        cloneTag.find(".meta-label").html(item.name);
+
+        targetTag.append(cloneTag);
+
+        if(item.hasOwnProperty("popupUuid")) {
+            cloneInput = cloneTag.find(".meta-combo");
+
+            cloneInput.show();
+            cloneTag.find(".meta-input").hide();
+
+            axboot.commonCodeVO(item.popupCode).forEach(function(codeVO, idx) {
+                option = $("<option value='"+ codeVO["codeDetailUUID"] +"'>"+codeVO["codeName"]+"</option>");
+                cloneInput.append(option);
+            });
+        }else {
+            cloneInput = cloneTag.find(".meta-input");
+
+            cloneInput.show();
+            cloneTag.find(".meta-combo").hide();
+        }
+
+        cloneInput.on("keyup change",function(event){
+            isDetailChanged = true;
+            currentData[$(event.target).attr("data-ax-path")] = $(event.target).val();
+            fnObj.formView.setFormData($(event.target).attr("data-ax-path"), $(event.target).val());
+        });
+
+        cloneInput.attr("title", item.name);
+        cloneInput.attr("data-ax-path", dataPath);
+        if(item.requiredYN == "Y"){
+            cloneInput.attr("data-ax-validate", "required");
+        }
+
+        cloneInput.css("width", item.displaySize == 0 ? "100%" : item.displaySize);
+
+        fnObj.formView.setFormData(dataPath, currentData[dataPath]);
+
+        cloneTag.show();
+    });
+
+    //fnObj.formView.setData(currentData);
 }
 
 function dateFormatter(orgDate){
@@ -484,4 +731,13 @@ function dateFormatter(orgDate){
     var day = orgDate.substring(6, 8);
 
     return year + '-' + month + '-' + day;
+}
+
+function getFormattedDate(str) {
+    if(str == "undefined" || str == null) return;
+    if(str.length == 8) {
+        return str.substr(0, 4) + "-" + str.substr(4, 2) + "-" + str.substr(6);
+    } else {
+        return str;
+    }
 }

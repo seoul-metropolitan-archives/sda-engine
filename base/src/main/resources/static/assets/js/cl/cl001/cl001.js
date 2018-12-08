@@ -1,8 +1,9 @@
 var fnObj = {};
-var selectedItem ; //선택된 그리드 아이템
 var CONFIRM_STATUS = "Confirm";
 var CANCEL_STATUS = "Draft";
 var isDetailChanged = false;
+var currentData = null;
+const ENTITY_TYPE = "CL_CLASSIFICATION_SCHEME_CON";
 
 $( function() {
     $('.detail_wrap').accordion();
@@ -47,10 +48,6 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH1: function (caller, act, data) {
         var sendData = fnObj.gridView01.getSelectedData();
 
-        if(data){
-            sendData["addMetaTemplateSetUuid"] = data;
-        }
-
         axboot.ajax({
             type: "GET",
             url: "/api/v1/cl001/02/detail",
@@ -60,6 +57,8 @@ var ACTIONS = axboot.actionExtend(fnObj, {
 
                 if(!selectedData)
                     return ;
+
+                currentData = res;
 
                 fnObj.formView.setFormData("managerOrganization",res.managerOrganization);
                 fnObj.formView.setFormData("manager",res.manager);
@@ -72,70 +71,9 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 fnObj.formView.setFormData("aggregationCnt",res.aggregationCnt);
                 fnObj.formView.setFormData("itemCnt",res.itemCnt);
 
-                if(data) {
-                    fnObj.formView.setFormData("addMetaTemplateSetUuid", data);
-                }else{
-                    fnObj.formView.setFormData("addMetaTemplateSetUuid", res.addMetaTemplateSetUuid);
-                }
+                fnObj.formView.setFormData("addMetaTemplateSetUuid", res.addMetaTemplateSetUuid);
 
-                var segmentList = res.segmentList;
-                var targetTag = $('#addConMetaArea');
-                var cloneTag = null;
-                var cloneInput = null;
-                var dataPath = "";
-                var option = "";
-
-                $(".meta-ui").remove();
-
-                segmentList.forEach(function(item, idx){
-                    if(item.displayedYN != "Y") return true;
-
-                    dataPath = "addMetadata" + item.additionalColumn.replace("ADD_METADATA", "");
-
-                    cloneTag = $('#addConMetaArea #template').clone();
-                    cloneTag.addClass("meta-ui");
-                    cloneTag.attr("id", item.additionalColumn);
-                    cloneTag.find(".meta-label").html(item.name);
-
-                    targetTag.append(cloneTag);
-
-                    if(item.hasOwnProperty("popupUuid")) {
-                        cloneInput = cloneTag.find(".meta-combo");
-
-                        cloneInput.show();
-                        cloneTag.find(".meta-input").hide();
-
-                        axboot.commonCodeVO(item.popupCode).forEach(function(codeVO, idx) {
-                            option = $("<option value='"+ codeVO["codeDetailUUID"] +"'>"+codeVO["codeName"]+"</option>");
-                            cloneInput.append(option);
-                        });
-
-                        cloneInput.change(function(){
-                            isDetailChanged = true;
-                        });
-                    }else {
-                        cloneInput = cloneTag.find(".meta-input");
-
-                        cloneInput.show();
-                        cloneTag.find(".meta-combo").hide();
-
-                        cloneInput.keyup(function(){
-                            isDetailChanged = true;
-                        });
-                    }
-
-                    cloneInput.attr("title", item.name);
-                    cloneInput.attr("data-ax-path", dataPath);
-                    if(item.requiredYN == "Y"){
-                        cloneInput.attr("data-ax-validate", "required");
-                    }
-
-                    fnObj.formView.setFormData(dataPath, res[dataPath]);
-
-                    cloneTag.show();
-                });
-
-                fnObj.formView.setData(fnObj.formView.getData());
+                ACTIONS.dispatch(ACTIONS.GET_META_TEMPLATE, res.addMetaTemplateSetUuid);
             },
             options: {
                 onError: axboot.viewError
@@ -226,6 +164,20 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     MENU_OPEN: function (caller,act, data){
 
     },
+    GET_META_TEMPLATE: function (caller, act, data) {
+        axboot.ajax({
+            type: "GET",
+            url: "/api/v1/ad/ad007/listSub",
+            data: $.extend({}, {pageSize: 1000}, {addMetaTemplateSetUuid : data, entityType : ENTITY_TYPE}),
+            callback: function (res) {
+                setAdditionalMeta(res.list);
+            },
+            options: {
+                onError: axboot.viewError
+            }
+        });
+        return false;
+    },
     dispatch: function (caller, act, data) {
         var result = ACTIONS.exec(caller, act, data);
         if (result != "error") {
@@ -263,7 +215,7 @@ fnObj.pageStart = function () {
 
     //alert(templateList);
     $("[data-ax-path='addMetaTemplateSetUuid']").on("change", function(){
-        ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, $("[data-ax-path='addMetaTemplateSetUuid']").val());
+        ACTIONS.dispatch(ACTIONS.GET_META_TEMPLATE, $("[data-ax-path='addMetaTemplateSetUuid']").val());
         isDetailChanged = true;
     });
 
@@ -404,6 +356,62 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
         }
     }
 });
+
+function setAdditionalMeta(segmentList){
+    var targetTag = $('#addConMetaArea');
+    var cloneTag = null;
+    var cloneInput = null;
+    var dataPath = "";
+    var option = "";
+
+    $(".meta-ui").remove();
+
+    segmentList.forEach(function(item, idx){
+        if(item.displayedYN != "Y") return true;
+
+        dataPath = "addMetadata" + item.additionalColumn.replace("ADD_METADATA", "");
+
+        cloneTag = $('#addConMetaArea #template').clone();
+        cloneTag.addClass("meta-ui");
+        cloneTag.attr("id", item.additionalColumn);
+        cloneTag.find(".meta-label").html(item.name);
+
+        targetTag.append(cloneTag);
+
+        if(item.hasOwnProperty("popupUuid")) {
+            cloneInput = cloneTag.find(".meta-combo");
+
+            cloneInput.show();
+            cloneTag.find(".meta-input").hide();
+
+            axboot.commonCodeVO(item.popupCode).forEach(function(codeVO, idx) {
+                option = $("<option value='"+ codeVO["codeDetailUUID"] +"'>"+codeVO["codeName"]+"</option>");
+                cloneInput.append(option);
+            });
+        }else {
+            cloneInput = cloneTag.find(".meta-input");
+
+            cloneInput.show();
+            cloneTag.find(".meta-combo").hide();
+        }
+
+        cloneInput.on("keyup change",function(event){
+            isDetailChanged = true;
+            currentData[$(event.target).attr("data-ax-path")] = $(event.target).val();
+            fnObj.formView.setFormData($(event.target).attr("data-ax-path"), $(event.target).val());
+        });
+
+        cloneInput.attr("title", item.name);
+        cloneInput.attr("data-ax-path", dataPath);
+        if(item.requiredYN == "Y"){
+            cloneInput.attr("data-ax-validate", "required");
+        }
+
+        fnObj.formView.setFormData(dataPath, currentData[dataPath]);
+
+        cloneTag.show();
+    });
+}
 
 /**
  * [필수]

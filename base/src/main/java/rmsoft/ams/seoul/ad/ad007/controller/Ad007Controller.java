@@ -39,7 +39,7 @@ public class Ad007Controller extends BaseController {
      * @return the responses . list response
      */
     @GetMapping("/listSub")
-    public Responses.ListResponse searchSegment(RequestParams<Ad00702VO> param) {
+    public Responses.ListResponse searchSegment(RequestParams<Ad00701VO> param) {
         return Responses.ListResponse.of(ad007Service.searchSegment(param));
     }
 

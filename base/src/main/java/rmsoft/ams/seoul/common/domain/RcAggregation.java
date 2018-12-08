@@ -43,7 +43,7 @@ public class RcAggregation extends BaseJpaModel<RcAggregation.RcAggregationId> {
     private String typeUuid;
     @Column(name = "PARENT_AGGREGATION_UUID", length = 36, nullable = true)
     @Comment(value = "부모 AGGREGATION_UUID")
-    private String parentsAggregationUuid;
+    private String parentAggregationUuid;
     @Column(name = "LEVEL_UUID", length = 36, nullable = true)
     @Comment(value = "계층 UUID")
     private String levelUuid;
@@ -56,7 +56,15 @@ public class RcAggregation extends BaseJpaModel<RcAggregation.RcAggregationId> {
     @Column(name = "DESCRIPTION_END_DATE", length = 8, nullable = true)
     @Comment(value = "")
     private String descriptionEndDate;
-
+    @Column(name = "LANGUAGE_CODE", length = 8, nullable = true)
+    @Comment(value = "")
+    private String languageCode;
+    @Column(name = "STATUS_DESCRIPTION", length = 8, nullable = true)
+    @Comment(value = "")
+    private String statusDescription;
+    @Column(name = "LEVEL_OF_DETAIL_UUID", length = 8, nullable = true)
+    @Comment(value = "")
+    private String levelOfDetailUuid;
 
 
     @Override

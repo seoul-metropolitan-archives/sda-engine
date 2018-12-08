@@ -87,7 +87,7 @@ public class Wf999Service extends BaseService {
                 Rc002VO rc002VO = new Rc002VO();
                 Rc00201VO rc00201VO = new Rc00201VO();
                 rc00201VO.setAggregationUuid(rootAggregationUUID);
-                rc00201VO.setParentsAggregationUuid(rc00501VO.getRaAggregationUuid());
+                rc00201VO.setParentAggregationUuid(rc00501VO.getRaAggregationUuid());
                 rc00201VO.setTitle(getFileNameNoExt(rc00502VO.getFileName()));
 
                 rc002VO.setSystemMeta(rc00201VO);
@@ -153,7 +153,7 @@ public class Wf999Service extends BaseService {
                     Rc002VO rc002VO = new Rc002VO();
                     Rc00201VO rc00201VO = new Rc00201VO();
                     rc00201VO.setAggregationUuid(aggregationUUID);
-                    rc00201VO.setParentsAggregationUuid(parentAggregationUUID);
+                    rc00201VO.setParentAggregationUuid(parentAggregationUUID);
                     rc00201VO.setTitle(path.getFileName().toString());
 
                     rc002VO.setSystemMeta(rc00201VO);
@@ -224,7 +224,7 @@ public class Wf999Service extends BaseService {
             Rc002VO rc002VO = new Rc002VO();
             Rc00201VO rc00201VO = new Rc00201VO();
             rc00201VO.setAggregationUuid(rootAggregationUUID);
-            rc00201VO.setParentsAggregationUuid("");
+            rc00201VO.setParentAggregationUuid("");
             rc00201VO.setTitle("표준RMS_" + DateUtils.getNow(DateUtils.DATE_PATTERN));
 
             rc002VO.setSystemMeta(rc00201VO);
@@ -238,7 +238,7 @@ public class Wf999Service extends BaseService {
 
                 String aggregationUUID = UUIDUtils.getUUID();
                 rc00201VO.setAggregationUuid(aggregationUUID);
-                rc00201VO.setParentsAggregationUuid(rootAggregationUUID);
+                rc00201VO.setParentAggregationUuid(rootAggregationUUID);
                 rc00201VO.setTitle(aggregation.get("TITLE").toString());
 
                 Rc00202VO rc00202VO = new Rc00202VO();

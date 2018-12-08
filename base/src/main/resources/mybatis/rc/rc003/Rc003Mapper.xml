@@ -21,6 +21,9 @@
         <result property="description" column="description" />
         <result property="notes" column="notes" />
         <result property="typeNm" column="typeNm" />
+        <result property="languageCode" column="languageCode" />
+        <result property="statusDescription" column="statusDescription" />
+        <result property="levelOfDetailUuid" column="levelOfDetailUuid" />
         <result property="provenance" column="provenance" />
         <result property="referenceCode" column="referenceCode" />
         <result property="creator" column="creator" />
@@ -41,6 +44,27 @@
         <result property="insertDate" column="insertDate" />
         <result property="updateUuid" column="updateUuid" />
         <result property="updateDate" column="updateDate" />
+        <result property="sourceSystemUuid" column="sourceSystemUuid" />
+        <result property="creationSystemUuid" column="creationSystemUuid" />
+        <result property="addMetaTemplateSetUuid" column="addMetaTemplateSetUuid" />
+        <result property="legalStatusUuid" column="legalStatusUuid" />
+        <result property="repositoriesUuid" column="repositoriesUuid" />
+        <result property="repositoriesName" column="repositoriesName" />
+        <result property="electronicRecordStatusUuid" column="electronicRecordStatusUuid" />
+        <result property="accumulationStartDate" column="accumulationStartDate" />
+        <result property="accumulationEndDate" column="accumulationEndDate" />
+        <result property="scopeContent" column="scopeContent" />
+        <result property="arrangement" column="arrangement" />
+        <result property="accruals" column="accruals" />
+        <result property="custodialHistory" column="custodialHistory" />
+        <result property="sourceAcquisitionUuid" column="sourceAcquisitionUuid" />
+        <result property="sourceAcquisitionName" column="sourceAcquisitionName" />
+        <result property="physicalCondition" column="physicalCondition" />
+        <result property="useCondition" column="useCondition" />
+        <result property="findingAids" column="findingAids" />
+        <result property="rulesConversionUuid" column="rulesConversionUuid" />
+        <result property="recordScheduleUuid" column="recordScheduleUuid" />
+        <result property="accessCondition" column="accessCondition" />
     </resultMap>
     <select id="getRecordAggregationList" resultMap="getAggInfoMap" statementType="PREPARED">
         SELECT
@@ -66,6 +90,9 @@
           Z1.DESCRIPTION as description,
           Z1.NOTES as notes,
           Z1.DESCRIPTION_END_DATE as descriptionEndDate,
+          Z1.LANGUAGE_CODE as languageCode,
+          Z1.STATUS_DESCRIPTION as statusDescription,
+          Z1.LEVEL_OF_DETAIL_UUID as levelOfDetailUuid,
           Z2.PROVENANCE as provenance,
           Z2.REFERENCE_CODE as referenceCode,
           Z2.CREATOR as creator,
@@ -85,7 +112,28 @@
           <include refid="Common.UserName"><property name="userUuid" value="INSERT_UUID"/></include> as insertUuid,
           Z1.INSERT_DATE as insertDate,
           <include refid="Common.UserName"><property name="userUuid" value="UPDATE_UUID"/></include> as updateUuid,
-          Z1.UPDATE_DATE as updateDate
+          Z1.UPDATE_DATE as updateDate,
+          Z2.SOURCE_SYSTEM_UUID as sourceSystemUuid,
+          Z2.CREATION_SYSTEM_UUID as creationSystemUuid,
+          Z2.ADD_META_TEMPLATE_SET_UUID as addMetaTemplateSetUuid,
+          Z2.LEGAL_STATUS_UUID as legalStatusUuid,
+          Z2.REPOSITORIES_UUID as repositoriesUuid,
+          (SELECT AUTHORITY_NAME FROM AT_AUTHORITY WHERE AUTHORITY_UUID = Z2.REPOSITORIES_UUID) as repositoriesName,
+          Z2.ELECTRONIC_RECORD_STATUS_UUID as electronicRecordStatusUuid,
+          Z2.ACCUMULATION_START_DATE as accumulationStartDate,
+          Z2.ACCUMULATION_END_DATE as accumulationEndDate,
+          Z2.SCOPE_CONTENT as scopeContent,
+          Z2.ARRANGEMENT as arrangement,
+          Z2.ACCRUALS as accruals,
+          Z2.CUSTODIAL_HISTORY as custodialHistory,
+          Z2.SOURCE_ACQUISITION_UUID as sourceAcquisitionUuid,
+          (SELECT AUTHORITY_NAME FROM AT_AUTHORITY WHERE AUTHORITY_UUID = Z2.SOURCE_ACQUISITION_UUID) as sourceAcquisitionName,
+          Z2.PHYSICAL_CONDITION as physicalCondition,
+          Z2.USE_CONDITION as useCondition,
+          Z2.FINDING_AIDS as findingAids,
+          Z2.RULES_CONVERSION_UUID as rulesConversionUuid,
+          Z2.RECORD_SCHEDULE_UUID as recordScheduleUuid,
+          Z2.ACCESS_CONDITION as accessCondition
         FROM
         RC_AGGREGATION Z1,RC_AGGREGATION_CON Z2
         WHERE
@@ -95,5 +143,25 @@
             Z1.AGGREGATION_UUID = #{aggregationUuid}
         </if>
         CONNECT BY PRIOR Z1.PARENT_AGGREGATION_UUID = Z1.AGGREGATION_UUID
+    </select>
+
+    <select id="getCreatorList" resultType="Rc00207VO" parameterType="String" statementType="PREPARED">
+        SELECT
+          AGGREGATION_CREATOR_UUID as aggregationCreatorUuid,
+          CREATOR_UUID as creatorUuid,
+          (SELECT AUTHORITY_NAME FROM AT_AUTHORITY WHERE AUTHORITY_UUID = T1.CREATOR_UUID) as creatorName
+        FROM RC_AGGREGATION_CREATOR T1
+        WHERE AGGREGATION_UUID = #{aggregationUuid}
+        ORDER BY INSERT_DATE ASC
+    </select>
+
+    <select id="getRelatedAuthorityList" resultType="Rc00209VO" parameterType="String" statementType="PREPARED">
+        SELECT
+          AGGR_RELATED_AUTHORITY_UUID as aggrRelatedAuthorityUuid,
+          AUTHORITY_UUID as authorityUuid,
+          (SELECT AUTHORITY_NAME FROM AT_AUTHORITY WHERE AUTHORITY_UUID = T1.AUTHORITY_UUID) as authorityName
+        FROM RC_AGGR_RELATED_AUTHORITY T1
+        WHERE AGGREGATION_UUID = #{aggregationUuid}
+        ORDER BY INSERT_DATE ASC
     </select>
 </mapper>

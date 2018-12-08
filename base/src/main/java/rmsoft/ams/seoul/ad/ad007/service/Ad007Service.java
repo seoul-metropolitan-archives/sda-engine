@@ -56,11 +56,12 @@ public class Ad007Service extends BaseService {
      * @param param the param
      * @return the list
      */
-    public List<Ad00702VO> searchSegment(RequestParams<Ad00702VO> param) {
-        Ad00702VO ad00702VO = new Ad00702VO();
-        ad00702VO.setAddMetaTemplateSetUuid(param.getString("addMetaTemplateSetUuid"));
+    public List<Ad00702VO> searchSegment(RequestParams<Ad00701VO> param) {
+        Ad00701VO ad00701VO = new Ad00701VO();
+        ad00701VO.setAddMetaTemplateSetUuid(param.getString("addMetaTemplateSetUuid"));
+        ad00701VO.setEntityType(param.getString("entityType"));
 
-        return mapper.searchSegment(ad00702VO);
+        return mapper.searchSegment(ad00701VO);
     }
 
     /**

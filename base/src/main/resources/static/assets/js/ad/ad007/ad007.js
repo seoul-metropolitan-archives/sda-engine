@@ -13,7 +13,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         axboot.ajax({
             type: "GET",
             url: "/api/v1/ad/ad007/list",
-            data: $.extend({}, {pageSize: 1000, sort: "eventCode"}, sendData),
+            data: $.extend({}, {pageSize: 1000, sort: "entityType"}, sendData),
             callback: function (res) {
                 if(res.list == null || res.list.length <= 0){
                     fnObj.gridView01.setData([]);
@@ -30,7 +30,6 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 onError: axboot.viewError
             }
         });
-        return false;
     },
     PAGE_SEARCH1: function (caller, act, data) {
         var selectedData = fnObj.gridView01.getSelectedData();
@@ -38,12 +37,12 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         if(!selectedData)
             return;
 
-        fnObj.formView.setFormData("eventNameTxt", selectedData.eventName);
+        //fnObj.formView.setFormData("eventNameTxt", selectedData.eventName);
 
         axboot.ajax({
             type: "GET",
             url: "/api/v1/ad/ad007/listSub",
-            data: $.extend({}, {pageSize: 1000}, fnObj.gridView01.getSelectedData()),
+            data: $.extend({}, {pageSize: 1000}, selectedData),
             callback: function (res) {
                 fnObj.gridView02.setData(res.list);
             },
@@ -51,7 +50,6 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 onError: axboot.viewError
             }
         });
-        return false;
     },
     ERROR_SEARCH: function (caller, act, data) {
     },
@@ -246,7 +244,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
             indicator: {visible: true}
         })
         this.makeGrid();
-        this.gridObj.setValidations([]);
+        //this.gridObj.setValidations([]);
         this.gridObj.itemClick(this.itemClick);
     },
     getSelectedData : function(){
@@ -257,26 +255,28 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
 
     },
     itemClick: function (data, index) {
-        var rowData = fnObj.gridView01.gridObj.getJsonRows();
+        //var rowData = fnObj.gridView01.gridObj.getJsonRows();
+
+        if(index['column'] == "defaultYN" || index['column'] == "useYN"){
+            return;
+        }
 
         if (data.addMetaTemplateSetUuid != null && data.addMetaTemplateSetUuid != "") {
-                if(fnObj.gridView02.getData().length > 0) {
-                    axDialog.confirm({
-                        msg: axboot.getCommonMessage("AA006")
-                    }, function () {
-                        if (this.key == "ok") {
-                            ACTIONS.dispatch(ACTIONS.BOTTOM_GRID_SAVE);
-                        } else {
-                            isDetailChanged = false;
-                            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, data);
-                        }
-                    });
-                }else{
-                    isDetailChanged = false;
-                    ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, data);
-                }
-            } else {
+            if(fnObj.gridView02.getData().length > 0) {
+                axDialog.confirm({
+                    msg: axboot.getCommonMessage("AA006")
+                }, function () {
+                    if (this.key == "ok") {
+                        ACTIONS.dispatch(ACTIONS.BOTTOM_GRID_SAVE);
+                    } else {
+                        isDetailChanged = false;
+                        ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, data);
+                    }
+                });
+            }else{
+                isDetailChanged = false;
                 ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, data);
+            }
         }
     }
 });
@@ -300,7 +300,7 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
         })
         this.makeGrid();
         this.gridObj.setValidations([]);
-        this.gridObj.onCellEdited(this.rowEditHandler);
+        //this.gridObj.onCellEdited(this.rowEditHandler);
     },
     getSelectedData : function(){
         return this.gridObj.getSelectedData();

@@ -624,7 +624,8 @@ function contextMenuClick(ui, treeData){
             item = getMenu("add aggregation");
             item.menuParams = $.extend({},{
                 parentUuid : selectedData[0].parentUuid,
-                uuid : selectedData[0].uuid
+                uuid : selectedData[0].uuid,
+                nodeType : selectedData[0].nodeType
             },{type: "update"},{navi : fnObj.naviView.getPathString()},{title : selectedData[0]["name"]});
             parentsObj.tabView.open(item);
             break;
@@ -3067,7 +3068,7 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
                 data["riAuthor"] = data["author"];
                 ACTIONS.dispatch(ACTIONS.ITEM_SAVE, data);
             }else {
-                data["parentsAggregationUuid"] = fnObj.naviView.getCurrent()["uuid"];
+                data["parentAggregationUuid"] = fnObj.naviView.getCurrent()["uuid"];
                 data["typeUuid"] = data["aggregationTypeUuid"];
                 ACTIONS.dispatch(ACTIONS.AGG_SAVE, data);
             }
@@ -3095,7 +3096,7 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
                 data["riAuthor"] = data["author"];
                 ACTIONS.dispatch(ACTIONS.ITEM_SAVE, data);
             }else {
-                data["parentsAggregationUuid"] = fnObj.naviView.getCurrent()["uuid"];
+                data["parentAggregationUuid"] = fnObj.naviView.getCurrent()["uuid"];
                 data["typeUuid"] = fnObj.formView.getData()["aggregationTypeUuid"];
                 ACTIONS.dispatch(ACTIONS.AGG_SAVE, data);
             }

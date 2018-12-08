@@ -10,13 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import rmsoft.ams.seoul.common.domain.RcAggregation;
-import rmsoft.ams.seoul.common.domain.RcAggregationCon;
-import rmsoft.ams.seoul.common.domain.RcRecordReference;
-import rmsoft.ams.seoul.common.repository.RcAggregationConRepository;
-import rmsoft.ams.seoul.common.repository.RcAggregationRepository;
-import rmsoft.ams.seoul.common.repository.RcLevelRepository;
-import rmsoft.ams.seoul.common.repository.RcRecordReferenceRepository;
+import rmsoft.ams.seoul.common.domain.*;
+import rmsoft.ams.seoul.common.repository.*;
 import rmsoft.ams.seoul.rc.rc002.dao.Rc002Mapper;
 import rmsoft.ams.seoul.rc.rc002.vo.Rc00204VO;
 import rmsoft.ams.seoul.rc.rc002.vo.Rc00205VO;
@@ -30,8 +25,7 @@ import java.util.List;
  * The type Rc 002 service.
  */
 @Service("Rc002Service")
-public class Rc002Service extends BaseService
-{
+public class Rc002Service extends BaseService {
 
     @Autowired
     private RcLevelRepository rcLevelRepository;
@@ -46,6 +40,18 @@ public class Rc002Service extends BaseService
     private RcRecordReferenceRepository rcRecordReferenceRepository;
 
     @Autowired
+    private RcAggregationCreatorRepository rcAggregationCreatorRepository;
+
+    @Autowired
+    private RcAggregationMaterialRepository rcAggregationMaterialRepository;
+
+    @Autowired
+    private RcAggrRelatedAuthorityRepository rcAggrRelatedAuthorityRepository;
+
+    @Autowired
+    private RcAggrRelatedRecordRepository rcAggrRelatedRecordRepository;
+
+    @Autowired
     private Rc002Mapper rc002Mapper;
 
     /**
@@ -53,8 +59,8 @@ public class Rc002Service extends BaseService
      *
      * @return the list
      */
-    public List<Rc00205VO> getLevel(){
-        return ModelMapperUtils.mapList(rcLevelRepository.findAll(),Rc00205VO.class);
+    public List<Rc00205VO> getLevel() {
+        return ModelMapperUtils.mapList(rcLevelRepository.findAll(), Rc00205VO.class);
     }
 
     /**
@@ -63,8 +69,7 @@ public class Rc002Service extends BaseService
      * @param data the data
      * @return the api response
      */
-    public ApiResponse save(Rc002VO data)
-    {
+    public ApiResponse save(Rc002VO data) {
 
         String uuid = "";
         boolean isCreate = false;
@@ -74,31 +79,36 @@ public class Rc002Service extends BaseService
         List<RcAggregation> childrenAggregation = null;
         List<RcRecordReference> referenceAggregation = null;
         List<RcRecordReference> referenceItem = null;
+        List<RcAggregationCreator> creatorList = null;
+        List<RcAggregationMaterial> materialList = null;
+        List<RcAggrRelatedAuthority> authorityList = null;
+        List<RcAggrRelatedRecord> recordList = null;
 
-        rcAggregation = ModelMapperUtils.map(data.getSystemMeta(),RcAggregation.class);
+        rcAggregation = ModelMapperUtils.map(data.getSystemMeta(), RcAggregation.class);
 
-        if(data.getContextualMeta() != null)
-            rcAggregationCon = ModelMapperUtils.map(data.getContextualMeta(),RcAggregationCon.class);
+        if (data.getContextualMeta() != null)
+            rcAggregationCon = ModelMapperUtils.map(data.getContextualMeta(), RcAggregationCon.class);
 
-        childrenAggregation = ModelMapperUtils.mapList(data.getChildrenAggregationList(),RcAggregation.class);
-        referenceAggregation = ModelMapperUtils.mapList(data.getReferenceAggregationList(),RcRecordReference.class);
-        referenceItem = ModelMapperUtils.mapList(data.getReferenceItemList(),RcRecordReference.class);
-        if(null == rcAggregation.getAggregationUuid() || rcAggregation.getAggregationUuid().equals(""))
-        {
+        childrenAggregation = ModelMapperUtils.mapList(data.getChildrenAggregationList(), RcAggregation.class);
+        referenceAggregation = ModelMapperUtils.mapList(data.getReferenceAggregationList(), RcRecordReference.class);
+        referenceItem = ModelMapperUtils.mapList(data.getReferenceItemList(), RcRecordReference.class);
+        creatorList = ModelMapperUtils.mapList(data.getCreatorList(), RcAggregationCreator.class);
+        materialList = ModelMapperUtils.mapList(data.getMaterialList(), RcAggregationMaterial.class);
+        authorityList = ModelMapperUtils.mapList(data.getRelatedAuthorityList(), RcAggrRelatedAuthority.class);
+        recordList = ModelMapperUtils.mapList(data.getRelatedRecordList(), RcAggrRelatedRecord.class);
+        if (null == rcAggregation.getAggregationUuid() || rcAggregation.getAggregationUuid().equals("")) {
             uuid = UUIDUtils.getUUID();
             rcAggregation.setAggregationUuid(uuid);
             String aggregationCode = jdbcTemplate.queryForObject("select fc_rc_aggregation_code from dual", String.class);
             rcAggregation.setAggregationCode(aggregationCode);
-            String descriptionStartDate = rcAggregation.getDescriptionStartDate() == null ? null : rcAggregation.getDescriptionStartDate().replace("-","");
+            String descriptionStartDate = rcAggregation.getDescriptionStartDate() == null ? null : rcAggregation.getDescriptionStartDate().replace("-", "");
             rcAggregation.setDescriptionStartDate(descriptionStartDate);
-            String descriptionEndDate = rcAggregation.getDescriptionEndDate() == null ? null : rcAggregation.getDescriptionEndDate().replace("-","");
+            String descriptionEndDate = rcAggregation.getDescriptionEndDate() == null ? null : rcAggregation.getDescriptionEndDate().replace("-", "");
             rcAggregation.setDescriptionEndDate(descriptionEndDate);
             rcAggregation.set__created__(true);
             isCreate = true;
             rcAggregationRepository.save(rcAggregation);
-        }
-        else
-        {
+        } else {
             uuid = rcAggregation.getAggregationUuid();
             RcAggregation before = rcAggregationRepository.findOne(rcAggregation.getId());
             rcAggregation.setInsertDate(before.getInsertDate());
@@ -111,24 +121,21 @@ public class Rc002Service extends BaseService
         }
 
 
-        if(isCreate)
-        {
+        if (isCreate) {
             rcAggregationCon.setAggregationUuid(uuid);
-            String creationStartDate = rcAggregationCon.getCreationStartDate() == null ? null : rcAggregationCon.getCreationStartDate().replace("-","");
+            String creationStartDate = rcAggregationCon.getCreationStartDate() == null ? null : rcAggregationCon.getCreationStartDate().replace("-", "");
             rcAggregationCon.setCreationStartDate(creationStartDate);
-            String creationEndDate = rcAggregationCon.getCreationEndDate() == null ? null : rcAggregationCon.getCreationEndDate().replace("-","");
+            String creationEndDate = rcAggregationCon.getCreationEndDate() == null ? null : rcAggregationCon.getCreationEndDate().replace("-", "");
             rcAggregationCon.setCreationEndDate(creationEndDate);
             rcAggregationCon.set__created__(true);
             rcAggregationConRepository.save(rcAggregationCon);
 
-            if(null != childrenAggregation)
-            {
-                for(RcAggregation child : childrenAggregation)
-                {
+            if (null != childrenAggregation) {
+                for (RcAggregation child : childrenAggregation) {
                     String aggregationCode = jdbcTemplate.queryForObject("select fc_rc_aggregation_code from dual", String.class);
                     child.setAggregationCode(aggregationCode);
                     child.setPublishedStatusUuid(rcAggregation.getPublishedStatusUuid());
-                    child.setParentsAggregationUuid(uuid);
+                    child.setParentAggregationUuid(uuid);
                     child.setTypeUuid(rcAggregation.getTypeUuid());
                     child.set__created__(true);
                     uuid = UUIDUtils.getUUID();
@@ -136,31 +143,24 @@ public class Rc002Service extends BaseService
                     rcAggregationRepository.save(child);
                 }
             }
-            if(null != referenceAggregation)
-            {
-                for(RcRecordReference child : referenceAggregation)
-                {
+            if (null != referenceAggregation) {
+                for (RcRecordReference child : referenceAggregation) {
                     child.setRecordReferenceUuid(UUIDUtils.getUUID());
                     child.setVirtualAggregationUuid(rcAggregation.getAggregationUuid());
                     child.set__created__(true);
                     rcRecordReferenceRepository.save(child);
                 }
             }
-            if(null != referenceItem)
-            {
-                for(RcRecordReference child : referenceItem)
-                {
+            if (null != referenceItem) {
+                for (RcRecordReference child : referenceItem) {
                     child.setRecordReferenceUuid(UUIDUtils.getUUID());
                     child.setVirtualAggregationUuid(rcAggregation.getAggregationUuid());
                     child.set__created__(true);
                     rcRecordReferenceRepository.save(child);
                 }
             }
-
-        }
-        else
-        {
-            if(rcAggregationCon != null) {
+        } else {
+            if (rcAggregationCon != null) {
                 rcAggregationCon.setAggregationUuid(uuid);
                 RcAggregationCon beforeCon = rcAggregationConRepository.findOne(rcAggregationCon.getId());
                 if (null != beforeCon) {
@@ -171,11 +171,11 @@ public class Rc002Service extends BaseService
                     rcAggregationCon.setUpdateUuid(SessionUtils.getCurrentLoginUserUuid());
 
                     rcAggregationConRepository.save(rcAggregationCon);
-                }else{
+                } else {
                     rcAggregationCon.setAggregationUuid(uuid);
-                    String creationStartDate = rcAggregationCon.getCreationStartDate().replace("-","");
+                    String creationStartDate = rcAggregationCon.getCreationStartDate().replace("-", "");
                     rcAggregationCon.setCreationStartDate(creationStartDate);
-                    String creationEndDate = rcAggregationCon.getCreationEndDate().replace("-","");
+                    String creationEndDate = rcAggregationCon.getCreationEndDate().replace("-", "");
                     rcAggregationCon.setCreationEndDate(creationEndDate);
                     rcAggregationCon.set__created__(true);
                     rcAggregationConRepository.save(rcAggregationCon);
@@ -183,7 +183,68 @@ public class Rc002Service extends BaseService
             }
         }
 
-        return ApiResponse.of(ApiStatus.SUCCESS,"SUCCESS");
+        if (null != creatorList) {
+            RcAggregationCreator prevCreator = null;
+            for (RcAggregationCreator child : creatorList) {
+                if(!child.isCreated() && !child.isModified() && !child.isDeleted())
+                    continue;
+
+                if(child.isDeleted()){
+                    rcAggregationCreatorRepository.delete(child.getId());
+                    continue;
+                }
+
+                if(child.isCreated()){
+                    child.setAggregationCreatorUuid(UUIDUtils.getUUID());
+                }else if(child.isModified()){
+                    prevCreator = rcAggregationCreatorRepository.findOne(child.getId());
+                    child.setInsertDate(prevCreator.getInsertDate());
+                    child.setInsertUuid(prevCreator.getInsertUuid());
+                }
+
+                child.setAggregationUuid(rcAggregation.getAggregationUuid());
+                rcAggregationCreatorRepository.save(child);
+            }
+        }
+        if (null != materialList) {
+            for (RcAggregationMaterial child : materialList) {
+                child.setAggregationMaterialUuid(UUIDUtils.getUUID());
+                child.setAggregationUuid(rcAggregation.getAggregationUuid());
+                rcAggregationMaterialRepository.save(child);
+            }
+        }
+        if (null != authorityList) {
+            RcAggrRelatedAuthority prevAuthority = null;
+            for (RcAggrRelatedAuthority child : authorityList) {
+                if(!child.isCreated() && !child.isModified() && !child.isDeleted())
+                    continue;
+
+                if(child.isDeleted()){
+                    rcAggrRelatedAuthorityRepository.delete(child.getId());
+                    continue;
+                }
+
+                if(child.isCreated()){
+                    child.setAggrRelatedAuthorityUuid(UUIDUtils.getUUID());
+                }else if(child.isModified()){
+                    prevAuthority = rcAggrRelatedAuthorityRepository.findOne(child.getId());
+                    child.setInsertDate(prevAuthority.getInsertDate());
+                    child.setInsertUuid(prevAuthority.getInsertUuid());
+                }
+
+                child.setAggregationUuid(rcAggregation.getAggregationUuid());
+                rcAggrRelatedAuthorityRepository.save(child);
+            }
+        }
+        if (null != recordList) {
+            for (RcAggrRelatedRecord child : recordList) {
+                child.setAggrRelatedRecordUuid(UUIDUtils.getUUID());
+                child.setAggregationUuid(rcAggregation.getAggregationUuid());
+                rcAggrRelatedRecordRepository.save(child);
+            }
+        }
+
+        return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");
     }
 
 
@@ -203,15 +264,15 @@ public class Rc002Service extends BaseService
         rcAggregation.setTypeUuid(CommonCodeUtils.getCodeDetailUuid("CD127", "Temporary"));
         rcAggregationRepository.save(rcAggregation);
 
-        if(data.getContextualMeta() != null){
+        if (data.getContextualMeta() != null) {
             RcAggregationCon rcAggregationCon = ModelMapperUtils.map(data.getContextualMeta(), RcAggregationCon.class);
             rcAggregationConRepository.save(rcAggregationCon);
         }
 
-        return ApiResponse.of(ApiStatus.SUCCESS,"SUCCESS");
+        return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");
     }
 
-    public List<Rc00204VO> getTreeData(Rc00204VO param){
+    public List<Rc00204VO> getTreeData(Rc00204VO param) {
         return rc002Mapper.getTreeData(param);
     }
 }

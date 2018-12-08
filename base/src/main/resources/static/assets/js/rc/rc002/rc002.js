@@ -1,6 +1,27 @@
-var sParam = [];
 var fnObj = {};
-var selectedItem = {};
+
+var option = '';
+var authorityTypeUuid = '';
+var isChanged = false;
+var currentData = null;
+const ENTITY_TYPE = "RC_AGGREGATION_CON";
+
+$( function() {
+    var icons = {
+        header: "ui-icon-circle-arrow-e",
+        activeHeader: "ui-icon-circle-arrow-s"
+    };
+    $('.detail_wrap').accordion({
+        icons: icons,
+        collapsible: true,
+        heightStyle: "content",
+        //onlyStyle : true,
+    });
+
+    //$( ".detail_wrap" ).accordion( "destroy" );
+
+});
+
 var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH: function (caller, act, data) {
         axboot.ajax({
@@ -8,12 +29,13 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             url: "/api/v1/rc003/01/list",
             data: $.extend({}, {pageSize: 1000}, data
 
-        //{aggregationUuid :'A2EF15E7-BE58-41DD-945C-E99FB5DE60C1'}
-        ),
+                //{aggregationUuid :'A2EF15E7-BE58-41DD-945C-E99FB5DE60C1'}
+            ),
             callback: function (res) {
                 if(res.list != "undefined" && res.list != null && res.list.length > 0){
                     rcList = ax5.util.deepCopy(res.list);
                     setFormData(rcList[0]);
+                    ACTIONS.dispatch(ACTIONS.GET_META_TEMPLATE, rcList[0].addMetaTemplateSetUuid);
                 }
             },
             options: {
@@ -70,8 +92,10 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SAVE: function (caller, act, data) {
         var saveData  =
             {
-                systemMeta : fnObj.systemMetaArea.getData(),
-                contextualMeta :fnObj.contextualMetaArea.getData(),
+                systemMeta : fnObj.identificationArea.getData(),
+                contextualMeta :fnObj.formView.getData(),
+                creatorList : fnObj.authorityInfo.getData("creatorArea"),
+                relatedAuthorityList : fnObj.authorityInfo.getData("authorityArea"),
                 childrenAggregationList : fnObj.childrenAggre.getData(),
                 referenceAggregationList : fnObj.referenceAggre.getData(),
                 referenceItemList : fnObj.referenceItem.getData()
@@ -90,6 +114,20 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             }
         });
 
+    },
+    GET_META_TEMPLATE: function (caller, act, data) {
+        axboot.ajax({
+            type: "GET",
+            url: "/api/v1/ad/ad007/listSub",
+            data: $.extend({}, {pageSize: 1000}, {addMetaTemplateSetUuid : data, entityType : ENTITY_TYPE}),
+            callback: function (res) {
+                setAdditionalMeta(res.list);
+            },
+            options: {
+                onError: axboot.viewError
+            }
+        });
+        return false;
     },
     dispatch: function (caller, act, data) {
         var result = ACTIONS.exec(caller, act, data);
@@ -145,34 +183,37 @@ fnObj.pageStart = function () {
     _this.formView.initView();
     _this.treeView01.initView();
 
+    _this.authorityInfo.initView();
+
 
     if(null != data)
     {
-        _this.systemMetaArea.nodeType = undefined == data["nodeType"]? data["type"] : data["nodeType"];
+        _this.identificationArea.nodeType = undefined == data["nodeType"]? data["type"] : data["nodeType"];
         _this.childrenAggre.nodeType = undefined == data["nodeType"]? data["type"] : data["nodeType"];
         _this.referenceAggre.nodeType = undefined == data["nodeType"]? data["type"] : data["nodeType"];
     }
-    _this.systemMetaArea.initView(uuid);
+    _this.identificationArea.initView(uuid);
 
     if(null != data && data["parentUuid"])
     {
-        fnObj.systemMetaArea.setFrom(data["parentUuid"],true);
+        fnObj.formView.setFormData("parentAggregationUuid", data["parentUuid"]);
+        //fnObj.identificationArea.setFrom(data["parentUuid"],true);
     }
 
-    _this.contextualMetaArea.initView(uuid);
+    _this.contentsStructureArea.initView(uuid);
     _this.childrenAggre.initView(uuid);
     _this.referenceItem.initView(uuid);
     _this.referenceAggre.initView(uuid);
 
-    if(data != null && !data["nodeType"] && data.nodeType=="virtual")
+    if(data != null && data.hasOwnProperty("nodeType") && data.nodeType=="virtual")
     {
-        $("#referenceAggreArea,#referenceItemArea").show();
-        $("#childrenAggreArea").hide();
+        $("#referenceAggreAreaTitle,#referenceItemAreaTitle").show();
+        $("#childrenAggreAreaTitle").hide();
     }
     else
     {
-        $("#referenceAggreArea,#referenceItemArea").hide();
-        $("#childrenAggreArea").show();
+        $("#referenceAggreAreaTitle,#referenceItemAreaTitle").hide();
+        $("#childrenAggreAreaTitle").show();
     }
 };
 //=================================================================
@@ -308,9 +349,21 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
                 $('#open_btn3').val('▼');
             }
         });
+
+        $("[data-ax-path='addMetaTemplateSetUuid']").on("change", function(){
+            ACTIONS.dispatch(ACTIONS.GET_META_TEMPLATE, $("[data-ax-path='addMetaTemplateSetUuid']").val());
+            isDetailChanged = true;
+        });
     },
     getData: function () {
         var data = this.modelFormatter.getClearData(this.model.get()); // 모델의 값을 포멧팅 전 값으로 치환.
+
+        data["creationStartDate"] = $("input[data-ax-path='creationStartDate']").val().replace(/-/gi,"");
+        data["creationEndDate"] = $("input[data-ax-path='creationEndDate']").val().replace(/-/gi,"");
+
+        data["accumulationStartDate"] = $("input[data-ax-path='accumulationStartDate']").val().replace(/-/gi,"");
+        data["accumulationEndDate"] = $("input[data-ax-path='accumulationEndDate']").val().replace(/-/gi,"");
+
         return $.extend({}, data);
     },
     setFormData: function (dataPath, value) {
@@ -341,8 +394,8 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
     }
 });
 //System Meta Object
-fnObj.systemMetaArea = axboot.viewExtend({
-    targetTag : $("#systemMetaArea"),
+fnObj.identificationArea = axboot.viewExtend({
+    targetTag : $("#identificationArea"),
     aggregationUuid : "",
     nodeType : "",
     popupCode : "",
@@ -386,14 +439,14 @@ fnObj.systemMetaArea = axboot.viewExtend({
                 $("#childrenAggreArea").show();
             }
         });
-        $("input[data-ax-path='parentsAggregationUuid']").blur(function(){
+        $("input[data-ax-path='parentAggregationUuid']").blur(function(){
             var _thisObj = this;
-            _this.setFrom($(this).parents().eq(0).find("input[data-ax-path='parentsAggregationUuid']").val());
+            _this.setFrom($(this).parents().eq(0).find("input[data-ax-path='parentAggregationUuid']").val());
         });
 
         $("#fromAggregation").click(function(){
             var _thisObj = this;
-            _this.setFrom($(this).parents().eq(0).find("input[data-ax-path='parentsAggregationUuid']").val());
+            _this.setFrom($(this).parents().eq(0).find("input[data-ax-path='parentAggregationUuid']").val());
         });
 
 
@@ -404,8 +457,8 @@ fnObj.systemMetaArea = axboot.viewExtend({
             preSearch : undefined == preSearch ? false : true,
             searchData : data,
             callback : function(data){
-                var target = $("#fromAggregation").parents().eq(0).find("input[data-ax-path='parentsAggregationUuid']");
-                target.attr("parentsAggregationUuid",data["AGGREGATION_UUID"]);
+                var target = $("#fromAggregation").parents().eq(0).find("input[data-ax-path='parentAggregationUuid']");
+                target.attr("parentAggregationUuid",data["AGGREGATION_UUID"]);
                 target.val(data["TITLE"]);
                 console.log(data);
             }
@@ -414,34 +467,38 @@ fnObj.systemMetaArea = axboot.viewExtend({
     },
     getData : function(){
         var data = {};
-        if(this.targetTag.css("display") != "none")
-        {
-            data = {};
-            data["aggregationUuid"] = this.aggregationUuid;
-            $(this.targetTag).find("ul").each(function(){
-                $(this).children("li").find("input,select,textarea").each(function(){
-                    if($(this).attr("data-ax-path"))
-                    {
-                        if($(this).attr($(this).attr("data-ax-path")))
-                            data[$(this).attr("data-ax-path")] = $(this).attr($(this).attr("data-ax-path"));
-                        else
-                            data[$(this).attr("data-ax-path")] = $(this).val();
-                    }
-                });
+
+        data = {};
+        data["aggregationUuid"] = this.aggregationUuid;
+        $(this.targetTag).find("ul").each(function(){
+            $(this).children("li").find("input,select,textarea").each(function(){
+                if($(this).attr("data-ax-path"))
+                {
+                    if($(this).attr($(this).attr("data-ax-path")))
+                        data[$(this).attr("data-ax-path")] = $(this).attr($(this).attr("data-ax-path"));
+                    else
+                        data[$(this).attr("data-ax-path")] = $(this).val();
+                }
             });
+        });
 
-            data["descriptionStartDate"] = data["descriptionStartDate"].replace(/-/gi,"");
-            data["descriptionEndDate"] = data["descriptionEndDate"].replace(/-/gi,"");
+        data["descriptionStartDate"] = $("input[data-ax-path='descriptionStartDate']").val().replace(/-/gi,"");
+        data["descriptionEndDate"] = $("input[data-ax-path='descriptionEndDate']").val().replace(/-/gi,"");
 
-            data["description"] = $("textarea[data-ax-path='description']").val();
-            data["notes"] = $("textarea[data-ax-path='notes']").val();
-        }
+        data["author"] = $("input[data-ax-path='author']").val();
+        data["description"] = $("textarea[data-ax-path='description']").val();
+        data["notes"] = $("textarea[data-ax-path='notes']").val();
+
+        data["languageCode"] = $("select[data-ax-path='languageCode']").val();
+        data["statusDescription"] = $("select[data-ax-path='statusDescription']").val();
+        data["levelOfDetailUuid"] = $("select[data-ax-path='levelOfDetailUuid']").val();
+
         return data;
     }
 });
 //Contextual Meta Object
-fnObj.contextualMetaArea = axboot.viewExtend({
-    targetTag : $("#contextualMetaArea"),
+fnObj.contentsStructureArea = axboot.viewExtend({
+    targetTag : $("#contentsStructureArea"),
     aggregationUuid : "",
     initView : function(aggregationUuid){
         this.initEvent();
@@ -452,30 +509,192 @@ fnObj.contextualMetaArea = axboot.viewExtend({
 
     },
     getData : function(){
+        var data = {};
+        data["aggregationUuid"] = this.aggregationUuid;
+        $(this.targetTag).find("ul").each(function(){
+            $(this).children("li").find("input,select,textarea").each(function(){
+                if($(this).attr("data-ax-path"))
+                {
+                    if($(this).attr($(this).attr("data-ax-path")))
+                        data[$(this).attr("data-ax-path")] = $(this).attr($(this).attr("data-ax-path"));
+                    else
+                        data[$(this).attr("data-ax-path")] = $(this).val();
+                }
+            });
+        });
+
+        return data;
+    }
+});
+/**
+ * 전거데이터 영역
+ */
+fnObj.authorityInfo = axboot.viewExtend({
+    parentUuid : "",
+    nodeType : "",
+    popupCode : "",
+    template :
+    "                                                            <input type=hidden data-ax-path='__created__'>" +"                                                            " +
+    "                                                            <input type=hidden data-ax-path='__deleted__'>" +
+    "                                                            <input type=hidden data-ax-path='__modified__'>" +
+    "                                                            <input type=hidden data-ax-path='aggAuthorityUuid'>" +
+    "                                                            <li style='padding: 0 10px 0 0;'>" +
+    "                                                               <div class='src_box2'>" +
+    "                                                                   <input type=text data-ax-path='authorityName'  readonly class='form-control' placeholder='관련전거' style='border-radius: 0px'>" +
+    "                                                                   <input type=hidden data-ax-path='authorityUuid' class='authorityUuid' >" +
+    "                                                                   <a href='#' class='searchAuthority' ><img src='/assets/images/ams/search_normal.png' alt='find'></a>" +
+    "                                                               </div>" +
+    "                                                            </li>" +
+    "                                                            <li style='text-align: center'><a href='#' class='btn_del_left' style=''>X</a></li>",
+    initView: function () {
+        this.initEvent();
+    },
+    initEvent: function () {
+        var _this = this;
+        $("#creatorArea, #authorityArea").on("click", ".addAuthoritiesInfo >li a", function(event){
+            _this.addChild($(event.delegateTarget).find(".childDnrInfo"));
+        });
+
+        $(".serv_cont").on("change",".authorityUuid",function(){
+            if("saved" == $(this).parents().eq(2).attr("saveType"))
+            {
+                $(this).parents().eq(2).find("input[data-ax-path='__modified__']").val(true);
+                isChanged = true;
+            }
+        });
+
+        $("#creatorArea, #authorityArea, #repositoriesArea, #sourceAcquisitionArea").on("click",".searchAuthority",function(event){
+            var parentTarget = $(event.target).parents().eq(2);
+            var delegateTarget = $(event.delegateTarget);
+            axboot.modal.open({
+                modalType: "AUTHORITY_POPUP",
+                header: {
+                    title: "Authority List"
+                },
+                sendData: function () {
+                    return null;
+                },
+                callback: function (data) {
+                    if(this) this.close();
+                    if(data){
+                        parentTarget.find("input[data-ax-path='authorityUuid']").val(data["authorityUuid"]);
+                        parentTarget.find("input[data-ax-path='authorityName']").val(data["authorityName"]);
+
+                        if(delegateTarget.attr("id") == "repositoriesArea") {
+                            fnObj.formView.setFormData("repositoriesUuid", data["authorityUuid"]);
+                            fnObj.formView.setFormData("repositoriesName", data["authorityName"]);
+                        }
+
+                        if(delegateTarget.attr("id") == "sourceAcquisitionArea") {
+                            fnObj.formView.setFormData("sourceAcquisitionUuid", data["authorityUuid"]);
+                            fnObj.formView.setFormData("sourceAcquisitionName", data["authorityName"]);
+                        }
+
+                        parentTarget.find("input[data-ax-path='authorityUuid']").trigger('change');
+                    }
+                }
+            });
+        });
+
+
+        $("#creatorArea, #authorityArea, #repositoriesArea, #sourceAcquisitionArea").on("click",".btn_del_left",function(event){
+            var delegateTarget = $(event.delegateTarget);
+
+            if(delegateTarget.attr("id") == "repositoriesArea") {
+                fnObj.formView.setFormData("repositoriesUuid", "");
+                fnObj.formView.setFormData("repositoriesName", "");
+                return;
+            }
+
+            if(delegateTarget.attr("id") == "sourceAcquisitionArea") {
+                fnObj.formView.setFormData("sourceAcquisitionUuid", "");
+                fnObj.formView.setFormData("sourceAcquisitionName", "");
+                return;
+            }
+
+            if("create" == $(this).parents().eq(1).attr("saveType"))
+            {
+                $(this).parents().eq(1).remove();
+            }
+            else
+            {
+                $(this).parents().eq(1).hide();
+                $(this).parents().eq(1).find("input[data-ax-path='__deleted__']").val(true);
+                $(this).parents().eq(1).find("input[data-ax-path='__modified__']").val(false);
+            }
+        });
+    },
+    addChild : function(_this,data){
+        var cloneTag = "";
+        if(data != null && data != undefined) {
+            cloneTag = $("<ul style='margin: 0px 5px 10px 0px;'>").addClass("auth_fit").attr("data-ax-path", "saveType").attr("saveType", "saved").html(fnObj.authorityInfo.template).clone();
+            cloneTag.find("input[data-ax-path='aggAuthorityUuid']").val(data["aggAuthorityUuid"]);
+            cloneTag.find("input[data-ax-path='authorityName']").val(data["authorityName"]);
+            cloneTag.find("input[data-ax-path='authorityUuid']").val(data["authorityUuid"]);
+            cloneTag.find("input[data-ax-path='__created__']").val(data["__created__"]);
+            cloneTag.find("input[data-ax-path='__deleted__']").val(data["__deleted__"]);
+            cloneTag.find("input[data-ax-path='__modified__']").val(data["__modified__"]);
+        }else{
+            cloneTag = $("<ul style='margin: 0px 5px 10px 0px;'>").addClass("auth_fit").attr("data-ax-path","saveType").attr("saveType","created").html(fnObj.authorityInfo.template).clone();
+            cloneTag.find("input[data-ax-path='__created__']").val(true);
+        }
+        $(_this).before(cloneTag);
+        cloneTag.show();
+    },
+    getData : function(target){
         var retData = new Array();
         var data = {};
-        if(this.targetTag.css("display") != "none")
+        var targetTag = $("#"+target);
+
+        if(targetTag.css("display") != "none")
         {
-            data = {};
-            data["aggregationUuid"] = this.aggregationUuid;
-            $(this.targetTag).find("ul").each(function(){
-                $(this).children("li").find("input,select,textarea").each(function(){
-                    if($(this).attr("data-ax-path"))
-                    {
-                        if($(this).attr($(this).attr("data-ax-path")))
+            targetTag.find(">ul:not(.addAuthoritiesInfo)").each(function(){
+                data = {};
+                data["saveType"] = $(this).attr("saveType");
+                $(this).find("input,select,textarea").each(function(){
+                    if($(this).attr("data-ax-path")) {
+                        if ($(this).attr($(this).attr("data-ax-path")))
                             data[$(this).attr("data-ax-path")] = $(this).attr($(this).attr("data-ax-path"));
                         else
                             data[$(this).attr("data-ax-path")] = $(this).val();
                     }
                 });
-            });
 
-            data["creationStartDate"] = data["creationStartDate"].replace(/-/gi,"");
-            data["creationEndDate"] = data["creationEndDate"].replace(/-/gi,"");
+                if(target == "creatorArea"){
+                    data["aggregationCreatorUuid"] = data["aggAuthorityUuid"];
+                    data["creatorUuid"] = data["authorityUuid"];
+                }else if(target == "authorityArea"){
+                    data["aggrRelatedAuthorityUuid"] = data["aggAuthorityUuid"];
+                }
+
+                // retData.push(data);
+                if(data["authorityUuid"] && data["authorityUuid"] != "" ){
+                    retData.push(data);
+                }
+            });
         }
-        return data;
+        return retData;
+    },
+    setData : function(target, data){
+        $("#" + target).remove(".auth_fit");
+
+        if(data != null && data != "undefined" && data.length > 0){
+            data.forEach(function(item, index){
+                if(target == "creatorArea"){
+                    item["aggAuthorityUuid"] = item["aggregationCreatorUuid"];
+                    item["authorityUuid"] = item["creatorUuid"];
+                    item["authorityName"] = item["creatorName"];
+                }else if(target == "authorityArea"){
+                    item["aggAuthorityUuid"] = item["aggrRelatedAuthorityUuid"];
+                }
+                fnObj.authorityInfo.addChild($("#" + target).find(".childDnrInfo"), item);
+            });
+        }
     }
 });
+
+
+
 
 fnObj.childrenAggre = axboot.viewExtend({
     targetTag  : $("#childrenAggreArea"),
@@ -543,7 +762,7 @@ fnObj.childrenAggre = axboot.viewExtend({
     addChild : function(_this){
         var cloneTag = $("<ul>").addClass("pdb_10").attr("data-ax-path","saveType").attr("saveType","create").html(this.template);
 
-        var optionList = $("#systemMetaArea").find("select[data-ax-path='levelUuid']>option");
+        var optionList = $("#identificationArea").find("select[data-ax-path='levelUuid']>option");
 
         for(var i = 0; i < optionList.length; i++)
         {
@@ -572,7 +791,7 @@ fnObj.childrenAggre = axboot.viewExtend({
                     }
 
                 });
-                data["type"] = $("#systemMetaArea").find("select[data-ax-path='typeUuid']").val();
+                data["type"] = $("#identificationArea").find("select[data-ax-path='typeUuid']").val();
 
                 if(data["title"] && data["title"] != "")
                     retData.push(data);
@@ -684,7 +903,7 @@ fnObj.referenceAggre = axboot.viewExtend({
                     }
                 });
                 /*
-                data["typeUuid"] = $("#systemMetaArea").find("select[data-ax-path='type']").val();
+                data["typeUuid"] = $("#identificationArea").find("select[data-ax-path='type']").val();
                 data["parentAggregationUuid"] = this.aggregationUuid;
                 */
                 if(data["aggregationUuid"] && data["aggregationUuid"] != "")
@@ -798,7 +1017,7 @@ fnObj.referenceItem = axboot.viewExtend({
                     }
                 });
                 /*
-                data["type"] = $("#systemMetaArea").find("select[data-ax-path='type']").val();
+                data["type"] = $("#identificationArea").find("select[data-ax-path='type']").val();
                 data["parentAggregationUuid"] = this.aggregationUuid;
                 */
                 if(data["itemUuid"] && data["itemUuid"] != "")
@@ -1006,8 +1225,8 @@ fnObj.treeView01 = axboot.viewExtend(axboot.commonView, {
     }
 });
 setFormData = function(data){
+    currentData = data;
 
-    console.log(data);
     for(var columnName in data)
     {
         switch(columnName)
@@ -1019,13 +1238,81 @@ setFormData = function(data){
             case "descriptionEndDate":
             case "creationStartDate":
             case "creationEndDate":
+            case "accumulationStartDate":
+            case "accumulationEndDate":
                 $("input[data-ax-path='"+columnName+"']").val(getFormattedDate(data[columnName]));
+                break;
+            case "creatorList" :
+                fnObj.authorityInfo.setData("creatorArea", data[columnName]);
+                break;
+            case "relatedAuthorityList" :
+                fnObj.authorityInfo.setData("authorityArea", data[columnName]);
                 break;
             default:
                 fnObj.formView.setFormData(columnName,data[columnName]);
                 break;
         }
     }
+}
+
+function setAdditionalMeta(segmentList){
+    var targetTag = $('#addConMetaArea');
+    var cloneTag = null;
+    var cloneInput = null;
+    var dataPath = "";
+    var option = "";
+
+    $("#addConMetaArea .meta-ui").remove();
+
+    segmentList.forEach(function(item, idx){
+        if(item.displayedYN != "Y") return true;
+
+        dataPath = "addMetadata" + item.additionalColumn.replace("ADD_METADATA", "");
+
+        cloneTag = $('#addConMetaArea #metaTemplate').clone();
+        cloneTag.addClass("meta-ui");
+        cloneTag.attr("id", item.additionalColumn);
+        cloneTag.find(".meta-label").html(item.name);
+
+        targetTag.append(cloneTag);
+
+        if(item.hasOwnProperty("popupUuid")) {
+            cloneInput = cloneTag.find(".meta-combo");
+
+            cloneInput.show();
+            cloneTag.find(".meta-input").hide();
+
+            axboot.commonCodeVO(item.popupCode).forEach(function(codeVO, idx) {
+                option = $("<option value='"+ codeVO["codeDetailUUID"] +"'>"+codeVO["codeName"]+"</option>");
+                cloneInput.append(option);
+            });
+        }else {
+            cloneInput = cloneTag.find(".meta-input");
+
+            cloneInput.show();
+            cloneTag.find(".meta-combo").hide();
+        }
+
+        cloneInput.on("keyup change",function(event){
+            isDetailChanged = true;
+            currentData[$(event.target).attr("data-ax-path")] = $(event.target).val();
+            fnObj.formView.setFormData($(event.target).attr("data-ax-path"), $(event.target).val());
+        });
+
+        cloneInput.attr("title", item.name);
+        cloneInput.attr("data-ax-path", dataPath);
+        if(item.requiredYN == "Y"){
+            cloneInput.attr("data-ax-validate", "required");
+        }
+
+        cloneInput.css("width", item.displaySize == 0 ? "100%" : item.displaySize);
+
+        fnObj.formView.setFormData(dataPath, currentData[dataPath]);
+
+        cloneTag.show();
+    });
+
+    //fnObj.formView.setData(currentData);
 }
 
 function getFormattedDate(str) {

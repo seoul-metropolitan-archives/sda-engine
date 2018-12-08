@@ -12,7 +12,7 @@ var ad00702 =
                  * visible  : grid 포함여부
                  ****************************************************/
                 {
-                    sortNo: 1,
+                    sortNo: 0,
                     width:30,
                     name: "addMetaSegmentUuid",
                     text: "",
@@ -22,7 +22,7 @@ var ad00702 =
                     visible: false
                 },
                 {
-                    sortNo: 1,
+                    sortNo: 0,
                     width:30,
                     name: "addMetaTemplateSetUuid",
                     text: "",
@@ -32,7 +32,7 @@ var ad00702 =
                     visible: false
                 },
                 {
-                    sortNo: 3,
+                    sortNo: 2,
                     name: "sequence",
                     text: "Sequence",
                     width: 70,
@@ -43,7 +43,7 @@ var ad00702 =
                     disable: false
                 },
                 {
-                    sortNo: 5,
+                    sortNo: 3,
                     name: "title",
                     text: "Title",
                     width: 120,
@@ -53,7 +53,7 @@ var ad00702 =
                     disable: false
                 },
                 {
-                    sortNo: 5,
+                    sortNo: 4,
                     name: "name",
                     text: "Name",
                     width: 120,
@@ -63,7 +63,7 @@ var ad00702 =
                     disable: false
                 },
                 {
-                    sortNo: 7,
+                    sortNo: 5,
                     name: "additionalColumn",
                     text: "Column",
                     width: 130,
@@ -75,7 +75,7 @@ var ad00702 =
                     disable: false
                 },
                 {
-                    sortNo: 9,
+                    sortNo: 6,
                     name: "popupUuid",
                     width: 100,
                     dataType: "popup",
@@ -85,7 +85,7 @@ var ad00702 =
                     visible:false
                 },
                 {
-                    sortNo: 9,
+                    sortNo: 7,
                     name: "popupName",
                     text: "Input Value",
                     width: 200,
@@ -100,7 +100,7 @@ var ad00702 =
                     disable: false
                 },
                 {
-                    sortNo: 11,
+                    sortNo: 8,
                     name: "displayedYN",
                     text: "Display",
                     width: 50,
@@ -117,7 +117,7 @@ var ad00702 =
                     required: false
                 },
                 {
-                    sortNo: 12,
+                    sortNo: 9,
                     name: "requiredYN",
                     text: "Required",
                     width: 60,
@@ -134,7 +134,7 @@ var ad00702 =
                     required: false,
                 },
                 {
-                    sortNo: 15,
+                    sortNo: 10,
                     name: "displaySize",
                     text: "Display Size",
                     width: 80,
@@ -157,7 +157,7 @@ var ad00702 =
                     disable: true
                 },
                 {
-                    sortNo: 17,
+                    sortNo: 11,
                     name: "insertDate",
                     text: "Date/Time Created",
                     width: 140,
@@ -176,7 +176,7 @@ var ad00702 =
                     disable: true
                 },
                 {
-                    sortNo: 19,
+                    sortNo: 12,
                     name: "updateDate",
                     text: "Date/Time Modified",
                     width: 140,

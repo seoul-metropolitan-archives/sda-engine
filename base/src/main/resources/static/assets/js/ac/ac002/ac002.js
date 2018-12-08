@@ -389,7 +389,7 @@ fnObj.leftMenuView = axboot.viewExtend({
                     thirdList.push({
                         icon: 0
                         , menuUuid: menu_3_list[k]["menuUuid"]
-                        , menuName: menu_3_list[k]["menuName"]
+                        , menuName: menu_3_list[k]["menuName"].replace(/&amp;/g,'&')
                         , program: menu_3_list[k]["program"]
                     });
                 }
@@ -397,16 +397,17 @@ fnObj.leftMenuView = axboot.viewExtend({
                 secondList.push({
                     icon: 0
                     , menuUuid: menu_2_list[j]["menuUuid"]
-                    , menuName: menu_2_list[j]["menuName"]
+                    , menuName: menu_2_list[j]["menuName"].replace(/&amp;/g,'&')
                     , program: menu_2_list[j]["program"]
                     , menus : thirdList
                 });
+                console.log( menu_2_list[j]["menuName"])
                 thirdList = undefined;
             }
             leftMenuItems.menus.push({
                 icon: 0
                 , menuUuid: menuItems[i]["menuUuid"]
-                , menuName: menuItems[i]["menuName"]
+                , menuName: menuItems[i]["menuName"].replace(/&amp;/g,'&')
                 , menus: secondList
             });
             secondList = undefined;
