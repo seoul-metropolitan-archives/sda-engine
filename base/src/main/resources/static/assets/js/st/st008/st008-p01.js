@@ -4,7 +4,7 @@ var parentsData;
 var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH_TREE: function (caller, act, data) {
         axboot.ajax({
-            url: "/api/v1/st/st006/getAllNodes",
+            url: "/api/v1/st/st008/getAllNodes",
             data: $.extend({},data,{nodeType:"normal"}),
             callback: function (res) {
                 fnObj.treeView01.setData({}, res.list, data);
@@ -18,7 +18,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH: function (caller, act, data) {
       axboot.ajax({
             type: "GET",
-            url: "/api/v1/st/st006/01/list01",
+            url: "/api/v1/st/st008/01/list01",
             async : false,
             data: $.extend({}, {pageSize: 10000},{aggregationUuid: data.uuid}),
             callback: function (res) {
@@ -53,7 +53,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
 
         axboot.ajax({
             type: "PUT",
-            url: "/api/v1/st/st006/01/save",
+            url: "/api/v1/st/st008/01/save",
             data: JSON.stringify(data),
             callback: function (res) {
                 ACTIONS.dispatch(ACTIONS.PAGE_CLOSE, data);
@@ -82,7 +82,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
 
         axboot.ajax({
             type: "PUT",
-            url: "/api/v1/st/st006/03/save",
+            url: "/api/v1/st/st008/03/save",
             data: JSON.stringify(send),
             callback: function (res) {
                 ACTIONS.dispatch(ACTIONS.PAGE_CLOSE,{classUuid:parentsData.classUuid});
@@ -117,7 +117,7 @@ fnObj.pageStart = function () {
     });
 
    /* $.ajax({
-        url: "/assets/js/column_info/st00601_p01_01.js",
+        url: "/assets/js/column_info/st00801_p01_01.js",
         dataType: "script",
         async: false,
         success: function () {
@@ -142,31 +142,71 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
         this.model = new ax5.ui.binder();
         this.model.setModel(this.getDefaultData(), this.target);
         this.modelFormatter = new axboot.modelFormatter(this.model); // 모델 포메터 시작
+
+        this.target.find('[data-ax5picker="date"]').ax5picker({
+            direction: "auto",
+            content: {
+                type: 'date'
+            }
+        });
+
         this.initEvent();
     },
     initEvent: function () {
         var _this = this;
 
-        // $(".btn_main_txt01").text(parentsData.confirmBtn);
-        //
-        // $(".sltCont").text(parentsData.crrntAgg);
-        //
-        // $(".btn_small").click(function(){
-        //    if(this.textContent == "Save"){
-        //        ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
-        //        this.textContent = "Edit";
-        //        $("#classDescription").prop("readonly",true);
-        //        $("#levelOfDetailUuid").prop("disabled",true);
-        //        $("#statusDescription").prop("disabled", true);
-        //        $("#classDescription").css("background","#ffffff");
-        //    }else if(this.textContent == "Edit"){
-        //        this.textContent = "Save";
-        //        $("#classDescription").prop("readonly",false);
-        //        $("#levelOfDetailUuid").prop("disabled", false);
-        //        $("#statusDescription").prop("disabled", false);
-        //        $("#classDescription").css("background","#fffdd6");
-        //    }
-        // });
+        $("input[data-ax-path='startDate']").keyup(function () {
+            var date = this.value;
+            if (date.match(/^\d{4}$/) !== null) {
+                this.value = date + '-';
+            } else if (date.match(/^\d{4}\-\d{2}$/) !== null) {
+                this.value = date + '-';
+            }
+        });
+        $("input[data-ax-path='startDate']").keypress(function () {
+            if ((event.keyCode < 48) || (event.keyCode > 57)) event.returnValue = false;
+        });
+        $("input[data-ax-path='endDate']").keyup(function () {
+            var date = this.value;
+            if (date.match(/^\d{4}$/) !== null) {
+                this.value = date + '-';
+            } else if (date.match(/^\d{4}\-\d{2}$/) !== null) {
+                this.value = date + '-';
+            }
+        });
+        $("input[data-ax-path='endDate']").keypress(function () {
+            if ((event.keyCode < 48) || (event.keyCode > 57)) event.returnValue = false;
+        });
+        $("input[data-ax-path='descriptionDate']").keyup(function () {
+            var date = this.value;
+            if (date.match(/^\d{4}$/) !== null) {
+                this.value = date + '-';
+            } else if (date.match(/^\d{4}\-\d{2}$/) !== null) {
+                this.value = date + '-';
+            }
+        });
+        $("input[data-ax-path='descriptionDate']").keypress(function () {
+            if ((event.keyCode < 48) || (event.keyCode > 57)) event.returnValue = false;
+        });
+
+        $("input[data-ax-path='startDate']").focusout(function () {
+            if (!checkDate(this.value)) {
+                this.value = "";
+                this.focus = true;
+            }
+        });
+        $("input[data-ax-path='endDate']").focusout(function () {
+            if (!checkDate(this.value)) {
+                this.value = "";
+                this.focus = true;
+            }
+        });
+        $("input[data-ax-path='descriptionDate']").focusout(function () {
+            if (!checkDate(this.value)) {
+                this.value = "";
+                this.focus = true;
+            }
+        });
         $(".btn_s").click(function() {
             //if (this.textContent == "Save") {
                 ACTIONS.dispatch(ACTIONS.PAGE_SAVE, fnObj.formView.getData());

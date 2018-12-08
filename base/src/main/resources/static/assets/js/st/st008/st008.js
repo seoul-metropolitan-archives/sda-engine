@@ -8,7 +8,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH01: function (caller, act, data) {
         axboot.ajax({
             type: "GET",
-            url: "/api/v1/st/st006/01/list01",
+            url: "/api/v1/st/st008/01/list01",
             data: $.extend({}, this.formView.getData()),
             callback: function (res) {
                 fnObj.gridView01.setData(res.list);
@@ -27,7 +27,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         }
         axboot.ajax({
             type: "GET",
-            url: "/api/v1/st/st006/01/list02",
+            url: "/api/v1/st/st008/01/list02",
             data: $.extend({}, this.formView.getData(),{containerUuid : fnObj.gridView01.getSelectedData().containerUuid}),
             callback: function (res) {
                 fnObj.gridView02.setData(res.list);
@@ -45,7 +45,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
 
         /*if (fnObj.gridView01.isChangeData() == true) {
             axDialog.confirm({
-                msg: axboot.getCommonMessage("AA006")
+                msg: axboot.getCommonMessage("AA008")
             }, function () {
                 if (this.key == "ok") {
                     ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
@@ -125,7 +125,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         var result = false;
         axboot.call({
             type: "PUT",
-            url: "/api/v1/st/st006/01/save01",
+            url: "/api/v1/st/st008/01/save01",
             data: JSON.stringify(this.gridView01.getData()),
             callback: function (res) {
                 ACTIONS.dispatch(ACTIONS.PAGE_SEARCH01);
@@ -168,6 +168,38 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             height: 400,
             header: {
                 title: "ARRANGE"
+            },
+            sendData: function () {
+                var selectedRow = fnObj.gridView01.getSelectedData();
+                console.log('selectedRow', selectedRow);
+                selectedRow.confirmBtn = "Arrange";
+                return selectedRow;
+            },
+            callback: function (data) {
+                if(this) this.close();
+                if(data){
+                    ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1,data);
+                }
+            }
+        });
+    },
+    MODAL_OPEN: function (caller, act, title) {
+        var modalOption ={ title : title };
+        if( title == '반출서 작성'){
+            modalOption.modalType = 'CREATE_TAKE_OUT_POPUP';
+        }else if( title == '반출서 수정'){
+            modalOption.modalType = 'ADD_TAKE_OUT_POPUP';
+        }else if( title == '대상 추가'){
+            modalOption.modalType = 'MODIFY_TAKE_OUT_POPUP';
+        }else if( title == '반출서 출력'){
+            modalOption.modalType = 'PRINT_TAKE_OUT_POPUP';
+        }else{
+            alert('팝업 타입 없음:' + data);
+        }
+        axboot.modal.open({
+            modalType: modalOption.modalType,
+            header: {
+                title: modalOption.title,
             },
             sendData: function () {
                 var selectedRow = fnObj.gridView01.getSelectedData();
@@ -279,7 +311,7 @@ fnObj.pageStart = function () {
         }
     });
     $.ajax({
-        url: "/assets/js/column_info/st00601.js",
+        url: "/assets/js/column_info/st00801.js",
         dataType: "script",
         async: false,
         success: function () {
@@ -287,7 +319,7 @@ fnObj.pageStart = function () {
     });
 
     $.ajax({
-        url: "/assets/js/column_info/st00602.js",
+        url: "/assets/js/column_info/st00802.js",
         dataType: "script",
         async: false,
         success: function () {
@@ -315,6 +347,19 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
     },
     initEvent: function () {
         var _this = this;
+
+        $('#btn_createTakeOut').click(function(){
+            ACTIONS.dispatch(ACTIONS.MODAL_OPEN, '반출서 작성');
+        });
+        $('#btn_addTakeOut').click(function(){
+            ACTIONS.dispatch(ACTIONS.MODAL_OPEN, '반출서 수정');
+        });
+        $('#btn_modifyTakeOut').click(function(){
+            ACTIONS.dispatch(ACTIONS.MODAL_OPEN, '대상 추가');
+        });
+        $('#btn_printTakeOut').click(function(){
+            ACTIONS.dispatch(ACTIONS.MODAL_OPEN, '반출서 출력');
+        });
 
         $("input[data-ax-path='repositoryName']").parents().eq(1).find("a").click(function(){
             var data = {
@@ -403,7 +448,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
                 indicator: {visible: true},
                 lineVisible: false
             });
-        this.gridObj.setColumnInfo(st00601.column_info).makeGrid();
+        this.gridObj.setColumnInfo(st00801.column_info).makeGrid();
         this.gridObj.onItemChecked(this.onItemChecked);
         this.gridObj.setDisplayOptions({
             fitStyle:"evenFill"
@@ -441,7 +486,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
 
         if (fnObj.gridView01.isChangeData() == true || fnObj.gridView02.isChangeData() == true) {
             axDialog.confirm({
-                msg: axboot.getCommonMessage("AA006")
+                msg: axboot.getCommonMessage("AA008")
             }, function () {
                 if (this.key == "ok") {
                     ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
@@ -487,7 +532,7 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
     parentsGrid: fnObj.gridView01,
     initView: function () {
         this.initInstance();
-        this.setColumnInfo(st00602.column_info);
+        this.setColumnInfo(st00802.column_info);
         this.gridObj.setOption({
             checkBar: {visible: true}
         })
@@ -517,7 +562,7 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
     itemClick: function (data) {
         /*if (fnObj.gridView03.isChangeData() == true) {
             axDialog.confirm({
-                msg: axboot.getCommonMessage("AA006")
+                msg: axboot.getCommonMessage("AA008")
             }, function () {
                 if (this.key == "ok") {
                     ACTIONS.dispatch(ACTIONS.PAGE_SAVE);

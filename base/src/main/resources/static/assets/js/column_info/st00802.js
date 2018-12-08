@@ -1,4 +1,4 @@
-var st00601 =
+var st00802 =
     {
         column_info :
             [

@@ -3,8 +3,8 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="rmsoft.ams.seoul.st.st006.dao.St008Mapper">
-    <select id="getStContainer" resultType="St00601VO" statementType="PREPARED">
+<mapper namespace="rmsoft.ams.seoul.st.st008.dao.St008Mapper">
+    <select id="getStContainer" resultType="St00801VO" statementType="PREPARED">
         <![CDATA[
         select container.CONTAINER_UUID                                                                           containerUuid,
                container.STATUS_UUID                                                                              statusUuid,
@@ -31,7 +31,7 @@
         CONNECT BY PRIOR container.CONTAINER_UUID = container.PARENT_CONTAINER_UUID
         ]]>
     </select>
-    <select id="getSelectedItem" resultType="St00603VO" statementType="PREPARED">
+    <select id="getSelectedItem" resultType="St00803VO" statementType="PREPARED">
         <![CDATA[
             SELECT
                    B.ITEM_UUID AS itemUuid,

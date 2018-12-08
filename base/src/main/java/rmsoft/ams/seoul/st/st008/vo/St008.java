@@ -1,4 +1,4 @@
-package rmsoft.ams.seoul.st.st006.vo;
+package rmsoft.ams.seoul.st.st008.vo;
 
 import io.onsemiro.core.annotations.Comment;
 import io.onsemiro.core.domain.BaseJpaModel;
@@ -20,9 +20,9 @@ import java.io.Serializable;
 @Entity
 @EqualsAndHashCode(callSuper = true)
 @Table(name = "AD_SERVICE")
-@IdClass(rmsoft.ams.seoul.st.st006.vo.St006.St006Id.class)
-@Alias("St006")
-public class St006 extends BaseJpaModel<rmsoft.ams.seoul.st.st006.vo.St006.St006Id> {
+@IdClass(St008.St008Id.class)
+@Alias("St008")
+public class St008 extends BaseJpaModel<St008.St008Id> {
 
     @Id
     @Column(name = "SERVICE_UUID")
@@ -44,8 +44,8 @@ public class St006 extends BaseJpaModel<rmsoft.ams.seoul.st.st006.vo.St006.St006
 
 
     @Override
-    public St006Id getId() {
-        return St006Id.of(service_uuid);
+    public St008Id getId() {
+        return St008Id.of(service_uuid);
     }
 
     /**
@@ -55,7 +55,7 @@ public class St006 extends BaseJpaModel<rmsoft.ams.seoul.st.st006.vo.St006.St006
     @Data
     @NoArgsConstructor
     @RequiredArgsConstructor(staticName = "of")
-    public static class St006Id implements Serializable {
+    public static class St008Id implements Serializable {
 
         @NonNull
         private String service_uuid;

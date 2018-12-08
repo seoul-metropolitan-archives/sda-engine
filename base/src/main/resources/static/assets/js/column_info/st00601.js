@@ -1,4 +1,4 @@
-var cl00302 =
+var st00601 =
     {
         column_info :
             [
@@ -14,8 +14,8 @@ var cl00302 =
                 {
                     sortNo: 0,
                     width:30,
-                    name: "classUuid",
-                    text: "Class UUID",
+                    name: "containerUuid",
+                    text: "containerUuid",
                     editable: false,
                     dataType: "code",
                     required: false,
@@ -23,29 +23,92 @@ var cl00302 =
                 },
                 {
                     sortNo: 1,
-                    width:200,
-                    name: "title",
-                    text: "Title",
+                    name: "containerName",
+                    text: "Container Name",
+                    width: 80,
                     editable: false,
-                    dataType: "code",
-                    required: false,
+                    disable: true,
+                    dataType: "text",
+                    required: false
                 },
                 {
                     sortNo: 2,
-                    width: 120,
-                    name: "statusUuid",
-                    text: "Status",
+                    name: "parentContainerName",
+                    text: "Parent Container Name",
+                    width: 80,
                     editable: false,
-                    values: axboot.commonCodeFilter("CD111").codeArr,
-                    labels: axboot.commonCodeFilter("CD111").nameArr,
-                    dataType : "combo",
+                    disable: true,
+                    dataType: "text",
+                    required: false
+                },
+                {
+                    sortNo: 3,
+                    name: "containerTypeUuid",
+                    text: "Container Type",
+                    width: 120,
+                    editable: false,
+                    dataType: "combo",
+                    values: axboot.commonCodeFilter("CD139").codeArr,
+                    labels: axboot.commonCodeFilter("CD139").nameArr,
+                    disable: true
+                },
+                {
+                    sortNo: 3,
+                    name: "containerType",
+                    text: "Container Type",
+                    width: 120,
+                    editable: false,
+                    dataType: "text",
+                    visible: false,
+                    values: axboot.commonCodeFilter("CD139").codeArr,
+                    labels: axboot.commonCodeFilter("CD139").nameArr,
+                    disable: true
+                },
+                {
+                    sortNo: 3,
+                    name: "controlNumber",
+                    text: "Control Number",
+                    width: 120,
+                    dataType: "text",
+                    editable: false,
+                    sortable: true,
+                    disable:true
+                },
+                {
+                    sortNo: 4,
+                    name: "provenance",
+                    text: "Provenance",
+                    width: 120,
+                    dataType: "text",
+                    editable: false,
+                    sortable: true,
                     disable:true
                 },
                 {
                     sortNo: 5,
-                    name: "classifiedDate",
-                    text: "Classified Date",
-                    width: 80,
+                    name: "creationStartDate",
+                    text: "Creation Start Date",
+                    width: 120,
+                    dataType: "timestamp",
+                    editable: false,
+                    sortable: true,
+                    disable:true
+                },
+                {
+                    sortNo: 6,
+                    name: "creationEndDate",
+                    text: "Creation End Date",
+                    width: 120,
+                    dataType: "timestamp",
+                    editable: false,
+                    sortable: true,
+                    disable:true
+                },
+                {
+                    sortNo: 7,
+                    name: "orderNo",
+                    text: "Order No",
+                    width: 120,
                     dataType: "text",
                     editable: false,
                     sortable: true,
@@ -53,83 +116,26 @@ var cl00302 =
                 },
                 {
                     sortNo: 8,
-                    name: "insertUuid",
-                    text: "Created By",
-                    width: 80,
+                    name: "description",
+                    text: "Description",
+                    width: 250,
+                    dataType: "richtext",
                     editable: false,
-                    disable: true,
-                    dataType: "text",
-                    required: false
+                    sortable: true,
+                    disable:true
                 },
                 {
                     sortNo: 9,
-                    name: "insertDate",
-                    text: "Date/Time Created",
-                    width: 140,
+                    name: "notes",
+                    text: "Notes",
+                    width: 250,
+                    dataType: "richtext",
                     editable: false,
-                    disable: true,
-                    dataType: "timestamp",
-                    required: false
+                    sortable: true,
+                    disable:true
                 },
                 {
                     sortNo: 10,
-                    name: "updateUuid",
-                    text: "Modified By",
-                    width: 80,
-                    editable: false,
-                    disable: true,
-                    dataType: "text",
-                    required: false
-                },
-                {
-                    sortNo: 11,
-                    name: "updateDate",
-                    text: "Date/Time Modified",
-                    width: 140,
-                    editable: false,
-                    disable: true,
-                    dataType: "timestamp",
-                    required: false
-                },
-                {
-                    sortNo: 12,
-                    width:30,
-                    name: "classifyRecordsUuid",
-                    text: "Classify Records UUID",
-                    editable: false,
-                    dataType: "code",
-                    required: false,
-                    visible: false
-                },
-                {
-                    sortNo: 13,
-                    width:30,
-                    name: "aggregationUuid",
-                    editable: false,
-                    dataType: "code",
-                    required: false,
-                    visible: false
-                },
-                {
-                    sortNo: 14,
-                    width:30,
-                    name: "itemUuid",
-                    editable: false,
-                    dataType: "code",
-                    required: false,
-                    visible: false
-                },
-                {
-                    sortNo: 15,
-                    width:30,
-                    name: "changeStatus",
-                    editable: false,
-                    dataType: "code",
-                    required: false,
-                    visible: false
-                },
-                {
-                    sortNo: 16,
                     width:140,
                     name: "orderKey1",
                     text: "ORDER_KEY",
@@ -138,7 +144,7 @@ var cl00302 =
                     visible : false
                 },
                 {
-                    sortNo: 17,
+                    sortNo: 11,
                     width:140,
                     name: "choiceYn",
                     text: "choiceYn",

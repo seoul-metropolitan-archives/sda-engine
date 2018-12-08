@@ -1,4 +1,4 @@
-package rmsoft.ams.seoul.st.st006.vo;
+package rmsoft.ams.seoul.st.st008.vo;
 
 import io.onsemiro.core.vo.BaseVO;
 import lombok.Data;
@@ -13,10 +13,10 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class St00602VO extends BaseVO
+public class St00802VO extends BaseVO
 {
 
     private String classUuid;
-    private List<rmsoft.ams.seoul.st.st006.vo.St00601VO> st00601VOList;
+    private List<St00801VO> st00801VOList;
 
 }
