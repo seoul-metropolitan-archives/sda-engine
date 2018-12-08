@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="rmsoft.ams.seoul.cl.cl003.dao.Cl003Mapper">
+    <select id="getAggregationNode" resultType="Rc00101VO" parameterType="Rc00101VO" statementType="PREPARED">
+        <![CDATA[
+            SELECT
+              Z1.AGGREGATION_UUID as uuid
+              , Z1.PARENT_AGGREGATION_UUID as parentUuid
+              , Z1.TITLE as name
+              , Z1.DESCRIPTION as description
+              , Z1.NOTEs as notes
+              , Z3.CLASSIFY_RECORDS_UUID AS classifyRecordsUuid
+              , SUBSTR(SYS_CONNECT_BY_PATH(ROWNUM, '.'), 2 , length(SYS_CONNECT_BY_PATH(ROWNUM, '.'))) as orderKey1
+              , LOWER (Z2.CODE_NAME) as nodeType
+              , (SELECT LEVEL_NO FROM RC_LEVEL WHERE LEVEL_UUID = Z1.LEVEL_UUID) as "level"
+              , (
+                (SELECT COUNT(*) FROM RC_AGGREGATION WHERE PARENT_AGGREGATION_UUID = Z1.AGGREGATION_UUID)
+                +(SELECT COUNT(*) FROM RC_ITEM WHERE AGGREGATION_UUID = Z1.AGGREGATION_UUID)
+                )as childCnt
+            FROM
+              RC_AGGREGATION Z1
+              , AD_CODE_DETAIL Z2
+              , (  SELECT CLASSIFY_RECORDS_UUID,  AGGREGATION_UUID
+                    FROM CL_CLASSIFY_RECORDS_RESULT
+                    WHERE CLASS_UUID = #{classUuid}) Z3
+            WHERE
+              Z2.CODE_DETAIL_UUID(+) = Z1.TYPE_UUID
+              AND Z1.AGGREGATION_UUID = Z3.AGGREGATION_UUID(+)
+
+        ]]>
+        <if test="null != nodeType and '' != nodeType and 'item' != nodeType">
+            AND
+            LOWER (CODE_NAME) = LOWER (#{nodeType})
+        </if>
+        <if test=" null != uuid and '' != uuid">
+            AND
+            PARENT_AGGREGATION_UUID = #{uuid}
+        </if>
+        START WITH Z1.PARENT_AGGREGATION_UUID IS NULL
+        CONNECT BY PRIOR Z1.AGGREGATION_UUID = Z1.PARENT_AGGREGATION_UUID
+    </select>
+    <select id="getAggregationNodeSchedule" resultType="Rc00101VO" parameterType="Rc00101VO" statementType="PREPARED">
+        <![CDATA[
+            SELECT
+              Z1.AGGREGATION_UUID as uuid
+              , Z3.RECORD_SCHEDULE_UUID as recordScheduleUuid
+              , Z1.PARENT_AGGREGATION_UUID as parentUuid
+              , Z1.TITLE || (SELECT ' [' || RS_CODE || ']'
+                             FROM RS_RECORD_SCHEDULE
+                             WHERE Z3.RECORD_SCHEDULE_UUID = RECORD_SCHEDULE_UUID )  as name
+              , Z1.DESCRIPTION as description
+              , Z1.NOTEs as notes
+              , SUBSTR(SYS_CONNECT_BY_PATH(ROWNUM, '.'), 2 , length(SYS_CONNECT_BY_PATH(ROWNUM, '.'))) as orderKey1
+              , LOWER (Z2.CODE_NAME) as nodeType
+              , (SELECT LEVEL_NO FROM RC_LEVEL WHERE LEVEL_UUID = Z1.LEVEL_UUID) as "level"
+            FROM
+              RC_AGGREGATION Z1,
+              AD_CODE_DETAIL Z2,
+              RC_AGGREGATION_CON Z3
+            WHERE
+              Z2.CODE_DETAIL_UUID(+) = Z1.TYPE_UUID AND Z1.AGGREGATION_UUID = Z3.AGGREGATION_UUID(+)
+        ]]>
+        <if test="null != nodeType and '' != nodeType and 'item' != nodeType">
+            AND
+            LOWER (CODE_NAME) = LOWER (#{nodeType})
+        </if>
+        <if test=" null != uuid and '' != uuid">
+            AND
+            PARENT_AGGREGATION_UUID = #{uuid}
+        </if>
+        START WITH Z1.PARENT_AGGREGATION_UUID IS NULL
+        CONNECT BY PRIOR Z1.AGGREGATION_UUID = Z1.PARENT_AGGREGATION_UUID
+    </select>
+    <select id="getClassAggregationList" resultType="Cl00301VO"  statementType="PREPARED">
+        SELECT
+        A.CLASSIFY_RECORDS_UUID as classifyRecordsUuid,
+        A.STATUS_UUID as statusUuid,
+        A.CHOICE_YN as choiceYn,
+        A.CLASS_UUID as classUuid,
+        B.AGGREGATION_CODE as aggregationCode,
+        B.TITLE as title,
+        A.AGGREGATION_UUID as aggregationUuid,
+        A.ITEM_UUID as itemUuid,
+        B.TYPE_UUID as typeUuid,
+        A.DESCRIPTION as description,
+        A.NOTES as notes,
+        to_char(A.CLASSIFIED_DATE, 'YYYY-MM-DD') as classifiedDate,
+        SUBSTR(SYS_CONNECT_BY_PATH(A.ROWID, '.'), 2 , length(SYS_CONNECT_BY_PATH(A.ROWID, '.'))) as orderKey1,
+        <include refid="Common.UserName"><property name="userUuid" value="A.INSERT_UUID"/></include> as insertUuid,
+        A.INSERT_DATE as insertDate,
+        <include refid="Common.UserName"><property name="userUuid" value="A.UPDATE_UUID"/></include> as updateUuid,
+        A.UPDATE_DATE as updateDate
+        FROM (SELECT *
+              FROM CL_CLASSIFY_RECORDS_RESULT
+              <where>
+                  <if test="classUuid != null">
+                      CLASS_UUID = #{classUuid}
+                  </if>
+              </where>
+            ) A,
+        (
+            SELECT
+            DISTINCT(AGGREGATION_UUID),
+            PARENT_AGGREGATION_UUID,
+            TITLE,
+            AGGREGATION_CODE,
+            TYPE_UUID
+            FROM RC_AGGREGATION
+            START WITH AGGREGATION_UUID IN (
+            SELECT AGGREGATION_UUID FROM CL_CLASSIFY_RECORDS_RESULT
+            <where>
+                <if test="classUuid != null">
+                    CLASS_UUID = #{classUuid}
+                </if>
+            </where>
+        )
+        CONNECT BY PRIOR PARENT_AGGREGATION_UUID = AGGREGATION_UUID) B
+        <where>
+            A.AGGREGATION_UUID(+) = B.AGGREGATION_UUID
+            <if test="classUuid != null">
+                AND  A.CLASS_UUID = #{classUuid}
+            </if>
+        </where>
+        START WITH A.CHOICE_YN = 'Y'
+        CONNECT BY PRIOR B.AGGREGATION_UUID = B.PARENT_AGGREGATION_UUID
+    </select>
+    <select id="getClassItemList" resultType="Cl00301VO"  statementType="PREPARED">
+        SELECT
+        A.CLASSIFY_RECORDS_UUID as classifyRecordsUuid,
+        A.STATUS_UUID as statusUuid,
+        A.CLASS_UUID as classUuid,
+        A.AGGREGATION_UUID as aggregationUuid,
+        A.ITEM_UUID as itemUuid,
+        A.DESCRIPTION as description,
+        A.NOTES as notes,
+        to_char(A.CLASSIFIED_DATE, 'YYYY-MM-DD') as classifiedDate,
+        (SELECT
+        SUBSTR(SYS_CONNECT_BY_PATH(ROWNUM, '.'), 2 , length(SYS_CONNECT_BY_PATH(ROWNUM, '.')))
+        FROM
+        RC_AGGREGATION C
+        WHERE A.AGGREGATION_UUID = C.AGGREGATION_UUID
+        START WITH PARENT_AGGREGATION_UUID IS NULL
+        CONNECT BY PRIOR AGGREGATION_UUID = PARENT_AGGREGATION_UUID) AS orderKey1,
+        <include refid="Common.UserName"><property name="userUuid" value="A.INSERT_UUID"/></include> as insertUuid,
+        A.INSERT_DATE as insertDate,
+        <include refid="Common.UserName"><property name="userUuid" value="A.UPDATE_UUID"/></include> as updateUuid,
+        A.UPDATE_DATE as updateDate
+        FROM CL_CLASSIFY_RECORDS_RESULT A
+        <where>
+            <if test="classUuid != null">
+                A.CLASS_UUID = #{classUuid}
+            </if>
+        </where>
+    </select>
+    <select id="getSelectedItem" resultType="St00303VO" statementType="PREPARED">
+        SELECT
+            B.ITEM_UUID AS itemUuid,
+            B.TITLE AS itemTitle,
+            B.ITEM_CODE AS itemCode,
+            A.LEVEL_UUID as levelUuid,
+            A.AGGREGATION_UUID as aggregationUuid,
+            A.PUBLISHED_STATUS_UUID as publishedStatusUuid,
+            A.AGGREGATION_CODE as aggregationCode,
+            A.TITLE as title,
+            A.TYPE_UUID as typeUuid,
+            B.TYPE_UUID AS itemTypeUuid,
+            B.DESCRIPTION as description,
+            B.NOTES as notes,
+            B.AGGREGATION_UUID as parentAggregationUuid,
+            (
+            SELECT SYS_CONNECT_BY_PATH((
+                SELECT TITLE FROM RC_AGGREGATION WHERE AGGREGATION_UUID = T1.AGGREGATION_UUID), ' > ')
+                FROM
+                (
+                    SELECT CONNECT_BY_ROOT AGGREGATION_UUID AS ROOT, AGGREGATION_UUID, PARENT_AGGREGATION_UUID, TITLE
+                    FROM RC_AGGREGATION
+                    START WITH PARENT_AGGREGATION_UUID IS NULL
+                    CONNECT BY PRIOR AGGREGATION_UUID = PARENT_AGGREGATION_UUID
+                ) T1
+            WHERE AGGREGATION_UUID = A.AGGREGATION_UUID
+            AND ROWNUM = 1
+            START WITH T1.PARENT_AGGREGATION_UUID IS NULL
+            CONNECT BY PRIOR T1.AGGREGATION_UUID = T1.PARENT_AGGREGATION_UUID
+            ) AS catPath
+        FROM RC_AGGREGATION A,
+            (
+            SELECT
+              AGGREGATION_UUID, ITEM_UUID, TITLE, ITEM_CODE,DESCRIPTION,NOTES,TYPE_UUID
+            FROM
+              RC_ITEM
+            WHERE AGGREGATION_UUID = #{aggregationUuid}
+            UNION ALL
+            SELECT
+              AGGREGATION_UUID, ITEM_UUID, TITLE, ITEM_CODE,DESCRIPTION,NOTES,TYPE_UUID
+            FROM RC_ITEM
+            WHERE AGGREGATION_UUID IN
+            (
+                SELECT AGGREGATION_UUID
+                FROM RC_AGGREGATION
+                START WITH PARENT_AGGREGATION_UUID = #{aggregationUuid}
+                CONNECT BY PRIOR AGGREGATION_UUID = PARENT_AGGREGATION_UUID
+            )
+        ) B
+        WHERE A.AGGREGATION_UUID = B.AGGREGATION_UUID
+        ORDER BY catPath
+    </select>
+    <select id="getSelectedItemSchedule" resultType="St00303VO" statementType="PREPARED">
+        SELECT
+        B.ITEM_UUID AS itemUuid,
+        B.TITLE AS itemTitle,
+        B.ITEM_CODE AS itemCode,
+        A.LEVEL_UUID as levelUuid,
+        A.AGGREGATION_UUID as aggregationUuid,
+        A.PUBLISHED_STATUS_UUID as publishedStatusUuid,
+        A.AGGREGATION_CODE as aggregationCode,
+        A.TITLE as title,
+        A.TYPE_UUID as typeUuid,
+        B.TYPE_UUID AS itemTypeUuid,
+        B.DESCRIPTION as description,
+        B.NOTES as notes,
+        B.AGGREGATION_UUID as parentAggregationUuid,
+        (
+            SELECT SYS_CONNECT_BY_PATH((
+            SELECT TITLE FROM RC_AGGREGATION WHERE AGGREGATION_UUID = T1.AGGREGATION_UUID), ' > ')
+            FROM
+            (
+            SELECT CONNECT_BY_ROOT AGGREGATION_UUID AS ROOT, AGGREGATION_UUID, PARENT_AGGREGATION_UUID, TITLE
+            FROM RC_AGGREGATION
+            START WITH PARENT_AGGREGATION_UUID IS NULL
+            CONNECT BY PRIOR AGGREGATION_UUID = PARENT_AGGREGATION_UUID
+            ) T1
+            WHERE AGGREGATION_UUID = A.AGGREGATION_UUID
+            AND ROWNUM = 1
+            START WITH T1.PARENT_AGGREGATION_UUID IS NULL
+            CONNECT BY PRIOR T1.AGGREGATION_UUID = T1.PARENT_AGGREGATION_UUID
+        ) AS catPath
+        FROM RC_AGGREGATION A,
+             RC_ITEM B
+        <where>
+            A.AGGREGATION_UUID = B.AGGREGATION_UUID
+            <if test="aggregationUuid != null">
+                AND B.AGGREGATION_UUID = #{aggregationUuid}
+            </if>
+        </where>
+        ORDER BY catPath
+    </select>
+</mapper>
