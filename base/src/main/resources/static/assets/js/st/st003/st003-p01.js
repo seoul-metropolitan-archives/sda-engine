@@ -281,7 +281,6 @@ fnObj.treeView01 = axboot.viewExtend(axboot.commonView, {
         this.target.setData(treeList);
 
 
-        debugger
         fnObj.treeView01.initStatus();
         //체크및 비활성화 처리
 

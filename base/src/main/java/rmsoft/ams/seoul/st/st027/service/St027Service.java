@@ -10,6 +10,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+/*import rmsoft.ams.seoul.common.domain.StZone;
+import rmsoft.ams.seoul.common.repository.StZoneRepository;*/
 import rmsoft.ams.seoul.common.domain.StZone;
 import rmsoft.ams.seoul.common.repository.StZoneRepository;
 import rmsoft.ams.seoul.st.st027.dao.St027Mapper;
@@ -39,7 +41,7 @@ public class St027Service extends BaseService {
 
     @Transactional
     public ApiResponse saveZone(List<St02701VO> list) {
-        List<StZone> stZoneList = ModelMapperUtils.mapList(list, StZone.class);
+      List<StZone> stZoneList = ModelMapperUtils.mapList(list, StZone.class);
         StZone orgStZone = null;
         for(StZone stZone : stZoneList){
             if(stZone.isDeleted()){

@@ -1,18 +1,26 @@
 var fnObj = {};
-var inoutExceptUuid = "";
+var CONFIRM_STATUS = "Confirm";
+var CANCEL_STATUS = "Draft";
+var beforeData01 = null;
+var beforeData02 = null;
+var repositoryUuid = '';
+var shelfUuid ='';
 var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH: function (caller, act, data) {
+        beforeData01 = null;
+        beforeData02 = null;
         ACTIONS.dispatch(ACTIONS.PAGE_SEARCH01);
     },
     PAGE_SEARCH01: function (caller, act, data) {
         axboot.ajax({
             type: "GET",
-            url: "/api/v1/st/st012/01/list01",
+            url: "/api/v1/st/st001/01/list01",
             data: $.extend({}, this.formView.getData()),
             callback: function (res) {
                 fnObj.gridView01.setData(res.list);
-                //fnObj.gridView01.disabledColumn();
+                fnObj.gridView01.disabledColumn();
                 fnObj.gridView02.clearData();
+                fnObj.gridView03.clearData();
             },
             options: {
                 onError: axboot.viewError
@@ -25,10 +33,46 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         }
         axboot.ajax({
             type: "GET",
-            url: "/api/v1/st/st013/01/list02",
-            data: $.extend({}, this.formView.getData(),{inoutExceptUuid : fnObj.gridView01.getSelectedData().inoutExceptUuid}),
+            url: "/api/v1/st/st001/01/list02",
+            data: $.extend({}, this.formView.getData(),{repositoryUuid : fnObj.gridView01.getSelectedData().repositoryUuid}),
             callback: function (res) {
                 fnObj.gridView02.setData(res.list);
+                // fnObj.gridView02.disabledColumn();
+                fnObj.gridView03.clearData();
+            },
+            options: {
+                onError: axboot.viewError
+            }
+        });
+    },
+    PAGE_SEARCH03: function (caller, act, data) {
+        if(fnObj.gridView02.getSelectedData() == null){
+            return;
+        }
+        axboot.ajax({
+            type: "GET",
+            url: "/api/v1/st/st001/01/list03",
+            data: $.extend({}, this.formView.getData(),{shelfUuid : fnObj.gridView02.getSelectedData().shelfUuid}),
+            callback: function (res) {
+                fnObj.gridView03.setData(res.list);
+                fnObj.gridView03.disabledColumn();
+            },
+            options: {
+                onError: axboot.viewError
+            }
+        });
+    },
+    PAGE_SEARCH04: function (caller, act, data) {
+        if(fnObj.gridView03.getSelectedData() == null){
+            return;
+        }
+        axboot.ajax({
+            type: "GET",
+            url: "/api/v1/st/st013/01/list02",
+            /*data: $.extend({}, this.formView.getData(),{inoutExceptUuid : fnObj.gridView03.getSelectedData().inoutExceptUuid}),*/
+            data: $.extend({}, this.formView.getData()),
+            callback: function (res) {
+                fnObj.gridView04.setData(res.list);
                 // fnObj.gridView02.disabledColumn();
                 //fnObj.gridView03.clearData();
             },
@@ -41,7 +85,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     },
     STATUS_UPDATE01: function (caller, act, data) {
 
-        /*if (fnObj.gridView01.isChangeData() == true) {
+        if (fnObj.gridView01.isChangeData() == true) {
             axDialog.confirm({
                 msg: axboot.getCommonMessage("AA006")
             }, function () {
@@ -58,7 +102,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 return item.repositoryUuid != "";
             });
 
-           axboot.ajax({
+            axboot.ajax({
                 type: "PUT",
                 url: "/api/v1/st/st001/02/confirm01",
                 data: JSON.stringify(params),
@@ -69,10 +113,10 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                     onError: axboot.viewError
                 }
             });
-        }*/
+        }
     },
     STATUS_UPDATE02: function (caller, act, data) {
-        /*var rows = fnObj.gridView02.gridObj.getCheckedList();
+        var rows = fnObj.gridView02.gridObj.getCheckedList();
 
         if (!rows || rows.length < 1) return;
 
@@ -91,7 +135,29 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             options: {
                 onError: axboot.viewError
             }
-        });*/
+        });
+    },
+    STATUS_UPDATE03: function (caller, act, data) {
+        var rows = fnObj.gridView03.gridObj.getCheckedList();
+
+        if (!rows || rows.length < 1) return;
+
+        var params = rows.filter(function (item) {
+            item.changeStatus = data;
+            return item.locationUuid != "";
+        });
+
+        axboot.ajax({
+            type: "PUT",
+            url: "/api/v1/st/st001/02/confirm03",
+            data: JSON.stringify(params),
+            callback: function (res) {
+                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH03);
+            },
+            options: {
+                onError: axboot.viewError
+            }
+        });
     },
     PAGE_CONFIRM: function (caller, act, data) {
         ACTIONS.dispatch(ACTIONS.STATUS_UPDATE, CONFIRM_STATUS);
@@ -100,30 +166,26 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         ACTIONS.dispatch(ACTIONS.STATUS_UPDATE, CANCEL_STATUS);
     },
     PAGE_SAVE: function (caller, act, data) {
-        if (!this.gridView01.gridObj.validate()) {
+        if (!this.gridView01.gridObj.validate() && !this.gridView02.gridObj.validate()
+            && !this.gridView03.gridObj.validate()) {
             return false;
         } else {
             if(fnObj.gridView01.gridObj.isDataChanged()){
-
-
-                var exceptReason = $('textarea[data-ax-path="except_reason"]').val()
-
-                for(var i=0;i<fnObj.gridView01.getJsonData().length;i++){
-                    fnObj.gridView01.gridObj.setValue(i, "exceptReason", exceptReason);
-                }
-
                 ACTIONS.dispatch(ACTIONS.TOP_GRID_SAVE01);
             }
-            /*if(fnObj.gridView02.gridObj.isDataChanged()){
+            if(fnObj.gridView02.gridObj.isDataChanged()){
                 ACTIONS.dispatch(ACTIONS.TOP_GRID_SAVE02);
-            }*/
+            }
+            if(fnObj.gridView03.gridObj.isDataChanged()){
+                ACTIONS.dispatch(ACTIONS.TOP_GRID_SAVE03);
+            }
         }
     },
     TOP_GRID_SAVE01: function (caller, act, data) {
         var result = false;
         axboot.call({
             type: "PUT",
-            url: "/api/v1/st/st013/01/save01",
+            url: "/api/v1/st/st001/02/save01",
             data: JSON.stringify(this.gridView01.getData()),
             callback: function (res) {
                 ACTIONS.dispatch(ACTIONS.PAGE_SEARCH01);
@@ -131,13 +193,12 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         })
             .done(function () {
                 fnObj.gridView01.commit();
-                $('textarea[data-ax-path="except_reason"]').val('');
                 axToast.push(axboot.getCommonMessage("AA007"));
             });
         return result;
     },
     TOP_GRID_SAVE02: function (caller, act, data) {
-        /*var result = false;
+        var result = false;
 
         axboot.call({
             type: "PUT",
@@ -151,13 +212,44 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 fnObj.gridView02.commit();
                 axToast.push(axboot.getCommonMessage("AA007"));
             });
-        return result;*/
+        return result;
+    },
+    TOP_GRID_SAVE03: function (caller, act, data) {
+        var result = false;
+
+        axboot.call({
+            type: "PUT",
+            url: "/api/v1/st/st001/02/save03",
+            data: JSON.stringify(this.gridView03.getData()),
+            callback: function (res) {
+                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH03);
+            }
+        })
+            .done(function () {
+                fnObj.gridView03.commit();
+                axToast.push(axboot.getCommonMessage("AA007"));
+            });
+        return result;
     },
     CLOSE_TAB: function (caller, act, data) {
         ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
     },
     MENU_OPEN: function (caller, act, data) {
 
+    },
+    POP_OPEN: function(caller, act, data){
+        axboot.modal.open({
+            modalType: "COMMON_POPUP",
+            preSearch : false,
+            sendData: function () {
+                return data;
+            },
+            callback: function (data) {
+                if(this.close)
+                    this.close();
+
+            }
+        });
     },
     dispatch: function (caller, act, data) {
         var result = ACTIONS.exec(caller, act, data);
@@ -166,82 +258,6 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         } else {
             return false;
         }
-    },
-    PAGE_CLASSIFY: function (caller, act, data) {
-        if(inoutExceptUuid == ""){
-            return
-        }
-
-        axboot.modal.open({
-            modalType: "CLASSIFY_POPUP",
-            header: {
-                title: "CLASSIFY - " + fnObj.gridView01.gridObj.getSelectedData().requestName
-            },
-            sendData: function () {
-                return {
-                    classUuid : inoutExceptUuid,
-                    flag : "inout",
-                    description : fnObj.gridView01.gridObj.getSelectedData().requestName
-                };
-            },
-            callback: function (data) {
-                if(this) this.close();
-                /*if(data){
-                    crntClassUuid = data.classUuid
-                    ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1,data);
-                }*/
-            }
-        });
-    },
-    SEARCH_CLASS_SCH : function(caller, act, data)
-    {
-        axboot.modal.open({
-            modalType: "COMMON_POPUP",
-            preSearch : data["preSearch"],
-            sendData: function () {
-                return data;
-            },
-            callback: function (data) {
-                $("input[data-ax-path='classificationCode']").val(data["CLASSIFICATION_NAME"])
-                $("input[data-ax-path='classificationCode']").attr("classificationCode",data["CLASSIFICATION_CODE"])
-                classificationSchemeUuid = data['CLASSIFICATION_SCHEME_UUID'];
-                selectedTreeItem = {orderKey:"", classTreeName:"",classificationSchemeUuid:"",orderNo:"",parentClassUuid:""};
-                if(this.close)
-                    this.close();
-                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH2,data);
-            }
-        });
-    },
-    SEARCH_REPOSITORY_SCH : function(caller, act, data)
-    {
-        axboot.modal.open({
-            modalType: "COMMON_POPUP",
-            preSearch : data["preSearch"],
-            sendData: function () {
-                return data;
-            },
-            callback: function (data) {
-                $("input[data-ax-path='repositoryName']").val(data["REPOSITORY_NAME"])
-                repositoryUuid = data['REPOSITORY_UUID'];
-                if(this.close) this.close();
-            }
-        });
-    },
-    SEARCH_SHELF_SCH : function(caller, act, data)
-    {
-        axboot.modal.open({
-            modalType: "COMMON_POPUP",
-            preSearch : data["preSearch"],
-            sendData: function () {
-                return data;
-            },
-            callback: function (data) {
-                $("input[data-ax-path='shelfName']").val(data["SHELF_NAME"])
-                shelfUuid = data['SHELF_UUID'];
-                statusUuid = data['STATUS_UUID'];
-                if(this.close) this.close();
-            }
-        });
     }
 });
 
@@ -255,23 +271,39 @@ fnObj.pageStart = function () {
         }
     });
     $.ajax({
-        url: "/assets/js/column_info/st01201.js",
+        url: "/assets/js/column_info/st00101.js",
+        dataType: "script",
+        async: false,
+        success: function () {
+        }
+    });
+    $.ajax({
+        url: "/assets/js/column_info/st00102.js",
+        dataType: "script",
+        async: false,
+        success: function () {
+        }
+    });
+    $.ajax({
+        url: "/assets/js/column_info/st00103.js",
+        dataType: "script",
+        async: false,
+        success: function () {
+        }
+    });
+    $.ajax({
+        url: "/assets/js/column_info/st01302.js",
         dataType: "script",
         async: false,
         success: function () {
         }
     });
 
-    $.ajax({
-        url: "/assets/js/column_info/st01202.js",
-        dataType: "script",
-        async: false,
-        success: function () {
-        }
-    });
     _this.formView.initView();
     _this.gridView01.initView();
     _this.gridView02.initView();
+    _this.gridView03.initView();
+    _this.gridView04.initView();
     ACTIONS.dispatch(ACTIONS.PAGE_SEARCH01, this.formView.getData());
 };
 
@@ -289,27 +321,6 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
     },
     initEvent: function () {
         var _this = this;
-
-        $("input[data-ax-path='repositoryName']").parents().eq(1).find("a").click(function(){
-            var data = {
-                popupCode : "PU137",
-                searchData : $("input[data-ax-path='repositoryName']").val().trim(),
-                preSearch : false
-            };
-            ACTIONS.dispatch(ACTIONS.SEARCH_REPOSITORY_SCH,data);
-        });
-
-        $("input[data-ax-path='shelfName']").parents().eq(1).find("a").click(function(){
-            if("" != repositoryUuid) {
-                var data = {
-                    popupCode: "PU138",
-                    searchData: repositoryUuid,
-                    preSearch: false
-                };
-                ACTIONS.dispatch(ACTIONS.SEARCH_SHELF_SCH, data);
-            }
-        });
-
     },
     getData: function () {
         var data = this.modelFormatter.getClearData(this.model.get()); // 모델의 값을 포멧팅 전 값으로 치환.
@@ -323,14 +334,13 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
         if (typeof data === "undefined") data = this.getDefaultData();
         data = $.extend({}, data);
 
-        //this.target.find('[data-ax-path="key"]').attr("readonly", "readonly");
+        this.target.find('[data-ax-path="key"]').attr("readonly", "readonly");
 
         this.model.setModel(data);
         this.modelFormatter.formatting(); // 입력된 값을 포메팅 된 값으로 변경
     },
     validate: function () {
         var rs = this.model.validate();
-
         if (rs.error) {
             alert(rs.error[0].jquery.attr("title") + '을(를) 입력해주세요.');
             rs.error[0].jquery.focus();
@@ -344,37 +354,49 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
     },
     bindEvent : function()
     {
-        /* var _this = this;
-         $(".btn_confirm01").click(function(){
-             ACTIONS.dispatch(ACTIONS.STATUS_UPDATE01,CONFIRM_STATUS);
-         });
-         $(".btn_cancel01").click(function(){
-             ACTIONS.dispatch(ACTIONS.STATUS_UPDATE01,CANCEL_STATUS);
-         });
-         $(".btn_confirm02").click(function(){
-             ACTIONS.dispatch(ACTIONS.STATUS_UPDATE02,CONFIRM_STATUS);
-         });
-         $(".btn_cancel02").click(function(){
-             ACTIONS.dispatch(ACTIONS.STATUS_UPDATE02,CANCEL_STATUS);
-         });*/
+        var _this = this;
+        $(".btn_confirm01").click(function(){
+            ACTIONS.dispatch(ACTIONS.STATUS_UPDATE01,CONFIRM_STATUS);
+        });
+        $(".btn_cancel01").click(function(){
+            ACTIONS.dispatch(ACTIONS.STATUS_UPDATE01,CANCEL_STATUS);
+        });
+        $(".btn_confirm02").click(function(){
+            ACTIONS.dispatch(ACTIONS.STATUS_UPDATE02,CONFIRM_STATUS);
+        });
+        $(".btn_cancel02").click(function(){
+            ACTIONS.dispatch(ACTIONS.STATUS_UPDATE02,CANCEL_STATUS);
+        });
+        $(".btn_confirm03").click(function(){
+            ACTIONS.dispatch(ACTIONS.STATUS_UPDATE03,CONFIRM_STATUS);
+        });
+        $(".btn_cancel03").click(function(){
+            ACTIONS.dispatch(ACTIONS.STATUS_UPDATE03,CANCEL_STATUS);
+        });
+
+        $('.pop_repository').click(function(){
+            var data = {
+                popupCode : "PU145"
+            };
+            ACTIONS.dispatch(ACTIONS.POP_OPEN,data);
+        });
     },
 });
 
 /*팝업 헤더*/
 fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     tagId: "realgrid01",
-    primaryKey: "inoutExceptUuid",
-    entityName: "ST_INOUT_EXCEPT",
+    primaryKey: "repositoryUuid",
+    entityName: "ST_REPOSITORY",
     initView: function () {
         this.initInstance();
-        this.setColumnInfo(st01301.column_info);
+        this.setColumnInfo(st00101.column_info);
         this.gridObj.setOption({
             checkBar: {visible: true}
         })
         this.makeGrid();
         this.gridObj.itemClick(this.itemClick);
-        //this.removeRowBeforeEvent(this.cancelDelete);
-
+        this.removeRowBeforeEvent(this.cancelDelete);
     },
     getSelectedData: function () {
         return this.gridObj.getSelectedData()
@@ -390,10 +412,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
         }, ["statusUuid", "repositoryCode", "repositoryName", "description"]);
     },
     itemClick: function (data) {
-        inoutExceptUuid = data.inoutExceptUuid;
-        console.log(inoutExceptUuid)
-
-        if (fnObj.gridView01.isChangeData() == true || fnObj.gridView02.isChangeData() == true) {
+        if (fnObj.gridView02.isChangeData() == true || fnObj.gridView03.isChangeData() == true) {
             axDialog.confirm({
                 msg: axboot.getCommonMessage("AA006")
             }, function () {
@@ -403,9 +422,31 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
                     ACTIONS.dispatch(ACTIONS.PAGE_SEARCH02);
                 }
             });
-        }
+        } else {
 
-        ACTIONS.dispatch(ACTIONS.PAGE_SEARCH02);
+            var codes = axboot.commonCodeFilter("CD138").codeArr;
+            var names = axboot.commonCodeFilter("CD138").nameArr;
+            var state = undefined;
+            for (var i = 0; i < codes.length; i++) {
+                if (codes[i] == fnObj.gridView01.getSelectedData().statusUuid) {
+                    state = names[i];
+                    break;
+                }
+            }
+
+            //confirm confirm
+            if(state == CONFIRM_STATUS){
+                if(fnObj.gridView01.getSelectedData().useYn == "Y"){
+                    fnObj.gridView02.gridObj.setRunAdd(true);
+                }else{
+                    fnObj.gridView02.gridObj.setRunAdd(false);
+                }
+            }else{
+                fnObj.gridView02.gridObj.setRunAdd(false);
+            }
+
+            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH02);
+        }
 
     },
     cancelDelete: function(){
@@ -425,29 +466,27 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
             this.setRunDel(false);
         }else{
             this.setRunDel(true);
+            this.setConfirmYn(true,"ST001_01");
         }
-    },
-    getJsonData: function () {
-        return this.gridObj.getJsonRows();
     }
 
 });
 fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
     tagId: "realgrid02",
-    primaryKey: "exceptRecordResultUuid",
-    uuidFieldName: "exceptRecordResultUuid", //EXCEPT_RECORD_RESULT_UUID
-    entityName: "ST_EXCEPT_RECORD_RESULT",
-    parentsUuidFieldName: "inoutExceptUuid",
+    primaryKey: "shelfUuid",
+    uuidFieldName: "shelfUuid",
+    entityName: "ST_SHELF",
+    parentsUuidFieldName: "repositoryUuid",
     parentsGrid: fnObj.gridView01,
     initView: function () {
         this.initInstance();
-        this.setColumnInfo(st01302.column_info);
+        this.setColumnInfo(st00102.column_info);
         this.gridObj.setOption({
             checkBar: {visible: true}
         })
         this.makeGrid();
-        //this.gridObj.itemClick(this.itemClick);
-        // this.removeRowBeforeEvent(this.cancelDelete);
+        this.gridObj.itemClick(this.itemClick);
+        this.removeRowBeforeEvent(this.cancelDelete);
     },
     getSelectedData: function () {
         return this.gridObj.getSelectedData()
@@ -467,9 +506,9 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
                 return ["useYn"];
             }
         });
-    },
+   },
     itemClick: function (data) {
-        /*if (fnObj.gridView03.isChangeData() == true) {
+        if (fnObj.gridView03.isChangeData() == true) {
             axDialog.confirm({
                 msg: axboot.getCommonMessage("AA006")
             }, function () {
@@ -504,10 +543,10 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
 
 
             ACTIONS.dispatch(ACTIONS.PAGE_SEARCH03);
-        }*/
+        }
     },
     cancelDelete: function(){
-        /*var codes = axboot.commonCodeFilter("CD138").codeArr;
+        var codes = axboot.commonCodeFilter("CD138").codeArr;
         var names = axboot.commonCodeFilter("CD138").nameArr;
         var state = undefined;
         for (var i = 0; i < codes.length; i++) {
@@ -523,6 +562,111 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
             this.setRunDel(false);
         }else{
             this.setRunDel(true);
-        }*/
+            this.setConfirmYn(true,"ST001_01");
+        }
+    },
+});
+
+fnObj.gridView03 = axboot.viewExtend(axboot.gridView, {
+    tagId: "realgrid03",
+    primaryKey: "locationUuid",
+    entityName: "ST_LOCATION",
+    parentsUuidFieldName: "shelfUuid",
+    parentsGrid: fnObj.gridView02,
+    initView: function () {
+        this.initInstance();
+        this.setColumnInfo(st00103.column_info);
+        this.gridObj.setOption({
+            checkBar: {visible: true}
+        })
+        this.makeGrid();
+        this.gridObj.itemClick(this.itemClick);
+        this.removeRowBeforeEvent(this.cancelDelete);
+    },
+    getSelectedData: function () {
+        return this.gridObj.getSelectedData()
+    },
+    disabledColumn: function () {
+
+        var state = axboot.commonCodeValueByCodeName("CD138", CONFIRM_STATUS);
+
+        this.gridObj.setCustomCellStyleRows("disable", function (row) {
+
+            if (row["statusUuid"] == state)
+                return true;
+            else
+                return false;
+        }, ["statusUuid", "rowNo", "columnNo", "description","useYn"]);
+    },
+    itemClick: function (data) {
+
+    },
+    cancelDelete: function(){
+        var codes = axboot.commonCodeFilter("CD138").codeArr;
+        var names = axboot.commonCodeFilter("CD138").nameArr;
+        var state = undefined;
+        for (var i = 0; i < codes.length; i++) {
+            if (codes[i] == fnObj.gridView03.getSelectedData().statusUuid) {
+                state = names[i];
+                break;
+            }
+        }
+
+        if(state == CONFIRM_STATUS){
+            axToast.push(axboot.getCommonMessage("DF001_01"));
+
+            this.setRunDel(false);
+        }else{
+            if(this.getSelectedData().rowNo == ""){
+                this.setRunDel(true);
+            }else{
+                this.setRunDel(true);
+                this.setConfirmYn(true,"ST001_01");
+            }
+
+
+        }
+    }
+});
+
+fnObj.gridView04 = axboot.viewExtend(axboot.gridView, {
+    tagId: "realgrid04",
+    primaryKey: "exceptRecordResultUuid",
+    uuidFieldName: "exceptRecordResultUuid", //EXCEPT_RECORD_RESULT_UUID
+    entityName: "ST_EXCEPT_RECORD_RESULT",
+    /*parentsUuidFieldName: "inoutExceptUuid",
+    parentsGrid: fnObj.gridView01,*/
+    initView: function () {
+        this.initInstance();
+        this.setColumnInfo(st01302.column_info);
+        this.gridObj.setOption({
+            checkBar: {visible: true}
+        })
+        this.makeGrid();
+    },
+    getSelectedData: function () {
+        return this.gridObj.getSelectedData()
+    },
+    disabledColumn: function () {
+        var state = axboot.commonCodeValueByCodeName("CD138", CONFIRM_STATUS);
+        this.gridObj.setCustomCellStyleRows("disable", function(row){
+            if (row["statusUuid"] == state)
+                return true;
+            else if(fnObj.gridView04.getSelectedData().useYn == "Y")
+                return true;
+            else return false;
+        },function(row){
+            if(row["statusUuid"] == state) {
+                return ["statusUuid", "shelfCode", "shelfName", "maxContainer", "description"];
+            }else {
+                return ["useYn"];
+            }
+        });
+    },
+    itemClick: function (data) {
+
+    },
+    cancelDelete: function(){
+
     },
 });
