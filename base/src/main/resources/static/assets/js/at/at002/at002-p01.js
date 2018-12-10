@@ -38,6 +38,11 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     },
     PAGE_CLOSE: function (caller,act, data){
         if (parent) {
+            data.AUTHORITY_NAME = data.authorityName;
+            data.AUTHORITY_NO = data.authorityNo;
+            data.AUTHORITY_TYPE_UUID = data.authorityTypeUuid;
+            data.AUTHORITY_UUID = data.authorityUuid;
+            data.ORG_TYPE_UUID = data.orgTypeUuid;
             parent.axboot.modal.callback(data);
         }
     },
