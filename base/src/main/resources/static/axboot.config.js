@@ -284,7 +284,7 @@
                 }
             },
             "AUTHORITY_POPUP": {
-                width: 450,
+                width: 550,
                 iframe: {
                     url: "/at/at002/at002-p01"
                 }
