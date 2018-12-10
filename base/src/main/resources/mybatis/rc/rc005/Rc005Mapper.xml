@@ -55,7 +55,29 @@
         <result property="addMetadata08" column="addMetadata08" />
         <result property="addMetadata09" column="addMetadata09" />
         <result property="addMetadata10" column="addMetadata10" />
+        <result property="languageCode" column="languageCode" />
+        <result property="statusDescription" column="statusDescription" />
+        <result property="levelOfDetailUuid" column="levelOfDetailUuid" />
         <result property="extraMetadata" column="extraMetadata" jdbcType="CLOB" javaType="java.lang.String" />
+        <result property="sourceSystemUuid" column="sourceSystemUuid" />
+        <result property="creationSystemUuid" column="creationSystemUuid" />
+        <result property="addMetaTemplateSetUuid" column="addMetaTemplateSetUuid" />
+        <result property="legalStatusUuid" column="legalStatusUuid" />
+        <result property="repositoriesUuid" column="repositoriesUuid" />
+        <result property="repositoriesName" column="repositoriesName" />
+        <result property="electronicRecordStatusUuid" column="electronicRecordStatusUuid" />
+        <result property="accumulationStartDate" column="accumulationStartDate" />
+        <result property="accumulationEndDate" column="accumulationEndDate" />
+        <result property="scopeContent" column="scopeContent" />
+        <result property="custodialHistory" column="custodialHistory" />
+        <result property="sourceAcquisitionUuid" column="sourceAcquisitionUuid" />
+        <result property="sourceAcquisitionName" column="sourceAcquisitionName" />
+        <result property="physicalCondition" column="physicalCondition" />
+        <result property="useCondition" column="useCondition" />
+        <result property="findingAids" column="findingAids" />
+        <result property="rulesConversionUuid" column="rulesConversionUuid" />
+        <result property="recordScheduleUuid" column="recordScheduleUuid" />
+        <result property="accessCondition" column="accessCondition" />
         <!--<result property="insertUuid2" column="insertUuid2" />
         <result property="insertDate2" column="insertDate2" />
         <result property="updateUuid2" column="updateUuid2" />
@@ -99,6 +121,9 @@
             ZZ1.INSERT_DATE1 as insertDate1,
             ZZ1.UPDATE_UUID1 as updateUuid1,
             ZZ1.UPDATE_DATE1 as updateDate1,
+            ZZ1.LANGUAGE_CODE as languageCode,
+            ZZ1.STATUS_DESCRIPTION as statusDescription,
+            ZZ1.LEVEL_OF_DETAIL_UUID as levelOfDetailUuid,
             FC_AD_CODE_NM(ZZ1.OPEN_STATUS_UUID) as openStatusUuid,
             ZZ1.KEYWORD as keyword,
             ZZ1.REFERENCE_CODE as referenceCode,
@@ -117,6 +142,25 @@
             ZZ1.ADD_METADATA09 as addMetadata09,
             ZZ1.ADD_METADATA10 as addMetadata10,
             ZZ1.EXTRA_METADATA as extraMetadata,
+            ZZ1.SOURCE_SYSTEM_UUID as sourceSystemUuid,
+            ZZ1.CREATION_SYSTEM_UUID as creationSystemUuid,
+            ZZ1.ADD_META_TEMPLATE_SET_UUID as addMetaTemplateSetUuid,
+            ZZ1.LEGAL_STATUS_UUID as legalStatusUuid,
+            ZZ1.REPOSITORIES_UUID as repositoriesUuid,
+            ZZ1.REPOSITORIES_NAME as repositoriesName,
+            ZZ1.ELECTRONIC_RECORD_STATUS_UUID as electronicRecordStatusUuid,
+            ZZ1.ACCUMULATION_START_DATE as accumulationStartDate,
+            ZZ1.ACCUMULATION_END_DATE as accumulationEndDate,
+            ZZ1.SCOPE_CONTENT as scopeContent,
+            ZZ1.CUSTODIAL_HISTORY as custodialHistory,
+            ZZ1.SOURCE_ACQUISITION_UUID as sourceAcquisitionUuid,
+            ZZ1.SOURCE_ACQUISITION_NAME as sourceAcquisitionName,
+            ZZ1.PHYSICAL_CONDITION as physicalCondition,
+            ZZ1.USE_CONDITION as useCondition,
+            ZZ1.FINDING_AIDS as findingAids,
+            ZZ1.RULES_CONVERSION_UUID as rulesConversionUuid,
+            ZZ1.RECORD_SCHEDULE_UUID as recordScheduleUuid,
+            ZZ1.ACCESS_CONDITION as accessCondition,
             ZZ1.INSERT_UUID2 as insertUuid2,
             ZZ1.INSERT_DATE2 as insertDate2,
             ZZ1.UPDATE_UUID2 as updateUuid2,
@@ -155,6 +199,9 @@
                 SYSDATE as INSERT_DATE1,
                 '' as UPDATE_UUID1,
                 SYSDATE as UPDATE_DATE1,
+                '' as LANGUAGE_CODE,
+                '' as STATUS_DESCRIPTION,
+                '' as LEVEL_OF_DETAIL_UUID,
                 '' as OPEN_STATUS_UUID,
                 '' as KEYWORD,
                 '' as REFERENCE_CODE,
@@ -172,7 +219,26 @@
                 '' as ADD_METADATA08,
                 '' as ADD_METADATA09,
                 '' as ADD_METADATA10,
-                TO_CLOB('')as EXTRA_METADATA,
+                TO_CLOB('') as EXTRA_METADATA,
+                '' as SOURCE_SYSTEM_UUID,
+                '' as CREATION_SYSTEM_UUID,
+                '' as ADD_META_TEMPLATE_SET_UUID,
+                '' as LEGAL_STATUS_UUID,
+                '' as REPOSITORIES_UUID,
+                '' as REPOSITORIES_NAME,
+                '' as ELECTRONIC_RECORD_STATUS_UUID,
+                '' as ACCUMULATION_START_DATE,
+                '' as ACCUMULATION_END_DATE,
+                '' as SCOPE_CONTENT,
+                '' as CUSTODIAL_HISTORY,
+                '' as SOURCE_ACQUISITION_UUID,
+                '' as SOURCE_ACQUISITION_NAME,
+                '' as PHYSICAL_CONDITION,
+                '' as USE_CONDITION,
+                '' as FINDING_AIDS,
+                '' as RULES_CONVERSION_UUID,
+                '' as RECORD_SCHEDULE_UUID,
+                '' as ACCESS_CONDITION,
                 '' as INSERT_UUID2,
                 SYSDATE as INSERT_DATE2,
                 '' as UPDATE_UUID2,
@@ -218,6 +284,9 @@
                     Z01.INSERT_DATE as INSERT_DATE1,
                     Z01.UPDATE_UUID as UPDATE_UUID1,
                     Z01.UPDATE_DATE as UPDATE_DATE1,
+                    Z01.LANGUAGE_CODE,
+                    Z01.STATUS_DESCRIPTION,
+                    Z01.LEVEL_OF_DETAIL_UUID,
                     Z02.OPEN_STATUS_UUID,
                     Z02.KEYWORD,
                     Z02.REFERENCE_CODE,
@@ -236,6 +305,25 @@
                     Z02.ADD_METADATA09,
                     Z02.ADD_METADATA10,
                     Z02.EXTRA_METADATA,
+                    Z02.SOURCE_SYSTEM_UUID,
+                    Z02.CREATION_SYSTEM_UUID,
+                    Z02.ADD_META_TEMPLATE_SET_UUID,
+                    Z02.LEGAL_STATUS_UUID,
+                    Z02.REPOSITORIES_UUID,
+                    (SELECT AUTHORITY_NAME FROM AT_AUTHORITY WHERE AUTHORITY_UUID = Z02.REPOSITORIES_UUID) as REPOSITORIES_NAME,
+                    Z02.ELECTRONIC_RECORD_STATUS_UUID,
+                    Z02.ACCUMULATION_START_DATE,
+                    Z02.ACCUMULATION_END_DATE,
+                    Z02.SCOPE_CONTENT,
+                    Z02.CUSTODIAL_HISTORY,
+                    Z02.SOURCE_ACQUISITION_UUID,
+                    (SELECT AUTHORITY_NAME FROM AT_AUTHORITY WHERE AUTHORITY_UUID = Z02.SOURCE_ACQUISITION_UUID) as SOURCE_ACQUISITION_NAME,
+                    Z02.PHYSICAL_CONDITION,
+                    Z02.USE_CONDITION,
+                    Z02.FINDING_AIDS,
+                    Z02.RULES_CONVERSION_UUID,
+                    Z02.RECORD_SCHEDULE_UUID,
+                    Z02.ACCESS_CONDITION,
                     Z02.INSERT_UUID AS INSERT_UUID2,
                     Z02.INSERT_DATE AS INSERT_DATE2,
                     Z02.UPDATE_UUID AS UPDATE_UUID2,
@@ -287,5 +375,25 @@
         <if test="itemUuid != null">
           AND Z1.ITEM_UUID = #{itemUuid}
         </if>
+    </select>
+
+    <select id="getCreatorList" resultType="Rc00503VO" parameterType="String" statementType="PREPARED">
+        SELECT
+            ITEM_CREATOR_UUID as itemCreatorUuid,
+            CREATOR_UUID as creatorUuid,
+            (SELECT AUTHORITY_NAME FROM AT_AUTHORITY WHERE AUTHORITY_UUID = T1.CREATOR_UUID) as creatorName
+        FROM RC_ITEM_CREATOR T1
+        WHERE ITEM_UUID = #{itemUuid}
+        ORDER BY INSERT_DATE ASC
+    </select>
+
+    <select id="getRelatedAuthorityList" resultType="Rc00505VO" parameterType="String" statementType="PREPARED">
+        SELECT
+            ITEM_RELATED_AUTHORITY_UUID as itemRelatedAuthorityUuid,
+            AUTHORITY_UUID as authorityUuid,
+            (SELECT AUTHORITY_NAME FROM AT_AUTHORITY WHERE AUTHORITY_UUID = T1.AUTHORITY_UUID) as authorityName
+        FROM RC_ITEM_RELATED_AUTHORITY T1
+        WHERE ITEM_UUID = #{itemUuid}
+        ORDER BY INSERT_DATE ASC
     </select>
 </mapper>

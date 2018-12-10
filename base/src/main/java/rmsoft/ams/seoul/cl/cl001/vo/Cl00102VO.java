@@ -53,6 +53,4 @@ public class Cl00102VO extends BaseVO {
     private String addMetadata10;
 
     private String addMetaTemplateSetUuid;
-
-    private List<Ad00702VO> segmentList;
 }

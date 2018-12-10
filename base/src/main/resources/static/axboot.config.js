@@ -171,6 +171,43 @@
                 }
 
             },
+            "ARRANGE_NOT_ARRANGED_CONTAINER_POPUP" :{
+                width: 600,
+                height: 300,
+                iframe: {
+                    url: "/st/st006/st006-p01"
+                }
+
+            },
+            "CREATE_TAKE_OUT_POPUP" :{
+                width: 1200,
+                height: 700,
+                iframe: {
+                    url: "/st/st008/st008-p01"
+                }
+            },
+            "MODIFY_TAKE_OUT_POPUP" :{
+                width: 1200,
+                height: 700,
+                iframe: {
+                    url: "/st/st008/st008-p02"
+                }
+            },
+            "ADD_TAKE_OUT_POPUP" :{
+                width: 1200,
+                height: 700,
+                iframe: {
+                    url: "/st/st008/st008-p03"
+                }
+            },
+
+            "PRINT_TAKE_OUT_POPUP" :{
+                width: 1200,
+                height: 700,
+                iframe: {
+                    url: "/st/st008/st008-p04"
+                }
+            },
             "FREEZE_POPUP" :{
                 width: 1600,
                 height: 700,

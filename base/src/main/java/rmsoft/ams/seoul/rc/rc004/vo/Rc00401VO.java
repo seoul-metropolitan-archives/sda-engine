@@ -53,4 +53,49 @@ public class Rc00401VO extends BaseVO {
 
     private String description;
 
+    private String languageCode;
+
+    private String statusDescription;
+
+    private String levelOfDetailUuid;
+
+    /** 설계변경 신규추가 **/
+    private String sourceSystemUuid;
+
+    private String creationSystemUuid;
+
+    private String addMetaTemplateSetUuid;
+
+    private String legalStatusUuid;
+
+    private String repositoriesUuid;
+
+    private String repositoriesName;
+
+    private String electronicRecordStatusUuid;
+
+    private String accumulationStartDate;
+
+    private String accumulationEndDate;
+
+    private String scopeContent;
+
+    private String custodialHistory;
+
+    private String sourceAcquisitionUuid;
+
+    private String sourceAcquisitionName;
+
+    private String physicalCondition;
+
+    private String useCondition;
+
+    private String findingAids;
+
+    private String rulesConversionUuid;
+
+    private String recordScheduleUuid;
+
+    private String accessCondition;
+
 }

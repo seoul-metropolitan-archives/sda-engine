@@ -12,36 +12,36 @@ var ad00701 =
                  * visible  : grid 포함여부
                  ****************************************************/
                 {
-                    sortNo: 1,
+                    sortNo: 0,
                     width:30,
                     name: "addMetaTemplateSetUuid",
-                    text: "",
+                    text: "Add Meta Template Set Uuid",
                     dataType: "code",
                     editable: false,
                     required: false,
                     visible: false
                 },
                 {
-                    sortNo: 4,
+                    sortNo: 1,
                     name: "setCode",
                     text: "Code",
-                    width: 180,
+                    width: 120,
                     dataType: "text",
                     editable: true,
                     required: true
                 },
                 {
-                    sortNo: 5,
+                    sortNo: 2,
                     name: "setName",
                     text: "Name",
-                    width: 120,
+                    width: 180,
                     dataType: "text",
                     editable: true,
                     required: true,
                     disable: false
                 },
                 {
-                    sortNo: 13,
+                    sortNo: 3,
                     name: "description",
                     text: "Description",
                     width: 150,
@@ -49,7 +49,7 @@ var ad00701 =
                     required: false
                 },
                 {
-                    sortNo: 14,
+                    sortNo: 4,
                     name: "notes",
                     text: "Notes",
                     width: 150,
@@ -57,35 +57,27 @@ var ad00701 =
                     required: false
                 },
                 {
-                    sortNo: 15,
+                    sortNo: 5,
                     name: "useYN",
                     text: "Use",
                     width: 50,
+                    editable: true,
                     dataType: "check",
-                    textAlignment: "center",
-                    defaultValue : "Y",
-                    renderer: {
-                        type: "check",
-                        shape: "",
-                        falseValues: "N",
-                        trueValues: "Y",
-                        startEditOnClick: true,
-                    },
-                    required: false,
+                    defaultValue: "Y"
                 },
                 {
-                    sortNo: 15,
+                    sortNo: 6,
                     name: "defaultYN",
                     text: "Default",
-                    width: 50,
+                    width: 70,
+                    editable: true,
                     dataType: "check",
-                    textAlignment: "center",
                     defaultValue : "N",
                     selectType : "single",
-                    required: false,
+                    required: false
                 },
                 {
-                    sortNo: 16,
+                    sortNo: 7,
                     name: "insertUuid",
                     text: "Created By",
                     width: 80,
@@ -97,7 +89,7 @@ var ad00701 =
                     disable: true
                 },
                 {
-                    sortNo: 17,
+                    sortNo: 8,
                     name: "insertDate",
                     text: "Date/Time Created",
                     width: 140,
@@ -106,7 +98,7 @@ var ad00701 =
                     disable: true
                 },
                 {
-                    sortNo: 18,
+                    sortNo: 9,
                     name: "updateUuid",
                     text: "Modifed By",
                     width: 80,
@@ -116,7 +108,7 @@ var ad00701 =
                     disable: true
                 },
                 {
-                    sortNo: 19,
+                    sortNo: 10,
                     name: "updateDate",
                     text: "Date/Time Modified",
                     width: 140,
@@ -125,9 +117,9 @@ var ad00701 =
                     disable: true
                 },
                 {
-                    sortNo:20 ,
+                    sortNo:11 ,
                     name: "metaCnt",
-                    text: "",
+                    text: "Meta Cnt",
                     dataType: "text",
                     visible: false
                 }

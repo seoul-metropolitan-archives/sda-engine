@@ -53,7 +53,7 @@
         </if>
         ORDER BY ENTITY_TYPE ASC
     </select>
-    <select id="searchSegment" resultType="Ad00702VO" parameterType="Ad00702VO" statementType="PREPARED">
+    <select id="searchSegment" resultType="Ad00702VO" parameterType="Ad00701VO" statementType="PREPARED">
         <![CDATA[
         SELECT
             T2.ADD_META_SEGMENT_UUID AS addMetaSegmentUuid,
@@ -95,6 +95,7 @@
             </when>
             <otherwise>
                 AND T1.DEFAULT_YN = 'Y'
+                AND T1.ENTITY_TYPE = #{entityType}
             </otherwise>
         </choose>
         ORDER BY T2.SEQUENCE, T2.ADDITIONAL_COLUMN ASC

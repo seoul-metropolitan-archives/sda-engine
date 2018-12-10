@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="rmsoft.ams.seoul.st.st009.dao.St009Mapper">
+
+    <select id="getTakeoutRequest" resultType="St00901VO" parameterType="St00901VO" statementType="PREPARED">
+      SELECT    A.TAKEOUT_REQUEST_UUID as takeoutRequestUuid,
+                A.REQUEST_TYPE_UUID as requestTypeUuid,
+                A.REQUEST_NAME as requestName,
+                A.REQUESTOR_UUID as requestorUuid,
+                A.TAKEOUT_DATE as takeoutDate,
+                A.RETURN_DUE_DATE as returnDueDate,
+                A.RETURN_DATE as returnDate,
+                A.TAKEOUT_PROPOSE as takeoutPropose,
+                A.STATUS_UUID as statusUuid,
+                A.OUTSOURCING_DEPARTMENT as outsourcingDepartment,
+                A.OUTSOURCING_POSITION as outsourcingPosition,
+                A.OUTSOURCING_PERSON_NAME as outsourcingPersonName,
+                A.OUTSOURCING_PHONE as outsourcingPhone,
+                <include refid="Common.UserName"><property name="userUuid" value="INSERT_UUID"/></include> as insertUuid,
+                A.INSERT_DATE as insertDate,
+                <include refid="Common.UserName"><property name="userUuid" value="UPDATE_UUID"/></include> as updateUuid,
+                A.UPDATE_DATE as updateDate,
+      FROM ST_TAKEOUT_REQUEST A
+        <where>
+            1=1
+            <!--<if test="machineId != null">
+                AND A.MACHINE_ID LIKE '%' || #{machineId} || '%'
+            </if>
+            <if test="machineName != null">
+                AND A.MACHINE_NAME LIKE '%' || #{machineName} || '%'
+            </if>
+            <if test="gateUuid != null">
+                AND A.GATE_UUID LIKE '%' || #{gateUuid} || '%'
+            </if>
+            <if test="ip != null">
+                AND A.IP LIKE '%' || #{ip} || '%'
+            </if>-->
+        </where>
+    </select>
+
+</mapper>

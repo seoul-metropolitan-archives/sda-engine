@@ -62,6 +62,18 @@ public class RcItem extends BaseJpaModel<RcItem.RcItemId> {
     @Comment(value = "DESCRIPTION END DATE")
     private String descriptionEndDate;
 
+    @Column(name = "LANGUAGE_CODE", length = 8, nullable = true)
+    @Comment(value = "")
+    private String languageCode;
+
+    @Column(name = "STATUS_DESCRIPTION", length = 8, nullable = true)
+    @Comment(value = "")
+    private String statusDescription;
+
+    @Column(name = "LEVEL_OF_DETAIL_UUID", length = 8, nullable = true)
+    @Comment(value = "")
+    private String levelOfDetailUuid;
+
 
     @Override
     public RcItem.RcItemId getId() { return RcItem.RcItemId.of(itemUuid); }

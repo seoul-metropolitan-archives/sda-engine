@@ -2,7 +2,6 @@ var fnObj = {};
 var inoutExceptUuid = "";
 var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH: function (caller, act, data) {
-        debugger
         ACTIONS.dispatch(ACTIONS.PAGE_SEARCH01);
     },
     PAGE_SEARCH01: function (caller, act, data) {
@@ -21,7 +20,6 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         });
     },
     PAGE_SEARCH02: function (caller, act, data) {
-        debugger
         if(fnObj.gridView01.getSelectedData() == null){
             return;
         }
@@ -392,7 +390,6 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
         }, ["statusUuid", "repositoryCode", "repositoryName", "description"]);
     },
     itemClick: function (data) {
-        debugger
         inoutExceptUuid = data.inoutExceptUuid;
         console.log(inoutExceptUuid)
 

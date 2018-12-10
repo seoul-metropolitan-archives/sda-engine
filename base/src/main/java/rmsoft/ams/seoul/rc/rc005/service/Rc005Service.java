@@ -33,6 +33,7 @@ public class Rc005Service extends BaseService{
         Rc00502VO rc00502VO;
         rc00501VO.setRiAggregationUuid(requestParams.getString("aggregationUuid"));
         rc00501VO.setRiItemUuid(requestParams.getString("itemUuid"));
+
         List<Rc00501VO>  rc00501VOList =  rc005Mapper.getRecordItemList(rc00501VO);
         for (Rc00501VO rc00501VO1 : rc00501VOList){
             if(StringUtils.isNotEmpty(rc00501VO1.getRiItemUuid())) {
@@ -40,6 +41,8 @@ public class Rc005Service extends BaseService{
                     rc00502VO = new Rc00502VO();
                     rc00502VO.setItemUuid(rc00501VO1.getRiItemUuid());
                     rc00501VO1.setRc00502VoList(rc005Mapper.getRecordComponentList(rc00502VO));
+                    rc00501VO1.setCreatorList(rc005Mapper.getCreatorList(requestParams.getString("itemUuid")));
+                    rc00501VO1.setRelatedAuthorityList(rc005Mapper.getRelatedAuthorityList(requestParams.getString("itemUuid")));
                 }
             }
         }

@@ -1498,7 +1498,8 @@ $.widget( "ui.accordion", {
 
 		// callbacks
 		activate: null,
-		beforeActivate: null
+		beforeActivate: null,
+        onlyStyle : false
 	},
 
 	_create: function() {
@@ -1672,6 +1673,7 @@ $.widget( "ui.accordion", {
 
 	refresh: function() {
 		var options = this.options;
+
 		this._processPanels();
 
 		// was collapsed or no panel
@@ -1720,12 +1722,15 @@ $.widget( "ui.accordion", {
 			accordionId = this.accordionId = "ui-accordion-" +
 				(this.element.attr( "id" ) || ++uid);
 
-		this.active = this._findActive( options.active )
-			.addClass( "ui-accordion-header-active ui-state-active ui-corner-top" )
-			.removeClass( "ui-corner-all" );
-		this.active.next()
-			.addClass( "ui-accordion-content-active" )
-			.show();
+		this.active = this._findActive(options.active);
+
+        if(!options.onlyStyle) {
+            this.active.addClass("ui-accordion-header-active ui-state-active ui-corner-top")
+                .removeClass("ui-corner-all");
+            this.active.next()
+                .addClass("ui-accordion-content-active")
+                .show();
+        }
 
 		this.headers
 			.attr( "role", "tab" )
@@ -1748,8 +1753,16 @@ $.widget( "ui.accordion", {
 			.next()
 				.attr( "role", "tabpanel" );
 
-		this.headers
-			.not( this.active )
+        var allHeaders = null;
+
+        if(options.onlyStyle){
+            allHeaders = this.headers;
+            allHeaders.addClass("ui-state-focus");
+		}else{
+            allHeaders = this.headers.not( this.active );
+		}
+
+        allHeaders
 			.attr({
 				"aria-selected": "false",
 				"aria-expanded": "false",
@@ -1758,23 +1771,32 @@ $.widget( "ui.accordion", {
 			.next()
 				.attr({
 					"aria-hidden": "true"
-				})
-				.hide();
+				});
+
+		if(options.onlyStyle) {
+            allHeaders.next().show();
+        }else {
+            allHeaders.next().hide();
+        }
 
 		// make sure at least one header is in the tab order
-		if ( !this.active.length ) {
-			this.headers.eq( 0 ).attr( "tabIndex", 0 );
-		} else {
-			this.active.attr({
-				"aria-selected": "true",
-				"aria-expanded": "true",
-				tabIndex: 0
-			})
-			.next()
-				.attr({
-					"aria-hidden": "false"
-				});
-		}
+        if(!options.onlyStyle) {
+            if (this.active) {
+                if (!this.active.length) {
+                    this.headers.eq(0).attr("tabIndex", 0);
+                } else {
+                    this.active.attr({
+                        "aria-selected": "true",
+                        "aria-expanded": "true",
+                        tabIndex: 0
+                    })
+                        .next()
+                        .attr({
+                            "aria-hidden": "false"
+                        });
+                }
+            }
+        }
 
 		this._createIcons();
 
@@ -1909,6 +1931,10 @@ $.widget( "ui.accordion", {
 	},
 
 	_toggle: function( data ) {
+		if(this.options.onlyStyle){
+			return;
+        }
+
 		var toShow = data.newPanel,
 			toHide = this.prevShow.length ? this.prevShow : data.oldPanel;
 
@@ -1920,7 +1946,7 @@ $.widget( "ui.accordion", {
 		if ( this.options.animate ) {
 			this._animate( toShow, toHide, data );
 		} else {
-			toHide.hide();
+			if(this.options.collapsible) toHide.hide();
 			toShow.show();
 			this._toggleComplete( data );
 		}

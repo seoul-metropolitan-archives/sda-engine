@@ -401,7 +401,6 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
 
     },
     cancelDelete: function(){
-        debugger
         var codes = axboot.commonCodeFilter("CD138").codeArr;
         var names = axboot.commonCodeFilter("CD138").nameArr;
         var state = undefined;
