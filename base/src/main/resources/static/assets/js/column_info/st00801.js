@@ -14,8 +14,38 @@ var st00801 =
                 {
                     sortNo: 0,
                     width:30,
-                    name: "containerUuid",
-                    text: "containerUuid",
+                    name: "takeoutRequestUuid",
+                    text: "takeoutRequestUuid",
+                    editable: false,
+                    dataType: "code",
+                    required: false,
+                    visible: false
+                },
+                {
+                    sortNo: 0,
+                    width:30,
+                    name: "requestTypeUuid",
+                    text: "requestTypeUuid",
+                    editable: false,
+                    dataType: "code",
+                    required: false,
+                    visible: false
+                },
+                {
+                    sortNo: 0,
+                    width:30,
+                    name: "requestorUuid",
+                    text: "requestorUuid",
+                    editable: false,
+                    dataType: "code",
+                    required: false,
+                    visible: false
+                },
+                {
+                    sortNo: 0,
+                    width:30,
+                    name: "statusUuid",
+                    text: "statusUuid",
                     editable: false,
                     dataType: "code",
                     required: false,
@@ -23,8 +53,8 @@ var st00801 =
                 },
                 {
                     sortNo: 1,
-                    name: "containerName",
-                    text: "Container Name",
+                    name: "requestName",
+                    text: "반출의뢰서",
                     width: 80,
                     editable: false,
                     disable: true,
@@ -33,8 +63,8 @@ var st00801 =
                 },
                 {
                     sortNo: 2,
-                    name: "parentContainerName",
-                    text: "Parent Container Name",
+                    name: "requestorName",
+                    text: "반출자",
                     width: 80,
                     editable: false,
                     disable: true,
@@ -43,51 +73,29 @@ var st00801 =
                 },
                 {
                     sortNo: 3,
-                    name: "containerTypeUuid",
-                    text: "Container Type",
-                    width: 120,
+                    name: "userGroupName",
+                    text: "소속",
+                    width: 80,
                     editable: false,
-                    dataType: "combo",
-                    values: axboot.commonCodeFilter("CD139").codeArr,
-                    labels: axboot.commonCodeFilter("CD139").nameArr,
-                    disable: true
-                },
-                {
-                    sortNo: 3,
-                    name: "containerType",
-                    text: "Container Type",
-                    width: 120,
-                    editable: false,
+                    disable: true,
                     dataType: "text",
-                    visible: false,
-                    values: axboot.commonCodeFilter("CD139").codeArr,
-                    labels: axboot.commonCodeFilter("CD139").nameArr,
-                    disable: true
+                    required: false
                 },
-                {
-                    sortNo: 3,
-                    name: "controlNumber",
-                    text: "Control Number",
-                    width: 120,
-                    dataType: "text",
-                    editable: false,
-                    sortable: true,
-                    disable:true
-                },
+
                 {
                     sortNo: 4,
-                    name: "provenance",
-                    text: "Provenance",
+                    name: "takeoutDate",
+                    text: "반출일자",
                     width: 120,
-                    dataType: "text",
+                    dataType: "timestamp",
                     editable: false,
                     sortable: true,
                     disable:true
                 },
                 {
                     sortNo: 5,
-                    name: "creationStartDate",
-                    text: "Creation Start Date",
+                    name: "returnDueDate",
+                    text: "반입예정일",
                     width: 120,
                     dataType: "timestamp",
                     editable: false,
@@ -96,18 +104,8 @@ var st00801 =
                 },
                 {
                     sortNo: 6,
-                    name: "creationEndDate",
-                    text: "Creation End Date",
-                    width: 120,
-                    dataType: "timestamp",
-                    editable: false,
-                    sortable: true,
-                    disable:true
-                },
-                {
-                    sortNo: 7,
-                    name: "orderNo",
-                    text: "Order No",
+                    name: "status",
+                    text: "상태",
                     width: 120,
                     dataType: "text",
                     editable: false,
@@ -115,42 +113,17 @@ var st00801 =
                     disable:true
                 },
                 {
-                    sortNo: 8,
-                    name: "description",
-                    text: "Description",
-                    width: 250,
-                    dataType: "richtext",
+                    sortNo: 7,
+                    name: "takeoutPropose",
+                    text: "takeoutPropose",
+                    width: 120,
+                    dataType: "text",
                     editable: false,
                     sortable: true,
-                    disable:true
+                    disable:true,
+                    visible: false
                 },
-                {
-                    sortNo: 9,
-                    name: "notes",
-                    text: "Notes",
-                    width: 250,
-                    dataType: "richtext",
-                    editable: false,
-                    sortable: true,
-                    disable:true
-                },
-                {
-                    sortNo: 10,
-                    width:140,
-                    name: "orderKey1",
-                    text: "ORDER_KEY",
-                    editable: false,
-                    dataType: "code",
-                    visible : false
-                },
-                {
-                    sortNo: 11,
-                    width:140,
-                    name: "choiceYn",
-                    text: "choiceYn",
-                    editable: false,
-                    dataType: "code",
-                    visible : false
-                }
+
+
             ]
     }

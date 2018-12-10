@@ -32,7 +32,6 @@ public class St00803VO extends BaseVO {
     private String type;
     private String typeUuid;
     private String itemTypeUuid;
- ;
 
     private String parentAggregationUuid;
     private String catPath;

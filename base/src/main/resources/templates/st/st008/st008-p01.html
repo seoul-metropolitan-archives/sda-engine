@@ -47,7 +47,7 @@
                                                     <div layout:fragment="wrap">
                                                         <input type="text" data-ax-path="authorityName"
                                                                class="form-control"
-                                                               th:placeholder="#{axboot.admin.login.status.message(${loginUser.userNm})}"
+
                                                                readonly/>
                                                     </div>
                                                 </th:block>
@@ -56,45 +56,78 @@
                                                 <th:block
                                                         layout:insert="~{/fragments/table :: tr-td(text='구분', style='width: 250px')}">
                                                     <div layout:fragment="wrap">
-                                                        <input type="text" data-ax-path="authorityName"
-                                                               class="form-control"
-                                                               th:placeholder="#{axboot.admin.login.status.message(${loginUser.userNm})}"
-                                                               readonly/>
+                                                        <div class="rdo_box">
+
+                                                        </div>
                                                     </div>
                                                 </th:block>
                                             </div>
 
                                             <div id="organizationArea">
+                                                <!-- 내부 직원 -->
+                                                <div id="innerWorker">
+                                                    <th:block
+                                                            layout:insert="~{/fragments/table :: tr-td3(text1='소속', style1='width: 250px', text2='직위', style2='width: 250px', text3='성명', style3='width: 250px')}">
+                                                        <div layout:fragment="wrap-1">
+                                                            <input type="text" data-ax-path="userGroupName"
+                                                                   class="form-control"
 
-                                                <th:block
-                                                        layout:insert="~{/fragments/table :: tr-td3(text1='소속', style1='width: 250px', text2='직위', style2='width: 250px', text3='성명', style3='width: 250px')}">
-                                                    <div layout:fragment="wrap-1">
-                                                        <input type="text" data-ax-path="descriptorUuid"
-                                                               class="form-control"
-                                                               th:placeholder="#{axboot.admin.login.status.message(${loginUser.userNm})}"
-                                                               readonly>
-                                                    </div>
-                                                    <div layout:fragment="wrap-2">
-                                                        <input type="text" data-ax-path="descriptorUuid"
-                                                               class="form-control"
-                                                               th:placeholder="#{axboot.admin.login.status.message(${loginUser.userNm})}"
-                                                               readonly>
-                                                    </div>
-                                                    <div layout:fragment="wrap-3">
-                                                        <input type="text" data-ax-path="descriptorUuid"
-                                                               class="form-control"
-                                                               th:placeholder="#{axboot.admin.login.status.message(${loginUser.userNm})}"
-                                                               readonly>
-                                                    </div>
+                                                                   readonly>
+                                                        </div>
+                                                        <div layout:fragment="wrap-2">
+                                                            <input type="text" data-ax-path="descriptorUuid"
+                                                                   class="form-control"
 
-                                                </th:block>
+                                                                   readonly>
+                                                        </div>
+                                                        <div layout:fragment="wrap-3">
+                                                            <input type="text" data-ax-path="requestorName"
+                                                                   class="form-control"
+                                                                   th:placeholder="#{axboot.admin.login.status.message(${loginUser.userNm})}"
+                                                                   readonly>
+                                                        </div>
+
+
+                                                    </th:block>
+                                                </div>
+                                                <div id="outerWorker" style="display:none">
+                                                    <!-- 외부 직원 -->
+                                                    <th:block
+                                                            layout:insert="~{/fragments/table :: tr-td4(text1='소속', style1='width: 250px', text2='직위', style2='width: 250px', text3='성명', style3='width: 250px', text4='전화번호', style4='width: 250px')}">
+                                                        <div layout:fragment="wrap-1">
+                                                            <input type="text" data-ax-path="outsourcingDepartment"
+                                                                   class="form-control"
+
+                                                                    >
+                                                        </div>
+                                                        <div layout:fragment="wrap-2">
+                                                            <input type="text" data-ax-path="outsourcingPosition"
+                                                                   class="form-control"
+
+                                                                    >
+                                                        </div>
+                                                        <div layout:fragment="wrap-3">
+                                                            <input type="text" data-ax-path="outsourcingPersonName"
+                                                                   class="form-control"
+                                                                   th:placeholder="홍길동"
+                                                                    >
+                                                        </div>
+                                                        <div layout:fragment="wrap-4">
+                                                            <input type="text" data-ax-path="outsourcingPhone"
+                                                                   class="form-control"
+                                                                   th:placeholder="0701112222"
+                                                                    >
+                                                        </div>
+
+                                                    </th:block>
+                                                </div>
                                                 <th:block
                                                         layout:insert="~{/fragments/table :: tr-td2(text1='반출일자', style1='width: 250px', text2='반입예정일', style2='width: 250px')}">
                                                     <div layout:fragment="wrap-1">
                                                         <div class="input-group" data-ax5picker="date">
                                                             <div class="cld_box">
                                                                 <input type="text"
-                                                                       data-ax-path="startDate"
+                                                                       data-ax-path="takeoutDate"
                                                                        style=""
                                                                        placeholder="YYYY-MM-DD" maxlength="10">
                                                                 <img title="calendar"
@@ -107,7 +140,7 @@
                                                         <div class="input-group" data-ax5picker="date">
                                                             <div class="cld_box">
                                                                 <input type="text"
-                                                                       data-ax-path="endDate"
+                                                                       data-ax-path="returnDueDate"
                                                                        style=""
                                                                        placeholder="YYYY-MM-DD" maxlength="10">
                                                                 <img title="calendar"
@@ -121,9 +154,9 @@
                                             </div>
                                             <div>
                                                 <th:block
-                                                        layout:insert="~{/fragments/table :: tr-td(text='주요업무', style='width: 100%;height: auto;')}">
+                                                        layout:insert="~{/fragments/table :: tr-td(text='반출목적', style='width: 100%;height: auto;')}">
                                                     <div layout:fragment="wrap">
-                                                        <textarea data-ax-path="mainJob01"
+                                                        <textarea data-ax-path="takeoutPropose"
                                                                   class="form-control" style="height:470px"></textarea>
                                                     </div>
                                                 </th:block>

@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="rmsoft.ams.seoul.st.st006.dao.St008Mapper">
+<mapper namespace="rmsoft.ams.seoul.st.st006.dao.St006Mapper">
     <select id="getStContainer" resultType="St00601VO" statementType="PREPARED">
         <![CDATA[
         select container.CONTAINER_UUID                                                                           containerUuid,
@@ -38,17 +38,21 @@
                    B.TITLE AS itemTitle,
                    B.ITEM_CODE AS itemCode,
                    A.LEVEL_UUID as levelUuid,
+                   A.AGGREGATION_CODE as code,
+                   A.TITLE as title,
                    (SELECT LEVEL_NO FROM RC_LEVEL WHERE LEVEL_UUID = A.LEVEL_UUID) as "level",
-                   A.AGGREGATION_UUID as aggregationUuid,
-                   A.PUBLISHED_STATUS_UUID as publishedStatusUuid,
+                   LOWER (Z2.CODE_NAME) as type,
                    (SELECT CODE_NAME FROM AD_CODE_DETAIL WHERE CODE_DETAIL_UUID = A.PUBLISHED_STATUS_UUID) as publishedStatus,
                    AUTHOR                                                                                   as author,
                    DESCRIPTION_START_DATE                                                                   as startDate,
                    DESCRIPTION_END_DATE                                                                     as endDate,
-                   A.AGGREGATION_CODE as code,
-                   A.TITLE as title,
+                   A.AGGREGATION_UUID as aggregationUuid,
+                   A.PUBLISHED_STATUS_UUID as publishedStatusUuid,
+
+
+
                    A.TYPE_UUID as typeUuid,
-                   LOWER (Z2.CODE_NAME) as type,
+
                    B.TYPE_UUID AS itemTypeUuid,
                    B.DESCRIPTION as description,
                    B.NOTES as notes,

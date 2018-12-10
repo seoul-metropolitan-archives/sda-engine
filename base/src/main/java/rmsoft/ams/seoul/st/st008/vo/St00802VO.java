@@ -13,10 +13,22 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class St00802VO extends BaseVO
-{
+public class St00802VO extends BaseVO {
 
-    private String classUuid;
-    private List<St00801VO> st00801VOList;
+    private String takeoutRecordResultUuid;
+    private String takeoutRequestUuid;
+    private String aggregationUuid;
+    private String code;
+    private String title;
+    private String level;
+    private String type;
+    private String publishedStatus;
+    private String author;
+    private String descStrDate;
+    private String descEdDate;
+
+    private String publishedStatusUuid;
+    private String locationName; // 행렬단
+
 
 }

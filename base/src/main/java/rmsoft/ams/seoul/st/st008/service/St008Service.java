@@ -1,20 +1,36 @@
 package rmsoft.ams.seoul.st.st008.service;
 
+import com.querydsl.core.types.Predicate;
+import io.onsemiro.core.api.response.ApiResponse;
+import io.onsemiro.core.code.ApiStatus;
 import io.onsemiro.core.domain.BaseService;
 import io.onsemiro.core.parameter.RequestParams;
+import io.onsemiro.utils.DateUtils;
+import io.onsemiro.utils.ModelMapperUtils;
+import io.onsemiro.utils.SessionUtils;
+import io.onsemiro.utils.UUIDUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import rmsoft.ams.seoul.common.domain.*;
 import rmsoft.ams.seoul.common.repository.ClClassConRepository;
 import rmsoft.ams.seoul.common.repository.ClClassRepository;
 import rmsoft.ams.seoul.common.repository.ClClassifyRecordResultRepository;
+import rmsoft.ams.seoul.common.repository.StTakeoutRequestRepository;
 import rmsoft.ams.seoul.st.st008.dao.St008Mapper;
 import rmsoft.ams.seoul.st.st008.vo.St00801VO;
-import rmsoft.ams.seoul.st.st008.vo.St00803VO;
+import rmsoft.ams.seoul.st.st008.vo.St00802VO;
+import rmsoft.ams.seoul.utils.CommonCodeUtils;
 
 import javax.inject.Inject;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
+
+import static rmsoft.ams.seoul.common.domain.QStShelf.stShelf;
 
 
 /**
@@ -26,11 +42,7 @@ public class St008Service extends BaseService {
     @Inject
     private St008Mapper st008Mapper;
     @Autowired
-    private ClClassRepository clClassRepository;
-    @Autowired
-    private ClClassConRepository clClassConRepository;
-    @Autowired
-    private ClClassifyRecordResultRepository clClassifyRecordResultRepository;
+    private StTakeoutRequestRepository stTakeoutRequestRepository;
 
     /**
      * Gets classified record list.
@@ -39,7 +51,7 @@ public class St008Service extends BaseService {
      * @param requestParams the request params
      * @return the classified record list
      */
-    public Page<St00801VO> getStContainer(Pageable pageable, RequestParams<St00801VO> requestParams) {
+    public Page<St00801VO> getStTakeoutRequest(Pageable pageable, RequestParams<St00801VO> requestParams) {
 
         St00801VO st00801VO = new St00801VO();
         // st00801VO.setClassUuid(requestParams.getString("classUuid"));
@@ -50,17 +62,71 @@ public class St008Service extends BaseService {
 //        st00801VO.setArrangedFromDate(requestParams.getString("arrangedFromDate01"));
 //        st00801VO.setArrangedToDate(requestParams.getString("arrangedToDate01"));
 //        st00801VO.setContainerUuid(requestParams.getString("containerUuid"));
-        return filter(st008Mapper.getStContainer(st00801VO), pageable, "", St00801VO.class);
+        return filter(st008Mapper.getStTakeoutRequest(st00801VO), pageable, "", St00801VO.class);
     }
 
 
-    public Page<St00803VO> getSelectedItem(Pageable pageable, RequestParams<St00803VO> requestParams) {
+    public Page<St00802VO> getStTakeoutRecordResult(Pageable pageable, RequestParams<St00802VO> requestParams) {
 
-        St00803VO vo = new St00803VO();
-        vo.setContainerUuid(requestParams.getString("containerUuid"));
+        St00802VO vo = new St00802VO();
+        vo.setTakeoutRequestUuid(requestParams.getString("takeoutRequestUuid"));
 //        vo.setStatusUuid(requestParams.getString("statusUuid02"));
-        List<St00803VO> ddd = st008Mapper.getSelectedItem(vo);
-        return filter(ddd, pageable, "", St00803VO.class);
+        List<St00802VO> ddd = st008Mapper.getStTakeoutRecordResult(vo);
+        return filter(ddd, pageable, "", St00802VO.class);
+    }
+
+    @Transactional
+    public ApiResponse saveStTakeoutRequest(St00801VO vo) {
+
+        vo.setRequestorUuid(SessionUtils.getCurrentLoginUserUuid());
+        boolean isCreateOrModify = false;
+        String uuid = vo.getTakeoutRequestUuid();
+        if( uuid == null) {
+
+            // 새로 생성
+            isCreateOrModify = true;
+            String orgCodeSeq = jdbcTemplate.queryForObject("SELECT ST_SHELF_CODE_SEQ.NEXTVAL FROM dual", String.class);
+            String refinedCodeSeq = orgCodeSeq;
+            int cnt = 0;
+            for ( ; cnt < Math.abs(refinedCodeSeq.length() - 2); cnt++) {
+                refinedCodeSeq = "0" + refinedCodeSeq;
+            }
+            String requestName = DateUtils.convertToString(LocalDateTime.now(), "yyyyMMdd") + "-" + refinedCodeSeq;
+            vo.setTakeoutRequestUuid(orgCodeSeq);
+            vo.setRequestName(requestName);
+
+            vo.setInsertDate(Timestamp.valueOf(DateUtils.convertToString(LocalDateTime.now(), DateUtils.DATE_TIME_PATTERN)));
+            vo.setInsertUuid(UUIDUtils.getUUID());
+            vo.setUpdateDate(Timestamp.valueOf(DateUtils.convertToString(LocalDateTime.now(), DateUtils.DATE_TIME_PATTERN)));
+            vo.setUpdateUuid(UUIDUtils.getUUID());
+            vo.setStatusUuid("6B1C7487-99F3-4F04-B449-891AD4679E00"); // 반출서 작성
+        }
+
+
+        StTakeoutRequest stTakeoutRequest = ModelMapperUtils.map(vo, StTakeoutRequest.class);
+        StTakeoutRequest orgClClass = stTakeoutRequestRepository.findOne(stTakeoutRequest.getId());
+        if (isCreateOrModify ==  true) {
+            // 새로 생성
+            // do nothing
+        } else {
+            // 수정
+            stTakeoutRequest = orgClClass;
+
+            vo.setUpdateDate(Timestamp.valueOf(DateUtils.convertToString(LocalDateTime.now(), DateUtils.DATE_TIME_PATTERN)));
+
+            // clClass.getRequestorName(); // 반출자
+            // clClass.getUser(); //  소속
+            // clClass.getUser(); //  직위
+
+            stTakeoutRequest.setTakeoutDate(stTakeoutRequest.getTakeoutDate()); //  반출일자
+
+            stTakeoutRequest.setReturnDueDate(stTakeoutRequest.getReturnDueDate()); //  반입예정일
+            stTakeoutRequest.setStatusUuid(stTakeoutRequest.getStatusUuid()); //  상태
+            stTakeoutRequest.setTakeoutPropose(stTakeoutRequest.getTakeoutPropose()); // 반출목적
+        }
+
+        stTakeoutRequestRepository.save(stTakeoutRequest);
+        return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");
     }
 
     /*public ApiResponse updateStatus(List<St00801VO> list) {
@@ -103,21 +169,21 @@ public class St008Service extends BaseService {
         }
         return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");
     }
-    public Page<St00303VO> getSelectedItem(Pageable pageable, RequestParams<St00303VO> requestParams) {
+    public Page<St00303VO> getStTakeoutRecordResult(Pageable pageable, RequestParams<St00303VO> requestParams) {
 
         St00303VO st00303VO = new St00303VO();
         st00303VO.setAggregationUuid(requestParams.getString("aggregationUuid"));
         st00303VO.setClassUuid(requestParams.getString("classUuid"));
 
-        return filter(st008Mapper.getSelectedItem(st00303VO), pageable, "", St00303VO.class);
+        return filter(st008Mapper.getStTakeoutRecordResult(st00303VO), pageable, "", St00303VO.class);
     }
-    public Page<St00303VO> getSelectedItemSchedule(Pageable pageable, RequestParams<St00303VO> requestParams) {
+    public Page<St00303VO> getStTakeoutRecordResultSchedule(Pageable pageable, RequestParams<St00303VO> requestParams) {
 
         St00303VO st00303VO = new St00303VO();
         st00303VO.setAggregationUuid(requestParams.getString("aggregationUuid"));
         st00303VO.setRecordScheduleUuid(requestParams.getString("recordScheduleUuid"));
 
-        return filter(st008Mapper.getSelectedItemSchedule(st00303VO), pageable, "", St00303VO.class);
+        return filter(st008Mapper.getStTakeoutRecordResultSchedule(st00303VO), pageable, "", St00303VO.class);
     }
     public Cl00201VO getClassInfo(Pageable pageable, RequestParams<Cl00201VO> params) {
         Cl00201VO cl00201VO = new Cl00201VO();
