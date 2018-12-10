@@ -232,9 +232,15 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
 
         this.target.find('[data-ax5picker="date"]').ax5picker({
             direction: "auto",
+            config: {
+                pattern: 'data'
+            },
             content: {
-                type: 'date'
-            }
+                type: 'date',
+                formatter: {
+                    pattern: 'number'
+                }
+            },
         });
 
         this.initEvent();
@@ -242,7 +248,7 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
     initEvent: function () {
         var _this = this;
         //by the Aggregation type, to control the Reference Area
-        $("input[data-ax-path='descriptionStartDate']").keyup(function (event) {
+        /*$("input[data-ax-path='descriptionStartDate']").keyup(function (event) {
             var date = this.value;
             if (date.match(/^\d{4}$/) !== null) {
                 this.value = date + '-';
@@ -320,7 +326,7 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
                 this.value = "";
                 this.focus = true;
             }
-        });
+        });*/
 
 
         $('.togl01').click(function () {
