@@ -72,6 +72,7 @@ fnObj.pageStart = function () {
 
     _this.formView.initView();
     _this.gridView01.initView();
+    authorityTypeUuid = '';
     ACTIONS.dispatch(ACTIONS.PAGE_SEARCH, this.formView.getData());
 };
 
@@ -134,11 +135,11 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
         var codes = axboot.commonCodeFilter("CD161").codeArr;
         var names = axboot.commonCodeFilter("CD161").nameArr;
         var defaultYNs = axboot.commonCodeFilter("CD161").defaultYNArr;
-        var radioTag = "";
+        var radioTag = '<label for="authType99"><input type="radio" id="authType99"  name="radio" class="no_border"  value="" checked="checked">' +'All'+ '</label>';
         for(var i = 0; i < codes.length; i++)
         {
             if(defaultYNs[i] == 'Y'){
-                radioTag += '<label for="authType' + i + '"><input type="radio" id="authType' + i + '"  name="radio" class="no_border" value="' + codes[i] + '" checked="checked">' + names[i] + '</label>'
+                radioTag += '<label for="authType' + i + '"><input type="radio" id="authType' + i + '"  name="radio" class="no_border" value="' + codes[i] + '" >' + names[i] + '</label>'
                 authorityTypeUuid = codes[i];
                 authorityTypeNm = names[i];
             }else{
@@ -163,12 +164,13 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
         this.initInstance();
         this.setColumnInfo(at00101.column_info);
         this.makeGrid();
-        this.gridObj.itemClick(this.itemClick);
+        this.gridObj.onDataCellDblClicked(this.itemDbClick);
     },
     getSelectedData : function(){
         return this.gridObj.getSelectedData()
     },
-    itemClick: function (data) {
-        ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, data);
-    },
+    itemDbClick : function(grid,index)
+    {
+        ACTIONS.dispatch(ACTIONS.PAGE_CLOSE,fnObj.gridView01.getSelectedData());
+    }
 });
