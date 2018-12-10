@@ -72,7 +72,6 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             return;
         }
 
-        debugger
 
         axboot.modal.open({
             modalType: "ARRANGE_CONTAINER_POPUP",
@@ -116,6 +115,12 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     },
     SEARCH_SHELF_SCH : function(caller, act, data)
     {
+        /*var data = {
+            popupCode: "PU138",
+            searchData: repositoryUuid,
+            preSearch: false
+        };*/
+
         axboot.modal.open({
             modalType: "COMMON_POPUP",
             preSearch : data["preSearch"],

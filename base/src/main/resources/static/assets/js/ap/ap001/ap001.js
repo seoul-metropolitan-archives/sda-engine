@@ -30,11 +30,8 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                return data;
             },
             callback: function (data) {
-                // if(this) this.close();
-                // UPLOAD.send();
-                // if(data){
-                //     ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1,data);
-                // }
+                if (this) this.close();
+                UPLOAD.send();
             }
         });
     },
@@ -47,21 +44,13 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 title: "INGEST"
             },
             sendData: function () {
-                // return {
-                //     confirmBtn:"Arrange",
-                //     crrntAgg: fnObj.formView.getData().aggInContainerName,
-                //     containerUuid :  currentContainerUuid
-                // };
             },
             callback: function (data) {
                 //if(this) this.close();
                 window.axModal.activeModal.remove();
                 window.axModal.activeModal = null;
 
-                ACTIONS.dispatch(ACTIONS.PAGE_TEST);
-                // setTimeout(function () {
-                //
-                // }, 500);
+                ACTIONS.dispatch(ACTIONS.PAGE_TEST,data);
 
             }
         });
@@ -188,7 +177,7 @@ fnObj.pageStart = function () {
             },
             multiple: true,
             manualUpload: true,
-            progressBox: false,
+            progressBox: true,
             progressBoxDirection: "left",
             dropZone: {
                 target: $('[data-uploaded-box="upload1"]'),

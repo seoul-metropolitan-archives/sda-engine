@@ -229,7 +229,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
 
     },
     PAGE_INGEST: function (caller, act, data) {
-        axboot.modal.open({
+        axboot.commonModal.open({
             modalType: "INGEST_POPUP",
             header: {
                 title: "INGEST"

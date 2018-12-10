@@ -37,7 +37,7 @@ public class StZone extends SimpleJpaModel<StZone.StZoneId> {
 
     @Override
     public StZoneId getId() {
-        return StZoneId.of(zoneUuid);
+        return StZoneId.of(zoneUuid);  
     }
 
     @Embeddable

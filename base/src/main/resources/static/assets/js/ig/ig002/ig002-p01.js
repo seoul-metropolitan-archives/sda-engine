@@ -76,7 +76,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     },
     PAGE_CLOSE: function (caller, act, data) {
         if (parent) {
-            parent.axboot.modal.callback(data);
+            parent.axboot.commonModal.callback(data);
         }
     },
     dispatch: function (caller, act, data) {

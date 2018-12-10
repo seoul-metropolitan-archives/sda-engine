@@ -4,7 +4,6 @@ var parentsData;
 var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH: function (caller, act, data) {
 
-        debugger
         var codes = axboot.commonCodeFilter("CD138").codeArr;
         var names = axboot.commonCodeFilter("CD138").nameArr;
         var state = undefined;
@@ -45,7 +44,6 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         }
     },
     PAGE_ARRANGE: function (caller, act, data) {
-        debugger
        if(fnObj.gridView04.getData().length  < 1){
             alert("Select Arrange Item List")
             return
@@ -168,7 +166,6 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
             exportItemList();
         });
         $(".btn_include").click(function(){
-            debugger
             importItemList();
         });
 

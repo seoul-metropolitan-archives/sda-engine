@@ -18,8 +18,11 @@ var st00402 =
                     text: "Status",
                     width: 120,
                     editable: false,
-                    dataType: "code",
                     required: false,
+                    disable : true,
+                    values: axboot.commonCodeFilter("CD138").codeArr,
+                    labels: axboot.commonCodeFilter("CD138").nameArr,
+                    dataType : "combo"
                 },
                 {
                     sortNo: 2,

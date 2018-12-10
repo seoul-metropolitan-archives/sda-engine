@@ -9,7 +9,7 @@ import rmsoft.ams.seoul.st.st010.service.St010Service;
 import javax.inject.Inject;
 
 @RestController
-@RequestMapping(value = "/api/v1/st/st009")
+@RequestMapping(value = "/api/v1/st/st010")
 public class St010Controller extends BaseController {
 
     @Inject
