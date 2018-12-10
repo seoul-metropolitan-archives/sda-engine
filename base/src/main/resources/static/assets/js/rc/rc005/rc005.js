@@ -652,8 +652,8 @@ setFormData = function(data){
     fnObj.formView.setFormData("itemTitle",'Item - ' + data.name);
     fnObj.formView.setFormData("title",data.name);
     fnObj.formView.setFormData("riItemCode",data.riItemCode);
-    fnObj.formView.setFormData("type",data.riTypeNm);
-    fnObj.formView.setFormData("publishedStatus",data.riPublishedStatusNm);
+    fnObj.formView.setFormData("riTypeUuid",data.riTypeUuid);
+    fnObj.formView.setFormData("riPublishedStatusUuid",data.riPublishedStatusUuid);
     fnObj.formView.setFormData("level",data.raLevelNm);
     fnObj.formView.setFormData("description",data.description1);
     fnObj.formView.setFormData("author",data.riAuthor);
