@@ -14,8 +14,28 @@ var st00802 =
                 {
                     sortNo: 0,
                     width:30,
-                    name: "containerUuid",
-                    text: "containerUuid",
+                    name: "takeoutRecordResultUuid",
+                    text: "takeoutRecordResultUuid",
+                    editable: false,
+                    dataType: "code",
+                    required: false,
+                    visible: false
+                },
+                {
+                    sortNo: 0,
+                    width:30,
+                    name: "takeoutRequestUuid",
+                    text: "takeoutRequestUuid",
+                    editable: false,
+                    dataType: "code",
+                    required: false,
+                    visible: false
+                },
+                {
+                    sortNo: 0,
+                    width:30,
+                    name: "aggregationUuid",
+                    text: "aggregationUuid",
                     editable: false,
                     dataType: "code",
                     required: false,
@@ -23,134 +43,99 @@ var st00802 =
                 },
                 {
                     sortNo: 1,
-                    name: "containerName",
-                    text: "Container Name",
-                    width: 80,
+                    name: "code",
+                    text: "Code",
+                    width: 120,
                     editable: false,
-                    disable: true,
                     dataType: "text",
-                    required: false
+                    disable: true
                 },
                 {
                     sortNo: 2,
-                    name: "parentContainerName",
-                    text: "Parent Container Name",
-                    width: 80,
-                    editable: false,
-                    disable: true,
-                    dataType: "text",
-                    required: false
+                    name: "title",
+                    text: "Title",
+                    width: 200,
+                    required: true,
+                    editable: true,
+                    dataType: "text"
                 },
                 {
                     sortNo: 3,
-                    name: "containerTypeUuid",
-                    text: "Container Type",
-                    width: 120,
+                    name: "level",
+                    text: "Level",
+                    width: 110,
                     editable: false,
-                    dataType: "combo",
-                    values: axboot.commonCodeFilter("CD139").codeArr,
-                    labels: axboot.commonCodeFilter("CD139").nameArr,
+                    dataType: "text",
                     disable: true
-                },
-                {
-                    sortNo: 3,
-                    name: "containerType",
-                    text: "Container Type",
-                    width: 120,
-                    editable: false,
-                    dataType: "text",
-                    visible: false,
-                    values: axboot.commonCodeFilter("CD139").codeArr,
-                    labels: axboot.commonCodeFilter("CD139").nameArr,
-                    disable: true
-                },
-                {
-                    sortNo: 3,
-                    name: "controlNumber",
-                    text: "Control Number",
-                    width: 120,
-                    dataType: "text",
-                    editable: false,
-                    sortable: true,
-                    disable:true
                 },
                 {
                     sortNo: 4,
-                    name: "provenance",
-                    text: "Provenance",
-                    width: 120,
-                    dataType: "text",
+                    name: "type",
+                    text: "Type",
+                    width: 80,
                     editable: false,
-                    sortable: true,
-                    disable:true
+                    dataType: "text",
+                    disable: true
                 },
                 {
                     sortNo: 5,
-                    name: "creationStartDate",
-                    text: "Creation Start Date",
-                    width: 120,
-                    dataType: "timestamp",
+                    name: "publishedStatus",
+                    text: "Published Status",
+                    width: 100,
                     editable: false,
-                    sortable: true,
-                    disable:true
+                    dataType: "text",
+                    disable: true
                 },
                 {
                     sortNo: 6,
-                    name: "creationEndDate",
-                    text: "Creation End Date",
-                    width: 120,
-                    dataType: "timestamp",
+                    name: "author",
+                    text: "Author",
+                    width: 140,
                     editable: false,
-                    sortable: true,
-                    disable:true
+                    dataType: "text",
+                    disable: true
                 },
                 {
                     sortNo: 7,
-                    name: "orderNo",
-                    text: "Order No",
-                    width: 120,
-                    dataType: "text",
+                    name: "descStrDate",
+                    text: "Start Date",
+                    width: 140,
                     editable: false,
-                    sortable: true,
-                    disable:true
+                    dataType: "date",
+                    disable: true
                 },
                 {
                     sortNo: 8,
-                    name: "description",
-                    text: "Description",
-                    width: 250,
-                    dataType: "richtext",
+                    name: "descEdDate",
+                    text: "End Date",
+                    width: 140,
                     editable: false,
-                    sortable: true,
-                    disable:true
+                    dataType: "date",
+                    disable: true
                 },
                 {
                     sortNo: 9,
-                    name: "notes",
-                    text: "Notes",
+                    name: "repositoryName",
+                    text: "서고",
                     width: 250,
-                    dataType: "richtext",
                     editable: false,
-                    sortable: true,
-                    disable:true
+                    dataType: "text"
                 },
                 {
-                    sortNo: 10,
-                    width:140,
-                    name: "orderKey1",
-                    text: "ORDER_KEY",
+                    sortNo: 9,
+                    name: "shelfName",
+                    text: "서가",
+                    width: 250,
                     editable: false,
-                    dataType: "code",
-                    visible : false
+                    dataType: "text"
                 },
                 {
-                    sortNo: 11,
-                    width:140,
-                    name: "choiceYn",
-                    text: "choiceYn",
+                    sortNo: 9,
+                    name: "locationName",
+                    text: "행렬단",
+                    width: 250,
                     editable: false,
-                    dataType: "code",
-                    visible : false
-                }
+                    dataType: "text"
+                },
             ]
     }

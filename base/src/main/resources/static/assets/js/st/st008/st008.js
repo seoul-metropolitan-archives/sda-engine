@@ -6,11 +6,13 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         ACTIONS.dispatch(ACTIONS.PAGE_SEARCH01);
     },
     PAGE_SEARCH01: function (caller, act, data) {
+
         axboot.ajax({
             type: "GET",
             url: "/api/v1/st/st008/01/list01",
             data: $.extend({}, this.formView.getData()),
             callback: function (res) {
+
                 fnObj.gridView01.setData(res.list);
                 //fnObj.gridView01.disabledColumn();
                 fnObj.gridView02.clearData();
@@ -161,36 +163,15 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     MENU_OPEN: function (caller, act, data) {
 
     },
-    PAGE_ARRANGE: function (caller, act, data) {
-        axboot.modal.open({
-            modalType: "ARRANGE_NOT_ARRANGED_CONTAINER_POPUP",
-            width: 400,
-            height: 400,
-            header: {
-                title: "ARRANGE"
-            },
-            sendData: function () {
-                var selectedRow = fnObj.gridView01.getSelectedData();
-                console.log('selectedRow', selectedRow);
-                selectedRow.confirmBtn = "Arrange";
-                return selectedRow;
-            },
-            callback: function (data) {
-                if(this) this.close();
-                if(data){
-                    ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1,data);
-                }
-            }
-        });
-    },
+
     MODAL_OPEN: function (caller, act, title) {
         var modalOption ={ title : title };
         if( title == '반출서 작성'){
             modalOption.modalType = 'CREATE_TAKE_OUT_POPUP';
         }else if( title == '반출서 수정'){
-            modalOption.modalType = 'ADD_TAKE_OUT_POPUP';
-        }else if( title == '대상 추가'){
             modalOption.modalType = 'MODIFY_TAKE_OUT_POPUP';
+        }else if( title == '대상 추가'){
+            modalOption.modalType = 'ADD_TAKE_OUT_POPUP';
         }else if( title == '반출서 출력'){
             modalOption.modalType = 'PRINT_TAKE_OUT_POPUP';
         }else{
@@ -202,16 +183,17 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 title: modalOption.title,
             },
             sendData: function () {
-                var selectedRow = fnObj.gridView01.getSelectedData();
+                /*var selectedRow = fnObj.gridView01.getSelectedData();
                 console.log('selectedRow', selectedRow);
                 selectedRow.confirmBtn = "Arrange";
-                return selectedRow;
+                return selectedRow;*/
+                return {};
             },
             callback: function (data) {
                 if(this) this.close();
-                if(data){
-                    ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1,data);
-                }
+                //if(data){
+                    ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, data);
+                //}
             }
         });
     },
@@ -351,10 +333,10 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
         $('#btn_createTakeOut').click(function(){
             ACTIONS.dispatch(ACTIONS.MODAL_OPEN, '반출서 작성');
         });
-        $('#btn_addTakeOut').click(function(){
+        $('#btn_modifyTakeOut').click(function(){
             ACTIONS.dispatch(ACTIONS.MODAL_OPEN, '반출서 수정');
         });
-        $('#btn_modifyTakeOut').click(function(){
+        $('#btn_addTakeOut').click(function(){
             ACTIONS.dispatch(ACTIONS.MODAL_OPEN, '대상 추가');
         });
         $('#btn_printTakeOut').click(function(){
@@ -434,39 +416,21 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
     },
 });
 
-/*팝업 헤더*/
+
 fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     tagId: "realgrid01",
-    primaryKey: "containerUuid",
-    entityName: "ST_Container",
+    primaryKey: "takeoutRequestUuid",
+    entityName: "ST_TAKEOUT_REQUEST",
     initView: function () {
-        this.gridObj = new TreeGridWrapper("realgrid01", "/assets/js/libs/realgrid", true);
-        this.gridObj.setGridStyle("100%", "100%")
-            .setOption({
-                header: { visible: true },
-                checkBar: {visible: true},
-                indicator: {visible: true},
-                lineVisible: false
-            });
-        this.gridObj.setColumnInfo(st00801.column_info).makeGrid();
-        this.gridObj.onItemChecked(this.onItemChecked);
-        this.gridObj.setDisplayOptions({
-            fitStyle:"evenFill"
-        });
-        // this.gridObj.gridView.setSelectOptions({
-        //         style: "none"
-        //     }
-        // )
-        this.gridObj.gridView.setCheckBar({
-            checkableExpression: "values['choiceYn'] match 'Y'"
-        });
-        this.gridObj.gridView.applyCheckables();
+        this.initInstance();
+        this.setColumnInfo(st00801.column_info);
+        this.gridObj.setOption({
+            checkBar: {visible: true}
+        })
+        this.makeGrid();
         this.gridObj.itemClick(this.itemClick);
-        this.removeRowBeforeEvent(this.cancelDelete);
     },
-    setData: function (list) {
-        this.gridObj.setTreeDataForArray(list, "orderKey1");
-    },
+
     getSelectedData: function () {
         return this.gridObj.getSelectedData()
     },
@@ -481,9 +445,11 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
         }, ["statusUuid", "repositoryCode", "repositoryName", "description"]);
     },
     itemClick: function (data) {
-        containerUuid = data.containerUuid;
-        console.log(data)
 
+        console.log(data)
+        $('#takeoutPropose').val(data.takeoutPropose);
+        ACTIONS.dispatch(ACTIONS.PAGE_SEARCH02);
+        /*containerUuid = data.containerUuid;
         if (fnObj.gridView01.isChangeData() == true || fnObj.gridView02.isChangeData() == true) {
             axDialog.confirm({
                 msg: axboot.getCommonMessage("AA008")
@@ -496,7 +462,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
             });
         }
 
-        ACTIONS.dispatch(ACTIONS.PAGE_SEARCH02);
+        ACTIONS.dispatch(ACTIONS.PAGE_SEARCH02);*/
 
     },
     cancelDelete: function(){

@@ -1,15 +1,25 @@
 package rmsoft.ams.seoul.st.st008.controller;
 
 import io.onsemiro.controller.BaseController;
+import io.onsemiro.core.api.ApiException;
+import io.onsemiro.core.api.response.ApiResponse;
 import io.onsemiro.core.api.response.Responses;
+import io.onsemiro.core.code.ApiStatus;
 import io.onsemiro.core.parameter.RequestParams;
+import io.onsemiro.utils.ModelMapperUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
+import rmsoft.ams.seoul.common.domain.StTakeoutRequest;
+import rmsoft.ams.seoul.common.repository.StTakeoutRequestRepository;
 import rmsoft.ams.seoul.st.st008.service.St008Service;
 import rmsoft.ams.seoul.st.st008.vo.St00801VO;
+import rmsoft.ams.seoul.st.st008.vo.St00802VO;
 import rmsoft.ams.seoul.st.st008.vo.St00803VO;
+import rmsoft.ams.seoul.utils.CommonCodeUtils;
+
+import static rmsoft.ams.seoul.common.domain.QStShelf.stShelf;
 
 /**
  * The type Cl 008 controller.
@@ -21,6 +31,7 @@ public class St008Controller extends BaseController {
     @Autowired
     private St008Service st008Service;
 
+
     /**
      * Gets classified record list.
      *
@@ -29,21 +40,29 @@ public class St008Controller extends BaseController {
      * @return the classified record list
      */
     @GetMapping("/01/list01")
-    public Responses.PageResponse getStContainer(Pageable pageable, RequestParams<St00801VO> requestParams) {
-        Page<St00801VO> pages = st008Service.getStContainer(pageable, requestParams);
+    public Responses.PageResponse getStTakeoutRequest(Pageable pageable, RequestParams<St00801VO> requestParams) {
+        Page<St00801VO> pages = st008Service.getStTakeoutRequest(pageable, requestParams);
 
         return Responses.PageResponse.of(pages.getContent(), pages);
     }
+
     @GetMapping("/01/list02")
-    public Responses.PageResponse getSelectedItem(Pageable pageable, RequestParams<St00803VO> requestParams) {
-        Page<St00803VO> pages = st008Service.getSelectedItem(pageable, requestParams);
+    public Responses.PageResponse getStTakeoutRecordResult(Pageable pageable, RequestParams<St00802VO> requestParams) {
+        Page<St00802VO> pages = st008Service.getStTakeoutRecordResult(pageable, requestParams);
 
         return Responses.PageResponse.of(pages.getContent(), pages);
     }
+
+    @PutMapping("/01/save")
+    @PostMapping
+    public ApiResponse saveStTakeoutRequest(@RequestBody St00801VO vo) {
+        return st008Service.saveStTakeoutRequest(vo);
+    }
+
     /*
     @GetMapping("/02/list01")
-    public Responses.PageResponse getSelectedItem(Pageable pageable, RequestParams<St00803VO> requestParam) {
-        Page<St00803VO> pages  = st008Service.getSelectedItem(pageable, requestParam);
+    public Responses.PageResponse getStTakeoutRecordResult(Pageable pageable, RequestParams<St00803VO> requestParam) {
+        Page<St00803VO> pages  = st008Service.getStTakeoutRecordResult(pageable, requestParam);
         return Responses.PageResponse.of(pages.getContent(), pages);
     }
     @RequestMapping("/02/list03")
@@ -51,8 +70,8 @@ public class St008Controller extends BaseController {
         return st008Service.getClassInfo(pageable, requestParams);
     }
     @GetMapping("/02/list04")
-    public Responses.PageResponse getSelectedItemSchedule(Pageable pageable, RequestParams<St00803VO> requestParam) {
-        Page<St00803VO> pages  = st008Service.getSelectedItemSchedule(pageable, requestParam);
+    public Responses.PageResponse getStTakeoutRecordResultSchedule(Pageable pageable, RequestParams<St00803VO> requestParam) {
+        Page<St00803VO> pages  = st008Service.getStTakeoutRecordResultSchedule(pageable, requestParam);
         return Responses.PageResponse.of(pages.getContent(), pages);
     }
     @PutMapping("/02/save")

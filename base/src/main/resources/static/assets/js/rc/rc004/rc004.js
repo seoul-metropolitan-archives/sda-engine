@@ -852,13 +852,13 @@ function setAdditionalMeta(segmentList){
     //fnObj.formView.setData(currentData);
 }
 
-function dateFormatter(orgDate){
-    if(orgDate == undefined || orgDate == null) return '';
-    var year = orgDate.substring(0, 4);
-    var month = orgDate.substring(4, 6);
-    var day = orgDate.substring(6, 8);
-
-    return year + '-' + month + '-' + day;
+function dateFormatter(str){
+    if(str == "undefined" || str == null) return;
+    if(str.length == 8) {
+        return str.substr(0, 4) + "-" + str.substr(4, 2) + "-" + str.substr(6);
+    } else {
+        return str;
+    }
 }
 
 function checkDate(date) {

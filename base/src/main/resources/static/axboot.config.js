@@ -190,14 +190,14 @@
                 width: 1200,
                 height: 700,
                 iframe: {
-                    url: "/st/st008/st008-p02"
+                    url: "/st/st008/st008-p01"
                 }
             },
             "ADD_TAKE_OUT_POPUP" :{
                 width: 1200,
                 height: 700,
                 iframe: {
-                    url: "/st/st008/st008-p03"
+                    url: "/st/st008/st008-p02"
                 }
             },
 
@@ -205,7 +205,7 @@
                 width: 1200,
                 height: 700,
                 iframe: {
-                    url: "/st/st008/st008-p04"
+                    url: "/st/st008/st008-p03"
                 }
             },
             "FREEZE_POPUP" :{
