@@ -621,13 +621,32 @@ function contextMenuClick(ui, treeData){
         case "AGG_EDIT":
             selectedData = treeData ? [treeData] : fnObj.iconView.getSelectedData();
 
-            item = getMenu("add aggregation");
+            axboot.modal.open({
+                modalType: "AGGREGATION_ADD",
+                width: 1600,
+                height: 800,
+                header: {
+                    title: "Edit Aggregation"
+                },
+                sendData: function () {
+                    return $.extend({},{
+                        parentUuid : selectedData[0].parentUuid,
+                        uuid : selectedData[0].uuid,
+                        nodeType : selectedData[0].nodeType
+                    },{type: "update"},{navi : fnObj.naviView.getPathString()},{title : selectedData[0]["name"]});
+                },
+                callback: function (data) {
+                    ACTIONS.dispatch(ACTIONS.GET_SUBDATA, fnObj.naviView.getCurrent());
+                }
+            });
+
+            /*item = getMenu("add aggregation");
             item.menuParams = $.extend({},{
                 parentUuid : selectedData[0].parentUuid,
                 uuid : selectedData[0].uuid,
                 nodeType : selectedData[0].nodeType
             },{type: "update"},{navi : fnObj.naviView.getPathString()},{title : selectedData[0]["name"]});
-            parentsObj.tabView.open(item);
+            parentsObj.tabView.open(item);*/
             break;
         case "AGG_VIEW":
             selectedData = treeData ? [treeData] : fnObj.iconView.getSelectedData();

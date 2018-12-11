@@ -296,15 +296,15 @@
                     url: "/rc/rc001/p_rc00104"
                 }
             },
-            "AGGREGATION_ITEM": {
-                width: 600,
+            "AGGREGATION_ADD": {
+                width: 1300,
                 height: 700,
                 iframe: {
                     url: "/rc/rc002/p_rc002"
                 }
             },
             "ITEM_ADD": {
-                width: 600,
+                width: 1300,
                 height: 700,
                 iframe: {
                     url: "/rc/rc004/p_rc004"

@@ -25606,7 +25606,7 @@ a.big_close{
     vertical-align: middle;
     width: 50%;
     padding:0 1px 0 0;
-    text-align: center;
+    /*text-align: center;*/
 }
 
 .cssBody dl {
@@ -27740,6 +27740,13 @@ a.small_open {
 
 .cont_title ul li {
     width: 90%;
+    text-align: left;
+    font-size: 16px;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.record_title{
     text-align: left;
     font-size: 16px;
     font-weight: bold;
