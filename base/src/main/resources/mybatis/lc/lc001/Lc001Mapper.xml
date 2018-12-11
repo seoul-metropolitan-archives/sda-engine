@@ -69,5 +69,6 @@
                 LEAD_CASE_UUID = #{leadCaseUuid}
             </if>
         </where>
+        ORDER BY Z.SCHEDULE_NO ASC
     </select>
 </mapper>
