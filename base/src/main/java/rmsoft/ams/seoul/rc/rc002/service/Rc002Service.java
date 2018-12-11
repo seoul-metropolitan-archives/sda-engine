@@ -249,11 +249,12 @@ public class Rc002Service extends BaseService {
             }
         }catch(Exception e){
             Map returnMap = new HashMap();
-            returnMap.put("resultMessage", "FAIL");
+            returnMap.put("result", "FAIL");
+            returnMap.put("message", e.getMessage());
         }
 
         Map returnMap = new HashMap();
-        returnMap.put("resultMessage", "SUCCESS");
+        returnMap.put("result", "SUCCESS");
         returnMap.put("uuid", uuid);
 
         return returnMap;

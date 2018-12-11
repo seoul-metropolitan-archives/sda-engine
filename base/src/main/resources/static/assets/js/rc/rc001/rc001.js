@@ -555,6 +555,7 @@ function contextMenuClick(ui, treeData){
     var msg = "";
     var typeUuid = "";
     var typeName = "";
+    var sendData = null;
 
     switch(ui.cmd){
         case "MERGE_ITEM":
@@ -571,32 +572,45 @@ function contextMenuClick(ui, treeData){
 
             ACTIONS.dispatch(ACTIONS.DELETE_AGGREGATION, selectedData);
             break;
-        case "ITEM_ADD":
-            selectedData = fnObj.naviView.getCurrent();
+        case "ITEM_ADD": case "ITEM_EDIT":
+            if(ui.cmd == "ITEM_ADD") {
+                selectedData = fnObj.naviView.getCurrent();
 
-            if(selectedData["uuid"] == ""){
-                axDialog.alert("Root위치에는 Item생성이 불가능합니다.");
-                return;
+                if (selectedData["uuid"] == "") {
+                    axDialog.alert("Root위치에는 Item생성이 불가능합니다.");
+                    return;
+                }
+
+                naviStr = undefined == selectedData["name"] ? "" : " > " + selectedData["name"]
+                sendData = $.extend({}, {aggregationUuid: selectedData.uuid},
+                    {type: "create"},
+                    {navi: fnObj.naviView.getPathString() + naviStr}, {title: ""},
+                    {nodeType: selectedData.nodeType}
+                );
+            }else if(ui.cmd == "ITEM_EDIT"){
+                selectedData = fnObj.iconView.getSelectedData();
+
+                sendData = $.extend({},{
+                    aggregationUuid : selectedData[0].parentUuid,
+                    itemUuid : selectedData[0].uuid
+                },{type: "update"},{navi : fnObj.naviView.getPathString()},{title : selectedData[0]["name"]});
             }
 
-            item = getMenu("add item");
-            naviStr = undefined == selectedData["name"]? "" : " > "+selectedData["name"]
-            item.menuParams = $.extend({},{
-                    aggregationUuid : selectedData.uuid
-                },{type: "create"},{navi : fnObj.naviView.getPathString()+naviStr},{title : ""},{nodeType : selectedData.nodeType}
-            );
-            parentsObj.tabView.open(item);
+            axboot.modal.open({
+                modalType: "ITEM_ADD",
+                width: 1600,
+                height: 800,
+                header: {
+                    title: ui.cmd == "ITEM_ADD" ? "Add Item" : "Edit Item"
+                },
+                sendData: function () {
+                    return sendData;
+                },
+                callback: function (data) {
+                    ACTIONS.dispatch(ACTIONS.GET_SUBDATA, fnObj.naviView.getCurrent());
+                }
+            });
 
-            break;
-        case "ITEM_EDIT":
-            selectedData = fnObj.iconView.getSelectedData();
-
-            item = getMenu("add item");
-            item.menuParams = $.extend({},{
-                aggregationUuid : selectedData[0].parentUuid,
-                itemUuid : selectedData[0].uuid
-            },{type: "update"},{navi : fnObj.naviView.getPathString()},{title : selectedData[0]["name"]});
-            parentsObj.tabView.open(item);
             break;
         case "ITEM_VIEW":
             item = getMenu("view item");
@@ -606,47 +620,39 @@ function contextMenuClick(ui, treeData){
             );
             parentsObj.tabView.open(item);
             break;
-        case "AGG_ADD":
-            selectedData = fnObj.naviView.getCurrent();
-
-            item = getMenu("add aggregation");
-            naviStr = undefined == selectedData["name"]? "" : " > "+selectedData["name"];
-            item.menuParams = $.extend({},
-                selectedData
-                ,{type: "create"}
-                ,{navi : fnObj.naviView.getPathString()+naviStr},{title : ""}
-            );
-            parentsObj.tabView.open(item);
-            break;
-        case "AGG_EDIT":
-            selectedData = treeData ? [treeData] : fnObj.iconView.getSelectedData();
+        case "AGG_ADD": case "AGG_EDIT":
+            if(ui.cmd == "AGG_ADD") {
+                selectedData = fnObj.naviView.getCurrent();
+                naviStr = undefined == selectedData["name"] ? "" : " > " + selectedData["name"];
+                sendData = $.extend({},
+                    selectedData
+                    , {type: "create"}
+                    , {navi: fnObj.naviView.getPathString() + naviStr}, {title: ""}
+                );
+            }else if(ui.cmd == "AGG_EDIT"){
+                selectedData = treeData ? [treeData] : fnObj.iconView.getSelectedData();
+                sendData = $.extend({},{
+                    parentUuid : selectedData[0].parentUuid,
+                    uuid : selectedData[0].uuid,
+                    nodeType : selectedData[0].nodeType
+                },{type: "update"},{navi : fnObj.naviView.getPathString()},{title : selectedData[0]["name"]});
+            }
 
             axboot.modal.open({
                 modalType: "AGGREGATION_ADD",
                 width: 1600,
                 height: 800,
                 header: {
-                    title: "Edit Aggregation"
+                    title: ui.cmd == "AGG_ADD" ? "Add Aggregation" : "Edit Aggregation"
                 },
                 sendData: function () {
-                    return $.extend({},{
-                        parentUuid : selectedData[0].parentUuid,
-                        uuid : selectedData[0].uuid,
-                        nodeType : selectedData[0].nodeType
-                    },{type: "update"},{navi : fnObj.naviView.getPathString()},{title : selectedData[0]["name"]});
+                    return sendData;
                 },
                 callback: function (data) {
                     ACTIONS.dispatch(ACTIONS.GET_SUBDATA, fnObj.naviView.getCurrent());
                 }
             });
 
-            /*item = getMenu("add aggregation");
-            item.menuParams = $.extend({},{
-                parentUuid : selectedData[0].parentUuid,
-                uuid : selectedData[0].uuid,
-                nodeType : selectedData[0].nodeType
-            },{type: "update"},{navi : fnObj.naviView.getPathString()},{title : selectedData[0]["name"]});
-            parentsObj.tabView.open(item);*/
             break;
         case "AGG_VIEW":
             selectedData = treeData ? [treeData] : fnObj.iconView.getSelectedData();
