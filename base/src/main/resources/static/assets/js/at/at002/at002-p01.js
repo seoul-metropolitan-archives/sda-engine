@@ -39,6 +39,12 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_CLOSE: function (caller,act, data){
         if(!parent) return;
 
+        data.AUTHORITY_NAME = data.authorityName;
+        data.AUTHORITY_NO = data.authorityNo;
+        data.AUTHORITY_TYPE_UUID = data.authorityTypeUuid;
+        data.AUTHORITY_UUID = data.authorityUuid;
+        data.ORG_TYPE_UUID = data.orgTypeUuid;
+
         if(parent.axboot.modalOpener == "modal")
             parent.axboot.modal.callback(data);
         else if(parent.axboot.modalOpener == "commonModal")
@@ -56,10 +62,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
 
 fnObj.pageStart = function () {
     var _this = this;
-    if(parent.axboot.modalOpener == "modal")
-        parentData = parent.axboot.modal.getData();
-    else if(parent.axboot.modalOpener == "commonModal")
-        parentData = parent.axboot.commonModal.getData();
+    parentData = parent.axboot.modal.getData();
 
     $.ajax({
         url: "/assets/js/controller/simple_controller.js",
@@ -96,7 +99,7 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
     },
     initEvent: function () {
         var _this = this;
-
+        parentsData = parent.axboot.modal.getData();
         $('input:radio[name="radio"]').change(function(){
             authorityTypeUuid = event.currentTarget.value;
             ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);

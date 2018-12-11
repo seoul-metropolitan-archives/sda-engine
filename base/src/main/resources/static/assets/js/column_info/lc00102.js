@@ -24,13 +24,16 @@ var lc00102 =
                 },
                 {
                     sortNo: 2,
-                    name: "creatorUuid",
+                    name: "authorityName",
                     text: "생산자",
                     width: 120,
                     editable: true,
-                    dataType: "text",
-                    required: false,
-                    visible: true
+                    visible: true,
+                    dataType: "popup",
+                    popupCode : "AUTHORITY_POPUP",
+                    popupCallback: fnObj.gridView01.popupCallback,
+                    sqlColumn : {AUTHORITY_UUID : "creatorUuid",AUTHORITY_TYPE_UUID : "AUTHORITY_NO",AUTHORITY_NO : "authorityNo",AUTHORITY_NAME : "authorityName", ORG_TYPE_UUID: "orgTypeUuid"},
+                    required: false
                 },
                 {
                     sortNo: 3,
@@ -93,6 +96,12 @@ var lc00102 =
                     sortNo: 13,
                     name : "leadCaseScheduleUuid",
                     visible:false
+                },
+                {
+                    sortNo: 13,
+                    name : "creatorUuid",
+                    visible:false
                 }
+
             ]
     }

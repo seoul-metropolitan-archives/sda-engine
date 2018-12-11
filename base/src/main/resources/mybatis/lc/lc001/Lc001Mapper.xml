@@ -49,18 +49,21 @@
     </select>
     <select id="getLeadCaseScheduleList" resultType="Lc00102VO" parameterType="Lc00102VO" statementType="PREPARED">
         SELECT
-            LEAD_CASE_SCHEDULE_UUID as leadCaseScheduleUuid,
-            LEAD_CASE_UUID as leadCaseUuid,
-            SCHEDULE_NO as scheduleNo,
-            INGEST_ORG_UUID as ingestOrgUuid,
-            CREATOR_UUID as creatorUuid,
-            COLLECTION_TYPE_UUID as collectionTypeUuid,
-            CONTACT_TYPE_UUID as contactTypeUuid,
-            CONTACT_MAKER as contactMaker,
-            COLLECT_MAKER as collectMaker,
-            TO_CHAR(COLLECTION_DATE,'yyyy-MM-dd') as collectionDate,
-            COLLECTION_CONTENTS as collectionContents
-        FROM LC_LEAD_CASE_SCHEDULE
+            Z.LEAD_CASE_SCHEDULE_UUID as leadCaseScheduleUuid,
+            Z.LEAD_CASE_UUID as leadCaseUuid,
+            Z.SCHEDULE_NO as scheduleNo,
+            Z.INGEST_ORG_UUID as ingestOrgUuid,
+            Z.CREATOR_UUID as creatorUuid,
+            Z.COLLECTION_TYPE_UUID as collectionTypeUuid,
+            Z.CONTACT_TYPE_UUID as contactTypeUuid,
+            Z.CONTACT_MAKER as contactMaker,
+            Z.COLLECT_MAKER as collectMaker,
+            TO_CHAR(Z.COLLECTION_DATE,'yyyy-MM-dd') as collectionDate,
+            Z.COLLECTION_CONTENTS as collectionContents,
+            (SELECT AUTHORITY_NAME
+             FROM AT_AUTHORITY
+            WHERE Z.CREATOR_UUID = AUTHORITY_UUID) as authorityName
+        FROM LC_LEAD_CASE_SCHEDULE Z
         <where>
             <if test="leadCaseUuid != null">
                 LEAD_CASE_UUID = #{leadCaseUuid}
