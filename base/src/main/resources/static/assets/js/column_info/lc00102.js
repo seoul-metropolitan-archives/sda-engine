@@ -31,8 +31,7 @@ var lc00102 =
                     visible: true,
                     dataType: "popup",
                     popupCode : "AUTHORITY_POPUP",
-                    popupCallback: fnObj.gridView01.popupCallback,
-                    sqlColumn : {AUTHORITY_UUID : "creatorUuid",AUTHORITY_TYPE_UUID : "AUTHORITY_NO",AUTHORITY_NO : "authorityNo",AUTHORITY_NAME : "authorityName", ORG_TYPE_UUID: "orgTypeUuid"},
+                    sqlColumn : {AUTHORITY_UUID : "creatorUuid",AUTHORITY_TYPE_UUID : "authorityTypeUuid",AUTHORITY_NO : "authorityNo",AUTHORITY_NAME : "authorityName", ORG_TYPE_UUID: "orgTypeUuid"},
                     required: false
                 },
                 {

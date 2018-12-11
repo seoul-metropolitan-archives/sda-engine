@@ -38,13 +38,13 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     },
     PAGE_CLOSE: function (caller,act, data){
         if(!parent) return;
-
-        data.AUTHORITY_NAME = data.authorityName;
-        data.AUTHORITY_NO = data.authorityNo;
-        data.AUTHORITY_TYPE_UUID = data.authorityTypeUuid;
-        data.AUTHORITY_UUID = data.authorityUuid;
-        data.ORG_TYPE_UUID = data.orgTypeUuid;
-
+        if(data){
+            data.AUTHORITY_NAME = data.authorityName;
+            data.AUTHORITY_NO = data.authorityNo;
+            data.AUTHORITY_TYPE_UUID = data.authorityTypeUuid;
+            data.AUTHORITY_UUID = data.authorityUuid;
+            data.ORG_TYPE_UUID = data.orgTypeUuid;
+        }
         if(parent.axboot.modalOpener == "modal")
             parent.axboot.modal.callback(data);
         else if(parent.axboot.modalOpener == "commonModal")

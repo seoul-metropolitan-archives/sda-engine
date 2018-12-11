@@ -74,6 +74,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter implements Application
 
         pageableHandlerMethodArgumentResolver.setPageParameterName("pageNumber");
         pageableHandlerMethodArgumentResolver.setSizeParameterName("pageSize");
+        pageableHandlerMethodArgumentResolver.setMaxPageSize(Integer.MAX_VALUE);
 
         argumentResolvers.add(new RequestParamsArgumentResolver());
         argumentResolvers.add(pageableHandlerMethodArgumentResolver);

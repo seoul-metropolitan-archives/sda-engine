@@ -32,7 +32,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         axboot.ajax({ //트리 리스트
             type: "GET",
             url: "/api/v1/cl/cl003/01/list01",
-            data: $.extend({}, {pageSize: 1000}, {classUuid:crntClassUuid}),
+            data: $.extend({}, {pageSize: 10000}, {classUuid:crntClassUuid}),
             callback: function (res) {
                 fnObj.gridView03.clearData();
                 gridData = [];
