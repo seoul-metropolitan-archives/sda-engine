@@ -27608,6 +27608,7 @@ a.small_open {
 
 .exp-menu li {
     float: left;
+    text-align: left;
     list-style: none;
     position: relative;
     width: 125px;

@@ -112,6 +112,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             callback: function (res) {
                 if(res.result == "SUCCESS"){
                     ACTIONS.dispatch(ACTIONS.PAGE_SEARCH,{aggregationUuid : res.uuid});
+                    parent.axboot.modal.callback();
                     axToast.push(axboot.getCommonMessage("AA007"));
                 }else{
                     axToast.push(res.resultMessage);
@@ -428,6 +429,8 @@ fnObj.identificationArea = axboot.viewExtend({
     initView : function(aggregationUuid){
         var _this = this;
         this.initEvent();
+
+        if(this.nodeType == "temp") this.nodeType = "temporary";
 
         if(this.nodeType.toLowerCase() == "virtual")
             this.popupCode = "PU121"
