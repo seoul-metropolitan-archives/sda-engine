@@ -970,7 +970,6 @@ fnObj.referenceItem = axboot.viewExtend({
     "                                                                <input type='text' style='width: 135px; margin-right: 3px' readonly class='bgf7'>" +
     "                                                            </div>" +
     "                                                        </li>" +
-    "" +
     "                                                        <li style='width: 2%; text-align: center'>" +
     "                                                            <b>&nbsp;</b>" +
     "                                                            <div><a href='#' class='btn_del' style=''>X</a></div>" +

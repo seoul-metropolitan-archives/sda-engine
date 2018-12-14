@@ -490,7 +490,7 @@
     <update id="updateState" parameterType="RcAggregation" statementType="PREPARED">
     {call
     BEGIN
-    UPDATE
+      UPDATE
         RC_AGGREGATION
       SET
         PUBLISHED_STATUS_UUID = #{publishedStatusUuid}
@@ -498,7 +498,7 @@
         , UPDATE_UUID = #{updateUuid}
       WHERE
         AGGREGATION_UUID = #{aggregationUuid};
-    UPDATE
+      UPDATE
         RC_ITEM
       SET
         PUBLISHED_STATUS_UUID = #{publishedStatusUuid}

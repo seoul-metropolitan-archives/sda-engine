@@ -28,6 +28,12 @@ $( function() {
 
 
 var ACTIONS = axboot.actionExtend(fnObj, {
+    PAGE_CLOSE: function (caller, act, data) {
+        if (parent) {
+            parent.axboot.modal.callback(data);
+            parent.axboot.modal.close();
+        }
+    },
     PAGE_SEARCH: function (caller, act, data) {
         axboot.ajax({
             type: "GET",
@@ -71,6 +77,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 else
                 {
                     axToast.push(axboot.getCommonMessage(res.message));
+                    ACTIONS.dispatch(ACTIONS.PAGE_CLOSE);
                 }
             },
             options: {
@@ -180,22 +187,22 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
             var parentUuid = sParam[0] === undefined ? sParam.parentUuid : sParam[0].parentUuid;
             var itemUuid = sParam[0] === undefined ? sParam.uuid : sParam[0].uuid;
             var title = sParam[0] === undefined ? sParam.name : sParam[0].name;
+            var sendData = null;
+
             switch(e.currentTarget.id)
             {
-
                 case "edit":
-                    var item = getMenu("add item");
-                    item.menuParams = $.extend({},{
+                    sendData = $.extend({},{
                         aggregationUuid : parentUuid,
                         itemUuid : itemUuid,
                         title : title,
                         navi:navi
-                        },{type: "update"}
+                        },{type: "update",cmd : "ITEM_EDIT"}
                     );
-                    parentsObj.tabView.open(item);
+                    ACTIONS.dispatch(ACTIONS.PAGE_CLOSE, sendData);
                     break;
                 case "move":
-                        axboot.commonModal.open({
+                    axboot.commonModal.open({
                         modalType: "MOVE_AGGREGATION",
                         param: "",
                         sendData: function () {
@@ -216,17 +223,17 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
                         param: "",
                         sendData: function () {
                             return {
-                                "selectedList": sParam//[{uuid: itemUuid, parentUuid: aggregationUuid}]
+                                "selectedList": [sParam]//[{uuid: itemUuid, parentUuid: aggregationUuid}]
                             };
                         },
                         callback: function (data) {
                             axToast.push(axboot.getCommonMessage("AA007"));
-                            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH,{aggregationUuid : sParam.uuid, itemUuid :parentUuid});
+                            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH,{aggregationUuid : sParam.parentUuid, itemUuid : sParam.uuid});
                         }
                     });
                     break;
                 case "delete":
-                    ACTIONS.dispatch(ACTIONS.DELETE_AGGREGATION,sParam);
+                    ACTIONS.dispatch(ACTIONS.DELETE_AGGREGATION,[sParam]);
                     break;
             }
         });

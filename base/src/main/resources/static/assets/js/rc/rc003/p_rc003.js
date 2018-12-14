@@ -25,6 +25,12 @@ $( function() {
 });
 
 var ACTIONS = axboot.actionExtend(fnObj, {
+    PAGE_CLOSE: function (caller, act, data) {
+        if (parent) {
+            parent.axboot.modal.callback(data);
+            parent.axboot.modal.close();
+        }
+    },
     PAGE_SEARCH: function (caller, act, data) {
         axboot.ajax({
             type: "GET",
@@ -55,6 +61,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 else
                 {
                     axToast.push(axboot.getCommonMessage(res.message));
+                    ACTIONS.dispatch(ACTIONS.PAGE_CLOSE);
                 }
             },
             options: {
@@ -199,9 +206,11 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
                             uuid : sParam[0].uuid,
                             title : sParam[0].name,
                             navi:navi
-                        },{type: "update"}
+                        },{type: "update",cmd : "AGG_EDIT"}
                     );
-                    fnObj.formView.openPopup("AGGREGATION_ADD", "Edit Aggregation", sendData);
+
+                    ACTIONS.dispatch(ACTIONS.PAGE_CLOSE, sendData);
+                    //fnObj.formView.openPopup("AGGREGATION_ADD", "Edit Aggregation", sendData);
                     break;
                 case "move":
                     axboot.commonModal.open({

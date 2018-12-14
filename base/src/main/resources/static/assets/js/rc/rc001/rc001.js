@@ -433,6 +433,17 @@ function updateRecord(targetData, parentNode, isTree) {
         currentUuid = fnObj.naviView.getCurrent()["uuid"];
     }
 
+    if(!targetData || !parentNode){
+        axDialog.alert({
+            title: 'Information',
+            theme: "default",
+            msg: "정보가 갱신되었습니다.\nAggregation 정보를 다시 가져옵니다."
+        }, function(){
+            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+        });
+        return [];
+    }
+
     if(parentNode["nodeType"] == "virtual"){
         axDialog.alert("Virtual Aggregation으로의 이동은 불가능합니다.");
         return false;
@@ -596,12 +607,17 @@ function contextMenuClick(ui, treeData){
             openRecordServicePopup("ITEM_ADD", "Add Item", sendData);
             break;
         case "ITEM_EDIT":
-            selectedData = fnObj.iconView.getSelectedData();
+            selectedData = treeData ? [treeData] : fnObj.iconView.getSelectedData();
 
             sendData = $.extend({},{
                 aggregationUuid : selectedData[0].parentUuid,
                 itemUuid : selectedData[0].uuid
             },{type: "update"},{navi : fnObj.naviView.getPathString()},{title : selectedData[0]["name"]});
+
+            if(this.axModal.activeModal) {
+                this.axModal.activeModal.remove();
+                this.axModal.activeModal = null;
+            }
 
             openRecordServicePopup("ITEM_ADD", "Edit Item", sendData);
             break;
@@ -636,6 +652,11 @@ function contextMenuClick(ui, treeData){
                 uuid : selectedData[0].uuid,
                 nodeType : selectedData[0].nodeType
             },{type: "update"},{navi : fnObj.naviView.getPathString()},{title : selectedData[0]["name"]});
+
+            if(this.axModal.activeModal) {
+                this.axModal.activeModal.remove();
+                this.axModal.activeModal = null;
+            }
 
             openRecordServicePopup("AGGREGATION_ADD", "Edit Aggregation", sendData);
             break;
@@ -792,7 +813,11 @@ function contextMenuClick(ui, treeData){
 function openRecordServicePopup(type, title, sendData, callback){
     if(!callback){
         callback = function (data) {
-            ACTIONS.dispatch(ACTIONS.GET_SUBDATA, fnObj.naviView.getCurrent());
+            if(data && data.cmd){
+                contextMenuClick({cmd : data.cmd}, sendData);
+            }else{
+                ACTIONS.dispatch(ACTIONS.GET_SUBDATA, fnObj.naviView.getCurrent());
+            }
         }
     }
 
