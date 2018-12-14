@@ -1,15 +1,15 @@
 var fnObj = {};
 var isDetailChange = false;
 
-$( function() {
-    $( "#itemTabs" ).tabs();
-} );
+$(function () {
+    $("#itemTabs").tabs();
+});
 
 var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH: function (caller, act, data) {
         axboot.ajax({
             url: "/rc/rc001/getAllNodes",
-            data: $.extend({},data,{isDisplayItem : $("#isDisplayItem").prop("checked")}),
+            data: $.extend({}, data, {isDisplayItem: $("#isDisplayItem").prop("checked")}),
             callback: function (res) {
                 console.log(res.list);
                 fnObj.treeView01.setData({}, res.list, data);
@@ -24,20 +24,19 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         });
         return false;
     },
-    GET_GRID_DATA : function(caller, act, data)
-    {
-        if(hideMenuRole('inquiryYn')) return;
+    GET_GRID_DATA: function (caller, act, data) {
+        if (hideMenuRole('inquiryYn')) return;
 
         axboot.ajax({
             //url: "/rc/rc001/getGridData",
             url: "/rc/rc001/getGridDataForPaging",
-            data: $.extend({},data,fnObj.pageView.getPageInfo()),
+            data: $.extend({}, data, fnObj.pageView.getPageInfo()),
             callback: function (res) {
                 console.log(res.list);
-                fnObj.gridView01.setData(res.list,true);
+                fnObj.gridView01.setData(res.list, true);
                 fnObj.pageView.setPage(res);
                 fnObj.gridView01.gridObj.getGridView().resetSize();
-                ACTIONS.dispatch(ACTIONS.GET_NAVI_DATA,data);
+                ACTIONS.dispatch(ACTIONS.GET_NAVI_DATA, data);
                 /*if (res.list.length > 0) {
                     ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, res.list[0]);
                 }*/
@@ -48,31 +47,29 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             }
         });
     },
-    GET_SUBDATA : function(caller, act, data)
-    {
-        if(hideMenuRole('inquiryYn')) return;
+    GET_SUBDATA: function (caller, act, data) {
+        if (hideMenuRole('inquiryYn')) return;
 
         console.log(data);
         axboot.ajax({
             url: "/rc/rc001/getAllNodeForPaging",
-            data: $.extend({},data,
-                {isDisplayItem : true}
+            data: $.extend({}, data,
+                {isDisplayItem: true}
                 ,
                 fnObj.pageView.getPageInfo()
             ),
             async: false,
             callback: function (res) {
-                fnObj.iconView.setData(res.list,data.uuid == "");
+                fnObj.iconView.setData(res.list, data.uuid == "");
                 fnObj.pageView.setPage(res);
-                ACTIONS.dispatch(ACTIONS.GET_NAVI_DATA,data);
+                ACTIONS.dispatch(ACTIONS.GET_NAVI_DATA, data);
             },
             options: {
                 onError: axboot.viewError
             }
         });
     },
-    GET_AGGREGATION_INFO : function(caller, act, data)
-    {
+    GET_AGGREGATION_INFO: function (caller, act, data) {
         axboot.ajax({
             url: "/rc/rc001/getAggregationInfo",
             data: data,
@@ -84,8 +81,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             }
         });
     },
-    GET_ITEM_INFO : function(caller, act, data)
-    {
+    GET_ITEM_INFO: function (caller, act, data) {
         axboot.ajax({
             url: "/rc/rc001/getItemInfo",
             data: data,
@@ -97,8 +93,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             }
         });
     },
-    GET_NAVI_DATA : function(caller, act, data)
-    {
+    GET_NAVI_DATA: function (caller, act, data) {
         axboot.ajax({
             url: "/rc/rc001/getNaviData",
             data: data,
@@ -110,25 +105,24 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             }
         });
     },
-    DELETE_AGGREGATION : function(caller, act, list){
-        if(hideMenuRole('saveYn')) return;
+    DELETE_AGGREGATION: function (caller, act, list) {
+        if (hideMenuRole('saveYn')) return;
 
         axboot.ajax({
             url: "/rc/rc001/deleteAggregation",
             data: JSON.stringify(list),
-            dataType : "JSON",
-            type : "POST",
+            dataType: "JSON",
+            type: "POST",
             callback: function (res) {
-                if(res.status == -500)
+                if (res.status == -500)
                     axWarningToast.push(axboot.getCommonMessage(res.message));
-                else
-                {
+                else {
                     axToast.push(axboot.getCommonMessage(res.message));
-                    ACTIONS.dispatch(ACTIONS.PAGE_SEARCH,fnObj.naviView.getRoot());
-                    if($(".explorer_grid").css("display")=="none")
-                        ACTIONS.dispatch(ACTIONS.GET_SUBDATA,fnObj.naviView.getCurrent());
+                    ACTIONS.dispatch(ACTIONS.PAGE_SEARCH, fnObj.naviView.getRoot());
+                    if ($(".explorer_grid").css("display") == "none")
+                        ACTIONS.dispatch(ACTIONS.GET_SUBDATA, fnObj.naviView.getCurrent());
                     else
-                        ACTIONS.dispatch(ACTIONS.GET_GRID_DATA,fnObj.naviView.getCurrent());
+                        ACTIONS.dispatch(ACTIONS.GET_GRID_DATA, fnObj.naviView.getCurrent());
                 }
             },
             options: {
@@ -137,18 +131,18 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         });
     },
     PAGE_SAVE: function (caller, act, list) {
-        if(hideMenuRole('saveYn')) return;
+        if (hideMenuRole('saveYn')) return;
 
-        if(!fnObj.gridView01.gridObj.validate()){
+        if (!fnObj.gridView01.gridObj.validate()) {
             return false;
-        }else{
+        } else {
             var data = fnObj.gridView01.getData();
 
             axboot.ajax({
                 url: "/rc/rc001/saveRecords",
                 data: JSON.stringify(data),
-                dataType : "JSON",
-                type : "POST",
+                dataType: "JSON",
+                type: "POST",
                 callback: function (res) {
                     if (res.status == -500) {
                         axWarningToast.push(res.message);
@@ -164,14 +158,14 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     },
     ITEMS_SAVE: function (caller, act, list) {
 
-        if(hideMenuRole('saveYn')) return;
+        if (hideMenuRole('saveYn')) return;
         //if(!isDetailChange) return;
 
         axboot.ajax({
             url: "/rc/rc001/save",
             data: JSON.stringify(list),
-            dataType : "JSON",
-            type : "POST",
+            dataType: "JSON",
+            type: "POST",
             callback: function (res) {
                 if (res.status == -500) {
                     axWarningToast.push(res.message);
@@ -184,9 +178,9 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             }
         });
     },
-    ITEM_SAVE: function (caller, act, data){
+    ITEM_SAVE: function (caller, act, data) {
 
-        if(hideMenuRole('saveYn')) return;
+        if (hideMenuRole('saveYn')) return;
         //if(!isDetailChange) return;
 
         axboot.ajax({
@@ -195,7 +189,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             data: JSON.stringify(data),
             callback: function (res) {
                 //axToast.push(axboot.getCommonMessage("AA007"));
-                ACTIONS.dispatch(ACTIONS.GET_SUBDATA,fnObj.naviView.getCurrent());
+                ACTIONS.dispatch(ACTIONS.GET_SUBDATA, fnObj.naviView.getCurrent());
             },
             options: {
                 onError: axboot.viewError
@@ -203,24 +197,24 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         });
     },
     AGG_SAVE: function (caller, act, data) {
-        var saveData  =
+        var saveData =
             {
-                systemMeta : data,
-                contextualMeta : null,
-                childrenAggregationList : null,
-                referenceAggregationList : null,
-                referenceItemList : null
+                systemMeta: data,
+                contextualMeta: null,
+                childrenAggregationList: null,
+                referenceAggregationList: null,
+                referenceItemList: null
             }
 
 
         axboot.ajax({
             url: "/api/v1/rc/rc002/save",
-            dataType : "JSON",
-            type : "POST",
+            dataType: "JSON",
+            type: "POST",
             data: JSON.stringify(saveData),
             callback: function (res) {
                 //axToast.push(axboot.getCommonMessage("AA007"));
-                ACTIONS.dispatch(ACTIONS.GET_SUBDATA,fnObj.naviView.getCurrent());
+                ACTIONS.dispatch(ACTIONS.GET_SUBDATA, fnObj.naviView.getCurrent());
             },
             options: {
                 onError: axboot.viewError
@@ -255,7 +249,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 window.axModal.activeModal.remove();
                 window.axModal.activeModal = null;
 
-                ACTIONS.dispatch(ACTIONS.PAGE_INGEST,data);
+                ACTIONS.dispatch(ACTIONS.PAGE_INGEST, data);
 
             }
         });
@@ -268,12 +262,15 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             .call({
                 type: "PUT",
                 url: "/api/v1/wf999/01/save",
-                data: JSON.stringify({raAggregationUuid : fnObj.naviView.getCurrent()["uuid"], rc00502VoList : uploadFiles}),
+                data: JSON.stringify({
+                    raAggregationUuid: fnObj.naviView.getCurrent()["uuid"],
+                    rc00502VoList: uploadFiles
+                }),
                 callback: function (res) {
                     UPLOAD.uploadedFiles = [];
                     axToast.push(axboot.getCommonMessage("AA007"));
                     ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
-                    ACTIONS.dispatch(ACTIONS.GET_SUBDATA,{uuid : fnObj.naviView.getCurrent()["uuid"]});
+                    ACTIONS.dispatch(ACTIONS.GET_SUBDATA, {uuid: fnObj.naviView.getCurrent()["uuid"]});
                 }
             })
             .done(function () {
@@ -393,7 +390,7 @@ function exp_listView() {
     //$(".exp_detail").css("display", "");
     fnObj.pageView.resetPage();
     fnObj.pageView.setPageSize(126);
-    ACTIONS.dispatch(ACTIONS.GET_SUBDATA,fnObj.naviView.getCurrent());
+    ACTIONS.dispatch(ACTIONS.GET_SUBDATA, fnObj.naviView.getCurrent());
 }
 
 function exp_gridView() {
@@ -402,7 +399,7 @@ function exp_gridView() {
     //$(".exp_detail").css("display", "none");
     fnObj.pageView.resetPage();
     fnObj.pageView.setPageSize(100);
-    ACTIONS.dispatch(ACTIONS.GET_GRID_DATA,fnObj.naviView.getCurrent());
+    ACTIONS.dispatch(ACTIONS.GET_GRID_DATA, fnObj.naviView.getCurrent());
 
 }
 
@@ -415,7 +412,7 @@ function exp_gridView() {
 function updateRecord(targetData, parentNode, isTree) {
     var targetNode = null;
 
-    if(isTree == null){
+    if (isTree == null) {
         isTree = false;
     }
 
@@ -423,60 +420,60 @@ function updateRecord(targetData, parentNode, isTree) {
     var targetNodeType = "";
     var currentUuid = "";   //현재 Record 화면에 로딩된 Aggregation UUID를 가져옴
 
-    if(isTree){
+    if (isTree) {
         targetUuid = targetData["uuid"];
         targetNodeType = targetData["nodeType"];
         currentUuid = targetData["parentUuid"];
-    }else{
+    } else {
         targetUuid = targetData.attr("uuid");
         targetNodeType = targetData.attr("nodeType");
         currentUuid = fnObj.naviView.getCurrent()["uuid"];
     }
 
-    if(!targetData || !parentNode){
+    if (!targetData || !parentNode) {
         axDialog.alert({
             title: 'Information',
             theme: "default",
             msg: "정보가 갱신되었습니다.\nAggregation 정보를 다시 가져옵니다."
-        }, function(){
+        }, function () {
             ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
         });
         return [];
     }
 
-    if(parentNode["nodeType"] == "virtual"){
+    if (parentNode["nodeType"] == "virtual") {
         axDialog.alert("Virtual Aggregation으로의 이동은 불가능합니다.");
         return false;
-    }else if(targetNodeType == "virtual"){
+    } else if (targetNodeType == "virtual") {
         axDialog.alert("Virtual Aggregation은 이동이 불가능합니다.");
         return false;
     }
 
-    if(targetNodeType == "item"){
-        if(fnObj.naviView.getCurrent()["nodeType"] == "virtual"){
+    if (targetNodeType == "item") {
+        if (fnObj.naviView.getCurrent()["nodeType"] == "virtual") {
             axDialog.alert("Virtual Aggregation의 Item은 \n이동이 불가능합니다.");
         }
 
-        if(parentNode["nodeType"] == "normal" && fnObj.naviView.getCurrent()["nodeType"] == "temp"){
+        if (parentNode["nodeType"] == "normal" && fnObj.naviView.getCurrent()["nodeType"] == "temp") {
             axDialog.alert("Aggregation Type이 다른 \nItem 이동은 불가능합니다.");
             return false;
-        }else if(parentNode["nodeType"] == "temporary" && fnObj.naviView.getCurrent()["nodeType"] == "normal"){
+        } else if (parentNode["nodeType"] == "temporary" && fnObj.naviView.getCurrent()["nodeType"] == "normal") {
             axDialog.alert("Aggregation Type이 다른 \nItem 이동은 불가능합니다.");
             return false;
         }
-    }else if(parentNode["nodeType"] == "normal" && targetNodeType == "temporary") {
+    } else if (parentNode["nodeType"] == "normal" && targetNodeType == "temporary") {
         axDialog.alert("Aggregation Type이 다른 \nAggregation 이동은 불가능합니다.");
         return false;
-    }else if(parentNode["nodeType"] == "temporary" && targetNodeType == "normal") {
+    } else if (parentNode["nodeType"] == "temporary" && targetNodeType == "normal") {
         axDialog.alert("Aggregation Type이 다른 \nAggregation 이동은 불가능합니다.");
         return false;
     }
 
-    if(parentNode["nodeType"] == "normal"){
-        if(targetNodeType == "temporary" || targetNodeType == "virtaul" ){
+    if (parentNode["nodeType"] == "normal") {
+        if (targetNodeType == "temporary" || targetNodeType == "virtaul") {
             axDialog.alert("Aggregation Type이 동일해야합니다.");
             return false;
-        }else if(targetNodeType == "item"){
+        } else if (targetNodeType == "item") {
 
         }
     }
@@ -498,7 +495,7 @@ function updateRecord(targetData, parentNode, isTree) {
             uuid: targetUuid,
             parentUuid: parentUuid,
             nodeType: targetNodeType,
-            parentNodeType : parentNode["nodeType"]
+            parentNodeType: parentNode["nodeType"]
         }];
     } else {
         reqList = [];
@@ -507,7 +504,7 @@ function updateRecord(targetData, parentNode, isTree) {
                 uuid: item.uuid,
                 parentUuid: parentUuid,
                 nodeType: item.nodeType,
-                parentNodeType : parentNode["nodeType"]
+                parentNodeType: parentNode["nodeType"]
             });
         });
     }
@@ -515,8 +512,8 @@ function updateRecord(targetData, parentNode, isTree) {
     axboot.ajax({
         url: "/rc/rc001/save",
         data: JSON.stringify(reqList),
-        dataType : "JSON",
-        type : "POST",
+        dataType: "JSON",
+        type: "POST",
         callback: function (res) {
             if (res.status == -500) {
                 axDialog.alert(res.message);
@@ -524,11 +521,11 @@ function updateRecord(targetData, parentNode, isTree) {
                 if (selectedData.length == 0) {
                     if (!isTree)
                         targetData.remove();
-                }else{
+                } else {
                     $("#iconListArea >div.selected").remove();
                 }
 
-                if(targetNodeType != "item") {
+                if (targetNodeType != "item") {
                     targetNode = fnObj.treeView01.getNodeByParam("uuid", targetUuid);
                     fnObj.treeView01.moveNode(parentNode, targetNode);
                 }
@@ -558,7 +555,7 @@ function updateRecord(targetData, parentNode, isTree) {
  * @param ui
  * @param treeData
  */
-function contextMenuClick(ui, treeData){
+function contextMenuClick(ui, treeData) {
     var selectedData = fnObj.iconView.getSelectedData();
     var parentsObj = parent.window.fnObj;
     var item = null;
@@ -568,7 +565,7 @@ function contextMenuClick(ui, treeData){
     var typeName = "";
     var sendData = null;
 
-    switch(ui.cmd){
+    switch (ui.cmd) {
         case "MERGE_ITEM":
             axDialog.confirm({
                 msg: "Merge를 진행 하시겠습니까?\nComponent들은 하나의 Item에 귀속됩니다."
@@ -609,12 +606,12 @@ function contextMenuClick(ui, treeData){
         case "ITEM_EDIT":
             selectedData = treeData ? [treeData] : fnObj.iconView.getSelectedData();
 
-            sendData = $.extend({},{
-                aggregationUuid : selectedData[0].parentUuid,
-                itemUuid : selectedData[0].uuid
-            },{type: "update"},{navi : fnObj.naviView.getPathString()},{title : selectedData[0]["name"]});
+            sendData = $.extend({}, {
+                aggregationUuid: selectedData[0].parentUuid,
+                itemUuid: selectedData[0].uuid
+            }, {type: "update"}, {navi: fnObj.naviView.getPathString()}, {title: selectedData[0]["name"]});
 
-            if(this.axModal.activeModal) {
+            if (this.axModal.activeModal) {
                 this.axModal.activeModal.remove();
                 this.axModal.activeModal = null;
             }
@@ -622,9 +619,9 @@ function contextMenuClick(ui, treeData){
             openRecordServicePopup("ITEM_ADD", "Edit Item", sendData);
             break;
         case "ITEM_VIEW":
-            sendData = $.extend({},selectedData[0],{type: "create"},
-                {navi : fnObj.naviView.getPathString()},
-                {title : selectedData["name"]},{sendData: selectedData}
+            sendData = $.extend({}, selectedData[0], {type: "create"},
+                {navi: fnObj.naviView.getPathString()},
+                {title: selectedData["name"]}, {sendData: selectedData}
             );
             openRecordServicePopup("ITEM_VIEW", "View Item", sendData);
             break;
@@ -647,13 +644,13 @@ function contextMenuClick(ui, treeData){
             break;
         case "AGG_EDIT":
             selectedData = treeData ? [treeData] : fnObj.iconView.getSelectedData();
-            sendData = $.extend({},{
-                parentUuid : selectedData[0].parentUuid,
-                uuid : selectedData[0].uuid,
-                nodeType : selectedData[0].nodeType
-            },{type: "update"},{navi : fnObj.naviView.getPathString()},{title : selectedData[0]["name"]});
+            sendData = $.extend({}, {
+                parentUuid: selectedData[0].parentUuid,
+                uuid: selectedData[0].uuid,
+                nodeType: selectedData[0].nodeType
+            }, {type: "update"}, {navi: fnObj.naviView.getPathString()}, {title: selectedData[0]["name"]});
 
-            if(this.axModal.activeModal) {
+            if (this.axModal.activeModal) {
                 this.axModal.activeModal.remove();
                 this.axModal.activeModal = null;
             }
@@ -662,21 +659,21 @@ function contextMenuClick(ui, treeData){
             break;
         case "AGG_VIEW":
             selectedData = treeData ? [treeData] : fnObj.iconView.getSelectedData();
-            sendData = $.extend({},selectedData[0],{type: "create"},
-                {navi : fnObj.naviView.getPathString()},
-                {title : selectedData["name"]},
+            sendData = $.extend({}, selectedData[0], {type: "create"},
+                {navi: fnObj.naviView.getPathString()},
+                {title: selectedData["name"]},
                 {sendData: selectedData});
 
             openRecordServicePopup("AGGREGATION_VIEW", "View Aggregation", sendData);
             break;
         case "AGG_TYPE_NORMAL":
         case "AGG_TYPE_TEMP":
-            if(ui.cmd == "AGG_TYPE_NORMAL"){
+            if (ui.cmd == "AGG_TYPE_NORMAL") {
                 selectedData = treeData ? [treeData] : fnObj.iconView.getSelectedData();
                 msg = "Normal Aggregation으로 변경하시겠습니까?";
                 typeUuid = axboot.commonCodeValueByCodeName("CD127", "Normal");
                 typeName = "normal";
-            }else if(ui.cmd == "AGG_TYPE_TEMP"){
+            } else if (ui.cmd == "AGG_TYPE_TEMP") {
                 selectedData = treeData ? [treeData] : fnObj.iconView.getSelectedData();
                 msg = "Temporay Aggregation으로 변경하시겠습니까?";
                 typeUuid = axboot.commonCodeValueByCodeName("CD127", "Temporary");
@@ -693,16 +690,16 @@ function contextMenuClick(ui, treeData){
                         url: "/rc/rc001/updateAggregationType",
                         data: $.extend({}, {uuid: selectedData[0].uuid, nodeType: typeUuid}, null),
                         callback: function (res) {
-                            if(res.map.isSuccess == true) {
+                            if (res.map.isSuccess == true) {
                                 if (res.map.list) {
                                     $.each(res.map.list, function (idx, item) {
                                         var nodeObj = fnObj.treeView01.getNodeByParam("uuid", item["uuid"]);
-                                        if(!nodeObj){
+                                        if (!nodeObj) {
                                             axDialog.alert({
                                                 title: 'Information',
                                                 theme: "default",
                                                 msg: "정보가 갱신되었습니다.\nAggregation 정보를 다시 가져옵니다."
-                                            }, function(){
+                                            }, function () {
                                                 ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
                                             });
                                             return;
@@ -714,7 +711,7 @@ function contextMenuClick(ui, treeData){
                                         fnObj.treeView01.updateNode(nodeObj);
                                     });
                                 }
-                            }else{
+                            } else {
                                 axDialog.alert({
                                     title: 'Warning',
                                     theme: "default",
@@ -736,9 +733,9 @@ function contextMenuClick(ui, treeData){
         case "ITEM_ADD_GRID":
         case "AGG_ADD_GRID":
             var nodeType = "";
-            if(ui.cmd == "ITEM_ADD_GRID"){
+            if (ui.cmd == "ITEM_ADD_GRID") {
                 nodeType = "item";
-            }else if(ui.cmd == "AGG_ADD_GRID") {
+            } else if (ui.cmd == "AGG_ADD_GRID") {
                 nodeType = "aggregation";
             }
             axboot.modal.open({
@@ -750,8 +747,8 @@ function contextMenuClick(ui, treeData){
                 },
                 sendData: function () {
                     return {
-                        aggregationUuid : fnObj.naviView.getCurrent().uuid,
-                        nodeType : nodeType
+                        aggregationUuid: fnObj.naviView.getCurrent().uuid,
+                        nodeType: nodeType
                     };
                 },
                 callback: function (data) {
@@ -767,26 +764,26 @@ function contextMenuClick(ui, treeData){
             treeData.choiceYn = "Y";
 
             var nodeType = "";
-            if(ui.cmd == "ITEM_ADD_GRID"){
+            if (ui.cmd == "ITEM_ADD_GRID") {
                 nodeType = "item";
-            }else if(ui.cmd == "AGG_CLASSIFY_RECORDS") {
+            } else if (ui.cmd == "AGG_CLASSIFY_RECORDS") {
                 nodeType = "aggregation";
             }
 
-            function getFlatData(listData){
-                listData.forEach(function(item, idx){
-                    if(item.nodeType == "normal") {
-                        item.aggregationUuid = item.uuid;
-                        selectedData.push(item);
-                    }else{
-                        return true;
-                    }
+        function getFlatData(listData) {
+            listData.forEach(function (item, idx) {
+                if (item.nodeType == "normal") {
+                    item.aggregationUuid = item.uuid;
+                    selectedData.push(item);
+                } else {
+                    return true;
+                }
 
-                    if(item.children.length > 0){
-                        getFlatData(item.children);
-                    }
-                });
-            }
+                if (item.children.length > 0) {
+                    getFlatData(item.children);
+                }
+            });
+        }
 
             axboot.modal.open({
                 modalType: "RECORD_EXPLORER_CLASSIFY_RECORDS",
@@ -799,7 +796,7 @@ function contextMenuClick(ui, treeData){
                     selectedData = [];
                     getFlatData([treeData]);
 
-                    return {aggregationUuid : treeData.uuid, classifyList : selectedData};
+                    return {aggregationUuid: treeData.uuid, classifyList: selectedData};
                 },
                 callback: function (data) {
                     //ACTIONS.dispatch(ACTIONS.GET_SUBDATA, fnObj.naviView.getCurrent());
@@ -810,12 +807,12 @@ function contextMenuClick(ui, treeData){
     }
 }
 
-function openRecordServicePopup(type, title, sendData, callback){
-    if(!callback){
+function openRecordServicePopup(type, title, sendData, callback) {
+    if (!callback) {
         callback = function (data) {
-            if(data && data.cmd){
-                contextMenuClick({cmd : data.cmd}, sendData);
-            }else{
+            if (data && data.cmd) {
+                contextMenuClick({cmd: data.cmd}, sendData);
+            } else {
                 ACTIONS.dispatch(ACTIONS.GET_SUBDATA, fnObj.naviView.getCurrent());
             }
         }
@@ -842,42 +839,42 @@ function openRecordServicePopup(type, title, sendData, callback){
  * @param nodeType
  * @returns {*}
  */
-function getContextMenu(ui, nodeType){
+function getContextMenu(ui, nodeType) {
     var menu = null;
 
     $("#iconListArea").tooltip("disable");
 
     //컨트롤 누르고 클릭 시 해당 아이템들이 다중으로 선택되어야된다
     if ($(ui.target).attr("id") != "iconListArea") {
-        if(fnObj.iconView.selectedItems && fnObj.iconView.selectedItems.length > 1){
+        if (fnObj.iconView.selectedItems && fnObj.iconView.selectedItems.length > 1) {
             menu = [
-                {title: "Delete Items", cmd: "NODE_DEL", uiIcon: "ui-icon-trash" },
+                {title: "Delete Items", cmd: "NODE_DEL", uiIcon: "ui-icon-trash"},
             ];
-        }else{
-            if(nodeType == "item"){
+        } else {
+            if (nodeType == "item") {
                 menu = [
-                    {title: "View Item", cmd: "ITEM_VIEW", uiIcon: "ui-icon-info" },
+                    {title: "View Item", cmd: "ITEM_VIEW", uiIcon: "ui-icon-info"},
                     {title: "----"},
                     {title: "Edit Item", cmd: "ITEM_EDIT", uiIcon: "ui-icon-wrench"},
                     {title: "Delete Item", cmd: "NODE_DEL", uiIcon: "ui-icon-trash"},
                 ];
-            }else if(nodeType == "normal"){
+            } else if (nodeType == "normal") {
                 var treeData = null;
                 var selectedData = null;
 
                 if ($(ui.target).offsetParent().attr("id") == "iconListArea") {
                     var selectedData = fnObj.iconView.getSelectedData();
                     treeData = fnObj.treeView01.getNodeByParam("uuid", selectedData[0].uuid);
-                }else{
+                } else {
                     treeData = fnObj.treeView01.getNodeByTId($(ui.target).closest("[treenode]").attr("id"));
                 }
 
-                if(!treeData){
+                if (!treeData) {
                     axDialog.alert({
                         title: 'Information',
                         theme: "default",
                         msg: "정보가 갱신되었습니다.\nAggregation 정보를 다시 가져옵니다."
-                    }, function(){
+                    }, function () {
                         ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
                     });
                     return [];
@@ -886,9 +883,9 @@ function getContextMenu(ui, nodeType){
                 var rootInfo = treeData.getPath();
                 var enableClassify = true;
 
-                if(rootInfo.length > 0){
-                    rootInfo.forEach(function(item, idx){
-                        if(item.nodeType != "normal"){
+                if (rootInfo.length > 0) {
+                    rootInfo.forEach(function (item, idx) {
+                        if (item.nodeType != "normal") {
                             enableClassify = false;
                             return false;
                         }
@@ -896,47 +893,51 @@ function getContextMenu(ui, nodeType){
                 }
 
                 menu = [
-                    {title: "View Aggregation", cmd: "AGG_VIEW", uiIcon: "ui-icon-info" },
+                    {title: "View Aggregation", cmd: "AGG_VIEW", uiIcon: "ui-icon-info"},
                     {title: "----"},
-                    {title: "Edit Aggregation", cmd: "AGG_EDIT", uiIcon: "ui-icon-wrench" },
-                    {title: "Change Temporary Aggregation", cmd: "AGG_TYPE_TEMP", uiIcon: "ui-icon-transferthick-e-w" },
+                    {title: "Edit Aggregation", cmd: "AGG_EDIT", uiIcon: "ui-icon-wrench"},
+                    {title: "Change Temporary Aggregation", cmd: "AGG_TYPE_TEMP", uiIcon: "ui-icon-transferthick-e-w"},
                     //{title: "Publishing Aggregation", cmd: "AGG_PUBLISH", uiIcon: "ui-icon-transferthick-e-w" },
                 ];
 
                 // 분류 가능할 조건에만 해당 Context메뉴를 보여줌
-                if(enableClassify){
+                if (enableClassify) {
                     menu.push({title: "----"});
-                    menu.push({title: "Classify Records", cmd: "AGG_CLASSIFY_RECORDS", uiIcon: "ui-icon-transferthick-e-w" });
+                    menu.push({
+                        title: "Classify Records",
+                        cmd: "AGG_CLASSIFY_RECORDS",
+                        uiIcon: "ui-icon-transferthick-e-w"
+                    });
                 }
-            }else if(nodeType == "temporary"){
+            } else if (nodeType == "temporary") {
                 menu = [
-                    {title: "View Aggregation", cmd: "AGG_VIEW", uiIcon: "ui-icon-info" },
-                    {title: "Edit Aggregation", cmd: "AGG_EDIT", uiIcon: "ui-icon-wrench" },
+                    {title: "View Aggregation", cmd: "AGG_VIEW", uiIcon: "ui-icon-info"},
+                    {title: "Edit Aggregation", cmd: "AGG_EDIT", uiIcon: "ui-icon-wrench"},
                     {title: "----"},
-                    {title: "Delete Aggregation", cmd: "NODE_DEL", uiIcon: "ui-icon-closethick" },
-                    {title: "Change Normal Aggregation", cmd: "AGG_TYPE_NORMAL", uiIcon: "ui-icon-transferthick-e-w" },
+                    {title: "Delete Aggregation", cmd: "NODE_DEL", uiIcon: "ui-icon-closethick"},
+                    {title: "Change Normal Aggregation", cmd: "AGG_TYPE_NORMAL", uiIcon: "ui-icon-transferthick-e-w"},
                 ];
-            }else if(nodeType == "virtual"){
+            } else if (nodeType == "virtual") {
                 menu = [
-                    {title: "View Aggregation", cmd: "AGG_VIEW", uiIcon: "ui-icon-info" },
+                    {title: "View Aggregation", cmd: "AGG_VIEW", uiIcon: "ui-icon-info"},
                     {title: "----"},
-                    {title: "Edit Aggregation", cmd: "AGG_EDIT", uiIcon: "ui-icon-wrench" },
-                    {title: "Delete Aggregation", cmd: "NODE_DEL", uiIcon: "ui-icon-closethick" },
+                    {title: "Edit Aggregation", cmd: "AGG_EDIT", uiIcon: "ui-icon-wrench"},
+                    {title: "Delete Aggregation", cmd: "NODE_DEL", uiIcon: "ui-icon-closethick"},
                 ];
             }
         }
-    }else{
-        if(fnObj.naviView.getCurrent().nodeType == "temp") {
+    } else {
+        if (fnObj.naviView.getCurrent().nodeType == "temp") {
             menu = [
-            {title: "Add Item", cmd: "ITEM_ADD", uiIcon: "ui-icon-document"},
-            {title: "Add Aggregation", cmd: "AGG_ADD", uiIcon: "ui-icon-folder-collapsed"},
-            {title: "----"},
-            {title: "Add Item Grid", cmd: "ITEM_ADD_GRID", uiIcon: "ui-icon-document"},
-            {title: "Add Aggregation Grid", cmd: "AGG_ADD_GRID", uiIcon: "ui-icon-folder-collapsed"},
-            {title: "----"},
-            {title: "Refresh", cmd: "REFRESH", uiIcon: "ui-icon-arrowrefresh-1-w"},
-        ];
-        }else{
+                {title: "Add Item", cmd: "ITEM_ADD", uiIcon: "ui-icon-document"},
+                {title: "Add Aggregation", cmd: "AGG_ADD", uiIcon: "ui-icon-folder-collapsed"},
+                {title: "----"},
+                {title: "Add Item Grid", cmd: "ITEM_ADD_GRID", uiIcon: "ui-icon-document"},
+                {title: "Add Aggregation Grid", cmd: "AGG_ADD_GRID", uiIcon: "ui-icon-folder-collapsed"},
+                {title: "----"},
+                {title: "Refresh", cmd: "REFRESH", uiIcon: "ui-icon-arrowrefresh-1-w"},
+            ];
+        } else {
             menu = [
                 {title: "Add Item", cmd: "ITEM_ADD", uiIcon: "ui-icon-document"},
                 {title: "Add Aggregation", cmd: "AGG_ADD", uiIcon: "ui-icon-folder-collapsed"},
@@ -949,15 +950,14 @@ function getContextMenu(ui, nodeType){
     return menu;
 }
 
-var getMenu = function(searchData)
-{
+var getMenu = function (searchData) {
     var menuObj = undefined;
     axboot.ajax({
         url: "/rc/rc001/getMenuInfo",
-        data: JSON.stringify({progNm : searchData}),
-        type : "POST",
-        dataType : "JSON",
-        async : false,
+        data: JSON.stringify({progNm: searchData}),
+        type: "POST",
+        dataType: "JSON",
+        async: false,
         callback: function (res) {
             menuObj = res;
         },
@@ -969,7 +969,7 @@ var getMenu = function(searchData)
 }
 
 
-function setFormData(item, isItem){
+function setFormData(item, isItem) {
     // Properties
     fnObj.formView.setFormData("title", item.name);
     fnObj.formView.setFormData("riItemUuid", item.riItemUuid);
@@ -988,27 +988,27 @@ function setFormData(item, isItem){
     fnObj.formView.setFormData("raTitle", item.raTitle);
     fnObj.formView.setFormData("raAggregationUuid", item.raAggregationUuid);
     fnObj.formView.setFormData("levelUuid", item.levelUuid);
-    fnObj.formView.setFormData("provenance",item.provenance);
-    fnObj.formView.setFormData("creator",item.creator);
-    fnObj.formView.setFormData("keyword",item.keyword);
-    fnObj.formView.setFormData("referenceCode",item.referenceCode);
+    fnObj.formView.setFormData("provenance", item.provenance);
+    fnObj.formView.setFormData("creator", item.creator);
+    fnObj.formView.setFormData("keyword", item.keyword);
+    fnObj.formView.setFormData("referenceCode", item.referenceCode);
 
     fnObj.formView.setFormData("descriptionStartDate", isItem ? item.riDescriptionStartDate : item.descriptionStartDate);
     fnObj.formView.setFormData("descriptionEndDate", isItem ? item.riDescriptionEndDate : item.descriptionEndDate);
 
-    fnObj.formView.setFormData("creationStartDate",item.creationStartDate);
-    fnObj.formView.setFormData("creationEndDate",item.creationEndDate);
+    fnObj.formView.setFormData("creationStartDate", item.creationStartDate);
+    fnObj.formView.setFormData("creationEndDate", item.creationEndDate);
     fnObj.formView.setFormData("isItem", isItem);
 
-    if(item.extraMetadata) {
+    if (item.extraMetadata) {
         fnObj.gridView02.setData(JSON.parse(item.extraMetadata));
-    }else{
+    } else {
         fnObj.gridView02.setData([]);
     }
 }
 
 var fnObj = {
-    pageStart : function () {
+    pageStart: function () {
         /*var _this = this;
         $.ajax({
             url: "/assets/js/column_info/ad00101.js",‰
@@ -1022,15 +1022,17 @@ var fnObj = {
         $.ajax({
             url: "/assets/js/column_info/rc00101.js",
             dataType: "script",
-            async : false,
-            success: function(){}
+            async: false,
+            success: function () {
+            }
         });
 
         $.ajax({
             url: "/assets/js/column_info/rc00102.js",
             dataType: "script",
-            async : false,
-            success: function(){}
+            async: false,
+            success: function () {
+            }
         });
 
         $(function () {
@@ -1069,41 +1071,43 @@ var fnObj = {
             });
         });
 
-        $(".exp-menu").hover(function(){
+        $(".exp-menu").hover(function () {
             //icon 실행
-            if($(".explorer_grid").css("display")=="none")
-            {
-                selectedData= fnObj.iconView.getSelectedData();
+            if ($(".explorer_grid").css("display") == "none") {
+                selectedData = fnObj.iconView.getSelectedData();
             }
             //grid 실행
             else {
                 selectedData = fnObj.gridView01.getSelectedData();
             }
 
-            switch(selectedData.length)
-            {
+            switch (selectedData.length) {
                 case 1:
                     $(".exp-menu>li>ul>li>a").removeClass("inactive");
                     break;
                 case 0:
-                    $(".exp-menu>li>ul>li>a").each(function(){
-                        switch($(this).text())
-                        {
-                            case "Properties":case "Edit":case "Move":case "Delete":
-                            $(this).addClass("inactive");
-                            break;
+                    $(".exp-menu>li>ul>li>a").each(function () {
+                        switch ($(this).text()) {
+                            case "Properties":
+                            case "Edit":
+                            case "Move":
+                            case "Delete":
+                                $(this).addClass("inactive");
+                                break;
                             default :
                                 $(this).removeClass("inactive");
                         }
                     });
                     break;
                 default :
-                    $(".exp-menu>li>ul>li>a").each(function(){
-                        switch($(this).text())
-                        {
-                            case "Aggregation" :case "Item":case "Properties":case "Edit":
-                            $(this).addClass("inactive");
-                            break;
+                    $(".exp-menu>li>ul>li>a").each(function () {
+                        switch ($(this).text()) {
+                            case "Aggregation" :
+                            case "Item":
+                            case "Properties":
+                            case "Edit":
+                                $(this).addClass("inactive");
+                                break;
                             default :
                                 $(this).removeClass("inactive");
                         }
@@ -1112,7 +1116,7 @@ var fnObj = {
             }
         });
 
-        $(".exp-menu a").click(function(event){
+        $(".exp-menu a").click(function (event) {
             event.stopPropagation();
             event.preventDefault();
             var selectedData = undefined;
@@ -1122,9 +1126,8 @@ var fnObj = {
 
 
             //icon 실행
-            if($(".explorer_grid").css("display")=="none")
-            {
-                selectedData= fnObj.iconView.getSelectedData();
+            if ($(".explorer_grid").css("display") == "none") {
+                selectedData = fnObj.iconView.getSelectedData();
             }
             //grid 실행
             else {
@@ -1133,112 +1136,35 @@ var fnObj = {
 
             //var selectedData = rightObj.getSelectedData();
 
-            if(selectedData.length > 0 && !selectedData[0]["name"])
+            if (selectedData.length > 0 && !selectedData[0]["name"])
                 selectedData[0]["name"] = selectedData[0]["title"];
 
-            switch($(this).text())
-            {
+            switch ($(this).text()) {
                 //add
                 case "Aggregation":
-                    if(selectedData.length < 2)
-                    {
-                        if(selectedData.length == 1)
-                            selectedData = selectedData[0];
-                        else
-                        {
-                            selectedData = fnObj.naviView.getCurrent();
-                        }
-                        if(selectedData["nodeType"] == "item")
-                        {
-                            alert("Item에는 Aggregation을 추가할 수 없습니다.");
-                            return ;
-                        }
-                        console.log(selectedData);
-
-                        var item = getMenu("add aggregation");
-                        var naviStr = undefined == selectedData["name"]? "" : " > "+selectedData["name"]
-                        item.menuParams = $.extend({},
-                            selectedData
-                            ,{type: "create"}
-                            ,{navi : fnObj.naviView.getPathString()+naviStr},{title : ""}
-                        );
-                        parentsObj.tabView.open(item);
-                    }
+                    contextMenuClick({cmd : "AGG_ADD"});
                     break;
                 case "Item":
-                    if(selectedData.length < 2)
-                    {
-                        if(selectedData.length == 1)
-                            selectedData = selectedData[0];
-                        else
-                        {
-                            selectedData = fnObj.naviView.getCurrent();
-                        }
-
-                        if(selectedData["nodeType"] == "item")
-                        {
-                            alert("Item에는 Item을 추가할 수 없습니다.");
-                            return ;
-                        }
-
-                        var item = getMenu("add item");
-                        var naviStr = undefined == selectedData["name"]? "" : " > "+selectedData["name"]
-                        item.menuParams = $.extend({},{
-                                aggregationUuid : selectedData.uuid
-                            },{type: "create"},{navi : fnObj.naviView.getPathString()+naviStr},{title : ""},{nodeType : selectedData.nodeType}
-                        );
-                        parentsObj.tabView.open(item);
-                    }
+                    contextMenuClick({cmd : "ITEM_ADD"});
                     break;
                 //view
                 case "Properties":
-                    if(selectedData.length == 1)
-                    {
-                        var item = "";
-                        if(selectedData[0].nodeType == "item")
-                        {
-                            item = getMenu("view item");
-                        }
-                        else
-                        {
-                            item = getMenu("view aggregation");
-                        }
-                        if(item != "")
-                        {
-                            item.menuParams = $.extend({},selectedData[0],{type: "create"},{navi : fnObj.naviView.getPathString()},{title : selectedData["name"]},{sendData: selectedData});
-                            parentsObj.tabView.open(item);
+                    if (selectedData.length == 1) {
+                        if (selectedData[0].nodeType == "item") {
+                            contextMenuClick({cmd : "ITEM_VIEW"}, selectedData[0]);
+                        } else {
+                            contextMenuClick({cmd : "AGG_VIEW"}, selectedData[0]);
                         }
                     }
                     break;
                 //do
                 case "Edit":
-                    if(selectedData.length == 1)
-                    {
-                        if(selectedData[0].nodeType == "item")
-                        {
-                            item = getMenu("add item");
+                    if (selectedData.length == 1) {
+                        if (selectedData[0].nodeType == "item") {
+                            contextMenuClick({cmd : "ITEM_EDIT"}, selectedData[0]);
+                        } else {
+                            contextMenuClick({cmd : "AGG_EDIT"}, selectedData[0]);
                         }
-                        else
-                        {
-                            item = getMenu("add aggregation");
-                        }
-                        if(item != "")
-                        {
-                            item.menuParams = $.extend({},{
-                                parentUuid : selectedData[0].parentUuid,
-                                uuid : selectedData[0].uuid
-                            },{type: "update"},{navi : fnObj.naviView.getPathString()},{title : selectedData[0]["name"]});
-                            parentsObj.tabView.open(item);
-                        }
-                        else
-                        {
-                            item.menuParams = $.extend({},{
-                                aggregationUuid : selectedData[0].parentUuid,
-                                itemUuid : selectedData[0].uuid
-                            },{type: "update"},{navi : fnObj.naviView.getPathString()},{title : selectedData[0]["name"]});
-                            parentsObj.tabView.open(item);
-                        }
-                        console.log(selectedData);
                     }
                     break;
                 case "Move":
@@ -1263,44 +1189,40 @@ var fnObj = {
                     var selectType = "";
                     var canMove = true;
                     var errorMsg = "";
-                    selectedData.sort(function(a,b){
+                    selectedData.sort(function (a, b) {
                         var typeName = undefined == a["nodeType"] ? "nodeType" : "type";
 
-                        return a[typeName]-b[typeName];
+                        return a[typeName] - b[typeName];
                     });
 
-                    for(var i = 0; i < selectedData.length; i++)
-                    {
+                    for (var i = 0; i < selectedData.length; i++) {
                         aggregationType = undefined === selectedData[i]["nodeType"] ? selectedData[i]["type"] : selectedData[i]["nodeType"];
-                        if(i == 0)
+                        if (i == 0)
                             selectType = compAggregation = aggregationType;
 
-                        if( ( !aggregationType || aggregationType == "") && selectType.toLowerCase().indexOf("virtual") > -1)
-                        {
+                        if ((!aggregationType || aggregationType == "") && selectType.toLowerCase().indexOf("virtual") > -1) {
                             canMove = false;
                             errorMsg = "RC001_06";
                             break;
                         }
 
-                        if(aggregationType && "" != aggregationType && compAggregation != aggregationType)
-                        {
+                        if (aggregationType && "" != aggregationType && compAggregation != aggregationType) {
                             canMove = false;
                             errorMsg = "RC001_02";
                             break;
                         }
                     }
 
-                    if(!canMove)
-                    {
+                    if (!canMove) {
                         axDialog.alert(axboot.getCommonMessage(errorMsg));
-                        return ;
+                        return;
                     }
                     axboot.modal.open({
                         modalType: "MOVE_AGGREGATION",
                         param: "",
                         sendData: function () {
                             return {
-                                selectType  :  selectType,
+                                selectType: selectType,
                                 "selectedList": selectedData
                             };
                         },
@@ -1309,17 +1231,16 @@ var fnObj = {
                             axToast.push(axboot.getCommonMessage("AA007"));
                             ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
 
-                            if($(".explorer_grid").css("display")=="none")
-                                ACTIONS.dispatch(ACTIONS.GET_SUBDATA,fnObj.naviView.getCurrent());
+                            if ($(".explorer_grid").css("display") == "none")
+                                ACTIONS.dispatch(ACTIONS.GET_SUBDATA, fnObj.naviView.getCurrent());
                             else
-                                ACTIONS.dispatch(ACTIONS.GET_GRID_DATA,fnObj.naviView.getCurrent());
+                                ACTIONS.dispatch(ACTIONS.GET_GRID_DATA, fnObj.naviView.getCurrent());
 
 
                         }
                     });
                     break;
                 case "Update Status":
-
 
 
                     axboot.modal.open({
@@ -1332,10 +1253,10 @@ var fnObj = {
                         },
                         callback: function (data) {
                             axToast.push(axboot.getCommonMessage("AA007"));
-                            if($(".explorer_grid").css("display")=="none")
-                                ACTIONS.dispatch(ACTIONS.GET_SUBDATA,fnObj.naviView.getCurrent());
+                            if ($(".explorer_grid").css("display") == "none")
+                                ACTIONS.dispatch(ACTIONS.GET_SUBDATA, fnObj.naviView.getCurrent());
                             else
-                                ACTIONS.dispatch(ACTIONS.GET_GRID_DATA,fnObj.naviView.getCurrent());
+                                ACTIONS.dispatch(ACTIONS.GET_GRID_DATA, fnObj.naviView.getCurrent());
                         }
                     });
 
@@ -1343,7 +1264,7 @@ var fnObj = {
                     break;
                 case "Delete":
 
-                    ACTIONS.dispatch(ACTIONS.DELETE_AGGREGATION,selectedData);
+                    ACTIONS.dispatch(ACTIONS.DELETE_AGGREGATION, selectedData);
                     break;
 
             }
@@ -1361,8 +1282,8 @@ var fnObj = {
         fnObj.formView.initView();
 
         $("#iconListArea").on({
-            "dragenter" : function(event){
-                if(fnObj.naviView.getCurrent().nodeType == "temp") {
+            "dragenter": function (event) {
+                if (fnObj.naviView.getCurrent().nodeType == "temp") {
                     $('[data-ax5uploader="upload1"]').show();
                 }
             }
@@ -1390,10 +1311,10 @@ var fnObj = {
                     }, function () {
                         if (this.key == "ok") {
                             ACTIONS.dispatch(ACTIONS.PAGE_INGEST);
-                        }else{
+                        } else {
                             ACTIONS.dispatch(ACTIONS.PAGE_INGEST_LIST);
                         }
-                        $(["data-pregressbox-btn='abort'"]).click(function(){
+                        $(["data-pregressbox-btn='abort'"]).click(function () {
                             $('[data-ax5uploader="upload1"]').hide();
                         });
                     });
@@ -1474,13 +1395,13 @@ var fnObj = {
                 axToast.push("File Upload Completed : onuploadComplete");
                 ACTIONS.dispatch(ACTIONS.INGEST_ARCHIVE);
             },
-            abortCallback: function(){
+            abortCallback: function () {
                 $('[data-ax5uploader="upload1"]').hide();
                 axToast.push("업로드를 취소하였습니다.");
             }
         });
 
-        $( "[href='#itemTabs-3']" ).on("click", function(){
+        $("[href='#itemTabs-3']").on("click", function () {
             fnObj.gridView02.gridObj.getGridView().resetSize();
         });
 
@@ -1489,120 +1410,108 @@ var fnObj = {
         });
 
         ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
-        ACTIONS.dispatch(ACTIONS.GET_SUBDATA,{uuid : ""});
+        ACTIONS.dispatch(ACTIONS.GET_SUBDATA, {uuid: ""});
     }
 };
 
 fnObj.naviView = axboot.viewExtend({
-    initView : function()
-    {
+    initView: function () {
         this.initEvent();
     },
-    initEvent : function(){
-        $("#navigatorArea").delegate(".navigator","click",function(){
+    initEvent: function () {
+        $("#navigatorArea").delegate(".navigator", "click", function () {
             console.log($(this));
 
             var currentLevel = $(this).attr("level");
 
-            $("#navigatorArea .navigator").each(function(idx){
-                if(idx > currentLevel)
-                {
+            $("#navigatorArea .navigator").each(function (idx) {
+                if (idx > currentLevel) {
                     $(this).remove();
-                    $("#navigatorArea .split[splitLevel="+idx+"]").remove();
+                    $("#navigatorArea .split[splitLevel=" + idx + "]").remove();
                 }
             });
-            if($(".explorer_grid").css("display")=="none")
-                ACTIONS.dispatch(ACTIONS.GET_SUBDATA,{uuid:$(this).attr("uuid")});
+            if ($(".explorer_grid").css("display") == "none")
+                ACTIONS.dispatch(ACTIONS.GET_SUBDATA, {uuid: $(this).attr("uuid")});
             else
-                ACTIONS.dispatch(ACTIONS.GET_GRID_DATA,{uuid:$(this).attr("uuid")});
+                ACTIONS.dispatch(ACTIONS.GET_GRID_DATA, {uuid: $(this).attr("uuid")});
 
         });
     },
-    setData : function(data)
-    {
-        $("#navigatorArea").append($("<span>").attr("splitLevel",$("#navigatorArea span.split").size()+1).addClass("split").text(" > "));
-        $("#navigatorArea").append($("<span>").addClass("navigator").attr("level",$("#navigatorArea span.navigator").size()).attr("uuid",data["uuid"]).text(data["name"]));
+    setData: function (data) {
+        $("#navigatorArea").append($("<span>").attr("splitLevel", $("#navigatorArea span.split").size() + 1).addClass("split").text(" > "));
+        $("#navigatorArea").append($("<span>").addClass("navigator").attr("level", $("#navigatorArea span.navigator").size()).attr("uuid", data["uuid"]).text(data["name"]));
     },
-    setList : function(list)
-    {
+    setList: function (list) {
         fnObj.naviView.clear();
         var data = undefined;
-        for(var i = 0; i < list.length; i++)
-        {
+        for (var i = 0; i < list.length; i++) {
             data = list[i];
-            $("#navigatorArea").append($("<span>").attr("splitLevel",$("#navigatorArea span.split").size()+1).addClass("split").text(" > "));
-            $("#navigatorArea").append($("<span>").addClass("navigator").attr("level",$("#navigatorArea span.navigator").size()).attr("nodeType",data["nodeType"]).attr("uuid",data["uuid"]).text(data["name"]));
+            $("#navigatorArea").append($("<span>").attr("splitLevel", $("#navigatorArea span.split").size() + 1).addClass("split").text(" > "));
+            $("#navigatorArea").append($("<span>").addClass("navigator").attr("level", $("#navigatorArea span.navigator").size()).attr("nodeType", data["nodeType"]).attr("uuid", data["uuid"]).text(data["name"]));
         }
     },
-    getCurrent : function()
-    {
+    getCurrent: function () {
         return {
-            uuid : $(".navigator:last").attr("uuid"),
-            nodeType : $(".navigator:last").attr("nodeType")
+            uuid: $(".navigator:last").attr("uuid"),
+            nodeType: $(".navigator:last").attr("nodeType")
         };
     },
-    getRoot : function()
-    {
-        return {uuid : $(".navigator:first").attr("uuid")};
+    getRoot: function () {
+        return {uuid: $(".navigator:first").attr("uuid")};
     },
-    getPathString : function(){
+    getPathString: function () {
         var pathStr = "";
-        $("#navigatorArea>span").each(function(idx){
+        $("#navigatorArea>span").each(function (idx) {
             pathStr += $(this).text();
         });
         return pathStr;
     },
-    clear : function()
-    {
-        $("#navigatorArea .navigator").each(function(idx)
-        {
-            if(idx > 0)
-            {
+    clear: function () {
+        $("#navigatorArea .navigator").each(function (idx) {
+            if (idx > 0) {
                 $(this).remove();
-                $("#navigatorArea .split[splitLevel="+idx+"]").remove();
+                $("#navigatorArea .split[splitLevel=" + idx + "]").remove();
             }
         });
     }
 });
 fnObj.pageView = axboot.viewExtend({
-    page : {
-        pageNumber:0,
+    page: {
+        pageNumber: 0,
         pageSize: 100
         //pageSize: 126
     },
-    initView : function()
-    {
+    initView: function () {
         this.initEvent();
     },
-    initEvent : function(){
+    initEvent: function () {
         var _this = this;
 
-        $(".page_no").delegate("a:not(.page_start,.page_prev,.page_next,.page_end)","click",function(){
-            _this.page.pageNumber = parseInt($(this).text())-1;
+        $(".page_no").delegate("a:not(.page_start,.page_prev,.page_next,.page_end)", "click", function () {
+            _this.page.pageNumber = parseInt($(this).text()) - 1;
             $(".page_no>a:not(.page_start,.page_prev,.page_next,.page_end)").removeClass("selec");
-            $(".page_no>a[pageNo='"+$(this).text()+"']").addClass("selec");
+            $(".page_no>a[pageNo='" + $(this).text() + "']").addClass("selec");
 
 
-            if($(".explorer_grid").css("display")=="none")
-                ACTIONS.dispatch(ACTIONS.GET_SUBDATA,fnObj.naviView.getCurrent());
+            if ($(".explorer_grid").css("display") == "none")
+                ACTIONS.dispatch(ACTIONS.GET_SUBDATA, fnObj.naviView.getCurrent());
             else
-                ACTIONS.dispatch(ACTIONS.GET_GRID_DATA,fnObj.naviView.getCurrent());
+                ACTIONS.dispatch(ACTIONS.GET_GRID_DATA, fnObj.naviView.getCurrent());
 
         });
-        $(".page_no>a.page_start,.page_no>a.page_prev,.page_no>a.page_next,.page_no>a.page_end").click(function(){
-            switch($(this).attr("class"))
-            {
+        $(".page_no>a.page_start,.page_no>a.page_prev,.page_no>a.page_next,.page_no>a.page_end").click(function () {
+            switch ($(this).attr("class")) {
                 case "page_start":
                     _this.page.pageNumber = 0;
                     break;
                 case "page_prev":
-                    if(_this.page.pageNumber < 10)
+                    if (_this.page.pageNumber < 10)
                         _this.page.pageNumber = 0;
                     else
-                        _this.page.pageNumber = _this.page.pageNumber - (_this.page.pageNumber % 10)  - 1;
+                        _this.page.pageNumber = _this.page.pageNumber - (_this.page.pageNumber % 10) - 1;
                     break;
                 case "page_next":
-                    if(_this.page.totalPages < 10)
+                    if (_this.page.totalPages < 10)
                         _this.page.pageNumber = _this.page.totalPages - 2;
                     else
                         _this.page.pageNumber = _this.page.pageNumber + 10 - (_this.page.pageNumber % 10);
@@ -1611,40 +1520,36 @@ fnObj.pageView = axboot.viewExtend({
                     _this.page.pageNumber = _this.page.totalPages - 1;
                     break;
             }
-            ACTIONS.dispatch(ACTIONS.GET_SUBDATA,fnObj.naviView.getCurrent());
+            ACTIONS.dispatch(ACTIONS.GET_SUBDATA, fnObj.naviView.getCurrent());
 
         });
     },
-    resetPage : function()
-    {
+    resetPage: function () {
         this.page.pageNumber = 0;
     },
-    setPage : function(page)
-    {
+    setPage: function (page) {
 
         this.page = page;
         //page.limit
-        var startPage = parseInt(page.pageNumber/10)*10 + 1;
-        var maxPage = startPage+10;
+        var startPage = parseInt(page.pageNumber / 10) * 10 + 1;
+        var maxPage = startPage + 10;
         maxPage = page.totalPages < maxPage ? page.totalPages : maxPage;
-        if(maxPage > 10 && maxPage%10 != 1)
-            maxPage ++;
+        if (maxPage > 10 && maxPage % 10 != 1)
+            maxPage++;
 
         maxPage = maxPage == 0 ? 1 : maxPage;
 
         $(".page_no a:not(.page_start,.page_prev,.page_next,.page_end)").remove();
-        for(var i = startPage; i <= maxPage; i++)
-        {
-            $(".page_no .page_next").before($("<a>").attr("pageNo",i).attr("href","#").text(i));
+        for (var i = startPage; i <= maxPage; i++) {
+            $(".page_no .page_next").before($("<a>").attr("pageNo", i).attr("href", "#").text(i));
         }
-        $(".page_no>a").each(function(){
-            if((page.pageNumber + 1) == $(this).text())
+        $(".page_no>a").each(function () {
+            if ((page.pageNumber + 1) == $(this).text())
                 $(this).addClass("selec");
             else
                 $(this).removeClass("selec");
 
         });
-
 
 
         /*
@@ -1654,10 +1559,10 @@ fnObj.pageView = axboot.viewExtend({
         totalPages:94
         */
     },
-    setPageSize : function(_pageSize){
+    setPageSize: function (_pageSize) {
         this.page.pageSize = _pageSize;
     },
-    getPageInfo : function(){
+    getPageInfo: function () {
         return {
             pageNumber: this.page.pageNumber,
             pageSize: this.page.pageSize
@@ -1699,37 +1604,36 @@ fnObj.detailView = axboot.viewExtend({
 });
 */
 fnObj.iconView = axboot.viewExtend({
-    pressedCtrl : false,
-    pressedShift : false,
-    isdbClk : false,
-    selectedItem : null,
-    timer : 0,
-    delay : 400,
-    prevent : false,
-    isItemDrop : false,
-    isOver : false,
-    initView : function()
-    {
+    pressedCtrl: false,
+    pressedShift: false,
+    isdbClk: false,
+    selectedItem: null,
+    timer: 0,
+    delay: 400,
+    prevent: false,
+    isItemDrop: false,
+    isOver: false,
+    initView: function () {
         this.initEvent();
     },
-    initEvent : function() {
+    initEvent: function () {
         var _this = this;
-        $("#isDisplayItem").change(function(){
-            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH,fnObj.naviView.getRoot());
+        $("#isDisplayItem").change(function () {
+            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH, fnObj.naviView.getRoot());
         });
 
-        $(document).keydown(function(event){
+        $(document).keydown(function (event) {
             fnObj.iconView.pressedCtrl = event.ctrlKey;
             fnObj.iconView.pressedShift = event.shiftKey;
         });
-        $(document).keyup(function(event){
+        $(document).keyup(function (event) {
             fnObj.iconView.pressedCtrl = event.ctrlKey;
             fnObj.iconView.pressedShift = event.shiftKey;
         });
-        $(document).click(function(event){
+        $(document).click(function (event) {
             $("#iconListArea .selected").removeClass("selected");
 
-            if(!fnObj.iconView.isOver && $(event.target).closest("#itemTabs").length == 0){
+            if (!fnObj.iconView.isOver && $(event.target).closest("#itemTabs").length == 0) {
                 $("#iconListArea").width("100%");
                 $("#componentView").empty();
                 fnObj.formView.clear();
@@ -1741,10 +1645,10 @@ fnObj.iconView = axboot.viewExtend({
         /**
          * 화면 Resize 시 iconListArea 크기를 조정
          */
-        $(window).resize(function(event){
+        $(window).resize(function (event) {
 
-            if($("#iconListArea").width() != "100%")
-                $("#iconListArea").width($("div.explorer_list").width() - $("#itemTabs").width()-7);
+            if ($("#iconListArea").width() != "100%")
+                $("#iconListArea").width($("div.explorer_list").width() - $("#itemTabs").width() - 7);
         });
 
 
@@ -1759,27 +1663,27 @@ fnObj.iconView = axboot.viewExtend({
 
         });*/
 
-        $("#iconListArea").delegate(">div[nodeType]","click",function(event){
+        $("#iconListArea").delegate(">div[nodeType]", "click", function (event) {
 
             event.stopPropagation();
 
             $("#componentView").empty();
-            if(fnObj.iconView.pressedCtrl){
+            if (fnObj.iconView.pressedCtrl) {
                 $(this).toggleClass("selected");
-            }else if(fnObj.iconView.pressedShift){
+            } else if (fnObj.iconView.pressedShift) {
                 var selectedIdx = $("#iconListArea .selected").index();
 
-                if(selectedIdx == -1){
+                if (selectedIdx == -1) {
                     $(this).toggleClass("selected");
-                }else if(selectedIdx < $(this).index()){
-                    for(var i=selectedIdx; i <= $(this).index(); i++){
+                } else if (selectedIdx < $(this).index()) {
+                    for (var i = selectedIdx; i <= $(this).index(); i++) {
                         $($("#iconListArea >div").get(i)).addClass("selected");
                     }
-                }else if(selectedIdx > $(this).index()){
-                    for(var i=$(this).index(); i <= selectedIdx; i++){
+                } else if (selectedIdx > $(this).index()) {
+                    for (var i = $(this).index(); i <= selectedIdx; i++) {
                         $($("#iconListArea >div").get(i)).addClass("selected");
                     }
-                }else{
+                } else {
                     $(this).toggleClass("selected");
                 }
 
@@ -1788,19 +1692,19 @@ fnObj.iconView = axboot.viewExtend({
                 $("#iconListArea >div").removeClass("selected");
                 $(this).toggleClass("selected");
 
-                var selectedData= fnObj.iconView.getSelectedData();
+                var selectedData = fnObj.iconView.getSelectedData();
 
-                fnObj.iconView.timer = setTimeout(function() {
-                    if(fnObj.iconView.prevent){
+                fnObj.iconView.timer = setTimeout(function () {
+                    if (fnObj.iconView.prevent) {
                         fnObj.iconView.prevent = false;
                         return;
                     }
 
                     $("#componentView").empty();
-                    $("#iconListArea").width($("div.explorer_list").width() - $("#itemTabs").width()-7);
+                    $("#iconListArea").width($("div.explorer_list").width() - $("#itemTabs").width() - 7);
 
-                    if(selectedData[0]["nodeType"] == "item") {
-                        $( "#itemTabs" ).tabs( "enable", 1);
+                    if (selectedData[0]["nodeType"] == "item") {
+                        $("#itemTabs").tabs("enable", 1);
                         //$( "#itemTabs" ).tabs( "option", "active", 1 );
                         $("[data-ax-path='riTypeUuid']").show();
                         $("[data-ax-path='aggregationTypeUuid']").hide();
@@ -1858,9 +1762,9 @@ fnObj.iconView = axboot.viewExtend({
                                 }
                             }
                         });
-                    }else{
-                        $( "#itemTabs" ).tabs( "option", "disabled", [ 1 ]);
-                        if($( "#itemTabs" ).tabs( "option", "active") == 1) {
+                    } else {
+                        $("#itemTabs").tabs("option", "disabled", [1]);
+                        if ($("#itemTabs").tabs("option", "active") == 1) {
                             $("#itemTabs").tabs("option", "active", 0);
                         }
                         $("[data-ax-path='riTypeUuid']").hide();
@@ -1870,9 +1774,9 @@ fnObj.iconView = axboot.viewExtend({
                         axboot.ajax({
                             type: "GET",
                             url: "/api/v1/rc003/01/list",
-                            data: $.extend({}, {pageSize: 1000}, {aggregationUuid :selectedData[0].uuid}),
+                            data: $.extend({}, {pageSize: 1000}, {aggregationUuid: selectedData[0].uuid}),
                             callback: function (res) {
-                                if(res.list != "undefined" && res.list != null && res.list.length > 0){
+                                if (res.list != "undefined" && res.list != null && res.list.length > 0) {
                                     rcList = ax5.util.deepCopy(res.list);
                                     setFormData(rcList[0], false);
                                 }
@@ -1889,7 +1793,7 @@ fnObj.iconView = axboot.viewExtend({
 
         });
 
-        $("#iconListArea").delegate(">div[nodeType]","dblclick",function(event){
+        $("#iconListArea").delegate(">div[nodeType]", "dblclick", function (event) {
             event.stopPropagation();
 
             $("#componentView").empty();
@@ -1900,56 +1804,49 @@ fnObj.iconView = axboot.viewExtend({
             fnObj.iconView.isdbClk = true;
 
             var index = 0;
-            var uuid ="";
-            if(undefined != $(this).attr("uuid")) {
+            var uuid = "";
+            if (undefined != $(this).attr("uuid")) {
                 imgSrc = $(this).find(".imageTag").find("img").prop("src");
                 uuid = $(this).attr("uuid");
-            }else if(undefined == $(this).attr("uuid")){
+            } else if (undefined == $(this).attr("uuid")) {
                 index++;
             }
-            if(undefined == $(this).attr("uuid"))
+            if (undefined == $(this).attr("uuid"))
                 index++;
 
-            if(uuid == "")
+            if (uuid == "")
                 imgSrc = $(this).find(".imageTag").find("img").prop("src")
 
-            if(imgSrc.indexOf("file")>-1){
+            if (imgSrc.indexOf("file") > -1) {
                 var selectedData = undefined;
 
                 var parentsObj = parent.window.fnObj;
 
                 //icon 실행
-                if($(".explorer_grid").css("display")=="none")
-                {
-                    selectedData= fnObj.iconView.getSelectedData();
+                if ($(".explorer_grid").css("display") == "none") {
+                    selectedData = fnObj.iconView.getSelectedData();
                 }
 
-                if(selectedData.length == 1)
-                {
-                    var item = "";
-                    if(selectedData[0].nodeType == "item")
-                    {
-                        item = getMenu("view item");
-                    }
-                    else
-                    {
-                        item = getMenu("view aggregation");
-                    }
-                    if(item != "")
-                    {
-                        item.menuParams = $.extend({},selectedData[0],{type: "create"},{navi : fnObj.naviView.getPathString()},{title : selectedData["name"]});
-                        parentsObj.tabView.open(item);
+                if (selectedData.length == 1) {
+                    if (selectedData[0].nodeType == "item") {
+                        contextMenuClick({cmd : "ITEM_VIEW"}, selectedData[0]);
+                    } else {
+                        contextMenuClick({cmd : "AGG_VIEW"}, selectedData[0]);
                     }
                 }
 
-                return ;
+                return;
             }
 
 
-            fnObj.naviView.setData({uuid : $(this).attr("uuid"),name : $(this).find(".titleTag").children().eq(0).text()});
-            ACTIONS.dispatch(ACTIONS.GET_SUBDATA,{
-                uuid:$(this).attr("uuid"),
-                nodeType : $(this).attr("nodeType")}
+            fnObj.naviView.setData({
+                uuid: $(this).attr("uuid"),
+                name: $(this).find(".titleTag").children().eq(0).text()
+            });
+            ACTIONS.dispatch(ACTIONS.GET_SUBDATA, {
+                    uuid: $(this).attr("uuid"),
+                    nodeType: $(this).attr("nodeType")
+                }
             );
             //fnObj.detailView.setData({});
             //setTimeout(function(){
@@ -1969,30 +1866,30 @@ fnObj.iconView = axboot.viewExtend({
             taphold: true,
             menu: [],
             // Handle menu selection to implement a fake-clipboard
-            select: function(event, ui) {
+            select: function (event, ui) {
                 contextMenuClick(ui);
                 // Optionally return false, to prevent closing the menu now
             },
             // Implement the beforeOpen callback to dynamically change the entries
-            beforeOpen: function(event, ui) {
+            beforeOpen: function (event, ui) {
                 var contextTarget = $(ui.target).closest("#iconListArea >div");
 
                 if (fnObj.iconView.pressedCtrl) {
                     contextTarget.addClass("selected");
-                } else if(fnObj.iconView.pressedShift){
+                } else if (fnObj.iconView.pressedShift) {
                     var selectedIdx = $("#iconListArea .selected").index();
 
-                    if(selectedIdx == -1){
+                    if (selectedIdx == -1) {
                         contextTarget.toggleClass("selected");
-                    }else if(selectedIdx < contextTarget.index()){
-                        for(var i=selectedIdx; i <= contextTarget.index(); i++){
+                    } else if (selectedIdx < contextTarget.index()) {
+                        for (var i = selectedIdx; i <= contextTarget.index(); i++) {
                             $($("#iconListArea >div").get(i)).addClass("selected");
                         }
-                    }else if(selectedIdx > contextTarget.index()){
-                        for(var i=contextTarget.index(); i <= selectedIdx; i++){
+                    } else if (selectedIdx > contextTarget.index()) {
+                        for (var i = contextTarget.index(); i <= selectedIdx; i++) {
                             $($("#iconListArea >div").get(i)).addClass("selected");
                         }
-                    }else{
+                    } else {
                         contextTarget.toggleClass("selected");
                     }
 
@@ -2009,13 +1906,12 @@ fnObj.iconView = axboot.viewExtend({
                     menu: getContextMenu(ui, contextTarget.attr("nodetype"))
                 });
             },
-            close : function(event, ui){
+            close: function (event, ui) {
                 $("#iconListArea").tooltip("enable");
             }
         });
     },
-    setData : function(list, isFirst)
-    {
+    setData: function (list, isFirst) {
         var targetTag = $("#iconListArea");
         var template = $("#template>div");
         var cloneTag = undefined;
@@ -2025,29 +1921,25 @@ fnObj.iconView = axboot.viewExtend({
         $("#iconListArea >div").remove("[nodeType]");
         var fullStr = "";
         this.list = list;
-        if(list.length < 1)
-            return ;
+        if (list.length < 1)
+            return;
 
         var chooseList = new Array();
-        if(isFirst)
-        {
-            for(var i = 0; i < list.length ;i++)
-            {
-                if(list[i]["parentUuid"] == undefined)
-                {
+        if (isFirst) {
+            for (var i = 0; i < list.length; i++) {
+                if (list[i]["parentUuid"] == undefined) {
                     chooseList.push(list[i]);
                 }
             }
             list = chooseList;
         }
 
-        for(var i = 0; i < list.length; i++)
-        {
+        for (var i = 0; i < list.length; i++) {
             data = list[i];
             cloneTag = template.clone();
             imgTag = $("<img>");
-            cloneTag.attr("uuid",data["uuid"]);
-            cloneTag.attr("nodeType",data["nodeType"]);
+            cloneTag.attr("uuid", data["uuid"]);
+            cloneTag.attr("nodeType", data["nodeType"]);
             /*
             Aggregation
             class : explorer_folder_empty or explorer_folder_full
@@ -2062,43 +1954,38 @@ fnObj.iconView = axboot.viewExtend({
             Text
             class : explorer_text, explorer_4line
             */
-            if(data["nodeType"] == "item")
-            {
+            if (data["nodeType"] == "item") {
                 cloneTag.addClass("explorer_file");
-            }else
-            {
-                if(data["childCnt"] > 0)
-                {
+            } else {
+                if (data["childCnt"] > 0) {
                     cloneTag.addClass("explorer_folder_full");
                     fullStr = "_f";
                 }
-                else
-                {
+                else {
                     cloneTag.addClass("explorer_folder_empty");
                     fullStr = "";
                 }
             }
 
 
-            switch(data["nodeType"])
-            {
+            switch (data["nodeType"]) {
                 case "normal":
-                    imgTag.prop("src",imgPath+"explorer_folder"+fullStr+".png").prop("alt","folder");
+                    imgTag.prop("src", imgPath + "explorer_folder" + fullStr + ".png").prop("alt", "folder");
                     break;
                 case "temporary":
-                    imgTag.prop("src",imgPath+"explorer_folder"+fullStr+"_t.png").prop("alt","folder");
+                    imgTag.prop("src", imgPath + "explorer_folder" + fullStr + "_t.png").prop("alt", "folder");
                     break;
                 case "virtual":
-                    imgTag.prop("src",imgPath+"explorer_folder"+fullStr+"_v.png").prop("alt","folder");
+                    imgTag.prop("src", imgPath + "explorer_folder" + fullStr + "_v.png").prop("alt", "folder");
                     break;
                 case "item":
-                    imgTag.prop("src",imgPath+"explorer_file.png").prop("alt","item");
+                    imgTag.prop("src", imgPath + "explorer_file.png").prop("alt", "item");
                     break;
             }
             cloneTag.find(".imageTag").append(imgTag);
 
             cloneTag.find(".titleTag").append($("<div>").attr("class", data["name"].length > 15 ? "explorer_4line" : "explorer_text").text(data["name"]));
-            cloneTag.attr("level",data["level"]);
+            cloneTag.attr("level", data["level"]);
             cloneTag.attr("title", data["name"].length > 35 ? data["name"] : "");
             //cloneTag.css("position", "absolute");
             targetTag.append(cloneTag);
@@ -2117,14 +2004,14 @@ fnObj.iconView = axboot.viewExtend({
          * Draggable Record Aggregation/Item
          */
         $('#iconListArea >div').draggable({
-            containment : "window",
+            containment: "window",
             opacity: 0.5,
-            delay : 50,
-            stack : "#iconListArea >div",
-            scroll : false,
-            revert : false,
-            revertDuration : 300,
-            helper : function (event) {
+            delay: 50,
+            stack: "#iconListArea >div",
+            scroll: false,
+            revert: false,
+            revertDuration: 300,
+            helper: function (event) {
                 var wrapper = "<div id='explorerDragWrapper'></div>";
                 $('#ax-base-root').append(wrapper);
 
@@ -2135,8 +2022,8 @@ fnObj.iconView = axboot.viewExtend({
 
                 return $('#explorerDragWrapper').append($('#iconListArea >div.selected').clone());
             },
-            start : function (event, ui){
-                $('[data-z-tree="tree-view-01"] [treenode_a]').droppable( "option", "accept", "#iconListArea >div" );
+            start: function (event, ui) {
+                $('[data-z-tree="tree-view-01"] [treenode_a]').droppable("option", "accept", "#iconListArea >div");
             }
         });
 
@@ -2146,11 +2033,11 @@ fnObj.iconView = axboot.viewExtend({
         $('#iconListArea [nodetype="temporary"], #iconListArea [nodetype="normal"]').droppable({
             tolerance: "pointer",
             hoverClass: "selected",
-            accept : "#iconListArea [nodetype='temporary'], #iconListArea [nodetype='normal'], #iconListArea [nodetype='item']",
-            drop: function( event, ui ) {
+            accept: "#iconListArea [nodetype='temporary'], #iconListArea [nodetype='normal'], #iconListArea [nodetype='item']",
+            drop: function (event, ui) {
                 var parentNode = fnObj.treeView01.getNodeByParam("uuid", $(this).attr("uuid"));
 
-                if(!updateRecord(ui.draggable, parentNode)){
+                if (!updateRecord(ui.draggable, parentNode)) {
                     return;
                 }
             }
@@ -2162,27 +2049,27 @@ fnObj.iconView = axboot.viewExtend({
         $('#iconListArea .explorer_file').droppable({
             tolerance: "pointer",
             hoverClass: "selected",
-            accept : "#iconListArea .explorer_file, #componentView .explorer_file",
-            over : function( event, ui ) {
+            accept: "#iconListArea .explorer_file, #componentView .explorer_file",
+            over: function (event, ui) {
                 fnObj.iconView.isItemDrop = true;
             },
-            out : function( event, ui ) {
+            out: function (event, ui) {
                 fnObj.iconView.isItemDrop = false;
             },
-            drop : function( event, ui ) {
+            drop: function (event, ui) {
                 // Item to Item
                 fnObj.iconView.isItemDrop = false;
 
                 var selectedData = fnObj.iconView.getSelectedData();
 
                 // Normal/Virtual Aggregation으로는 Component 2 Item 생성 불가
-                if(fnObj.naviView.getCurrent()["nodeType"] == "normal" || fnObj.naviView.getCurrent()["nodeType"] == "virtual" ){
+                if (fnObj.naviView.getCurrent()["nodeType"] == "normal" || fnObj.naviView.getCurrent()["nodeType"] == "virtual") {
                     return;
                 }
 
                 // 멀티 선택시 Aggregation 포함되었을 때
-                for(var i=0; selectedData.length>i; i++){
-                    if(selectedData[i]["nodeType"] != "item"){
+                for (var i = 0; selectedData.length > i; i++) {
+                    if (selectedData[i]["nodeType"] != "item") {
                         axDialog.alert("Aggregation은 포함될 수 없습니다.");
                         return;
                     }
@@ -2193,10 +2080,10 @@ fnObj.iconView = axboot.viewExtend({
                 var msg = "";
                 var url = "";
 
-                if(ui.draggable.closest("[type='comp']").length > 0){
+                if (ui.draggable.closest("[type='comp']").length > 0) {
                     msg = "Component를 이동하시겠습니까?"
                     url = "/rc/rc001/moveComponent";
-                }else if(ui.draggable.closest('.explorer_file').length > 0){
+                } else if (ui.draggable.closest('.explorer_file').length > 0) {
                     msg = "Component를 이동하시겠습니까?\n해당 Item은 삭제됩니다."
                     url = "/rc/rc001/delItemAndMoveComponent";
                 }
@@ -2207,12 +2094,12 @@ fnObj.iconView = axboot.viewExtend({
                     if (this.key == "ok") {
                         var data = [];
 
-                        if(ui.draggable.closest("[type='comp']").length > 0){
+                        if (ui.draggable.closest("[type='comp']").length > 0) {
                             data.push({
                                 itemUuid: targetItemUuid,
                                 itemComponentUuid: ui.draggable.attr("uuid")
                             });
-                        }else if(ui.draggable.closest('#iconListArea .explorer_file').length > 0) {
+                        } else if (ui.draggable.closest('#iconListArea .explorer_file').length > 0) {
                             $.each(selectedData, function (idx, item) {
                                 data.push({
                                     itemUuid: item.uuid,
@@ -2226,7 +2113,7 @@ fnObj.iconView = axboot.viewExtend({
                             url: url,
                             data: JSON.stringify(data),
                             callback: function (res) {
-                                ACTIONS.dispatch(ACTIONS.GET_SUBDATA,fnObj.naviView.getCurrent());
+                                ACTIONS.dispatch(ACTIONS.GET_SUBDATA, fnObj.naviView.getCurrent());
                             },
                             options: {
                                 onError: axboot.viewError
@@ -2242,20 +2129,20 @@ fnObj.iconView = axboot.viewExtend({
          */
         $('#iconListArea').droppable({
             tolerance: "pointer",
-            drop: function( event, ui ) {
+            drop: function (event, ui) {
                 // Record 영역에 드랍 될 때 트리영역 드랍되는 것을 방지
-                $('[data-z-tree="tree-view-01"] [treenode_a]').droppable( "option", "accept", "#iconListArea .noAccept" );
+                $('[data-z-tree="tree-view-01"] [treenode_a]').droppable("option", "accept", "#iconListArea .noAccept");
 
                 // Normal/Virtual Aggregation으로는 Component 2 Item 생성 불가
-                if(fnObj.naviView.getCurrent()["nodeType"] == "normal" || fnObj.naviView.getCurrent()["nodeType"] == "virtual" ){
+                if (fnObj.naviView.getCurrent()["nodeType"] == "normal" || fnObj.naviView.getCurrent()["nodeType"] == "virtual") {
                     return;
                 }
 
                 // Item 2 Item 시 드랍방지
-                if(fnObj.iconView.isItemDrop) return;
+                if (fnObj.iconView.isItemDrop) return;
 
                 // Record Frame은 부모가 componentView 일때만 받아들인다.
-                if(ui.draggable.parent().attr("id") != "componentView") return;
+                if (ui.draggable.parent().attr("id") != "componentView") return;
 
                 var compUuid = ui.draggable.attr("uuid");
                 axDialog.confirm({
@@ -2263,10 +2150,10 @@ fnObj.iconView = axboot.viewExtend({
                 }, function () {
                     if (this.key == "ok") {
                         var data = {
-                            raTitle : ui.draggable.attr("label"),
-                            riPublishedStatusUuid : axboot.commonCodeValueByCodeName("CD121", "Draft"),
-                            raAggregationUuid : fnObj.naviView.getCurrent()["uuid"],
-                            rc00502VoList : [{itemComponentUuid : compUuid}]
+                            raTitle: ui.draggable.attr("label"),
+                            riPublishedStatusUuid: axboot.commonCodeValueByCodeName("CD121", "Draft"),
+                            raAggregationUuid: fnObj.naviView.getCurrent()["uuid"],
+                            rc00502VoList: [{itemComponentUuid: compUuid}]
                         };
 
                         axboot.ajax({
@@ -2274,7 +2161,7 @@ fnObj.iconView = axboot.viewExtend({
                             url: "/rc/rc001/creItemAndMoveComponent",
                             data: JSON.stringify(data),
                             callback: function (res) {
-                                ACTIONS.dispatch(ACTIONS.GET_SUBDATA,fnObj.naviView.getCurrent());
+                                ACTIONS.dispatch(ACTIONS.GET_SUBDATA, fnObj.naviView.getCurrent());
                             },
                             options: {
                                 onError: axboot.viewError
@@ -2287,19 +2174,15 @@ fnObj.iconView = axboot.viewExtend({
             }
         });
     },
-    getSelectedData : function()
-    {
+    getSelectedData: function () {
         var selectedData = new Array();
         var retData = new Array();
-        $(".explorer_list .selected").each(function(item,index){
+        $(".explorer_list .selected").each(function (item, index) {
             selectedData.push($(this).attr("uuid"));
         });
-        for(var i = 0; i < this.list.length; i++)
-        {
-            for(var j = 0; j < selectedData.length; j++)
-            {
-                if(this.list[i].uuid == selectedData[j])
-                {
+        for (var i = 0; i < this.list.length; i++) {
+            for (var j = 0; j < selectedData.length; j++) {
+                if (this.list[i].uuid == selectedData[j]) {
                     retData.push(this.list[i]);
                 }
             }
@@ -2318,7 +2201,7 @@ fnObj.treeView01 = axboot.viewExtend(axboot.commonView, {
     param: {},
     deletedList: [],
     newCount: 0,
-    otherParam : {},
+    otherParam: {},
     addRootNode: function () {
         /*
         var _this = this;
@@ -2356,12 +2239,12 @@ fnObj.treeView01 = axboot.viewExtend(axboot.commonView, {
             taphold: true,
             menu: [],
             // Handle menu selection to implement a fake-clipboard
-            select: function(event, ui) {
+            select: function (event, ui) {
                 contextMenuClick(ui, fnObj.treeView01.getNodeByTId($(ui.target).closest("[treenode]").attr("id")));
                 // Optionally return false, to prevent closing the menu now
             },
             // Implement the beforeOpen callback to dynamically change the entries
-            beforeOpen: function(event, ui) {
+            beforeOpen: function (event, ui) {
                 var objNode = fnObj.treeView01.getNodeByTId($(ui.target).closest("[treenode]").attr("id"));
 
                 $(this).contextmenu({
@@ -2401,15 +2284,15 @@ fnObj.treeView01 = axboot.viewExtend(axboot.commonView, {
             edit: {
                 enable: true,
                 editNameSelectAll: false,
-                showRemoveBtn : false,
-                showRenameBtn : false,
-                drag : {
-                    inner : true,
-                    prev : false,
-                    next : false
+                showRemoveBtn: false,
+                showRenameBtn: false,
+                drag: {
+                    inner: true,
+                    prev: false,
+                    next: false
                 }
             },
-            data : {
+            data: {
                 simpleData: {
                     enable: true,
                     idKey: "uuid",
@@ -2422,25 +2305,23 @@ fnObj.treeView01 = axboot.viewExtend(axboot.commonView, {
                     //return false;
                 },
                 onClick: function (e, treeId, treeNode, isCancel) {
-                    var reqData = $.extend({},treeNode);
+                    var reqData = $.extend({}, treeNode);
                     var path = treeNode.getPath();
-                    for(var key in reqData)
-                    {
-                        if( !(key == "uuid" || key == "nodeType") )
+                    for (var key in reqData) {
+                        if (!(key == "uuid" || key == "nodeType"))
                             delete(reqData[key]);
                     }
 
                     //tree는 자기 어머니까지 다해서 한방에 셋해야된다.
                     fnObj.naviView.clear();
-                    for(var i = 0; i < path.length; i++)
-                    {
+                    for (var i = 0; i < path.length; i++) {
                         fnObj.naviView.setData(path[i]);
                     }
                     fnObj.pageView.resetPage();
-                    if($(".explorer_grid").css("display")=="none")
-                        ACTIONS.dispatch(ACTIONS.GET_SUBDATA,reqData);
+                    if ($(".explorer_grid").css("display") == "none")
+                        ACTIONS.dispatch(ACTIONS.GET_SUBDATA, reqData);
                     else
-                        ACTIONS.dispatch(ACTIONS.GET_GRID_DATA,reqData);
+                        ACTIONS.dispatch(ACTIONS.GET_GRID_DATA, reqData);
                     //ACTIONS.dispatch(ACTIONS.GET_SUBDATA, reqData);
                 },
                 onRename: function (e, treeId, treeNode, isCancel) {
@@ -2453,7 +2334,7 @@ fnObj.treeView01 = axboot.viewExtend(axboot.commonView, {
                     }
                     fnObj.treeView01.deselectNode();
                 },
-                beforeClick: function(treeId, treeNode) {
+                beforeClick: function (treeId, treeNode) {
                     /*
                     zTree = $.fn.zTree.getZTreeObj(treeId);
                     if (treeNode.isParent) {
@@ -2463,7 +2344,7 @@ fnObj.treeView01 = axboot.viewExtend(axboot.commonView, {
                     }
                     */
                 },
-                beforeExpand : function(treeId, treeNode) {
+                beforeExpand: function (treeId, treeNode) {
                     /*
                     _this.otherParam = treeNode;
                     _this.reloadFlag = true;
@@ -2471,7 +2352,7 @@ fnObj.treeView01 = axboot.viewExtend(axboot.commonView, {
                     return true;up
                     */
                 },
-                beforeCheck : function (treeId, treeNode) {
+                beforeCheck: function (treeId, treeNode) {
                     var zTree = $.fn.zTree.getZTreeObj(treeId);
                     if (!treeNode.children) {
                         _this.reloadFlag = true;
@@ -2480,7 +2361,7 @@ fnObj.treeView01 = axboot.viewExtend(axboot.commonView, {
                     }
                     return true;
                 },
-                onNodeCreated : function(event, treeId, treeNode) {
+                onNodeCreated: function (event, treeId, treeNode) {
                     var zTree = $.fn.zTree.getZTreeObj(treeId);
                     if (_this.reloadFlag) {
                         if (_this.checkFlag) {
@@ -2495,47 +2376,42 @@ fnObj.treeView01 = axboot.viewExtend(axboot.commonView, {
                         tolerance: "pointer",
                         greedy: true,
                         hoverClass: "curSelectedNode",
-                        drop: function( event, ui ) {
+                        drop: function (event, ui) {
                             var parentNode = fnObj.treeView01.getNodeByTId($(this).parent().attr("id"));
 
-                            if(!updateRecord(ui.draggable, parentNode)){
+                            if (!updateRecord(ui.draggable, parentNode)) {
                                 return;
                             }
                         }
                     });
                 },
-                beforeDrop : function(treeId, treeNodes, targetNode, moveType, isCopy){
+                beforeDrop: function (treeId, treeNodes, targetNode, moveType, isCopy) {
 
 
                     console.log(targetNode);
                     console.log(treeNodes);
                     var msgCode = "";
                     var result = true;
-                    if(targetNode.nodeType == "item")
-                    {
+                    if (targetNode.nodeType == "item") {
                         result = false;
                         msgCode = "RC001_01";
                     }
-                    else
-                    {
+                    else {
                         var itemCnt = targetNode.childCnt - targetNode.children.length;
 
-                        for(var i = 0; i < treeNodes.length; i++)
-                        {
-                            if(treeNodes[i].nodeType == "normal" && itemCnt > 0){
+                        for (var i = 0; i < treeNodes.length; i++) {
+                            if (treeNodes[i].nodeType == "normal" && itemCnt > 0) {
                                 result = false;
                                 msgCode = "RC001_08";
                                 break;
                             }
 
-                            if(treeNodes[i].nodeType != "item" && targetNode.nodeType != treeNodes[i].nodeType)
-                            {
+                            if (treeNodes[i].nodeType != "item" && targetNode.nodeType != treeNodes[i].nodeType) {
                                 result = false;
                                 msgCode = "RC001_02";
                                 break;
                             }
-                            else if(treeNodes[i].nodeType == "item" && targetNode == null )
-                            {
+                            else if (treeNodes[i].nodeType == "item" && targetNode == null) {
                                 result = false;
                                 msgCode = "RC001_03";
                                 break;
@@ -2548,14 +2424,14 @@ fnObj.treeView01 = axboot.viewExtend(axboot.commonView, {
                         msgCode = "RC001_03";
                     }*/
 
-                    if(!result)
+                    if (!result)
                         axDialog.alert(axboot.getCommonMessage(msgCode));
 
 
                     return result;
 
                 },
-                onDrop : function(event, treeId, treeNodes, targetNode, moveType, isCopy){
+                onDrop: function (event, treeId, treeNodes, targetNode, moveType, isCopy) {
 
                     console.log(event);
                     console.log(treeId);
@@ -2566,24 +2442,25 @@ fnObj.treeView01 = axboot.viewExtend(axboot.commonView, {
                      * Droppable Tree 2 Record
                      * Tree간의 이동이 아닐 경우 동작함
                      */
-                    if(targetNode == null) {
+                    if (targetNode == null) {
                         var parentNode = null;
                         var currentNode = treeNodes[0];
                         var childNodes = currentNode.children;
 
                         // 이동될 Aggregation의 자신의 하위 Aggregation 여부를 체크하는 함수
-                        var checkChildNodes = function(nodes, parentUuid){
+                        var checkChildNodes = function (nodes, parentUuid) {
                             var rtn = false;
 
                             $.each(nodes, function (idx, item) {
-                                if(item.children.length > 0){
-                                    if(checkChildNodes(item.children, parentUuid)){
+                                if (item.children.length > 0) {
+                                    if (checkChildNodes(item.children, parentUuid)) {
                                         rtn = true;
                                         return false;
-                                    };
+                                    }
+                                    ;
                                 }
 
-                                if(parentUuid == item["uuid"]){
+                                if (parentUuid == item["uuid"]) {
                                     rtn = true;
                                     return false;
                                 }
@@ -2592,26 +2469,26 @@ fnObj.treeView01 = axboot.viewExtend(axboot.commonView, {
                             return rtn;
                         };
 
-                        if($(event.target).attr("id") == $('#iconListArea').attr("id") ||
+                        if ($(event.target).attr("id") == $('#iconListArea').attr("id") ||
                             $(event.target).closest('.explorer_file').length > 0) {
                             parentNode = fnObj.treeView01.getNodeByParam("uuid", fnObj.naviView.getCurrent()["uuid"]);
-                        }else{
-                            if($(event.target).closest('.explorer_folder_full').length > 0) {
+                        } else {
+                            if ($(event.target).closest('.explorer_folder_full').length > 0) {
                                 parentNode = fnObj.treeView01.getNodeByParam("uuid", $(event.target).closest('.explorer_folder_full').attr("uuid"));
                             } else if ($(event.target).closest('.explorer_folder_empty').length > 0) {
                                 parentNode = fnObj.treeView01.getNodeByParam("uuid", $(event.target).closest('.explorer_folder_empty').attr("uuid"));
                             }
                         }
 
-                        if(parentNode == null) return;
+                        if (parentNode == null) return;
 
-                        if(checkChildNodes(currentNode.children, parentNode["uuid"])){
+                        if (checkChildNodes(currentNode.children, parentNode["uuid"])) {
                             axDialog.alert("하위 Aggregation으로 이동이 불가능합니다.");
                             return;
                         }
 
-                        if(parentNode){
-                            if(!updateRecord(currentNode, parentNode, true)){
+                        if (parentNode) {
+                            if (!updateRecord(currentNode, parentNode, true)) {
                                 return;
                             }
                         }
@@ -2622,54 +2499,50 @@ fnObj.treeView01 = axboot.viewExtend(axboot.commonView, {
                     var reqList = new Array();
                     var validate = true;
                     //validate 로직 추가 ( item은 최상위 불가, Aggregation의 타입에 따라서 상위 이동 불가 )
-                    for(var i = 0; i < treeNodes.length; i++)
-                    {
-                        if(treeNodes[i].nodeType == "item" && null == targetNode)
-                        {
+                    for (var i = 0; i < treeNodes.length; i++) {
+                        if (treeNodes[i].nodeType == "item" && null == targetNode) {
                             validate = false;
                             break;
                         }
-                        if(null == targetNode)
+                        if (null == targetNode)
                             treeNodes[i].parentUuid = null;
                         else
                             treeNodes[i].parentUuid = targetNode.uuid;
                         reqList.push({
-                            uuid :treeNodes[i].uuid,
-                            parentUuid :treeNodes[i].parentUuid,
-                            nodeType :treeNodes[i].nodeType,
-                            parentNodeType :targetNode.nodeType,
+                            uuid: treeNodes[i].uuid,
+                            parentUuid: treeNodes[i].parentUuid,
+                            nodeType: treeNodes[i].nodeType,
+                            parentNodeType: targetNode.nodeType,
                         })
                     }
 
-                    if(!validate)
-                        return ;
+                    if (!validate)
+                        return;
 
-                    ACTIONS.dispatch(ACTIONS.ITEMS_SAVE,reqList);
+                    ACTIONS.dispatch(ACTIONS.ITEMS_SAVE, reqList);
                     //오른쪽 데이터 refresh 로직 추가
 
                     console.log(treeNodes);
                     console.log(isCopy);
 
                     //요청
-                    var reqData = $.extend({},targetNode);
+                    var reqData = $.extend({}, targetNode);
                     var path = targetNode.getPath();
-                    for(var key in reqData)
-                    {
-                        if(key != "uuid")
+                    for (var key in reqData) {
+                        if (key != "uuid")
                             delete(reqData[key]);
                     }
 
                     //tree는 자기 어머니까지 다해서 한방에 셋해야된다.
                     fnObj.naviView.clear();
-                    for(var i = 0; i < path.length; i++)
-                    {
+                    for (var i = 0; i < path.length; i++) {
                         fnObj.naviView.setData(path[i]);
                     }
 
-                    if($(".explorer_grid").css("display")=="none")
-                        ACTIONS.dispatch(ACTIONS.GET_SUBDATA,reqData);
+                    if ($(".explorer_grid").css("display") == "none")
+                        ACTIONS.dispatch(ACTIONS.GET_SUBDATA, reqData);
                     else
-                        ACTIONS.dispatch(ACTIONS.GET_GRID_DATA,reqData);
+                        ACTIONS.dispatch(ACTIONS.GET_GRID_DATA, reqData);
 
 
                 },
@@ -2681,14 +2554,11 @@ fnObj.treeView01 = axboot.viewExtend(axboot.commonView, {
                     console.log(msg);
                     msg = JSON.parse(msg);
                     var _tree = msg.list;
-                    var matchingData = function(key, list)
-                    {
+                    var matchingData = function (key, list) {
                         var retList = new Array();
-                        for(var i = 0; i < list.length; i++)
-                        {
-                            if( key == list[i]["parentUuid"] )
-                            {
-                                list[i].children =  matchingData(list[i]["uuid"], list);
+                        for (var i = 0; i < list.length; i++) {
+                            if (key == list[i]["parentUuid"]) {
+                                list[i].children = matchingData(list[i]["uuid"], list);
                                 retList.push(list[i]);
                             }
                         }
@@ -2697,12 +2567,10 @@ fnObj.treeView01 = axboot.viewExtend(axboot.commonView, {
 
                     var treeData = undefined;
                     var treeList = new Array();
-                    for(var i = 0; i < _tree.length; i++)
-                    {
+                    for (var i = 0; i < _tree.length; i++) {
                         treeData = _tree[i];
-                        if(treeData["parentUuid"] == null)
-                        {
-                            treeData.children = matchingData(treeData["uuid"],_tree);
+                        if (treeData["parentUuid"] == null) {
+                            treeData.children = matchingData(treeData["uuid"], _tree);
                             treeList.push(treeData);
                         }
                     }
@@ -2728,23 +2596,21 @@ fnObj.treeView01 = axboot.viewExtend(axboot.commonView, {
             }
         }, []);
     },
-    convertTreeData : function(_tree)
-    {
+    convertTreeData: function (_tree) {
         var iconObj = undefined;
-        for(var i = 0; i < _tree.length; i++)
-        {
+        for (var i = 0; i < _tree.length; i++) {
             iconObj = this.getAggregationIcon(_tree[i]["nodeType"], _tree[i]["publishedStatus"])
-            _tree[i] = $.extend({},_tree[i],iconObj);
+            _tree[i] = $.extend({}, _tree[i], iconObj);
             iconObj = {};
         }
         return _tree;
     },
-    getAggregationIcon : function(nodeType, publishedStatus){
-        if(nodeType == "normal" && publishedStatus == "published"){
+    getAggregationIcon: function (nodeType, publishedStatus) {
+        if (nodeType == "normal" && publishedStatus == "published") {
             nodeType = publishedStatus;
         }
 
-        var iconObj = {open:false, iconSkin:nodeType};
+        var iconObj = {open: false, iconSkin: nodeType};
         /*switch(nodeType)
         {
             case "normal":
@@ -2783,14 +2649,11 @@ fnObj.treeView01 = axboot.viewExtend(axboot.commonView, {
         var data = undefined;
 
 
-        var matchingData = function(key, list)
-        {
+        var matchingData = function (key, list) {
             var retList = new Array();
-            for(var i = 0; i < list.length; i++)
-            {
-                if( key == list[i]["parentUuid"] )
-                {
-                    list[i].children =  matchingData(list[i]["uuid"], list);
+            for (var i = 0; i < list.length; i++) {
+                if (key == list[i]["parentUuid"]) {
+                    list[i].children = matchingData(list[i]["uuid"], list);
                     retList.push(list[i]);
                 }
             }
@@ -2800,12 +2663,10 @@ fnObj.treeView01 = axboot.viewExtend(axboot.commonView, {
 
         var treeData = undefined;
         _tree = this.convertTreeData(_tree);
-        for(var i = 0; i < _tree.length; i++)
-        {
+        for (var i = 0; i < _tree.length; i++) {
             treeData = _tree[i];
-            if(treeData["parentUuid"] == null)
-            {
-                treeData.children = matchingData(treeData["uuid"],_tree);
+            if (treeData["parentUuid"] == null) {
+                treeData.children = matchingData(treeData["uuid"], _tree);
                 treeList.push(treeData);
             }
         }
@@ -2831,8 +2692,7 @@ fnObj.treeView01 = axboot.viewExtend(axboot.commonView, {
             })(this.target.zTree, "uuid", _data.uuid);
         }*/
     },
-    updateNode : function(treeNode)
-    {
+    updateNode: function (treeNode) {
         var treeObj = $.fn.zTree.getZTreeObj("ztree");
         treeObj.updateNode(treeNode);
         treeObj.refresh();
@@ -2894,34 +2754,29 @@ fnObj.treeView01 = axboot.viewExtend(axboot.commonView, {
     deselectNode: function () {
         ACTIONS.dispatch(ACTIONS.TREEITEM_DESELECTE);
     },
-    getSelectedData : function()
-    {
+    getSelectedData: function () {
         var treeObj = $.fn.zTree.getZTreeObj("ztree");
         return treeObj.getSelectedNodes();
     },
-    getNodeByTId : function(tId)
-    {
+    getNodeByTId: function (tId) {
         var treeObj = $.fn.zTree.getZTreeObj("ztree");
         return treeObj.getNodeByTId(tId);
     },
-    moveNode : function(targetNode, treeNode)
-    {
+    moveNode: function (targetNode, treeNode) {
         var treeObj = $.fn.zTree.getZTreeObj("ztree");
         return treeObj.moveNode(targetNode, treeNode, "inner", false);
     },
-    getNodeByParam : function(key, value)
-    {
+    getNodeByParam: function (key, value) {
         var treeObj = $.fn.zTree.getZTreeObj("ztree");
         return treeObj.getNodeByParam(key, value, null);
     }
 });
 
-fnObj.gridView01 = axboot.viewExtend(axboot.gridView,{
-    tagId : "realgrid01",
-    uuidFieldName : "uuid",
-    entityName : "Record Explorer",
-    initView  : function()
-    {
+fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
+    tagId: "realgrid01",
+    uuidFieldName: "uuid",
+    entityName: "Record Explorer",
+    initView: function () {
         var _this = this;
         this.initInstance();
         this.gridObj.setFixedOptions({
@@ -2937,39 +2792,35 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView,{
 
 
     },
-    itemDbClick : function(grid,index)
-    {
+    itemDbClick: function (grid, index) {
         fnObj.pageView.resetPage();
         var reqData = fnObj.gridView01.gridObj.getSelectedData();
-        if(reqData["iconType"] == "file")
-        {
+        if (reqData["iconType"] == "file") {
             var item = getMenu("view item");
             var parentsObj = parent.window.fnObj;
             reqData["parentUuid"] = fnObj.naviView.getCurrent()["uuid"];
 
-            item.menuParams = $.extend({},reqData,{type: "create"},
-                {navi : fnObj.naviView.getPathString()},
-                {title : reqData["name"]},{sendData: [reqData]}
+            item.menuParams = $.extend({}, reqData, {type: "create"},
+                {navi: fnObj.naviView.getPathString()},
+                {title: reqData["name"]}, {sendData: [reqData]}
             );
             parentsObj.tabView.open(item);
             return;
         }
 
-        fnObj.naviView.setData({uuid : reqData["uuid"],name : reqData["title"],nodeType : reqData["type"]});
+        fnObj.naviView.setData({uuid: reqData["uuid"], name: reqData["title"], nodeType: reqData["type"]});
 
         reqData["nodeType"] = reqData["type"].toLowerCase();
-        for(var key in reqData)
-        {
-            if( !("uuid" == key ||"nodeType" == key) )
+        for (var key in reqData) {
+            if (!("uuid" == key || "nodeType" == key))
                 delete(reqData[key]);
         }
-        ACTIONS.dispatch(ACTIONS.GET_GRID_DATA,reqData);
+        ACTIONS.dispatch(ACTIONS.GET_GRID_DATA, reqData);
     },
-    itemClick : function(data){
+    itemClick: function (data) {
 
     },
-    setData : function(list)
-    {
+    setData: function (list) {
         /*{criteria : "value='file'",styles : "iconIndex=0"}
     ,{criteria : "value='file_v'",styles : "iconIndex=1"}
     ,{criteria : "value='folder'",styles : "iconIndex=2"}
@@ -2983,25 +2834,22 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView,{
         var iconType = "";
         var nodeType = "";
         var isOpen = false;
-        for(var i = 0; i < list.length ;i++)
-        {
+        for (var i = 0; i < list.length; i++) {
             data = list[i];
-            if(data["childCnt"] > 0)
-            {
+            if (data["childCnt"] > 0) {
                 isOpen = true;
             }
-            switch(data["type"])
-            {
+            switch (data["type"]) {
                 case "Normal":
-                    iconType = "folder"+(isOpen ? "_open" : "");
+                    iconType = "folder" + (isOpen ? "_open" : "");
                     nodeType = data["type"].toLowerCase();
                     break;
                 case "Temporary":
-                    iconType = "folder"+(isOpen ? "_open" : "")+"_t";
+                    iconType = "folder" + (isOpen ? "_open" : "") + "_t";
                     nodeType = data["type"].toLowerCase();
                     break;
                 case "Virtual":
-                    iconType = "folder"+(isOpen ? "_open" : "")+"_v";
+                    iconType = "folder" + (isOpen ? "_open" : "") + "_v";
                     nodeType = data["type"].toLowerCase();
                     break;
                 case "item":
@@ -3021,8 +2869,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView,{
 
         this.gridObj.setData("set", list);
     },
-    getSelectedData : function()
-    {
+    getSelectedData: function () {
         return this.gridObj.getSelectionData();
     },
     validate: function () {
@@ -3036,12 +2883,11 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView,{
     }
 });
 
-fnObj.gridView02 = axboot.viewExtend(axboot.gridView,{
-    tagId : "realgrid02",
-    uuidFieldName : "fieldName",
+fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
+    tagId: "realgrid02",
+    uuidFieldName: "fieldName",
     entityName: "RC_ITEM",
-    initView  : function()
-    {
+    initView: function () {
         var _this = this;
         this.initInstance();
         this.setColumnInfo(rc00102.column_info);
@@ -3057,11 +2903,10 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView,{
         this.makeGrid();
         this.setFilter(true);
     },
-    getSelectedData : function()
-    {
+    getSelectedData: function () {
         return this.gridObj.getSelectionData();
     },
-    setFilter: function(value){
+    setFilter: function (value) {
         var filters = [{
             name: "NULL_VALUE",
             criteria: "value != ''",
@@ -3104,7 +2949,6 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
             },
 
 
-
         });
 
         this.initEvent();
@@ -3112,11 +2956,11 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
     initEvent: function () {
         var _this = this;
 
-        $("#formView01 #propertiesView input, #formView01 #propertiesView textarea").on("focusout", function(){
-            if(fnObj.formView.getData()["itemUuid"] == "" || fnObj.formView.getData()["aggregationUuid"] == "" ) return;
+        $("#formView01 #propertiesView input, #formView01 #propertiesView textarea").on("focusout", function () {
+            if (fnObj.formView.getData()["itemUuid"] == "" || fnObj.formView.getData()["aggregationUuid"] == "") return;
 
             var data = fnObj.formView.getData();
-            if(fnObj.formView.getData()["isItem"]) {
+            if (fnObj.formView.getData()["isItem"]) {
                 data["raAggregationUuid"] = fnObj.naviView.getCurrent()["uuid"];
                 data["name"] = data["title"];
                 data["riTypeUuid"] = data["itemTypeUuid"];
@@ -3125,27 +2969,27 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
                 data["riDescriptionEndDate"] = data["descriptionEndDate"];
                 data["riAuthor"] = data["author"];
                 ACTIONS.dispatch(ACTIONS.ITEM_SAVE, data);
-            }else {
+            } else {
                 data["parentAggregationUuid"] = fnObj.naviView.getCurrent()["uuid"];
                 data["typeUuid"] = data["aggregationTypeUuid"];
                 ACTIONS.dispatch(ACTIONS.AGG_SAVE, data);
             }
         });
 
-        $("#formView01 #propertiesView input, #formView01 #propertiesView textarea").on("focus", function(event){
-            $(event.target).click(function(event){
+        $("#formView01 #propertiesView input, #formView01 #propertiesView textarea").on("focus", function (event) {
+            $(event.target).click(function (event) {
                 event.stopPropagation();
             });
             fnObj.iconView.isOver = true;
         });
 
-        $("#formView01 #propertiesView select").on("change", function(){
-            if(fnObj.formView.getData()["itemUuid"] == "" || fnObj.formView.getData()["aggregationUuid"] == "" ) return;
+        $("#formView01 #propertiesView select").on("change", function () {
+            if (fnObj.formView.getData()["itemUuid"] == "" || fnObj.formView.getData()["aggregationUuid"] == "") return;
 
             fnObj.formView.setFormData($(this).attr("data-ax-path"), $(this).val());
 
             var data = fnObj.formView.getData();
-            if(fnObj.formView.getData()["isItem"]) {
+            if (fnObj.formView.getData()["isItem"]) {
                 data["raAggregationUuid"] = fnObj.naviView.getCurrent()["uuid"];
                 data["name"] = data["title"];
                 data["riPublishedStatusUuid"] = data["publishedStatusUuid"];
@@ -3153,7 +2997,7 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
                 data["riDescriptionEndDate"] = data["descriptionEndDate"];
                 data["riAuthor"] = data["author"];
                 ACTIONS.dispatch(ACTIONS.ITEM_SAVE, data);
-            }else {
+            } else {
                 data["parentAggregationUuid"] = fnObj.naviView.getCurrent()["uuid"];
                 data["typeUuid"] = fnObj.formView.getData()["aggregationTypeUuid"];
                 ACTIONS.dispatch(ACTIONS.AGG_SAVE, data);
@@ -3241,22 +3085,21 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
         });
 
 
-        $("input[data-ax-path='from']").parents().eq(1).find("a").click(function(){
+        $("input[data-ax-path='from']").parents().eq(1).find("a").click(function () {
             var data = {
-                popupCode : "PU123",
-                preSearch : false,
-                searchData : $("input[data-ax-path='from']").val().trim(),
+                popupCode: "PU123",
+                preSearch: false,
+                searchData: $("input[data-ax-path='from']").val().trim(),
             };
-            ACTIONS.dispatch(ACTIONS.SEARCH_FROM_SCH,data);
+            ACTIONS.dispatch(ACTIONS.SEARCH_FROM_SCH, data);
         });
-        $("input[data-ax-path='from']").focusout(function(){
+        $("input[data-ax-path='from']").focusout(function () {
 
-            if("" != $(this).val().trim())
-            {
+            if ("" != $(this).val().trim()) {
                 var data = {
-                    popupCode : "PU123",
+                    popupCode: "PU123",
                 };
-                ACTIONS.dispatch(ACTIONS.SEARCH_FROM_SCH,data);
+                ACTIONS.dispatch(ACTIONS.SEARCH_FROM_SCH, data);
             }
         });
 
