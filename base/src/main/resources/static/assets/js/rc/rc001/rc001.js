@@ -555,6 +555,7 @@ function contextMenuClick(ui, treeData){
     var msg = "";
     var typeUuid = "";
     var typeName = "";
+    var sendData = null;
 
     switch(ui.cmd){
         case "MERGE_ITEM":
@@ -574,86 +575,78 @@ function contextMenuClick(ui, treeData){
         case "ITEM_ADD":
             selectedData = fnObj.naviView.getCurrent();
 
-            if(selectedData["uuid"] == ""){
+            if (selectedData["uuid"] == "") {
                 axDialog.alert("Root위치에는 Item생성이 불가능합니다.");
                 return;
             }
 
-            item = getMenu("add item");
-            naviStr = undefined == selectedData["name"]? "" : " > "+selectedData["name"]
-            item.menuParams = $.extend({},{
-                    aggregationUuid : selectedData.uuid
-                },{type: "create"},{navi : fnObj.naviView.getPathString()+naviStr},{title : ""},{nodeType : selectedData.nodeType}
-            );
-            parentsObj.tabView.open(item);
+            var currentNode = fnObj.treeView01.getNodeByParam("uuid", selectedData["uuid"]);
+            if (currentNode.nodeType == "normal" && currentNode.isParent) {
+                axDialog.alert(axboot.getCommonMessage("RC001_08"));
+                return;
+            }
 
+            naviStr = undefined == selectedData["name"] ? "" : " > " + selectedData["name"]
+            sendData = $.extend({}, {aggregationUuid: selectedData.uuid},
+                {type: "create"},
+                {navi: fnObj.naviView.getPathString() + naviStr}, {title: ""},
+                {nodeType: selectedData.nodeType}
+            );
+
+            openRecordServicePopup("ITEM_ADD", "Add Item", sendData);
             break;
         case "ITEM_EDIT":
             selectedData = fnObj.iconView.getSelectedData();
 
-            item = getMenu("add item");
-            item.menuParams = $.extend({},{
+            sendData = $.extend({},{
                 aggregationUuid : selectedData[0].parentUuid,
                 itemUuid : selectedData[0].uuid
             },{type: "update"},{navi : fnObj.naviView.getPathString()},{title : selectedData[0]["name"]});
-            parentsObj.tabView.open(item);
+
+            openRecordServicePopup("ITEM_ADD", "Edit Item", sendData);
             break;
         case "ITEM_VIEW":
-            item = getMenu("view item");
-            item.menuParams = $.extend({},selectedData[0],{type: "create"},
+            sendData = $.extend({},selectedData[0],{type: "create"},
                 {navi : fnObj.naviView.getPathString()},
                 {title : selectedData["name"]},{sendData: selectedData}
             );
-            parentsObj.tabView.open(item);
+            openRecordServicePopup("ITEM_VIEW", "View Item", sendData);
             break;
         case "AGG_ADD":
             selectedData = fnObj.naviView.getCurrent();
+            var currentNode = fnObj.treeView01.getNodeByParam("uuid", selectedData["uuid"]);
+            if (currentNode.nodeType == "normal" && !currentNode.isParent && currentNode.childCnt > 0) {
+                axDialog.alert(axboot.getCommonMessage("RC001_08"));
+                return;
+            }
 
-            item = getMenu("add aggregation");
-            naviStr = undefined == selectedData["name"]? "" : " > "+selectedData["name"];
-            item.menuParams = $.extend({},
+            naviStr = undefined == selectedData["name"] ? "" : " > " + selectedData["name"];
+            sendData = $.extend({},
                 selectedData
-                ,{type: "create"}
-                ,{navi : fnObj.naviView.getPathString()+naviStr},{title : ""}
+                , {type: "create"}
+                , {navi: fnObj.naviView.getPathString() + naviStr}, {title: ""}
             );
-            parentsObj.tabView.open(item);
+
+            openRecordServicePopup("AGGREGATION_ADD", "Add Aggregation", sendData);
             break;
         case "AGG_EDIT":
             selectedData = treeData ? [treeData] : fnObj.iconView.getSelectedData();
-
-            axboot.modal.open({
-                modalType: "AGGREGATION_ADD",
-                width: 1600,
-                height: 800,
-                header: {
-                    title: "Edit Aggregation"
-                },
-                sendData: function () {
-                    return $.extend({},{
-                        parentUuid : selectedData[0].parentUuid,
-                        uuid : selectedData[0].uuid,
-                        nodeType : selectedData[0].nodeType
-                    },{type: "update"},{navi : fnObj.naviView.getPathString()},{title : selectedData[0]["name"]});
-                },
-                callback: function (data) {
-                    ACTIONS.dispatch(ACTIONS.GET_SUBDATA, fnObj.naviView.getCurrent());
-                }
-            });
-
-            /*item = getMenu("add aggregation");
-            item.menuParams = $.extend({},{
+            sendData = $.extend({},{
                 parentUuid : selectedData[0].parentUuid,
                 uuid : selectedData[0].uuid,
                 nodeType : selectedData[0].nodeType
             },{type: "update"},{navi : fnObj.naviView.getPathString()},{title : selectedData[0]["name"]});
-            parentsObj.tabView.open(item);*/
+
+            openRecordServicePopup("AGGREGATION_ADD", "Edit Aggregation", sendData);
             break;
         case "AGG_VIEW":
             selectedData = treeData ? [treeData] : fnObj.iconView.getSelectedData();
+            sendData = $.extend({},selectedData[0],{type: "create"},
+                {navi : fnObj.naviView.getPathString()},
+                {title : selectedData["name"]},
+                {sendData: selectedData});
 
-            item = getMenu("view aggregation");
-            item.menuParams = $.extend({},selectedData[0],{type: "create"},{navi : fnObj.naviView.getPathString()},{title : selectedData["name"]},{sendData: selectedData});
-            parentsObj.tabView.open(item);
+            openRecordServicePopup("AGGREGATION_VIEW", "View Aggregation", sendData);
             break;
         case "AGG_TYPE_NORMAL":
         case "AGG_TYPE_TEMP":
@@ -794,6 +787,27 @@ function contextMenuClick(ui, treeData){
             break;
 
     }
+}
+
+function openRecordServicePopup(type, title, sendData, callback){
+    if(!callback){
+        callback = function (data) {
+            ACTIONS.dispatch(ACTIONS.GET_SUBDATA, fnObj.naviView.getCurrent());
+        }
+    }
+
+    axboot.modal.open({
+        modalType: type,
+        width: 1600,
+        height: 800,
+        header: {
+            title: title
+        },
+        sendData: function () {
+            return sendData;
+        },
+        callback: callback
+    });
 }
 
 

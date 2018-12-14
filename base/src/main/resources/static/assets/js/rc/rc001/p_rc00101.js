@@ -16,8 +16,12 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         });
     },
     PAGE_CLOSE: function (caller, act, data) {
-        if (parent) {
+        if(parent.axboot.modalOpener == "modal") {
+            parent.axboot.modal.callback();
             parent.axboot.modal.close();
+        }else if(parent.axboot.modalOpener == "commonModal") {
+            parent.axboot.commonModal.callback();
+            parent.axboot.commonModal.close();
         }
     },
     MOVE : function(caller,act,data){
@@ -29,7 +33,6 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             callback: function (res) {
                 if(res.status == 0 || res.status == 200)
                 {
-                    parent.axboot.modal.callback();
                     ACTIONS.dispatch(ACTIONS.PAGE_CLOSE);
                 }
             },
@@ -50,7 +53,16 @@ var ACTIONS = axboot.actionExtend(fnObj, {
 
 var fnObj = {
     pageStart: function () {
-        fnObj.gridView01.initView(parent.axboot.modal.getData());
+        var pageParam = null;
+
+        if(parent.axboot.modalOpener == "modal"){
+            pageParam = parent.axboot.modal.getData();
+        }else if(parent.axboot.modalOpener == "commonModal"){
+            pageParam = parent.axboot.commonModal.getData();
+        }
+
+
+        fnObj.gridView01.initView(pageParam);
 
         $("#btnClose").click(function(){
             ACTIONS.dispatch(ACTIONS.PAGE_CLOSE)

@@ -310,6 +310,20 @@
                     url: "/rc/rc004/p_rc004"
                 }
             },
+            "AGGREGATION_VIEW": {
+                width: 1300,
+                height: 700,
+                iframe: {
+                    url: "/rc/rc003/p_rc003"
+                }
+            },
+            "ITEM_VIEW": {
+                width: 1300,
+                height: 700,
+                iframe: {
+                    url: "/rc/rc005/p_rc005"
+                }
+            },
         };
     }
 
