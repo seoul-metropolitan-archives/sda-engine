@@ -104,6 +104,10 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 fnObj.formView.setFormData("description",res.description);
                 fnObj.formView.setFormData("statusDescription",res.statusDescription);
                 fnObj.formView.setFormData("levelOfDetailUuid",res.levelOfDetailUuid);
+                fnObj.formView.setFormData("creationStartDate",res.creationStartDate);
+                fnObj.formView.setFormData("creationEndDate",res.creationEndDate);
+                fnObj.formView.setFormData("accumulationStartDate",res.accumulationStartDate);
+                fnObj.formView.setFormData("accumulationEndDate",res.accumulationEndDate);
                 fnObj.formView.setFormData("scopeContent",res.scopeContent);
                 isDetailChanged = false;
             },
@@ -296,6 +300,22 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
         this.model = new ax5.ui.binder();
         this.model.setModel(this.getDefaultData(), this.target);
         this.modelFormatter = new axboot.modelFormatter(this.model); // 모델 포메터 시작
+
+        this.target.find('[data-ax5picker="date"]').ax5picker({
+            direction: "auto",
+            config: {
+                pattern: 'data'
+            },
+            content: {
+                type: 'date',
+                formatter: {
+                    pattern: 'number'
+                }
+            },
+
+
+
+        });
         this.initEvent();
     },
     initEvent: function () {
@@ -346,7 +366,10 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
             }
         });
 
-        $("textarea[data-ax-path='scopeContent'],textarea[data-ax-path='description']").keyup(function(){
+        $("textarea[data-ax-path='scopeContent'],textarea[data-ax-path='description'],input[data-ax-path='creationStartDate'],input[data-ax-path='creationEndDate'],input[data-ax-path='accumulationStartDate'],input[data-ax-path='accumulationEndDate']").keyup(function(){
+            isDetailChanged = true;
+        });
+        $("textarea[data-ax-path='scopeContent'],textarea[data-ax-path='description'],input[data-ax-path='creationStartDate'],input[data-ax-path='creationEndDate'],input[data-ax-path='accumulationStartDate'],input[data-ax-path='accumulationEndDate']").change(function(){
             isDetailChanged = true;
         });
 
@@ -366,16 +389,10 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
         $(".bdb").delegate("#rg_tree_allclose", "click", function () {
             _this.collapseAll();
         });
-
     },
     getData: function () {
         var data = this.modelFormatter.getClearData(this.model.get()); // 모델의 값을 포멧팅 전 값으로 치환.
         return $.extend({}, data);
-        /*return $.extend({}, data,
-            {
-                classificationCode : $("input[data-ax-path='classificationCode']").attr("classificationCode")
-                ,parentClassCode :  $("input[data-ax-path='parentClassCode']").attr("parentClassCode")
-            });*/
     },
     setFormData: function (dataPath, value) {
         this.model.set(dataPath, value);
@@ -598,8 +615,13 @@ setDefaultClassDetails = function(){
     fnObj.formView.setFormData("detailAddMetadata02",'');
     fnObj.formView.setFormData("detailAddMetadata03",'');
     fnObj.formView.setFormData("detailAddMetadata04",'');
+    fnObj.formView.setFormData("creationStartDate",'');
+    fnObj.formView.setFormData("creationEndDate",'');
+    fnObj.formView.setFormData("accumulationStartDate",'');
+    fnObj.formView.setFormData("accumulationEndDate",'');
     isDetailChanged = false;
 }
+
 /*
 getPreClassLevels = function(key) {
     var path = classList.filter(function (item) {

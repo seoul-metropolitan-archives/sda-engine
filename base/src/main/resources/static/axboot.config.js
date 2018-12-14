@@ -241,7 +241,7 @@
 
             },
             "CLASSIFY_POPUP" :{
-                width: 1400,
+                width: 1500,
                 height: 700,
                 iframe: {
                     url: "/cl/cl003/cl003-p01"
