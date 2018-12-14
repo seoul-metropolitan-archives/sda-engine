@@ -328,6 +328,10 @@ public class Cl002Service extends BaseService {
         orgClClassCon = orgClClassCon == null ? clClassCon : orgClClassCon;
         orgClClassCon.setScopeContent(cl00202Vo.getScopeContent());
         orgClClassCon.setRulesConversionUuid(cl00202Vo.getRulesConversionUuid());
+        orgClClassCon.setCreationStartDate(cl00202Vo.getCreationStartDate());
+        orgClClassCon.setCreationEndDate(cl00202Vo.getCreationEndDate());
+        orgClClassCon.setAccumulationStartDate(cl00202Vo.getAccumulationStartDate());
+        orgClClassCon.setAccumulationEndDate(cl00202Vo.getAccumulationEndDate());
         clClassConRepository.save(orgClClassCon);
 
         ClClass clClass = new ClClass();

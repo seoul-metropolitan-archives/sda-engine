@@ -162,7 +162,7 @@
                                         </li>
                                     </ul>
                                     <ul style="width: 100%; height: 30px;">
-                                        <li style="width: 25%;text-align: left">Rules Conversion</li>
+                                        <li style="width: 25%;text-align: left;line-height:10px">Rules Conversion</li>
                                         <li style="width: 75%;text-align: left">
                                             <select data-ax-path="rulesConversionUuid" style="width:135px;">
                                                 <option value=""></option>
@@ -173,7 +173,7 @@
                                         </li>
                                     </ul>
                                     <ul style="width: 100%; height: 30px;">
-                                        <li style="width: 25%;text-align: left">Status Description</li>
+                                        <li style="width: 25%;text-align: left;line-height:10px">Status Description</li>
                                         <li style="width: 75%;text-align: left">
                                             <select data-ax-path="statusDescription" style="width:135px;">
                                                 <option value=""></option>
@@ -192,6 +192,42 @@
                                                         th:value="${item.codeDetailUUID}"
                                                         th:text="${item.codeName}"/>
                                             </select>
+                                        </li>
+                                    </ul>
+                                    <ul style="width: 100%; height: 30px;">
+                                        <li style="width: 25%;text-align: left; line-height:10px">Date of Creation</li>
+                                        <li style="width: 75%;text-align: left">
+                                            <div data-ax5picker="date">
+                                                <div class="cld_box" style="width: 110px;">
+                                                    <input type="text" data-ax-path="creationStartDate" style="ime-mode:disabled;width: 80%"
+                                                           placeholder="YYYY-MM-DD" maxlength="10">
+                                                    <img title="calendar" class="ui-datepicker-trigger" alt="..." src="/assets/images/ams/calendar.png" >
+                                                </div>
+                                                ~
+                                                <div class="cld_box" style="width: 110px;">
+                                                    <input type="text" data-ax-path="creationEndDate" style="ime-mode:disabled;width: 80%"
+                                                           placeholder="YYYY-MM-DD" maxlength="10">
+                                                    <img title="calendar" class="ui-datepicker-trigger" alt="..." src="/assets/images/ams/calendar.png" >
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                    <ul style="width: 100%; height: 30px;">
+                                        <li style="width: 25%;text-align: left;line-height:10px">Date of Accumulation</li>
+                                        <li style="width: 75%;text-align: left">
+                                            <div data-ax5picker="date">
+                                                <div class="cld_box" style="width: 110px;">
+                                                    <input type="text" data-ax-path="accumulationStartDate" style="ime-mode:disabled;width: 80%"
+                                                           placeholder="YYYY-MM-DD" maxlength="10">
+                                                    <img title="calendar" class="ui-datepicker-trigger" alt="..." src="/assets/images/ams/calendar.png" >
+                                                </div>
+                                                ~
+                                                <div class="cld_box" style="width: 110px;">
+                                                    <input type="text" data-ax-path="accumulationEndDate" style="ime-mode:disabled;width: 80%"
+                                                           placeholder="YYYY-MM-DD" maxlength="10">
+                                                    <img title="calendar" class="ui-datepicker-trigger" alt="..." src="/assets/images/ams/calendar.png" >
+                                                </div>
+                                            </div>
                                         </li>
                                     </ul>
                                     <ul style="width: 100%; height: 30px; padding-top: 10px">

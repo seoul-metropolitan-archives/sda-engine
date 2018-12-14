@@ -146,6 +146,10 @@ public class Cl003Service extends BaseService {
         clClassCon = clClassConRepository.findOne(clClassCon.getId());
 
         cl00201VO.setScopeContent(clClassCon.getScopeContent());
+        cl00201VO.setCreationEndDate(clClassCon.getCreationEndDate());
+        cl00201VO.setCreationStartDate(clClassCon.getCreationStartDate());
+        cl00201VO.setAccumulationEndDate(clClassCon.getAccumulationEndDate());
+        cl00201VO.setAccumulationStartDate(clClassCon.getAccumulationStartDate());
         cl00201VO.setRulesConversionUuid(clClassCon.getRulesConversionUuid());
         return cl00201VO;
     }
@@ -177,6 +181,10 @@ public class Cl003Service extends BaseService {
 
         if(orgClClassCon != null){
             orgClClassCon.setScopeContent(clClassCon.getScopeContent());
+            orgClClassCon.setCreationStartDate(clClassCon.getCreationStartDate());
+            orgClClassCon.setCreationEndDate(clClassCon.getCreationEndDate());
+            orgClClassCon.setAccumulationStartDate(clClassCon.getAccumulationStartDate());
+            orgClClassCon.setAccumulationEndDate(clClassCon.getAccumulationEndDate());
             orgClClassCon.setRulesConversionUuid(clClassCon.getRulesConversionUuid());
             orgClClassCon.setUpdateDate(null);
             orgClClassCon.setUpdateUuid(null);

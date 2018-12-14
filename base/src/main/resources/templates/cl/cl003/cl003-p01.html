@@ -39,14 +39,14 @@
                 </ul>
             </div>
             <div style="height:100%; width:100%" class="div_tablerow">
-                <div style="display:table; height:100%; width:20%; padding-bottom: 28px; float:left" class="bdr">
+                <div style="display:table; height:100%; width:22%; padding-bottom: 28px; float:left" class="bdr">
                     <ul class="bdb sdiv_tablerow bgf7" style="height:30px;">
                         <th:block layout:insert="~{/fragments/page-buttons :: dot('Class Description')}"/>
                     </ul>
                     <div style="padding: 10px 10px 0 10px;">
                         <ul style="width: 100%; height: 30px;">
-                            <li style="width: 50%;text-align: left">Rules Conversion</li>
-                            <li style="width: 50%;text-align: left">
+                            <li style="width: 30%;text-align: left;line-height: 10px">Rules Conversion</li>
+                            <li style="width: 70%;text-align: left">
                                 <select data-ax-path="rulesConversionUuid" style="width:135px;">
                                     <option value=""></option>
                                     <option th:each="item : ${rulesConversionUuid}"
@@ -56,8 +56,8 @@
                             </li>
                         </ul>
                         <ul style="width: 100%; height: 30px;">
-                            <li style="width: 50%;text-align: left">Status Description</li>
-                            <li style="width: 50%;text-align: left">
+                            <li style="width: 30%;text-align: left;line-height: 10px">Status Description</li>
+                            <li style="width: 70%;text-align: left">
                                 <select data-ax-path="statusDescription" style="width:135px;">
                                     <option value=""></option>
                                     <option th:each="item : ${statusDescription}"
@@ -67,8 +67,8 @@
                             </li>
                         </ul>
                         <ul style="width: 100%; height: 30px;">
-                            <li style="width: 50%;text-align: left">Level of Detail</li>
-                            <li style="width: 50%;text-align: left">
+                            <li style="width: 30%;text-align: left;">Level of Detail</li>
+                            <li style="width: 70%;text-align: left">
                                 <select data-ax-path="levelOfDetailUuid" style="width:135px;">
                                     <option value=""></option>
                                     <option th:each="item : ${levelOfDetail}"
@@ -77,11 +77,47 @@
                                 </select>
                             </li>
                         </ul>
+                        <ul style="width: 100%; height: 30px;">
+                            <li style="width: 30%;text-align: left; line-height:10px">Date of Creation</li>
+                            <li style="width: 70%;text-align: left">
+                                <div data-ax5picker="date">
+                                    <div class="cld_box" style="width: 105px;">
+                                        <input type="text" data-ax-path="creationStartDate" style="ime-mode:disabled;width: 80%"
+                                               placeholder="YYYY-MM-DD" maxlength="10">
+                                        <img title="calendar" class="ui-datepicker-trigger" alt="..." src="/assets/images/ams/calendar.png" >
+                                    </div>
+                                    ~
+                                    <div class="cld_box" style="width: 105px;">
+                                        <input type="text" data-ax-path="creationEndDate" style="ime-mode:disabled;width: 80%"
+                                               placeholder="YYYY-MM-DD" maxlength="10">
+                                        <img title="calendar" class="ui-datepicker-trigger" alt="..." src="/assets/images/ams/calendar.png" >
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                        <ul style="width: 100%; height: 30px;">
+                            <li style="width: 30%;text-align: left;line-height:10px">Date of Accumulation</li>
+                            <li style="width: 70%;text-align: left">
+                                <div data-ax5picker="date">
+                                    <div class="cld_box" style="width: 105px;">
+                                        <input type="text" data-ax-path="accumulationStartDate" style="ime-mode:disabled;width: 80%"
+                                               placeholder="YYYY-MM-DD" maxlength="10">
+                                        <img title="calendar" class="ui-datepicker-trigger" alt="..." src="/assets/images/ams/calendar.png" >
+                                    </div>
+                                    ~
+                                    <div class="cld_box" style="width: 105px;">
+                                        <input type="text" data-ax-path="accumulationEndDate" style="ime-mode:disabled;width: 80%"
+                                               placeholder="YYYY-MM-DD" maxlength="10">
+                                        <img title="calendar" class="ui-datepicker-trigger" alt="..." src="/assets/images/ams/calendar.png" >
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
                         <ul style="width: 100%; height: 30px; padding-top: 10px">
                             <li style="width: 49%;">
                                 <div style="text-align: left;">Scope Content </div>
                                 <div>
-                                    <textarea class="txtar" style="height: 180px;resize: vertical" data-ax-path="scopeContent"></textarea>
+                                    <textarea class="txtar" style="height: 160px;resize: vertical" data-ax-path="scopeContent"></textarea>
                                 </div>
                             </li>
                         </ul>
@@ -95,18 +131,18 @@
                         </ul>
                     </div>
                 </div><!--오늘쪽 내용에서 좌측 트리부분-->
-                <div style="display:table; height:100%; width:20%; padding-bottom: 28px; float:left" class="bdr">
+                <div style="display:table; height:100%; width:22%; padding-bottom: 28px; float:left" class="bdr">
                     <ul class="bdb sdiv_tablerow bgf7" style="height:30px;">
                         <th:block layout:insert="~{/fragments/page-buttons :: dot('Aggregation')}"/>
                     </ul>
                     <div style="height:100%; width:100%" class="div_tablerow bdb">
                         <!--<div id="realgrid01" style="width:100%; height:100%"></div>-->
                         <div style="width: 100%; height:100%; position: relative;overflow: auto;">
-                            <div data-z-tree="tree-view-01" data-fit-height-content="tree-view-01" style="height: 100%;width : 100%;max-width: 271px; position: absolute" class="ztree" id="ztree"></div>
+                            <div data-z-tree="tree-view-01" data-fit-height-content="tree-view-01" style="height: 100%;width : 100%; max-width: 344px; position: absolute" class="ztree" id="ztree"></div>
                         </div>
                     </div>
                 </div><!--오늘쪽 내용에서 좌측 트리부분-->
-                <div style="display:table; height:50%; width:60%; float:left">
+                <div style="display:table; height:50%; width:56%; float:left">
                     <div style="height:30px; line-height: 28px" class="bgf7 bdb div_tablerow">
                         <ul class="bdb sdiv_tablerow bgf7">
                             <th:block layout:insert="~{/fragments/page-buttons :: dot('item')}"/>
@@ -138,7 +174,7 @@
                         <div id="realgrid02" style="width: 100%; height: 100%;"></div>
                     </div>
                 </div>
-                <div style="display:table; height:50%; width:60%; padding-bottom:28px; float:left">
+                <div style="display:table; height:50%; width:56%; padding-bottom:28px; float:left">
                     <div style="height:30px; line-height: 28px" class="bgf7 bdt div_tablerow">
                         <th:block layout:insert="~{/fragments/page-buttons :: dot('Selected Aggregation List')}"/>
                     </div>
