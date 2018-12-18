@@ -45,6 +45,14 @@ var rc00401 =
                 {
                     sortNo: 4,
                     width:80,
+                    name: "status",
+                    text: "Status",
+                    disable : true,
+                    dataType:"text"
+                },
+                {
+                    sortNo: 5,
+                    width:80,
                     name: "contentsSize",
                     text: "Size(kb)",
                     disable : true,
@@ -53,7 +61,7 @@ var rc00401 =
 
                 },
                 {
-                    sortNo: 4,
+                    sortNo: 7,
                     width:140,
                     name: "componentUuid",
                     dataType:"text",

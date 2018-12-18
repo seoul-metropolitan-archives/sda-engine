@@ -44,7 +44,15 @@ var rc00501 =
                     dataType:"commanumber"
                 },
                 {
-                    sortNo : 5,
+                    sortNo: 5,
+                    width:80,
+                    name: "status",
+                    text: "Status",
+                    disable : true,
+                    dataType:"text"
+                },
+                {
+                    sortNo : 6,
                     width :80,
                     name : "componentUuid",
                     text : "Size(kb)",
