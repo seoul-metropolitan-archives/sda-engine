@@ -5,6 +5,7 @@
 package rmsoft.ams.seoul.common.domain;
 
 import io.onsemiro.core.domain.BaseJpaModel;
+import io.onsemiro.core.domain.BasicJpaModel;
 import lombok.*;
 import org.apache.ibatis.type.Alias;
 import org.hibernate.annotations.DynamicInsert;
@@ -26,7 +27,7 @@ import java.sql.Timestamp;
 @Table(name = "JOB_CONV")
 @IdClass(JobConv.JobConvId.class)
 @Alias("JobConv")
-public class JobConv extends BaseJpaModel<JobConv.JobConvId> {
+public class JobConv extends BasicJpaModel<JobConv.JobConvId> {
 
     @Id
     @Column(name = "JOBID", length = 64, nullable = false)
