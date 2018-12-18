@@ -106,9 +106,12 @@ public class Wf999Service extends BaseService {
             // item 정보생성
             rc00502VOList.forEach(fileInfo -> {
                 Rc00501VO itemVO = new Rc00501VO();
+                //2018-12-18 신영현
+                //파일확장자 얻기
 
                 itemVO.setRaTitle(getFileNameNoExt(fileInfo.getFileName()));
                 itemVO.setRaAggregationUuid(rc00501VO.getRaAggregationUuid());
+
 
                 // component 정보생성
                 File file = new File(uploadPath + File.separator + fileInfo.getFilePath() + File.separator + fileInfo.getOriginalFileName());
