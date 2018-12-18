@@ -92,6 +92,10 @@ public class WorkflowExecutor extends ClassLoader {
                 }
 
                 //TODO 파라미터 값이 없어서 setter 를 찾지 못하는 경우 처리
+                if (method == null || parameterObject == null) {
+                    throw new NullPointerException("Methods Or ParameterObject is null");
+                }
+
                 method.invoke(myClassObject, parameterObject);
                 System.out.println("Invoked method name: " + method.getName());
             }
@@ -107,12 +111,12 @@ public class WorkflowExecutor extends ClassLoader {
 
             log.error("Workflow Process Executor Error", e);
             callResult.setSuccess(false);
-            callResult.setMessage(e.getMessage());
+            callResult.setMessage(e.getClass().getSimpleName() + ":" + e.getMessage());
         } catch (Exception e) {
             errorLogging(e);
 
             log.error("Workflow Process Service Error", e);
-            callResult.setMessage(e.getMessage());
+            callResult.setMessage(e.getClass().getSimpleName() + ":" + e.getMessage());
         }
 
         return callResult;

@@ -102,7 +102,7 @@ public class ProcessStndRmsUpload {
         } catch (Exception e) {
             log.error("Process Standard RMS Upload service Error", e);
             workflowResult.setSuccess(false);
-            workflowResult.setMessage(e.getMessage());
+            workflowResult.setMessage(e.getClass().getSimpleName() + ":" + e.getMessage());
         } finally {
             try {
                 dbUnitCon.close();
