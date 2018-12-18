@@ -122,9 +122,12 @@ public class Wf999Service extends BaseService {
                 List<Rc00502VO> componentsList = new ArrayList<>();
                 fileInfo.setTitle(getFileNameNoExt(fileInfo.getFileName().toString()));
                 fileInfo.setFilePath(fileToMove.getAbsolutePath().replace(contentsPath, ""));
+                fileInfo.setServiceFilePath("\\service");
                 if(isWindows()){
                     fileInfo.setFilePath(fileInfo.getFilePath().replace(File.separator, "/"));
+                    fileInfo.setServiceFilePath(fileInfo.getServiceFilePath().replace(File.separator, "/"));
                 }
+                fileInfo.setServiceFileName(fileInfo.getOriginalFileName().substring(0, fileInfo.getOriginalFileName().lastIndexOf( "." )) + ".pdf");
                 componentsList.add(fileInfo);
                 itemVO.setRc00502VoList(componentsList);
 
