@@ -1742,8 +1742,13 @@ fnObj.iconView = axboot.viewExtend({
                                             cloneTag.attr("type", "comp");
 
                                             cloneTag.addClass("explorer_file");
-
-                                            imgTag.prop("src", imgPath + "explorer_file_img.png").prop("alt", "folder");
+                                            if(data["thumbnailContent"] == "" || data["thumbnailContent"] == null ){
+                                                imgTag.prop("src", imgPath + "explorer_file_img.png").prop("alt", "folder");
+                                            }else{
+                                                imgTag.prop("src", "data:image/jpg;base64," + data["thumbnailContent"]).prop("alt", "folder");
+                                            }
+                                            // imgTag.setStyle("width",320);
+                                            // imgTag.setStyle("height",320);
                                             cloneTag.find(".imageTag").append(imgTag);
 
                                             cloneTag.find(".titleTag").append($("<div>").attr("class", data["title"].length > 15 ? "explorer_4line" : "explorer_text").text(data["title"]));
@@ -1758,6 +1763,7 @@ fnObj.iconView = axboot.viewExtend({
                                         });
 
                                         $('#componentView').delegate(">div", "dblclick", function (event) {
+                                            event.preventDefault();
                                             if (event.currentTarget.hasAttribute("componentuuid") != null && event.currentTarget.getAttribute("componentuuid") != "" && event.currentTarget.getAttribute("componentuuid") != null) {
                                                 $.ajax({
                                                     url :"/api/v1/common/getStreamingUrl",

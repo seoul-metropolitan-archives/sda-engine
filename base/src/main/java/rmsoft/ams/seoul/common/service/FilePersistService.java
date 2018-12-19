@@ -49,7 +49,7 @@ public class FilePersistService  implements InitializingBean {
             try {
                 Thumbnails.of(file)
                         .crop(Positions.CENTER)
-                        .size(320, 320)
+                        .size(44, 40)
                         .toFiles(new File(fileSavePath), Rename.SUFFIX_HYPHEN_THUMBNAIL);
             } catch (Exception e) {
             }

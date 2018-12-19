@@ -64,7 +64,7 @@ public class Rc00502VO extends BaseVO {
 
     private String status;
 
-    private String thumbNailContent;
+    private String thumbnailContent;
 
-    private String thumbNailFileName;
+    private String thumbnailFileName;
 }
