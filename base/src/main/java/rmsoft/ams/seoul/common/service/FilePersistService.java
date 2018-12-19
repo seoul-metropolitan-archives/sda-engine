@@ -10,12 +10,16 @@ import net.coobird.thumbnailator.Thumbnails;
 import net.coobird.thumbnailator.geometry.Positions;
 import net.coobird.thumbnailator.name.Rename;
 import org.apache.commons.io.FileUtils;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.util.ImageIOUtil;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collections;
@@ -51,18 +55,44 @@ public class FilePersistService  implements InitializingBean {
                         .crop(Positions.CENTER)
                         .size(44, 40)
                         .toFiles(new File(fileSavePath), Rename.SUFFIX_HYPHEN_THUMBNAIL);
+
+                if(FileUtils.sizeOf(new File(fileSavePath + File.separator + ax5File.getThumbnailFileName())) > 0){
+                    try {
+                        ax5File.setThumbnailContent(FileUtils.readFileToByteArray(new File(fileSavePath + File.separator + ax5File.getThumbnailFileName())));
+                        FileUtils.deleteQuietly(new File(fileSavePath + File.separator + ax5File.getThumbnailFileName()));
+                    } catch (IOException e) {
+                        throw new IOException("Unable to convert file to byte array. " + e.getMessage());
+                    }
+                }
             } catch (Exception e) {
             }
         }
 
-        if(FileUtils.sizeOf(new File(fileSavePath + File.separator + ax5File.getThumbnailFileName())) > 0){
+        if (fileType.equals(Types.FileType.PDF)) {
             try {
-                ax5File.setThumbnailContent(FileUtils.readFileToByteArray(new File(fileSavePath + File.separator + ax5File.getThumbnailFileName())));
-                FileUtils.deleteQuietly(new File(fileSavePath + File.separator + ax5File.getThumbnailFileName()));
-            } catch (IOException e) {
-                throw new IOException("Unable to convert file to byte array. " + e.getMessage());
+                PDDocument document = PDDocument.loadNonSeq(file, null);
+                List<PDPage> pdPages = document.getDocumentCatalog().getAllPages();
+                int page = 0;
+                for (PDPage pdPage : pdPages)
+                {
+                    BufferedImage bim = pdPage.convertToImage(BufferedImage.TYPE_INT_RGB, 300);
+                    ImageIOUtil.writeImage(bim, fileSavePath + File.separator + ax5File.getThumbnailFileName() + "-" + page + ".jpg", 300);
+                    break;
+                }
+                document.close();
+
+                if(FileUtils.sizeOf(new File(fileSavePath + File.separator + ax5File.getThumbnailFileName())) > 0){
+                    try {
+                        ax5File.setThumbnailContent(FileUtils.readFileToByteArray(new File(fileSavePath + File.separator + ax5File.getThumbnailFileName())));
+                        FileUtils.deleteQuietly(new File(fileSavePath + File.separator + ax5File.getThumbnailFileName()));
+                    } catch (IOException e) {
+                        throw new IOException("Unable to convert file to byte array. " + e.getMessage());
+                    }
+                }
+            } catch (Exception e) {
             }
         }
+
     }
 
 
