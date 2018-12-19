@@ -43,17 +43,26 @@ public class FilePersistService  implements InitializingBean {
         // JSON 정보 저장
 //        FileUtils.writeStringToFile(new File(fileSavePath + File.separator + ax5File.getJsonName()), JsonUtils.toJson(ax5File), "UTF-8");
 
-//        String fileType = getFileType(ax5File.getExt());
-//
-//        if (fileType.equals(Types.FileType.IMAGE)) {
-//            try {
-//                Thumbnails.of(file)
-//                        .crop(Positions.CENTER)
-//                        .size(320, 320)
-//                        .toFiles(new File(fileSavePath), Rename.SUFFIX_HYPHEN_THUMBNAIL);
-//            } catch (Exception e) {
-//            }
-//        }
+        String fileType = getFileType(ax5File.getExt());
+
+        if (fileType.equals(Types.FileType.IMAGE)) {
+            try {
+                Thumbnails.of(file)
+                        .crop(Positions.CENTER)
+                        .size(320, 320)
+                        .toFiles(new File(fileSavePath), Rename.SUFFIX_HYPHEN_THUMBNAIL);
+            } catch (Exception e) {
+            }
+        }
+
+        if(FileUtils.sizeOf(new File(fileSavePath + File.separator + ax5File.getThumbnailFileName())) > 0){
+            try {
+                ax5File.setThumbnailContent(FileUtils.readFileToByteArray(new File(fileSavePath + File.separator + ax5File.getThumbnailFileName())));
+                FileUtils.deleteQuietly(new File(fileSavePath + File.separator + ax5File.getThumbnailFileName()));
+            } catch (IOException e) {
+                throw new IOException("Unable to convert file to byte array. " + e.getMessage());
+            }
+        }
     }
 
 

@@ -50,6 +50,8 @@ public class AX5File implements Comparable {
 
     private String fileFormatUuid;
 
+    private byte[] thumbnailContent;
+
     public static AX5File of(MultipartFile multipartFile) {
         AX5File ax5File = new AX5File();
 
@@ -88,9 +90,11 @@ public class AX5File implements Comparable {
         return String.format("%s.%s", id, ext);
     }
 
-    /*public String getThumbnailSaveName() {
+    public String getThumbnailFileName() {
         return String.format("%s-thumbnail.%s", id, ext);
-    }*/
+    }
+
+    public void setThumbnailContent(byte[] thumbnail){ thumbnailContent = thumbnail; }
 
     public String getJsonName() {
         return String.format("%s.json", id, ext);

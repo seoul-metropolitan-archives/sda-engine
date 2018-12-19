@@ -100,6 +100,14 @@ public class RcComponent extends BaseJpaModel<RcComponent.RcComponentId> {
     @Comment(value = "SERVICE FILE PATH")
     private String serviceFilePath;
 
+    @Column(name = "THUMBNAIL_FILE_NAME", length = 200, nullable = true)
+    @Comment(value = "THUMBNAIL FILE NAME")
+    private String thumbnailFileName;
+
+    @Column(name = "THUMBNAIL_CONTENT", nullable = true)
+    @Comment(value = "THUMBNAIL CONTENT")
+    private String thumbnailContent;
+
     @Override
     public RcComponentId getId() {
         return RcComponentId.of(componentUuid);
