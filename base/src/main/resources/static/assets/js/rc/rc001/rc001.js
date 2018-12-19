@@ -1756,6 +1756,29 @@ fnObj.iconView = axboot.viewExtend({
                                             helper: "clone",
                                             opacity: 0.7
                                         });
+
+                                        $('#componentView').delegate(">div", "dblclick", function (event) {
+                                            if (event.currentTarget.hasAttribute("componentuuid") != null && event.currentTarget.getAttribute("componentuuid") != "" && event.currentTarget.getAttribute("componentuuid") != null) {
+                                                $.ajax({
+                                                    url :"/api/v1/common/getStreamingUrl",
+                                                    data : JSON.stringify({componentUuid:event.currentTarget.getAttribute("componentuuid")}),
+                                                    dataType : "json",
+                                                    type : "post",
+                                                    contentType : "application/json",
+                                                    success : function(res){
+                                                        if(res.url != undefined && res.url != null){
+                                                            window.open(res.url, "", "");
+                                                        }else if(res.componentUuid != undefined && res.componentUuid != null){
+                                                            window.open("/api/v1/common/video/" + res.componentUuid, "", "");
+                                                        }
+                                                    },
+                                                    error : function (a,b,c)
+                                                    {
+                                                        console.log(a);
+                                                    }
+                                                })
+                                            }
+                                        });
                                     }
 
                                     setFormData(item, true);
