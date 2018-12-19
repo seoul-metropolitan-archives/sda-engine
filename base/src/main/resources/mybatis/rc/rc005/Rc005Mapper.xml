@@ -363,7 +363,12 @@
           <!--Z3.THUMBNAIL as thumbnail,-->
           Z3.CHECKSUM_TYPE_UUID as checksumTypeUuid,
           Z3.CHECKSUM as checksum,
-          NVL(Z4.JOBSTATUS,'-') AS status,
+          NVL(DECODE(Z4.JOBSTATUS, 'W' , 'Wait',
+                                   'R' , 'Ready',
+                                   'C' , 'Check',
+                                   'I' , 'InProc',
+                                   'S' , 'Success',
+                                   'F' , 'Fail'),'Nothing') AS status,
         <include refid="Common.UserName"><property name="userUuid" value="INSERT_UUID"/></include> as insertUuid,
           Z2.INSERT_DATE as insertDate,
         <include refid="Common.UserName"><property name="userUuid" value="UPDATE_UUID"/></include> as updateUuid,
