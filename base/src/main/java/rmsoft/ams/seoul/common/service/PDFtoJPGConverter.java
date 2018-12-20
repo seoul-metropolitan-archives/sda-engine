@@ -26,16 +26,14 @@ public class PDFtoJPGConverter {
         if (file.exists()) {
             PDDocument doc = PDDocument.load(file);
             PDFRenderer renderer = new PDFRenderer(doc);
-            List<File> fileList = new ArrayList<File>();
-            File convertedFile = null;
-            for (int i = 0; i < doc.getNumberOfPages(); i++) {
-                String fileName = file.getName().replace(".pdf", "");
-                convertedFile = new File(destination + fileName + ".jpg"); // jpg or png
-                BufferedImage image = renderer.renderImageWithDPI(i, 200);
-                // 200 is sample dots per inch.
-                // if necessary, change 200 into another integer.
-                ImageIO.write(image, "JPEG", convertedFile); // JPEG or PNG
-            }
+
+            String fileName = file.getName().replace(".pdf", "");
+            File convertedFile = new File(destination + fileName + ".jpg"); // jpg or png
+            BufferedImage image = renderer.renderImageWithDPI(0, 200);
+            // 200 is sample dots per inch.
+            // if necessary, change 200 into another integer.
+            ImageIO.write(image, "JPEG", convertedFile); // JPEG or PNG
+
             doc.close();
             return convertedFile;
         } else {
