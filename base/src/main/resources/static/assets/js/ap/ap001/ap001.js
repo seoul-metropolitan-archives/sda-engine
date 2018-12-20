@@ -1,5 +1,7 @@
 var fnObj = {};
 
+var API_SERVER = CONTEXT_PATH;
+
 var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH: function (caller, act, data) {
         axboot.ajax({
@@ -93,6 +95,12 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             url: "/api/v1/common/controller",
             data: $.extend({}, {pageSize: 1000, sort: "", serviceId: "ad001", methodName: "getEnviromentList1"}, fnObj.searchView.getData()),
             callback: function (res) {
+
+                location.href = API_SERVER + "/api/v1/common/download/item?itemId=" + "85BEE949-4DF4-4AFA-8552-E242FCC7F9E1";
+
+                //var fileUrl  = "/assets/01-20180928172530296.hwp";
+                //download_file(fileUrl , "테스트.hwp");
+                //window.open(fileUrl);
                 //fnObj.gridView01.resetCurrent();
                 //fnObj.gridView01.setData(res.list);
             },
@@ -165,8 +173,6 @@ fnObj.pageStart = function () {
         });
 
         _this.searchView.initView();
-
-        var API_SERVER = CONTEXT_PATH;
 
         UPLOAD = new ax5.ui.uploader({
             debug: false,
@@ -388,5 +394,37 @@ function traverseFileTree(item, path) {
                 traverseFileTree(entries[i], path + item.name + "/");
             }
         });
+    }
+}
+
+/* Helper function */
+function download_file(fileURL, fileName) {
+    // for non-IE
+    if (!window.ActiveXObject) {
+        var save = document.createElement('a');
+        save.href = fileURL;
+        save.target = '_blank';
+        var filename = fileURL.substring(fileURL.lastIndexOf('/')+1);
+        save.download = fileName || filename;
+        if ( navigator.userAgent.toLowerCase().match(/(ipad|iphone|safari)/) && navigator.userAgent.search("Chrome") < 0) {
+            document.location = save.href;
+// window event not working here
+        }else{
+            var evt = new MouseEvent('click', {
+                'view': window,
+                'bubbles': true,
+                'cancelable': false
+            });
+            save.dispatchEvent(evt);
+            (window.URL || window.webkitURL).revokeObjectURL(save.href);
+        }
+    }
+
+    // for IE < 11
+    else if ( !! window.ActiveXObject && document.execCommand)     {
+        var _window = window.open(fileURL, '_blank');
+        _window.document.close();
+        _window.document.execCommand('SaveAs', true, fileName || fileURL)
+        _window.close();
     }
 }
