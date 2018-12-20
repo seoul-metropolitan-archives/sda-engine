@@ -53,15 +53,39 @@ public class FilePersistService  implements InitializingBean {
         if (fileType.equals(Types.FileType.PDF)) {
             try {
                 pdFtoJPGConverter = new PDFtoJPGConverter();
-                File tempFile = pdFtoJPGConverter.convertPdfToImage(file,fileSavePath + File.separator + "gen/");
-                makeThumbnail(tempFile,fileSavePath,ax5File);
+                File tempFile = pdFtoJPGConverter.convertPdfToImage(file,fileSavePath);
+                Thumbnails.of(tempFile)
+                        .crop(Positions.CENTER)
+                        .size(44, 40)
+                        .toFiles(new File(fileSavePath), Rename.SUFFIX_HYPHEN_THUMBNAIL);
+
+                if(FileUtils.sizeOf(new File(fileSavePath + File.separator + ax5File.getThumbnailFileName().replace(".pdf",".jpg"))) > 0){
+                    try {
+                        ax5File.setThumbnailContent(FileUtils.readFileToByteArray(new File(fileSavePath + File.separator + ax5File.getThumbnailFileName().replace(".pdf",".jpg"))));
+                        FileUtils.deleteQuietly(new File(fileSavePath + File.separator + ax5File.getThumbnailFileName()));
+                    } catch (IOException e) {
+                        throw new IOException("Unable to convert file to byte array. " + e.getMessage());
+                    }
+                }
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
         }
 
         if (fileType.equals(Types.FileType.IMAGE)) {
-            makeThumbnail(file,fileSavePath,ax5File);
+            Thumbnails.of(file)
+                    .crop(Positions.CENTER)
+                    .size(44, 40)
+                    .toFiles(new File(fileSavePath), Rename.SUFFIX_HYPHEN_THUMBNAIL);
+
+            if(FileUtils.sizeOf(new File(fileSavePath + File.separator + ax5File.getThumbnailFileName())) > 0){
+                try {
+                    ax5File.setThumbnailContent(FileUtils.readFileToByteArray(new File(fileSavePath + File.separator + ax5File.getThumbnailFileName())));
+                    FileUtils.deleteQuietly(new File(fileSavePath + File.separator + ax5File.getThumbnailFileName()));
+                } catch (IOException e) {
+                    throw new IOException("Unable to convert file to byte array. " + e.getMessage());
+                }
+            }
         }
     }
 

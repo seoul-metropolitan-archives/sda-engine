@@ -6,8 +6,7 @@ import org.apache.pdfbox.rendering.PDFRenderer;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
+
 
 public class PDFtoJPGConverter {
     public File convertPdfToImage(File file, String destination) throws Exception {
@@ -28,7 +27,7 @@ public class PDFtoJPGConverter {
             PDFRenderer renderer = new PDFRenderer(doc);
 
             String fileName = file.getName().replace(".pdf", "");
-            File convertedFile = new File(destination + fileName + ".jpg"); // jpg or png
+            File convertedFile = new File(destination + File.separator + fileName + ".jpg"); // jpg or png
             BufferedImage image = renderer.renderImageWithDPI(0, 200);
             // 200 is sample dots per inch.
             // if necessary, change 200 into another integer.
