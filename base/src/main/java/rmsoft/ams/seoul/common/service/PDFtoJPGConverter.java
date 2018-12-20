@@ -1,0 +1,46 @@
+package rmsoft.ams.seoul.common.service;
+
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.rendering.PDFRenderer;
+
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
+public class PDFtoJPGConverter {
+    public File convertPdfToImage(File file, String destination) throws Exception {
+
+        File destinationFile = new File(destination);
+
+        if (!destinationFile.exists()) {
+            destinationFile.mkdir();
+            System.out.println("DESTINATION FOLDER CREATED -> " + destinationFile.getAbsolutePath());
+        }else if(destinationFile.exists()){
+            System.out.println("DESTINATION FOLDER ALLREADY CREATED!!!");
+        }else{
+            System.out.println("DESTINATION FOLDER NOT CREATED!!!");
+        }
+
+        if (file.exists()) {
+            PDDocument doc = PDDocument.load(file);
+            PDFRenderer renderer = new PDFRenderer(doc);
+            List<File> fileList = new ArrayList<File>();
+            File convertedFile = null;
+            for (int i = 0; i < doc.getNumberOfPages(); i++) {
+                String fileName = file.getName().replace(".pdf", "");
+                convertedFile = new File(destination + fileName + ".jpg"); // jpg or png
+                BufferedImage image = renderer.renderImageWithDPI(i, 200);
+                // 200 is sample dots per inch.
+                // if necessary, change 200 into another integer.
+                ImageIO.write(image, "JPEG", convertedFile); // JPEG or PNG
+            }
+            doc.close();
+            return convertedFile;
+        } else {
+            System.err.println(file.getName() + " FILE DOES NOT EXIST");
+        }
+        return null;
+    }
+}
