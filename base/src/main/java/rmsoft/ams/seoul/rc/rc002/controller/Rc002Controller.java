@@ -11,6 +11,8 @@ import rmsoft.ams.seoul.rc.rc002.service.Rc002Service;
 import rmsoft.ams.seoul.rc.rc002.vo.Rc00204VO;
 import rmsoft.ams.seoul.rc.rc002.vo.Rc002VO;
 
+import java.util.Map;
+
 /**
  * The type Rc 002 controller.
  */
@@ -28,7 +30,7 @@ public class Rc002Controller extends MessageBaseController
      * @return the api response
      */
     @RequestMapping("/save")
-    public ApiResponse save(@RequestBody Rc002VO data)
+    public Map save(@RequestBody Rc002VO data)
     {
         return rc002Service.save(data);
     }

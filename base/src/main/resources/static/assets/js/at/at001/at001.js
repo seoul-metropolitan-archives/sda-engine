@@ -9,6 +9,11 @@ var relAutData = [];
 var ORG_TYPE_NM = "Organization";
 var firstSearch = 1;
 var childrenAuthInfo = false;
+
+$( function() {
+    $( "#itemTabs" ).tabs();
+} );
+
 var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH: function (caller, act, data) {
         axboot.ajax({ //트리 리스트

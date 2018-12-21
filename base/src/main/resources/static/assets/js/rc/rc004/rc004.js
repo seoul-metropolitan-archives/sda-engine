@@ -195,7 +195,7 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
     initEvent: function () {
         var _this = this;
 
-        $("input[data-ax-path='descriptionStartDate']").keyup(function () {
+        /*$("input[data-ax-path='descriptionStartDate']").keyup(function () {
             var date = this.value;
             if (date.match(/^\d{4}$/) !== null) {
                 this.value = date + '-';
@@ -273,7 +273,7 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
                 this.value = "";
                 this.focus = true;
             }
-        });
+        });*/
 
 
         $("input[data-ax-path='from']").parents().eq(1).find("a").click(function(){
@@ -852,13 +852,13 @@ function setAdditionalMeta(segmentList){
     //fnObj.formView.setData(currentData);
 }
 
-function dateFormatter(orgDate){
-    if(orgDate == undefined || orgDate == null) return '';
-    var year = orgDate.substring(0, 4);
-    var month = orgDate.substring(4, 6);
-    var day = orgDate.substring(6, 8);
-
-    return year + '-' + month + '-' + day;
+function dateFormatter(str){
+    if(str == "undefined" || str == null) return;
+    if(str.length == 8) {
+        return str.substr(0, 4) + "-" + str.substr(4, 2) + "-" + str.substr(6);
+    } else {
+        return str;
+    }
 }
 
 function checkDate(date) {
@@ -870,6 +870,8 @@ function checkDate(date) {
     if (strValue == "") { // 공백이면 무시
         return result;
     }
+
+    return date;
 
     if (chk1.test(strValue) == false && chk2.test(strValue) == false) { // 유효성 검사에 둘다 성공하지 못했다면
         //alert("1999-1-1 형식 또는 \r\n1999-01-01 형식으로 날자를 입력해주세요.");

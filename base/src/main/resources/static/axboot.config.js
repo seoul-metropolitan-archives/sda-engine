@@ -190,14 +190,14 @@
                 width: 1200,
                 height: 700,
                 iframe: {
-                    url: "/st/st008/st008-p02"
+                    url: "/st/st008/st008-p01"
                 }
             },
             "ADD_TAKE_OUT_POPUP" :{
                 width: 1200,
                 height: 700,
                 iframe: {
-                    url: "/st/st008/st008-p03"
+                    url: "/st/st008/st008-p02"
                 }
             },
 
@@ -205,7 +205,7 @@
                 width: 1200,
                 height: 700,
                 iframe: {
-                    url: "/st/st008/st008-p04"
+                    url: "/st/st008/st008-p03"
                 }
             },
             "CREATE_TAKE_IN_POPUP" :{
@@ -248,7 +248,7 @@
 
             },
             "CLASSIFY_POPUP" :{
-                width: 1400,
+                width: 1500,
                 height: 700,
                 iframe: {
                     url: "/cl/cl003/cl003-p01"
@@ -291,7 +291,7 @@
                 }
             },
             "AUTHORITY_POPUP": {
-                width: 450,
+                width: 550,
                 iframe: {
                     url: "/at/at002/at002-p01"
                 }
@@ -302,7 +302,35 @@
                 iframe: {
                     url: "/rc/rc001/p_rc00104"
                 }
-            }
+            },
+            "AGGREGATION_ADD": {
+                width: 1300,
+                height: 700,
+                iframe: {
+                    url: "/rc/rc002/p_rc002"
+                }
+            },
+            "ITEM_ADD": {
+                width: 1300,
+                height: 700,
+                iframe: {
+                    url: "/rc/rc004/p_rc004"
+                }
+            },
+            "AGGREGATION_VIEW": {
+                width: 1300,
+                height: 700,
+                iframe: {
+                    url: "/rc/rc003/p_rc003"
+                }
+            },
+            "ITEM_VIEW": {
+                width: 1300,
+                height: 700,
+                iframe: {
+                    url: "/rc/rc005/p_rc005"
+                }
+            },
         };
     }
 

@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.sql.Timestamp;
+
 /**
  * The type Cl 00301 vo.
  */
@@ -13,20 +15,23 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(callSuper = false)
 public class St00801VO extends BaseVO
 {
-    private String containerUuid;
+    private String takeoutRequestUuid;
+    private String requestTypeUuid;
+
+    private String requestorUuid;
     private String statusUuid;
-    private String containerName;
-    private String containerTypeUuid;
-    private String parentContainerName;
-    private String parentContainerUuid;
-    private String controlNumber;
-    private String provenance;
-    private String creationStartDate;
-    private String creationEndDate;
-    private String orderNo;
-    private String orderKey;
-    private String orderKey1;
-    private String description;
-    private String notes;
-    private String useYn;
+    private String outsourcingDepartment;
+    private String outsourcingPosition;
+    private String outsourcingPersonName;
+    private String outsourcingPhone;
+
+    private String requestName; // 반출의뢰서
+    private String requestorName; // 반출자
+    private String userGroupName; //  소속
+    private Timestamp takeoutDate; //  반출일자
+    private Timestamp returnDate; //  반입일
+    private Timestamp returnDueDate; //  반입예정일
+    private String status; //  상태
+    private String takeoutPropose ; // 반출목적
+
 }

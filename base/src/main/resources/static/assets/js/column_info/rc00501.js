@@ -44,13 +44,37 @@ var rc00501 =
                     dataType:"commanumber"
                 },
                 {
-                    sortNo : 5,
+                    sortNo: 5,
+                    width:80,
+                    name: "status",
+                    text: "Status",
+                    disable : true,
+                    dataType:"text"
+                },
+                {
+                    sortNo : 6,
                     width :80,
                     name : "componentUuid",
                     text : "Size(kb)",
                     disable : true,
-                    dataType : "code",
+                    dataType : "text",
                     visible : false
-                 }
+                },
+                {
+                    sortNo : 7,
+                    width :80,
+                    name : "filePath",
+                    disable : true,
+                    dataType : "text",
+                    visible : false
+                },
+                {
+                    sortNo : 8,
+                    width :80,
+                    name : "serviceFileName",
+                    disable : true,
+                    dataType : "text",
+                    visible : false
+                }
             ]
     }

@@ -27,4 +27,5 @@ public class Lc00102VO extends BaseVO {
 	private Timestamp insertDate;
 	private String updateUuid;
 	private Timestamp updateDate;
+	private String authorityName;
 }

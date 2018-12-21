@@ -237,8 +237,19 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
             gridIndex02 = fnObj.gridView02.gridObj.getCurrent().itemIndex;
             fnObj.formView.setFormData("collectionContents", data.collectionContents);
         });
-    },
 
+        this.gridObj.onCellEdited(function(gridWrapper,grid){
+            fnObj.gridView02.clearUuid();
+        });
+    },
+    clearUuid: function() {
+        if (fnObj.gridView02.gridObj.getCurrent().column == "authorityName") {
+            if((fnObj.gridView02.getCurrentData()["authorityName"]).trim() == ''){
+                fnObj.gridView02.gridObj.setValue(fnObj.gridView02.gridObj.getCurrent()["dataRow"], "creatorUuid",'');
+            }
+        }
+        fnObj.gridView02.gridObj.commit();
+    },
     clear : function () {
         this.gridObj.setData("set",[]);
     },

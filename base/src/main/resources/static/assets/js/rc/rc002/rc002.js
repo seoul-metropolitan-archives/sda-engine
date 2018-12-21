@@ -107,6 +107,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             type : "POST",
             data: JSON.stringify(saveData),
             callback: function (res) {
+                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH,{aggregationUuid : fnObj.identificationArea.getData()["aggregationUuid"]});
                 axToast.push(axboot.getCommonMessage("AA007"));
             },
             options: {
@@ -232,9 +233,15 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
 
         this.target.find('[data-ax5picker="date"]').ax5picker({
             direction: "auto",
+            config: {
+                pattern: 'data'
+            },
             content: {
-                type: 'date'
-            }
+                type: 'date',
+                formatter: {
+                    pattern: 'number'
+                }
+            },
         });
 
         this.initEvent();
@@ -242,7 +249,7 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
     initEvent: function () {
         var _this = this;
         //by the Aggregation type, to control the Reference Area
-        $("input[data-ax-path='descriptionStartDate']").keyup(function (event) {
+        /*$("input[data-ax-path='descriptionStartDate']").keyup(function (event) {
             var date = this.value;
             if (date.match(/^\d{4}$/) !== null) {
                 this.value = date + '-';
@@ -320,7 +327,7 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
                 this.value = "";
                 this.focus = true;
             }
-        });
+        });*/
 
 
         $('.togl01').click(function () {
@@ -676,7 +683,7 @@ fnObj.authorityInfo = axboot.viewExtend({
         return retData;
     },
     setData : function(target, data){
-        $("#" + target).remove(".auth_fit");
+        $("#" + target + " .auth_fit").remove();
 
         if(data != null && data != "undefined" && data.length > 0){
             data.forEach(function(item, index){

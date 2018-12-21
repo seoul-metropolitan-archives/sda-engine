@@ -1,6 +1,8 @@
 
 var fnObj = {};
 var parentsData;
+var aRequestTypeUuid = []; // 직원구분 uuid
+var aRequestTypeName = []; // 직원구분 이름
 var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH_TREE: function (caller, act, data) {
         axboot.ajax({
@@ -133,6 +135,23 @@ fnObj.pageStart = function () {
     // ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
 };
 
+function getFormattedDate(date, isStart) {
+    var day;
+    var tempDate;
+    if (isStart) {
+        date.setDate(date.getDate() - 10);
+        tempDate = date.getDate();
+    } else {
+        tempDate = date.getDate();
+    }
+    day = tempDate.toString();
+
+    var year = date.getFullYear();
+    var month = (1 + date.getMonth()).toString();
+    month = month.length > 1 ? month : '0' + month;
+    day = day.length > 1 ? day : '0' + day;
+    return year + '-' + month + '-' + day;
+}
 fnObj.formView = axboot.viewExtend(axboot.formView, {
     getDefaultData: function () {
         return $.extend({}, axboot.formView.defaultData, parentsData);
@@ -150,12 +169,19 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
             }
         });
 
+        fnObj.formView.setFormData("takeoutDate",getFormattedDate(new Date())); //  반출일자
+        fnObj.formView.setFormData("returnDate",getFormattedDate(new Date())); //  반입일
+        fnObj.formView.setFormData("returnDueDate",getFormattedDate(new Date())); //  반입예정일
+      /*  $("input[data-ax-path='startFromDate']").val(getFormattedDate(new Date(), true));
+        $("input[data-ax-path='startToDate']").val(getFormattedDate(new Date()));*/
+
+        this.makeRadio();
         this.initEvent();
     },
     initEvent: function () {
         var _this = this;
 
-        $("input[data-ax-path='startDate']").keyup(function () {
+        $("input[data-ax-path='takeoutDate']").keyup(function () {
             var date = this.value;
             if (date.match(/^\d{4}$/) !== null) {
                 this.value = date + '-';
@@ -163,10 +189,10 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
                 this.value = date + '-';
             }
         });
-        $("input[data-ax-path='startDate']").keypress(function () {
+        $("input[data-ax-path='takeoutDate']").keypress(function () {
             if ((event.keyCode < 48) || (event.keyCode > 57)) event.returnValue = false;
         });
-        $("input[data-ax-path='endDate']").keyup(function () {
+        $("input[data-ax-path='returnDueDate']").keyup(function () {
             var date = this.value;
             if (date.match(/^\d{4}$/) !== null) {
                 this.value = date + '-';
@@ -174,7 +200,7 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
                 this.value = date + '-';
             }
         });
-        $("input[data-ax-path='endDate']").keypress(function () {
+        $("input[data-ax-path='returnDueDate']").keypress(function () {
             if ((event.keyCode < 48) || (event.keyCode > 57)) event.returnValue = false;
         });
         $("input[data-ax-path='descriptionDate']").keyup(function () {
@@ -189,13 +215,13 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
             if ((event.keyCode < 48) || (event.keyCode > 57)) event.returnValue = false;
         });
 
-        $("input[data-ax-path='startDate']").focusout(function () {
+        $("input[data-ax-path='takeoutDate']").focusout(function () {
             if (!checkDate(this.value)) {
                 this.value = "";
                 this.focus = true;
             }
         });
-        $("input[data-ax-path='endDate']").focusout(function () {
+        $("input[data-ax-path='returnDueDate']").focusout(function () {
             if (!checkDate(this.value)) {
                 this.value = "";
                 this.focus = true;
@@ -237,8 +263,73 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
         };
         accordion.click('.accordion > ul');
     },
+    changeView: function () {
+        var requestTypeUuid = getRequestTypeUuidFromRadio();
+        if( requestTypeUuid == 'AF04136D-3508-4E1C-A85B-F1A1FEDDB607'){
+            // 직원
+            $('#innerWorker').show();
+            $('#outerWorker').hide();
+            console.log('내부직원');
+        }else{
+            // 외부
+            $('#innerWorker').hide();
+            $('#outerWorker').show();
+            console.log('외부직원');
+        }
+      /*  fnObj.formView.clear();
+        // $(".auth_fit").remove();
+        fnObj.childrenAuthInfo.addChild($("#addDnrInfo"));
+
+        selectedRadio = $('input:radio[name="radio"]:checked').attr("id");
+        selectedLabel = $("label[for='"+selectedRadio+"']").text();
+        authorityTypeNm = selectedLabel;
+        if(selectedLabel == "Organization"){
+            $("#organizationArea").show();
+            $("#etcArea").hide();
+        }else{
+            $("#organizationArea").hide();
+            $("#etcArea").show();
+        }
+
+         ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);*/
+    },
+    makeRadio: function() {
+        var codes = axboot.commonCodeFilter("CD209").codeArr;
+        var names = axboot.commonCodeFilter("CD209").nameArr;
+
+        var radioTag = "";
+        for(var i = 0; i < codes.length; i++)
+        {
+            if(codes[i] == parent.axboot.modal.getData().takeoutRequestUuid){
+                // 수정
+                radioTag += '<label for="authType' + i + '"><input type="radio" id="authType' + i + '"  name="radio" class="no_border" value="' + codes[i] + '" checked="checked">' + names[i] + '</label>'
+            }else{
+                // 새로 작성
+                var checked ='';
+                if( i == 0){
+                    // 첫번째 애를 기본선택
+                    checked = 'checked="checked"';
+                }
+                radioTag += '<label for="authType' + i + '"><input type="radio" id="authType' + i + '" name="radio" class="no_border" value="' + codes[i] + '" '+ checked +'>' + names[i] + '</label>'
+            }
+
+
+        }
+
+        $(".rdo_box").append(radioTag);
+        // 최초 한번 호출
+        fnObj.formView.changeView();
+        // 라디오 이벤트를 걸어주자.
+        $('.rdo_box input[type=radio]').change(function(){
+            fnObj.formView.changeView();
+        })
+
+    },
     getData: function () {
         var data = this.modelFormatter.getClearData(this.model.get()); // 모델의 값을 포멧팅 전 값으로 치환.
+
+        // 직원구분 넣어주자.
+        data.requestTypeUuid = getRequestTypeUuidFromRadio();
         return $.extend({}, data);
     },
     setFormData: function (dataPath, value) {
@@ -317,4 +408,54 @@ importItemList = function(){
 
 setCheckable = function(rows){
     // for()
+}
+
+/**
+ * 직원 구분
+ * @returns uuid
+ */
+function getRequestTypeUuidFromRadio(){
+    var selected = $(".rdo_box input[type='radio']:checked");
+    if (selected.length > 0) {
+        var selectedVal = selected.val();
+        return selectedVal;
+    }
+    return null;
+}
+function checkDate(date) {
+    var result = true;
+    var strValue = date;
+    var chk1 = /^(19|20)\d{2}-([1-9]|1[012])-([1-9]|[12][0-9]|3[01])$/;
+    //var chk2 = /^(19|20)\d{2}\/([0][1-9]|1[012])\/(0[1-9]|[12][0-9]|3[01])$/;
+    var chk2 = /^(19|20)\d{2}-([0][1-9]|1[012])-([012][1-9]|3[01])$/;
+    if (strValue == "") { // 공백이면 무시
+        return result;
+    }
+//-------------------------------------------------------------------------------
+// 유효성 검사- 입력형식에 맞게 들왔는지 // 예) 2000-1-1, 2000-01-01 2가지 형태 지원
+//-------------------------------------------------------------------------------
+    if (chk1.test(strValue) == false && chk2.test(strValue) == false) { // 유효성 검사에 둘다 성공하지 못했다면
+        //alert("1999-1-1 형식 또는 \r\n1999-01-01 형식으로 날자를 입력해주세요.");
+        axToast.push(axboot.getCommonMessage("AA011"));
+        result = false;
+
+    }
+    return result;
+}
+function getFormattedDate(date, isStart) {
+    var day;
+    var tempDate;
+    if (isStart) {
+        date.setDate(date.getDate() - 10);
+        tempDate = date.getDate();
+    } else {
+        tempDate = date.getDate();
+    }
+    day = tempDate.toString();
+
+    var year = date.getFullYear();
+    var month = (1 + date.getMonth()).toString();
+    month = month.length > 1 ? month : '0' + month;
+    day = day.length > 1 ? day : '0' + day;
+    return year + '-' + month + '-' + day;
 }

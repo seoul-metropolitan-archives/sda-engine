@@ -360,18 +360,27 @@
           FC_AD_CODE_NM(Z3.TYPE_UUID) as typeNm,
           Z3.TYPE_UUID as typeUuid,
           Z3.FILE_FORMAT_UUID as fileFormatUuid,
-          <!--Z3.THUMBNAIL as thumbnail,-->
+          Z3.THUMBNAIL_CONTENT as thumbnailContent,
           Z3.CHECKSUM_TYPE_UUID as checksumTypeUuid,
           Z3.CHECKSUM as checksum,
+          Z3.SERVICE_FILE_NAME as serviceFileName,
+          Z3.FILE_PATH as filePath,
+          NVL(DECODE(Z4.JOBSTATUS, 'W' , 'Wait',
+                                   'R' , 'Ready',
+                                   'C' , 'Check',
+                                   'I' , 'InProc',
+                                   'S' , 'Success',
+                                   'F' , 'Fail'),'Nothing') AS status,
         <include refid="Common.UserName"><property name="userUuid" value="INSERT_UUID"/></include> as insertUuid,
           Z2.INSERT_DATE as insertDate,
         <include refid="Common.UserName"><property name="userUuid" value="UPDATE_UUID"/></include> as updateUuid,
           Z2.UPDATE_DATE as updateDate
         FROM
-          RC_ITEM Z1, RC_ITEM_COMPONENT Z2, RC_COMPONENT Z3
+          RC_ITEM Z1, RC_ITEM_COMPONENT Z2, RC_COMPONENT Z3, JOB_CONV Z4
         WHERE
-          Z1.ITEM_UUID = Z2.ITEM_UUID
-          AND Z3.COMPONENT_UUID = Z2.COMPONENT_UUID
+          Z1.ITEM_UUID = Z2.ITEM_UUID AND
+          Z3.COMPONENT_UUID = Z2.COMPONENT_UUID AND
+          Z3.COMPONENT_UUID = Z4.JOBID(+)
         <if test="itemUuid != null">
           AND Z1.ITEM_UUID = #{itemUuid}
         </if>
@@ -396,4 +405,25 @@
         WHERE ITEM_UUID = #{itemUuid}
         ORDER BY INSERT_DATE ASC
     </select>
+
+    <select id="getJobStatus" resultType="String" parameterType="String" statementType="PREPARED">
+        SELECT JOBSTATUS FROM JOB_CONV
+        WHERE JOBID = #{jobId}
+    </select>
+
+    <update id="mergeInsert" parameterType="Rc00507VO" statementType="PREPARED">
+        INSERT INTO JOB_MERGE (
+            JOBID,
+            SEQ,
+            MERGEFILE,
+            PAGE
+        ) VALUES (
+            #{jobid},
+            #{seq},
+            #{mergefile},
+            #{page}
+        )
+    </update>
+
+
 </mapper>
