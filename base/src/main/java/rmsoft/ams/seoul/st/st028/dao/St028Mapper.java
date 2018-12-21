@@ -1,11 +1,11 @@
-package rmsoft.ams.seoul.st.st027.dao;
+package rmsoft.ams.seoul.st.st028.dao;
 
 import io.onsemiro.core.mybatis.MyBatisMapper;
-import rmsoft.ams.seoul.st.st027.vo.St02701VO;
+import rmsoft.ams.seoul.st.st028.vo.St02801VO;
 
 import java.util.List;
 
-public interface St027Mapper extends MyBatisMapper {
+public interface St028Mapper extends MyBatisMapper {
 
-    List<St02701VO> getStZone(St02701VO st02701VO);
+    List<St02801VO> getStGate(St02801VO st02801VO);
 }

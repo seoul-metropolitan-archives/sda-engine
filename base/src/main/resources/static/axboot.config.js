@@ -208,6 +208,13 @@
                     url: "/st/st008/st008-p04"
                 }
             },
+            "CREATE_TAKE_IN_POPUP" :{
+                width: 750,
+                height: 200,
+                iframe: {
+                    url: "/st/st009/st009-p01"
+                }
+            },
             "FREEZE_POPUP" :{
                 width: 1600,
                 height: 700,

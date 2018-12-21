@@ -27,4 +27,5 @@ public class St00901VO extends BaseVO {
     private String outsourcingPosition;
     private String outsourcingPersonName;
     private String outsourcingPhone;
+    private String changeStatus;
 }

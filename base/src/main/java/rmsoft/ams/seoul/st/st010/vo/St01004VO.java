@@ -1,4 +1,4 @@
-package rmsoft.ams.seoul.st.st013.vo;
+package rmsoft.ams.seoul.st.st010.vo;
 
 import io.onsemiro.core.vo.BaseVO;
 import lombok.Data;
@@ -8,11 +8,11 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class St01302VO extends BaseVO{
+public class St01004VO extends BaseVO{
 
-    private String exceptRecordResultUuid;
-    private String inoutExceptUuid;
-    private String aggregationUuid;
+    private String arrangeContainersResultUuid;
+    private String locationUuid;
+    private String containerUuid;
     private String uuid;
     private String publishedStatus;
     private String code;

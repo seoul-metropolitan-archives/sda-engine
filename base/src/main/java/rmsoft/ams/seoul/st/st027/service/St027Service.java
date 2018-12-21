@@ -1,24 +1,24 @@
 package rmsoft.ams.seoul.st.st027.service;
 
-import io.onsemiro.core.api.response.ApiResponse;
-import io.onsemiro.core.code.ApiStatus;
-import io.onsemiro.core.domain.BaseService;
-import io.onsemiro.core.parameter.RequestParams;
-import io.onsemiro.utils.ModelMapperUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+        import io.onsemiro.core.api.response.ApiResponse;
+        import io.onsemiro.core.code.ApiStatus;
+        import io.onsemiro.core.domain.BaseService;
+        import io.onsemiro.core.parameter.RequestParams;
+        import io.onsemiro.utils.ModelMapperUtils;
+        import org.springframework.beans.factory.annotation.Autowired;
+        import org.springframework.data.domain.Page;
+        import org.springframework.data.domain.Pageable;
+        import org.springframework.stereotype.Service;
+        import org.springframework.transaction.annotation.Transactional;
 /*import rmsoft.ams.seoul.common.domain.StZone;
 import rmsoft.ams.seoul.common.repository.StZoneRepository;*/
-import rmsoft.ams.seoul.common.domain.StZone;
-import rmsoft.ams.seoul.common.repository.StZoneRepository;
-import rmsoft.ams.seoul.st.st027.dao.St027Mapper;
-import rmsoft.ams.seoul.st.st027.vo.St02701VO;
+        import rmsoft.ams.seoul.common.domain.StZone;
+        import rmsoft.ams.seoul.common.repository.StZoneRepository;
+        import rmsoft.ams.seoul.st.st027.dao.St027Mapper;
+        import rmsoft.ams.seoul.st.st027.vo.St02701VO;
 
-import javax.inject.Inject;
-import java.util.List;
+        import javax.inject.Inject;
+        import java.util.List;
 
 @Service
 public class St027Service extends BaseService {
@@ -41,7 +41,7 @@ public class St027Service extends BaseService {
 
     @Transactional
     public ApiResponse saveZone(List<St02701VO> list) {
-      List<StZone> stZoneList = ModelMapperUtils.mapList(list, StZone.class);
+        List<StZone> stZoneList = ModelMapperUtils.mapList(list, StZone.class);
         StZone orgStZone = null;
         for(StZone stZone : stZoneList){
             if(stZone.isDeleted()){

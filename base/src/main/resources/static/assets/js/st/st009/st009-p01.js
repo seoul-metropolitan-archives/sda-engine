@@ -236,6 +236,27 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
             }
         };
         accordion.click('.accordion > ul');
+
+        $("input[data-ax-path='employeeYn']").change(function(){
+            debugger
+            if($(this).val() == "Y"){
+                //직원
+
+                //직원인경우 이름이 다시 자동셋팅 되어야 한다!?
+                $("input[data-ax-path='department']").prop('readonly', true);
+                $("input[data-ax-path='position']").prop('readonly', true);
+                $("input[data-ax-path='name']").prop('readonly', true);
+            }else{
+                //기타
+                $("input[data-ax-path='department']").prop('readonly', false);
+                $("input[data-ax-path='position']").prop('readonly', false);
+                $("input[data-ax-path='name']").prop('readonly', false);
+
+            }
+        });
+
+        var emp = $("input[data-ax-path='employeeYn']")[0];
+        $(emp).prop('checked',true)
     },
     getData: function () {
         var data = this.modelFormatter.getClearData(this.model.get()); // 모델의 값을 포멧팅 전 값으로 치환.

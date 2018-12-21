@@ -3,28 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="rmsoft.ams.seoul.st.st027.dao.St027Mapper">
+<mapper namespace="rmsoft.ams.seoul.st.st027.dao.St028Mapper">
 
-    <select id="getStZone" resultType="St02701VO" parameterType="St02701VO" statementType="PREPARED">
-        SELECT A.ZONE_UUID as zoneUuid,
-               A.NO as no,
-               A.ZONE_ID as zoneId,
-               A.ZONE_NAME as zoneName,
-               <include refid="Common.UserName"><property name="userUuid" value="INSERT_UUID"/></include> as insertUuid,
-               A.INSERT_DATE,
-               <include refid="Common.UserName"><property name="userUuid" value="UPDATE_UUID"/></include> as updateUuid,
-               A.UPDATE_DATE
-          FROM ST_ZONE A
-          <where>
-              1=1
-              <if test="zoneId != null">
-                  AND ZONE_ID LIKE '%' || #{zoneId} || '%'
-              </if>
-              <if test="zoneName != null">
-                  AND ZONE_NAME LIKE '%' || #{zoneName} || '%'
-              </if>
-          </where>
-        ORDER BY A.NO
-    </select>
 
 </mapper>

@@ -8,7 +8,7 @@
       layout:decorate="~{/layout/base}">
 
 <!-- ===== [ script ] ===== -->
-<script layout:fragment="script" type="text/javascript" th:src="@{/assets/js/st/st013/st013.js}"></script>
+<script layout:fragment="script" type="text/javascript" th:src="@{/assets/js/st/st009/st009.js}"></script>
 <!-- ===== [ script ] _END_ ===== -->
 
 <!-- ===== [ base-content ] ===== -->
@@ -20,15 +20,15 @@
                     <ul class="bdb" style="border:none">
                         <li style="text-align:right; width:48%;">
 
-                            <button class="btn_co">
+                            <button class="btn_co btn_takeoutApproval">
                                 <span class="btn_icon_co" >&nbsp;</span>
                                 <span class="btn_main_txt">반출 승인</span>
                             </button>
-                            <button class="btn_co">
+                            <button class="btn_co btn_takeoutNotApproval">
                                 <span class="btn_icon_co" >&nbsp;</span>
                                 <span class="btn_main_txt">반출 불가</span>
                             </button>
-                            <button class="btn_co">
+                            <button class="btn_co" th:id="btn_createTakeOut">
                                 <span class="btn_icon_co" >&nbsp;</span>
                                 <span class="btn_main_txt">반입의뢰서 작성</span>
                             </button>
@@ -58,11 +58,11 @@
                     </ul>
                 </div>
                 <!-- 상단검색 -->
-                <div class="bdb div_tablerow">
+                <div class="bdb div_tablerow searchFields">
                     <dl>
                         <dt class="w150">반출의뢰서</dt>
                         <dd>
-                            <input type=text style="width:135px">
+                            <input type=text style="width:135px" data-ax-path="requestName">
                         </dd>
                         <dt>반출일자</dt>
                         <dd class="w_auto">
@@ -84,13 +84,13 @@
                         <dd class="w_auto">
                             <div class="input-group" data-ax5picker="date">
                                 <div class="cld_box" style="background-color: #fffdd6">
-                                    <input type="text" data-ax-path="startFromDate" style="background-color: #fffdd6;ime-mode:disabled;"
+                                    <input type="text" data-ax-path="startFromDate2" style="background-color: #fffdd6;ime-mode:disabled;"
                                            placeholder="YYYY-MM-DD" maxlength="10">
                                     <img title="calendar" class="ui-datepicker-trigger" alt="..." src="/assets/images/ams/calendar.png" >
                                 </div>
                                 ~
                                 <div class="cld_box" style="background-color: #fffdd6">
-                                    <input type="text" data-ax-path="startToDate" style="background-color: #fffdd6;ime-mode:disabled;"
+                                    <input type="text" data-ax-path="startToDate2" style="background-color: #fffdd6;ime-mode:disabled;"
                                            placeholder="YYYY-MM-DD" maxlength="10">
                                     <img title="calendar" class="ui-datepicker-trigger" alt="..." src="/assets/images/ams/calendar.png">
                                 </div>
@@ -100,19 +100,24 @@
                     <dl>
                         <dt class="w150">작성자</dt>
                         <dd>
-                            <input type=text style="width:135px">
+                            <input type=text style="width:135px" data-ax-path="repositoryCode">
                         </dd>
                         <dt class="w150">상태</dt>
                         <dd>
-                            <input type=text style="width:135px">
+                            <select data-ax-path="statusUuid" style="width:135px;">
+                                <option value=""></option>
+                                <option th:each="item : ${statusUuid}"
+                                        th:value="${item.codeDetailUUID}"
+                                        th:text="${item.codeName}"/>
+                            </select>
                         </dd>
                         <dt class="w150">Aggregation Code</dt>
                         <dd>
-                            <input type=text style="width:135px">
+                            <input type=text style="width:135px" data-ax-path="aggregationCode">
                         </dd>
                         <dt class="w150">Title</dt>
                         <dd>
-                            <input type=text style="width:135px">
+                            <input type=text style="width:135px" data-ax-path="title">
                         </dd>
 
                     </dl>

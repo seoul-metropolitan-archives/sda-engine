@@ -158,9 +158,6 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     entityName: "ST_ZONE",
     initView: function () {
         this.initInstance();
-        this.gridObj.setFixedOptions({
-            colCount: 2
-        });
         this.setColumnInfo(st02701.column_info);
         this.makeGrid();
         this.gridObj.itemClick(this.itemClick);

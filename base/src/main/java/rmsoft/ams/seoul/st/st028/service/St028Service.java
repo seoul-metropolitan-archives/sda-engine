@@ -1,63 +1,57 @@
-package rmsoft.ams.seoul.st.st027.service;
+package rmsoft.ams.seoul.st.st028.service;
 
-        import io.onsemiro.core.api.response.ApiResponse;
-        import io.onsemiro.core.code.ApiStatus;
-        import io.onsemiro.core.domain.BaseService;
-        import io.onsemiro.core.parameter.RequestParams;
-        import io.onsemiro.utils.ModelMapperUtils;
-        import org.springframework.beans.factory.annotation.Autowired;
-        import org.springframework.data.domain.Page;
-        import org.springframework.data.domain.Pageable;
-        import org.springframework.stereotype.Service;
-        import org.springframework.transaction.annotation.Transactional;
-/*import rmsoft.ams.seoul.common.domain.StZone;
-import rmsoft.ams.seoul.common.repository.StZoneRepository;*/
-        import rmsoft.ams.seoul.common.domain.StZone;
-        import rmsoft.ams.seoul.common.repository.StZoneRepository;
-        import rmsoft.ams.seoul.st.st027.dao.St027Mapper;
-        import rmsoft.ams.seoul.st.st027.vo.St02701VO;
+import io.onsemiro.core.api.response.ApiResponse;
+import io.onsemiro.core.code.ApiStatus;
+import io.onsemiro.core.domain.BaseService;
+import io.onsemiro.core.parameter.RequestParams;
+import io.onsemiro.utils.ModelMapperUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import rmsoft.ams.seoul.common.domain.StGate;
+import rmsoft.ams.seoul.common.repository.StGateRepository;
+import rmsoft.ams.seoul.st.st028.dao.St028Mapper;
+import rmsoft.ams.seoul.st.st028.vo.St02801VO;
 
-        import javax.inject.Inject;
-        import java.util.List;
+import javax.inject.Inject;
+import java.util.List;
 
 @Service
-public class St027Service extends BaseService {
+public class St028Service extends BaseService {
 
     @Inject
-    private St027Mapper st027Mapper;
-
+    private St028Mapper st028Mapper;
 
     @Autowired
-    private StZoneRepository stZoneRepository;
+    private StGateRepository stGateRepository;
 
-    public Page<St02701VO> getStZone(Pageable pageable, RequestParams<St02701VO> requestParams) {
-        St02701VO st02701VO = new St02701VO();
-        st02701VO.setZoneId(requestParams.getString("zoneId"));
-        st02701VO.setZoneName(requestParams.getString("zoneName"));
+    public Page<St02801VO> getStGate(Pageable pageable, RequestParams<St02801VO> requestParams) {
+        St02801VO st02801VO = new St02801VO();
         //검색조건 추가시
 
-        return filter(st027Mapper.getStZone(st02701VO), pageable, "", St02701VO.class);
+        return filter(st028Mapper.getStGate(st02801VO), pageable, "", St02801VO.class);
     }
 
     @Transactional
-    public ApiResponse saveZone(List<St02701VO> list) {
-        List<StZone> stZoneList = ModelMapperUtils.mapList(list, StZone.class);
-        StZone orgStZone = null;
-        for(StZone stZone : stZoneList){
-            if(stZone.isDeleted()){
-                stZoneRepository.delete(stZone);
-                //TODO : 삭제시 ST_GATE도 같이 삭제해주어야 한다.
+    public ApiResponse saveGate(List<St02801VO> list) {
+        List<StGate> stGateList = ModelMapperUtils.mapList(list, StGate.class);
+        StGate orgStGate = null;
+        for(StGate stGate : stGateList){
+            if(stGate.isDeleted()){
+                stGateRepository.delete(stGate);
             }else{
-                if(stZone.isCreated()){
-                    int no = jdbcTemplate.queryForObject("SELECT ST_ZONE_SEQ.NEXTVAL FROM dual", int.class);
-                    stZone.setNo(no);
-                }else if(stZone.isModified()){
-                    orgStZone = stZoneRepository.findOne(stZone.getId());
-                    stZone.setInsertDate(orgStZone.getInsertDate());
-                    stZone.setInsertUuid(orgStZone.getInsertUuid());
-                }
+                if(stGate.isCreated()){
+                    int no = jdbcTemplate.queryForObject("SELECT ST_GATE_SEQ.NEXTVAL FROM dual", int.class);
+                    stGate.setNo(no);
+                }else if(stGate.isModified()){
+                    orgStGate = stGateRepository.findOne(stGate.getId());
+                    stGate.setInsertDate(stGate.getInsertDate());
+                    stGate.setInsertUuid(stGate.getInsertUuid());
 
-                stZoneRepository.save(stZone);
+                }
+                stGateRepository.save(stGate);
             }
         }
 
