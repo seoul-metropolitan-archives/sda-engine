@@ -25,14 +25,6 @@ public class CommonFileController extends BaseController {
     @Inject
     private FileUploadService fileUploadService;
 
-    /**
-     * Controller invoker object.
-     *
-     * @param pageable      the pageable
-     * @param serviceParams the service params
-     * @param requestParams the request params
-     * @return the object
-     */
     @PostMapping(value = "/upload")
     public AX5File upload(@RequestParam MultipartFile file) throws IOException {
         return fileUploadService.upload(file);
@@ -48,6 +40,12 @@ public class CommonFileController extends BaseController {
     @ResponseBody
     public ResponseEntity<byte[]> download(HttpServletRequest request, @RequestParam String id) throws IOException {
         return fileUploadService.download(request, id);
+    }
+
+    @GetMapping(value = "/download/item")
+    @ResponseBody
+    public ResponseEntity<byte[]> downloadItem(HttpServletRequest request, @RequestParam String itemId) throws IOException {
+        return fileUploadService.downloadItem(request, itemId);
     }
 
     @RequestMapping(value = "/preview", method = RequestMethod.GET)

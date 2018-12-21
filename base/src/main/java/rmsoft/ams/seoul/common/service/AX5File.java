@@ -50,6 +50,8 @@ public class AX5File implements Comparable {
 
     private String fileFormatUuid;
 
+    private int fileHash;
+
     private byte[] thumbnailContent;
 
     public static AX5File of(MultipartFile multipartFile) {
