@@ -40,7 +40,7 @@ public class Rc005Controller extends MessageBaseController{
 
     @PutMapping(value = "/01/merge")
     @PostMapping
-    public ApiResponse mergeComponent(@RequestBody List<Rc00502VO> mergeList) {
+    public Object mergeComponent(@RequestBody List<Rc00502VO> mergeList) {
         return rc005Service.mergeComponent(mergeList);
     }
 }

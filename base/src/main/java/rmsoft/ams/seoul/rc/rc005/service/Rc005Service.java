@@ -8,6 +8,7 @@ import io.onsemiro.utils.DateUtils;
 import io.onsemiro.utils.UUIDUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -22,9 +23,16 @@ import rmsoft.ams.seoul.rc.rc005.vo.Rc00507VO;
 
 import javax.inject.Inject;
 import javax.jdo.annotations.Transactional;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * The type Rc 005 service.
@@ -40,6 +48,18 @@ public class Rc005Service extends BaseService {
 
     @Value("${repository.upload}")
     private String path;
+    @Value("${streaming.url}")
+    private String streamingUrl;
+    @Value("${streaming.port}")
+    private String streamingPort;
+    @Value("${streaming.context}")
+    private String streamingContext;
+    @Value("${streaming.param}")
+    private String streamingParam;
+    @Value("${streaming.view}")
+    private String streamingView;
+    @Value("${repository.contents}")
+    private String contentsPath;
 
     /**
      * Get record item list page.
@@ -68,15 +88,17 @@ public class Rc005Service extends BaseService {
         }
         return filter(rc00501VOList, pageable, "", Rc00501VO.class);
     }
-
+    //TODO 소스 정리해야댐 (병합 테스트만 한것임);
     @Transactional
-    public ApiResponse mergeComponent(List<Rc00502VO> mergeList) {
+    public Object mergeComponent(List<Rc00502VO> mergeList) {
 
-        ApiResponse apiResponse = null;
-
+        String responseSB = "";
+        HttpURLConnection conn = null;
+        BufferedReader br = null;
         JobConv jobConv = new JobConv();
         String uuid = UUIDUtils.getUUID();
         Rc00507VO rc00507VO;
+        Map<String, Object> response = new HashMap<String, Object>();
         int cnt = 0;
 
 
@@ -98,14 +120,6 @@ public class Rc005Service extends BaseService {
             cnt++;
         }
 
-        int loopStop = 0;
-
-       /* try {
-            Thread.sleep(5000);
-        }catch(Exception e){
-            e.printStackTrace();
-        }*/
-
         try {
             while (true) {
                 String jobStatus = getJobStatus(jobConv.getJobid());
@@ -113,56 +127,62 @@ public class Rc005Service extends BaseService {
                 if (jobStatus != null && (jobStatus.equals("S") || jobStatus.equals("F"))) {
                     if (jobStatus.equals("S")) {
                         log.info("Rc005Service mergeComponent :" + "PDF merge status is Success");
-                        apiResponse = ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");
+                        URL url = new URL(
+                                streamingUrl + ":" + streamingPort + streamingContext + streamingParam + "seoul/merge/" + uuid + ".pdf"
+                        );
+                        System.out.println("Stream URL => "+url);
+                        conn = (HttpURLConnection) url.openConnection();
+                        conn.setDoOutput(true);
+                        conn.setRequestMethod("GET");
+                        conn.setRequestProperty("Content-Type", "application/json");
+                        // Write data
+                        // Read response
 
+                        try {
+                            br = new BufferedReader(new InputStreamReader(
+                                    conn.getInputStream()));
+
+                            String line;
+                            while ((line = br.readLine()) != null)
+                                responseSB += line;
+
+                            // Close streamsd
+                        } catch (IOException e) {
+                            log.error(e.getMessage());
+                        } finally {
+                            if (null != br)
+                                br.close();
+                        }
+
+                        System.out.println("Stream Viewer response =>"+responseSB);
+                        JSONObject obj = new JSONObject(responseSB);
+
+
+                        response.put("url", streamingUrl + ":" + streamingPort + streamingContext + streamingView + obj.getString("streamdocsId") + ";currentPage=1");
+                        System.out.println(streamingUrl+":"+streamingPort+streamingContext+streamingView+obj.getString("streamdocsId")+";currentPage=1");
                     } else {
                         log.info("Rc005Service mergeComponent :" + "PDF merge status is Failed");
-                        apiResponse = ApiResponse.of(ApiStatus.SYSTEM_ERROR, "SERVICE ERROR");
-
                     }
-
                     break;
                 }
-
                 log.info("Rc005Service mergeComponent :" + "PDF merge status is not completed");
                 Thread.sleep(2000);
             }
-        } catch (Exception e) {
-            apiResponse = ApiResponse.of(ApiStatus.SYSTEM_ERROR, "System Error");
-            e.printStackTrace();
-        }
+        } catch (Exception ex) {
+            log.error(ex.getMessage());
 
-
-
-        /*Timer mergeCheckTimer = new Timer();
-
-        TimerTask mergeCheck = new TimerTask() {
-            @Override
-            public synchronized void run() {
-                JobConv orgJobConv = jobConvRepository.findOne(jobConv.getId());
-
-                switch (orgJobConv.getJobstatus()) {
-                    case "S":
-                        mergeCheckTimer.cancel();
-                        break;
-                    case "F":
-                        mergeCheckTimer.cancel();
-                        break;
-                }
+        }finally
+        {
+            if(null != conn)
+            {
+                conn.disconnect();
             }
-        };
 
-
-        mergeCheckTimer.scheduleAtFixedRate(mergeCheck, 2000, 2000);*/
-
-        return apiResponse;
+        }
+        return response;
     }
 
     private String getJobStatus(String jobId) {
-        //JobConv orgJobConv = jobConvRepository.findOne(jobId);
-
-        //log.info("Rc005Service getJobStatus status is :" + orgJobConv.getJobstatus());
-
         return rc005Mapper.getJobStatus(jobId);
 
     }

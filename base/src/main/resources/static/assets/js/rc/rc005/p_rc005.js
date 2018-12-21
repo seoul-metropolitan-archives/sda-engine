@@ -107,7 +107,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             url: "/api/v1/rc005/01/merge",
             data: JSON.stringify(fnObj.gridView01.gridObj.getCheckedList()),
             callback: function (res) {
-               //
+                window.open(res.url, "", "");
             },
             options: {
                 onError: axboot.viewError
