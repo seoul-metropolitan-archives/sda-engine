@@ -101,6 +101,19 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         });
         return false;
     },
+    COMPONENT_PRINT: function (caller, act, data) {
+        axboot.ajax({
+            type: "PUT",
+            url: "/api/v1/rc005/01/merge",
+            data: JSON.stringify(fnObj.gridView01.gridObj.getCheckedList()),
+            callback: function (res) {
+               //
+            },
+            options: {
+                onError: axboot.viewError
+            }
+        });
+    },
     dispatch: function (caller, act, data) {
         var result = ACTIONS.exec(caller, act, data);
         if (result != "error") {
@@ -156,6 +169,14 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
     },
     initEvent: function () {
         var _this = this;
+
+        $("#print").click(function(){
+            if(fnObj.gridView01.gridObj.getCheckedList().length > 1 ){
+                ACTIONS.dispatch(ACTIONS.COMPONENT_PRINT);
+            }else{
+
+            }
+        });
 
         this.target.on("focus", function(event){
             alert(event.type());
@@ -432,7 +453,8 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
         this.initInstance();
         this.setColumnInfo(rc00501.column_info);
         this.gridObj.setOption({
-            indicator: {visible: true}
+            indicator: {visible: true},
+            checkBar: {visible: true}
         })
         this.makeGrid();
         this.gridObj.itemClick(this.itemClick);

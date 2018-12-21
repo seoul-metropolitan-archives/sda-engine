@@ -45,6 +45,9 @@ public class JobConv extends BasicJpaModel<JobConv.JobConvId> {
     @Column(name = "REQDATE", length = 6)
     private Timestamp reqdate;
 
+    @Column(name = "EXTRAJOBS", length = 64)
+    private String extrajobs;
+
     @Override
     public JobConvId getId() {
         return JobConvId.of(jobid);

@@ -57,8 +57,24 @@ var rc00501 =
                     name : "componentUuid",
                     text : "Size(kb)",
                     disable : true,
-                    dataType : "code",
+                    dataType : "text",
                     visible : false
-                 }
+                },
+                {
+                    sortNo : 7,
+                    width :80,
+                    name : "filePath",
+                    disable : true,
+                    dataType : "text",
+                    visible : false
+                },
+                {
+                    sortNo : 8,
+                    width :80,
+                    name : "serviceFileName",
+                    disable : true,
+                    dataType : "text",
+                    visible : false
+                }
             ]
     }

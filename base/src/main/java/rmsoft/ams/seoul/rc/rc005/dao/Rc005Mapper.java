@@ -1,10 +1,7 @@
 package rmsoft.ams.seoul.rc.rc005.dao;
 
 import io.onsemiro.core.mybatis.MyBatisMapper;
-import rmsoft.ams.seoul.rc.rc005.vo.Rc00501VO;
-import rmsoft.ams.seoul.rc.rc005.vo.Rc00502VO;
-import rmsoft.ams.seoul.rc.rc005.vo.Rc00503VO;
-import rmsoft.ams.seoul.rc.rc005.vo.Rc00505VO;
+import rmsoft.ams.seoul.rc.rc005.vo.*;
 
 import java.util.List;
 
@@ -31,4 +28,6 @@ public interface Rc005Mapper extends MyBatisMapper {
     List<Rc00503VO> getCreatorList(String itemUuid);
 
     List<Rc00505VO> getRelatedAuthorityList(String itemUuid);
+
+    int mergeInsert(Rc00507VO rc00507VO);
 }

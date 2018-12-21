@@ -363,6 +363,8 @@
           Z3.THUMBNAIL_CONTENT as thumbnailContent,
           Z3.CHECKSUM_TYPE_UUID as checksumTypeUuid,
           Z3.CHECKSUM as checksum,
+          Z3.SERVICE_FILE_NAME as serviceFileName,
+          Z3.FILE_PATH as filePath,
           NVL(DECODE(Z4.JOBSTATUS, 'W' , 'Wait',
                                    'R' , 'Ready',
                                    'C' , 'Check',
@@ -403,4 +405,20 @@
         WHERE ITEM_UUID = #{itemUuid}
         ORDER BY INSERT_DATE ASC
     </select>
+
+    <update id="mergeInsert" parameterType="Rc00507VO" statementType="PREPARED">
+        INSERT INTO JOB_MERGE (
+            JOBID,
+            SEQ,
+            MERGEFILE,
+            PAGE
+        ) VALUES (
+            #{jobid},
+            #{seq},
+            #{mergefile},
+            #{page}
+        )
+    </update>
+
+
 </mapper>
