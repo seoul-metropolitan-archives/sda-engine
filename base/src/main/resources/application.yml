@@ -5,8 +5,8 @@ management.endpoint.restart.enabled: true
 server:
   url: localhost
   port: 8888
-#운영
-#server:
+  #운영
+  #server:
   #url: 98.33.1.162
 #  url: engine.archives.eseoul.go.kr
 #  port: 80
@@ -28,7 +28,6 @@ spring:
       file-size-threshold: 0
       max-file-size: 8192Mb
       max-request-size: 8192Mb
-      location: D:\devspace\tmp
 
     # HTTP Encoding
     encoding:
@@ -74,18 +73,18 @@ dip.process:
     cron: "0 0 5 31 12 *"
   #tmp.dir: D:\seoul-ams-repo\dip\tmp\
   #digital.file.dir: D:\seoul-ams-repo\dip\tmp\
-  tmp.dir: D:\seoul-ams-repo\dip\tmp\
-  digital.file.dir: D:\seoul-ams-repo\dip\tmp\
+  tmp.dir: /Users/jspark226/devspace/upload/dip/tmp/
+  digital.file.dir: /Users/jspark226/devspace/upload/dip/tmp/
 #개발
 #window
 #workflow.module.path: D:\02.DreamAntDev\git-workspaces\java\seoul-ams\base\src\main\resources\workflow-modules\
 #mac
-workflow.module.path: C:/devSpace/seoul-ams/base/src/main/resources/workflow-modules/
+workflow.module.path: /Users/jspark226/IdeaProjects/seoul-ams/base/src/main/resources/workflow-modules/
 
 #운영
 #workflow.module.path: /app/www/WEB-INF/classes/native-libs/
-streaming.url: http://192.168.0.5
-streaming.port: 18088
+streaming.url: http://98.33.1.163
+streaming.port: 18080
 streaming.context: /streamdocs
 streaming.param: /v3/documents/sftp?sftpPath=sftp://
 
@@ -99,8 +98,10 @@ taskExecutor:
 
 # Uploaded Archive File Path & Save Contents Path
 repository:
-  upload: D:\devspace\upload
-  contents: D:\devspace\contents
+  #upload: /Users/younghyunshin/Downloads/upload
+  #contents: /Users/younghyunshin/Downloads/contents
+  upload: D:/devspace/upload
+  contents: D:/devspace/contents
 
 # ONSEMIRO
 onsemiro:
@@ -143,30 +144,30 @@ onsemiro:
     url: jdbc:oracle:thin:@//rmhost.iptime.org:11521/amsdb
     username: ams
     password: ams
-  # File Upload
-  #upload.repository:
+    # File Upload
+    #upload.repository:
     #img: /devSpace/upload/
-  #개발
-  #data-source:
-  #url: jdbc:oracle:thin:@//rmhost.iptime.org:1521/amsdb
-  #  username: ams
-  #  password: ams1234
-  #운영
-  #data-source:
-  #      url: jdbc:oracle:thin:@//98.33.1.46:1522/UNTDB2
-  #      username: amsdb
-  #      password: dkagh365! Dkagh365
-  #data-source:
+    #개발
+    #data-source:
+    #url: jdbc:oracle:thin:@//rmhost.iptime.org:1521/amsdb
+    #  username: ams
+    #  password: ams1234
+    #운영
+    #data-source:
+    #      url: jdbc:oracle:thin:@//98.33.1.46:1522/UNTDB2
+    #      username: amsdb
+    #      password: dkagh365! Dkagh365
+    #data-source:
     #url: jdbc:oracle:thin:@//10.200.2.16:1531/amsdb
     #username: ams
     #password: aamswc01
-  #운영
-  #data-source:
+    #운영
+    #data-source:
     #url: jdbc:oracle:thin:@//10.200.2.53:1531/amsdb
     #username: ams
     #password: aamswc01
-  #드림앤트
-  #data-source:
+    #드림앤트
+    #data-source:
     #url: jdbc:oracle:thin:@shinhan.cwozeqnjffgl.ap-northeast-2.rds.amazonaws.com:1521:shinhan
     #username: js_park
     #password: ParkSt0re!
