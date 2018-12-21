@@ -70,6 +70,34 @@ public class FileUploadService {
         return new ResponseEntity<>(bytes, httpHeaders, HttpStatus.OK);
     }
 
+    public ResponseEntity<byte[]> downloadItem(HttpServletRequest request, String itemId) throws IOException {
+
+        // itemId 로 item 관련 메타 및 파일 정보 찾아오기
+
+        // 찾아온 item파일을 temp 폴더로 복사
+
+        // item메타 정보는 일반 txt 파일로 temp에 저장
+
+        // txt파일과 컴포넌트 파일을 압축
+
+        // hash.txt 파일과 위 압축된 정보를 다시 한번 압축하여 temp 에 이동
+
+        // 다운로드 실행
+
+        AX5File ax5File = filePersistService.getAx5TempFile("sample.zip");
+
+        byte[] bytes = FileUtils.readFileToByteArray(ax5File.getFile());
+
+        String fileName = getDisposition(request, ax5File.getFileName());
+
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        httpHeaders.setContentLength(bytes.length);
+        httpHeaders.setContentDispositionFormData("attachment", fileName);
+
+        return new ResponseEntity<>(bytes, httpHeaders, HttpStatus.OK);
+    }
+
     public static String getDisposition(HttpServletRequest request, String fileName) {
         try {
             Browser browser = AgentUtils.getBrowser(request);

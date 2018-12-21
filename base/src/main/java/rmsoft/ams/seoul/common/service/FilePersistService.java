@@ -10,6 +10,7 @@ import net.coobird.thumbnailator.Thumbnails;
 import net.coobird.thumbnailator.geometry.Positions;
 import net.coobird.thumbnailator.name.Rename;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
@@ -27,15 +28,24 @@ import static java.util.stream.Collectors.toList;
  * Created by jung-young-il on 28/03/2017.
  */
 @Service
-public class FilePersistService  implements InitializingBean {
+public class FilePersistService implements InitializingBean {
 
     @Value("${repository.upload}")
     private String path;
 
+    @Value("${repository.temp}")
+    private String pathTemp;
+
+    private String fileSavePath;
+    private AX5File ax5File;
+    private String fileType;
+
     public void persist(AX5File ax5File) throws IOException {
-        String fileSavePath = path + File.separator + ax5File.getFilePath() ;
+        this.ax5File = ax5File;
+        fileSavePath = path + File.separator + ax5File.getFilePath();
         FileUtils.forceMkdir(new File(fileSavePath));
         File file = new File(fileSavePath + File.separator + ax5File.getSaveName());
+        PDFtoJPGConverter pdFtoJPGConverter = null;
 
         // 파일 로컬시스템에 저장
         ax5File.getMultipartFile().transferTo(file);
@@ -43,19 +53,40 @@ public class FilePersistService  implements InitializingBean {
         // JSON 정보 저장
 //        FileUtils.writeStringToFile(new File(fileSavePath + File.separator + ax5File.getJsonName()), JsonUtils.toJson(ax5File), "UTF-8");
 
-//        String fileType = getFileType(ax5File.getExt());
-//
-//        if (fileType.equals(Types.FileType.IMAGE)) {
-//            try {
-//                Thumbnails.of(file)
-//                        .crop(Positions.CENTER)
-//                        .size(320, 320)
-//                        .toFiles(new File(fileSavePath), Rename.SUFFIX_HYPHEN_THUMBNAIL);
-//            } catch (Exception e) {
-//            }
-//        }
+        fileType = getFileType(ax5File.getExt());
+
+        if (fileType.equals(Types.FileType.PDF)) {
+            try {
+                pdFtoJPGConverter = new PDFtoJPGConverter();
+                File tempFile = pdFtoJPGConverter.convertPdfToImage(file, fileSavePath);
+                makeThumbnail(tempFile, ax5File.getThumbnailFileName().replace(".pdf", ".jpg"));
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+
+        if (fileType.equals(Types.FileType.IMAGE) && !fileType.equals(Types.FileExtensions.BMP)) {
+            makeThumbnail(file, ax5File.getThumbnailFileName());
+        }
     }
 
+    public void makeThumbnail(File inputFile, String thumbnailName) throws IOException {
+        try {
+            Thumbnails.of(inputFile)
+                    .crop(Positions.CENTER)
+                    .size(44, 40)
+                    .toFiles(new File(fileSavePath), Rename.SUFFIX_HYPHEN_THUMBNAIL);
+
+            if (FileUtils.sizeOf(new File(fileSavePath + File.separator + thumbnailName)) > 0) {
+                ax5File.setThumbnailContent(FileUtils.readFileToByteArray(new File(fileSavePath + File.separator + thumbnailName)));
+                FileUtils.deleteQuietly(new File(fileSavePath + File.separator + thumbnailName));
+                if (fileType.equals(Types.FileType.PDF)) {
+                    FileUtils.deleteQuietly(inputFile);
+                }
+            }
+        } catch (IOException e) {
+        }
+    }
 
     @Override
     public void afterPropertiesSet() throws Exception {
@@ -89,6 +120,21 @@ public class FilePersistService  implements InitializingBean {
     public AX5File getAx5File(String id) throws IOException {
         String fileSavePath = path + File.separator + id.substring(0, 4) + File.separator + id.substring(4, 6) + File.separator + id.substring(6, 8);
         return getAx5File(new File(fileSavePath + File.separator + id + ".json"));
+    }
+
+    public AX5File getAx5TempFile(String tempFileName) throws IOException {
+        File tempFile = new File(pathTemp + File.separator + tempFileName);
+
+        AX5File ax5File = new AX5File();
+        ax5File.setLastModified(tempFile.lastModified());
+        ax5File.setId("");
+        ax5File.setFileName(tempFileName);
+        ax5File.setFileHash(tempFile.hashCode());
+        ax5File.setFileSize(tempFile.length());
+        ax5File.setExt(FilenameUtils.getExtension(tempFileName));
+        ax5File.setFile(tempFile);
+
+        return ax5File;
     }
 
     public void flush() {

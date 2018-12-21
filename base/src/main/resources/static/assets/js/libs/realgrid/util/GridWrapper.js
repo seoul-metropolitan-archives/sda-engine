@@ -633,8 +633,12 @@ var GridWrapper = function(p_id,p_rootContext) {
         }
 
         var retData = undefined;
+        var modalType = "COMMON_POPUP";
+        if(popupCode.search("POPUP") > -1){
+            modalType = popupCode;
+        }
         axboot.modal.open({
-            modalType: "COMMON_POPUP",
+            modalType: modalType,
             preSearch : preSearch,
             sendData: function () {
                 return {

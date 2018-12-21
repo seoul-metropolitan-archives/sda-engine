@@ -87,9 +87,8 @@ public class Lc001Service extends BaseService{
             }else{
                 if(lcLeadCaseSchedule.isCreated()){ //ClassificationSchemeUuid가 없을때
                     lcLeadCaseSchedule.setLeadCaseScheduleUuid(UUIDUtils.getUUID());
-                    String scheduleNo = jdbcTemplate.queryForObject("select LC_LEAD_CASE_SCHEDULE_SQ.NEXTVAL from dual", String.class);
-                    lcLeadCaseSchedule.setScheduleNo(scheduleNo);
-//                    lcLeadCaseSchedule.setCollectionDate(DateUtils.convertToDate() lcLeadCaseSchedule.getCollectionDate());
+                    String scheduleNo = jdbcTemplate.queryForObject("select NVL(MAX(SCHEDULE_NO),0) from LC_LEAD_CASE_SCHEDULE WHERE LEAD_CASE_UUID = '" + lcLeadCaseSchedule.getLeadCaseUuid() +"'", String.class);
+                    lcLeadCaseSchedule.setScheduleNo(String.valueOf((Integer.valueOf(scheduleNo) + 1)));
                 }
                 if(lcLeadCaseSchedule.isModified()) {
                     orgLcLeadCaseSchedule = lcLeadCaseScheduleRepository.findOne(lcLeadCaseSchedule.getId());

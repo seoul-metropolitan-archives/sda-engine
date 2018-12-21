@@ -16,7 +16,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import rmsoft.ams.seoul.rc.rc001.service.Rc001Service;
 import rmsoft.ams.seoul.rc.rc002.service.Rc002Service;
@@ -49,6 +48,9 @@ public class Wf999Service extends BaseService {
 
     @Value("${repository.contents}")
     private String contentsPath;
+
+    @Value("${repository.streamDoc}")
+    private String servicePath;
 
     @Autowired
     private Rc001Service rc001Service;
@@ -106,9 +108,12 @@ public class Wf999Service extends BaseService {
             // item 정보생성
             rc00502VOList.forEach(fileInfo -> {
                 Rc00501VO itemVO = new Rc00501VO();
+                //2018-12-18 신영현
+                //파일확장자 얻기
 
                 itemVO.setRaTitle(getFileNameNoExt(fileInfo.getFileName()));
                 itemVO.setRaAggregationUuid(rc00501VO.getRaAggregationUuid());
+
 
                 // component 정보생성
                 File file = new File(uploadPath + File.separator + fileInfo.getFilePath() + File.separator + fileInfo.getOriginalFileName());
@@ -122,9 +127,13 @@ public class Wf999Service extends BaseService {
                 List<Rc00502VO> componentsList = new ArrayList<>();
                 fileInfo.setTitle(getFileNameNoExt(fileInfo.getFileName().toString()));
                 fileInfo.setFilePath(fileToMove.getAbsolutePath().replace(contentsPath, ""));
+//                fileInfo.setServiceFilePath("\\service");
+                fileInfo.setServiceFilePath(servicePath);
                 if(isWindows()){
                     fileInfo.setFilePath(fileInfo.getFilePath().replace(File.separator, "/"));
+                    fileInfo.setServiceFilePath(fileInfo.getServiceFilePath().replace(File.separator, "/"));
                 }
+                fileInfo.setServiceFileName(fileInfo.getOriginalFileName().substring(0, fileInfo.getOriginalFileName().lastIndexOf( "." )) + ".pdf");
                 componentsList.add(fileInfo);
                 itemVO.setRc00502VoList(componentsList);
 
@@ -181,9 +190,12 @@ public class Wf999Service extends BaseService {
                     }
 
                     rc00502VO.setFilePath(path.getParent().toString().replace(contentsPath, ""));
+                    rc00502VO.setServiceFilePath(servicePath);
                     if(isWindows()){
                         rc00502VO.setFilePath(rc00502VO.getFilePath().replace(File.separator, "/"));
+                        rc00502VO.setServiceFilePath(rc00502VO.getServiceFilePath().replace(File.separator, "/"));
                     }
+                    rc00502VO.setServiceFileName(rc00502VO.getOriginalFileName().substring(0, rc00502VO.getOriginalFileName().lastIndexOf( "." )) + ".pdf");
                     rc00502VO.setFileName(path.getFileName().toString());
                     rc00502VO.setOriginalFileName(path.getFileName().toString());
                     componentsList.add(rc00502VO);

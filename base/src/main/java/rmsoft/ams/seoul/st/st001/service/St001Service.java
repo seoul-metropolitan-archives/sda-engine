@@ -45,8 +45,8 @@ public class St001Service extends BaseService {
         St00101VO st00101VO = new St00101VO();
         st00101VO.setRepositoryCode(requestParams.getString("repositoryCode"));
         st00101VO.setRepositoryName(requestParams.getString("repositoryName"));
-        st00101VO.setStatusUuid (requestParams.getString("statusUuid01"));
-        st00101VO.setUseYn(requestParams.getString("useYn01"));
+        st00101VO.setStatusUuid (requestParams.getString("statusUuid"));
+        st00101VO.setUseYn(requestParams.getString("useYn"));
         return filter(st001Mapper.getStRepositoryList(st00101VO), pageable, "", St00101VO.class);
     }
 
@@ -55,8 +55,8 @@ public class St001Service extends BaseService {
         st00102VO.setRepositoryUuid(requestParams.getString("repositoryUuid"));
         st00102VO.setShelfCode(requestParams.getString("shelfCode"));
         st00102VO.setShelfName(requestParams.getString("shelfName"));
-        st00102VO.setStatusUuid (requestParams.getString("statusUuid02"));
-        st00102VO.setUseYn(requestParams.getString("useYn02"));
+        st00102VO.setStatusUuid (requestParams.getString("statusUuid"));
+        st00102VO.setUseYn(requestParams.getString("useYn"));
 
         return filter(st001Mapper.getStShelfList(st00102VO), pageable, "", St00102VO.class);
     }
@@ -66,8 +66,8 @@ public class St001Service extends BaseService {
         st00103VO.setShelfUuid(requestParams.getString("shelfUuid"));
         st00103VO.setRowNo(requestParams.getString("rowNo"));
         st00103VO.setColumnNo(requestParams.getString("columnNo"));
-        st00103VO.setStatusUuid (requestParams.getString("statusUuid03"));
-        st00103VO.setUseYn(requestParams.getString("useYn03"));
+        st00103VO.setStatusUuid (requestParams.getString("statusUuid"));
+        st00103VO.setUseYn(requestParams.getString("useYn"));
 
         return filter(st001Mapper.getLocationList(st00103VO), pageable, "", St00103VO.class);
     }

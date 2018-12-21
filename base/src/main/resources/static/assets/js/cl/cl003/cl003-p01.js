@@ -43,6 +43,10 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 fnObj.formView.setFormData("statusDescription",res.statusDescription);
                 fnObj.formView.setFormData("rulesConversionUuid",res.rulesConversionUuid);
                 fnObj.formView.setFormData("scopeContent",res.scopeContent);
+                fnObj.formView.setFormData("creationStartDate",res.creationStartDate);
+                fnObj.formView.setFormData("creationEndDate",res.creationEndDate);
+                fnObj.formView.setFormData("accumulationStartDate",res.accumulationStartDate);
+                fnObj.formView.setFormData("accumulationEndDate",res.accumulationEndDate);
 
             },
             options: {
@@ -68,7 +72,11 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                                  levelOfDetailUuid:fnObj.formView.getFormData("levelOfDetailUuid"),
                                  statusDescription:fnObj.formView.getFormData("statusDescription"),
                                  rulesConversionUuid:fnObj.formView.getFormData("rulesConversionUuid"),
-                                 scopeContent:fnObj.formView.getFormData("scopeContent")
+                                 scopeContent:fnObj.formView.getFormData("scopeContent"),
+                                 creationStartDate:fnObj.formView.getFormData("creationStartDate"),
+                                 creationEndDate:fnObj.formView.getFormData("creationEndDate"),
+                                 accumulationStartDate:fnObj.formView.getFormData("accumulationStartDate"),
+                                 accumulationEndDate:fnObj.formView.getFormData("accumulationEndDate")
             }),
             callback: function (res) {
                 ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
@@ -467,6 +475,21 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
         this.model = new ax5.ui.binder();
         this.model.setModel(this.getDefaultData(), this.target);
         this.modelFormatter = new axboot.modelFormatter(this.model); // 모델 포메터 시작
+        this.target.find('[data-ax5picker="date"]').ax5picker({
+            direction: "auto",
+            config: {
+                pattern: 'data'
+            },
+            content: {
+                type: 'date',
+                formatter: {
+                    pattern: 'number'
+                }
+            },
+
+
+
+        });
         this.initEvent();
     },
     initEvent: function () {

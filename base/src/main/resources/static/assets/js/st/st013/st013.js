@@ -2,6 +2,7 @@ var fnObj = {};
 var inoutExceptUuid = "";
 var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH: function (caller, act, data) {
+        debugger
         ACTIONS.dispatch(ACTIONS.PAGE_SEARCH01);
     },
     PAGE_SEARCH01: function (caller, act, data) {

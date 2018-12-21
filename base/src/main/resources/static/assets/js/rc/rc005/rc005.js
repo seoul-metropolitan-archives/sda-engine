@@ -652,8 +652,8 @@ setFormData = function(data){
     fnObj.formView.setFormData("itemTitle",'Item - ' + data.name);
     fnObj.formView.setFormData("title",data.name);
     fnObj.formView.setFormData("riItemCode",data.riItemCode);
-    fnObj.formView.setFormData("type",data.riTypeNm);
-    fnObj.formView.setFormData("publishedStatus",data.riPublishedStatusNm);
+    fnObj.formView.setFormData("riTypeUuid",data.riTypeUuid);
+    fnObj.formView.setFormData("riPublishedStatusUuid",data.riPublishedStatusUuid);
     fnObj.formView.setFormData("level",data.raLevelNm);
     fnObj.formView.setFormData("description",data.description1);
     fnObj.formView.setFormData("author",data.riAuthor);
@@ -662,22 +662,11 @@ setFormData = function(data){
     fnObj.formView.setFormData("from",from);
     fnObj.formView.setFormData("referenceCode",data.referenceCode);
 
-    if(data.riDescriptionStartDate != "undefined" || data.riDescriptionStartDate != null) {
-        if (data.riDescriptionStartDate == data.riDescriptionEndDate) {
-            fnObj.formView.setFormData("rcDateOfDescription", dateFormatter(data.riDescriptionStartDate));
-        } else {
-            fnObj.formView.setFormData("rcDateOfDescription", dateFormatter(data.riDescriptionStartDate) + ' ~ ' + dateFormatter(data.riDescriptionEndDate));
-        }
-    }
+    fnObj.formView.setFormData("riDescriptionStartDate", data.riDescriptionStartDate);
+    fnObj.formView.setFormData("riDescriptionEndDate", data.riDescriptionEndDate);
 
-    if(data.creationStartDate != "undefined" || data.creationStartDate != null) {
-        if (data.creationEndDate == data.creationStartDate) {
-            fnObj.formView.setFormData("rcDateOfCreation", dateFormatter(data.creationEndDate));
-        } else {
-            fnObj.formView.setFormData("rcDateOfCreation", dateFormatter(data.creationStartDate) + ' ~ ' + dateFormatter(data.creationEndDate));
-        }
-    }
-
+    fnObj.formView.setFormData("creationStartDate", data.creationStartDate);
+    fnObj.formView.setFormData("creationEndDate", data.creationEndDate);
 
     fnObj.formView.setFormData("provenance",data.provenance);
     fnObj.formView.setFormData("creator",data.creator);
@@ -779,12 +768,11 @@ function setAdditionalMeta(segmentList){
     //fnObj.formView.setData(currentData);
 }
 
-function dateFormatter(orgDate){
-    if(orgDate == undefined) return ' ';
-
-    var year = orgDate.substring(0, 4);
-    var month = orgDate.substring(4, 6);
-    var day = orgDate.substring(6, 8);
-
-    return year + '-' + month + '-' + day;
+function dateFormatter(str) {
+    if(str == "undefined" || str == null) return;
+    if(str.length == 8) {
+        return str.substr(0, 4) + "-" + str.substr(4, 2) + "-" + str.substr(6);
+    } else {
+        return str;
+    }
 }

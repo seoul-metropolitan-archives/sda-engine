@@ -208,6 +208,13 @@
                     url: "/st/st008/st008-p03"
                 }
             },
+            "CREATE_TAKE_IN_POPUP" :{
+                width: 750,
+                height: 200,
+                iframe: {
+                    url: "/st/st009/st009-p01"
+                }
+            },
             "FREEZE_POPUP" :{
                 width: 1600,
                 height: 700,
@@ -241,7 +248,7 @@
 
             },
             "CLASSIFY_POPUP" :{
-                width: 1400,
+                width: 1500,
                 height: 700,
                 iframe: {
                     url: "/cl/cl003/cl003-p01"
@@ -284,7 +291,7 @@
                 }
             },
             "AUTHORITY_POPUP": {
-                width: 450,
+                width: 550,
                 iframe: {
                     url: "/at/at002/at002-p01"
                 }
@@ -295,7 +302,35 @@
                 iframe: {
                     url: "/rc/rc001/p_rc00104"
                 }
-            }
+            },
+            "AGGREGATION_ADD": {
+                width: 1300,
+                height: 700,
+                iframe: {
+                    url: "/rc/rc002/p_rc002"
+                }
+            },
+            "ITEM_ADD": {
+                width: 1300,
+                height: 700,
+                iframe: {
+                    url: "/rc/rc004/p_rc004"
+                }
+            },
+            "AGGREGATION_VIEW": {
+                width: 1300,
+                height: 700,
+                iframe: {
+                    url: "/rc/rc003/p_rc003"
+                }
+            },
+            "ITEM_VIEW": {
+                width: 1300,
+                height: 700,
+                iframe: {
+                    url: "/rc/rc005/p_rc005"
+                }
+            },
         };
     }
 

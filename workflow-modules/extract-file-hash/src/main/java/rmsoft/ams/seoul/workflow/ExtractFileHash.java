@@ -154,7 +154,7 @@ public class ExtractFileHash {
         } catch (Exception e) {
             log.error("Process ExtractFileHash service Error", e);
             workflowResult.setSuccess(false);
-            workflowResult.setMessage(e.getMessage());
+            workflowResult.setMessage(e.getClass().getSimpleName() + ":" + e.getMessage());
         } finally {
             log.info("Process ExtractFileHash service terminated");
             return workflowResult;

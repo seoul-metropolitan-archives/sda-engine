@@ -57,4 +57,14 @@ public class Rc00502VO extends BaseVO {
     private String fileName;
 
     private String originalFileName;
+
+    private String serviceFilePath;
+
+    private String serviceFileName;
+
+    private String status;
+
+    private String thumbnailContent;
+
+    private String thumbnailFileName;
 }

@@ -157,14 +157,14 @@ public class Rc004Service extends BaseService{
                     child.setInsertUuid(prevCreator.getInsertUuid());
                 }
 
-                child.setItemUuid(requestParams.getRiItemUuid());
+                child.setItemUuid(rcItem.getItemUuid());
                 rcItemCreatorRepository.save(child);
             }
         }
         if (null != materialList) {
             for (RcItemMaterial child : materialList) {
                 child.setItemMaterialUuid(UUIDUtils.getUUID());
-                child.setItemUuid(requestParams.getRiItemUuid());
+                child.setItemUuid(rcItem.getItemUuid());
                 rcItemMaterialRepository.save(child);
             }
         }
@@ -187,19 +187,19 @@ public class Rc004Service extends BaseService{
                     child.setInsertUuid(prevAuthority.getInsertUuid());
                 }
 
-                child.setItemUuid(requestParams.getRiItemUuid());
+                child.setItemUuid(rcItem.getItemUuid());
                 rcItemRelatedAuthorityRepository.save(child);
             }
         }
         if (null != recordList) {
             for (RcItemRelatedRecord child : recordList) {
                 child.setItemRelatedRecordUuid(UUIDUtils.getUUID());
-                child.setItemUuid(requestParams.getRiItemUuid());
+                child.setItemUuid(rcItem.getItemUuid());
                 rcItemRelatedRecordRepository.save(child);
             }
         }
 
-        requestParams.setRiItemUuid(itemUuid);
+        requestParams.setRiItemUuid(rcItem.getItemUuid());
         return requestParams;
     }
 

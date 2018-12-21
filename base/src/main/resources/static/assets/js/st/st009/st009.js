@@ -1,13 +1,16 @@
 var fnObj = {};
-var inoutExceptUuid = "";
+var takeoutRequestUuid = "";
+var TAKEOUT_CONFIRM_STATUS = "반출서 작성";
+
 var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH: function (caller, act, data) {
+
         ACTIONS.dispatch(ACTIONS.PAGE_SEARCH01);
     },
     PAGE_SEARCH01: function (caller, act, data) {
         axboot.ajax({
             type: "GET",
-            url: "/api/v1/st/st013/01/list01",
+            url: "/api/v1/st/st009/01/list01",
             data: $.extend({}, this.formView.getData()),
             callback: function (res) {
                 fnObj.gridView01.setData(res.list);
@@ -25,8 +28,8 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         }
         axboot.ajax({
             type: "GET",
-            url: "/api/v1/st/st013/01/list02",
-            data: $.extend({}, this.formView.getData(),{inoutExceptUuid : fnObj.gridView01.getSelectedData().inoutExceptUuid}),
+            url: "/api/v1/st/st009/01/list02",
+            data: $.extend({}, this.formView.getData(),{inoutExceptUuid : fnObj.gridView01.getSelectedData().takeoutRequestUuid}),
             callback: function (res) {
                 fnObj.gridView02.setData(res.list);
                 // fnObj.gridView02.disabledColumn();
@@ -39,9 +42,11 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     },
     ERROR_SEARCH: function (caller, act, data) {
     },
+
+    //승인
     STATUS_UPDATE01: function (caller, act, data) {
 
-        /*if (fnObj.gridView01.isChangeData() == true) {
+        if (fnObj.gridView01.isChangeData() == true) {
             axDialog.confirm({
                 msg: axboot.getCommonMessage("AA006")
             }, function () {
@@ -53,14 +58,35 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         }else{
             var rows = fnObj.gridView01.gridObj.getCheckedList();
             if (!rows || rows.length < 1) return;
+
+            var codes = axboot.commonCodeFilter("CD208").codeArr;
+            var names = axboot.commonCodeFilter("CD208").nameArr;
+            var state = undefined;
+
+            for(var j = 0 ; j < rows.length; j++){
+                for (var i = 0; i < codes.length; i++) {
+                    if (codes[i] == rows[j].statusUuid) {
+                        state = names[i];
+                        if(state != "반출서 작성"){
+                            alert('반출서 작성만 반출승이 가능합니다.');
+                            return;
+                        }
+                        break;
+                    }
+                }
+            }
+
+
+
+
             var params = rows.filter(function (item) {
                 item.changeStatus = data;
-                return item.repositoryUuid != "";
+                return item.takeoutRequestUuid != "";
             });
 
            axboot.ajax({
                 type: "PUT",
-                url: "/api/v1/st/st001/02/confirm01",
+                url: "/api/v1/st/st009/01/confirm01",
                 data: JSON.stringify(params),
                 callback: function (res) {
                     ACTIONS.dispatch(ACTIONS.PAGE_SEARCH01);
@@ -69,8 +95,9 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                     onError: axboot.viewError
                 }
             });
-        }*/
+        }
     },
+    //승인블가
     STATUS_UPDATE02: function (caller, act, data) {
         /*var rows = fnObj.gridView02.gridObj.getCheckedList();
 
@@ -93,15 +120,15 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             }
         });*/
     },
-    PAGE_CONFIRM: function (caller, act, data) {
+/*    PAGE_CONFIRM: function (caller, act, data) {
         ACTIONS.dispatch(ACTIONS.STATUS_UPDATE, CONFIRM_STATUS);
     },
     PAGE_CANCEL: function (caller, act, data) {
         ACTIONS.dispatch(ACTIONS.STATUS_UPDATE, CANCEL_STATUS);
-    },
+    },*/
     PAGE_SAVE: function (caller, act, data) {
 
-        if (!this.gridView01.gridObj.validate()) {
+       /* if (!this.gridView01.gridObj.validate()) {
             return false;
         } else {
             //여긴 신규다
@@ -140,10 +167,10 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             if(fnObj.gridView02.gridObj.isDataChanged()){
                 ACTIONS.dispatch(ACTIONS.TOP_GRID_SAVE02);
             }
-        }
+        }*/
     },
     TOP_GRID_SAVE01: function (caller, act, data) {
-        var result = false;
+       /* var result = false;
         axboot.call({
             type: "PUT",
             url: "/api/v1/st/st013/01/save01",
@@ -157,10 +184,10 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 $('textarea[data-ax-path="except_reason"]').val('');
                 axToast.push(axboot.getCommonMessage("AA007"));
             });
-        return result;
+        return result;*/
     },
     TOP_GRID_SAVE02: function (caller, act, data) {
-        var result = false;
+       /* var result = false;
 
         axboot.call({
             type: "PUT",
@@ -174,7 +201,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 fnObj.gridView02.commit();
                 axToast.push(axboot.getCommonMessage("AA007"));
             });
-        return result;
+        return result;*/
     },
     CLOSE_TAB: function (caller, act, data) {
         ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
@@ -190,7 +217,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             return false;
         }
     },
-    PAGE_CLASSIFY: function (caller, act, data) {
+  /*  PAGE_CLASSIFY: function (caller, act, data) {
         if(inoutExceptUuid == ""){
             return
         }
@@ -212,8 +239,8 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 ACTIONS.dispatch(ACTIONS.PAGE_SEARCH02);
             }
         });
-    },
-    SEARCH_CLASS_SCH : function(caller, act, data)
+    },*/
+   /* SEARCH_CLASS_SCH : function(caller, act, data)
     {
         axboot.modal.open({
             modalType: "COMMON_POPUP",
@@ -231,38 +258,34 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 ACTIONS.dispatch(ACTIONS.PAGE_SEARCH2,data);
             }
         });
-    },
-    SEARCH_REPOSITORY_SCH : function(caller, act, data)
-    {
+    },*/
+    MODAL_OPEN: function (caller, act, title) {
+
+        var rows = fnObj.gridView01.gridObj.getCheckedList();
+        if (!rows || rows.length < 1) return;
+
+
+        var modalOption ={ title : title };
+
         axboot.modal.open({
-            modalType: "COMMON_POPUP",
-            preSearch : data["preSearch"],
+            modalType: 'CREATE_TAKE_IN_POPUP',
+            header: {
+                title: modalOption.title
+            },
             sendData: function () {
-                return data;
+                var rows = fnObj.gridView01.gridObj.getCheckedList();
+
+                return rows;
             },
             callback: function (data) {
-                $("input[data-ax-path='repositoryName']").val(data["REPOSITORY_NAME"])
-                repositoryUuid = data['REPOSITORY_UUID'];
-                if(this.close) this.close();
+                if(this) this.close();
+                if(data){
+                    ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1,data);
+                }
             }
         });
     },
-    SEARCH_SHELF_SCH : function(caller, act, data)
-    {
-        axboot.modal.open({
-            modalType: "COMMON_POPUP",
-            preSearch : data["preSearch"],
-            sendData: function () {
-                return data;
-            },
-            callback: function (data) {
-                $("input[data-ax-path='shelfName']").val(data["SHELF_NAME"])
-                shelfUuid = data['SHELF_UUID'];
-                statusUuid = data['STATUS_UUID'];
-                if(this.close) this.close();
-            }
-        });
-    }
+
 });
 
 fnObj.pageStart = function () {
@@ -275,7 +298,7 @@ fnObj.pageStart = function () {
         }
     });
     $.ajax({
-        url: "/assets/js/column_info/st01301.js",
+        url: "/assets/js/column_info/st00901.js",
         dataType: "script",
         async: false,
         success: function () {
@@ -283,7 +306,7 @@ fnObj.pageStart = function () {
     });
 
     $.ajax({
-        url: "/assets/js/column_info/st01302.js",
+        url: "/assets/js/column_info/st00902.js",
         dataType: "script",
         async: false,
         success: function () {
@@ -310,27 +333,15 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
     initEvent: function () {
         var _this = this;
 
-        $("input[data-ax-path='repositoryName']").parents().eq(1).find("a").click(function(){
-            var data = {
-                popupCode : "PU137",
-                searchData : $("input[data-ax-path='repositoryName']").val().trim(),
-                preSearch : false
-            };
-            ACTIONS.dispatch(ACTIONS.SEARCH_REPOSITORY_SCH,data);
+        $('#btn_createTakeOut').click(function(){
+            ACTIONS.dispatch(ACTIONS.MODAL_OPEN, '반입의뢰서 작성');
         });
 
-        $("input[data-ax-path='shelfName']").parents().eq(1).find("a").click(function(){
-            if("" != repositoryUuid) {
-                var data = {
-                    popupCode: "PU138",
-                    searchData: repositoryUuid,
-                    preSearch: false
-                };
-                ACTIONS.dispatch(ACTIONS.SEARCH_SHELF_SCH, data);
+        /*$('#formView01 input[type="text"]').keydown(function(e){
+            if(e.keyCode == 13){
+                $('#inquiry').trigger('click');
             }
-        });
-
-
+        });*/
 
 
     },
@@ -367,23 +378,14 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
     },
     bindEvent : function()
     {
-        /* var _this = this;
-         $(".btn_confirm01").click(function(){
-             ACTIONS.dispatch(ACTIONS.STATUS_UPDATE01,CONFIRM_STATUS);
-         });
-         $(".btn_cancel01").click(function(){
-             ACTIONS.dispatch(ACTIONS.STATUS_UPDATE01,CANCEL_STATUS);
-         });
-         $(".btn_confirm02").click(function(){
-             ACTIONS.dispatch(ACTIONS.STATUS_UPDATE02,CONFIRM_STATUS);
-         });
-         $(".btn_cancel02").click(function(){
-             ACTIONS.dispatch(ACTIONS.STATUS_UPDATE02,CANCEL_STATUS);
-         });*/
 
-        $('#btn_deleteWithOutNoticeApproval').click(function(){
-            fnObj.gridView02.gridObj.getDataProvider().removeRows(fnObj.gridView02.gridObj.gridView.getCheckedRows(), false);
-            fnObj.gridView02.gridObj.dispatch("onRemoveRow");
+        //승인 버튼시 상태 update
+        $('.btn_takeoutApproval').click(function(){
+            ACTIONS.dispatch(ACTIONS.STATUS_UPDATE01,TAKEOUT_CONFIRM_STATUS);
+        });
+        //승인 불가 버튼시 상태 update
+        $('.btn_takeoutNotApproval').click(function(){
+            ACTIONS.dispatch(ACTIONS.STATUS_UPDATE01,CONFIRM_STATUS);
         });
 
     },
@@ -396,7 +398,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     entityName: "ST_INOUT_EXCEPT",
     initView: function () {
         this.initInstance();
-        this.setColumnInfo(st01301.column_info);
+        this.setColumnInfo(st00901.column_info);
         this.gridObj.setOption({
             checkBar: {visible: true}
         })
@@ -408,28 +410,23 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     getSelectedData: function () {
         return this.gridObj.getSelectedData()
     },
-    disabledColumn: function () {
-        var state = axboot.commonCodeValueByCodeName("CD138", CONFIRM_STATUS);
-        this.gridObj.setCustomCellStyleRows("disable", function (row) {
-
-            if (row["statusUuid"] == state)
-                return true;
-            else
-                return false;
-        }, ["statusUuid", "repositoryCode", "repositoryName", "description"]);
-    },
     itemClick: function (data) {
 
-        inoutExceptUuid = data.inoutExceptUuid;
+        takeoutRequestUuid = data.takeoutRequestUuid;
 
-        if(data.exceptReason != undefined){
+
+        //TODO : 아이템 클릭하면 반입 정보, 반입자, 소속, 직위, 반입일자가 들어 와야 하는데 모르겟다.
+
+
+
+        /*if(data.exceptReason != undefined){
             $('textarea[data-ax-path="except_reason"]').val(data.exceptReason);
         }else{
             $('textarea[data-ax-path="except_reason"]').val('');
-        }
+        }*/
 
 
-        if (fnObj.gridView01.isChangeData() == true || fnObj.gridView02.isChangeData() == true) {
+       /* if (fnObj.gridView01.isChangeData() == true || fnObj.gridView02.isChangeData() == true) {
             axDialog.confirm({
                 msg: axboot.getCommonMessage("AA006")
             }, function () {
@@ -439,29 +436,10 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
                     ACTIONS.dispatch(ACTIONS.PAGE_SEARCH02);
                 }
             });
-        }
+        }*/
 
         ACTIONS.dispatch(ACTIONS.PAGE_SEARCH02);
 
-    },
-    cancelDelete: function(){
-        var codes = axboot.commonCodeFilter("CD138").codeArr;
-        var names = axboot.commonCodeFilter("CD138").nameArr;
-        var state = undefined;
-        for (var i = 0; i < codes.length; i++) {
-            if (codes[i] == fnObj.gridView01.getSelectedData().statusUuid) {
-                state = names[i];
-                break;
-            }
-        }
-
-        if(state == CONFIRM_STATUS){
-            axToast.push(axboot.getCommonMessage("DF001_01"));
-
-            this.setRunDel(false);
-        }else{
-            this.setRunDel(true);
-        }
     },
     getJsonData: function () {
         return this.gridObj.getJsonRows();
@@ -477,7 +455,7 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
     parentsGrid: fnObj.gridView01,
     initView: function () {
         this.initInstance();
-        this.setColumnInfo(st01302.column_info);
+        this.setColumnInfo(st00902.column_info);
         this.gridObj.setOption({
             checkBar: {visible: true}
         })
@@ -485,22 +463,6 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
     },
     getSelectedData: function () {
         return this.gridObj.getSelectedData()
-    },
-    disabledColumn: function () {
-        var state = axboot.commonCodeValueByCodeName("CD138", CONFIRM_STATUS);
-        this.gridObj.setCustomCellStyleRows("disable", function(row){
-            if (row["statusUuid"] == state)
-                return true;
-            else if(fnObj.gridView02.getSelectedData().useYn == "Y")
-                return true;
-            else return false;
-        },function(row){
-            if(row["statusUuid"] == state) {
-                return ["statusUuid", "shelfCode", "shelfName", "maxContainer", "description"];
-            }else {
-                return ["useYn"];
-            }
-        });
     },
     itemClick: function (data) {
 

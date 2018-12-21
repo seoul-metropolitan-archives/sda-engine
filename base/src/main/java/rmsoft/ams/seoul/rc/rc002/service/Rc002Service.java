@@ -19,7 +19,9 @@ import rmsoft.ams.seoul.rc.rc002.vo.Rc002VO;
 import rmsoft.ams.seoul.utils.CommonCodeUtils;
 
 import java.sql.Timestamp;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * The type Rc 002 service.
@@ -69,7 +71,7 @@ public class Rc002Service extends BaseService {
      * @param data the data
      * @return the api response
      */
-    public ApiResponse save(Rc002VO data) {
+    public Map save(Rc002VO data) {
 
         String uuid = "";
         boolean isCreate = false;
@@ -96,155 +98,166 @@ public class Rc002Service extends BaseService {
         materialList = ModelMapperUtils.mapList(data.getMaterialList(), RcAggregationMaterial.class);
         authorityList = ModelMapperUtils.mapList(data.getRelatedAuthorityList(), RcAggrRelatedAuthority.class);
         recordList = ModelMapperUtils.mapList(data.getRelatedRecordList(), RcAggrRelatedRecord.class);
-        if (null == rcAggregation.getAggregationUuid() || rcAggregation.getAggregationUuid().equals("")) {
-            uuid = UUIDUtils.getUUID();
-            rcAggregation.setAggregationUuid(uuid);
-            String aggregationCode = jdbcTemplate.queryForObject("select fc_rc_aggregation_code from dual", String.class);
-            rcAggregation.setAggregationCode(aggregationCode);
-            String descriptionStartDate = rcAggregation.getDescriptionStartDate() == null ? null : rcAggregation.getDescriptionStartDate().replace("-", "");
-            rcAggregation.setDescriptionStartDate(descriptionStartDate);
-            String descriptionEndDate = rcAggregation.getDescriptionEndDate() == null ? null : rcAggregation.getDescriptionEndDate().replace("-", "");
-            rcAggregation.setDescriptionEndDate(descriptionEndDate);
-            rcAggregation.set__created__(true);
-            isCreate = true;
-            rcAggregationRepository.save(rcAggregation);
-        } else {
-            uuid = rcAggregation.getAggregationUuid();
-            RcAggregation before = rcAggregationRepository.findOne(rcAggregation.getId());
-            rcAggregation.setInsertDate(before.getInsertDate());
-            rcAggregation.setInsertUuid(before.getInsertUuid());
-            rcAggregation.setAggregationCode(before.getAggregationCode());
-            rcAggregation.setUpdateDate(new Timestamp(System.currentTimeMillis()));
-            rcAggregation.setUpdateUuid(SessionUtils.getCurrentLoginUserUuid());
 
-            rcAggregationRepository.save(rcAggregation);
-        }
+        try {
+            if (null == rcAggregation.getAggregationUuid() || rcAggregation.getAggregationUuid().equals("")) {
+                uuid = UUIDUtils.getUUID();
+                rcAggregation.setAggregationUuid(uuid);
+                String aggregationCode = jdbcTemplate.queryForObject("select fc_rc_aggregation_code from dual", String.class);
+                rcAggregation.setAggregationCode(aggregationCode);
+                String descriptionStartDate = rcAggregation.getDescriptionStartDate() == null ? null : rcAggregation.getDescriptionStartDate().replace("-", "");
+                rcAggregation.setDescriptionStartDate(descriptionStartDate);
+                String descriptionEndDate = rcAggregation.getDescriptionEndDate() == null ? null : rcAggregation.getDescriptionEndDate().replace("-", "");
+                rcAggregation.setDescriptionEndDate(descriptionEndDate);
+                rcAggregation.set__created__(true);
+                isCreate = true;
+                rcAggregationRepository.save(rcAggregation);
+            } else {
+                uuid = rcAggregation.getAggregationUuid();
+                RcAggregation before = rcAggregationRepository.findOne(rcAggregation.getId());
+                rcAggregation.setInsertDate(before.getInsertDate());
+                rcAggregation.setInsertUuid(before.getInsertUuid());
+                rcAggregation.setAggregationCode(before.getAggregationCode());
+                rcAggregation.setUpdateDate(new Timestamp(System.currentTimeMillis()));
+                rcAggregation.setUpdateUuid(SessionUtils.getCurrentLoginUserUuid());
 
-
-        if (isCreate) {
-            rcAggregationCon.setAggregationUuid(uuid);
-            String creationStartDate = rcAggregationCon.getCreationStartDate() == null ? null : rcAggregationCon.getCreationStartDate().replace("-", "");
-            rcAggregationCon.setCreationStartDate(creationStartDate);
-            String creationEndDate = rcAggregationCon.getCreationEndDate() == null ? null : rcAggregationCon.getCreationEndDate().replace("-", "");
-            rcAggregationCon.setCreationEndDate(creationEndDate);
-            rcAggregationCon.set__created__(true);
-            rcAggregationConRepository.save(rcAggregationCon);
-
-            if (null != childrenAggregation) {
-                for (RcAggregation child : childrenAggregation) {
-                    String aggregationCode = jdbcTemplate.queryForObject("select fc_rc_aggregation_code from dual", String.class);
-                    child.setAggregationCode(aggregationCode);
-                    child.setPublishedStatusUuid(rcAggregation.getPublishedStatusUuid());
-                    child.setParentAggregationUuid(uuid);
-                    child.setTypeUuid(rcAggregation.getTypeUuid());
-                    child.set__created__(true);
-                    uuid = UUIDUtils.getUUID();
-                    child.setAggregationUuid(uuid);
-                    rcAggregationRepository.save(child);
-                }
+                rcAggregationRepository.save(rcAggregation);
             }
-            if (null != referenceAggregation) {
-                for (RcRecordReference child : referenceAggregation) {
-                    child.setRecordReferenceUuid(UUIDUtils.getUUID());
-                    child.setVirtualAggregationUuid(rcAggregation.getAggregationUuid());
-                    child.set__created__(true);
-                    rcRecordReferenceRepository.save(child);
-                }
-            }
-            if (null != referenceItem) {
-                for (RcRecordReference child : referenceItem) {
-                    child.setRecordReferenceUuid(UUIDUtils.getUUID());
-                    child.setVirtualAggregationUuid(rcAggregation.getAggregationUuid());
-                    child.set__created__(true);
-                    rcRecordReferenceRepository.save(child);
-                }
-            }
-        } else {
-            if (rcAggregationCon != null) {
+
+
+            if (isCreate) {
                 rcAggregationCon.setAggregationUuid(uuid);
-                RcAggregationCon beforeCon = rcAggregationConRepository.findOne(rcAggregationCon.getId());
-                if (null != beforeCon) {
-                    rcAggregationCon.setInsertDate(beforeCon.getInsertDate());
-                    rcAggregationCon.setInsertUuid(beforeCon.getInsertUuid());
+                String creationStartDate = rcAggregationCon.getCreationStartDate() == null ? null : rcAggregationCon.getCreationStartDate().replace("-", "");
+                rcAggregationCon.setCreationStartDate(creationStartDate);
+                String creationEndDate = rcAggregationCon.getCreationEndDate() == null ? null : rcAggregationCon.getCreationEndDate().replace("-", "");
+                rcAggregationCon.setCreationEndDate(creationEndDate);
+                rcAggregationCon.set__created__(true);
+                rcAggregationConRepository.save(rcAggregationCon);
 
-                    rcAggregationCon.setUpdateDate(new Timestamp(System.currentTimeMillis()));
-                    rcAggregationCon.setUpdateUuid(SessionUtils.getCurrentLoginUserUuid());
-
-                    rcAggregationConRepository.save(rcAggregationCon);
-                } else {
+                if (null != childrenAggregation) {
+                    for (RcAggregation child : childrenAggregation) {
+                        String aggregationCode = jdbcTemplate.queryForObject("select fc_rc_aggregation_code from dual", String.class);
+                        child.setAggregationCode(aggregationCode);
+                        child.setPublishedStatusUuid(rcAggregation.getPublishedStatusUuid());
+                        child.setParentAggregationUuid(uuid);
+                        child.setTypeUuid(rcAggregation.getTypeUuid());
+                        child.set__created__(true);
+                        uuid = UUIDUtils.getUUID();
+                        child.setAggregationUuid(uuid);
+                        rcAggregationRepository.save(child);
+                    }
+                }
+                if (null != referenceAggregation) {
+                    for (RcRecordReference child : referenceAggregation) {
+                        child.setRecordReferenceUuid(UUIDUtils.getUUID());
+                        child.setVirtualAggregationUuid(rcAggregation.getAggregationUuid());
+                        child.set__created__(true);
+                        rcRecordReferenceRepository.save(child);
+                    }
+                }
+                if (null != referenceItem) {
+                    for (RcRecordReference child : referenceItem) {
+                        child.setRecordReferenceUuid(UUIDUtils.getUUID());
+                        child.setVirtualAggregationUuid(rcAggregation.getAggregationUuid());
+                        child.set__created__(true);
+                        rcRecordReferenceRepository.save(child);
+                    }
+                }
+            } else {
+                if (rcAggregationCon != null) {
                     rcAggregationCon.setAggregationUuid(uuid);
-                    String creationStartDate = rcAggregationCon.getCreationStartDate().replace("-", "");
-                    rcAggregationCon.setCreationStartDate(creationStartDate);
-                    String creationEndDate = rcAggregationCon.getCreationEndDate().replace("-", "");
-                    rcAggregationCon.setCreationEndDate(creationEndDate);
-                    rcAggregationCon.set__created__(true);
-                    rcAggregationConRepository.save(rcAggregationCon);
+                    RcAggregationCon beforeCon = rcAggregationConRepository.findOne(rcAggregationCon.getId());
+                    if (null != beforeCon) {
+                        rcAggregationCon.setInsertDate(beforeCon.getInsertDate());
+                        rcAggregationCon.setInsertUuid(beforeCon.getInsertUuid());
+
+                        rcAggregationCon.setUpdateDate(new Timestamp(System.currentTimeMillis()));
+                        rcAggregationCon.setUpdateUuid(SessionUtils.getCurrentLoginUserUuid());
+
+                        rcAggregationConRepository.save(rcAggregationCon);
+                    } else {
+                        rcAggregationCon.setAggregationUuid(uuid);
+                        String creationStartDate = rcAggregationCon.getCreationStartDate().replace("-", "");
+                        rcAggregationCon.setCreationStartDate(creationStartDate);
+                        String creationEndDate = rcAggregationCon.getCreationEndDate().replace("-", "");
+                        rcAggregationCon.setCreationEndDate(creationEndDate);
+                        rcAggregationCon.set__created__(true);
+                        rcAggregationConRepository.save(rcAggregationCon);
+                    }
                 }
             }
-        }
 
-        if (null != creatorList) {
-            RcAggregationCreator prevCreator = null;
-            for (RcAggregationCreator child : creatorList) {
-                if(!child.isCreated() && !child.isModified() && !child.isDeleted())
-                    continue;
+            if (null != creatorList) {
+                RcAggregationCreator prevCreator = null;
+                for (RcAggregationCreator child : creatorList) {
+                    if (!child.isCreated() && !child.isModified() && !child.isDeleted())
+                        continue;
 
-                if(child.isDeleted()){
-                    rcAggregationCreatorRepository.delete(child.getId());
-                    continue;
+                    if (child.isDeleted()) {
+                        rcAggregationCreatorRepository.delete(child.getId());
+                        continue;
+                    }
+
+                    if (child.isCreated()) {
+                        child.setAggregationCreatorUuid(UUIDUtils.getUUID());
+                    } else if (child.isModified()) {
+                        prevCreator = rcAggregationCreatorRepository.findOne(child.getId());
+                        child.setInsertDate(prevCreator.getInsertDate());
+                        child.setInsertUuid(prevCreator.getInsertUuid());
+                    }
+
+                    child.setAggregationUuid(rcAggregation.getAggregationUuid());
+                    rcAggregationCreatorRepository.save(child);
                 }
-
-                if(child.isCreated()){
-                    child.setAggregationCreatorUuid(UUIDUtils.getUUID());
-                }else if(child.isModified()){
-                    prevCreator = rcAggregationCreatorRepository.findOne(child.getId());
-                    child.setInsertDate(prevCreator.getInsertDate());
-                    child.setInsertUuid(prevCreator.getInsertUuid());
+            }
+            if (null != materialList) {
+                for (RcAggregationMaterial child : materialList) {
+                    child.setAggregationMaterialUuid(UUIDUtils.getUUID());
+                    child.setAggregationUuid(rcAggregation.getAggregationUuid());
+                    rcAggregationMaterialRepository.save(child);
                 }
-
-                child.setAggregationUuid(rcAggregation.getAggregationUuid());
-                rcAggregationCreatorRepository.save(child);
             }
-        }
-        if (null != materialList) {
-            for (RcAggregationMaterial child : materialList) {
-                child.setAggregationMaterialUuid(UUIDUtils.getUUID());
-                child.setAggregationUuid(rcAggregation.getAggregationUuid());
-                rcAggregationMaterialRepository.save(child);
-            }
-        }
-        if (null != authorityList) {
-            RcAggrRelatedAuthority prevAuthority = null;
-            for (RcAggrRelatedAuthority child : authorityList) {
-                if(!child.isCreated() && !child.isModified() && !child.isDeleted())
-                    continue;
+            if (null != authorityList) {
+                RcAggrRelatedAuthority prevAuthority = null;
+                for (RcAggrRelatedAuthority child : authorityList) {
+                    if (!child.isCreated() && !child.isModified() && !child.isDeleted())
+                        continue;
 
-                if(child.isDeleted()){
-                    rcAggrRelatedAuthorityRepository.delete(child.getId());
-                    continue;
+                    if (child.isDeleted()) {
+                        rcAggrRelatedAuthorityRepository.delete(child.getId());
+                        continue;
+                    }
+
+                    if (child.isCreated()) {
+                        child.setAggrRelatedAuthorityUuid(UUIDUtils.getUUID());
+                    } else if (child.isModified()) {
+                        prevAuthority = rcAggrRelatedAuthorityRepository.findOne(child.getId());
+                        child.setInsertDate(prevAuthority.getInsertDate());
+                        child.setInsertUuid(prevAuthority.getInsertUuid());
+                    }
+
+                    child.setAggregationUuid(rcAggregation.getAggregationUuid());
+                    rcAggrRelatedAuthorityRepository.save(child);
                 }
-
-                if(child.isCreated()){
-                    child.setAggrRelatedAuthorityUuid(UUIDUtils.getUUID());
-                }else if(child.isModified()){
-                    prevAuthority = rcAggrRelatedAuthorityRepository.findOne(child.getId());
-                    child.setInsertDate(prevAuthority.getInsertDate());
-                    child.setInsertUuid(prevAuthority.getInsertUuid());
+            }
+            if (null != recordList) {
+                for (RcAggrRelatedRecord child : recordList) {
+                    child.setAggrRelatedRecordUuid(UUIDUtils.getUUID());
+                    child.setAggregationUuid(rcAggregation.getAggregationUuid());
+                    rcAggrRelatedRecordRepository.save(child);
                 }
-
-                child.setAggregationUuid(rcAggregation.getAggregationUuid());
-                rcAggrRelatedAuthorityRepository.save(child);
             }
-        }
-        if (null != recordList) {
-            for (RcAggrRelatedRecord child : recordList) {
-                child.setAggrRelatedRecordUuid(UUIDUtils.getUUID());
-                child.setAggregationUuid(rcAggregation.getAggregationUuid());
-                rcAggrRelatedRecordRepository.save(child);
-            }
+        }catch(Exception e){
+            Map returnMap = new HashMap();
+            returnMap.put("result", "FAIL");
+            returnMap.put("message", e.getMessage());
         }
 
-        return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");
+        Map returnMap = new HashMap();
+        returnMap.put("result", "SUCCESS");
+        returnMap.put("uuid", uuid);
+
+        return returnMap;
     }
 
 

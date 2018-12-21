@@ -7,7 +7,7 @@
     <select id="getAuthorityList" resultType="At00101VO"  statementType="PREPARED">
         SELECT
           AUTHORITY_UUID AS authorityUuid,
-          AUTHORITY_TYPE_UUID AS authorityTypeUuid ,
+          FC_AD_CODE_NM(AUTHORITY_TYPE_UUID) AS authorityTypeUuid ,
           AUTHORITY_NO AS authorityNo,
           AUTHORITY_NAME AS authorityName,
           ORG_TYPE_UUID AS orgTypeUuid,
@@ -22,7 +22,10 @@
           NOTES AS notes
         FROM AT_AUTHORITY Z
         <where>
-            AUTHORITY_TYPE_UUID = #{authorityTypeUuid}
+            1=1
+            <if test="authorityTypeUuid != null">
+              AND AUTHORITY_TYPE_UUID = #{authorityTypeUuid}
+            </if>
             <if test="authorityName != null">
                 AND  UPPER(Z.AUTHORITY_NAME) LIKE  UPPER('%' || #{authorityName} || '%')
             </if>

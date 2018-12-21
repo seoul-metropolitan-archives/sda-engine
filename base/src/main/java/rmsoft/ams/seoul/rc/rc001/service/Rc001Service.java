@@ -4,9 +4,11 @@ import io.onsemiro.core.api.response.ApiResponse;
 import io.onsemiro.core.api.response.Responses;
 import io.onsemiro.core.code.ApiStatus;
 import io.onsemiro.core.domain.BaseService;
+import io.onsemiro.utils.DateUtils;
 import io.onsemiro.utils.ModelMapperUtils;
 import io.onsemiro.utils.SessionUtils;
 import io.onsemiro.utils.UUIDUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,6 +30,8 @@ import rmsoft.ams.seoul.utils.CommonMessageUtils;
 
 import javax.inject.Inject;
 import java.math.BigDecimal;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -62,6 +66,9 @@ public class Rc001Service extends BaseService
 
     @Autowired
     private RcAggregationRepository rcAggregationRepository;
+
+    @Autowired
+    private JobConvRepository jobConvRepository;
 
     public List<Rc00101VO> getAllNode(Rc00101VO param)
     {
@@ -414,7 +421,7 @@ public class Rc001Service extends BaseService
             comp.setItemUuid(rc00501VO.getRiItemUuid());
             comp.setPublicationStatusUuid(CommonCodeUtils.getCodeDetailUuid("CD121", "Draft"));
             comp.setAreaUuid(CommonCodeUtils.getCodeDetailUuid("CD125", "Attachment"));
-            comp.setTypeUuid(CommonCodeUtils.getCodeDetailUuid("CD126", "Draft"));
+            comp.setTypeUuid(CommonCodeUtils.getCodeDetailUuid("CD126", "Document"));
             comp.setOpenStatusUuid(CommonCodeUtils.getCodeDetailUuid("CD123", "Open"));
             comp.setElectronYn("Y");
         }
@@ -449,6 +456,14 @@ public class Rc001Service extends BaseService
             rcItemComponent.setComponentUuid(rcComponent.getComponentUuid());
             rcItemComponent.setItemUuid(itemUuid);
             rcItemComponentRepository.save(rcItemComponent);
+
+            JobConv jobConv = new JobConv();
+            jobConv.setJobid(componentUuid);
+            jobConv.setDestfile("sftp://" + rcComponent.getServiceFilePath() + "/" + rcComponent.getServiceFileName());
+            jobConv.setSrcfile("sftp://" + rcComponent.getFilePath() + "/" + rcComponent.getOriginalFileName());
+            jobConv.setJobstatus("W");
+            jobConv.setReqdate(Timestamp.valueOf(DateUtils.convertToString(LocalDateTime.now(),DateUtils.DATE_TIME_PATTERN)));
+            jobConvRepository.save(jobConv);
 
             idx++;
         }

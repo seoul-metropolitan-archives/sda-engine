@@ -82,7 +82,7 @@ public class CommonController extends BaseController {
             List<Ad00101VO> ad00101VOList = ad001Service.getEnviromentList(ad00101VO);
             String prefix = ad00101VOList.get(0).getConfigurationValue();
             //System.out.println(streamingUrl+":"+streamingPort+streamingContext+streamingParam+prefix+"/"]] +path+rcComponent.getFileName());
-            String path = rcComponent.getFilePath().replaceAll("\\\\\\\\", "/");
+            String path = rcComponent.getServiceFilePath().replaceAll("\\\\\\\\", "/");
 
             if("mp4,mkv,avi,mov,wmv".indexOf(rcComponent.getFileFormatUuid().toLowerCase()) > -1){
                 Map<String, Object> response = new HashMap<String, Object>();
@@ -99,7 +99,7 @@ public class CommonController extends BaseController {
 
 
                 URL url = new URL(
-                        streamingUrl + ":" + streamingPort + streamingContext + streamingParam + prefix + path + rcComponent.getOriginalFileName()
+                        streamingUrl + ":" + streamingPort + streamingContext + streamingParam + prefix + path + rcComponent.getServiceFileName()
                 );
                 System.out.println("Stream URL => "+url);
                 conn = (HttpURLConnection) url.openConnection();

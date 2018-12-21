@@ -2,8 +2,12 @@ var fnObj = {};
 
 var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_CLOSE: function (caller, act, data) {
-        if (parent) {
+        if(parent.axboot.modalOpener == "modal") {
             parent.axboot.modal.close();
+            parent.axboot.modal.callback(data);
+        }else if(parent.axboot.modalOpener == "commonModal") {
+            parent.axboot.commonModal.close();
+            parent.axboot.commonModal.callback(data);
         }
     },
     UPDATE_STATE : function(caller,act,data){
@@ -15,7 +19,6 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             callback: function (res) {
                 if(res.status == 0 || res.status == 200)
                 {
-                    parent.axboot.modal.callback();
                     ACTIONS.dispatch(ACTIONS.PAGE_CLOSE);
                 }
             },
@@ -36,7 +39,14 @@ var ACTIONS = axboot.actionExtend(fnObj, {
 
 var fnObj = {
     pageStart: function () {
-        fnObj.popupView.initView(parent.axboot.modal.getData());
+        var param = null;
+
+        if(parent.axboot.modalOpener == "modal")
+            param = parent.axboot.modal.getData();
+        else if(parent.axboot.modalOpener == "commonModal")
+            param = parent.axboot.commonModal.getData();
+
+        fnObj.popupView.initView(param);
     }
 };
 
@@ -51,7 +61,11 @@ fnObj.popupView = axboot.viewExtend({
     {
         var _this = this;
         $("#close").click(function(){
-            ACTIONS.dispatch(ACTIONS.PAGE_CLOSE)
+            if(parent.axboot.modalOpener == "modal") {
+                parent.axboot.modal.close();
+            }else if(parent.axboot.modalOpener == "commonModal") {
+                parent.axboot.commonModal.close();
+            }
         })
         $("#apply").click(function(){
             var reqList = new Array();

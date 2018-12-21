@@ -11,7 +11,16 @@ var at00101 =
                     visible: false
                 },
                 {
-                    sortNo: 1,
+                    sortNo: 2,
+                    name: "authorityTypeUuid",
+                    text: "Type",
+                    editable: false,
+                    width:100,
+                    dataType: "text",
+                    required: false
+                },
+                {
+                    sortNo: 2,
                     name: "authorityNo",
                     text: "Authority No",
                     editable: false,
@@ -20,7 +29,7 @@ var at00101 =
                     required: false
                 },
                 {
-                    sortNo: 2,
+                    sortNo: 3,
                     name: "authorityName",
                     text: "Title",
                     dataType: "text",

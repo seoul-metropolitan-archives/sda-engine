@@ -28,4 +28,8 @@ public class Cl00202VO extends BaseVO {
     private String description;
     private String statusDescription;
     private String levelOfDetailUuid;
+    private String creationStartDate;
+    private String creationEndDate;
+    private String accumulationStartDate;
+    private String accumulationEndDate;
 }
