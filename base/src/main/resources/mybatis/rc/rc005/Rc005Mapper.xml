@@ -406,6 +406,11 @@
         ORDER BY INSERT_DATE ASC
     </select>
 
+    <select id="getJobStatus" resultType="String" parameterType="String" statementType="PREPARED">
+        SELECT JOBSTATUS FROM JOB_CONV
+        WHERE JOBID = #{jobId}
+    </select>
+
     <update id="mergeInsert" parameterType="Rc00507VO" statementType="PREPARED">
         INSERT INTO JOB_MERGE (
             JOBID,

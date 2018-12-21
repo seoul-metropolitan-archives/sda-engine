@@ -30,4 +30,6 @@ public interface Rc005Mapper extends MyBatisMapper {
     List<Rc00505VO> getRelatedAuthorityList(String itemUuid);
 
     int mergeInsert(Rc00507VO rc00507VO);
+
+    String getJobStatus(String jobId);
 }
