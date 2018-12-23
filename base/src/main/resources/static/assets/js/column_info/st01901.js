@@ -12,6 +12,15 @@ var st01901 =
                     visible: false
                 },
                 {
+                    sortNo: 0,
+                    name: "rfidTagRepublishUuid",
+                    text: "rfidTagRepublishUuid",
+                    editable: false,
+                    dataType: "code",
+                    required: false,
+                    visible: false
+                },
+                {
                     sortNo: 1,
                     name: "code",
                     text: "Code",
@@ -92,7 +101,7 @@ var st01901 =
                     dataType: "text"
                 },
                 {
-                    sortNo: 9,
+                    sortNo: 10,
                     name: "shelfName",
                     text: "서가",
                     width: 250,
@@ -100,12 +109,37 @@ var st01901 =
                     dataType: "text"
                 },
                 {
-                    sortNo: 9,
+                    sortNo: 11,
                     name: "locationName",
                     text: "행렬단",
                     width: 250,
                     editable: false,
                     dataType: "text"
                 },
+                {
+                    sortNo: 12,
+                    name: "requestDate",
+                    text: "Request Date",
+                    width: 140,
+                    editable: false,
+                    dataType: "date"
+                },
+                {
+                    sortNo: 13,
+                    name: "republishYn",
+                    text: "Republish YN",
+                    width: 100,
+                    editable: false,
+                    dataType: "text"
+                },
+                {
+                    sortNo: 14,
+                    name: "republishDate",
+                    text: "Republish Date",
+                    width: 140,
+                    editable: false,
+                    dataType: "date"
+                },
+
             ]
     }

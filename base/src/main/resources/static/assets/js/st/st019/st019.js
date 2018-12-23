@@ -26,7 +26,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         }
         axboot.ajax({
             type: "GET",
-            url: "/api/v1/st/st019/01/list02",
+            url: "/api/v1/st/st018/01/list02",
             data: $.extend({}, this.formView.getData(), {inoutExceptUuid: fnObj.gridView01.getSelectedData().inoutExceptUuid}),
             callback: function (res) {
                 fnObj.gridView02.setData(res.list);
@@ -56,7 +56,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
 
         axboot.ajax({
             type: "PUT",
-            url: "/api/v1/st/st019/01/saveTagPublish",
+            url: "/api/v1/st/st019/01/saveTagRepublish",
             data: JSON.stringify(selectedData),
             callback: function (res) {
                 ACTIONS.dispatch(ACTIONS.PAGE_SEARCH01);
@@ -263,7 +263,7 @@ fnObj.pageStart = function () {
     });
 
     $.ajax({
-        url: "/assets/js/column_info/st01902.js",
+        url: "/assets/js/column_info/st01802.js",
         dataType: "script",
         async: false,
         success: function () {
@@ -441,7 +441,7 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
     parentsGrid: fnObj.gridView01,
     initView: function () {
         this.initInstance();
-        this.setColumnInfo(st01902.column_info);
+        this.setColumnInfo(st01802.column_info);
         this.gridObj.setOption({
             checkBar: {visible: true}
         })

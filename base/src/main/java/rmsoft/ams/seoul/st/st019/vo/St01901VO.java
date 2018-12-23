@@ -13,6 +13,7 @@ import java.sql.Timestamp;
 public class St01901VO extends BaseVO {
 
     private String aggregationUuid;
+    private String rfidTagRepublishUuid;
     private String code;
     private String title;
     private String level;
@@ -24,6 +25,9 @@ public class St01901VO extends BaseVO {
     private String repositoryName;
     private String shelfName;
     private String locationName;
+    private String requestDate;
+    private String republishYn;
+    private String republishDate;
 
 
 }

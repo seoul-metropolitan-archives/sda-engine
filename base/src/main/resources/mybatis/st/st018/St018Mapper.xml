@@ -85,16 +85,19 @@ FROM RC_AGGREGATION A
     </select>
 
     <select id="getStRfidTag" resultType="St01802VO" parameterType="St01802VO" statementType="PREPARED">
-SELECT
-       tag.AGGREGATION_UUID aggregationUuid,
-       SEQ seq,
-       PUBLISH_SOURCE_TYPE_UUID publishSourceTypeUuid,
-       PUBLISH_STATUS_UUID publishStatusUuid,
-       PUBLISH_DATE publishDate,
-       TAG tag
-FROM ST_RFID_TAG tag
-  INNER JOIN RC_AGGREGATION R on tag.AGGREGATION_UUID = R.AGGREGATION_UUID
+        SELECT
+               tag.AGGREGATION_UUID aggregationUuid,
+               SEQ seq,
+               PUBLISH_SOURCE_TYPE_UUID publishSourceTypeUuid,
+               PUBLISH_STATUS_UUID publishStatusUuid,
+               PUBLISH_DATE publishDate,
+               TAG tag
+        FROM ST_RFID_TAG tag
 
+        <where>
+            1=1
+            AND tag.AGGREGATION_UUID = #{aggregationUuid}
+        </where>
     </select>
 
 

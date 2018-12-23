@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import rmsoft.ams.seoul.st.st019.service.St019Service;
 import rmsoft.ams.seoul.st.st019.vo.St01901VO;
-import rmsoft.ams.seoul.st.st019.vo.St01902VO;
+
 
 import javax.inject.Inject;
 
@@ -21,20 +21,16 @@ public class St019Controller extends BaseController {
     private St019Service service;
 
     @GetMapping("/01/list01")
-    public Responses.PageResponse getRcAggregation(Pageable pageable, RequestParams<St01901VO> requestParams) {
-        Page<St01901VO> pages = service.getRcAggregation(pageable, requestParams);
-        return Responses.PageResponse.of(pages.getContent(), pages);
-    }
-    @GetMapping("/01/list02")
-    public Responses.PageResponse getStRfidTag(Pageable pageable, RequestParams<St01902VO> requestParams) {
-        Page<St01902VO> pages = service.getStRfidTag(pageable, requestParams);
+    public Responses.PageResponse getStRfidTagPublishRequest(Pageable pageable, RequestParams<St01901VO> requestParams) {
+        Page<St01901VO> pages = service.getStRfidTagPublishRequest(pageable, requestParams);
         return Responses.PageResponse.of(pages.getContent(), pages);
     }
 
-    @PutMapping(value = "/01/saveTagPublish")
+
+    @PutMapping(value = "/01/saveTagRepublish")
     @PostMapping
-    public void saveTagPublish(@RequestBody St01901VO requestParams) {
-        service.saveTagPublish(requestParams);
+    public void saveTagRepublish(@RequestBody St01901VO requestParams) {
+        service.saveTagRepublish(requestParams);
     }
 
 
