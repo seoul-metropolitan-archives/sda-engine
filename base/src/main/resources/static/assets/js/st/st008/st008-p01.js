@@ -1,8 +1,7 @@
 
 var fnObj = {};
 var parentsData;
-var aRequestTypeUuid = []; // 직원구분 uuid
-var aRequestTypeName = []; // 직원구분 이름
+
 var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH_TREE: function (caller, act, data) {
         axboot.ajax({
@@ -169,9 +168,18 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
             }
         });
 
-        fnObj.formView.setFormData("takeoutDate",getFormattedDate(new Date())); //  반출일자
-        fnObj.formView.setFormData("returnDate",getFormattedDate(new Date())); //  반입일
-        fnObj.formView.setFormData("returnDueDate",getFormattedDate(new Date())); //  반입예정일
+        if(this.model.model.takeoutRequestUuid){
+            // 값이 있다면
+            // 수정이다.
+            fnObj.formView.setFormData("takeoutDate",getFormattedDate(new Date(this.model.model.takeoutDate))); //  반출일자
+            // fnObj.formView.setFormData("returnDate",getFormattedDate(new Date())); //  반입일
+            fnObj.formView.setFormData("returnDueDate",getFormattedDate(new Date(this.model.model.returnDueDate))); //  반입예정일
+        }else{
+            fnObj.formView.setFormData("takeoutDate",getFormattedDate(new Date())); //  반출일자
+            // fnObj.formView.setFormData("returnDate",getFormattedDate(new Date())); //  반입일
+            fnObj.formView.setFormData("returnDueDate",getFormattedDate(new Date())); //  반입예정일
+        }
+
       /*  $("input[data-ax-path='startFromDate']").val(getFormattedDate(new Date(), true));
         $("input[data-ax-path='startToDate']").val(getFormattedDate(new Date()));*/
 

@@ -179,6 +179,14 @@
                 }
 
             },
+            "SET_REASON_POPUP" :{
+                width: 1200,
+                height: 700,
+                iframe: {
+                    url: "/st/st012/st012-p01"
+                }
+            },
+
             "CREATE_TAKE_OUT_POPUP" :{
                 width: 1200,
                 height: 700,

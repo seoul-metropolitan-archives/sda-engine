@@ -6,20 +6,14 @@ import io.onsemiro.core.api.response.ApiResponse;
 import io.onsemiro.core.api.response.Responses;
 import io.onsemiro.core.code.ApiStatus;
 import io.onsemiro.core.parameter.RequestParams;
-import io.onsemiro.utils.ModelMapperUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
-import rmsoft.ams.seoul.common.domain.StTakeoutRequest;
-import rmsoft.ams.seoul.common.repository.StTakeoutRequestRepository;
 import rmsoft.ams.seoul.st.st008.service.St008Service;
 import rmsoft.ams.seoul.st.st008.vo.St00801VO;
 import rmsoft.ams.seoul.st.st008.vo.St00802VO;
-import rmsoft.ams.seoul.st.st008.vo.St00803VO;
-import rmsoft.ams.seoul.utils.CommonCodeUtils;
-
-import static rmsoft.ams.seoul.common.domain.QStShelf.stShelf;
+import rmsoft.ams.seoul.st.st008.vo.St00802pVO;
 
 /**
  * The type Cl 008 controller.
@@ -56,9 +50,23 @@ public class St008Controller extends BaseController {
     @PutMapping("/01/save")
     @PostMapping
     public ApiResponse saveStTakeoutRequest(@RequestBody St00801VO vo) {
-        return st008Service.saveStTakeoutRequest(vo);
+        ApiResponse apiResponse = st008Service.saveStTakeoutRequest(vo);
+        if(apiResponse.getStatus() == -1) {
+            throw new ApiException(ApiStatus.SYSTEM_ERROR, apiResponse.getMessage());
+        }
+        return apiResponse;
+
     }
 
+    @PutMapping("/02/save01")
+    @PostMapping
+    public ApiResponse saveStTakeoutAdd(@RequestBody St00802pVO vo) {
+        ApiResponse apiResponse = st008Service.saveStTakeoutAdd(vo);
+        if(apiResponse.getStatus() == -1) {
+            throw new ApiException(ApiStatus.SYSTEM_ERROR, apiResponse.getMessage());
+        }
+        return apiResponse;
+    }
     /*
     @GetMapping("/02/list01")
     public Responses.PageResponse getStTakeoutRecordResult(Pageable pageable, RequestParams<St00803VO> requestParam) {

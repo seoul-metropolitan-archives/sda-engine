@@ -12,7 +12,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             callback: function (res) {
                 fnObj.gridView01.setData(res.list);
                 //fnObj.gridView01.disabledColumn();
-                fnObj.gridView02.clearData();
+                // fnObj.gridView02.clearData();
             },
             options: {
                 onError: axboot.viewError
@@ -25,7 +25,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         }
         axboot.ajax({
             type: "GET",
-            url: "/api/v1/st/st013/01/list02",
+            url: "/api/v1/st/st012/01/list02",
             data: $.extend({}, this.formView.getData(),{inoutExceptUuid : fnObj.gridView01.getSelectedData().inoutExceptUuid}),
             callback: function (res) {
                 fnObj.gridView02.setData(res.list);
@@ -123,7 +123,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         var result = false;
         axboot.call({
             type: "PUT",
-            url: "/api/v1/st/st013/01/save01",
+            url: "/api/v1/st/st012/01/save01",
             data: JSON.stringify(this.gridView01.getData()),
             callback: function (res) {
                 ACTIONS.dispatch(ACTIONS.PAGE_SEARCH01);
@@ -158,6 +158,41 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     },
     MENU_OPEN: function (caller, act, data) {
 
+    },
+    MODAL_OPEN: function (caller, act, title) {
+        var modalOption ={ title : title };
+        if( title == '사유 등록'){
+            modalOption.modalType = 'SET_REASON_POPUP';
+        } else{
+            alert('팝업 타입 없음:' + data);
+        }
+        var aSelected = fnObj.gridView01.getSelectedData();
+        if( aSelected == undefined || aSelected.length == 0){
+            alert('선택된 기록물이 없습니다');
+            return;
+        }
+        axboot.modal.open({
+            modalType: modalOption.modalType,
+            header: {
+                title: modalOption.title,
+            },
+            sendData: function () {
+                var selectedRow = fnObj.gridView01.getSelectedData();
+
+                console.log('selectedRow', selectedRow);
+                // selectedRow.confirmBtn = "Arrange";
+                return selectedRow;
+
+            },
+            callback: function (data) {
+
+                if(this) this.close();
+                //if(data){
+                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH01, data);
+                //ACTIONS.dispatch(ACTIONS.PAGE_SEARCH02, data);
+                //}
+            }
+        });
     },
     dispatch: function (caller, act, data) {
         var result = ACTIONS.exec(caller, act, data);
@@ -271,7 +306,7 @@ fnObj.pageStart = function () {
     });
     _this.formView.initView();
     _this.gridView01.initView();
-    _this.gridView02.initView();
+   // _this.gridView02.initView();
     ACTIONS.dispatch(ACTIONS.PAGE_SEARCH01, this.formView.getData());
 };
 
@@ -289,6 +324,10 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
     },
     initEvent: function () {
         var _this = this;
+
+        $('#btn_setReason').click(function(){
+            ACTIONS.dispatch(ACTIONS.MODAL_OPEN, '사유 등록');
+        });
 
         $("input[data-ax-path='repositoryName']").parents().eq(1).find("a").click(function(){
             var data = {
@@ -367,7 +406,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     entityName: "ST_INOUT_EXCEPT",
     initView: function () {
         this.initInstance();
-        this.setColumnInfo(st01301.column_info);
+        this.setColumnInfo(st01201.column_info);
         this.gridObj.setOption({
             checkBar: {visible: true}
         })
@@ -432,97 +471,4 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     }
 
 });
-fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
-    tagId: "realgrid02",
-    primaryKey: "exceptRecordResultUuid",
-    uuidFieldName: "exceptRecordResultUuid", //EXCEPT_RECORD_RESULT_UUID
-    entityName: "ST_EXCEPT_RECORD_RESULT",
-    parentsUuidFieldName: "inoutExceptUuid",
-    parentsGrid: fnObj.gridView01,
-    initView: function () {
-        this.initInstance();
-        this.setColumnInfo(st01302.column_info);
-        this.gridObj.setOption({
-            checkBar: {visible: true}
-        })
-        this.makeGrid();
-        //this.gridObj.itemClick(this.itemClick);
-        // this.removeRowBeforeEvent(this.cancelDelete);
-    },
-    getSelectedData: function () {
-        return this.gridObj.getSelectedData()
-    },
-    disabledColumn: function () {
-        var state = axboot.commonCodeValueByCodeName("CD138", CONFIRM_STATUS);
-        this.gridObj.setCustomCellStyleRows("disable", function(row){
-            if (row["statusUuid"] == state)
-                return true;
-            else if(fnObj.gridView02.getSelectedData().useYn == "Y")
-                return true;
-            else return false;
-        },function(row){
-            if(row["statusUuid"] == state) {
-                return ["statusUuid", "shelfCode", "shelfName", "maxContainer", "description"];
-            }else {
-                return ["useYn"];
-            }
-        });
-    },
-    itemClick: function (data) {
-        /*if (fnObj.gridView03.isChangeData() == true) {
-            axDialog.confirm({
-                msg: axboot.getCommonMessage("AA006")
-            }, function () {
-                if (this.key == "ok") {
-                    ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
-                } else {
-                    ACTIONS.dispatch(ACTIONS.PAGE_SEARCH03);
-                }
-            });
-        } else {
 
-            var codes = axboot.commonCodeFilter("CD138").codeArr;
-            var names = axboot.commonCodeFilter("CD138").nameArr;
-            var state = undefined;
-            for (var i = 0; i < codes.length; i++) {
-                if (codes[i] == fnObj.gridView02.getSelectedData().statusUuid) {
-                    state = names[i];
-                    break;
-                }
-            }
-
-            //confirm confirm
-            if(state == CONFIRM_STATUS){
-                if(fnObj.gridView02.getSelectedData().useYn == "Y"){
-                    fnObj.gridView03.gridObj.setRunAdd(true);
-                }else{
-                    fnObj.gridView03.gridObj.setRunAdd(false);
-                }
-            }else{
-                fnObj.gridView03.gridObj.setRunAdd(false);
-            }
-
-
-            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH03);
-        }*/
-    },
-    cancelDelete: function(){
-        /*var codes = axboot.commonCodeFilter("CD138").codeArr;
-        var names = axboot.commonCodeFilter("CD138").nameArr;
-        var state = undefined;
-        for (var i = 0; i < codes.length; i++) {
-            if (codes[i] == fnObj.gridView02.getSelectedData().statusUuid) {
-                state = names[i];
-                break;
-            }
-        }
-
-        if(state == CONFIRM_STATUS){
-            axToast.push(axboot.getCommonMessage("DF001_01"));
-
-            this.setRunDel(false);
-        }else{
-            this.setRunDel(true);
-        }*/
-    },
-});

@@ -5,7 +5,6 @@ import io.onsemiro.core.mybatis.MyBatisMapper;
 import rmsoft.ams.seoul.st.st008.vo.St00801VO;
 
 import rmsoft.ams.seoul.st.st008.vo.St00802VO;
-import rmsoft.ams.seoul.st.st008.vo.St00803VO;
 
 import java.util.List;
 
