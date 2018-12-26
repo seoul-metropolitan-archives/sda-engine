@@ -103,7 +103,7 @@ public class Rc005Service extends BaseService {
 
 
         jobConv.setJobid(uuid);
-        jobConv.setSrcfile("sftp://" + mergeList.get(0).getFilePath() + "/" + mergeList.get(0).getServiceFileName());
+        jobConv.setSrcfile("sftp:///service/" + mergeList.get(0).getServiceFileName());
         jobConv.setDestfile("sftp:///merge/" + uuid + ".pdf");
         jobConv.setExtrajobs("MG");
         jobConv.setReqdate(Timestamp.valueOf(DateUtils.convertToString(LocalDateTime.now(), DateUtils.DATE_TIME_PATTERN)));
