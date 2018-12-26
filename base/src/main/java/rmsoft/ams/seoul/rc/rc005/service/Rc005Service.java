@@ -113,7 +113,7 @@ public class Rc005Service extends BaseService {
         for (Rc00502VO rc00502VO : mergeList) {
             rc00507VO = new Rc00507VO();
             rc00507VO.setJobid(uuid);
-            rc00507VO.setMergefile("sftp://" + rc00502VO.getFilePath() + "/" + rc00502VO.getServiceFileName());
+            rc00507VO.setMergefile("sftp:///service/" + rc00502VO.getServiceFileName());
             rc00507VO.setPage("1-");
             rc00507VO.setSeq(cnt + 1);
             rc005Mapper.mergeInsert(rc00507VO);
