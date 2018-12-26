@@ -179,6 +179,14 @@
                 }
 
             },
+            "SET_REASON_POPUP" :{
+                width: 1200,
+                height: 700,
+                iframe: {
+                    url: "/st/st012/st012-p01"
+                }
+            },
+
             "CREATE_TAKE_OUT_POPUP" :{
                 width: 1200,
                 height: 700,
@@ -206,6 +214,13 @@
                 height: 700,
                 iframe: {
                     url: "/st/st008/st008-p03"
+                }
+            },
+            "CREATE_TAKE_IN_POPUP" :{
+                width: 750,
+                height: 200,
+                iframe: {
+                    url: "/st/st009/st009-p01"
                 }
             },
             "FREEZE_POPUP" :{

@@ -24,6 +24,13 @@ public class St012Controller extends BaseController {
         Page<St01201VO> pages = service.getStInoutExcept(pageable, requestParams);
         return Responses.PageResponse.of(pages.getContent(), pages);
     }
+/*
+    @GetMapping("/01/list02")
+    public Responses.PageResponse getStInoutExceptList(Pageable pageable, RequestParams<St01201VO> requestParams) {
+        Page<St01201VO> pages = service.getStInoutExcept(pageable, requestParams);
+        return Responses.PageResponse.of(pages.getContent(), pages);
+    }
+   */
 
    /* @GetMapping("/01/list02")
     public Responses.PageResponse getStExceptRecordResult(Pageable pageable, RequestParams<St01102VO> requestParams) {

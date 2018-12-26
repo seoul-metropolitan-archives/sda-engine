@@ -22,10 +22,13 @@
                 <include refid="Common.UserName"><property name="userUuid" value="INSERT_UUID"/></include> as insertUuid,
                 A.INSERT_DATE as insertDate,
                 <include refid="Common.UserName"><property name="userUuid" value="UPDATE_UUID"/></include> as updateUuid,
-                A.UPDATE_DATE as updateDate,
+                A.UPDATE_DATE as updateDate
       FROM ST_TAKEOUT_REQUEST A
         <where>
             1=1
+            <if test="requestName != null">
+                AND A.REQUEST_NAME LIKE '%' || #{requestName} || '%'
+            </if>
             <!--<if test="machineId != null">
                 AND A.MACHINE_ID LIKE '%' || #{machineId} || '%'
             </if>
@@ -38,6 +41,83 @@
             <if test="ip != null">
                 AND A.IP LIKE '%' || #{ip} || '%'
             </if>-->
+        </where>
+    </select>
+    
+    <select id="getTakeoutRecordResult" resultType="St00902VO" parameterType="St00902VO" statementType="PREPARED">
+              SELECT A.TAKEOUT_RECORD_RESULT_UUID as takeoutRecordResultUuid,
+               A.TAKEOUT_REQUEST_UUID         as takeoutRequestUuid,
+               A.AGGREGATION_UUID          as aggregationUuid,
+               B.uuid,
+               B.orderNo,
+               B.publishedStatus,
+               B.code,
+               B.title,
+               B."type",
+               B."level",
+               B.author,
+               B.descStrDate,
+               B.descEdDate,
+               B.description,
+               B.notes,
+               SR.REPOSITORY_NAME as repositoryName,
+               SS.SHELF_NAME as shelfName,
+               NVL2(SL.ROW_NO,SL.ROW_NO || '행 ' || SL.COLUMN_NO || '열' ,'') as locationName
+        FROM ST_TAKEOUT_RECORD_RESULT A LEFT OUTER JOIN ST_ARRANGE_RECORDS_RESULT SARR
+        ON A.AGGREGATION_UUID = SARR.AGGREGATION_UUID
+        LEFT OUTER JOIN ST_ARRANGE_CONTAINERS_RESULT SACR
+        ON SARR.CONTAINER_UUID = SACR.CONTAINER_UUID
+        LEFT OUTER JOIN ST_LOCATION SL
+        ON SL.LOCATION_UUID = SACR.LOCATION_UUID
+        LEFT OUTER JOIN ST_SHELF SS
+        ON SS.SHELF_UUID = SL.SHELF_UUID
+        LEFT OUTER JOIN ST_REPOSITORY SR
+        ON SR.REPOSITORY_UUID = SS.REPOSITORY_UUID
+               INNER JOIN (SELECT AGGREGATION_UUID                                                                         as uuid,
+                                  1                                                                                        as orderNo,
+                                  (SELECT CODE_NAME
+                                   FROM AD_CODE_DETAIL
+                                   WHERE CODE_DETAIL_UUID = Z1.PUBLISHED_STATUS_UUID)                                      as publishedStatus,
+                                  AGGREGATION_CODE                                                                         as code,
+                                  TITLE                                                                                    as title,
+                                  (SELECT CODE_NAME
+                                   FROM AD_CODE_DETAIL
+                                   WHERE CODE_DETAIL_UUID = Z1.TYPE_UUID)                                                  as "type",
+                                  (SELECT TO_CHAR(LEVEL_NO)
+                                   FROM RC_LEVEL
+                                   WHERE LEVEL_UUID = Z1.LEVEL_UUID)                                                       as "level",
+                                  AUTHOR                                                                                   as author,
+                                  DESCRIPTION_START_DATE                                                                   as descStrDate,
+                                  DESCRIPTION_END_DATE                                                                     as descEdDate,
+                                  DESCRIPTION                                                                              as description,
+                                  NOTES                                                                                    as notes,
+                                  ((SELECT COUNT(*) FROM RC_AGGREGATION WHERE PARENT_AGGREGATION_UUID = Z1.AGGREGATION_UUID) +
+                                   (SELECT COUNT(*)
+                                    FROM RC_ITEM
+                                    WHERE AGGREGATION_UUID = Z1.AGGREGATION_UUID))                                         as childCnt
+                           FROM RC_AGGREGATION Z1
+                           UNION
+                           ALL SELECT ITEM_UUID                                                                    as uuid,
+                                      2                                                                            as orderNo,
+                                      (SELECT CODE_NAME
+                                       FROM AD_CODE_DETAIL
+                                       WHERE CODE_DETAIL_UUID = Z1.PUBLISHED_STATUS_UUID)                          as publishedStatus,
+                                      ITEM_CODE                                                                    as code,
+                                      TITLE                                                                        as title,
+                                      (SELECT CODE_NAME FROM AD_CODE_DETAIL WHERE CODE_DETAIL_UUID = Z1.TYPE_UUID) as "type",
+                                      ''                                                                           as "level",
+                                      AUTHOR                                                                       as author,
+                                      DESCRIPTION_START_DATE                                                       as descStrDate,
+                                      DESCRIPTION_END_DATE                                                         as descEdDate,
+                                      DESCRIPTION                                                                  as description,
+                                      NOTES                                                                        as notes,
+                                      0                                                                            as childCnt
+                               FROM RC_ITEM Z1) B on A.AGGREGATION_UUID = B.uuid
+        <where>
+            1=1
+            <if test="takeoutRequestUuid != null">
+                AND A.TAKEOUT_REQUEST_UUID = #{takeoutRequestUuid}
+            </if>
         </where>
     </select>
 

@@ -60,18 +60,23 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         ACTIONS.dispatch(ACTIONS.STATUS_UPDATE,CANCEL_STATUS);
     },
     PAGE_SAVE: function (caller, act, data) {
+
+        var aggregationList = caller.gridView03.getData();
+        if( aggregationList.length == 0){
+            alert('저장 할 데이터가 없습니다.');
+            return;
+        }
         axboot.ajax({
             type: "PUT",
-            url: "/api/v1/cl/cl003/02/save02",
-            data: JSON.stringify({classUuid:parentsData.classUuid,
-                                 description:fnObj.formView.getFormData("description"),
-                                 levelOfDetailUuid:fnObj.formView.getFormData("levelOfDetailUuid"),
-                                 statusDescription:fnObj.formView.getFormData("statusDescription"),
-                                 rulesConversionUuid:fnObj.formView.getFormData("rulesConversionUuid"),
-                                 scopeContent:fnObj.formView.getFormData("scopeContent")
+            url: "/api/v1/st/st008/02/save01",
+            data: JSON.stringify({
+                takeoutRequestUuid: parentsData.takeoutRequestUuid,
+                st00802VOList: aggregationList, // 대상추가될 aggregation list
             }),
             callback: function (res) {
-                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+
+                ACTIONS.dispatch(ACTIONS.PAGE_CLOSE);
+                // ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
             }
         });
         return false

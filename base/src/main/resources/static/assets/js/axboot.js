@@ -2698,7 +2698,7 @@ axboot.baseView =
         name: "baseView",
         init: function () {
             var _this = this;
-            
+
             $(".bdb").delegate("#confirm", "click", function () {
                 _this.confirm();
             });
@@ -3053,7 +3053,7 @@ axboot.gridView = {
         if (undefined == key || "" == key) {
             key = _this.primaryKey;
         }
-        
+
         var column = wrapperObj.columnByName(key);
         column.defaultValue = uuid;
         wrapperObj.setColumn(column);
@@ -3241,10 +3241,10 @@ axboot.viewExtend = function (_obj1, _obj2) {
     try {
         if(!_obj2.noPermission){
             if (!isPermission(_obj2.entityName, FUNCTION_ADD_UUID)) {
-                $("#"+_obj2.tagId).parents().eq(1).find(".btn_a").attr('disabled', true);
+                // $("#"+_obj2.tagId).parents().eq(1).find(".btn_a").attr('disabled', true);
             }
             if (!isPermission(_obj2.entityName, FUNCTION_DEL_UUID)) {
-                $("#"+_obj2.tagId).parents().eq(1).find(".btn_d").attr('disabled', true);
+                // $("#"+_obj2.tagId).parents().eq(1).find(".btn_d").attr('disabled', true);
             }
         }
     }catch(e){

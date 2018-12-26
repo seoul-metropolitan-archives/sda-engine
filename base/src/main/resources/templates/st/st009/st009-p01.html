@@ -1,0 +1,110 @@
+<!DOCTYPE HTML>
+<!--
+  ~ Copyright (c) 2017. RMSoft Co.,Ltd. All rights reserved
+  -->
+
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout/modal}">
+
+<!-- ===== [ script ] ===== -->
+<script layout:fragment="script" type="text/javascript" th:src="@{/assets/js/st/st009/st009-p01.js}"></script>
+<!-- ===== [ script ] _END_ ===== -->
+
+<!-- ===== [ base-content ] ===== -->
+<div layout:fragment="base-content" class="ax-base-content">
+    <form name="formView01" id="formView01" method="post" onsubmit="return false">
+        <div class="cssBody" style="top:80px">
+            <div class="contents_wrap">
+                <div style=" height:30px; width:100%" class="bgf7 div_tablerow">
+                    <ul class="bdb">
+                        <th:block layout:insert="~{/fragments/page-buttons :: save-and-inquiry('show','none')}"/>
+                    </ul>
+                </div>
+                <!--<div class="bdb div_tablerow searchFields">
+                    <dl>
+                        <dd class="mgl_5 w_auto">
+                            <div class="rdo_box">
+                                <span class="rdo_box_title">Type</span>
+                            </div>
+                        </dd>
+                    </dl>
+                </div>
+-->
+                <div style="height:100%; width:100%" class="bgf7 div_tablerow">
+                    <div style="display:table; height:100%; width:100%; float:right">
+                        <!--<ul class="bdb bdt div_tablerow" style="height:30px;">
+                            <th:block layout:insert="~{/fragments/page-buttons :: dot('Authority')}"/>
+                        </ul>-->
+                        <div style="height:100%; width:100%" class="div_tablerow bdb">
+                            <div style="position:relative;width: 100%;height:100%;background:#ffffff;">
+                                <div class="cont_wrap01" style="position: absolute;padding-bottom: 30px">
+                                    <div style="width:100%;height:100%;" class="bgf7 div_tablerow">
+                                        <div data-ax-tbl class="ax-search-tbl">
+                                            <div>
+                                                <th:block layout:insert="~{/fragments/table :: tr-td(text='구분', style='width: 250px')}">
+                                                    <div layout:fragment="wrap">
+                                                            <label>
+                                                                <input data-ax-path="employeeYn" type="radio" name="employeeYn" class="no_border" value="Y" checked="checked">직원</label>
+                                                            <label>
+                                                                <input data-ax-path="employeeYn" type="radio" name="employeeYn" class="no_border" value="N" >외부</label>
+                                                        </div>
+                                                </th:block>
+                                            </div>
+
+                                            <div id="organizationArea">
+
+                                                <th:block
+                                                        layout:insert="~{/fragments/table :: tr-td3(text1='소속', style1='width: 250px', text2='직위', style2='width: 250px', text3='성명', style3='width: 250px')}">
+                                                    <div layout:fragment="wrap-1">
+                                                        <input type="text" data-ax-path="department"
+                                                               class="form-control"
+                                                               th:placeholder="#{axboot.admin.login.status.message(${loginUser.userNm})}"
+                                                               readonly>
+                                                    </div>
+                                                    <div layout:fragment="wrap-2">
+                                                        <input type="text" data-ax-path="position"
+                                                               class="form-control"
+                                                               th:placeholder="#{axboot.admin.login.status.message(${loginUser.userNm})}"
+                                                               readonly>
+                                                    </div>
+                                                    <div layout:fragment="wrap-3">
+                                                        <input type="text" data-ax-path="name"
+                                                               class="form-control"
+                                                               th:placeholder="#{axboot.admin.login.status.message(${loginUser.userNm})}"
+                                                               readonly>
+                                                    </div>
+
+                                                </th:block>
+                                                <div>
+                                                    <th:block layout:insert="~{/fragments/table :: tr-td(text='반출일자', style='width: 250px')}">
+                                                        <div layout:fragment="wrap">
+                                                            <div class="input-group" data-ax5picker="date">
+                                                                <div class="cld_box">
+                                                                    <input type="text"
+                                                                           data-ax-path="startDate"
+                                                                           style=""
+                                                                           placeholder="YYYY-MM-DD" maxlength="10">
+                                                                    <img title="calendar"
+                                                                         class="ui-datepicker-trigger" alt="..."
+                                                                         src="/assets/images/ams/calendar.png">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </th:block>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><!--오른쪽 내용영역 전체 e -->
+    </form>
+</div>
+<!-- ===== [ base-content ] _END_ ===== -->
+</html>
