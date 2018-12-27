@@ -110,7 +110,7 @@ public class Rc005Service extends BaseService {
         itemMap.put("title",itemVo.getName());
         itemMap.put("itemUuid",itemVo.getRiItemUuid());
         itemMap.put("itemCode",itemVo.getRiItemCode());
-        itemMap.put("typeUuid",itemVo.getRiTypeUuid());
+        itemMap.put("typeName",itemVo.getRiTypeName());
         itemMap.put("publishedStatusName",itemVo.getRiPublishedStatusName());
         itemMap.put("description",itemVo.getDescription1());
         itemMap.put("author",itemVo.getRiAuthor());
