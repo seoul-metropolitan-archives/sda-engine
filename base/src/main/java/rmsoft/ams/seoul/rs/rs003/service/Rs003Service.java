@@ -168,6 +168,7 @@ public class Rs003Service extends BaseService {
 
                     initDate = calinitailDate(initDate);
                     rsRecordScheduleResult.setInitialDate(initDate);
+                    rsRecordScheduleResult.setDisposalTypeUuid(rsRecordSchedule.getDisposalTypeUuid());
                     rsRecordScheduleResult.setDisposalDueDate(calDueToDate(period,initDate));
                     rsRecordScheduleResult.setInsertDate(orgRsRecordScheduleResult.getInsertDate());
                     rsRecordScheduleResult.setInsertUuid(orgRsRecordScheduleResult.getInsertUuid());
