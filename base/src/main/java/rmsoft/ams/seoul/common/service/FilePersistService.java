@@ -33,9 +33,6 @@ public class FilePersistService implements InitializingBean {
     @Value("${repository.upload}")
     private String path;
 
-    @Value("${repository.temp}")
-    private String pathTemp;
-
     private String fileSavePath;
     private AX5File ax5File;
     private String fileType;
@@ -122,16 +119,16 @@ public class FilePersistService implements InitializingBean {
         return getAx5File(new File(fileSavePath + File.separator + id + ".json"));
     }
 
-    public AX5File getAx5TempFile(String tempFileName) throws IOException {
-        File tempFile = new File(pathTemp + File.separator + tempFileName);
+    public AX5File getAx5TempFile(String tempFilePath) throws IOException {
+        File tempFile = new File(tempFilePath);
 
         AX5File ax5File = new AX5File();
         ax5File.setLastModified(tempFile.lastModified());
         ax5File.setId("");
-        ax5File.setFileName(tempFileName);
+        ax5File.setFileName(tempFile.getName());
         ax5File.setFileHash(tempFile.hashCode());
         ax5File.setFileSize(tempFile.length());
-        ax5File.setExt(FilenameUtils.getExtension(tempFileName));
+        ax5File.setExt(FilenameUtils.getExtension(tempFile.getName()));
         ax5File.setFile(tempFile);
 
         return ax5File;

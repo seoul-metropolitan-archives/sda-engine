@@ -26,11 +26,12 @@ public class ArchiveUtils {
      * @param destinationFilePath the destination file path
      * @param password            the password
      */
-    public static void archive(String targetPath, String destinationFilePath, String password) {
+    public static void archive(String targetPath, String destinationFilePath, String password, boolean includeRootFolder) {
         try {
             ZipParameters parameters = new ZipParameters();
             parameters.setCompressionMethod(Zip4jConstants.COMP_DEFLATE);
             parameters.setCompressionLevel(Zip4jConstants.DEFLATE_LEVEL_NORMAL);
+            parameters.setIncludeRootFolder(includeRootFolder);
 
             if (password.length() > 0) {
                 parameters.setEncryptFiles(true);
