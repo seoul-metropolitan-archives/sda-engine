@@ -97,6 +97,30 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             }
         });
     },
+    DATE_UPDATE : function(caller, act, data)
+    {
+
+        var rows = fnObj.gridView01.gridObj.getJsonRows();;
+        var state = axboot.commonCodeValueByCodeName("CD134", "Confirm");
+
+        if(!rows || rows.length < 1) return;
+
+        var params = rows.filter(function (item) {
+            return item.statusUuid == state && item.reCalculationYn == 'Y';
+        });
+
+        axboot.ajax({
+            type: "PUT",
+            url: "/api/v1/rs/rs003/04/update",
+            data: JSON.stringify(params),
+            callback: function (res) {
+                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+            },
+            options: {
+                onError: axboot.viewError
+            }
+        });
+    },
     dispatch: function (caller, act, data) {
         var result = ACTIONS.exec(caller, act, data);
         if (result != "error") {
@@ -313,15 +337,20 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     },
     cancelDelete: function(){
         var index = fnObj.gridView01.gridObj.getCurrent().dataRow;
-        var state = axboot.commonCodeValueByCodeName("CD134", "Confirm");
+        var state = axboot.commonCodeValueByCodeName("CD134", "Draft");
+
+
 
         if(fnObj.gridView01.gridObj.getSelectedData().statusUuid == state) {
-            this.setRunDel(false);
+            if(fnObj.gridView01.gridObj.getSelectedData().relatedItems == 0){
+                this.setRunDel(true);
+            }else{
+                this.setRunDel(false);
+            }
         }else{
-            this.setRunDel(true);
+            this.setRunDel(false);
         }
-    },
-
+    }
 });
 /**
  * [필수]

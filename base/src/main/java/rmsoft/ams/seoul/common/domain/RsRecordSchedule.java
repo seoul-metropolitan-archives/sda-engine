@@ -51,6 +51,9 @@ public class RsRecordSchedule extends BaseJpaModel<RsRecordSchedule.RsRecordSche
 	@Column(name = "USE_YN", length = 1, nullable = false)
 	private String useYn;
 
+	@Column(name = "RE_CALCULATION_YN", length = 1)
+	private String recalculationYn;
+
 	@Override
 	public RsRecordScheduleId getId() {
 		return RsRecordScheduleId.of(recordScheduleUuid);

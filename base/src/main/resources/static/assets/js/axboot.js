@@ -2729,6 +2729,9 @@ axboot.baseView =
             $(".bdb").delegate("#disposal", "click", function () {
                 _this.disposal();
             });
+            $(".bdb").delegate("#update", "click", function () {
+                _this.update();
+            });
 
             try {
                 if (hideMenuRole("saveYn")) {
@@ -2835,6 +2838,10 @@ axboot.baseView =
         , disposal: function () {
             if (ACTIONS && ACTIONS.PAGE_DISPOSAL)
                 ACTIONS.dispatch(ACTIONS.PAGE_DISPOSAL);
+        }
+        , update: function () {
+            if (ACTIONS && ACTIONS.DATE_UPDATE)
+                ACTIONS.dispatch(ACTIONS.DATE_UPDATE);
         }
     };
 

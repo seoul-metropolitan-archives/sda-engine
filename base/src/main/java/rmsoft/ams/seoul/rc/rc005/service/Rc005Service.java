@@ -1,7 +1,5 @@
 package rmsoft.ams.seoul.rc.rc005.service;
 
-import io.onsemiro.core.api.response.ApiResponse;
-import io.onsemiro.core.code.ApiStatus;
 import io.onsemiro.core.domain.BaseService;
 import io.onsemiro.core.parameter.RequestParams;
 import io.onsemiro.utils.DateUtils;
@@ -93,10 +91,10 @@ public class Rc005Service extends BaseService {
     public Object mergeComponent(List<Rc00502VO> mergeList) {
 
         String responseSB = "";
-        HttpURLConnection conn = null;
-        BufferedReader br = null;
         JobConv jobConv = new JobConv();
         String uuid = UUIDUtils.getUUID();
+        HttpURLConnection conn = null;
+        BufferedReader br = null;
         Rc00507VO rc00507VO;
         Map<String, Object> response = new HashMap<String, Object>();
         int cnt = 0;
@@ -139,24 +137,18 @@ public class Rc005Service extends BaseService {
                         // Read response
 
                         try {
-                            br = new BufferedReader(new InputStreamReader(
-                                    conn.getInputStream()));
-
+                            br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
                             String line;
-                            while ((line = br.readLine()) != null)
-                                responseSB += line;
-
+                            while ((line = br.readLine()) != null) responseSB += line;
                             // Close streamsd
                         } catch (IOException e) {
                             log.error(e.getMessage());
                         } finally {
-                            if (null != br)
-                                br.close();
+                            if (null != br) br.close();
                         }
 
                         System.out.println("Stream Viewer response =>"+responseSB);
                         JSONObject obj = new JSONObject(responseSB);
-
 
                         response.put("url", streamingUrl + ":" + streamingPort + streamingContext + streamingView + obj.getString("streamdocsId") + ";currentPage=1");
                         System.out.println(streamingUrl+":"+streamingPort+streamingContext+streamingView+obj.getString("streamdocsId")+";currentPage=1");
