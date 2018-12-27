@@ -27,8 +27,6 @@ axboot.def = {
     "dialogTitle": "Confirm"
 };
 
-axboot.modalOpener = "";
-
 /**
  * document ready 상태가 되었을 때 실행됩니다. 애플리케이션 초기화를 담당합니다.
  * @method axboot.init
@@ -1861,8 +1859,6 @@ axboot.modal = function () {
         this.modalCallback = modalConfig.callback;
         this.modalSendData = modalConfig.sendData;
 
-        axboot.modalOpener = "modal";
-
         window.axModal.open(modalConfig);
     };
 
@@ -2092,8 +2088,6 @@ axboot.commonModal = function () {
 
         this.modalCallback = modalConfig.callback;
         this.modalSendData = modalConfig.sendData;
-
-        axboot.modalOpener = "commonModal";
 
         window.axCommonModal.open(modalConfig);
     };
@@ -2698,7 +2692,7 @@ axboot.baseView =
         name: "baseView",
         init: function () {
             var _this = this;
-            
+
             $(".bdb").delegate("#confirm", "click", function () {
                 _this.confirm();
             });
@@ -2741,16 +2735,16 @@ axboot.baseView =
             } catch(e) {
 
             }
-           /* $(document).delegate(".ax-body .div_tablerow:not(.searchFields) input", "keydown", function (e) {
-                if (e.ctrlKey && e.altKey && e.keyCode == 73) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    _this.inquiry();
-;                } else if (e.ctrlKey && e.altKey && e.keyCode == 83) {
-                    _this.save();
-                }
+            /* $(document).delegate(".ax-body .div_tablerow:not(.searchFields) input", "keydown", function (e) {
+                 if (e.ctrlKey && e.altKey && e.keyCode == 73) {
+                     e.preventDefault();
+                     e.stopPropagation();
+                     _this.inquiry();
+ ;                } else if (e.ctrlKey && e.altKey && e.keyCode == 83) {
+                     _this.save();
+                 }
 
-            });*/
+             });*/
             $(document).delegate(".ax-body .searchFields input,.ax-body .searchFields select", "keydown", function (e) {
                 if (e.keyCode == 13)
                 {
@@ -2777,11 +2771,11 @@ axboot.baseView =
             });
         }
         , save: function (event) {
-        if (ACTIONS && ACTIONS.PAGE_SAVE)
-            ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
+            if (ACTIONS && ACTIONS.PAGE_SAVE)
+                ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
         }
         , inquiry: function () {
-        if (axboot.isDataChanged && axboot.isDataChanged(axboot.getMenuId())) {
+            if (axboot.isDataChanged && axboot.isDataChanged(axboot.getMenuId())) {
                 axDialog.confirm({
                     msg: axboot.getCommonMessage("AA006")
                 }, function () {
@@ -2809,8 +2803,8 @@ axboot.baseView =
                 ACTIONS.dispatch(ACTIONS.PAGE_CONFIRM);
         }
         , cancel: function () {
-        if (ACTIONS && ACTIONS.PAGE_CANCEL)
-            ACTIONS.dispatch(ACTIONS.PAGE_CANCEL);
+            if (ACTIONS && ACTIONS.PAGE_CANCEL)
+                ACTIONS.dispatch(ACTIONS.PAGE_CANCEL);
         }
         , arrange: function () {
             if (ACTIONS && ACTIONS.PAGE_ARRANGE)
@@ -3053,7 +3047,7 @@ axboot.gridView = {
         if (undefined == key || "" == key) {
             key = _this.primaryKey;
         }
-        
+
         var column = wrapperObj.columnByName(key);
         column.defaultValue = uuid;
         wrapperObj.setColumn(column);

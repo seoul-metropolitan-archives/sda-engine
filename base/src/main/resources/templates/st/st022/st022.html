@@ -8,7 +8,7 @@
       layout:decorate="~{/layout/base}">
 
 <!-- ===== [ script ] ===== -->
-<script layout:fragment="script" type="text/javascript" th:src="@{/assets/js/st/st025/st025.js}"></script>
+<script layout:fragment="script" type="text/javascript" th:src="@{/assets/js/st/st022/st022.js}"></script>
 <!-- ===== [ script ] _END_ ===== -->
 
 <!-- ===== [ base-content ] ===== -->
@@ -19,25 +19,15 @@
                 <div style=" height:30px; width:100%" class="bgf7 div_tablerow">
                     <ul class="bdb">
                         <th:block layout:insert="~{/fragments/page-buttons :: bookmark}"/>
-                        <th:block layout:insert="~{/fragments/page-buttons :: save-and-inquiry}"/>
+                        <th:block layout:insert="~{/fragments/page-buttons :: inquiry}"/>
                     </ul>
                 </div>
                 <div class="bdb div_tablerow searchFields">
                     <dl>
-                        <dt class="mgl_5">장비 ID</dt>
-                        <dd>
-                            <input type=text data-ax-path="machineId" style="width:135px">
-                        </dd>
-                        <dt class="mgl_5">장비명</dt>
-                        <dd>
-                            <input type=text data-ax-path="machineName" style="width:135px">
-                        </dd>
-                        <th:block layout:insert="~{/fragments/page-buttons :: searchInputYellow ('Parent Gate Name','parentGateName')}"/>
-                        <dt class="mgl_5">IP주소</dt>
-                        <dd>
-                            <input type=text data-ax-path="ip" style="width:135px">
-                        </dd>
-
+                        <th:block layout:insert="~{/fragments/page-buttons :: searchInputYellow ('서고','InZoneName')}"/>
+                        <th:block layout:insert="~{/fragments/page-buttons :: searchInputYellow ('서가','outZoneName')}"/>
+                        <th:block layout:insert="~{/fragments/page-buttons :: searchInputYellow ('행렬단','InZoneName')}"/>
+                        <th:block layout:insert="~{/fragments/page-buttons :: searchInputYellow ('Container','outZoneName')}"/>
                     </dl>
                 </div>
                 <div style="height:100%; width:100%" class="div_tablerow">

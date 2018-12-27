@@ -1,5 +1,9 @@
 var fnObj = {};
 
+$( function() {
+    $( "#itemTabs" ).tabs();
+} );
+
 var ACTIONS = axboot.actionExtend(fnObj, {
     // JOB 조회
     PAGE_SEARCH: function (caller, act, data) {

@@ -29,6 +29,7 @@ public class St028Service extends BaseService {
 
     public Page<St02801VO> getStGate(Pageable pageable, RequestParams<St02801VO> requestParams) {
         St02801VO st02801VO = new St02801VO();
+        st02801VO.setGateId(requestParams.getString("gateId"));
         //검색조건 추가시
 
         return filter(st028Mapper.getStGate(st02801VO), pageable, "", St02801VO.class);

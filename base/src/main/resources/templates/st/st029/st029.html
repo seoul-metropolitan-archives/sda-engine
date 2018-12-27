@@ -8,7 +8,7 @@
       layout:decorate="~{/layout/base}">
 
 <!-- ===== [ script ] ===== -->
-<script layout:fragment="script" type="text/javascript" th:src="@{/assets/js/st/st028/st028.js}"></script>
+<script layout:fragment="script" type="text/javascript" th:src="@{/assets/js/st/st029/st029.js}"></script>
 <!-- ===== [ script ] _END_ ===== -->
 
 <!-- ===== [ base-content ] ===== -->
@@ -24,36 +24,34 @@
                 </div>
                 <div class="bdb div_tablerow searchFields">
                     <dl>
-                        <dt class="mgl_5">게이트 ID</dt>
+                        <dt class="mgl_5">장비 유형</dt>
                         <dd>
-                            <input type=text data-ax-path="gateId" style="width:135px">
+                            <input type=text data-ax-path="test1" style="width:135px">
                         </dd>
-                        <dt class="mgl_5">게이트명</dt>
+                        <dt class="mgl_5">프로그램 명</dt>
                         <dd>
-                            <input type=text data-ax-path="gateName" style="width:135px">
-                        </dd>
-                        <dt class="pdl_5">운영모드</dt>
-                        <dd>
-                            <select data-ax-path="statusUuid01" style="width:135px;">
-                                <option value=""></option>
-                                <option th:each="item : ${statusUuid}"
-                                        th:value="${item.codeDetailUUID}"
-                                        th:text="${item.codeName}"/>
-                            </select>
-                        </dd>
-                        <dt class="pdl_5">센서사용</dt>
-                        <dd>
-                            <select data-ax-path="statusUuid02" style="width:135px;">
-                                <option value=""></option>
-                                <option th:each="item : ${statusUuid}"
-                                        th:value="${item.codeDetailUUID}"
-                                        th:text="${item.codeName}"/>
-                            </select>
+                            <input type=text data-ax-path="test1" style="width:135px">
                         </dd>
                     </dl>
                     <dl>
                         <th:block layout:insert="~{/fragments/page-buttons :: searchInputYellow ('In zone','InZoneName')}"/>
-                        <th:block layout:insert="~{/fragments/page-buttons :: searchInputYellow ('out Zone','outZoneName')}"/>
+
+                        <dt>등록일자</dt>
+                        <dd class="w_auto">
+                            <div class="input-group" data-ax5picker="date">
+                                <div class="cld_box" style="background-color: #fffdd6">
+                                    <input type="text" data-ax-path="startFromDate" style="background-color: #fffdd6;ime-mode:disabled;"
+                                           placeholder="YYYY-MM-DD" maxlength="10">
+                                    <img title="calendar" class="ui-datepicker-trigger" alt="..." src="/assets/images/ams/calendar.png" >
+                                </div>
+                                ~
+                                <div class="cld_box" style="background-color: #fffdd6">
+                                    <input type="text" data-ax-path="startToDate" style="background-color: #fffdd6;ime-mode:disabled;"
+                                           placeholder="YYYY-MM-DD" maxlength="10">
+                                    <img title="calendar" class="ui-datepicker-trigger" alt="..." src="/assets/images/ams/calendar.png">
+                                </div>
+                            </div>
+                        </dd>
                     </dl>
                 </div>
                 <div style="height:100%; width:100%" class="div_tablerow">

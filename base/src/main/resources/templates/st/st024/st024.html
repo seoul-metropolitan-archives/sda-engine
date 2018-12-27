@@ -1,0 +1,86 @@
+<!DOCTYPE HTML>
+<!--
+  ~ Copyright (c) 2017. RMSoft Co.,Ltd. All rights reserved
+  -->
+
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout/base}">
+
+<!-- ===== [ script ] ===== -->
+<script layout:fragment="script" type="text/javascript" th:src="@{/assets/js/st/st024/st024.js}"></script>
+<!-- ===== [ script ] _END_ ===== -->
+
+<!-- ===== [ base-content ] ===== -->
+<div layout:fragment="base-content" class="ax-base-content">
+    <form name="formView01" id="formView01" method="post" onsubmit="return false">
+        <div class="cssBody" style="top:80px">
+            <div class="contents_wrap">
+                <div style=" height:30px; width:100%" class="bgf7 div_tablerow">
+                    <ul class="bdb">
+                        <th:block layout:insert="~{/fragments/page-buttons :: bookmark}"/>
+                        <th:block layout:insert="~{/fragments/page-buttons :: inquiry}"/>
+                    </ul>
+                </div>
+                <!--<div style="height:100%; width:100%" class="div_tablerow">
+                    <div style="display:table; height:50%; width:100%">
+                        <ul class="bdb bdt div_tablerow bgf7" style="height:30px;">
+                            <th:block layout:insert="~{/fragments/page-buttons :: dot('Workflow')}"/>
+                            <th:block layout:insert="~{/fragments/page-buttons :: add-and-delete}"/>
+                        </ul>
+                        <div style="height:100%; width:100%" class="div_tablerow bdb">
+                            <div id="realgrid01" style="width:100%; height:100%"></div>
+                        </div>
+                    </div>
+                </div>-->
+                <div style="height:100%; width:100%" class="bgf7 div_tablerow">
+                    <div style="display:table; height:100%; width:100%; float:right">
+                        <div class="explorer_list" style="overflow-y: hidden;background-color: #ffffff">
+                            <div id="itemTabs" style="width:100%;height:100%;position:relative;">
+                                <ul style="padding:0px;height: 29px;">
+                                    <li style="height: 29px"><a href="#itemTabs-1">Untitled01</a></li>
+                                    <li style="height: 29px"><a href="#itemTabs-2">Untitled02</a></li>
+                                </ul>
+                                <div id="itemTabs-1" class="padding-tab" style="width:100%;height:100%;position:relative;border: 0px;">
+                                    <div class="bdb div_tablerow searchFields">
+                                        <dl>
+                                            <th:block layout:insert="~{/fragments/page-buttons :: searchInputYellow ('서고','InZoneName')}"/>
+                                            <th:block layout:insert="~{/fragments/page-buttons :: searchInputYellow ('서가','outZoneName')}"/>
+                                            <th:block layout:insert="~{/fragments/page-buttons :: searchInputYellow ('행렬단','InZoneName')}"/>
+                                        </dl>
+                                        <dl>
+                                            <dt class="mgl_5">Aggregation Code</dt>
+                                            <dd>
+                                                <input type=text data-ax-path="test1" style="width:135px">
+                                            </dd>
+                                            <dt class="mgl_5">Title</dt>
+                                            <dd>
+                                                <input type=text data-ax-path="test2" style="width:135px">
+                                            </dd>
+                                        </dl>
+                                    </div>
+                                    <div style="height:100%; width:100%" class="">
+                                        <div style="display:table; height:100%; width:100%">
+                                            <ul class="bdb bdt div_tablerow bgf7" style="height:30px;">
+                                                <th:block layout:insert="~{/fragments/page-buttons :: dot('Workflow')}"/>
+                                            </ul>
+                                            <div style="height:100%; width:100%" class="div_tablerow bdb">
+                                                <div id="realgrid01" style="width:100%; height:100%"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div id="itemTabs-2" class="padding-tab" style="width:100%;position:relative;border: 0px;">
+                                    와..
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><!--오른쪽 내용영역 전체 e -->
+    </form>
+</div>
+<!-- ===== [ base-content ] _END_ ===== -->
+</html>
