@@ -81,6 +81,7 @@ dip.process:
 #workflow.module.path: D:\02.DreamAntDev\git-workspaces\java\seoul-ams\base\src\main\resources\workflow-modules\
 #mac
 workflow.module.path: /Users/jspark226/IdeaProjects/seoul-ams/base/src/main/resources/workflow-modules/
+service.module.path: /Users/jspark226/IdeaProjects/seoul-ams/base/src/main/resources/service-modules/
 
 #운영
 #workflow.module.path: /app/www/WEB-INF/classes/native-libs/
@@ -105,6 +106,7 @@ repository:
   #contents: /Users/younghyunshin/Downloads/contents
   upload: /Users/jspark226/devspace/upload
   contents: /Users/jspark226/devspace/contents
+  streamDoc: \service
   temp: /Users/jspark226/devspace/contents/temp
 
 # ONSEMIRO

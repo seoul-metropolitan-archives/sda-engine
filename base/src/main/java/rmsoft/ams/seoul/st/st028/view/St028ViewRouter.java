@@ -4,14 +4,16 @@ import io.onsemiro.controller.BaseController;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import rmsoft.ams.seoul.utils.CommonCodeUtils;
 
 @Controller
 public class St028ViewRouter extends BaseController {
 
     @GetMapping("/st/st028/st028")
     public String view(ModelMap model) {
-        //model.addAttribute("statusUuid", CommonCodeUtils.get("CD138"));
-        //model.addAttribute("containerTypeUuid", CommonCodeUtils.get("CD139"));
+        model.addAttribute("statusUuid01", CommonCodeUtils.get("CD202"));
+        model.addAttribute("statusUuid02", CommonCodeUtils.get("CD207"));
+
         return "/st/st028/st028";
     }
 

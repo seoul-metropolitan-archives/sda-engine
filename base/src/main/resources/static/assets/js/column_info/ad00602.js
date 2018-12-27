@@ -155,12 +155,12 @@ var ad00602 =
                 name: "auditYN",
                 text: "Audit",
                 width: 50,
-                editable: false,
+                editable: true,
                 dataType: "check",
                 textAlignment: "center",
                 defaultValue : "N",
                 visible: true,
-                disable: true
+                disable: false
             },
             {
                 sortNo: 11,

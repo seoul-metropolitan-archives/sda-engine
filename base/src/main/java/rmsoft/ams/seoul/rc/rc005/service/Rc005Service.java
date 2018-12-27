@@ -5,19 +5,16 @@ import io.onsemiro.core.parameter.RequestParams;
 import io.onsemiro.utils.DateUtils;
 import io.onsemiro.utils.UUIDUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import rmsoft.ams.seoul.common.domain.JobConv;
 import rmsoft.ams.seoul.common.repository.JobConvRepository;
 import rmsoft.ams.seoul.rc.rc005.dao.Rc005Mapper;
-import rmsoft.ams.seoul.rc.rc005.vo.Rc00501VO;
-import rmsoft.ams.seoul.rc.rc005.vo.Rc00502VO;
-import rmsoft.ams.seoul.rc.rc005.vo.Rc00507VO;
+import rmsoft.ams.seoul.rc.rc005.vo.*;
 
 import javax.inject.Inject;
 import javax.jdo.annotations.Transactional;
@@ -28,6 +25,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -61,14 +59,12 @@ public class Rc005Service extends BaseService {
 
     /**
      * Get record item list page.
-     *
-     * @param pageable      the pageable
      * @param requestParams the request params
      * @return the page
      */
-    public Page<Rc00501VO> getRecordItemList(Pageable pageable, RequestParams<Rc00501VO> requestParams) {
+    public List<Rc00501VO> getRecordItemList(RequestParams<Rc00501VO> requestParams) {
         Rc00501VO rc00501VO = new Rc00501VO();
-        Rc00502VO rc00502VO;
+        Rc00502VO rc00502VO = null;
         rc00501VO.setRiAggregationUuid(requestParams.getString("aggregationUuid"));
         rc00501VO.setRiItemUuid(requestParams.getString("itemUuid"));
 
@@ -84,8 +80,114 @@ public class Rc005Service extends BaseService {
                 }
             }
         }
-        return filter(rc00501VOList, pageable, "", Rc00501VO.class);
+        return rc00501VOList;
     }
+
+    /**
+     * @param requestParams
+     * @return Rc00501VO
+     */
+    public Map exportItem(Map requestParams) {
+        RequestParams params = new RequestParams();
+        params.put("itemUuid", requestParams.get("itemUuid"));
+        params.put("aggregationUuid", requestParams.get("aggregationUuid"));
+
+        List<Rc00501VO> rc00501VOList = getRecordItemList(params);
+
+        Rc00501VO itemVo = new Rc00501VO();
+
+        for (Rc00501VO item : rc00501VOList) {
+            if (StringUtils.isNotEmpty(item.getRiItemUuid())) {
+                itemVo = item;
+            }
+        }
+
+        Map itemMap = new HashMap();
+        List<Map> creatorList = new ArrayList<>();
+        List<Map> relatedAuthorityList = new ArrayList<>();
+        List<Map> componentList = new ArrayList<>();
+
+        itemMap.put("title",itemVo.getName());
+        itemMap.put("itemUuid",itemVo.getRiItemUuid());
+        itemMap.put("itemCode",itemVo.getRiItemCode());
+        itemMap.put("typeName",itemVo.getRiTypeName());
+        itemMap.put("publishedStatusName",itemVo.getRiPublishedStatusName());
+        itemMap.put("description",itemVo.getDescription1());
+        itemMap.put("author",itemVo.getRiAuthor());
+        itemMap.put("aggregationCode",itemVo.getRaAggregationCode());
+        itemMap.put("notes",itemVo.getNotes1());
+
+        itemMap.put("descriptionStartDate", itemVo.getRiDescriptionStartDate());
+        itemMap.put("descriptionEndDate", itemVo.getRiDescriptionEndDate());
+
+        itemMap.put("creationStartDate", itemVo.getCreationStartDate());
+        itemMap.put("creationEndDate", itemVo.getCreationEndDate());
+
+        itemMap.put("provenance",itemVo.getProvenance());
+        itemMap.put("keyword",itemVo.getKeyword());
+        itemMap.put("openStatusName",itemVo.getOpenStatusName());
+
+
+        /** 설계변경 추가 **/
+        itemMap.put("keyword",itemVo.getKeyword());
+
+        itemMap.put("languageCode", itemVo.getLanguageName());
+        itemMap.put("statusDescription", itemVo.getStatusDescriptionName());
+        itemMap.put("levelOfDetailName", itemVo.getLevelOfDetailName());
+        //itemMap.put("sourceSystemName", itemVo.sourceSystemUuid);
+        //itemMap.put("creationSystemUuid", itemVo.creationSystemUuid);
+        //itemMap.put("addMetaTemplateSetUuid", itemVo.addMetaTemplateSetUuid);
+        itemMap.put("legalStatusName", itemVo.getLegalStatusName());
+        itemMap.put("repositoriesName", itemVo.getRepositoriesName());
+        itemMap.put("electronicRecordStatusName", itemVo.getElectronicRecordStatusName());
+        itemMap.put("accumulationStartDate", itemVo.getAccumulationStartDate());
+        itemMap.put("accumulationEndDate", itemVo.getAccumulationEndDate());
+        itemMap.put("scopeContent", itemVo.getScopeContent());
+        itemMap.put("custodialHistory", itemVo.getCustodialHistory());
+        itemMap.put("sourceAcquisitionName", itemVo.getSourceAcquisitionName());
+        itemMap.put("physicalCondition", itemVo.getPhysicalCondition());
+        itemMap.put("useCondition", itemVo.getUseCondition());
+        itemMap.put("findingAids", itemVo.getFindingAids());
+        itemMap.put("rulesConversionName", itemVo.getRulesConversionName());
+        itemMap.put("accessCondition", itemVo.getAccessCondition());
+
+        for (Rc00503VO data : itemVo.getCreatorList()) {
+            Map dataMap = new HashMap();
+            dataMap.put("creatorName", data.getCreatorName());
+            creatorList.add(dataMap);
+        }
+
+        for (Rc00505VO data : itemVo.getRelatedAuthorityList()) {
+            Map dataMap = new HashMap();
+            dataMap.put("authorityName", data.getAuthorityName());
+            relatedAuthorityList.add(dataMap);
+        }
+
+        for (Rc00502VO data : itemVo.getRc00502VoList()) {
+            try{
+                Map dataMap = null;
+                dataMap = BeanUtils.describe(data);
+
+                dataMap.remove("__deleted__");
+                dataMap.remove("__created__");
+                dataMap.remove("__modified__");
+                dataMap.remove("deleted");
+                dataMap.remove("created");
+                dataMap.remove("modified");
+
+                componentList.add(dataMap);
+            }catch(Exception e){
+
+            }
+        }
+
+        itemMap.put("creatorList", creatorList);
+        itemMap.put("relatedAuthorityList", relatedAuthorityList);
+        itemMap.put("componentList", componentList);
+
+        return itemMap;
+    }
+
     //TODO 소스 정리해야댐 (병합 테스트만 한것임);
     @Transactional
     public Object mergeComponent(List<Rc00502VO> mergeList) {

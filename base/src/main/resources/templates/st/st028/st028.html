@@ -8,7 +8,7 @@
       layout:decorate="~{/layout/base}">
 
 <!-- ===== [ script ] ===== -->
-<script layout:fragment="script" type="text/javascript" th:src="@{/assets/js/st/st027/st028.js}"></script>
+<script layout:fragment="script" type="text/javascript" th:src="@{/assets/js/st/st028/st028.js}"></script>
 <!-- ===== [ script ] _END_ ===== -->
 
 <!-- ===== [ base-content ] ===== -->
@@ -24,14 +24,36 @@
                 </div>
                 <div class="bdb div_tablerow searchFields">
                     <dl>
-                        <dt class="mgl_5">존 ID</dt>
+                        <dt class="mgl_5">게이트 ID</dt>
                         <dd>
-                            <input type=text data-ax-path="zoneId" style="width:135px">
+                            <input type=text data-ax-path="gateId" style="width:135px">
                         </dd>
-                        <dt class="mgl_5">존명 </dt>
+                        <dt class="mgl_5">게이트명</dt>
                         <dd>
-                            <input type=text data-ax-path="zoneName" style="width:135px">
+                            <input type=text data-ax-path="gateName" style="width:135px">
                         </dd>
+                        <dt class="pdl_5">운영모드</dt>
+                        <dd>
+                            <select data-ax-path="statusUuid01" style="width:135px;">
+                                <option value=""></option>
+                                <option th:each="item : ${statusUuid}"
+                                        th:value="${item.codeDetailUUID}"
+                                        th:text="${item.codeName}"/>
+                            </select>
+                        </dd>
+                        <dt class="pdl_5">센서사용</dt>
+                        <dd>
+                            <select data-ax-path="statusUuid02" style="width:135px;">
+                                <option value=""></option>
+                                <option th:each="item : ${statusUuid}"
+                                        th:value="${item.codeDetailUUID}"
+                                        th:text="${item.codeName}"/>
+                            </select>
+                        </dd>
+                    </dl>
+                    <dl>
+                        <th:block layout:insert="~{/fragments/page-buttons :: searchInputYellow ('In zone','InZoneName')}"/>
+                        <th:block layout:insert="~{/fragments/page-buttons :: searchInputYellow ('out Zone','outZoneName')}"/>
                     </dl>
                 </div>
                 <div style="height:100%; width:100%" class="div_tablerow">
