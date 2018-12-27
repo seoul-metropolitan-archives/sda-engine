@@ -619,6 +619,8 @@ function contextMenuClick(ui, treeData) {
             openRecordServicePopup("ITEM_ADD", "Edit Item", sendData);
             break;
         case "ITEM_VIEW":
+            selectedData = treeData ? [treeData] : selectedData;
+
             sendData = $.extend({}, selectedData[0], {type: "create"},
                 {navi: fnObj.naviView.getPathString()},
                 {title: selectedData["name"]}, {sendData: selectedData}
@@ -770,20 +772,20 @@ function contextMenuClick(ui, treeData) {
                 nodeType = "aggregation";
             }
 
-        function getFlatData(listData) {
-            listData.forEach(function (item, idx) {
-                if (item.nodeType == "normal") {
-                    item.aggregationUuid = item.uuid;
-                    selectedData.push(item);
-                } else {
-                    return true;
-                }
+            function getFlatData(listData) {
+                listData.forEach(function (item, idx) {
+                    if (item.nodeType == "normal") {
+                        item.aggregationUuid = item.uuid;
+                        selectedData.push(item);
+                    } else {
+                        return true;
+                    }
 
-                if (item.children.length > 0) {
-                    getFlatData(item.children);
-                }
-            });
-        }
+                    if (item.children.length > 0) {
+                        getFlatData(item.children);
+                    }
+                });
+            }
 
             axboot.modal.open({
                 modalType: "RECORD_EXPLORER_CLASSIFY_RECORDS",
@@ -803,7 +805,19 @@ function contextMenuClick(ui, treeData) {
                 }
             });
             break;
+        case "ITEM_EXPORT" :
+            axboot.ajax({
+                type: "GET",
+                url: "/api/v1/rc005/01/export",
+                data: $.extend({}, {pageSize: 1000}, {
+                    aggregationUuid: selectedData[0].parentUuid,
+                    itemUuid: selectedData[0].uuid
+                }),
+                callback: function (res) {
 
+                }
+            });
+            break;
     }
 }
 
@@ -857,6 +871,8 @@ function getContextMenu(ui, nodeType) {
                     {title: "----"},
                     {title: "Edit Item", cmd: "ITEM_EDIT", uiIcon: "ui-icon-wrench"},
                     {title: "Delete Item", cmd: "NODE_DEL", uiIcon: "ui-icon-trash"},
+                    {title: "----"},
+                    {title: "Export Item", cmd: "ITEM_EXPORT", uiIcon: "ui-icon-trash"},
                 ];
             } else if (nodeType == "normal") {
                 var treeData = null;
@@ -2830,11 +2846,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
             var parentsObj = parent.window.fnObj;
             reqData["parentUuid"] = fnObj.naviView.getCurrent()["uuid"];
 
-            item.menuParams = $.extend({}, reqData, {type: "create"},
-                {navi: fnObj.naviView.getPathString()},
-                {title: reqData["name"]}, {sendData: [reqData]}
-            );
-            parentsObj.tabView.open(item);
+            contextMenuClick({cmd : "ITEM_VIEW"}, reqData);
             return;
         }
 
