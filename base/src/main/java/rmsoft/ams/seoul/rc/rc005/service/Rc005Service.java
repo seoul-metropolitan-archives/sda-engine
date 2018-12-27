@@ -63,12 +63,10 @@ public class Rc005Service extends BaseService {
 
     /**
      * Get record item list page.
-     *
-     * @param pageable      the pageable
      * @param requestParams the request params
      * @return the page
      */
-    public Page<Rc00501VO> getRecordItemList(Pageable pageable, RequestParams<Rc00501VO> requestParams) {
+    public List<Rc00501VO> getRecordItemList(RequestParams<Rc00501VO> requestParams) {
         Rc00501VO rc00501VO = new Rc00501VO();
         Rc00502VO rc00502VO;
         rc00501VO.setRiAggregationUuid(requestParams.getString("aggregationUuid"));
@@ -86,8 +84,27 @@ public class Rc005Service extends BaseService {
                 }
             }
         }
-        return filter(rc00501VOList, pageable, "", Rc00501VO.class);
+        return rc00501VOList;
     }
+
+    /**
+     * @param requestParams
+     * @return Rc00501VO
+     */
+    public Rc00501VO exportItemJson(RequestParams<Rc00501VO> requestParams) {
+        List<Rc00501VO> rc00501VOList = getRecordItemList(requestParams);
+
+        Rc00501VO rc00501VO = new Rc00501VO();
+
+        for (Rc00501VO item : rc00501VOList) {
+            if (StringUtils.isNotEmpty(item.getRiItemUuid())) {
+                rc00501VO = item;
+            }
+        }
+
+        return rc00501VO;
+    }
+
     //TODO 소스 정리해야댐 (병합 테스트만 한것임);
     @Transactional
     public Object mergeComponent(List<Rc00502VO> mergeList) {
