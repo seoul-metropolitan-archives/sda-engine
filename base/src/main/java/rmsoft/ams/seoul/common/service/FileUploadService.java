@@ -13,7 +13,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import rmsoft.ams.seoul.rc.rc005.service.Rc005Service;
+import rmsoft.ams.seoul.rc.rc005.vo.Rc00501VO;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
@@ -21,6 +24,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by jung-young-il on 28/03/2017.
@@ -30,6 +34,9 @@ public class FileUploadService {
 
     @Inject
     private FilePersistService filePersistService;
+
+    @Inject
+    private Rc005Service rc005Service;
 
     public AX5File upload(MultipartFile multipartFile) throws IOException {
         AX5File file = AX5File.of(multipartFile);
@@ -70,9 +77,10 @@ public class FileUploadService {
         return new ResponseEntity<>(bytes, httpHeaders, HttpStatus.OK);
     }
 
-    public ResponseEntity<byte[]> downloadItem(HttpServletRequest request, String itemId) throws IOException {
+    public ResponseEntity<byte[]> downloadItem(HttpServletRequest request, Map params) throws IOException {
 
         // itemId 로 item 관련 메타 및 파일 정보 찾아오기
+        Rc00501VO itemInfo = rc005Service.exportItem(params);
 
         // 찾아온 item파일을 temp 폴더로 복사
 

@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -44,8 +45,8 @@ public class CommonFileController extends BaseController {
 
     @GetMapping(value = "/download/item")
     @ResponseBody
-    public ResponseEntity<byte[]> downloadItem(HttpServletRequest request, @RequestParam String itemId) throws IOException {
-        return fileUploadService.downloadItem(request, itemId);
+    public ResponseEntity<byte[]> downloadItem(HttpServletRequest request,@RequestParam Map param) throws IOException {
+        return fileUploadService.downloadItem(request, param);
     }
 
     @RequestMapping(value = "/preview", method = RequestMethod.GET)

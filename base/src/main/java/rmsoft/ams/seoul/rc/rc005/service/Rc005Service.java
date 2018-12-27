@@ -68,7 +68,7 @@ public class Rc005Service extends BaseService {
      */
     public List<Rc00501VO> getRecordItemList(RequestParams<Rc00501VO> requestParams) {
         Rc00501VO rc00501VO = new Rc00501VO();
-        Rc00502VO rc00502VO;
+        Rc00502VO rc00502VO = null;
         rc00501VO.setRiAggregationUuid(requestParams.getString("aggregationUuid"));
         rc00501VO.setRiItemUuid(requestParams.getString("itemUuid"));
 
@@ -91,8 +91,12 @@ public class Rc005Service extends BaseService {
      * @param requestParams
      * @return Rc00501VO
      */
-    public Rc00501VO exportItemJson(RequestParams<Rc00501VO> requestParams) {
-        List<Rc00501VO> rc00501VOList = getRecordItemList(requestParams);
+    public Rc00501VO exportItem(Map requestParams) {
+        RequestParams params = new RequestParams();
+        params.put("itemUuid", requestParams.get("itemUuid"));
+        params.put("aggregationUuid", requestParams.get("aggregationUuid"));
+
+        List<Rc00501VO> rc00501VOList = getRecordItemList(params);
 
         Rc00501VO rc00501VO = new Rc00501VO();
 

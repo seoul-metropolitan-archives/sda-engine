@@ -13,6 +13,7 @@ import rmsoft.ams.seoul.rc.rc005.vo.Rc00501VO;
 import rmsoft.ams.seoul.rc.rc005.vo.Rc00502VO;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * The type Rc 005 controller.
@@ -28,7 +29,6 @@ public class Rc005Controller extends MessageBaseController{
     /**
      * Get record item list responses . page response.
      *
-     * @param pageable      the pageable
      * @param requestParams the request params
      * @return the responses . page response
      */
@@ -46,8 +46,8 @@ public class Rc005Controller extends MessageBaseController{
 
 
     @GetMapping("/01/export")
-    public Rc00501VO exportItemJson(RequestParams<Rc00501VO> requestParams){
-        Rc00501VO rc00501VO = rc005Service.exportItemJson(requestParams);
+    public Rc00501VO exportItemJson(Map requestParams){
+        Rc00501VO rc00501VO = rc005Service.exportItem(requestParams);
         return rc00501VO;
     }
 }

@@ -1,5 +1,6 @@
 var fnObj = {};
 var isDetailChange = false;
+var API_SERVER = CONTEXT_PATH;
 
 $(function () {
     $("#itemTabs").tabs();
@@ -806,7 +807,8 @@ function contextMenuClick(ui, treeData) {
             });
             break;
         case "ITEM_EXPORT" :
-            axboot.ajax({
+            location.href = API_SERVER + "/api/v1/common/download/item?itemUuid="+selectedData[0].uuid+"&aggregationUuid="+selectedData[0].parentUuid;
+            /*axboot.ajax({
                 type: "GET",
                 url: "/api/v1/rc005/01/export",
                 data: $.extend({}, {pageSize: 1000}, {
@@ -816,7 +818,7 @@ function contextMenuClick(ui, treeData) {
                 callback: function (res) {
 
                 }
-            });
+            });*/
             break;
     }
 }
