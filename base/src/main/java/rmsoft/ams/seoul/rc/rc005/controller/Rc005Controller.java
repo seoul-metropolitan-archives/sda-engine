@@ -46,8 +46,8 @@ public class Rc005Controller extends MessageBaseController{
 
 
     @GetMapping("/01/export")
-    public Rc00501VO exportItemJson(Map requestParams){
-        Rc00501VO rc00501VO = rc005Service.exportItem(requestParams);
+    public Map exportItemJson(Map requestParams){
+        Map rc00501VO = rc005Service.exportItem(requestParams);
         return rc00501VO;
     }
 }

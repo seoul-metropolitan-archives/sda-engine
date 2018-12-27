@@ -382,6 +382,8 @@
           Z3.CHECKSUM as checksum,
           Z3.SERVICE_FILE_NAME as serviceFileName,
           Z3.FILE_PATH as filePath,
+          Z3.FILE_NAME as fileName,
+          Z3.ORIGINAL_FILE_NAME as originalFileName,
           NVL(DECODE(Z4.JOBSTATUS, 'W' , 'Wait',
                                    'R' , 'Ready',
                                    'C' , 'Check',

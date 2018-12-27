@@ -80,7 +80,7 @@ public class FileUploadService {
     public ResponseEntity<byte[]> downloadItem(HttpServletRequest request, Map params) throws IOException {
 
         // itemId 로 item 관련 메타 및 파일 정보 찾아오기
-        Rc00501VO itemInfo = rc005Service.exportItem(params);
+        Map itemInfo = rc005Service.exportItem(params);
 
         // 찾아온 item파일을 temp 폴더로 복사
 
