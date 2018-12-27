@@ -28,14 +28,14 @@ public class St008ViewRouter extends BaseController {
     }
     @PostMapping("/st/st008/st008-p02")
     public String viewPopup_02(ModelMap model) {
-        // 반출서 수정
+        // 대상 추가
 //        model.addAttribute("statusUuid", CommonCodeUtils.get("CD138"));
-//        model.addAttribute("containerTypeUuid", CommonCodeUtils.get("CD139"));
+
         return "/st/st008/st008-p02";
     }
     @PostMapping("/st/st008/st008-p03")
     public String viewPopup_03(ModelMap model) {
-        // 대상 추가
+
 //        model.addAttribute("statusUuid", CommonCodeUtils.get("CD138"));
 //        model.addAttribute("containerTypeUuid", CommonCodeUtils.get("CD139"));
         return "/st/st008/st008-p03";

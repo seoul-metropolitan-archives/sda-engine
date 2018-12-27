@@ -183,16 +183,19 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 title: modalOption.title,
             },
             sendData: function () {
-                /*var selectedRow = fnObj.gridView01.getSelectedData();
+                 var selectedRow = fnObj.gridView01.getSelectedData();
+
                 console.log('selectedRow', selectedRow);
-                selectedRow.confirmBtn = "Arrange";
-                return selectedRow;*/
-                return {};
+                // selectedRow.confirmBtn = "Arrange";
+                return selectedRow;
+
             },
             callback: function (data) {
+
                 if(this) this.close();
                 //if(data){
-                    ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, data);
+                    ACTIONS.dispatch(ACTIONS.PAGE_SEARCH01, data);
+                    ACTIONS.dispatch(ACTIONS.PAGE_SEARCH02, data);
                 //}
             }
         });

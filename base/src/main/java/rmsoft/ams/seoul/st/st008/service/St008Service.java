@@ -15,13 +15,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import rmsoft.ams.seoul.common.domain.*;
-import rmsoft.ams.seoul.common.repository.ClClassConRepository;
-import rmsoft.ams.seoul.common.repository.ClClassRepository;
-import rmsoft.ams.seoul.common.repository.ClClassifyRecordResultRepository;
-import rmsoft.ams.seoul.common.repository.StTakeoutRequestRepository;
+import rmsoft.ams.seoul.common.repository.*;
 import rmsoft.ams.seoul.st.st008.dao.St008Mapper;
 import rmsoft.ams.seoul.st.st008.vo.St00801VO;
 import rmsoft.ams.seoul.st.st008.vo.St00802VO;
+import rmsoft.ams.seoul.st.st008.vo.St00802pVO;
 import rmsoft.ams.seoul.utils.CommonCodeUtils;
 
 import javax.inject.Inject;
@@ -43,6 +41,8 @@ public class St008Service extends BaseService {
     private St008Mapper st008Mapper;
     @Autowired
     private StTakeoutRequestRepository stTakeoutRequestRepository;
+    @Autowired
+    private StTakeoutRecordResultRepository stTakeoutRecordResultRepository;
 
     /**
      * Gets classified record list.
@@ -110,22 +110,51 @@ public class St008Service extends BaseService {
             // do nothing
         } else {
             // 수정
-            stTakeoutRequest = orgClClass;
 
-            vo.setUpdateDate(Timestamp.valueOf(DateUtils.convertToString(LocalDateTime.now(), DateUtils.DATE_TIME_PATTERN)));
+            orgClClass.setUpdateDate(Timestamp.valueOf(DateUtils.convertToString(LocalDateTime.now(), DateUtils.DATE_TIME_PATTERN)));
+            orgClClass.setTakeoutDate(stTakeoutRequest.getTakeoutDate());
+            orgClClass.setReturnDueDate(stTakeoutRequest.getReturnDueDate());
+            orgClClass.setTakeoutPropose(stTakeoutRequest.getTakeoutPropose());
+            orgClClass.setStatusUuid(stTakeoutRequest.getStatusUuid());
+            orgClClass.setOutsourcingDepartment(stTakeoutRequest.getOutsourcingDepartment());
+            orgClClass.setOutsourcingPosition(stTakeoutRequest.getOutsourcingPosition());
+            orgClClass.setOutsourcingPersonName(stTakeoutRequest.getOutsourcingPersonName());
+            orgClClass.setOutsourcingPhone(stTakeoutRequest.getOutsourcingPhone());
 
             // clClass.getRequestorName(); // 반출자
             // clClass.getUser(); //  소속
             // clClass.getUser(); //  직위
-
-            stTakeoutRequest.setTakeoutDate(stTakeoutRequest.getTakeoutDate()); //  반출일자
-
-            stTakeoutRequest.setReturnDueDate(stTakeoutRequest.getReturnDueDate()); //  반입예정일
-            stTakeoutRequest.setStatusUuid(stTakeoutRequest.getStatusUuid()); //  상태
-            stTakeoutRequest.setTakeoutPropose(stTakeoutRequest.getTakeoutPropose()); // 반출목적
+            stTakeoutRequest = orgClClass;
         }
 
         stTakeoutRequestRepository.save(stTakeoutRequest);
+        return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");
+    }
+
+    @Transactional
+    public ApiResponse saveStTakeoutAdd(St00802pVO st00802pVO) {
+        List<St00802VO> st00802VOList = st00802pVO.getSt00802VOList();
+        List<StTakeoutRecordResult> clClassifiedRecordsList = ModelMapperUtils.mapList(st00802VOList,StTakeoutRecordResult.class);
+        // StTakeoutRecordResult orgClClassifyRecordsResult = null;
+        int i = 0;
+        for(StTakeoutRecordResult stTakeoutRecordResult : clClassifiedRecordsList) {
+            if(st00802pVO.getTakeoutRequestUuid()== null){ //삭제
+                stTakeoutRecordResultRepository.delete(stTakeoutRecordResult);
+            }
+//            else if(null != clClassifyRecordsResult.getClassifyRecordsUuid() && !"".equals(clClassifyRecordsResult.getClassifyRecordsUuid())){
+//                //수정
+//                orgClClassifyRecordsResult = clClassifyRecordResultRepository.findOne(clClassifyRecordsResult.getId());
+//                orgClClassifyRecordsResult.setChoiceYn(clClassifyRecordsResult.getChoiceYn());
+//                orgClClassifyRecordsResult.setStatusUuid(CommonCodeUtils.getCodeDetailUuid("CD111","Confirm"));
+//                clClassifyRecordResultRepository.save(orgClClassifyRecordsResult);
+//            }
+            else{ //신규
+                stTakeoutRecordResult.setTakeoutRecordResultUuid(UUIDUtils.getUUID());
+                stTakeoutRecordResult.setTakeoutRequestUuid(st00802pVO.getTakeoutRequestUuid());
+                //stTakeoutRecordResult.setAggregationUuid(st00802pVO.getuu);
+                stTakeoutRecordResultRepository.save(stTakeoutRecordResult);
+            }
+        }
         return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");
     }
 
