@@ -13,6 +13,7 @@ import rmsoft.ams.seoul.rc.rc005.vo.Rc00501VO;
 import rmsoft.ams.seoul.rc.rc005.vo.Rc00502VO;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * The type Rc 005 controller.
@@ -28,19 +29,25 @@ public class Rc005Controller extends MessageBaseController{
     /**
      * Get record item list responses . page response.
      *
-     * @param pageable      the pageable
      * @param requestParams the request params
      * @return the responses . page response
      */
     @GetMapping("/01/list")
-    public Responses.PageResponse getRecordItemList(Pageable pageable, RequestParams<Rc00501VO> requestParams){
-        Page<Rc00501VO> pages = rc005Service.getRecordItemList(pageable, requestParams);
-        return Responses.PageResponse.of(pages.getContent(), pages);
+    public Responses.ListResponse getRecordItemList(RequestParams<Rc00501VO> requestParams){
+        List<Rc00501VO> lists = rc005Service.getRecordItemList(requestParams);
+        return Responses.ListResponse.of(lists);
     }
 
     @PutMapping(value = "/01/merge")
     @PostMapping
     public Object mergeComponent(@RequestBody List<Rc00502VO> mergeList) {
         return rc005Service.mergeComponent(mergeList);
+    }
+
+
+    @GetMapping("/01/export")
+    public Map exportItemJson(Map requestParams){
+        Map rc00501VO = rc005Service.exportItem(requestParams);
+        return rc00501VO;
     }
 }

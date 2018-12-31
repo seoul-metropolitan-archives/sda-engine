@@ -17,6 +17,11 @@ apply from: 'config-querydsl.gradle'
 jar {
     baseName = 'long-term-preservation'
     version = '0.0.1'
+    destinationDir = file("${project.rootDir}/base/src/main/resources/service-modules")
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
 }
 
 dependencies {

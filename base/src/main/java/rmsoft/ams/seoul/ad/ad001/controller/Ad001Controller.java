@@ -2,17 +2,19 @@ package rmsoft.ams.seoul.ad.ad001.controller;
 
 import io.onsemiro.core.api.response.ApiResponse;
 import io.onsemiro.core.api.response.Responses;
+import io.onsemiro.core.context.AppContextManager;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cloud.context.restart.RestartEndpoint;
+import org.springframework.context.ApplicationContext;
+import org.springframework.core.io.Resource;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import rmsoft.ams.seoul.AppRunner;
 import rmsoft.ams.seoul.ad.ad001.service.Ad001Service;
 import rmsoft.ams.seoul.ad.ad001.vo.Ad00101VO;
 import rmsoft.ams.seoul.common.controller.MessageBaseController;
-import rmsoft.ams.seoul.dip.DIPBatchExecutor;
 import rmsoft.ams.seoul.utils.RuntimeJarLoader;
 
 import java.util.List;
@@ -21,6 +23,7 @@ import java.util.List;
 /**
  * The type Ad 001 controller.
  */
+@Slf4j
 @RestController
 @RequestMapping("/api/v1/ad/ad001")
 public class Ad001Controller extends MessageBaseController {
@@ -45,10 +48,17 @@ public class Ad001Controller extends MessageBaseController {
     @RequestMapping("/getEnviromentList.do")
     public Responses.ListResponse getEnviromentList(@RequestBody Ad00101VO param) {
 
+        ApplicationContext context = AppContextManager.getAppContext();
 
+        try{
+            Resource[] resources = context.getResources("classpath*:service-modules/*.jar");
+            log.info("Service Modules...");
+        }catch(Exception e){
+            e.printStackTrace();
+        }
 
         //dipBatchExecutor.runDipProcess()
-        RuntimeJarLoader.loadJarIndDir("C:\\devSpace\\seoul-ams\\service-modules\\long-term-preservation\\build\\libs");
+        //RuntimeJarLoader.loadJarIndDir("C:\\devSpace\\seoul-ams\\service-modules\\long-term-preservation\\build\\libs");
         //AppRunner.restart(restartEndpoint);
        // AppRunner.restart();
 

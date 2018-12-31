@@ -48,6 +48,8 @@ fnObj.pageStart = function () {
     this.frameView.initView();
     this.tabView.initView();
     this.activityTimerView.initView();
+    leftcloseView();
+
 };
 
 fnObj.pageResize = function () {
@@ -193,7 +195,6 @@ fnObj.frameView = axboot.viewExtend({
                 axToast.push(axboot.getCommonMessage("AC002_02"));
             }
         });
-
     },
     toggleAside: function () {
         this.target.toggleClass("show-aside");

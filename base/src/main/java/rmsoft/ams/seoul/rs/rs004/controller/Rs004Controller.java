@@ -51,7 +51,7 @@ public class Rs004Controller extends BaseController {
     }
     @PutMapping("/03/save")
     @PostMapping
-    public ApiResponse saveRecordScheduleResultList(@RequestBody List<Rs00402VO> requestParams) {
+    public ApiResponse saveRecordScheduleResultList(@RequestBody List<Rs00402VO> requestParams) throws Exception {
         ApiResponse apiResponse = rs004Service.saveRecordScheduleResultList(requestParams);
         if(apiResponse.getStatus() == -1) {
             throw new ApiException(ApiStatus.SYSTEM_ERROR, apiResponse.getMessage());

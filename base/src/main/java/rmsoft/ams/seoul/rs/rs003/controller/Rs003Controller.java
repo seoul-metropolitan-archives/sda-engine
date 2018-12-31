@@ -47,4 +47,13 @@ public class Rs003Controller extends BaseController {
         }
         return apiResponse;
     }
+    @PutMapping("/04/update")
+    @PostMapping
+    public ApiResponse dueToUpdateSchedule(@RequestBody List<Rs00301VO> requestParams) throws Exception {
+        ApiResponse apiResponse = rs003Service.dueToUpdateSchedule(requestParams);
+        if(apiResponse.getStatus() == -1) {
+            throw new ApiException(ApiStatus.SYSTEM_ERROR, apiResponse.getMessage());
+        }
+        return apiResponse;
+    }
 }

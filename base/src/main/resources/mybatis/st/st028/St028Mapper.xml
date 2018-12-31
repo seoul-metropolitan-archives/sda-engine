@@ -3,7 +3,25 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="rmsoft.ams.seoul.st.st027.dao.St028Mapper">
+<mapper namespace="rmsoft.ams.seoul.st.st028.dao.St028Mapper">
 
+    <select id="getStGate" resultType="St02801VO" parameterType="St02801VO" statementType="PREPARED">
+        select A.GATE_UUID as gateUuid,
+               A.NO as no,
+               A.GATE_ID as gateId,
+               A.GATE_NAME as gateName,
+               A.MODE_UUID as modeUuid,
+               A.SENSOR_USE_YN as sensorUseYn,
+               A.IN_ZONE_UUID as inZoneUuid,
+               B.ZONE_NAME as inZoneName,
+               A.OUT_ZONE_UUID as outZoneUuid,
+               C.ZONE_NAME as outZoneName,
+               A.LIGHT_BAR_STATUS_UUID as lightBarStatusUuid
+          from ST_GATE A LEFT OUTER JOIN ST_ZONE B
+              ON A.IN_ZONE_UUID = B.ZONE_UUID
+          LEFT OUTER JOIN ST_ZONE C
+              ON A.OUT_ZONE_UUID = C.ZONE_UUID
+          WHERE 1=1
+    </select>
 
 </mapper>

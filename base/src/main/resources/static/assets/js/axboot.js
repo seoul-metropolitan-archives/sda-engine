@@ -2729,6 +2729,9 @@ axboot.baseView =
             $(".bdb").delegate("#disposal", "click", function () {
                 _this.disposal();
             });
+            $(".bdb").delegate("#update", "click", function () {
+                _this.update();
+            });
 
             try {
                 if (hideMenuRole("saveYn")) {
@@ -2741,16 +2744,16 @@ axboot.baseView =
             } catch(e) {
 
             }
-           /* $(document).delegate(".ax-body .div_tablerow:not(.searchFields) input", "keydown", function (e) {
-                if (e.ctrlKey && e.altKey && e.keyCode == 73) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    _this.inquiry();
-;                } else if (e.ctrlKey && e.altKey && e.keyCode == 83) {
-                    _this.save();
-                }
+            /* $(document).delegate(".ax-body .div_tablerow:not(.searchFields) input", "keydown", function (e) {
+                 if (e.ctrlKey && e.altKey && e.keyCode == 73) {
+                     e.preventDefault();
+                     e.stopPropagation();
+                     _this.inquiry();
+ ;                } else if (e.ctrlKey && e.altKey && e.keyCode == 83) {
+                     _this.save();
+                 }
 
-            });*/
+             });*/
             $(document).delegate(".ax-body .searchFields input,.ax-body .searchFields select", "keydown", function (e) {
                 if (e.keyCode == 13)
                 {
@@ -2777,11 +2780,11 @@ axboot.baseView =
             });
         }
         , save: function (event) {
-        if (ACTIONS && ACTIONS.PAGE_SAVE)
-            ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
+            if (ACTIONS && ACTIONS.PAGE_SAVE)
+                ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
         }
         , inquiry: function () {
-        if (axboot.isDataChanged && axboot.isDataChanged(axboot.getMenuId())) {
+            if (axboot.isDataChanged && axboot.isDataChanged(axboot.getMenuId())) {
                 axDialog.confirm({
                     msg: axboot.getCommonMessage("AA006")
                 }, function () {
@@ -2809,8 +2812,8 @@ axboot.baseView =
                 ACTIONS.dispatch(ACTIONS.PAGE_CONFIRM);
         }
         , cancel: function () {
-        if (ACTIONS && ACTIONS.PAGE_CANCEL)
-            ACTIONS.dispatch(ACTIONS.PAGE_CANCEL);
+            if (ACTIONS && ACTIONS.PAGE_CANCEL)
+                ACTIONS.dispatch(ACTIONS.PAGE_CANCEL);
         }
         , arrange: function () {
             if (ACTIONS && ACTIONS.PAGE_ARRANGE)
@@ -2835,6 +2838,10 @@ axboot.baseView =
         , disposal: function () {
             if (ACTIONS && ACTIONS.PAGE_DISPOSAL)
                 ACTIONS.dispatch(ACTIONS.PAGE_DISPOSAL);
+        }
+        , update: function () {
+            if (ACTIONS && ACTIONS.DATE_UPDATE)
+                ACTIONS.dispatch(ACTIONS.DATE_UPDATE);
         }
     };
 

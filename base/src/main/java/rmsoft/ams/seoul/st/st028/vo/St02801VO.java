@@ -25,7 +25,11 @@ public class St02801VO extends BaseVO {
 
     private String inZoneUuid;
 
+    private String inZoneName;
+
     private String outZoneUuid;
+
+    private String outZoneName;
 
     private String lightBarStatusUuid;
 }

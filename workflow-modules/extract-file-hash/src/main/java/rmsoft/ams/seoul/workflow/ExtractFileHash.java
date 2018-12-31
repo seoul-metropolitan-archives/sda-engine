@@ -135,7 +135,7 @@ public class ExtractFileHash {
                             sqlList.add(queryStr.toString());
                             queryStr.delete(0, queryStr.length());
                         }
-                    }else{
+                    } else {
                         // Missing File
                         queryStr.append("UPDATE RC_COMPONENT \n");
                         queryStr.append("SET CHECKSUM_TYPE_UUID = '0CE2B767-F3F3-46C6-9AE3-9E17067ABBAA' \n");
@@ -165,41 +165,46 @@ public class ExtractFileHash {
      * Process Methods
      *******************************************************/
 
-    public String extractFileHashSHA256(File file) throws Exception {
+    public String extractFileHashSHA256(File file) {
 
         String SHA = "";
         int buff = 16384;
 
-        RandomAccessFile randomAccessFile = new RandomAccessFile(file, "r");
+        try {
 
-        MessageDigest hashSum = MessageDigest.getInstance("SHA-256");
+            RandomAccessFile randomAccessFile = new RandomAccessFile(file, "r");
 
-        byte[] buffer = new byte[buff];
-        byte[] partialHash = null;
+            MessageDigest hashSum = MessageDigest.getInstance("SHA-256");
 
-        long read = 0;
+            byte[] buffer = new byte[buff];
+            byte[] partialHash = null;
 
-        // calculate the hash of the hole file for the test
-        long offset = randomAccessFile.length();
-        int unitsize;
-        while (read < offset) {
-            unitsize = (int) (((offset - read) >= buff) ? buff : (offset - read));
-            randomAccessFile.read(buffer, 0, unitsize);
+            long read = 0;
 
-            hashSum.update(buffer, 0, unitsize);
+            // calculate the hash of the hole file for the test
+            long offset = randomAccessFile.length();
+            int unitsize;
+            while (read < offset) {
+                unitsize = (int) (((offset - read) >= buff) ? buff : (offset - read));
+                randomAccessFile.read(buffer, 0, unitsize);
 
-            read += unitsize;
+                hashSum.update(buffer, 0, unitsize);
+
+                read += unitsize;
+            }
+
+            randomAccessFile.close();
+            partialHash = new byte[hashSum.getDigestLength()];
+            partialHash = hashSum.digest();
+
+            StringBuffer sb = new StringBuffer();
+            for (int i = 0; i < partialHash.length; i++) {
+                sb.append(Integer.toString((partialHash[i] & 0xff) + 0x100, 16).substring(1));
+            }
+            SHA = sb.toString();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
-        randomAccessFile.close();
-        partialHash = new byte[hashSum.getDigestLength()];
-        partialHash = hashSum.digest();
-
-        StringBuffer sb = new StringBuffer();
-        for (int i = 0; i < partialHash.length; i++) {
-            sb.append(Integer.toString((partialHash[i] & 0xff) + 0x100, 16).substring(1));
-        }
-        SHA = sb.toString();
 
         return SHA;
     }

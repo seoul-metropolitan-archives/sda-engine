@@ -107,7 +107,11 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             url: "/api/v1/rc005/01/merge",
             data: JSON.stringify(fnObj.gridView01.gridObj.getCheckedList()),
             callback: function (res) {
-                window.open(res.url, "", "");
+                if(res != null && res.url != null){
+                    window.open(res.url, "", "");
+                }else{
+                    alert("변환에 실패하였습니다.");
+                }
             },
             options: {
                 onError: axboot.viewError

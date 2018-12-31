@@ -22,12 +22,12 @@
         <result property="updateUuid" column="updateUuid" />
         <result property="updateDate" column="updateDate" />
         <result property="riItemUuid" column="riItemUuid" />
-        <result property="riPublishedStatusNm" column="riPublishedStatusNm" />
+        <result property="riPublishedStatusName" column="riPublishedStatusName" />
         <result property="riPublishedStatusUuid" column="riPublishedStatusUuid" />
         <result property="riItemCode" column="riItemCode" />
         <result property="riTypeUuid" column="riTypeUuid" />
+        <result property="riTypeName" column="riTypeName" />
         <result property="name" column="name" />
-        <result property="riTypeNm" column="riTypeNm" />
         <result property="riAggregationUuid" column="riAggregationUuid" />
         <result property="riAuthor" column="riAuthor" />
         <result property="riDescriptionStartDate" column="riDescriptionStartDate" />
@@ -39,6 +39,7 @@
         <result property="updateUuid1" column="updateUuid1" />
         <result property="updateDate1" column="updateDate1" />-->
         <result property="openStatusUuid" column="openStatusUuid" />
+        <result property="openStatusName" column="openStatusName" />
         <result property="keyword" column="keyword" />
         <result property="referenceCode" column="referenceCode" />
         <result property="provenance" column="provenance" />
@@ -57,12 +58,16 @@
         <result property="addMetadata10" column="addMetadata10" />
         <result property="languageCode" column="languageCode" />
         <result property="statusDescription" column="statusDescription" />
+        <result property="statusDescriptionName" column="statusDescriptionName" />
         <result property="levelOfDetailUuid" column="levelOfDetailUuid" />
+        <result property="levelOfDetailName" column="levelOfDetailName" />
         <result property="extraMetadata" column="extraMetadata" jdbcType="CLOB" javaType="java.lang.String" />
         <result property="sourceSystemUuid" column="sourceSystemUuid" />
         <result property="creationSystemUuid" column="creationSystemUuid" />
+        <result property="creationSystemName" column="creationSystemName" />
         <result property="addMetaTemplateSetUuid" column="addMetaTemplateSetUuid" />
         <result property="legalStatusUuid" column="legalStatusUuid" />
+        <result property="legalStatusName" column="legalStatusName" />
         <result property="repositoriesUuid" column="repositoriesUuid" />
         <result property="repositoriesName" column="repositoriesName" />
         <result property="electronicRecordStatusUuid" column="electronicRecordStatusUuid" />
@@ -76,7 +81,9 @@
         <result property="useCondition" column="useCondition" />
         <result property="findingAids" column="findingAids" />
         <result property="rulesConversionUuid" column="rulesConversionUuid" />
+        <result property="rulesConversionName" column="rulesConversionName" />
         <result property="recordScheduleUuid" column="recordScheduleUuid" />
+        <result property="recordScheduleName" column="recordScheduleName" />
         <result property="accessCondition" column="accessCondition" />
         <!--<result property="insertUuid2" column="insertUuid2" />
         <result property="insertDate2" column="insertDate2" />
@@ -90,11 +97,13 @@
             ZZ1.TITLE as raTitle,
             ZZ1.AGGREGATION_UUID as raAggregationUuid,
             ZZ1.PUBLISHED_STATUS_UUID as raPublishedStatusUuid,
+            FC_AD_CODE_NM(ZZ1.PUBLISHED_STATUS_UUID) as raPublishedStatusName,
             ZZ1.AGGREGATION_CODE as raAggregationCode,
             ZZ1.TYPE_UUID as raTypeUuid,
+            FC_AD_CODE_NM(ZZ1.TYPE_UUID) as raTypeName,
             ZZ1.PARENT_AGGREGATION_UUID as raParentAggregationUuid,
-            ZZ1.LEVEL_UUID as raLevelUuid,
-            FC_AD_CODE_NM(ZZ1.LEVEL_UUID) as raLevelNm,
+            ZZ1.LEVEL_UUID as raLevelNm,
+            FC_AD_CODE_NM(ZZ1.LEVEL_UUID) as raLevelName,
             ZZ1.AUTHOR as raAuthor,
             ZZ1.DESCRIPTION_START_DATE as raDescriptionStartDate,
             ZZ1.DESCRIPTION_END_DATE as raDescriptionEndDate,
@@ -105,12 +114,12 @@
             ZZ1.UPDATE_UUID as updateUuid,
             ZZ1.UPDATE_DATE as updateDate,
             ZZ1.ITEM_UUID as riItemUuid,
-            FC_AD_CODE_NM(ZZ1.PUBLISHED_STATUS_UUID1) as riPublishedStatusNm,
             ZZ1.PUBLISHED_STATUS_UUID1 as riPublishedStatusUuid,
+            FC_AD_CODE_NM(ZZ1.PUBLISHED_STATUS_UUID1) as riPublishedStatusName,
             ZZ1.ITEM_CODE as riItemCode,
             NVL(ZZ1.TITLE1 ,ZZ1.TITLE) as name,
             ZZ1.TYPE_UUID1 as riTypeUuid,
-            FC_AD_CODE_NM(ZZ1.TYPE_UUID1) as riTypeNm,
+            FC_AD_CODE_NM(ZZ1.TYPE_UUID1) as riTypeName,
             ZZ1.AGGREGATION_UUID1 as riAggregationUuid,
             ZZ1.AUTHOR1 as riAuthor,
             ZZ1.DESCRIPTION_START_DATE1 as riDescriptionStartDate,
@@ -122,9 +131,13 @@
             ZZ1.UPDATE_UUID1 as updateUuid1,
             ZZ1.UPDATE_DATE1 as updateDate1,
             ZZ1.LANGUAGE_CODE as languageCode,
+            FC_AD_CODE_NM(ZZ1.LANGUAGE_CODE) as languageName,
             ZZ1.STATUS_DESCRIPTION as statusDescription,
+            FC_AD_CODE_NM(ZZ1.STATUS_DESCRIPTION) as statusDescriptionName,
             ZZ1.LEVEL_OF_DETAIL_UUID as levelOfDetailUuid,
-            FC_AD_CODE_NM(ZZ1.OPEN_STATUS_UUID) as openStatusUuid,
+            FC_AD_CODE_NM(ZZ1.LEVEL_OF_DETAIL_UUID) as levelOfDetailName,
+            ZZ1.OPEN_STATUS_UUID as openStatusUuid,
+            FC_AD_CODE_NM(ZZ1.OPEN_STATUS_UUID) as openStatusName,
             ZZ1.KEYWORD as keyword,
             ZZ1.REFERENCE_CODE as referenceCode,
             ZZ1.PROVENANCE as provenance,
@@ -146,9 +159,11 @@
             ZZ1.CREATION_SYSTEM_UUID as creationSystemUuid,
             ZZ1.ADD_META_TEMPLATE_SET_UUID as addMetaTemplateSetUuid,
             ZZ1.LEGAL_STATUS_UUID as legalStatusUuid,
+            FC_AD_CODE_NM(ZZ1.LEGAL_STATUS_UUID) as legalStatusName,
             ZZ1.REPOSITORIES_UUID as repositoriesUuid,
             ZZ1.REPOSITORIES_NAME as repositoriesName,
             ZZ1.ELECTRONIC_RECORD_STATUS_UUID as electronicRecordStatusUuid,
+            FC_AD_CODE_NM(ZZ1.ELECTRONIC_RECORD_STATUS_UUID) as electronicRecordStatusName,
             ZZ1.ACCUMULATION_START_DATE as accumulationStartDate,
             ZZ1.ACCUMULATION_END_DATE as accumulationEndDate,
             ZZ1.SCOPE_CONTENT as scopeContent,
@@ -159,7 +174,9 @@
             ZZ1.USE_CONDITION as useCondition,
             ZZ1.FINDING_AIDS as findingAids,
             ZZ1.RULES_CONVERSION_UUID as rulesConversionUuid,
+            FC_AD_CODE_NM(ZZ1.RULES_CONVERSION_UUID) as rulesConversionName,
             ZZ1.RECORD_SCHEDULE_UUID as recordScheduleUuid,
+            FC_AD_CODE_NM(ZZ1.RECORD_SCHEDULE_UUID) as recordScheduleName,
             ZZ1.ACCESS_CONDITION as accessCondition,
             ZZ1.INSERT_UUID2 as insertUuid2,
             ZZ1.INSERT_DATE2 as insertDate2,
@@ -365,6 +382,8 @@
           Z3.CHECKSUM as checksum,
           Z3.SERVICE_FILE_NAME as serviceFileName,
           Z3.FILE_PATH as filePath,
+          Z3.FILE_NAME as fileName,
+          Z3.ORIGINAL_FILE_NAME as originalFileName,
           NVL(DECODE(Z4.JOBSTATUS, 'W' , 'Wait',
                                    'R' , 'Ready',
                                    'C' , 'Check',
