@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="rmsoft.ams.seoul.st.st030.dao.St030Mapper">
+    <select id="getStMissArrangeRequest" resultType="St03001VO" parameterType="St03001VO" statementType="PREPARED">
+
+
+
+      SELECT
+               record_req.AGGREGATION_UUID aggregationUuid,
+               B.code,
+               B.title,
+               B."level",
+               B."type",
+               record_req.CURRENT_CONTAINER_UUID currentContainerUuid,
+               (
+                 SELECT CONTAINER_NAME
+                 FROM ST_CONTAINER con
+                 WHERE con.CONTAINER_UUID = record_req.CURRENT_CONTAINER_UUID
+               ) currentContainerName,
+               record_req.SOURCE_TYPE_UUID sourceTypeUuid,
+               (
+                 SELECT CODE_NAME
+                 FROM AD_CODE_DETAIL
+                 WHERE CODE_DETAIL_UUID = record_req.SOURCE_TYPE_UUID
+               ) sourceTypeName,
+               record_req.REQUEST_DATE requestDate,
+               record_req.REPUBLISH_YN republishYn,
+               record_req.REPUBLISH_DATE republishDate,
+               container.CONTAINER_UUID containerUuid,
+               container.CONTAINER_NAME containerName -- 실제 보존상자
+        FROM ST_MISS_ARRANGE_RECORD_REQ record_req
+               INNER JOIN (
+                          SELECT ar.AGGREGATION_UUID, ar.CONTAINER_UUID    FROM RC_ITEM item
+                                                                                  INNER JOIN ST_ARRANGE_RECORDS_RESULT ar
+                                                                                    ON ar.AGGREGATION_UUID = item.AGGREGATION_UUID
+                          ) etc
+                 ON etc.AGGREGATION_UUID = record_req.AGGREGATION_UUID
+               INNER JOIN ST_ARRANGE_CONTAINERS_RESULT acr
+                 ON acr.CONTAINER_UUID = etc.CONTAINER_UUID
+               INNER JOIN ST_LOCATION location
+                 ON location.LOCATION_UUID = acr.LOCATION_UUID
+               INNER JOIN ST_CONTAINER container
+                 ON container.CONTAINER_UUID = etc.CONTAINER_UUID
+               INNER JOIN ST_SHELF shelf
+                 ON shelf.SHELF_UUID = location.SHELF_UUID
+               INNER JOIN ST_REPOSITORY repository
+                 ON repository.REPOSITORY_UUID = shelf.REPOSITORY_UUID
+               INNER JOIN (SELECT AGGREGATION_UUID                                                                         as uuid,
+                                  1                                                                                        as orderNo,
+                                  (SELECT CODE_NAME
+                                   FROM AD_CODE_DETAIL
+                                   WHERE CODE_DETAIL_UUID = Z1.PUBLISHED_STATUS_UUID)                                      as publishedStatus,
+                                  AGGREGATION_CODE                                                                         as code,
+                                  TITLE                                                                                    as title,
+                                  (SELECT CODE_NAME
+                                   FROM AD_CODE_DETAIL
+                                   WHERE CODE_DETAIL_UUID = Z1.TYPE_UUID)                                                  as "type",
+                                  (SELECT TO_CHAR(LEVEL_NO)
+                                   FROM RC_LEVEL
+                                   WHERE LEVEL_UUID = Z1.LEVEL_UUID)                                                       as "level",
+                                  AUTHOR                                                                                   as author,
+                                  DESCRIPTION_START_DATE                                                                   as descStrDate,
+                                  DESCRIPTION_END_DATE                                                                     as descEdDate,
+                                  DESCRIPTION                                                                              as description,
+                                  NOTES                                                                                    as notes,
+                                  ((SELECT COUNT(*) FROM RC_AGGREGATION WHERE PARENT_AGGREGATION_UUID = Z1.AGGREGATION_UUID) +
+                                   (SELECT COUNT(*)
+                                    FROM RC_ITEM
+                                    WHERE AGGREGATION_UUID = Z1.AGGREGATION_UUID))                                         as childCnt
+                           FROM RC_AGGREGATION Z1
+                           UNION ALL SELECT ITEM_UUID                                                                    as uuid,
+                                            2                                                                            as orderNo,
+                                            (SELECT CODE_NAME
+                                             FROM AD_CODE_DETAIL
+                                             WHERE CODE_DETAIL_UUID = Z1.PUBLISHED_STATUS_UUID)                          as publishedStatus,
+                                            ITEM_CODE                                                                    as code,
+                                            TITLE                                                                        as title,
+                                            (SELECT CODE_NAME
+                                             FROM AD_CODE_DETAIL
+                                             WHERE CODE_DETAIL_UUID = Z1.TYPE_UUID)                                      as "type",
+                                            ''                                                                           as "level",
+                                            AUTHOR                                                                       as author,
+                                            DESCRIPTION_START_DATE                                                       as descStrDate,
+                                            DESCRIPTION_END_DATE                                                         as descEdDate,
+                                            DESCRIPTION                                                                  as description,
+                                            NOTES                                                                        as notes,
+                                            0                                                                            as childCnt
+                                     FROM RC_ITEM Z1) B on B.UUID = record_req.AGGREGATION_UUID
+
+        <where>
+            1=1
+
+        </where>
+        ORDER BY record_req.REQUEST_DATE
+    </select>
+    <select id="getStArrangeRecordsResult" resultType="St003VO" parameterType="St03001VO" statementType="PREPARED">
+        SELECT *
+              FROM ST_ARRANGE_RECORDS_RESULT result
+                INNER JOIN ST_MISS_ARRANGE_RECORD_REQ req
+                  ON req.AGGREGATION_UUID = result.AGGREGATION_UUID
+                  AND req.CURRENT_CONTAINER_UUID = result.CONTAINER_UUID
+        <where>
+            1=1
+            AND result.AGGREGATION_UUID = #{aggregationUuid}
+            AND result.CONTAINER_UUID = #{currentContainerUuid}
+
+        </where>
+    </select>
+
+</mapper>
