@@ -24,8 +24,7 @@
     <link rel="stylesheet" type="text/css" href="/assets/css/ams_layout.css">
     <link rel="stylesheet" type="text/css" href="/assets/css/popup.css">
     <link rel="stylesheet" type="text/css" href="/assets/css/ax5uploader.css"/>
-
-
+    <!--<link rel="import" href="../../home/main.html">-->
 
     <script type="text/javascript">
         /* $(function() {
@@ -119,6 +118,13 @@
                     }
                 });
             });
+
+           //  var link = document.querySelector('link[rel="import"]');
+           //  var content = link.import;
+           //  var el = content.querySelector('.home');
+           //  var contents  = document.querySelector('#main-content');
+           //
+           // contents.appendChild(el.cloneNode(true));
         });
 
 
@@ -283,9 +289,49 @@
             <a href="#" onclick="left7closeView()" class="leftmenu7_close">◀</a>
             <a href="#" onclick="left7openView()" class="leftmenu7_open"> ▶</a>
         </div>
-        <!--나의 메뉴인 즐겨찾기와 최근메뉴-->
 
-        <div layout:fragment="contents"></div>
+        <!--나의 메뉴인 즐겨찾기와 최근메뉴-->
+        <div id="main-content" class="ax-frame-contents" style="left: 0%; padding-left: 0px; background: white">
+            <div class="contents_wrap" style="padding: 60px 75px 180px 75px">
+                <div class="div_tablerow" style="width: 100%;">
+                    <div style="text-align: center; margin-bottom: 50px;">
+                        <div style="display: inline-block; height: 52px;width: 700px;border: 1px solid #41a679;background: #ffffff;">
+                            <input type="text" placeholder="검색어 입력" style="font-size: 24px;width: 640px;padding: 10px;border: 0px;outline: none;float: left;height: 100%">
+                            <button style="width: 50px;height: 100%;border: 0px; background: #41a679;outline: none;float: right;color: #ffffff;margin: 0px; font-size: 18px">검색<button>
+                        </div>
+                    </div>
+                </div>
+                <div class="div_tablerow" style="width: 100%;height: 100%;">
+                    <div style="display:table; width:35%; padding-right: 10px; float:left">
+                        <div style="width: 100%;" class="div_tablerow bdb" >
+                            <div class="panel panel-default" style="margin-bottom: 0px;border: 1px solid #41a679;">
+                                <p class="panel-heading" style="border: 0px; background: #41a679;color: #ffffff;font-size: 15px">공지사항</p>
+                                <div class="panel-body gallery" style="height: 100%;width: 100%;padding:2px">
+                                    <div data-ax5grid="grid-view-01" data-fit-height-content="grid-view-01" style="height: 516px;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="display:table; width:65%; padding-left:10px; float:left">
+                        <div class="panel panel-default" style="margin-bottom: 19px;border: 1px solid #41a679;">
+                            <p class="panel-heading" style="border: 0px; background: #41a679;color: #ffffff;font-size: 15px">전자 기록물</p>
+                            <div class="gallery" style="width: 100%">
+                                <div style="height: 231px"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="display:table; width:65%; padding-left:10px; float:left">
+                        <div class="panel panel-default" style="margin-bottom: 0;border: 1px solid #41a679;">
+                            <p class="panel-heading" style="border: 0px; background: #41a679;color: #ffffff;font-size: 15px">비전자 기록물</p>
+                            <div class="gallery" style="width: 100%">
+                                <div style="height: 231px"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div layout:fragment="contents" style="visibility: hidden"></div>
         <!-- footer -->
         <div class="ax-frame-foot">
             <div class="ax-split-col" style="height: 100%;">
