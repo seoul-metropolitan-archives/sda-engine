@@ -631,7 +631,7 @@ function contextMenuClick(ui, treeData) {
         case "AGG_ADD":
             selectedData = fnObj.naviView.getCurrent();
             var currentNode = fnObj.treeView01.getNodeByParam("uuid", selectedData["uuid"]);
-            if (currentNode.nodeType == "normal" && !currentNode.isParent && currentNode.childCnt > 0) {
+            if (currentNode && currentNode.nodeType == "normal" && !currentNode.isParent && currentNode.childCnt > 0) {
                 axDialog.alert(axboot.getCommonMessage("RC001_08"));
                 return;
             }
@@ -1169,7 +1169,7 @@ var fnObj = {
                 case "Properties":
                     if (selectedData.length == 1) {
                         if (selectedData[0].nodeType == "item") {
-                            contextMenuClick({cmd : "ITEM_VIEW"}, selectedData[0]);
+                            contextMenuClick({cmd : "ITEM_VIEW"}, $.extend(selectedData[0], {parentUuid : fnObj.naviView.getCurrent()["uuid"]}));
                         } else {
                             contextMenuClick({cmd : "AGG_VIEW"}, selectedData[0]);
                         }
@@ -1179,7 +1179,7 @@ var fnObj = {
                 case "Edit":
                     if (selectedData.length == 1) {
                         if (selectedData[0].nodeType == "item") {
-                            contextMenuClick({cmd : "ITEM_EDIT"}, selectedData[0]);
+                            contextMenuClick({cmd : "ITEM_EDIT"}, $.extend(selectedData[0], {parentUuid : fnObj.naviView.getCurrent()["uuid"]}));
                         } else {
                             contextMenuClick({cmd : "AGG_EDIT"}, selectedData[0]);
                         }
