@@ -35,7 +35,7 @@ var ad00801 =
                 {
                     sortNo: 4,
                     name: "primaryKey",
-                    text: "Primary Key",
+                    text: "Primary Code",
                     width: 150,
                     dataType: "text",
                     editable: false,
