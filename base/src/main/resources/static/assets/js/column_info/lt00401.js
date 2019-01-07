@@ -36,7 +36,7 @@ var lt00401 =
                 {
                     sortNo: 4,
                     name: "targetFileFormat",
-                    text: "Source File Format",
+                    text: "Target File Format",
                     width: 150,
                     editable: true,
                     dataType: "popup",
