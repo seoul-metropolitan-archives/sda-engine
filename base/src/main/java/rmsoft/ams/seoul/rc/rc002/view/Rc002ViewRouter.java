@@ -47,6 +47,12 @@ public class Rc002ViewRouter extends BaseController {
         return "/rc/rc002/rc002";
     }
 
+    /**
+     * Add aggregation string.
+     *
+     * @param model the model
+     * @return the string
+     */
     @PostMapping("/rc/rc002/p_rc002")
     public String addAggregation(ModelMap model) {
         model.addAttribute("levelList", rc002Service.getLevel());

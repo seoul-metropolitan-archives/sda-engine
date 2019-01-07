@@ -25,6 +25,7 @@ public class Rc004Controller extends MessageBaseController{
      * Save item details.
      *
      * @param requestParams the request params
+     * @return the rc 00501 vo
      */
     @PutMapping("/01/saveItemDetails")
     @PostMapping

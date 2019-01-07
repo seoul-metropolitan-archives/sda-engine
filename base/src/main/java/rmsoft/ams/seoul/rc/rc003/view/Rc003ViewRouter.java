@@ -22,6 +22,7 @@ public class Rc003ViewRouter extends BaseController {
     private Rc002Service rc002Service;
     @Autowired
     private Ad007Mapper mapper;
+
     /**
      * View string.
      *
@@ -47,6 +48,12 @@ public class Rc003ViewRouter extends BaseController {
         return "/rc/rc003/rc003";
     }
 
+    /**
+     * View aggregation string.
+     *
+     * @param model the model
+     * @return the string
+     */
     @PostMapping("/rc/rc003/p_rc003")
     public String viewAggregation(ModelMap model) {
         model.addAttribute("levelList", rc002Service.getLevel());

@@ -37,6 +37,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * The type Rc 001 service.
+ */
 @Service("Rc001Service")
 public class Rc001Service extends BaseService
 {
@@ -70,6 +73,12 @@ public class Rc001Service extends BaseService
     @Autowired
     private JobConvRepository jobConvRepository;
 
+    /**
+     * Gets all node.
+     *
+     * @param param the param
+     * @return the all node
+     */
     public List<Rc00101VO> getAllNode(Rc00101VO param)
     {
         ArrayList<Rc00101VO> nodes = new ArrayList<Rc00101VO>();
@@ -83,6 +92,13 @@ public class Rc001Service extends BaseService
 
         return nodes;
     }
+
+    /**
+     * Gets all node.
+     *
+     * @param param the param
+     * @return the all node
+     */
     public ResponseForPaging<Rc00101VO> getAllNode(Rc00104VO param)
     {
         ResponseForPaging pageData = ModelMapperUtils.map(param,ResponseForPaging.class);
@@ -93,15 +109,35 @@ public class Rc001Service extends BaseService
 
         return pageData;
     }
+
+    /**
+     * Gets aggregation info.
+     *
+     * @param param the param
+     * @return the aggregation info
+     */
     public Rc00102VO getAggregationInfo(Rc00101VO param)
     {
         return rc001Mapper.getAggregationInfo(param);
     }
+
+    /**
+     * Gets item info.
+     *
+     * @param param the param
+     * @return the item info
+     */
     public Rc00102VO getItemInfo(Rc00101VO param)
     {
         return rc001Mapper.getItemInfo(param);
     }
 
+    /**
+     * Gets grid data for paging.
+     *
+     * @param param the param
+     * @return the grid data for paging
+     */
     public ResponseForPaging<Rc00103VO> getGridDataForPaging(Rc00104VO param)
     {
         ResponseForPaging pageData = ModelMapperUtils.map(param,ResponseForPaging.class);
@@ -113,6 +149,12 @@ public class Rc001Service extends BaseService
         return pageData;
     }
 
+    /**
+     * Gets grid data.
+     *
+     * @param param the param
+     * @return the grid data
+     */
     public List<Rc00103VO> getGridData(Rc00101VO param)
     {
         List<Rc00103VO> gridData = new ArrayList<Rc00103VO>();
@@ -125,6 +167,12 @@ public class Rc001Service extends BaseService
         return gridData;
     }
 
+    /**
+     * Save api response.
+     *
+     * @param list the list
+     * @return the api response
+     */
     @Transactional
     public ApiResponse save(List<Map<String,String>> list)
     {
@@ -145,6 +193,12 @@ public class Rc001Service extends BaseService
         return ApiResponse.of(ApiStatus.SUCCESS,"SUCCESS");
     }
 
+    /**
+     * Save records api response.
+     *
+     * @param list the list
+     * @return the api response
+     */
     @Transactional
     public ApiResponse saveRecords(List<Map<String,String>> list)
     {
@@ -175,6 +229,12 @@ public class Rc001Service extends BaseService
         return ApiResponse.of(ApiStatus.SUCCESS,"SUCCESS");
     }
 
+    /**
+     * Save records grid api response.
+     *
+     * @param list the list
+     * @return the api response
+     */
     @Transactional
     public ApiResponse saveRecordsGrid(List<Map<String,Object>> list){
         RcAggregation rcAggregation = null;
@@ -218,11 +278,23 @@ public class Rc001Service extends BaseService
     }
 
 
+    /**
+     * Gets menu.
+     *
+     * @param param the param
+     * @return the menu
+     */
     public Object getMenu(Map<String,String> param)
     {
         return rc001Mapper.getMenu(param);
     }
 
+    /**
+     * Update state api response.
+     *
+     * @param list the list
+     * @return the api response
+     */
     @Transactional
     public ApiResponse updateState(List<Map<String,String>> list) {
         List<RcAggregation> updateList = ModelMapperUtils.mapList(list,RcAggregation.class);
@@ -233,6 +305,13 @@ public class Rc001Service extends BaseService
         }
         return ApiResponse.of(ApiStatus.SUCCESS,"AA007");
     }
+
+    /**
+     * Delete aggregation api response.
+     *
+     * @param list the list
+     * @return the api response
+     */
     @Transactional
     public ApiResponse deleteAggregation(List<Rc00101VO> list) {
         boolean error = false;
@@ -260,12 +339,24 @@ public class Rc001Service extends BaseService
             return ApiResponse.of(ApiStatus.SUCCESS,"AA007");
     }
 
+    /**
+     * Gets navi data.
+     *
+     * @param param the param
+     * @return the navi data
+     */
     public List<Rc00101VO> getNaviData(Rc00101VO param)
     {
         return rc001Mapper.getNaviData(param);
     }
 
 
+    /**
+     * Move api response.
+     *
+     * @param data the data
+     * @return the api response
+     */
     public ApiResponse move(Rc00105VO data)
     {
         String targetUuid = data.getTargetUuid();
@@ -286,6 +377,12 @@ public class Rc001Service extends BaseService
     }
 
 
+    /**
+     * Move component api response.
+     *
+     * @param param the param
+     * @return the api response
+     */
     @Transactional
     public ApiResponse moveComponent(List<Rc00502VO> param){
         List<RcItemComponent> itemList = ModelMapperUtils.mapList(param, RcItemComponent.class);
@@ -305,8 +402,9 @@ public class Rc001Service extends BaseService
 
     /**
      * Item 2 Item
-     * @param param
-     * @return
+     *
+     * @param param the param
+     * @return api response
      */
     @Transactional
     public ApiResponse delItemAndMoveComponent(List<Rc00502VO> param) {
@@ -334,8 +432,9 @@ public class Rc001Service extends BaseService
 
     /**
      * Component 2 Record Window
-     * @param params
-     * @return
+     *
+     * @param params the params
+     * @return api response
      */
     @Transactional
     public ApiResponse creItemAndMoveComponent(Rc00501VO params) {
@@ -360,8 +459,9 @@ public class Rc001Service extends BaseService
 
     /**
      * uuid에 해당하는 Aggregaiton 및 하위 Aggregation Type 변경
-     * @param param
-     * @return
+     *
+     * @param param the param
+     * @return responses . map response
      */
     @Transactional
     public Responses.MapResponse updateAggregationType(Rc00101VO param){
@@ -402,8 +502,9 @@ public class Rc001Service extends BaseService
 
     /**
      * 외부파일 Drag & Drop시 Item 생성 및 Component생성
-     * @param params
-     * @return
+     *
+     * @param params the params
+     * @return api response
      */
     @Transactional
     public ApiResponse creItemAndCreComponent(Rc00501VO params) {
@@ -434,8 +535,9 @@ public class Rc001Service extends BaseService
 
     /**
      * 외부파일 Drag & Drop 시 Component 생성 및 Item에 연결
-     * @param param
-     * @return
+     *
+     * @param param the param
+     * @return api response
      */
     @Transactional
     public ApiResponse createComponent(List<Rc00502VO> param){
@@ -469,5 +571,22 @@ public class Rc001Service extends BaseService
         }
 
         return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");
+    }
+
+    /**
+     * Gets Search data for paging.
+     *
+     * @param param the param
+     * @return the grid data for paging
+     */
+    public ResponseForPaging<Rc00107VO> getSearchDataForPaging(Rc00107VO param)
+    {
+        ResponseForPaging pageData = ModelMapperUtils.map(param,ResponseForPaging.class);
+
+        pageData.setLimit(rc001Mapper.getTotalSearchCnt(param));
+        param.setLimit(pageData.getLimit());
+        pageData.setList(rc001Mapper.getSearchList(param));
+
+        return pageData;
     }
 }

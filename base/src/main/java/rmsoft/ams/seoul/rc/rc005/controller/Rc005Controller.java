@@ -38,6 +38,12 @@ public class Rc005Controller extends MessageBaseController{
         return Responses.ListResponse.of(lists);
     }
 
+    /**
+     * Merge component object.
+     *
+     * @param mergeList the merge list
+     * @return the object
+     */
     @PutMapping(value = "/01/merge")
     @PostMapping
     public Object mergeComponent(@RequestBody List<Rc00502VO> mergeList) {
@@ -45,6 +51,12 @@ public class Rc005Controller extends MessageBaseController{
     }
 
 
+    /**
+     * Export item json map.
+     *
+     * @param requestParams the request params
+     * @return the map
+     */
     @GetMapping("/01/export")
     public Map exportItemJson(Map requestParams){
         Map rc00501VO = rc005Service.exportItem(requestParams);

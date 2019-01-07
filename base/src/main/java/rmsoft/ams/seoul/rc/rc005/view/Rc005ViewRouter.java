@@ -18,6 +18,7 @@ public class Rc005ViewRouter extends BaseController {
 
     @Autowired
     private Ad007Mapper mapper;
+
     /**
      * View string.
      *
@@ -42,6 +43,12 @@ public class Rc005ViewRouter extends BaseController {
         return "/rc/rc005/rc005";
     }
 
+    /**
+     * View item string.
+     *
+     * @param model the model
+     * @return the string
+     */
     @PostMapping("/rc/rc005/p_rc005")
     public String viewItem(ModelMap model) {
         model.addAttribute("typeList", CommonCodeUtils.get("CD136"));

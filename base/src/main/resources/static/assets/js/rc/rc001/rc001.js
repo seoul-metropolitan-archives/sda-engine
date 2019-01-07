@@ -8,6 +8,8 @@ $(function () {
 
 var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH: function (caller, act, data) {
+        if (hideMenuRole('inquiryYn')) return;
+
         axboot.ajax({
             url: "/rc/rc001/getAllNodes",
             data: $.extend({}, data, {isDisplayItem: $("#isDisplayItem").prop("checked")}),
@@ -34,6 +36,8 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             data: $.extend({}, data, fnObj.pageView.getPageInfo()),
             callback: function (res) {
                 console.log(res.list);
+                fnObj.gridView01.setColumnInfo(rc00101.column_info);
+                fnObj.gridView01.mode = "grid";
                 fnObj.gridView01.setData(res.list, true);
                 fnObj.pageView.setPage(res);
                 fnObj.gridView01.gridObj.getGridView().resetSize();
@@ -64,6 +68,60 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 fnObj.iconView.setData(res.list, data.uuid == "");
                 fnObj.pageView.setPage(res);
                 ACTIONS.dispatch(ACTIONS.GET_NAVI_DATA, data);
+            },
+            options: {
+                onError: axboot.viewError
+            }
+        });
+    },
+    GET_SEARCH_DATA: function (caller, act, data) {
+        if (hideMenuRole('inquiryYn')) return;
+
+        var formData = fnObj.formView.getData();
+        var searchData = {};
+        searchData["level"] = formData["searchLevelUuid"];
+        searchData["nodeType"] = formData["searchTypeUuid"];
+        searchData["publishedStatus"] = formData["searchPublishedStatusUuid"];
+        searchData["author"] = formData["searchAuthor"];
+        searchData["title"] = formData["searchTitle"];
+
+        var startDate = formData["descriptionDateFrom"] ? formData["descriptionDateFrom"] : "";
+        var endDate = formData["descriptionDateTo"] ? formData["descriptionDateTo"] : "";
+
+        startDate = startDate.replace(/-/gi, "");
+        endDate = endDate.replace(/-/gi, "");
+
+        if(startDate.length == 4){
+            searchData["descriptionStartDate"] = startDate + "0101";
+        }else if(startDate.length == 6){
+            searchData["descriptionStartDate"] = startDate + "01";
+        }else{
+            searchData["descriptionStartDate"] = startDate;
+        }
+
+        if(endDate.length == 4){
+            searchData["descriptionEndDate"] = endDate + "1231";
+        }else if(endDate.length == 6){
+            searchData["descriptionEndDate"] = endDate + "31";
+        }else{
+            searchData["descriptionEndDate"] = endDate;
+        }
+        
+        axboot.ajax({
+            //url: "/rc/rc001/getGridData",
+            url: "/rc/rc001/search",
+            data: $.extend({}, searchData, fnObj.pageView.getPageInfo()),
+            callback: function (res) {
+                console.log(res.list);
+                fnObj.gridView01.setColumnInfo(rc00107.column_info);
+                fnObj.gridView01.mode = "search";
+                fnObj.gridView01.setData(res.list, true);
+                fnObj.pageView.setPage(res);
+                fnObj.gridView01.gridObj.getGridView().resetSize();
+
+                $("#searchView").hide();
+                $("#searchResultView").show();
+                $("#searchLabel").html("<span style='color: orangered; font-weight: bold'>\"" + searchData["title"] + "\"</span>의 검색결과(총 " + res["limit"].toLocaleString() +"건)&nbsp;&nbsp;&nbsp;");
             },
             options: {
                 onError: axboot.viewError
@@ -394,13 +452,17 @@ function exp_listView() {
     ACTIONS.dispatch(ACTIONS.GET_SUBDATA, fnObj.naviView.getCurrent());
 }
 
-function exp_gridView() {
+function exp_gridView(isSearch) {
     $(".explorer_list").css("display", "none");
     $(".explorer_grid").css("display", "block");
     //$(".exp_detail").css("display", "none");
     fnObj.pageView.resetPage();
     fnObj.pageView.setPageSize(100);
-    ACTIONS.dispatch(ACTIONS.GET_GRID_DATA, fnObj.naviView.getCurrent());
+    if(isSearch) {
+        ACTIONS.dispatch(ACTIONS.GET_SEARCH_DATA, null);
+    }else{
+        ACTIONS.dispatch(ACTIONS.GET_GRID_DATA, fnObj.naviView.getCurrent());
+    }
 
 }
 
@@ -1046,6 +1108,14 @@ var fnObj = {
         });
 
         $.ajax({
+            url: "/assets/js/column_info/rc00107.js",
+            dataType: "script",
+            async: false,
+            success: function () {
+            }
+        });
+
+        $.ajax({
             url: "/assets/js/column_info/rc00102.js",
             dataType: "script",
             async: false,
@@ -1299,6 +1369,20 @@ var fnObj = {
         fnObj.pageView.initView();
         fnObj.formView.initView();
 
+        $("#search").on("click", function(){
+            if($.trim($("[data-ax-path='searchTitle']").val()).length < 2){
+                axWarningToast.push("검색어를 2글자 이상 입력하세요.");
+                return;
+            }
+
+            exp_gridView(true);
+        });
+
+        $("#reSearch").on("click", function(){
+            $("#searchView").show();
+            $("#searchResultView").hide();
+        });
+
         $("#iconListArea").on({
             "dragenter": function (event) {
                 if (fnObj.naviView.getCurrent().nodeType == "temp") {
@@ -1511,12 +1595,17 @@ fnObj.pageView = axboot.viewExtend({
             $(".page_no>a[pageNo='" + $(this).text() + "']").addClass("selec");
 
 
-            if ($(".explorer_grid").css("display") == "none")
+            if ($(".explorer_grid").css("display") == "none") {
                 ACTIONS.dispatch(ACTIONS.GET_SUBDATA, fnObj.naviView.getCurrent());
-            else
-                ACTIONS.dispatch(ACTIONS.GET_GRID_DATA, fnObj.naviView.getCurrent());
-
+            } else{
+                if(fnObj.gridView01.mode == "grid") {
+                    ACTIONS.dispatch(ACTIONS.GET_GRID_DATA, fnObj.naviView.getCurrent());
+                } else if(fnObj.gridView01.mode == "search") {
+                    ACTIONS.dispatch(ACTIONS.GET_SEARCH_DATA);
+                }
+            }
         });
+
         $(".page_no>a.page_start,.page_no>a.page_prev,.page_no>a.page_next,.page_no>a.page_end").click(function () {
             switch ($(this).attr("class")) {
                 case "page_start":
@@ -1679,7 +1768,7 @@ fnObj.iconView = axboot.viewExtend({
             if (!fnObj.iconView.isOver && $(event.target).closest("#itemTabs").length == 0) {
                 $("#iconListArea").width("100%");
                 $("#componentView").empty();
-                fnObj.formView.clear();
+                //fnObj.formView.clear();
             }
 
             fnObj.iconView.isOver = false;
@@ -1734,6 +1823,7 @@ fnObj.iconView = axboot.viewExtend({
                 //컨트롤 누르지 않고 클릭 시 해당 아이템만 선택되어야된다
                 $("#iconListArea >div").removeClass("selected");
                 $(this).toggleClass("selected");
+                //fnObj.formView.clear();
 
                 var selectedData = fnObj.iconView.getSelectedData();
 
@@ -2824,13 +2914,13 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     tagId: "realgrid01",
     uuidFieldName: "uuid",
     entityName: "Record Explorer",
+    mode: "grid",
     initView: function () {
         var _this = this;
         this.initInstance();
         this.gridObj.setFixedOptions({
             colCount: 3
         });
-        this.setColumnInfo(rc00101.column_info);
 
         this.gridObj.onDataCellDblClicked(this.itemDbClick);
 
@@ -2846,7 +2936,9 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
         if (reqData["iconType"] == "file") {
             var item = getMenu("view item");
             var parentsObj = parent.window.fnObj;
-            reqData["parentUuid"] = fnObj.naviView.getCurrent()["uuid"];
+
+            if(this.mode == "grid")
+                reqData["parentUuid"] = fnObj.naviView.getCurrent()["uuid"];
 
             contextMenuClick({cmd : "ITEM_VIEW"}, reqData);
             return;
@@ -2880,6 +2972,11 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
         var isOpen = false;
         for (var i = 0; i < list.length; i++) {
             data = list[i];
+
+            if(this.mode == "search"){
+                data["type"] = data["nodeType"];
+            }
+
             if (data["childCnt"] > 0) {
                 isOpen = true;
             }

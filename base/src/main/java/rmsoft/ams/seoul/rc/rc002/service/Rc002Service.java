@@ -285,6 +285,12 @@ public class Rc002Service extends BaseService {
         return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");
     }
 
+    /**
+     * Gets tree data.
+     *
+     * @param param the param
+     * @return the tree data
+     */
     public List<Rc00204VO> getTreeData(Rc00204VO param) {
         return rc002Mapper.getTreeData(param);
     }

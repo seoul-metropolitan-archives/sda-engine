@@ -59,6 +59,7 @@ public class Rc005Service extends BaseService {
 
     /**
      * Get record item list page.
+     *
      * @param requestParams the request params
      * @return the page
      */
@@ -84,8 +85,10 @@ public class Rc005Service extends BaseService {
     }
 
     /**
-     * @param requestParams
-     * @return Rc00501VO
+     * Export item map.
+     *
+     * @param requestParams the request params
+     * @return Rc00501VO map
      */
     public Map exportItem(Map requestParams) {
         RequestParams params = new RequestParams();
@@ -188,7 +191,13 @@ public class Rc005Service extends BaseService {
         return itemMap;
     }
 
-    //TODO 소스 정리해야댐 (병합 테스트만 한것임);
+    /**
+     * Merge component object.
+     *
+     * @param mergeList the merge list
+     * @return the object
+     */
+//TODO 소스 정리해야댐 (병합 테스트만 한것임);
     @Transactional
     public Object mergeComponent(List<Rc00502VO> mergeList) {
 

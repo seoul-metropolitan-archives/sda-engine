@@ -45,6 +45,12 @@ public class Rc004ViewRouter extends BaseController {
         return "/rc/rc004/rc004";
     }
 
+    /**
+     * Add item string.
+     *
+     * @param model the model
+     * @return the string
+     */
     @PostMapping("/rc/rc004/p_rc004")
     public String addItem(ModelMap model) {
         model.addAttribute("typeList", CommonCodeUtils.get("CD136"));

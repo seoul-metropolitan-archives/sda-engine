@@ -28065,3 +28065,9 @@ a.small_open {
     width: 100%;
     padding: 0px;
 }
+
+div.recordSearchField dt, div.recordSearchField dd{
+    width: fit-content;
+    padding-left: 10px;
+    padding-bottom: 5px;
+}

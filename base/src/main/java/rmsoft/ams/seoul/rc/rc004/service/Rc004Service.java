@@ -53,6 +53,7 @@ public class Rc004Service extends BaseService{
      * Save item details.
      *
      * @param requestParams the request params
+     * @return the rc 00501 vo
      */
     @Transactional
     public Rc00501VO saveItemDetails(Rc00501VO requestParams){

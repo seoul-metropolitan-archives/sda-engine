@@ -35,6 +35,12 @@ public class Rc002Controller extends MessageBaseController
         return rc002Service.save(data);
     }
 
+    /**
+     * Gets tree data.
+     *
+     * @param param the param
+     * @return the tree data
+     */
     @RequestMapping("/getTreeData")
     public Responses.ListResponse getTreeData(Rc00204VO param)
     {

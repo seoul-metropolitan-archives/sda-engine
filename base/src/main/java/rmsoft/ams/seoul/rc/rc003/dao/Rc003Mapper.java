@@ -19,8 +19,20 @@ public interface Rc003Mapper extends MyBatisMapper {
      */
     List<Rc00301VO> getRecordAggregationList(Rc00301VO rc00301VO);
 
+    /**
+     * Gets creator list.
+     *
+     * @param aggreagtionUuid the aggreagtion uuid
+     * @return the creator list
+     */
     List<Rc00207VO> getCreatorList(String aggreagtionUuid);
 
+    /**
+     * Gets related authority list.
+     *
+     * @param aggreagtionUuid the aggreagtion uuid
+     * @return the related authority list
+     */
     List<Rc00209VO> getRelatedAuthorityList(String aggreagtionUuid);
 
 }

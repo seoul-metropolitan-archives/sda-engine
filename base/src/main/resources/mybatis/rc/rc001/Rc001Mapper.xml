@@ -565,4 +565,118 @@
             dual
     </select>
 
+
+    <select id="getSearchList" resultType="Rc00107VO" parameterType="Rc00107VO" statementType="PREPARED">
+        SELECT * FROM (
+            SELECT
+                ZZ.*,
+                ZY.AGGREGATION_PATH AS path,
+                ROW_NUMBER() OVER(ORDER BY orderNo ASC) AS NUM
+            FROM (
+                  <include refid="searchSQL"></include>
+                ) ZZ,
+                (
+                  <include refid="aggregationPathSQL"></include>
+                ) ZY
+            WHERE ZZ.JOIN_KEY = ZY.AGGREGATION_UUID
+            ORDER BY orderNo ASC, title ASC
+        ) Z1
+        WHERE NUM <![CDATA[ >= ]]> (#{start} + 1)
+        AND NUM <![CDATA[ <= ]]> #{end}
+    </select>
+
+    <select id="getTotalSearchCnt" resultType="long" parameterType="Rc00107VO" statementType="PREPARED">
+        SELECT COUNT(*) FROM (
+        <include refid="searchSQL"></include>
+        )
+    </select>
+
+    <sql id="searchSQL">
+        SELECT
+            Z1.AGGREGATION_UUID AS uuid,
+            Z1.PARENT_AGGREGATION_UUID AS parentUuid,
+            1 as orderNo,
+            FC_AD_CODE_NM(Z1.TYPE_UUID) AS nodeType,
+            Z1.TITLE AS title,
+            (SELECT LEVEL_NAME FROM RC_LEVEL WHERE LEVEL_UUID = Z1.LEVEL_UUID) as "level",
+            FC_AD_CODE_NM(Z1.PUBLISHED_STATUS_UUID) AS publishedStatus,
+            Z1.AUTHOR AS author,
+            DESCRIPTION_START_DATE AS descriptionStartDate,
+            DESCRIPTION_END_DATE AS descriptionEndDate,
+            DESCRIPTION AS description,
+            NOTES AS notes,
+            (
+            (SELECT COUNT(*) FROM RC_AGGREGATION WHERE PARENT_AGGREGATION_UUID = Z1.AGGREGATION_UUID)
+            + (SELECT COUNT(*) FROM RC_ITEM WHERE AGGREGATION_UUID = Z1.AGGREGATION_UUID)
+            )as childCnt,
+            Z1.AGGREGATION_UUID AS JOIN_KEY
+        FROM RC_AGGREGATION Z1
+        WHERE 1=1
+        <if test=" null != title and '' != title">
+          AND TITLE LIKE '%' || #{title} || '%'
+        </if>
+        <if test=" null != level and '' != level">
+          AND LEVEL_UUID = #{level}
+        </if>
+        <if test=" null != nodeType and '' != nodeType">
+          AND TYPE_UUID = #{nodeType}
+        </if>
+        <if test=" null != publishedStatus and '' != publishedStatus">
+          AND PUBLISHED_STATUS_UUID = #{publishedStatus}
+        </if>
+        <if test=" null != author and '' != author">
+          AND AUTHOR LIKE '%' || #{author} || '%'
+        </if>
+        <if test=" null != descriptionStartDate and '' != descriptionStartDate">
+            <![CDATA[ AND DESCRIPTION_START_DATE >= #{descriptionStartDate} ]]>
+        </if>
+        <if test=" null != descriptionEndDate and '' != descriptionEndDate">
+            <![CDATA[ AND DESCRIPTION_END_DATE <= #{descriptionEndDate} ]]>
+        </if>
+        UNION ALL
+        SELECT
+            ITEM_UUID AS uuid,
+            AGGREGATION_UUID AS parentUuid,
+            2 AS orderNo,
+            FC_AD_CODE_NM(TYPE_UUID) AS nodeType,
+            TITLE AS title,
+            'Item' AS "level",
+            FC_AD_CODE_NM(PUBLISHED_STATUS_UUID) AS publishedStatus,
+            AUTHOR AS author,
+            DESCRIPTION_START_DATE AS descriptionStartDate,
+            DESCRIPTION_END_DATE AS descriptionEndDate,
+            DESCRIPTION AS description,
+            NOTES AS notes,
+            0 AS childCnt,
+            AGGREGATION_UUID AS JOIN_KEY
+        FROM RC_ITEM
+        WHERE 1=1
+        <if test=" null != title and '' != title">
+          AND TITLE LIKE '%' || #{title} || '%'
+        </if>
+        <if test=" null != nodeType and '' != nodeType">
+          AND TYPE_UUID = #{nodeType}
+        </if>
+        <if test=" null != publishedStatus and '' != publishedStatus">
+          AND PUBLISHED_STATUS_UUID = #{publishedStatus}
+        </if>
+        <if test=" null != author and '' != author">
+          AND AUTHOR LIKE '%' || #{author} || '%'
+        </if>
+        <if test=" null != descriptionStartDate and '' != descriptionStartDate">
+            <![CDATA[ AND DESCRIPTION_START_DATE >= #{descriptionStartDate} ]]>
+        </if>
+        <if test=" null != descriptionEndDate and '' != descriptionEndDate">
+            <![CDATA[ AND DESCRIPTION_END_DATE <= #{descriptionEndDate} ]]>
+        </if>
+    </sql>
+
+    <sql id="aggregationPathSQL">
+        SELECT
+            AGGREGATION_UUID,
+            SUBSTR(SYS_CONNECT_BY_PATH(TITLE,'>'),2,length(SYS_CONNECT_BY_PATH(TITLE, '>'))) as AGGREGATION_PATH
+        FROM RC_AGGREGATION
+        START WITH PARENT_AGGREGATION_UUID IS NULL
+        CONNECT BY PRIOR AGGREGATION_UUID = PARENT_AGGREGATION_UUID
+    </sql>
 </mapper>
