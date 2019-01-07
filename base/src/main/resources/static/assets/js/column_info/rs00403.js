@@ -22,7 +22,7 @@ var rs00403 =
                     sortNo: 2,
                     width:140,
                     name: "rsCode",
-                    text: "RS_CODE",
+                    text: "RS Code",
                     editable: false,
                     dataType: "text",
                     visible : true
@@ -31,7 +31,7 @@ var rs00403 =
                     sortNo: 3,
                     width:140,
                     name: "rsName",
-                    text: "RS_NAME",
+                    text: "RS Name",
                     editable: false,
                     dataType: "text",
                     visible : true
@@ -66,6 +66,13 @@ var rs00403 =
                     values: axboot.commonCodeFilter("CD135").codeArr,
                     labels: axboot.commonCodeFilter("CD135").nameArr,
                     disable: true
+                },
+                {
+                    sortNo: 7,
+                    width:140,
+                    name: "aggregationUuid",
+                    visible: false,
+                    dataType: "text"
                 }
             ]
     }

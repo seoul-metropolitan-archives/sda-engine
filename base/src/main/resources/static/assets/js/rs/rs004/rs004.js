@@ -123,7 +123,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         axboot.call({
             type: "PUT",
             url: "/api/v1/rs/rs004/03/save",
-            data: JSON.stringify(this.gridView01.getData()),
+            data: JSON.stringify(fnObj.gridView01.getData()),
             callback: function (res) {
                 if(isDetailChanged){
                     isDetailChanged = false;

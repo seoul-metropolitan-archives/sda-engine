@@ -154,7 +154,7 @@ public class Wf003Service extends BaseService {
      * @return api response
      */
     @Transactional
-    public ApiResponse saveWorkfloeJob(List<Wf00302VO> wf00302VOList) {
+    public ApiResponse saveWorkflowJob(List<Wf00302VO> wf00302VOList) {
         List<WfWorkflowJob> wfWorkflowJobList = ModelMapperUtils.mapList(wf00302VOList, WfWorkflowJob.class);
         WfWorkflowJob orgWfWorkflowJob = null;
 

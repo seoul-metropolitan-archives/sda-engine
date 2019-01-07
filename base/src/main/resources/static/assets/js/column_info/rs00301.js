@@ -35,14 +35,13 @@ var rs00301 =
                 {
                     sortNo: 2,
                     width: 80,
-                    name: "recalculationYn",
+                    name: "reCalculationYn",
                     text: "Recalculation",
                     editable: false,
                     dataType: "check",
                     defaultValue : "N",
                     textAlignment: "center",
-                    required: false,
-                    disable: true
+                    required: false
                 },
                 {
                     sortNo: 3,
@@ -208,6 +207,11 @@ var rs00301 =
                     sortNo: 20,
                     name : "triggerUuid",
                     text : "Trigger Uuid",
+                    visible : false
+                },
+                {
+                    sortNo: 21,
+                    name : "relatedItems",
                     visible : false
                 }
             ]

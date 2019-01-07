@@ -15,7 +15,7 @@
             T1.PROGRAM_ID AS programId,
             T1.PROGRAM_NAME AS programName,
             T1.FUNCTION AS "function",
-            T2.TERM_NAME AS primaryKey,
+            T1.PRIMARY_KEY_UUID AS primaryKey,
             T1.PREVIOUS_VALUE AS previousValue,
             T1.NEW_VALUE AS newValue,
             T1.DESCRIPTION AS description,
@@ -52,7 +52,7 @@
         </if>
         <if test="null != primaryKey and '' != primaryKey">
             <![CDATA[
-            AND T2.TERM_NAME LIKE '%' || #{primaryKey} || '%'
+            AND T1.PRIMARY_KEY_UUID = #{primaryKey}
           ]]>
         </if>
         <if test="null != programName and '' != programName">
@@ -67,7 +67,12 @@
         </if>
         <if test="null != modifyDateFrom and '' != modifyDateFrom">
             <![CDATA[
-          AND TO_CHAR(T1.UPDATE_DATE, 'yyyy-MM-dd') BETWEEN #{modifyDateFrom} AND #{modifyDateTo}
+          AND TO_CHAR(T1.UPDATE_DATE, 'yyyy-MM-dd') >= #{modifyDateFrom}
+        ]]>
+        </if>
+        <if test="null != modifyDateTo and '' != modifyDateTo">
+            <![CDATA[
+          AND TO_CHAR(T1.UPDATE_DATE, 'yyyy-MM-dd') <= #{modifyDateTo}
         ]]>
         </if>
         ORDER BY T1.UPDATE_DATE DESC

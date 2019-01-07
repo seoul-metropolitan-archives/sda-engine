@@ -60,7 +60,31 @@ public class CommonCodeUtils {
 
         return StringUtils.isEmpty(commonCode.getCode()) ? "미등록코드" : commonCode.getCode();
     }
+    /**
+     * Gets code by uuid.
+     *
+     * @param groupCd the group cd
+     * @param name    the name
+     * @return the code
+     */
+    public static String getCodeByUuid(String groupCd, String uuid) {
 
+        List<Ad00303VO> commonCodes = get(groupCd);
+
+        Ad00303VO commonCode = commonCodes.stream()
+                .filter(e -> e.getCodeDetailUUID().equals(uuid))
+                .findFirst().get();
+
+        if (StringUtils.isEmpty(commonCode.getCode())) {
+            commonCodes = get(groupCd);
+
+            commonCode = commonCodes.stream()
+                    .filter(e -> e.getCodeDetailUUID().equals(uuid))
+                    .findFirst().get();
+        }
+
+        return StringUtils.isEmpty(commonCode.getCode()) ? "미등록코드" : commonCode.getCode();
+    }
     /**
      * Gets name.
      *

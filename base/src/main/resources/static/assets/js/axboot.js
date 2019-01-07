@@ -27,6 +27,8 @@ axboot.def = {
     "dialogTitle": "Confirm"
 };
 
+axboot.modalOpener = "";
+
 /**
  * document ready 상태가 되었을 때 실행됩니다. 애플리케이션 초기화를 담당합니다.
  * @method axboot.init
@@ -1859,6 +1861,8 @@ axboot.modal = function () {
         this.modalCallback = modalConfig.callback;
         this.modalSendData = modalConfig.sendData;
 
+        axboot.modalOpener = "modal";
+
         window.axModal.open(modalConfig);
     };
 
@@ -2088,6 +2092,8 @@ axboot.commonModal = function () {
 
         this.modalCallback = modalConfig.callback;
         this.modalSendData = modalConfig.sendData;
+
+        axboot.modalOpener = "commonModal";
 
         window.axCommonModal.open(modalConfig);
     };
@@ -2723,6 +2729,9 @@ axboot.baseView =
             $(".bdb").delegate("#disposal", "click", function () {
                 _this.disposal();
             });
+            $(".bdb").delegate("#update", "click", function () {
+                _this.update();
+            });
 
             try {
                 if (hideMenuRole("saveYn")) {
@@ -2829,6 +2838,10 @@ axboot.baseView =
         , disposal: function () {
             if (ACTIONS && ACTIONS.PAGE_DISPOSAL)
                 ACTIONS.dispatch(ACTIONS.PAGE_DISPOSAL);
+        }
+        , update: function () {
+            if (ACTIONS && ACTIONS.DATE_UPDATE)
+                ACTIONS.dispatch(ACTIONS.DATE_UPDATE);
         }
     };
 

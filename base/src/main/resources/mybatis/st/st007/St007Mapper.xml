@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="rmsoft.ams.seoul.st.st007.dao.St007Mapper">
+    <select id="getDisposalList" resultType="St00701VO" parameterType="St00701VO" statementType="PREPARED">
+
+        SELECT
+               schedule_result.AGGREGATION_UUID aggregationUuid,
+               B.code,
+               B.title,
+               B."level",
+               B."type",
+               B.publishedStatus,
+               B.author,
+               B.descStrDate,
+               B.descEdDate,
+               repository.REPOSITORY_NAME repositoryName,
+               shelf.SHELF_NAME shelfName,
+               (location.ROW_NO || '행 ' || location.COLUMN_NO || '열') as locationName,
+               container.CONTAINER_UUID containerUuid,
+               container.CONTAINER_NAME containerName
+        FROM
+             (                SELECT
+                                  *
+                              FROM
+                                   (                        select
+                                                                   A.*,
+                                                                   (select
+                                                                           count(*)
+                                                                    from
+                                                                         rc_item B
+                                                                           inner join
+                                                                             RS_RECORD_SCHEDULE_RESULT C
+                                                                             ON B.ITEM_UUID = C.ITEM_UUID
+                                                                    where
+                                                                        B.AGGREGATION_UUID = A.AGGREGATION_UUID
+                                                                      and disposal_complete_date is null                              ) as  cnt
+                                                            from
+                                                                 RC_AGGREGATION A) main
+                              WHERE
+                                  main.cnt >= 1                  ) schedule_result
+               INNER JOIN
+                 (
+                 SELECT
+                        ar.AGGREGATION_UUID,
+                        ar.CONTAINER_UUID
+                 FROM
+                      RC_ITEM item
+                        INNER JOIN
+                          ST_ARRANGE_RECORDS_RESULT ar
+                          ON ar.AGGREGATION_UUID = item.AGGREGATION_UUID
+                 GROUP BY ar.AGGREGATION_UUID, ar.CONTAINER_UUID
+                 ) etc
+                 ON etc.AGGREGATION_UUID = schedule_result.AGGREGATION_UUID
+               INNER JOIN
+                 ST_ARRANGE_CONTAINERS_RESULT acr
+                 ON acr.CONTAINER_UUID = etc.CONTAINER_UUID
+               INNER JOIN
+                 ST_LOCATION location
+                 ON location.LOCATION_UUID = acr.LOCATION_UUID
+               INNER JOIN
+                 ST_CONTAINER container
+                 ON container.CONTAINER_UUID = etc.CONTAINER_UUID
+               INNER JOIN
+                 ST_SHELF shelf
+                 ON shelf.SHELF_UUID = location.SHELF_UUID
+               INNER JOIN
+                 ST_REPOSITORY repository
+                 ON repository.REPOSITORY_UUID = shelf.REPOSITORY_UUID
+               INNER JOIN
+                 (
+                 SELECT
+                        AGGREGATION_UUID                                                                         as uuid,
+                        1                                                                                        as orderNo,
+                        (SELECT
+                                CODE_NAME
+                         FROM
+                              AD_CODE_DETAIL
+                         WHERE
+                             CODE_DETAIL_UUID = Z1.PUBLISHED_STATUS_UUID)                                      as publishedStatus,
+                        AGGREGATION_CODE                                                                         as code,
+                        TITLE                                                                                    as title,
+                        (SELECT
+                                CODE_NAME
+                         FROM
+                              AD_CODE_DETAIL
+                         WHERE
+                             CODE_DETAIL_UUID = Z1.TYPE_UUID)                                                  as "type",
+                        (SELECT
+                                TO_CHAR(LEVEL_NO)
+                         FROM
+                              RC_LEVEL
+                         WHERE
+                             LEVEL_UUID = Z1.LEVEL_UUID)                                                       as "level",
+                        AUTHOR                                                                                   as author,
+                        DESCRIPTION_START_DATE                                                                   as descStrDate,
+                        DESCRIPTION_END_DATE                                                                     as descEdDate,
+                        DESCRIPTION                                                                              as description,
+                        NOTES                                                                                    as notes,
+                        ((SELECT
+                                 COUNT(*)
+                          FROM
+                               RC_AGGREGATION
+                          WHERE
+                              PARENT_AGGREGATION_UUID = Z1.AGGREGATION_UUID) +                                    (SELECT
+                                                                                                                          COUNT(*)
+                                                                                                                   FROM
+                                                                                                                        RC_ITEM
+                                                                                                                   WHERE
+                                                                                                                       AGGREGATION_UUID = Z1.AGGREGATION_UUID))                                         as childCnt
+                 FROM
+                      RC_AGGREGATION Z1
+                 UNION
+                 ALL SELECT
+                            ITEM_UUID                                                                    as uuid,
+                            2                                                                            as orderNo,
+                            (SELECT
+                                    CODE_NAME
+                             FROM
+                                  AD_CODE_DETAIL
+                             WHERE
+                                 CODE_DETAIL_UUID = Z1.PUBLISHED_STATUS_UUID)                          as publishedStatus,
+                            ITEM_CODE                                                                    as code,
+                            TITLE                                                                        as title,
+                            (SELECT
+                                    CODE_NAME
+                             FROM
+                                  AD_CODE_DETAIL
+                             WHERE
+                                 CODE_DETAIL_UUID = Z1.TYPE_UUID)                                      as "type",
+                            ''                                                                           as "level",
+                            AUTHOR                                                                       as author,
+                            DESCRIPTION_START_DATE                                                       as descStrDate,
+                            DESCRIPTION_END_DATE                                                         as descEdDate,
+                            DESCRIPTION                                                                  as description,
+                            NOTES                                                                        as notes,
+                            0                                                                            as childCnt
+                     FROM
+                          RC_ITEM Z1) B
+                 on B.UUID = schedule_result.AGGREGATION_UUID
+        <where>
+            1=1
+
+        </where>
+    </select>
+
+    <select id="getDisposalItem" resultType="St00702VO" parameterType="St00702VO" statementType="PREPARED">
+        SELECT
+                A.AGGREGATION_UUID aggregationUuid,
+                result.ITEM_CODE code,
+                result.TITLE title,
+                code_detail.CODE_NAME retentionPeriodName, -- 보존기간
+                A.DESCRIPTION_START_DATE descriptionStartDate,
+                A.DESCRIPTION_END_DATE descriptionEndDate,
+                result.INITIAL_DATE initialDate,
+                result.DISPOSAL_DUE_DATE disposalDueDate,
+                result.DISPOSAL_COMPLETE_DATE disposalCompleteDate
+         from RC_AGGREGATION A
+          INNER JOIN
+                  (select *
+                   from rc_item B
+                          inner join RS_RECORD_SCHEDULE_RESULT C
+                            ON B.ITEM_UUID = C.ITEM_UUID
+                   where
+                       disposal_complete_date is null
+                  ) result
+            ON result.AGGREGATION_UUID = A.AGGREGATION_UUID
+         INNER JOIN RS_RECORD_SCHEDULE schedule
+            ON schedule.RECORD_SCHEDULE_UUID = result.RECORD_SCHEDULE_UUID
+         INNER JOIN RS_GENERAL_RECORD_SCHEDULE general
+            ON general.GENERAL_RECORD_SCHEDULE_UUID = schedule.GENERAL_RECORD_SCHEDULE_UUID
+         INNER JOIN AD_CODE_DETAIL code_detail
+            ON code_detail.CODE_DETAIL_UUID = general.RETENTION_PERIOD_UUID
+        WHERE 1 = 1
+          AND A.AGGREGATION_UUID = #{aggregationUuid}
+    </select>
+</mapper>

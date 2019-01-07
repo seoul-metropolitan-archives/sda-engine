@@ -22,10 +22,16 @@
             A.DESCRIPTION as description,
             A.NOTES as notes,
             A.USE_YN as useYn,
+            A.RE_CALCULATION_YN as reCalculationYn,
             <include refid="Common.UserName"><property name="userUuid" value="A.INSERT_UUID"/></include> as insertUuid,
             A.INSERT_DATE as insertDate,
             <include refid="Common.UserName"><property name="userUuid" value="A.UPDATE_UUID"/></include> as updateUuid,
-            A.UPDATE_DATE as updateDate
+            A.UPDATE_DATE as updateDate,
+            (
+              SELECT Count(ITEM_UUID)
+              FROM RS_RECORD_SCHEDULE_RESULT
+              WHERE A.RECORD_SCHEDULE_UUID = RECORD_SCHEDULE_UUID
+            ) as relatedItems
         FROM
           RS_RECORD_SCHEDULE A, RS_GENERAL_RECORD_SCHEDULE B, RS_TRIGGER T
         <where>

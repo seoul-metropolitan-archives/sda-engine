@@ -41,13 +41,15 @@ public class Rc00501VO extends BaseVO {
 
     private String riPublishedStatusUuid;
 
-    private String riPublishedStatusNm;
+    private String riPublishedStatusName;
 
     private String riItemCode;
 
     private String name; //title
 
     private String riTypeUuid;
+
+    private String riTypeName;
 
     private String riAggregationUuid;
 
@@ -57,11 +59,11 @@ public class Rc00501VO extends BaseVO {
 
     private String riDescriptionEndDate;
 
-    private String riTypeNm;
-
     private String provenance;
 
     private String openStatusUuid;
+
+    private String openStatusName;
 
     private String keyword;
 
@@ -102,9 +104,15 @@ public class Rc00501VO extends BaseVO {
     /** 설계변경 신규추가 **/
     private String languageCode;
 
+    private String languageName;
+
     private String statusDescription;
 
+    private String statusDescriptionName;
+
     private String levelOfDetailUuid;
+
+    private String levelOfDetailName;
 
     private String sourceSystemUuid;
 
@@ -114,11 +122,15 @@ public class Rc00501VO extends BaseVO {
 
     private String legalStatusUuid;
 
+    private String legalStatusName;
+
     private String repositoriesUuid;
 
     private String repositoriesName;
 
     private String electronicRecordStatusUuid;
+
+    private String electronicRecordStatusName;
 
     private String accumulationStartDate;
 
@@ -140,7 +152,11 @@ public class Rc00501VO extends BaseVO {
 
     private String rulesConversionUuid;
 
+    private String rulesConversionName;
+
     private String recordScheduleUuid;
+
+    private String recordScheduleName;
 
     private String accessCondition;
 

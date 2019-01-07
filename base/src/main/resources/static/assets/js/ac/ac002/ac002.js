@@ -48,6 +48,9 @@ fnObj.pageStart = function () {
     this.frameView.initView();
     this.tabView.initView();
     this.activityTimerView.initView();
+    this.gridView01.initView();
+    leftcloseView();
+
 };
 
 fnObj.pageResize = function () {
@@ -193,7 +196,6 @@ fnObj.frameView = axboot.viewExtend({
                 axToast.push(axboot.getCommonMessage("AC002_02"));
             }
         });
-
     },
     toggleAside: function () {
         this.target.toggleClass("show-aside");
@@ -639,10 +641,6 @@ fnObj.tabView = axboot.viewExtend({
     },
     open: function (item) {
         var _item;
-
-
-
-
         var findedIndex = ax5.util.search(this.list, function () {
             this.status = '';
             return this.menuId == item.menuId;
@@ -651,6 +649,8 @@ fnObj.tabView = axboot.viewExtend({
         this.frameTarget.find('.frame-item').removeClass("on");
 
         if (findedIndex < 0) {
+            $("#main-content").css('visibility', 'hidden');
+            $("#content-frame-container").css('visibility', 'visible');
 
             if (this.list.length >= this.limitCount) {
                 axErrorToast.push(axboot.getCommonMessage("AA009"));
@@ -734,6 +734,10 @@ fnObj.tabView = axboot.viewExtend({
         var thisTarget = this.target.find('[data-tab-id="' + menuId + '"]');
         var _this = this;
 
+        if(this.list.length == 0){
+            $("#main-content").css('visibility', 'visible');
+            $("#content-frame-container").css('visibility', 'hidden');
+        }
         // 프레임 제거
         (function () {
             var $iframe = this.frameTarget.find('[data-tab-id="' + menuId + '"]'), // iframe jQuery Object
@@ -968,7 +972,33 @@ fnObj.activityTimerView = axboot.viewExtend({
         this.$target.html(displayTime.join(""));
     }
 });
+fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
+    initView: function () {
+        var _this = this;
 
+        this.target = axboot.gridBuilder({
+            frozenColumnIndex: 0,
+            multipleSelect: true,
+            target: $('[data-ax5grid="grid-view-01"]'),
+            columns: [
+                {key: "value", label: "제목", width: 300, align: "center", editor: "text"},
+                {key: "etc1", label: "작성자", width: 120, align: "center", editor: "text"},
+                {key: "ect2", label: "작성일자", align: "center", editor: "text"}
+            ],
+            body: {
+                onClick: function () {
+                    this.self.select(this.dindex);
+                }
+            }
+        });
+
+        axboot.buttonClick(this, "data-grid-view-01-btn", {
+            "add": function () {
+                ACTIONS.dispatch(ACTIONS.ITEM_ADD);
+            }
+        });
+    }
+});
 /**
  * 우측 상단 버튼 전체화면
  */
@@ -977,6 +1007,8 @@ function leftcloseView() {
     $(".left").hide();
     $(".ax-frame-header-tab").css("left", "0%");
     $(".ax-frame-header-tab").css("padding-left", "0");
+    $("#contents").css("left", "0%");
+    $("#contents").css("padding-left", "0");
     $(".ax-frame-contents").css("left", "0%");
     $(".ax-frame-contents").css("padding-left", "0");
     $("a.leftmenu_open").show();
@@ -993,6 +1025,8 @@ function leftopenView() {
     $("a.leftmenu_close").show();
     $(".ax-frame-header-tab").css("left", "");
     $(".ax-frame-header-tab").css("padding-left", "");
+    $("#contents").css("left", ""); //오른쪽 부분 원상복귀
+    $("#contents").css("padding-left", ""); //오른쪽 부분 복귀
     $(".ax-frame-contents").css("left", ""); //오른쪽 부분 원상복귀
     $(".ax-frame-contents").css("padding-left", ""); //오른쪽 부분 복귀
     $(".left_close_open_btn a").css("left", "");
@@ -1008,6 +1042,8 @@ function left7openView() {
     $("a.leftmenu_open").hide();
     $("a.leftmenu_close").hide();
     $("a.leftmenu7_close").show();
+    $("#contents").css("left", ""); //오른쪽 부분 원상복귀
+    $("#contents").css("padding-left", ""); //오른쪽 부분 복귀
     $(".ax-frame-contents").css("left", ""); //오른쪽 부분 원상복귀
     $(".ax-frame-contents").css("padding-left", ""); //오른쪽 부분 복귀
     $(".left_close_open_btn a").css("left", "");
@@ -1017,6 +1053,8 @@ function left7openView() {
 
 function left7closeView() {
     $(".left").hide();
+    $("#contents").css("left", "0%");
+    $("#contents").css("padding-left", "0");
     $(".ax-frame-contents").css("left", "0%");
     $(".ax-frame-contents").css("padding-left", "0");
     $("a.leftmenu_open").hide();
@@ -1032,6 +1070,9 @@ function bigView() {
     $(".ax-frame-header-tool").hide();
     $(".left").hide();
     $(".ax-frame-header-tab").hide();
+    $("#contents").css("left", "0%");
+    $("#contents").css("top", "50px");
+    $("#contents").css("padding-bottom", "50px");
     $(".ax-frame-contents").css("left", "0%");
     $(".ax-frame-contents").css("top", "50px");
     $(".ax-frame-contents").css("padding-bottom", "50px");
@@ -1055,7 +1096,10 @@ function smallView() {
     $(".left").show();
     $(".ax-frame-header-tab").show();
     $(".left").css("top", "50px");
-
+    $("#contents").css("left", "");
+    $("#contents").css("top", "80px");
+    $("#contents").css("padding-bottom", "110px");
+    $("#contents").css("padding-left", "");
     $(".ax-frame-contents").css("left", "");
     $(".ax-frame-contents").css("top", "80px");
     $(".ax-frame-contents").css("padding-bottom", "110px");

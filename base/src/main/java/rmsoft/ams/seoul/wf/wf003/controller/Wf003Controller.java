@@ -79,8 +79,8 @@ public class Wf003Controller extends MessageBaseController {
      */
     @PutMapping(value = "/02/save")
     @PostMapping
-    public ApiResponse saveWorkfloeJob(@RequestBody List<Wf00302VO> requestParams) {
-        return wf003Service.saveWorkfloeJob(requestParams);
+    public ApiResponse saveWorkflowJob(@RequestBody List<Wf00302VO> requestParams) {
+        return wf003Service.saveWorkflowJob(requestParams);
     }
 
 
