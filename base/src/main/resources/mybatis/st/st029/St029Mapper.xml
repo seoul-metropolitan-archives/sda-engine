@@ -5,6 +5,25 @@
 
 <mapper namespace="rmsoft.ams.seoul.st.st029.dao.St029Mapper">
 
+    <select id="getStProgram" resultType="St02901VO" parameterType="St02901VO" statementType="PREPARED">
+        select PROGRAM_UUID as PROGRAM_UUID,
+               NO as no,
+               MACHINE_TYPE_UUID as machineTypeUuid,
+               MACHINE_NAME as machineName,
+               PROGRAM_NAME as programName,
+               VERSION as version,
+               FILE_PATH as filePath,
+               FILE_NAME as fileName,
+               <include refid="Common.UserName"><property name="userUuid" value="INSERT_UUID"/></include> as insertUuid,
+               INSERT_DATE as insertDate,
+               <include refid="Common.UserName"><property name="userUuid" value="UPDATE_UUID"/></include> as updateUuid,
+               UPDATE_DATE as updateDate,
+               DESCRIPTION as description
+          from ST_PROGRAM
+          <where>
+              1=1
 
+          </where>
+    </select>
 
 </mapper>

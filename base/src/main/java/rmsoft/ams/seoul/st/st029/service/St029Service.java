@@ -35,7 +35,7 @@ public class St029Service extends BaseService {
         St02901VO st02901VO = new St02901VO();
         //st02901VO.setGateId(requestParams.getString("gateId"));
 
-        return filter(st029Mapper.getProgram(st02901VO), pageable, "", St02901VO.class);
+        return filter(st029Mapper.getStProgram(st02901VO), pageable, "", St02901VO.class);
     }
 
     @Transactional
@@ -47,12 +47,12 @@ public class St029Service extends BaseService {
                 stProgramRepository.delete(stProgram);
             }else{
                 if(stProgram.isCreated()){
-                    //int no = jdbcTemplate.queryForObject("SELECT ST_GATE_SEQ.NEXTVAL FROM dual", int.class);
-                    //stProgram.setNo(no);
+                    int no = jdbcTemplate.queryForObject("SELECT ST_PROGRAM_SEQ.NEXTVAL FROM dual", int.class);
+                    stProgram.setNo(no);
                 }else if(stProgram.isModified()){
-                    //orgStGate = stProgramRepository.findOne(stProgram.getId());
-                    //stGate.setInsertDate(stProgram.getInsertDate());
-                    //stGate.setInsertUuid(stProgram.getInsertUuid());
+                    orgStProgram = stProgramRepository.findOne(stProgram.getId());
+                    stProgram.setInsertDate(orgStProgram.getInsertDate());
+                    stProgram.setInsertUuid(orgStProgram.getInsertUuid());
 
                 }
                 stProgramRepository.save(stProgram);

@@ -4,5 +4,50 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="rmsoft.ams.seoul.st.st015.dao.St015Mapper">
+    <select id="getStInventoryPlan" resultType="St01501VO" parameterType="St01501VO" statementType="PREPARED">
+        select a.INVENTORY_PLAN_UUID as inventoryPlanUuid,
+               a.PLAN_NAME as planName,
+               a.PLANNER_UUID as plannerUuid,
+               <include refid="Common.UserName"><property name="userUuid" value="PLANNER_UUID"/></include> as plannerName,
+               a.EXCEPT_START_DATE as exceptStartDate,
+               a.EXCEPT_END_DATE as exceptEndDate,
+               a.REPOSITORY_UUID as repositoryUuid,
+               b.REPOSITORY_NAME as repositoryName,
+               a.SHELF_UUID as shelfUuid,
+               c.SHELF_NAME as shelfName,
+               a.LOCATION_UUID as locationUuid,
+               (d.COLUMN_NO || d.ROW_NO) as locationName,
+               a.STATUS_UUID as statusUuid,
+               a.PLAN_RESULT_UUID as planResultUuid,
+               a.NOTES as notes,
+               a.EXCEPT_REASON as exceptReason
+          from ST_INVENTORY_PLAN a left outer join ST_REPOSITORY b
+            ON a.REPOSITORY_UUID = b.REPOSITORY_UUID
+            left outer join ST_SHELF c
+            ON a.SHELF_UUID = C.SHELF_UUID
+            left outer join ST_LOCATION d
+            ON a.SHELF_UUID = d.LOCATION_UUID
+    </select>
 
+    <select id="getStInventoryContainerResult" resultType="St01502VO" parameterType="St01502VO" statementType="PREPARED">
+        select a.INVENTORY_CONT_RESULT_UUID as inventoryContResultUuid,
+               a.INVENTORY_PLAN_UUID as inventoryPlanUuid,
+               a.CONTAINER_UUID as containerUuid,
+               a.INVENTORY_RESULT_UUID as inventoryResultUuid,
+               a.CONTAINER_STATUS_UUID as containerStatusUuid
+        from ST_INVENTORY_CONTAINER_RESULT a
+    </select>
+
+    <select id="getStInventoryRecordResult" resultType="St01503VO" parameterType="St01503VO" statementType="PREPARED">
+        SELECT a.INVENTORY_RECORD_RESULT_UUID as inventoryRecordResultUuid,
+               a.INVENTORY_PLAN_UUID as inventoryPlanUuid,
+               a.CONTAINER_UUID as containerUuid,
+               a.AGGREGATION_UUID as aggregationUuid,
+               a.WORKER_UUID as workerUuid,
+               a.INVENTORY_DATE as inventoryDate,
+               a.INVENTORY_RESULT_UUID as inventoryResultUuid,
+               a.TAG_STATUS_UUID as tagStatusUuid,
+               a.RECORD_STATUS_UUID as recordStatusUuid
+          from ST_INVENTORY_RECORD_RESULT a
+    </select>
 </mapper>

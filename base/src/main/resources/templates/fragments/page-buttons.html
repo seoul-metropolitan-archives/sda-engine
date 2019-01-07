@@ -144,6 +144,35 @@
     </li>
 </th:block>
 
+<th:block layout:fragment="confirm-cancel-except-save-and-inquiry">
+    <li style="text-align:right; width:48%;">
+        <button class="btn_co btn_confirm01" th:id="confirm">
+            <span class="btn_icon_co">&nbsp;</span>
+            <span class="btn_main_txt">Confirm</span>
+        </button>
+        <button class="btn_co btn_cancel01" th:id="cancel">
+            <span class="btn_icon_co">&nbsp;</span>
+            <span class="btn_main_txt">Cancel</span>
+        </button>
+        <button class="btn_a" th:id="exceptBtn">
+            <span class="btn_icon">&nbsp;</span>
+            <span class="btn_main_txt">Except Reocrd</span>
+        </button>
+        <button class="btn_a">
+            <span class="btn_icon">&nbsp;</span>
+            <span class="btn_main_txt">Print</span>
+        </button>
+        <button class="btn_s" th:id="save">
+            <span class="btn_icon">&nbsp;</span>
+            <span class="btn_main_txt">Save(S)</span>
+        </button>
+        <button class="btn_i" th:id="inquiry">
+            <span class="btn_icon">&nbsp;</span>
+            <span class="btn_main_txt">Inquiry(I)</span>
+        </button>
+    </li>
+</th:block>
+
 <th:block layout:fragment="inquiry(btn2Visible)">
     <li style="text-align:right; width:48%;">
         <button class="btn_i" th:id="inquiry" th:style="'display:'+${btn2Visible==null?'show':btn2Visible}+';'">

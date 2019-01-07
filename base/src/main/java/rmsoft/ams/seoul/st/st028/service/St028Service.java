@@ -48,8 +48,8 @@ public class St028Service extends BaseService {
                     stGate.setNo(no);
                 }else if(stGate.isModified()){
                     orgStGate = stGateRepository.findOne(stGate.getId());
-                    stGate.setInsertDate(stGate.getInsertDate());
-                    stGate.setInsertUuid(stGate.getInsertUuid());
+                    stGate.setInsertDate(orgStGate.getInsertDate());
+                    stGate.setInsertUuid(orgStGate.getInsertUuid());
 
                 }
                 stGateRepository.save(stGate);

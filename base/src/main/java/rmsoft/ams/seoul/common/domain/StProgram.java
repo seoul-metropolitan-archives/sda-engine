@@ -25,9 +25,29 @@ public class StProgram extends SimpleJpaModel<StProgram.StProgramId> {
     @Column(name = "PROGRAM_UUID", length = 36, nullable = false)
     private String programUuid;
 
+    @Column(name = "NO", length = 8, nullable = false)
+    private int no;
 
+    @Column(name = "MACHINE_TYPE_UUID", length = 36, nullable = false)
+    private String machineTypeUuid;
 
+    @Column(name = "MACHINE_NAME", length = 50, nullable = false)
+    private String machineName;
 
+    @Column(name = "PROGRAM_NAME", length = 50, nullable = false)
+    private String programName;
+
+    @Column(name = "VERSION", length = 36, nullable = false)
+    private String version;
+
+    @Column(name = "FILE_PATH", length = 50, nullable = false)
+    private String filePath;
+
+    @Column(name = "FILE_NAME", length = 50, nullable = false)
+    private String fileName;
+
+    @Column(name = "DESCRIPTION", length = 4000, nullable = false)
+    private String description;
 
 
 

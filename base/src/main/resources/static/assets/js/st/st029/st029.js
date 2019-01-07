@@ -5,7 +5,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH: function (caller, act, data) {
         axboot.ajax({
             type: "GET",
-            url: "/api/v1/st/st028/01/list01",
+            url: "/api/v1/st/st029/01/list01",
             data: $.extend({}, {pageSize: 1000}, this.formView.getData()),
             callback: function (res) {
                 fnObj.gridView01.setData(res.list);
@@ -24,7 +24,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         var result = false;
         axboot.call({
             type: "PUT",
-            url: "/api/v1/st/st028/01/save01",
+            url: "/api/v1/st/st029/01/save01",
             data: JSON.stringify(this.gridView01.getData()),
             callback: function (res) {
                 ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
@@ -89,7 +89,7 @@ fnObj.pageStart = function () {
 
     //TODO 추후에 삭제될 내용으로 /실제 Grid의 컬럼 정보는 DB에서 가져올 예정
     $.ajax({
-        url: "/assets/js/column_info/st02801.js",
+        url: "/assets/js/column_info/st02901.js",
         dataType: "script",
         async: false,
         success: function () {
@@ -154,11 +154,11 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
 // AC005 User Group User GridView
 fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     tagId: "realgrid01",
-    primaryKey: "gateUuid",
-    entityName: "ST_GATE",
+    primaryKey: "programUuid",
+    entityName: "ST_PROGRAM",
     initView: function () {
         this.initInstance();
-        this.setColumnInfo(st02801.column_info);
+        this.setColumnInfo(st02901.column_info);
         this.makeGrid();
         this.gridObj.itemClick(this.itemClick);
     },

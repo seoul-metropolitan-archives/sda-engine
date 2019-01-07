@@ -1,10 +1,6 @@
 var fnObj = {};
 var CONFIRM_STATUS = "Confirm";
 var CANCEL_STATUS = "Draft";
-var beforeData01 = null;
-var beforeData02 = null;
-var repositoryUuid = '';
-var shelfUuid ='';
 var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH: function (caller, act, data) {
         /*beforeData01 = null;
@@ -14,14 +10,13 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH01: function (caller, act, data) {
         axboot.ajax({
             type: "GET",
-            url: "/api/v1/st/st001/01/list01",
+            url: "/api/v1/st/st015/01/list01",
             data: $.extend({},  {repositoryCode : $("input[data-ax-path='repositoryCode']").val()},{ repositoryName : $("input[data-ax-path='repositoryName']").val()}),
             callback: function (res) {
                 fnObj.gridView01.setData(res.list);
-                //fnObj.gridView01.disabledColumn();
+                fnObj.gridView01.disabledColumn();
                 fnObj.gridView02.clearData();
                 fnObj.gridView03.clearData();
-                //fnObj.gridView04.clearData();
             },
             options: {
                 onError: axboot.viewError
@@ -34,12 +29,11 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         }
         axboot.ajax({
             type: "GET",
-            url: "/api/v1/st/st001/01/list02",
+            url: "/api/v1/st/st015/01/list02",
             data: $.extend({}, {shelfCode : $("input[data-ax-path='shelfCode']").val()},{ shelfName : $("input[data-ax-path='shelfName']").val()},{repositoryUuid : fnObj.gridView01.getSelectedData().repositoryUuid}),
             callback: function (res) {
                 fnObj.gridView02.setData(res.list);
                 fnObj.gridView03.clearData();
-                //fnObj.gridView04.clearData();
             },
             options: {
                 onError: axboot.viewError
@@ -52,11 +46,10 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         }
         axboot.ajax({
             type: "GET",
-            url: "/api/v1/st/st001/01/list03",
+            url: "/api/v1/st/st015/01/list03",
             data: $.extend({}, this.formView.getData(),{shelfUuid : fnObj.gridView02.getSelectedData().shelfUuid}),
             callback: function (res) {
                 fnObj.gridView03.setData(res.list);
-                //fnObj.gridView04.clearData();
             },
             options: {
                 onError: axboot.viewError
@@ -67,6 +60,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     },
     STATUS_UPDATE01: function (caller, act, data) {
 
+        debugger
         if (fnObj.gridView01.isChangeData() == true) {
             axDialog.confirm({
                 msg: axboot.getCommonMessage("AA006")
@@ -81,12 +75,12 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             if (!rows || rows.length < 1) return;
             var params = rows.filter(function (item) {
                 item.changeStatus = data;
-                return item.repositoryUuid != "";
+                return item.inventoryPlanUuid != "";
             });
 
             axboot.ajax({
                 type: "PUT",
-                url: "/api/v1/st/st001/02/confirm01",
+                url: "/api/v1/st/st015/02/confirm01",
                 data: JSON.stringify(params),
                 callback: function (res) {
                     ACTIONS.dispatch(ACTIONS.PAGE_SEARCH01);
@@ -109,7 +103,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
 
         axboot.ajax({
             type: "PUT",
-            url: "/api/v1/st/st001/02/confirm02",
+            url: "/api/v1/st/st015/01/save02",
             data: JSON.stringify(params),
             callback: function (res) {
                 ACTIONS.dispatch(ACTIONS.PAGE_SEARCH02);
@@ -131,7 +125,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
 
         axboot.ajax({
             type: "PUT",
-            url: "/api/v1/st/st001/02/confirm03",
+            url: "/api/v1/st/st015/01/save03",
             data: JSON.stringify(params),
             callback: function (res) {
                 ACTIONS.dispatch(ACTIONS.PAGE_SEARCH03);
@@ -167,7 +161,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         var result = false;
         axboot.call({
             type: "PUT",
-            url: "/api/v1/st/st001/02/save01",
+            url: "/api/v1/st/st015/01/save01",
             data: JSON.stringify(this.gridView01.getData()),
             callback: function (res) {
                 ACTIONS.dispatch(ACTIONS.PAGE_SEARCH01);
@@ -184,7 +178,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
 
         axboot.call({
             type: "PUT",
-            url: "/api/v1/st/st001/02/save02",
+            url: "/api/v1/st/st015/01/save02",
             data: JSON.stringify(this.gridView02.getData()),
             callback: function (res) {
                 ACTIONS.dispatch(ACTIONS.PAGE_SEARCH02);
@@ -201,7 +195,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
 
         axboot.call({
             type: "PUT",
-            url: "/api/v1/st/st001/02/save03",
+            url: "/api/v1/st/st015/01/save03",
             data: JSON.stringify(this.gridView03.getData()),
             callback: function (res) {
                 ACTIONS.dispatch(ACTIONS.PAGE_SEARCH03);
@@ -253,21 +247,21 @@ fnObj.pageStart = function () {
         }
     });
     $.ajax({
-        url: "/assets/js/column_info/st01001.js",
+        url: "/assets/js/column_info/st01501.js",
         dataType: "script",
         async: false,
         success: function () {
         }
     });
     $.ajax({
-        url: "/assets/js/column_info/st01002.js",
+        url: "/assets/js/column_info/st01502.js",
         dataType: "script",
         async: false,
         success: function () {
         }
     });
     $.ajax({
-        url: "/assets/js/column_info/st01003.js",
+        url: "/assets/js/column_info/st01503.js",
         dataType: "script",
         async: false,
         success: function () {
@@ -330,7 +324,7 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
     bindEvent : function()
     {
         var _this = this;
-        $("input[data-ax-path='shelfCode'],input[data-ax-path='shelfName']").keydown(function(e){
+       /* $("input[data-ax-path='shelfCode'],input[data-ax-path='shelfName']").keydown(function(e){
             if(e.keyCode == 13){
                 ACTIONS.dispatch(ACTIONS.PAGE_SEARCH02);
             }
@@ -340,6 +334,14 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
             if(e.keyCode == 13){
                 ACTIONS.dispatch(ACTIONS.PAGE_SEARCH01);
             }
+        });*/
+
+        $(".btn_confirm01").click(function(){
+            ACTIONS.dispatch(ACTIONS.STATUS_UPDATE01,CONFIRM_STATUS);
+        });
+
+        $(".btn_cancel01").click(function(){
+            ACTIONS.dispatch(ACTIONS.STATUS_UPDATE01,CANCEL_STATUS);
         });
 
 
@@ -349,32 +351,74 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
 /*팝업 헤더*/
 fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     tagId: "realgrid01",
-    primaryKey: "repositoryUuid",
-    entityName: "ST_REPOSITORY",
+    primaryKey: "inventoryPlanUuid",
+    entityName: "ST_INVENTORY_PLAN",
     initView: function () {
         this.initInstance();
-        this.setColumnInfo(st01001.column_info);
+        this.setColumnInfo(st01501.column_info);
+        this.gridObj.setOption({
+            checkBar : {visible : true}
+        })
         this.makeGrid();
         this.gridObj.itemClick(this.itemClick);
+        this.removeRowBeforeEvent(this.cancelDelete);
     },
     getSelectedData: function () {
         return this.gridObj.getSelectedData()
     },
+    disabledColumn: function () {
+        var state = axboot.commonCodeValueByCodeName("CD216", CONFIRM_STATUS);
+        this.gridObj.setCustomCellStyleRows("disable", function (row) {
+
+            if (row["statusUuid"] == state)
+                return true;
+            else
+                return false;
+        }, ["statusUuid", "planName", "plannerName", "exceptStartDate","exceptEndDate","repositoryName","shelfName","planResultUuid"]);
+    },
     itemClick: function (data) {
         ACTIONS.dispatch(ACTIONS.PAGE_SEARCH02);
+    },
+    popupCallback : function(grid,data)
+    {
+        grid.commit(true);
+        var parentData = fnObj.gridView01.gridObj.getSelectedData();
+
+        console.log('test');
+
+    },
+    cancelDelete: function(){
+        var codes = axboot.commonCodeFilter("CD216").codeArr;
+        var names = axboot.commonCodeFilter("CD216").nameArr;
+        var state = undefined;
+        for (var i = 0; i < codes.length; i++) {
+            if (codes[i] == fnObj.gridView01.getSelectedData().statusUuid) {
+                state = names[i];
+                break;
+            }
+        }
+
+        if(state == CONFIRM_STATUS){
+            axToast.push(axboot.getCommonMessage("DF001_01"));
+
+            this.setRunDel(false);
+        }else{
+            this.setRunDel(true);
+            this.setConfirmYn(true,"ST001_01");
+        }
     }
 
 });
 fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
     tagId: "realgrid02",
-    primaryKey: "shelfUuid",
-    uuidFieldName: "shelfUuid",
-    entityName: "ST_SHELF",
-    parentsUuidFieldName: "repositoryUuid",
+    primaryKey: "inventoryContResultUuid",
+    uuidFieldName: "inventoryContResultUuid",
+    entityName: "ST_INVENTORY_CONTAINER_RESULT",
+    parentsUuidFieldName: "inventoryPlanUuid",
     parentsGrid: fnObj.gridView01,
     initView: function () {
         this.initInstance();
-        this.setColumnInfo(st01002.column_info);
+        this.setColumnInfo(st01502.column_info);
         this.makeGrid();
         this.gridObj.itemClick(this.itemClick);
         //this.removeRowBeforeEvent(this.cancelDelete);
@@ -389,13 +433,13 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
 
 fnObj.gridView03 = axboot.viewExtend(axboot.gridView, {
     tagId: "realgrid03",
-    primaryKey: "locationUuid",
-    entityName: "ST_LOCATION",
-    parentsUuidFieldName: "shelfUuid",
+    primaryKey: "inventoryRecordResultUuid",
+    entityName: "ST_INVENTORY_RECORD_RESULT",
+    parentsUuidFieldName: "inventoryContResultUuid",
     parentsGrid: fnObj.gridView02,
     initView: function () {
         this.initInstance();
-        this.setColumnInfo(st01003.column_info);
+        this.setColumnInfo(st01503.column_info);
         this.makeGrid();
         this.gridObj.itemClick(this.itemClick);
         //this.removeRowBeforeEvent(this.cancelDelete);

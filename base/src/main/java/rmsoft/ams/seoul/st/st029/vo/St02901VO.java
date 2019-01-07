@@ -11,4 +11,23 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(callSuper = false)
 public class St02901VO extends BaseVO {
 
+    private String programUuid;
+
+    private int no;
+
+    private String machineTypeUuid;
+
+    private String machineName;
+
+    private String programName;
+
+    private String version;
+
+    private String filePath;
+
+    private String fileName;
+
+    private String description;
+
+
 }

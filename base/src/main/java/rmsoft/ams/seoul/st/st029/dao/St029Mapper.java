@@ -9,5 +9,5 @@ import java.util.List;
 
 public interface St029Mapper extends MyBatisMapper {
 
-    List<St02901VO> getProgram(St02901VO st02901VO);
+    List<St02901VO> getStProgram(St02901VO st02901VO);
 }
