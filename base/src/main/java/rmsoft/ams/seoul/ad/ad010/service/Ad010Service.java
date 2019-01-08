@@ -1,4 +1,4 @@
-package rmsoft.ams.seoul.ad010.ad010.service;
+package rmsoft.ams.seoul.ad.ad010.service;
 
 import io.onsemiro.core.domain.BaseService;
 import org.springframework.stereotype.Service;

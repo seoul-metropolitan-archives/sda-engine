@@ -1,10 +1,10 @@
-package rmsoft.ams.seoul.ad010.ad010.controller;
+package rmsoft.ams.seoul.ad.ad010.controller;
 
 import io.onsemiro.controller.BaseController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import rmsoft.ams.seoul.ad010.ad010.service.Ad010Service;
+import rmsoft.ams.seoul.ad.ad010.service.Ad010Service;
 
 @RestController
 @RequestMapping(value = "/api/v1/ad/ad010")

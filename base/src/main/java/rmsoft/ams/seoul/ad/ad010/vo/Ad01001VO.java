@@ -1,4 +1,4 @@
-package rmsoft.ams.seoul.ad010.ad010.vo;
+package rmsoft.ams.seoul.ad.ad010.vo;
 
 import io.onsemiro.core.vo.BaseVO;
 import lombok.Data;
