@@ -76,6 +76,7 @@
                                                 <b>Type </b>
                                                 <div>
                                                     <select data-ax-path="riTypeUuid" style="width: 200px; background-color: #fffdd6">
+                                                        <option value=""></option>
                                                         <option th:each="item : ${typeList}"
                                                                 th:value="${item.codeDetailUUID}"
                                                                 th:text="${item.codeName}"

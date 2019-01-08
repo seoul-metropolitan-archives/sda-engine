@@ -84,6 +84,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         searchData["publishedStatus"] = formData["searchPublishedStatusUuid"];
         searchData["author"] = formData["searchAuthor"];
         searchData["title"] = formData["searchTitle"];
+        searchData["parentUuid"] = fnObj.naviView.getCurrent()["uuid"];
 
         var startDate = formData["descriptionDateFrom"] ? formData["descriptionDateFrom"] : "";
         var endDate = formData["descriptionDateTo"] ? formData["descriptionDateTo"] : "";
@@ -2937,7 +2938,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
             var item = getMenu("view item");
             var parentsObj = parent.window.fnObj;
 
-            if(this.mode == "grid")
+            if(fnObj.gridView01.mode == "grid")
                 reqData["parentUuid"] = fnObj.naviView.getCurrent()["uuid"];
 
             contextMenuClick({cmd : "ITEM_VIEW"}, reqData);

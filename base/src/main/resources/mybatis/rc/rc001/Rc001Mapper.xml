@@ -612,6 +612,9 @@
             Z1.AGGREGATION_UUID AS JOIN_KEY
         FROM RC_AGGREGATION Z1
         WHERE 1=1
+        <if test=" null != parentUuid and '' != parentUuid">
+            AND PARENT_AGGREGATION_UUID = #{parentUuid}
+        </if>
         <if test=" null != title and '' != title">
           AND TITLE LIKE '%' || #{title} || '%'
         </if>
@@ -651,6 +654,9 @@
             AGGREGATION_UUID AS JOIN_KEY
         FROM RC_ITEM
         WHERE 1=1
+        <if test=" null != parentUuid and '' != parentUuid">
+          AND AGGREGATION_UUID = #{parentUuid}
+        </if>
         <if test=" null != title and '' != title">
           AND TITLE LIKE '%' || #{title} || '%'
         </if>
