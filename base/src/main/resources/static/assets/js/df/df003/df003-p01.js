@@ -6,9 +6,8 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH_TREE: function (caller, act, data) {
         axboot.ajax({ //트리리스트조회
             type: "GET",
-            url: "/api/v1/st/st003/04/list01",
+            url: "/api/v1/df/df003/freeze/aggregationTree",
             async : false,
-            data: $.extend({}, {pageSize: 1000}),
             callback: function (res) {
                 fnObj.gridView01.resetCurrent();
                 fnObj.gridView01.setData(res.list);

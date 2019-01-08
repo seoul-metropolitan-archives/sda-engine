@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import rmsoft.ams.seoul.df.df003.service.Df003Service;
 import rmsoft.ams.seoul.df.df003.vo.Df00301VO;
 import rmsoft.ams.seoul.df.df003.vo.Df00302VO;
+import rmsoft.ams.seoul.df.df003.vo.Df00303VO;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -84,6 +85,18 @@ public class Df003Controller extends BaseController {
     public Responses.PageResponse searchFreeze(Pageable pageable, RequestParams<Df00302VO> requestParams) {
         Page<Df00302VO> pages  = df003Service.search(pageable, requestParams);
         return Responses.PageResponse.of(pages.getContent(), pages);
+    }
+
+    /**
+     * Update status api response.
+     *
+     * @param requestParams the request params
+     * @return the api response
+     */
+    @GetMapping(value = "/freeze/aggregationTree")
+    public Responses.ListResponse searchAggregationTree(RequestParams<Df00303VO> requestParams) {
+        List<Df00303VO> lists  = df003Service.searchAggregationTree(requestParams);
+        return Responses.ListResponse.of(lists);
     }
 
 }

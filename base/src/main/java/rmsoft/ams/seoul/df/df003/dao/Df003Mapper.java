@@ -3,6 +3,7 @@ package rmsoft.ams.seoul.df.df003.dao;
 import io.onsemiro.core.mybatis.MyBatisMapper;
 import rmsoft.ams.seoul.df.df003.vo.Df00301VO;
 import rmsoft.ams.seoul.df.df003.vo.Df00302VO;
+import rmsoft.ams.seoul.df.df003.vo.Df00303VO;
 
 import java.util.List;
 
@@ -40,4 +41,12 @@ public interface Df003Mapper extends MyBatisMapper {
      * @return the list
      */
     List<Df00302VO> search(Df00302VO param);
+
+    /**
+     * Search entity type list.
+     *
+     * @param param the param
+     * @return the list
+     */
+    List<Df00303VO> searchAggregationTree(Df00303VO param);
 }

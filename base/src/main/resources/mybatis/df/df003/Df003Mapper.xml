@@ -211,4 +211,47 @@
         )
         ORDER BY catPath
     </select>
+
+    <select id="searchAggregationTree" resultType="Df00303VO"  statementType="PREPARED">
+        SELECT *
+        FROM
+        (
+            SELECT
+                T1.*,
+                (SELECT TYPE_UUID FROM RC_AGGREGATION WHERE AGGREGATION_UUID = T1.ROOT_AGGREGATION) AS ROOT_TYPE
+            FROM
+            (
+                SELECT
+                    AGGREGATION_UUID as aggregationUuid,
+                    PUBLISHED_STATUS_UUID as publishedStatusUuid,
+                    AGGREGATION_CODE as aggregationCode,
+                    TITLE as title,
+                    TYPE_UUID as typeUuid,
+                    PARENT_AGGREGATION_UUID as parentAggregationUuid,
+                    LEVEL_UUID as levelUuid,
+                    DESCRIPTION as description,
+                    NOTES as notes,
+                    SUBSTR(SYS_CONNECT_BY_PATH(AGGREGATION_CODE,
+                    '.'),
+                    2 ,
+                    length(SYS_CONNECT_BY_PATH(AGGREGATION_CODE,
+                    '.'))) as orderKey1,
+                    CONNECT_BY_ROOT(AGGREGATION_UUID) AS ROOT_AGGREGATION
+                FROM
+                  RC_AGGREGATION
+                <where>
+                    <if test="typeUuid != null">
+                        TYPE_UUID = #{typeUuid}
+                    </if>
+                </where>
+                START WITH PARENT_AGGREGATION_UUID IS NULL
+                CONNECT BY PRIOR AGGREGATION_UUID = PARENT_AGGREGATION_UUID
+            ) T1
+        ) T2
+        <where>
+            <if test="typeUuid != null">
+                ROOT_TYPE = #{typeUuid}
+            </if>
+        </where>
+    </select>
 </mapper>

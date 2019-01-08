@@ -17,6 +17,8 @@ import rmsoft.ams.seoul.common.repository.DfResultRepository;
 import rmsoft.ams.seoul.df.df003.dao.Df003Mapper;
 import rmsoft.ams.seoul.df.df003.vo.Df00301VO;
 import rmsoft.ams.seoul.df.df003.vo.Df00302VO;
+import rmsoft.ams.seoul.df.df003.vo.Df00303VO;
+import rmsoft.ams.seoul.utils.CommonCodeUtils;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -68,7 +70,7 @@ public class Df003Service extends BaseService {
     /**
      * Save entity type api response.
      *
-     * @param  itemList vo list
+     * @param itemList vo list
      * @return the api response
      */
     @Transactional
@@ -81,12 +83,12 @@ public class Df003Service extends BaseService {
         for (DfResult dfResult : saveList) {
             if (dfResult.isDeleted()) {
                 repository.delete(dfResult);
-            }else{
-                if(dfResult.isModified()) {
+            } else {
+                if (dfResult.isModified()) {
                     orgItem = repository.findOne(dfResult.getId());
                     dfResult.setInsertDate(orgItem.getInsertDate());
                     dfResult.setInsertUuid(orgItem.getInsertUuid());
-                }else{
+                } else {
                     dfResult.setDisposalFreezeResultUuid(UUIDUtils.getUUID());
                     dfResult.setFreezedDate(Timestamp.valueOf(DateUtils.convertToString(LocalDateTime.now(), DateUtils.DATE_TIME_PATTERN)));
                 }
@@ -104,12 +106,12 @@ public class Df003Service extends BaseService {
      * @param list the list
      * @return the api response
      */
-    public ApiResponse unfreeze(List<Df00302VO> list){
-        if(list.size() == 0){
+    public ApiResponse unfreeze(List<Df00302VO> list) {
+        if (list.size() == 0) {
             return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");
         }
 
-        if(list.get(0).getDisposalFreezeResultUuid() == null){
+        if (list.get(0).getDisposalFreezeResultUuid() == null) {
             Df00302VO df00302VO = new Df00302VO();
             df00302VO.setDisposalFreezeEventUuid(list.get(0).getDisposalFreezeEventUuid());
             df00302VO.setDisposalFreezeDegreeUuid(list.get(0).getDisposalFreezeDegreeUuid());
@@ -117,7 +119,7 @@ public class Df003Service extends BaseService {
             list = mapper.searchList(df00302VO);
         }
 
-        List<DfResult> saveList = ModelMapperUtils.mapList(list,DfResult.class);
+        List<DfResult> saveList = ModelMapperUtils.mapList(list, DfResult.class);
 
         for (DfResult dfResult : saveList) {
             repository.delete(dfResult);
@@ -133,6 +135,14 @@ public class Df003Service extends BaseService {
         df00302VO.setDisposalFreezeDegreeUuid(requestParams.getString("disposalFreezeDegreeUuid"));
 
         return filter(mapper.search(df00302VO), pageable, "", Df00302VO.class);
+    }
+
+    public List<Df00303VO> searchAggregationTree(RequestParams<Df00303VO> requestParams) {
+
+        Df00303VO df00303VO = new Df00303VO();
+        df00303VO.setTypeUuid(CommonCodeUtils.getCodeDetailUuid("CD127", "Normal"));
+
+        return mapper.searchAggregationTree(df00303VO);
     }
 
 }
