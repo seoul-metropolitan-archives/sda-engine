@@ -1033,6 +1033,8 @@ function leftopenView() {
     $(".left_close_open_btn a").css("margin-left", "");
     $(".ax-frame-header-tool").css("width", "");
 
+    fnObj.leftMenuView.gridObj.getGridView().resetSize();
+
 }
 
 function left7openView() {
