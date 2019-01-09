@@ -64,7 +64,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     RECORD_SEARCH: function (caller,act, data) {
         var item = getMenu("record explorer");
         var parentsObj = parent.window.fnObj;
-        item.menuParams = $.extend({},{});
+        item.menuParams = $.extend({},{searchWord:"서울시"});
         parentsObj.tabView.open(item);
     },
     dispatch: function (caller, act, data) {
