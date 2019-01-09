@@ -1512,8 +1512,17 @@ var fnObj = {
             fnObj.gridView02.setFilter(!$(this).is(":checked"));
         });
 
+        // Data 조회
+        var data = axboot.getMenuParams();
+
         ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
-        ACTIONS.dispatch(ACTIONS.GET_SUBDATA, {uuid: ""});
+
+        if(data && data["type"] == "search"){
+            fnObj.formView.setFormData("searchTitle", data["searchWord"]);
+            exp_gridView(true);
+        }else{
+            ACTIONS.dispatch(ACTIONS.GET_SUBDATA, {uuid: ""});
+        }
     }
 };
 
