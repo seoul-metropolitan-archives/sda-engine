@@ -1,7 +1,39 @@
 var fnObj = {};
+
+var getMenu = function(searchData)
+{
+    var menuObj = undefined;
+    axboot.ajax({
+        url: "/rc/rc001/getMenuInfo",
+        data: JSON.stringify({progNm : searchData}),
+        type : "POST",
+        dataType : "JSON",
+        async : false,
+        callback: function (res) {
+            menuObj = res;
+        },
+        options: {
+            onError: axboot.viewError
+        }
+    });
+    return menuObj;
+}
+
 var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH: function (caller, act, data) {
-
+        axboot.ajax({
+            type: "GET",
+            url: "/api/v1/ad003/04/save",
+            async : false,
+            data: $.extend({}, {pageSize: 1000},{ crntPwd:$("#crntPwd").val(), newPwd:$("#newPwd").val(), userUuid:sessionJson.userUuid }),
+            callback: function (res) {
+                axToast.push(axboot.getCommonMessage("AC002_03"));
+                popupReset();
+            },
+            options: {
+                onError: axboot.viewError
+            }
+        });
         return false;
     },
     TOGGLE_ASIDE: function (caller, act, data) {
@@ -29,7 +61,12 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             }
         });
     },
-
+    RECORD_SEARCH: function (caller,act, data) {
+        var item = getMenu("record explorer");
+        var parentsObj = parent.window.fnObj;
+        item.menuParams = $.extend({},{});
+        parentsObj.tabView.open(item);
+    },
     dispatch: function (caller, act, data) {
         var result = ACTIONS.exec(caller, act, data);
         if (result != "error") {
@@ -166,7 +203,9 @@ fnObj.frameView = axboot.viewExtend({
             this.asideView.initView();
             this.asideView.print();
         }
-
+        $("#searchBtn").click(function (){
+            ACTIONS.dispatch(ACTIONS.RECORD_SEARCH);
+        });
         $("#userNm").click(function (){
             if($(".user_edit").css("display") == "block"){
                 $(".user_edit").css("display", "none");
@@ -979,6 +1018,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
         this.target = axboot.gridBuilder({
             frozenColumnIndex: 0,
             multipleSelect: true,
+            showLineNumber: false,
             target: $('[data-ax5grid="grid-view-01"]'),
             columns: [
                 {key: "value", label: "제목", width: 300, align: "center", editor: "text"},
@@ -988,6 +1028,18 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
             body: {
                 onClick: function () {
                     this.self.select(this.dindex);
+                }
+            },
+            page: {
+                navigationItemCount: 9,
+                height: 30,
+                display: true,
+                firstIcon: '<i class="fa fa-step-backward" aria-hidden="true"></i>',
+                prevIcon: '<i class="fa fa-caret-left" aria-hidden="true"></i>',
+                nextIcon: '<i class="fa fa-caret-right" aria-hidden="true"></i>',
+                lastIcon: '<i class="fa fa-step-forward" aria-hidden="true"></i>',
+                onChange: function () {
+                    gridView.setData(this.page.selectPage);
                 }
             }
         });

@@ -178,6 +178,17 @@
             /*.bottom_close{ margin-bottom: -3px}*/
 
         }
+        #first, #second, #third, #fourth,#fifth {
+            display: inline-block;
+            vertical-align: top;
+            font-size: 12px;
+            height: 100%;
+            margin-right: -4px;
+            width: 20%;
+        }
+        .content_frame {
+            isplay:table; width:70%; padding-left:10px; float:left
+        }
     </style>
 </head>
 <body class="ax-body" th:classappend="${axbody_class}" onselectstart="return false;">
@@ -296,13 +307,13 @@
                 <div class="div_tablerow" style="width: 100%;">
                     <div style="text-align: center; margin-bottom: 50px;">
                         <div style="display: inline-block; height: 52px;width: 700px;border: 1px solid #41a679;background: #ffffff;">
-                            <input type="text" placeholder="검색어 입력" style="font-size: 24px;width: 640px;padding: 10px;border: 0px;outline: none;float: left;height: 100%">
-                            <button style="width: 50px;height: 100%;border: 0px; background: #41a679;outline: none;float: right;color: #ffffff;margin: 0px; font-size: 18px">검색<button>
+                            <input type="text" data-ax-path="searchInput" placeholder="검색어 입력" style="font-size: 24px;width: 640px;padding: 10px;border: 0px;outline: none;float: left;height: 100%">
+                            <button id="searchBtn" style="width: 50px;height: 100%;border: 0px; background: #41a679;outline: none;float: right;color: #ffffff;margin: 0px; font-size: 18px">검색<button>
                         </div>
                     </div>
                 </div>
                 <div class="div_tablerow" style="width: 100%;height: 100%;">
-                    <div style="display:table; width:35%; padding-right: 10px; float:left">
+                    <div style="display:table; width:30%; padding-right: 10px; float:left">
                         <div style="width: 100%;" class="div_tablerow bdb" >
                             <div class="panel panel-default" style="margin-bottom: 0px;border: 1px solid #41a679;">
                                 <p class="panel-heading" style="border: 0px; background: #41a679;color: #ffffff;font-size: 15px">공지사항</p>
@@ -312,25 +323,32 @@
                             </div>
                         </div>
                     </div>
-                    <div style="display:table; width:65%; padding-left:10px; float:left">
+                    <div class="content_frame">
                         <div class="panel panel-default" style="margin-bottom: 19px;border: 1px solid #41a679;">
                             <p class="panel-heading" style="border: 0px; background: #41a679;color: #ffffff;font-size: 15px">전자 기록물</p>
                             <div class="gallery" style="width: 100%">
-                                <div style="height: 231px"></div>
+                                <div style="height: 331px;">
+                                    <div id="first">First</div>
+                                    <div id="second">Second</div>
+                                    <div id="third">Third</div>
+                                    <div id="fourth">Fourth</div>
+                                    <div id="fifth">Fifth</div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div style="display:table; width:65%; padding-left:10px; float:left">
+                    <div class="content_frame">
                         <div class="panel panel-default" style="margin-bottom: 0;border: 1px solid #41a679;">
                             <p class="panel-heading" style="border: 0px; background: #41a679;color: #ffffff;font-size: 15px">비전자 기록물</p>
                             <div class="gallery" style="width: 100%">
-                                <div style="height: 231px"></div>
+                                <div style="height: 131px"></div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
         <div layout:fragment="contents" style="visibility: hidden"></div>
         <!-- footer -->
         <div class="ax-frame-foot">
