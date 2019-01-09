@@ -50,7 +50,7 @@
                     AND  B.TITLE = #{title}
                 </if>
                 <if test="typeUuid != null">
-                    AND  B.TYPEUUID = #{typeUuid}
+                    AND  B.TYPE_UUID = #{typeUuid}
                 </if>
             </where>
     </select>

@@ -83,41 +83,6 @@
                                     </button>
                                 </li>-->
                             </ul>
-                            <ul class="bdb div_tablerow" style="height:auto;">
-                                <li style="width:100%; text-align:left; float: left">
-                                    <dl>
-                                        <!--<dt class="pdl_5">Status</dt>
-                                        <dd>
-                                            <select data-ax-path="statusUuid01" style="width:135px;">
-                                                <option value=""></option>
-                                                <option th:each="item : ${statusUuid}"
-                                                        th:value="${item.codeDetailUUID}"
-                                                        th:text="${item.codeName}"/>
-                                            </select>
-                                        </dd>-->
-                                        <dt>Repository Code</dt>
-                                        <dd><input type=text style="width:135px" data-ax-path="repositoryCode"></dd>
-                                        <dt class="pdl_5">Repository Name</dt>
-                                        <dd><input type=text style="width:135px" data-ax-path="repositoryName"></dd>
-
-                                    </dl>
-                                    <dl>
-                                        <!--<dt class="pdl_5">Repository Name</dt>
-                                        <dd><input type=text style="width:135px" data-ax-path="repositoryName"></dd>-->
-                                        <!--<dd class="w_auto">
-                                            <div class="rdo_box">
-                                                <span class="rdo_box_title">Use</span>
-                                                <label>
-                                                    <input data-ax-path="useYn01" type="radio" name="radio1" class="no_border" value="Y">Yes</label>
-                                                <label>
-                                                    <input data-ax-path="useYn01" type="radio" name="radio1" class="no_border" value="N">No</label>
-                                                <label>
-                                                    <input data-ax-path="useYn01"  type="radio" name="radio1" class="no_border" checked="checked" value="">All</label>
-                                            </div>
-                                        </dd>-->
-                                    </dl>
-                                </li>
-                            </ul>
                             <div style="height:100%; width:100%" class="div_tablerow bdb">
                                 <div id="realgrid01" style="width:100%; height:100%"></div>
                             </div>
@@ -128,71 +93,8 @@
 
                             <ul class="bdb bdt bgf7 div_tablerow" style="height:30px;">
                                 <th:block layout:insert="~{/fragments/page-buttons :: dot('반입/반출 이력')}"/>
-                                <!--<li style="text-align:right; width:83%;">
-                                    <button class="btn_co btn_confirm02">
-                                        <span class="btn_icon_co" th:id="confirm">&nbsp;</span>
-                                        <span class="btn_main_txt">Confirm</span>
-                                    </button>
-                                    <button class="btn_co btn_cancel02" th:id="cancel">
-                                        <span class="btn_icon_co">&nbsp;</span>
-                                        <span class="btn_main_txt">Cancel</span>
-                                    </button>
-                                    <button class="btn_a">
-                                        <span class="btn_icon">&nbsp;</span>
-                                        <span class="btn_main_txt">Add</span>
-                                    </button>
-                                    <button class="btn_d">
-                                        <span class="btn_icon">&nbsp;</span>
-                                        <span class="btn_main_txt">Delete</span>
-                                    </button>
-                                </li>-->
-                                <!--<li style="text-align:right; width:83%;">
-                                    <button class="btn_co btn_excelDown02">
-                                        <span class="btn_icon_co">&nbsp;</span>
-                                        <span class="btn_main_txt">엑셀다운</span>
-                                    </button>
-                                </li>-->
                             </ul>
-                            <ul class="bdb div_tablerow" style="height:auto;">
-                                <li style="width:100%; text-align:left; float: left">
-                                    <dl>
-                                        <!--<dt class="pdl_5">Status</dt>
-                                        <dd>
-                                            <select data-ax-path="statusUuid02" style="width:135px;">
-                                                <option value=""></option>
-                                                <option th:each="item : ${statusUuid}"
-                                                        th:value="${item.codeDetailUUID}"
-                                                        th:text="${item.codeName}"/>
-                                            </select>
-                                        </dd>-->
-                                        <dt>Shelf Code</dt>
-                                        <dd><input type=text style="width:135px" data-ax-path="shelfCode"></dd>
-                                        <dt class="pdl_5">Shelf Name</dt>
-                                        <dd><input type=text style="width:135px" data-ax-path="shelfName"></dd>
 
-                                    </dl>
-                                    <!--<dl>
-                                        <dt class="pdl_5">Shelf Name</dt>
-                                        <dd><input type=text style="width:135px" data-ax-path="shelfName"></dd>
-                                        <dd class="w_auto">
-                                            <div class="rdo_box">
-                                                <span class="rdo_box_title">Use</span>
-                                                <label>
-                                                    <input data-ax-path="useYn02" type="radio" name="radio2" class="no_border" value="Y">Yes</label>
-                                                <label>
-                                                    <input data-ax-path="useYn02" type="radio" name="radio2" class="no_border" value="N">No</label>
-                                                <label>
-                                                    <input data-ax-path="useYn02" type="radio" name="radio2" class="no_border" value="" checked>All</label>
-                                            </div>
-                                        </dd>
-                                    </dl>-->
-                                </li>
-                            </ul>
-                            <ul class="bdb div_tablerow" style="height:25px;">
-                                <li style="width:100%; text-align:left;">
-                                    <input type=text class="yeongye" value="본관 서고" readonly style="width: 259px">
-                                </li>
-                            </ul>
                             <div style="height:100%; width:100%" class="div_tablerow bdb">
                                 <div id="realgrid02" style="width:100%; height:100%"></div>
                             </div>

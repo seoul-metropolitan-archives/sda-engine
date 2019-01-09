@@ -27,10 +27,10 @@
                         <th:block layout:insert="~{/fragments/page-buttons :: dot('Container')}"/>
                         <ul class="bdb" style="height:25px;width:100%; float:left;">
                             <li style="width:80%">
-                                <input type="text" style="width:100%; margin-left: 0.5%;">
+                                <input type="text" style="width:100%; margin-left: 0.5%;" id="leftMenuTreeParam">
                             </li>
                             <li style="width:20%">
-                                <button class="btn_small" style="margin-right: 0">Find</button>
+                                <button class="btn_small" style="margin-right: 0" id="searchLeftTree">Find</button>
                             </li>
                         </ul>
 
@@ -72,7 +72,7 @@
                             <dl>
                                 <dt class="pdl_5">Type</dt>
                                 <dd>
-                                    <select data-ax-path="aggregationTypeUuid" style="width:135px;">
+                                    <select data-ax-path="typeUuid" style="width:135px;">
                                         <option value="" ></option>
                                         <option th:each="item : ${aggregationTypeUuid}"
                                                 th:value="${item.codeDetailUUID}"
@@ -81,9 +81,25 @@
                                 </dd>
                                 <dt class="w130">Arranged Date</dt>
                                 <dd class="w_auto">
-                                    <div class="cld_box"><input type=text id="datepicker1"></div>
-                                    ~
-                                    <div class="cld_box"><input type=text id="datepicker2"></div>
+                                <dd class="w_auto">
+                                    <div class="input-group" data-ax5picker="date">
+                                        <div class="cld_box" style="background-color: #fffdd6">
+                                            <input type="text" data-ax-path="arrangedFromDate01"
+                                                   style="background-color: #fffdd6;ime-mode:disabled;"
+                                                   placeholder="YYYY-MM-DD" maxlength="10">
+                                            <img title="calendar" class="ui-datepicker-trigger" alt="..."
+                                                 src="/assets/images/ams/calendar.png">
+                                        </div>
+                                        ~
+                                        <div class="cld_box" style="background-color: #fffdd6">
+                                            <input type="text" data-ax-path="arrangedToDate01"
+                                                   style="background-color: #fffdd6;ime-mode:disabled;"
+                                                   placeholder="YYYY-MM-DD" maxlength="10">
+                                            <img title="calendar" class="ui-datepicker-trigger" alt="..."
+                                                 src="/assets/images/ams/calendar.png">
+                                        </div>
+                                    </div>
+                                </dd>
                                 </dd>
                             </dl>
                         </div>

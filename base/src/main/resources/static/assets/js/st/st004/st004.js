@@ -57,8 +57,33 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_CANCEL: function (caller, act, data) {
     },
     PAGE_SAVE: function (caller, act, data) {
+        if (!this.gridView02.gridObj.validate()) {
+            return false;
+        } else {
+            if(fnObj.gridView02.gridObj.isDataChanged()){
+                ACTIONS.dispatch(ACTIONS.TOP_GRID_SAVE);
+
+            }
+        }
+
+
     },
     TOP_GRID_SAVE: function (caller, act, data) {
+        var result = false;
+
+        axboot.call({
+            type: "PUT",
+            url: "/api/v1/st/st004/02/save",
+            data: JSON.stringify(this.gridView02.getData()),
+            callback: function (res) {
+                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH01);
+            }
+        })
+            .done(function () {
+                fnObj.gridView02.commit();
+                axToast.push(axboot.getCommonMessage("AA007"));
+            });
+        return result;
     },
     CLOSE_TAB: function (caller, act, data) {
     },
@@ -221,6 +246,13 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
                 ACTIONS.dispatch(ACTIONS.SEARCH_SHELF_SCH, data);
             }
         });
+
+
+        $("input[data-ax-path='rowNo'],input[data-ax-path='columnNo']").keyup(function(){
+            if(13 == event.keyCode)
+                $(".btn_inquiry01").trigger('click');
+        });
+
     },
     bindEvent : function()
     {

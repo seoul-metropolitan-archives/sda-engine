@@ -54,7 +54,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         axboot.ajax({
             type: "GET",
             url: "/api/v1/st/st001/01/list03",
-            data: $.extend({},{useYn : $('input[data-ax-path="useYn03"]:checked').val()} ,{statusUuid : $("select[data-ax-path='statusUuid03']").val()},{shelfUuid : fnObj.gridView02.getSelectedData().shelfUuid}),
+            data: $.extend({},{useYn : $('input[data-ax-path="useYn03"]:checked').val()} ,{statusUuid : $("select[data-ax-path='statusUuid03']").val()},{shelfUuid : fnObj.gridView02.getSelectedData().shelfUuid},{ rowNo : $("input[data-ax-path='row']").val() } , { columnNo : $("input[data-ax-path='columnNo']").val()}),
             callback: function (res) {
                 fnObj.gridView03.setData(res.list);
                 fnObj.gridView03.disabledColumn();
@@ -388,6 +388,13 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
         });
         $('input[data-ax-path="useYn03"]').on('change',function(){
             ACTIONS.dispatch(ACTIONS.PAGE_SEARCH03);
+        });
+
+
+        $("input[data-ax-path='row'],input[data-ax-path='columnNo']").keydown(function(e){
+            if(e.keyCode == 13){
+                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH03);
+            }
         });
 
 

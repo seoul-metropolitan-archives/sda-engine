@@ -1,21 +1,14 @@
 var fnObj = {};
-var CONFIRM_STATUS = "Confirm";
-var CANCEL_STATUS = "Draft";
-var beforeData01 = null;
-var beforeData02 = null;
-var repositoryUuid = '';
-var shelfUuid ='';
+
 var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH: function (caller, act, data) {
-        beforeData01 = null;
-        beforeData02 = null;
         ACTIONS.dispatch(ACTIONS.PAGE_SEARCH01);
     },
     PAGE_SEARCH01: function (caller, act, data) {
         axboot.ajax({
             type: "GET",
-            url: "/api/v1/st/st010/01/list04",
-            data: $.extend({}, this.formView.getData()),
+            url: "/api/v1/st/st011/01/list01",
+            data: $.extend({}, {pageSize: 10000},this.formView.getData()),
             callback: function (res) {
                 fnObj.gridView01.setData(res.list);
                 fnObj.gridView02.clearData();
@@ -29,11 +22,12 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         if(fnObj.gridView01.getSelectedData() == null){
             return;
         }
+
+        debugger
         axboot.ajax({
             type: "GET",
-            url: "/api/v1/st/st001/01/list02",
-            data: $.extend({}, this.formView.getData()),
-            //data: $.extend({}, this.formView.getData(),{repositoryUuid : fnObj.gridView01.getSelectedData().repositoryUuid}),
+            url: "/api/v1/st/st011/01/list02",
+            data: $.extend({}, this.formView.getData(),{aggregationUuid : fnObj.gridView01.getSelectedData().uuid}),
             callback: function (res) {
                 fnObj.gridView02.setData(res.list);
             },
@@ -80,9 +74,10 @@ fnObj.pageStart = function () {
         success: function () {
         }
     });
-    //샘플삭제 해야됨
+
+
     $.ajax({
-        url: "/assets/js/column_info/st00102.js",
+        url: "/assets/js/column_info/st01101.js",
         dataType: "script",
         async: false,
         success: function () {
@@ -90,7 +85,7 @@ fnObj.pageStart = function () {
     });
 
     $.ajax({
-        url: "/assets/js/column_info/st01004.js",
+        url: "/assets/js/column_info/st01102.js",
         dataType: "script",
         async: false,
         success: function () {
@@ -163,7 +158,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     entityName: "ST_ARRANGE_CONTAINERS_RESULT",
     initView: function () {
         this.initInstance();
-        this.setColumnInfo(st01004.column_info);
+        this.setColumnInfo(st01101.column_info);
         this.makeGrid();
         this.gridObj.itemClick(this.itemClick);
     },
@@ -185,7 +180,7 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
     parentsGrid: fnObj.gridView01,
     initView: function () {
         this.initInstance();
-        this.setColumnInfo(st00102.column_info);
+        this.setColumnInfo(st01102.column_info);
         this.makeGrid();
         this.gridObj.itemClick(this.itemClick);
     },

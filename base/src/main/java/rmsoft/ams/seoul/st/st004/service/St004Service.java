@@ -62,7 +62,7 @@ public class St004Service extends BaseService {
         StArrangeContainersResult orgStArrangeContainerResult = null;
         for(StArrangeContainersResult stArrangeContainersResult : stArrangeContainersResultList) {
             if(stArrangeContainersResult.isDeleted()){
-
+                stArrangeContainersResultRepository.delete(stArrangeContainersResult);
             }else{
                 if(stArrangeContainersResult.isModified()){
                     orgStArrangeContainerResult = stArrangeContainersResultRepository.findOne(stArrangeContainersResult.getId());

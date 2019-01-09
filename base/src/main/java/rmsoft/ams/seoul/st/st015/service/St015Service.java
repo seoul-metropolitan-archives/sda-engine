@@ -60,6 +60,8 @@ public class St015Service extends BaseService {
 
     public Page<St01502VO> getStInventoryContainerResult(Pageable pageable, RequestParams<St01502VO> requestParams) {
         St01502VO st01502VO = new St01502VO();
+        st01502VO.setInventoryPlanUuid(requestParams.getString("inventoryPlanUuid"));
+
         //st02901VO.setGateId(requestParams.getString("gateId"));
 
         return filter(st015Mapper.getStInventoryContainerResult(st01502VO), pageable, "", St01502VO.class);
@@ -69,6 +71,8 @@ public class St015Service extends BaseService {
     public Page<St01503VO> getStInventoryRecordResult(Pageable pageable, RequestParams<St01503VO> requestParams) {
         St01503VO st01503VO = new St01503VO();
         //st02901VO.setGateId(requestParams.getString("gateId"));
+        st01503VO.setInventoryPlanUuid(requestParams.getString("inventoryPlanUuid"));
+        //st01503VO.setContainerUuid(requestParams.getString("containerUuid"));
 
         return filter(st015Mapper.getStInventoryRecordResult(st01503VO), pageable, "", St01503VO.class);
     }
@@ -112,8 +116,13 @@ public class St015Service extends BaseService {
             changeStatus = list.get(index).getChangeStatus() == "" ? "Draft" : list.get(index).getChangeStatus();
             //바뀌는 값이 confirm일때
             if(changeStatus.equals("confirm")){
-                //서가 서고 행렬단에 있는 location이 없을수도 있다. location이 없으면 모든 하위 container uuid를 가져와야한다.
+                //서고 서가 행렬단에 있는 location이 없을수도 있다. location이 없으면 모든 하위 container uuid를 가져와야한다.
+
+
+                //location값이 있는경우
                 List<String> ContainerList = jdbcTemplate.queryForList("select CONTAINER_UUID from ST_ARRANGE_CONTAINERS_RESULT where LOCATION_UUID =", String.class);
+
+                //location값이 없는경우 서가 밑에 모든 container를 가져와야한다.
 
 
 

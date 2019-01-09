@@ -35,7 +35,7 @@ var st00301 =
                 },
                 {
                     sortNo: 2,
-                    width: 100,
+                    width: 150,
                     name: "aggregationCode",
                     text: "Aggregation Code",
                     editable: false,

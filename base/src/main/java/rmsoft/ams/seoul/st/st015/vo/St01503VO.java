@@ -29,4 +29,9 @@ public class St01503VO extends BaseVO {
 
     private String recordStatusUuid;
 
+    private String code;
+    private String title;
+    private String level;
+    private String type;
+
 }

@@ -6,6 +6,7 @@ var classList = new Object();
 var CONFIRM_STATUS = "Confirm";
 var CANCEL_STATUS = "Draft";
 var currentContainerUuid = "";
+var aggregationUuid = "";
 
 var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH: function (caller, act, data) {
@@ -34,7 +35,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             type: "GET",
             url: "/api/v1/st/st003/01/list01",
             async : false,
-            data: $.extend({}, {pageSize: 1000},this.formView.getData(),{containerUuid: data.containerUuid}),
+            data: $.extend({}, {pageSize: 1000},this.formView.getData(),{containerUuid: data.containerUuid},{aggregationCode : $("input[data-ax-path='aggregationCode']").val()}),
             callback: function (res) {
                 fnObj.gridView02.resetCurrent();
                 fnObj.gridView02.setData(res.list);
@@ -163,7 +164,24 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         } else {
             return false;
         }
-    }
+    },
+    SEARCH_AGGREGATION_SCH : function(caller, act, data)
+    {
+        axboot.modal.open({
+            modalType: "COMMON_POPUP",
+            preSearch : data["preSearch"],
+            sendData: function () {
+                return data;
+            },
+            callback: function (data) {
+                $("input[data-ax-path='aggregationCode']").val(data["AGGREGATION_CODE"])
+                aggregationUuid = data["AGGREGATION_UUID"];
+                if(this.close) this.close();
+
+                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1,data);
+            }
+        });
+    },
 });
 
 fnObj.pageStart = function () {
@@ -216,7 +234,21 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
         this.model = new ax5.ui.binder();
         this.model.setModel(this.getDefaultData(), this.target);
         this.modelFormatter = new axboot.modelFormatter(this.model); // 모델 포메터 시작
+
+        this.target.find('[data-ax5picker="date"]').ax5picker({
+            direction: "auto",
+            content: {
+                type: 'date'
+            }
+        });
+
+        $("input[data-ax-path='arrangedFromDate01']").val(getFormattedDate(new Date(), true));
+        $("input[data-ax-path='arrangedToDate01']").val(getFormattedDate(new Date()));
+
         this.initEvent();
+
+
+
     },
     initEvent: function () {
         var _this = this;
@@ -240,9 +272,10 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
             if(13 == event.keyCode)
                 ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
         });
-        $("select[data-ax-path='statusUuid'], select[data-ax-path='containerTypeUuid']").change(function() {
+        $("select[data-ax-path='statusUuid'], select[data-ax-path='containerTypeUuid'],select[data-ax-path='typeUuid']").change(function() {
             ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
         });
+
 
         $(".bdb").delegate("#rg_tree_allopen", "click", function () {
             _this.expandAll();
@@ -250,6 +283,40 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
         $(".bdb").delegate("#rg_tree_allclose", "click", function () {
             _this.collapseAll();
         });
+
+
+        $("input[data-ax-path='aggregationCode']").parents().eq(1).find("a").click(function(){
+            var data = {
+                popupCode : "PU136",
+                searchData : $("input[data-ax-path='aggregationCode']").val().trim(),
+                preSearch : false
+            };
+            ACTIONS.dispatch(ACTIONS.SEARCH_AGGREGATION_SCH,data);
+        });
+
+        $("input[data-ax-path='arrangedFromDate01']").keyup(function () {
+            var date = this.value;
+            if (date.match(/^\d{4}$/) !== null) {
+                this.value = date + '-';
+            } else if (date.match(/^\d{4}\-\d{2}$/) !== null) {
+                this.value = date + '-';
+            }
+        });
+        $("input[data-ax-path='arrangedFromDate01']").keypress(function () {
+            if ((event.keyCode < 48) || (event.keyCode > 57)) event.returnValue = false;
+        });
+        $("input[data-ax-path='arrangedToDate01']").keyup(function () {
+            var date = this.value;
+            if (date.match(/^\d{4}$/) !== null) {
+                this.value = date + '-';
+            } else if (date.match(/^\d{4}\-\d{2}$/) !== null) {
+                this.value = date + '-';
+            }
+        });
+        $("input[data-ax-path='arrangedToDate01']").keypress(function () {
+            if ((event.keyCode < 48) || (event.keyCode > 57)) event.returnValue = false;
+        });
+
 
     },
     getData: function () {
@@ -319,14 +386,14 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
         $(".open_close.collapseAll").click(function(){
             _this.gridObj.collapseAll();
         });
-        $("#leftMenuParam").keydown(function(event){
+        $("#leftMenuTreeParam").keydown(function(event){
             if(13 == event.keyCode)
-                $("#searchLeftMenu").click();
+                $("#searchLeftTree").click();
         })
-        $("#searchLeftMenu").click(function(){
-            if("" != $("#leftMenuParam").val())
+        $("#searchLeftTree").click(function(){
+            if("" != $("#leftMenuTreeParam").val())
             {
-                _this.gridObj.search(["containerName"],$("#leftMenuParam").val())
+                _this.gridObj.search(["containerName"],$("#leftMenuTreeParam").val())
             }
         });
         $(".btn_arrange").click(function(){
@@ -467,6 +534,46 @@ isDataChanged = function () {
     } else {
         return false;
     }
+}
+
+
+function getFormattedDate(date, isStart) {
+    var day;
+    var tempDate;
+    if (isStart) {
+        date.setDate(date.getDate() - 10);
+        tempDate = date.getDate();
+    } else {
+        tempDate = date.getDate();
+    }
+    day = tempDate.toString();
+
+    var year = date.getFullYear();
+    var month = (1 + date.getMonth()).toString();
+    month = month.length > 1 ? month : '0' + month;
+    day = day.length > 1 ? day : '0' + day;
+    return year + '-' + month + '-' + day;
+}
+
+function checkDate(date) {
+    var result = true;
+    var strValue = date;
+    var chk1 = /^(19|20)\d{2}-([1-9]|1[012])-([1-9]|[12][0-9]|3[01])$/;
+    //var chk2 = /^(19|20)\d{2}\/([0][1-9]|1[012])\/(0[1-9]|[12][0-9]|3[01])$/;
+    var chk2 = /^(19|20)\d{2}-([0][1-9]|1[012])-([012][1-9]|3[01])$/;
+    if (strValue == "") { // 공백이면 무시
+        return result;
+    }
+//-------------------------------------------------------------------------------
+// 유효성 검사- 입력형식에 맞게 들왔는지 // 예) 2000-1-1, 2000-01-01 2가지 형태 지원
+//-------------------------------------------------------------------------------
+    if (chk1.test(strValue) == false && chk2.test(strValue) == false) { // 유효성 검사에 둘다 성공하지 못했다면
+        //alert("1999-1-1 형식 또는 \r\n1999-01-01 형식으로 날자를 입력해주세요.");
+        axToast.push(axboot.getCommonMessage("AA011"));
+        result = false;
+
+    }
+    return result;
 }
 
 
