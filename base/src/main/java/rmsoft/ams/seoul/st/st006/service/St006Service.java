@@ -42,14 +42,19 @@ public class St006Service extends BaseService {
     public Page<St00601VO> getStContainer(Pageable pageable, RequestParams<St00601VO> requestParams) {
 
         St00601VO st00601VO = new St00601VO();
-        // st00601VO.setClassUuid(requestParams.getString("classUuid"));
-        // st00601VO.setStatusUuid(requestParams.getString("statusUuid01"));
-//        st00601VO.setAggregationCode(requestParams.getString("aggregationCode"));
-//        st00601VO.setTitle(requestParams.getString("title"));
-//        st00601VO.setTypeUuid(requestParams.getString("typeUuid"));
-//        st00601VO.setArrangedFromDate(requestParams.getString("arrangedFromDate01"));
-//        st00601VO.setArrangedToDate(requestParams.getString("arrangedToDate01"));
-//        st00601VO.setContainerUuid(requestParams.getString("containerUuid"));
+        st00601VO.setContainerUuid(requestParams.getString("containerUuid"));
+        st00601VO.setStatusUuid(requestParams.getString("statusUuid"));
+         st00601VO.setContainerName(requestParams.getString("containerName"));
+
+        st00601VO.setContainerTypeUuid(requestParams.getString("containerTypeUuid"));
+        // st00601VO.setParentContainerName(requestParams.getString("parentContainerName"));
+        st00601VO.setParentContainerUuid(requestParams.getString("parentContainerUuid"));
+        st00601VO.setControlNumber(requestParams.getString("controlNumber"));
+        st00601VO.setProvenance(requestParams.getString("provenance"));
+        st00601VO.setCreationStartDate(requestParams.getString("creationStartDate"));
+        st00601VO.setCreationEndDate(requestParams.getString("creationEndDate"));
+
+
         return filter(st006Mapper.getStContainer(st00601VO), pageable, "", St00601VO.class);
     }
 

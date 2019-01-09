@@ -89,7 +89,7 @@ var st00601 =
                     name: "creationStartDate",
                     text: "Creation Start Date",
                     width: 120,
-                    dataType: "timestamp",
+                    dataType: "date",
                     editable: false,
                     sortable: true,
                     disable:true
@@ -99,7 +99,7 @@ var st00601 =
                     name: "creationEndDate",
                     text: "Creation End Date",
                     width: 120,
-                    dataType: "timestamp",
+                    dataType: "date",
                     editable: false,
                     sortable: true,
                     disable:true

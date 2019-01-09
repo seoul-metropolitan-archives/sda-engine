@@ -1,18 +1,32 @@
 var fnObj = {};
+var parentContainerUuid = "";
+
 var containerUuid = "";
 var selectedRowForContainer = {};
 var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH: function (caller, act, data) {
         ACTIONS.dispatch(ACTIONS.PAGE_SEARCH01);
     },
+    PAGE_SEARCH1: function (caller, act, data) {
+        ACTIONS.dispatch(ACTIONS.PAGE_SEARCH01);
+    },
     PAGE_SEARCH01: function (caller, act, data) {
+
+        // var parentContainerName =this.formView.getData().parentContainerName;
+        // if( parentContainerName == null || parentContainerName == undefined || parentContainerName == '' ){
+        //     // parentContainerName이 빈값이면,
+        //     // 이렇게 해줘야 앞에서 저장된 parentContainerUuid 을 reset 할 수 있음.
+        //     parentContainerUuid = undefined;
+        // }
+        console.log($("input[data-ax-path='parentContainerName']").attr("parentContainerName"));
         axboot.ajax({
             type: "GET",
             url: "/api/v1/st/st006/01/list01",
-            data: $.extend({}, this.formView.getData()),
+            data: $.extend({}, {pageSize: 1000},this.formView.getData(),{parentContainerUuid: parentContainerUuid}),
             callback: function (res) {
                 fnObj.gridView01.setData(res.list);
                 //fnObj.gridView01.disabledColumn();
+                // fnObj.gridView02.resetCurrent();
                 fnObj.gridView02.clearData();
             },
             options: {
@@ -162,7 +176,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
 
     },
     PAGE_ARRANGE: function (caller, act, data) {
-        axboot.modal.open({
+        axboot.commonModal.open({
             modalType: "ARRANGE_NOT_ARRANGED_CONTAINER_POPUP",
             width: 400,
             height: 400,
@@ -214,6 +228,23 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                     crntClassUuid = data.classUuid
                     ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1,data);
                 }*/
+            }
+        });
+    },
+    SEARCH_CONTAINER_SCH: function(caller, act, data){
+        axboot.modal.open({
+            modalType: "COMMON_POPUP",
+            preSearch : data["preSearch"],
+            sendData: function () {
+                return data;
+            },
+            callback: function (data) {
+                $("input[data-ax-path='parentContainerName']").val(data["CONTAINER_NAME"])
+                $("input[data-ax-path='parentContainerName']").attr("parentContainerName",data["CONTAINER_NAME"])
+                parentContainerUuid = data['CONTAINER_UUID'];
+                if(this.close)
+                    this.close();
+                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1,data);
             }
         });
     },
@@ -309,33 +340,95 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
         this.model = new ax5.ui.binder();
         this.model.setModel(this.getDefaultData(), this.target);
         this.modelFormatter = new axboot.modelFormatter(this.model); // 모델 포메터 시작
+        this.target.find('[data-ax5picker="date"]').ax5picker({
+            direction: "auto",
+            content: {
+                type: 'date'
+            }
+        });
+
+        $("input[data-ax-path='creationStartDate']").val(getFormattedDate(new Date(), true));
+        $("input[data-ax-path='creationEndDate']").val(getFormattedDate(new Date()));
+
+
         this.initEvent();
         this.bindEvent();
 
     },
     initEvent: function () {
         var _this = this;
-
-        $("input[data-ax-path='repositoryName']").parents().eq(1).find("a").click(function(){
+        $("input[data-ax-path='parentContainerName']").parents().eq(1).find("a").click(function(){
             var data = {
-                popupCode : "PU137",
-                searchData : $("input[data-ax-path='repositoryName']").val().trim(),
+                popupCode : "PU135",
+                searchData : $("input[data-ax-path='parentContainerName']").val().trim(),
                 preSearch : false
             };
-            ACTIONS.dispatch(ACTIONS.SEARCH_REPOSITORY_SCH,data);
+            ACTIONS.dispatch(ACTIONS.SEARCH_CONTAINER_SCH,data);
         });
+        $("input[data-ax-path='parentContainerName']").focusout(function(){
 
-        $("input[data-ax-path='shelfName']").parents().eq(1).find("a").click(function(){
-            if("" != repositoryUuid) {
+            if("" != $(this).val().trim())
+            {
                 var data = {
-                    popupCode: "PU138",
-                    searchData: repositoryUuid,
-                    preSearch: false
+                    popupCode : "PU135",
+                    searchData : $(this).val().trim()
                 };
-                ACTIONS.dispatch(ACTIONS.SEARCH_SHELF_SCH, data);
+                ACTIONS.dispatch(ACTIONS.SEARCH_CONTAINER_SCH,data);
+            }
+
+        });
+        $("input[data-ax-path='containerName']").focusout(function(){
+
+            if("" == $(this).val().trim())
+            {
+                $("input[data-ax-path='containerName']").val("");
+            }
+        });
+        $("input[data-ax-path='provenance']").focusout(function(){
+
+            if("" == $(this).val().trim())
+            {
+                $("input[data-ax-path='provenance']").val("");
             }
         });
 
+        $("input[data-ax-path='containerName'],input[data-ax-path='provenance'] ,input[data-ax-path='controlNumber']").keyup(function(){
+            if(13 == event.keyCode)
+                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+        });
+        $("select[data-ax-path='statusUuid'], select[data-ax-path='containerTypeUuid']").change(function() {
+            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+        });
+
+        $(".bdb").delegate("#rg_tree_allopen", "click", function () {
+            _this.expandAll();
+        });
+        $(".bdb").delegate("#rg_tree_allclose", "click", function () {
+            _this.collapseAll();
+        });
+
+        $("input[data-ax-path='creationStartDate']").keyup(function () {
+            var date = this.value;
+            if (date.match(/^\d{4}$/) !== null) {
+                this.value = date + '-';
+            } else if (date.match(/^\d{4}\-\d{2}$/) !== null) {
+                this.value = date + '-';
+            }
+        });
+        $("input[data-ax-path='creationStartDate']").keypress(function () {
+            if ((event.keyCode < 48) || (event.keyCode > 57)) event.returnValue = false;
+        });
+        $("input[data-ax-path='creationEndDate']").keyup(function () {
+            var date = this.value;
+            if (date.match(/^\d{4}$/) !== null) {
+                this.value = date + '-';
+            } else if (date.match(/^\d{4}\-\d{2}$/) !== null) {
+                this.value = date + '-';
+            }
+        });
+        $("input[data-ax-path='creationEndDate']").keypress(function () {
+            if ((event.keyCode < 48) || (event.keyCode > 57)) event.returnValue = false;
+        });
     },
     getData: function () {
         var data = this.modelFormatter.getClearData(this.model.get()); // 모델의 값을 포멧팅 전 값으로 치환.
@@ -399,7 +492,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
         this.gridObj.setGridStyle("100%", "100%")
             .setOption({
                 header: { visible: true },
-                checkBar: {visible: true},
+                checkBar: {visible: false},
                 indicator: {visible: true},
                 lineVisible: false
             });
@@ -572,3 +665,44 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
         }*/
     },
 });
+
+
+function getFormattedDate(date, isStart) {
+    var day;
+    var tempDate;
+    if (isStart) {
+        date.setDate(date.getDate() - 10);
+        tempDate = date.getDate();
+    } else {
+        tempDate = date.getDate();
+    }
+    day = tempDate.toString();
+
+    var year = date.getFullYear();
+    var month = (1 + date.getMonth()).toString();
+    month = month.length > 1 ? month : '0' + month;
+    day = day.length > 1 ? day : '0' + day;
+    return year + '-' + month + '-' + day;
+}
+
+function checkDate(date) {
+    var result = true;
+    var strValue = date;
+    var chk1 = /^(19|20)\d{2}-([1-9]|1[012])-([1-9]|[12][0-9]|3[01])$/;
+    //var chk2 = /^(19|20)\d{2}\/([0][1-9]|1[012])\/(0[1-9]|[12][0-9]|3[01])$/;
+    var chk2 = /^(19|20)\d{2}-([0][1-9]|1[012])-([012][1-9]|3[01])$/;
+    if (strValue == "") { // 공백이면 무시
+        return result;
+    }
+//-------------------------------------------------------------------------------
+// 유효성 검사- 입력형식에 맞게 들왔는지 // 예) 2000-1-1, 2000-01-01 2가지 형태 지원
+//-------------------------------------------------------------------------------
+    if (chk1.test(strValue) == false && chk2.test(strValue) == false) { // 유효성 검사에 둘다 성공하지 못했다면
+        //alert("1999-1-1 형식 또는 \r\n1999-01-01 형식으로 날자를 입력해주세요.");
+        axToast.push(axboot.getCommonMessage("AA011"));
+        result = false;
+
+    }
+    return result;
+}
+

@@ -5,31 +5,67 @@
 
 <mapper namespace="rmsoft.ams.seoul.st.st006.dao.St006Mapper">
     <select id="getStContainer" resultType="St00601VO" statementType="PREPARED">
-        <![CDATA[
-        select container.CONTAINER_UUID                                                                           containerUuid,
-               container.STATUS_UUID                                                                              statusUuid,
-               container.CONTAINER_NAME                                                                           containerName,
-               container.CONTAINER_TYPE_UUID                                                                      containerTypeUuid,
-               (SELECT con.CONTAINER_NAME FROM ST_CONTAINER con
-                WHERE con.CONTAINER_UUID = container.PARENT_CONTAINER_UUID)                                       parentContainerName,
-               container.PARENT_CONTAINER_UUID                                                                    parentContainerUuid,
-               container.CONTROL_NUMBER                                                                           controlNumber,
-               container.PROVENANCE                                                                               provenance,
-               container.CREATION_START_DATE                                                                      creationStartDate,
-               container.CREATION_END_DATE                                                                        creationEndDate,
-               container.ORDER_NO                                                                                 orderNo,
-               container.ORDER_KEY                                                                                orderKey,
-               SUBSTR(SYS_CONNECT_BY_PATH(ROWNUM, '.'), 2, length(SYS_CONNECT_BY_PATH(ROWNUM, '.')))           as orderKey1,
-               container.DESCRIPTION                                                                              description,
-               container.NOTES                                                                                    notes,
-               container.USE_YN                                                                                   useYn
 
-        from ST_CONTAINER container
-               INNER JOIN ST_ARRANGE_CONTAINERS_RESULT container_result
-                 ON container.CONTAINER_UUID NOT IN (container_result.CONTAINER_UUID)
-        START WITH container.PARENT_CONTAINER_UUID IS NULL
-        CONNECT BY PRIOR container.CONTAINER_UUID = container.PARENT_CONTAINER_UUID
-        ]]>
+        SELECT *
+        FROM (
+            select container.CONTAINER_UUID                                                                           containerUuid,
+                   container.STATUS_UUID                                                                              statusUuid,
+                   container.CONTAINER_NAME                                                                           containerName,
+                   container.CONTAINER_TYPE_UUID                                                                      containerTypeUuid,
+                   (SELECT con.CONTAINER_NAME FROM ST_CONTAINER con
+                    WHERE con.CONTAINER_UUID = container.PARENT_CONTAINER_UUID)                                       parentContainerName,
+                   container.PARENT_CONTAINER_UUID                                                                    parentContainerUuid,
+                   container.CONTROL_NUMBER                                                                           controlNumber,
+                   container.PROVENANCE                                                                               provenance,
+                   container.CREATION_START_DATE                                                                      creationStartDate,
+                   container.CREATION_END_DATE                                                                        creationEndDate,
+                   container.ORDER_NO                                                                                 orderNo,
+                   container.ORDER_KEY                                                                                orderKey,
+                   SUBSTR(SYS_CONNECT_BY_PATH(ROWNUM, '.'), 2, length(SYS_CONNECT_BY_PATH(ROWNUM, '.')))           as orderKey1,
+                   container.DESCRIPTION                                                                              description,
+                   container.NOTES                                                                                    notes,
+                   container.USE_YN                                                                                   useYn
+            from
+                ST_CONTAINER container
+                  LEFT JOIN
+                    ST_ARRANGE_CONTAINERS_RESULT container_result
+                    ON container.CONTAINER_UUID = container_result.CONTAINER_UUID
+            <!-- container_result에 포함되지 않은 애를 찾아라. -->
+            WHERE container_result.container_uuid is null
+
+            START WITH container.PARENT_CONTAINER_UUID IS NULL
+            CONNECT BY PRIOR container.CONTAINER_UUID = container.PARENT_CONTAINER_UUID
+        )
+        <where>
+            <if test="provenance != null">
+                provenance = #{provenance}
+            </if>
+            <if test="parentContainerUuid != null">
+                AND  parentContainerUuid = #{parentContainerUuid}
+            </if>
+            <if test="containerName != null">
+                AND UPPER(containerName) LIKE '%'||#{containerName}||'%'
+            </if>
+            <if test="statusUuid != null">
+                AND statusUuid = #{statusUuid}
+            </if>
+            <if test="controlNumber != null">
+                AND controlNumber = #{controlNumber}
+            </if>
+            <if test="containerTypeUuid != null">
+                AND containerTypeUuid = #{containerTypeUuid}
+            </if>
+            <if test="creationStartDate != null">
+                AND creationStartDate <![CDATA[>=]]> TO_DATE(#{creationStartDate},'yyyy-mm-dd')
+            </if>
+            <if test="creationEndDate != null">
+                AND creationEndDate <![CDATA[<]]> TO_DATE(#{creationEndDate},'yyyy-mm-dd')+1
+            </if>
+            <if test="useYn != null">
+                AND useYn = #{useYn}
+            </if>
+        </where>
+
     </select>
     <select id="getSelectedItem" resultType="St00603VO" statementType="PREPARED">
         <![CDATA[
