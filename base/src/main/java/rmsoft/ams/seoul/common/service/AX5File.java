@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.UUID;
 
@@ -96,7 +97,7 @@ public class AX5File implements Comparable {
         return String.format("%s-thumbnail.%s", id, ext);
     }
 
-    public void setThumbnailContent(byte[] thumbnail){ thumbnailContent = thumbnail; }
+    public void setThumbnailContent(byte[] thumbnail){ thumbnailContent = Arrays.copyOf(thumbnail, thumbnail.length); }
 
     public String getJsonName() {
         return String.format("%s.json", id, ext);
