@@ -90,7 +90,7 @@ public class Ac003Service extends BaseService {
         AcUser orgAcUser = acUserRepository.findOne(acUser.getId());
 
         if (orgAcUser == null) {
-            throw new ApiException(ApiStatus.SYSTEM_ERROR, "출동요청 전문응답코드가 99입니다.");
+            throw new ApiException(ApiStatus.SYSTEM_ERROR, "입력하신 사용자의 정보가 없습니다.");
         } else {
             if (bCryptPasswordEncoder.matches(requestParams.getString("crntPwd"), orgAcUser.getUserPassword())) {//암호가 일치
                 //암호 변경
