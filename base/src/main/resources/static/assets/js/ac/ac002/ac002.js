@@ -35,10 +35,12 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         });
         return false;
     },
+    PAGE_NOTICE: function (caller, act, data) {
+
+    },
     TOGGLE_ASIDE: function (caller, act, data) {
         caller.frameView.toggleAside();
     },
-
     MENU_OPEN: function (caller, act, data) {
         caller.tabView.open(data);
     },
@@ -60,10 +62,10 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             }
         });
     },
-    RECORD_SEARCH: function (caller,act, data) {
-        var item = getMenu("record explorer");
+    PAGE_MOVE: function (caller,act, data) {
+        var item = getMenu(data.pageName);
         var parentsObj = parent.window.fnObj;
-        item.menuParams = $.extend({},{type: "search",searchWord:$("[data-ax-path='searchInput']").val()});
+        item.menuParams = $.extend({},{type: data.type,searchWord:data.param});
         parentsObj.tabView.open(item);
     },
     dispatch: function (caller, act, data) {
@@ -1062,9 +1064,41 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
     initEvent: function () {
         var _this = this;
         $("#searchBtn").click(function (){
-            ACTIONS.dispatch(ACTIONS.RECORD_SEARCH);
+            ACTIONS.dispatch(ACTIONS.PAGE_MOVE,{pageName: "record explorer",type: "search",param: $("[data-ax-path='searchInput']").val()});
         });
-
+        $(".temporaryRecords").click(function (){
+            ACTIONS.dispatch(ACTIONS.PAGE_MOVE,{pageName: "record explorer",type: '', param:''});
+        });
+        $("#classificationScheme").click(function (){
+            ACTIONS.dispatch(ACTIONS.PAGE_MOVE,{pageName: "classification scheme",param:''});
+        });
+        $("#class").click(function (){
+            ACTIONS.dispatch(ACTIONS.PAGE_MOVE,{pageName: "class",param:''});
+        });
+        $(".classifyRecords").click(function (){
+            ACTIONS.dispatch(ACTIONS.PAGE_MOVE,{pageName: "classify records",param:''});
+        });
+        $("#generalRecordsSchedule").click(function (){
+            ACTIONS.dispatch(ACTIONS.PAGE_MOVE,{pageName: "general records schedule",param:''});
+        });
+        $("#recordSchedule").click(function (){
+            ACTIONS.dispatch(ACTIONS.PAGE_MOVE,{pageName: "record schedule",param:''});
+        });
+        $(".recordScheduling").click(function (){
+            ACTIONS.dispatch(ACTIONS.PAGE_MOVE,{pageName: "record scheduling",param:''});
+        });
+        $("#disposalFreezeEvent").click(function (){
+            ACTIONS.dispatch(ACTIONS.PAGE_MOVE,{pageName: "disposal freeze event",param:''});
+        });
+        $("#disposalFreezeDegree").click(function (){
+            ACTIONS.dispatch(ACTIONS.PAGE_MOVE,{pageName: "disposal freeze degree",param:''});
+        });
+        $(".disposalFreezeRecords").click(function (){
+            ACTIONS.dispatch(ACTIONS.PAGE_MOVE,{pageName: "disposal freeze records",param:''});
+        });
+        $("#dfRecordDraft").click(function (){
+            ACTIONS.dispatch(ACTIONS.PAGE_MOVE,{pageName: "disposal records",param:''});
+        });
         ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
     },
     setData: function (data) {
