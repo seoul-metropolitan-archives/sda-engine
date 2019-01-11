@@ -76,6 +76,11 @@ dip.process:
   #digital.file.dir: D:\seoul-ams-repo\dip\tmp\
   tmp.dir: /Users/jspark226/devspace/upload/dip/tmp/
   digital.file.dir: /Users/jspark226/devspace/upload/dip/tmp/
+
+dashboard:
+  batch:
+    enable: false
+    cron: "0 0 1 * * *"
 #개발
 #window
 #workflow.module.path: D:\02.DreamAntDev\git-workspaces\java\seoul-ams\base\src\main\resources\workflow-modules\
