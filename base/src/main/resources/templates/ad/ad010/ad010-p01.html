@@ -1,0 +1,60 @@
+<!DOCTYPE HTML>
+<!--
+  ~ Copyright (c) 2017. RMSoft Co.,Ltd. All rights reserved
+  -->
+
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout/modal}">
+
+<!-- ===== [ script ] ===== -->
+<script layout:fragment="script" type="text/javascript" th:src="@{/assets/js/ad/ad010/ad010-p01.js}"></script>
+<!-- ===== [ script ] _END_ ===== -->
+
+<!-- ===== [ base-content ] ===== -->
+<div layout:fragment="base-content" class="ax-base-content">
+    <form name="formView01" id="formView01" method="post" onsubmit="return false">
+        <div class="contents_wrap">
+            <div style=" height:31px; width:100%" class="bgf7 div_tablerow searchFields">
+                <ul>
+                    <li style="text-align:right; padding:5px;">
+                        <button class="btn_s" th:id="save">
+                            <span class="btn_icon">&nbsp;</span>
+                            <span class="btn_main_txt">Save(S)</span>
+                        </button>
+                    </li>
+                </ul>
+            </div>
+            <div data-ax-tbl class="ax-search-tbl" minWidth="500px" style="margin:10px">
+                <th:block layout:insert="~{/fragments/table :: tr-td(text='작성자', style='width: 100%')}">
+                    <div layout:fragment="wrap">
+                        <input title="작성자" data-ax-path="registerUuid" class="form-control" style="height: 90%" readonly>
+                    </div>
+                </th:block>
+                <th:block layout:insert="~{/fragments/table :: tr-td(text='작성일', style='width: 100%')}">
+                    <div layout:fragment="wrap">
+                        <input title="작성일" data-ax-path="registerDate" class="form-control" style="height: 90%" readonly>
+                    </div>
+                </th:block>
+                <th:block layout:insert="~{/fragments/table :: tr-td(text='제목', style='width: 100%')}">
+                    <div layout:fragment="wrap">
+                        <input title="제목" data-ax-path="title" class="form-control" style="height: 90%" readonly>
+                    </div>
+                </th:block>
+                <th:block layout:insert="~{/fragments/table :: tr-td(text='내용', style='width: 100%;height:300px')}">
+                    <div layout:fragment="wrap">
+                        <textarea title="내용" data-ax-path="contents" id="msgContent" class="form-control" style="height: 100%" readonly></textarea>
+                    </div>
+                </th:block>
+                <th:block layout:insert="~{/fragments/table :: tr-td(text='첨부파일', style='width: 100%')}">
+                    <div layout:fragment="wrap">
+                        <input title="첨부파일" data-ax-path="fileName" class="form-control" style="height: 90%" readonly>
+                    </div>
+                </th:block>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!-- ===== [ base-content ] _END_ ===== -->
+</html>
