@@ -3226,6 +3226,57 @@ axboot.formView = {
 };
 
 /**
+ * gridView
+ * @Object {Object} axboot.gridView
+ */
+axboot.axGridView = {
+    page: {
+        pageNumber: 0,
+        pageSize: 99999
+    },
+    setData: function setData(_data) {
+        this.target.setData(_data);
+    },
+    getData: function getData(_type) {
+        var list = [];
+        var _list = this.target.getList(_type);
+        if (_type == "modified" || _type == "deleted") {
+            list = ax5.util.filter(_list, function () {
+                return true;
+            });
+        } else {
+            list = _list;
+        }
+        return list;
+    },
+    addRow: function addRow() {
+        this.target.addRow({__created__: true}, "last");
+    },
+    delRow: function delRow(_type) {
+        this.target.deleteRow(_type);
+    },
+    align: function align() {
+        this.target.align();
+    },
+    clear: function clear() {
+        this.target.setData({
+            list: [],
+            page: {
+                currentPage: 0,
+                pageSize: 0,
+                totalElements: 0,
+                totalPages: 0
+            }
+        });
+    },
+    setPageData: function setPageData(_page) {
+        this.page = $.extend(this.page, _page);
+    },
+    getPageData: function getPageData() {
+        return this.page;
+    }
+};
+/**
  * formView.defaultData
  * @Object {Object} axboot.formView.defaultData
  */

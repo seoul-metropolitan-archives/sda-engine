@@ -36,7 +36,19 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         return false;
     },
     PAGE_NOTICE: function (caller, act, data) {
-
+        axboot.ajax({
+            type: "GET",
+            url: "/api/v1/ad/ad010/01/getList02",
+            async : false,
+            data: $.extend({},this.gridView01.getPageData()),
+            callback: function (res) {
+                caller.gridView01.setData(res);
+            },
+            options: {
+                onError: axboot.viewError
+            }
+        });
+        return false;
     },
     TOGGLE_ASIDE: function (caller, act, data) {
         caller.frameView.toggleAside();
@@ -1009,33 +1021,35 @@ fnObj.activityTimerView = axboot.viewExtend({
         this.$target.html(displayTime.join(""));
     }
 });
-fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
+fnObj.gridView01 = axboot.viewExtend(axboot.axGridView, {
+    page: {
+        pageNumber: 0,
+        pageSize: 17
+    },
     initView: function () {
         var _this = this;
 
         this.target = axboot.gridBuilder({
-            frozenColumnIndex: 0,
-            multipleSelect: true,
-            showLineNumber: false,
+            showLineNumber: true,
             target: $('[data-ax5grid="grid-view-01"]'),
             columns: [
-                {key: "value", label: "제목", width: 300, align: "center", editor: "text"},
-                {key: "etc1", label: "작성자", width: 120, align: "center", editor: "text"},
-                {key: "ect2", label: "작성일자", align: "center", editor: "text"}
+                {key: "title", label: "제목", width: 243, align: "center", sortable: false},
+                {key: "registerUuid", label: "작성자", width: 120, align: "center", sortable: false},
+                {key: "registerDate", label: "작성일자",width: 100, align: "center", sortable: false}
             ],
             body: {
                 onClick: function () {
                     this.self.select(this.dindex);
                 }
             },
+            onPageChange: function (pageNumber) {
+                _this.setPageData({pageNumber: pageNumber});
+                ACTIONS.dispatch(ACTIONS.PAGE_NOTICE);
+            },
             page: {
                 navigationItemCount: 9,
-                height: 30,
+                height: 40,
                 display: true,
-                firstIcon: '<i class="fa fa-step-backward" aria-hidden="true"></i>',
-                prevIcon: '<i class="fa fa-caret-left" aria-hidden="true"></i>',
-                nextIcon: '<i class="fa fa-caret-right" aria-hidden="true"></i>',
-                lastIcon: '<i class="fa fa-step-forward" aria-hidden="true"></i>',
                 onChange: function () {
                     gridView.setData(this.page.selectPage);
                 }
@@ -1100,6 +1114,7 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
             ACTIONS.dispatch(ACTIONS.PAGE_MOVE,{pageName: "disposal records",param:''});
         });
         ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+        ACTIONS.dispatch(ACTIONS.PAGE_NOTICE);
     },
     setData: function (data) {
         if (typeof data === "undefined") data = this.getDefaultData();
