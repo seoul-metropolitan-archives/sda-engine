@@ -8,6 +8,7 @@
 
         SELECT
                schedule_result.AGGREGATION_UUID aggregationUuid,
+               acr.LOCATION_UUID                                           as locationUuid,
                B.code,
                B.title,
                B."level",
@@ -20,6 +21,7 @@
                shelf.SHELF_NAME shelfName,
                (location.ROW_NO || '행 ' || location.COLUMN_NO || '열') as locationName,
                container.CONTAINER_UUID containerUuid,
+               container.CONTAINER_TYPE_UUID containerTypeUuid,
                container.CONTAINER_NAME containerName
         FROM
              (                SELECT
@@ -89,7 +91,7 @@
                          WHERE
                              CODE_DETAIL_UUID = Z1.TYPE_UUID)                                                  as "type",
                         (SELECT
-                                TO_CHAR(LEVEL_NO)
+                            LEVEL_NAME
                          FROM
                               RC_LEVEL
                          WHERE
@@ -142,6 +144,31 @@
                  on B.UUID = schedule_result.AGGREGATION_UUID
         <where>
             1=1
+            <if test="code != null">
+                <![CDATA[
+                   AND B.code  LIKE '%' || #{code} || '%'
+                ]]>
+            </if>
+            <if test="title != null">
+                <![CDATA[
+                   AND B.title  LIKE '%' || #{title} || '%'
+                ]]>
+
+            </if>
+            <if test="repositoryUuid != null">
+                AND  repository.REPOSITORY_UUID = #{repositoryUuid}
+            </if>
+            <if test="shelfUuid != null">
+                AND  shelf.SHELF_UUID = #{shelfUuid}
+            </if>
+
+            <if test="locationUuid != null">
+                AND acr.LOCATION_UUID = #{locationUuid}
+            </if>
+
+            <if test="containerTypeUuid != null">
+                AND container.CONTAINER_TYPE_UUID = #{containerTypeUuid}
+            </if>
 
         </where>
     </select>
@@ -173,7 +200,14 @@
             ON general.GENERAL_RECORD_SCHEDULE_UUID = schedule.GENERAL_RECORD_SCHEDULE_UUID
          INNER JOIN AD_CODE_DETAIL code_detail
             ON code_detail.CODE_DETAIL_UUID = general.RETENTION_PERIOD_UUID
-        WHERE 1 = 1
-          AND A.AGGREGATION_UUID = #{aggregationUuid}
+        <where>
+          1 = 1
+            <if test="disposalDueDateStart != null">
+                AND result.DISPOSAL_DUE_DATE <![CDATA[>=]]> TO_DATE(#{disposalDueDateStart},'yyyy-mm-dd')
+            </if>
+            <if test="disposalDueDateEnd != null">
+                AND result.DISPOSAL_DUE_DATE <![CDATA[<]]> TO_DATE(#{disposalDueDateEnd},'yyyy-mm-dd')
+            </if>
+        </where>
     </select>
 </mapper>

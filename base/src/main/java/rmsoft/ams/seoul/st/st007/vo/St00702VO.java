@@ -20,6 +20,9 @@ public class St00702VO extends BaseVO {
     private Timestamp descriptionEndDate;
     private Timestamp initialDate;
     private Timestamp disposalDueDate;
+    private Timestamp disposalDueDateStart;
+    private Timestamp disposalDueDateEnd;
     private Timestamp disposalCompleteDate;
+
 
 }
