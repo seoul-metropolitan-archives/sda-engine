@@ -29,7 +29,7 @@
 
 
                         </li>
-                        <th:block layout:insert="~{/fragments/page-buttons :: save-and-inquiry}"/>
+                        <th:block layout:insert="~{/fragments/page-buttons :: save-and-inquiry('none','show')}"/>
                     </ul>
                 </div>
                 <!-- 상단검색 -->
@@ -37,18 +37,18 @@
                     <dl>
                         <dt class="w150">Aggregation Code</dt>
                         <dd>
-                            <input type=text style="width:135px" data-ax-path="test1">
+                            <input type=text style="width:135px" data-ax-path="code">
                         </dd>
                         <dt class="w150">Aggregation Title</dt>
                         <dd>
-                            <input type=text style="width:135px" data-ax-path="test2">
+                            <input type=text style="width:135px" data-ax-path="title">
                         </dd>
-                        <th:block layout:insert="~{/fragments/page-buttons :: searchInputYellow ('서고','repositoryName')}"/>
-                        <th:block layout:insert="~{/fragments/page-buttons :: searchInputYellow ('서가','shelfName')}"/>
+                        <th:block layout:insert="~{/fragments/page-buttons :: searchInput ('서고','repositoryName')}"/>
+                        <th:block layout:insert="~{/fragments/page-buttons :: searchInput ('서가','shelfName')}"/>
 
                     </dl>
                     <dl>
-                        <dt>Code</dt>
+                        <!--<dt>Code</dt>
                         <dd>
                             <select data-ax-path="codeTypeUuid" style="width:135px;" id="codeList">
                                 <option value=""></option>
@@ -56,20 +56,22 @@
                                         th:value="${item.codeDetailUUID}"
                                         th:text="${item.codeName}"/>
                             </select>
-                        </dd>
+                        </dd>-->
                         <dt>출입 일시</dt>
                         <dd class="w_auto">
                             <div class="input-group" data-ax5picker="date">
-                                <div class="cld_box" style="background-color: #fffdd6">
-                                    <input type="text" data-ax-path="startFromDate" style="background-color: #fffdd6;ime-mode:disabled;"
+                                <div class="cld_box">
+                                    <input type="text" data-ax-path="descStrDate" style=" ime-mode:disabled;"
                                            placeholder="YYYY-MM-DD" maxlength="10">
-                                    <img title="calendar" class="ui-datepicker-trigger" alt="..." src="/assets/images/ams/calendar.png" >
+                                    <img title="calendar" class="ui-datepicker-trigger" alt="..."
+                                         src="/assets/images/ams/calendar.png">
                                 </div>
                                 ~
-                                <div class="cld_box" style="background-color: #fffdd6">
-                                    <input type="text" data-ax-path="startToDate" style="background-color: #fffdd6;ime-mode:disabled;"
+                                <div class="cld_box" style=" ">
+                                    <input type="text" data-ax-path="descEdDate" style=" ime-mode:disabled;"
                                            placeholder="YYYY-MM-DD" maxlength="10">
-                                    <img title="calendar" class="ui-datepicker-trigger" alt="..." src="/assets/images/ams/calendar.png">
+                                    <img title="calendar" class="ui-datepicker-trigger" alt="..."
+                                         src="/assets/images/ams/calendar.png">
                                 </div>
                             </div>
                         </dd>
@@ -84,12 +86,12 @@
                                 <th:block layout:insert="~{/fragments/page-buttons :: dot('무단반출입 기록물')}"/>
                                 <li style="text-align:right; width:83%;">
                                     <!--<button class="btn_a">-->
-                                        <!--<span class="btn_icon">&nbsp;</span>-->
-                                        <!--<span class="btn_main_txt">Add</span>-->
+                                    <!--<span class="btn_icon">&nbsp;</span>-->
+                                    <!--<span class="btn_main_txt">Add</span>-->
                                     <!--</button>-->
                                     <!--<button class="btn_d">-->
-                                        <!--<span class="btn_icon">&nbsp;</span>-->
-                                        <!--<span class="btn_main_txt">Delete</span>-->
+                                    <!--<span class="btn_icon">&nbsp;</span>-->
+                                    <!--<span class="btn_main_txt">Delete</span>-->
                                     <!--</button>-->
                                 </li>
                             </ul>
@@ -99,9 +101,7 @@
                         </div>
 
 
-
                     </div>
-
 
 
                 </div>

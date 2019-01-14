@@ -11,7 +11,7 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 public class St01402VO extends BaseVO {
-
+    private String withoutNoticeIoRecordUuid;
     private String inoutDateTime;
     private String zoneName;
 

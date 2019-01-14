@@ -51,11 +51,53 @@ var st00801 =
                     required: false,
                     visible: false
                 },
+
+                {
+                    sortNo: 0,
+                    width:30,
+                    name: "outsourcingDepartment",
+                    text: "outsourcingDepartment",
+                    editable: false,
+                    dataType: "code",
+                    required: false,
+                    visible: false
+                },
+                {
+                    sortNo: 0,
+                    width:30,
+                    name: "outsourcingPosition",
+                    text: "outsourcingPosition",
+                    editable: false,
+                    dataType: "code",
+                    required: false,
+                    visible: false
+                },
+                {
+                    sortNo: 0,
+                    width:30,
+                    name: "outsourcingPersonName",
+                    text: "outsourcingPersonName",
+                    editable: false,
+                    dataType: "code",
+                    required: false,
+                    visible: false
+                },
+                {
+                    sortNo: 0,
+                    width:30,
+                    name: "outsourcingPhone",
+                    text: "outsourcingPhone",
+                    editable: false,
+                    dataType: "code",
+                    required: false,
+                    visible: false
+                },
+
                 {
                     sortNo: 1,
                     name: "requestName",
                     text: "반출의뢰서",
-                    width: 80,
+                    width: 100,
                     editable: false,
                     disable: true,
                     dataType: "text",
@@ -65,7 +107,7 @@ var st00801 =
                     sortNo: 2,
                     name: "requestorName",
                     text: "반출자",
-                    width: 80,
+                    width: 100,
                     editable: false,
                     disable: true,
                     dataType: "text",
@@ -75,7 +117,7 @@ var st00801 =
                     sortNo: 3,
                     name: "userGroupName",
                     text: "소속",
-                    width: 80,
+                    width: 100,
                     editable: false,
                     disable: true,
                     dataType: "text",

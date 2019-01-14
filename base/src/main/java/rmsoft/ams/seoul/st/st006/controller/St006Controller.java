@@ -1,15 +1,22 @@
 package rmsoft.ams.seoul.st.st006.controller;
 
 import io.onsemiro.controller.BaseController;
+import io.onsemiro.core.api.ApiException;
+import io.onsemiro.core.api.response.ApiResponse;
 import io.onsemiro.core.api.response.Responses;
+import io.onsemiro.core.code.ApiStatus;
 import io.onsemiro.core.parameter.RequestParams;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
+import rmsoft.ams.seoul.st.st004.service.St004Service;
+import rmsoft.ams.seoul.st.st004.vo.St00401VO;
 import rmsoft.ams.seoul.st.st006.service.St006Service;
 import rmsoft.ams.seoul.st.st006.vo.St00601VO;
 import rmsoft.ams.seoul.st.st006.vo.St00603VO;
+
+import javax.inject.Inject;
 
 /**
  * The type Cl 006 controller.
@@ -39,6 +46,15 @@ public class St006Controller extends BaseController {
         Page<St00603VO> pages = st006Service.getSelectedItem(pageable, requestParams);
 
         return Responses.PageResponse.of(pages.getContent(), pages);
+    }
+    @PutMapping("/01/save")
+    @PostMapping
+    public ApiResponse saveArrangeRecordList(@RequestBody St00401VO requestParams) {
+        ApiResponse apiResponse = st006Service.saveArrangeRecordList(requestParams);
+        if(apiResponse.getStatus() == -1) {
+            throw new ApiException(ApiStatus.SYSTEM_ERROR, apiResponse.getMessage());
+        }
+        return apiResponse;
     }
     /*
     @GetMapping("/02/list01")

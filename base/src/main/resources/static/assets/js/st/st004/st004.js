@@ -93,9 +93,9 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         // }
 
         //체크 안하면 Arrange 클릭이 되면 안된다.
-        if(fnObj.gridView01.getSelectedData() == undefined){
-            return;
-        }
+        // if(fnObj.gridView01.getSelectedData() == undefined){
+        //     return;
+        // }
 
 
         axboot.modal.open({

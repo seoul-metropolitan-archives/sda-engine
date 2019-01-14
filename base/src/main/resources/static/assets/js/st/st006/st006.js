@@ -42,7 +42,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         axboot.ajax({
             type: "GET",
             url: "/api/v1/st/st006/01/list02",
-            data: $.extend({}, this.formView.getData(),{containerUuid : fnObj.gridView01.getSelectedData().containerUuid}),
+            data: $.extend({},{pageSize: 1000 }, this.formView.getData(),{containerUuid : fnObj.gridView01.getSelectedData().containerUuid}),
             callback: function (res) {
                 fnObj.gridView02.setData(res.list);
                 // fnObj.gridView02.disabledColumn();
@@ -176,18 +176,29 @@ var ACTIONS = axboot.actionExtend(fnObj, {
 
     },
     PAGE_ARRANGE: function (caller, act, data) {
+        var selectedContainer = fnObj.gridView01.getSelectedData();
+        if( selectedContainer.parentContainerName == undefined){
+            // do nothing
+        }else{
+            // 위에 parent가 있다 ( 최상위 컨테이너가 아니다 )
+            axToast.push(axboot.getCommonMessage("ST006_01"));
+            return;
+        }
+
         axboot.commonModal.open({
             modalType: "ARRANGE_NOT_ARRANGED_CONTAINER_POPUP",
-            width: 400,
-            height: 400,
+            width: 800,
+            height: 700,
+
             header: {
                 title: "ARRANGE"
             },
             sendData: function () {
-                var selectedRow = fnObj.gridView01.getSelectedData();
-                console.log('selectedRow', selectedRow);
-                selectedRow.confirmBtn = "Arrange";
-                return selectedRow;
+
+                var selectedData = fnObj.gridView01.getSelectedData();
+                console.log('selectedData', selectedData);
+
+                return selectedData;
             },
             callback: function (data) {
                 if(this) this.close();
@@ -347,8 +358,8 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
             }
         });
 
-        $("input[data-ax-path='creationStartDate']").val(getFormattedDate(new Date(), true));
-        $("input[data-ax-path='creationEndDate']").val(getFormattedDate(new Date()));
+        // $("input[data-ax-path='creationStartDate']").val(getFormattedDate(new Date(), true));
+        // $("input[data-ax-path='creationEndDate']").val(getFormattedDate(new Date()));
 
 
         this.initEvent();
@@ -492,7 +503,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
         this.gridObj.setGridStyle("100%", "100%")
             .setOption({
                 header: { visible: true },
-                checkBar: {visible: false},
+                checkBar: {visible: true},
                 indicator: {visible: true},
                 lineVisible: false
             });
@@ -582,7 +593,7 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
         this.initInstance();
         this.setColumnInfo(st00602.column_info);
         this.gridObj.setOption({
-            checkBar: {visible: true}
+            checkBar: {visible: false}
         })
         this.makeGrid();
         //this.gridObj.itemClick(this.itemClick);

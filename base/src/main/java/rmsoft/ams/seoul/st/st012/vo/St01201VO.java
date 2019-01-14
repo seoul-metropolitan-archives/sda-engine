@@ -14,6 +14,9 @@ public class St01201VO extends BaseVO {
 
     private String aggregationUuid;
     private String withoutNoticeIoRecordUuid;
+    private String repositoryUuid;
+    private String shelfUuid;
+
     private String code;
     private String title;
     private String level;

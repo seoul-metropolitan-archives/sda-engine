@@ -1,5 +1,6 @@
 var fnObj = {};
-var inoutExceptUuid = "";
+var repositoryUuid;
+var shelfUuid;
 var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH: function (caller, act, data) {
         ACTIONS.dispatch(ACTIONS.PAGE_SEARCH01);
@@ -8,7 +9,9 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         axboot.ajax({
             type: "GET",
             url: "/api/v1/st/st012/01/list01",
-            data: $.extend({}, this.formView.getData()),
+            data: $.extend({}, {pageSize: 1000}, this.formView.getData(),
+                {repositoryUuid : repositoryUuid, shelfUuid : shelfUuid}
+                ),
             callback: function (res) {
                 fnObj.gridView01.setData(res.list);
                 //fnObj.gridView01.disabledColumn();
@@ -167,21 +170,23 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             alert('팝업 타입 없음:' + data);
         }
         var aSelected = fnObj.gridView01.getSelectedData();
-        if( aSelected == undefined || aSelected.length == 0){
-            alert('선택된 기록물이 없습니다');
+        if( aSelected.length == 0){
+            axToast.push(axboot.getCommonMessage("ST012_01"));
             return;
         }
-        axboot.modal.open({
+
+
+        axboot.commonModal.open({
             modalType: modalOption.modalType,
             header: {
                 title: modalOption.title,
             },
             sendData: function () {
-                var selectedRow = fnObj.gridView01.getSelectedData();
 
-                console.log('selectedRow', selectedRow);
+
+                console.log('aSelected', aSelected);
                 // selectedRow.confirmBtn = "Arrange";
-                return selectedRow;
+                return aSelected;
 
             },
             callback: function (data) {
@@ -319,6 +324,12 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
         this.model = new ax5.ui.binder();
         this.model.setModel(this.getDefaultData(), this.target);
         this.modelFormatter = new axboot.modelFormatter(this.model); // 모델 포메터 시작
+        this.target.find('[data-ax5picker="date"]').ax5picker({
+            direction: "auto",
+            content: {
+                type: 'date'
+            }
+        });
         this.initEvent();
         this.bindEvent();
     },
@@ -349,6 +360,28 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
             }
         });
 
+        $("input[data-ax-path='descStrDate']").keyup(function () {
+            var date = this.value;
+            if (date.match(/^\d{4}$/) !== null) {
+                this.value = date + '-';
+            } else if (date.match(/^\d{4}\-\d{2}$/) !== null) {
+                this.value = date + '-';
+            }
+        });
+        $("input[data-ax-path='descStrDate']").keypress(function () {
+            if ((event.keyCode < 48) || (event.keyCode > 57)) event.returnValue = false;
+        });
+        $("input[data-ax-path='descEdDate']").keyup(function () {
+            var date = this.value;
+            if (date.match(/^\d{4}$/) !== null) {
+                this.value = date + '-';
+            } else if (date.match(/^\d{4}\-\d{2}$/) !== null) {
+                this.value = date + '-';
+            }
+        });
+        $("input[data-ax-path='descEdDate']").keypress(function () {
+            if ((event.keyCode < 48) || (event.keyCode > 57)) event.returnValue = false;
+        });
     },
     getData: function () {
         var data = this.modelFormatter.getClearData(this.model.get()); // 모델의 값을 포멧팅 전 값으로 치환.
@@ -383,6 +416,7 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
     },
     bindEvent : function()
     {
+
         /* var _this = this;
          $(".btn_confirm01").click(function(){
              ACTIONS.dispatch(ACTIONS.STATUS_UPDATE01,CONFIRM_STATUS);
@@ -396,6 +430,8 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
          $(".btn_cancel02").click(function(){
              ACTIONS.dispatch(ACTIONS.STATUS_UPDATE02,CANCEL_STATUS);
          });*/
+
+
     },
 });
 
@@ -416,7 +452,22 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
 
     },
     getSelectedData: function () {
-        return this.gridObj.getSelectedData()
+        var checkedList = this.gridObj.getCheckedList();
+        if( checkedList.length == 0){
+            // checked된 애가 없음
+            // array 형태로 return
+            if( this.gridObj.getSelectedData() ){
+                return [this.gridObj.getSelectedData()];
+            }else{
+                return [];
+            }
+
+        }else{
+            // check 된 애가 있다.
+            return checkedList;
+        }
+
+
     },
     disabledColumn: function () {
         var state = axboot.commonCodeValueByCodeName("CD138", CONFIRM_STATUS);
@@ -429,22 +480,22 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
         }, ["statusUuid", "repositoryCode", "repositoryName", "description"]);
     },
     itemClick: function (data) {
-        inoutExceptUuid = data.inoutExceptUuid;
-        console.log(inoutExceptUuid)
 
-        if (fnObj.gridView01.isChangeData() == true || fnObj.gridView02.isChangeData() == true) {
-            axDialog.confirm({
-                msg: axboot.getCommonMessage("AA006")
-            }, function () {
-                if (this.key == "ok") {
-                    ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
-                } else {
-                    ACTIONS.dispatch(ACTIONS.PAGE_SEARCH02);
-                }
-            });
-        }
+        console.log( fnObj.gridView01.getSelectedData())
 
-        ACTIONS.dispatch(ACTIONS.PAGE_SEARCH02);
+        // if (fnObj.gridView01.isChangeData() == true || fnObj.gridView02.isChangeData() == true) {
+        //     axDialog.confirm({
+        //         msg: axboot.getCommonMessage("AA006")
+        //     }, function () {
+        //         if (this.key == "ok") {
+        //             ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
+        //         } else {
+        //             ACTIONS.dispatch(ACTIONS.PAGE_SEARCH02);
+        //         }
+        //     });
+        // }
+        //
+        // ACTIONS.dispatch(ACTIONS.PAGE_SEARCH02);
 
     },
     cancelDelete: function(){

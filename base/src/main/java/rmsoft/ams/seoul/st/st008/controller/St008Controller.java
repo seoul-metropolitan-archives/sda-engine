@@ -15,6 +15,8 @@ import rmsoft.ams.seoul.st.st008.vo.St00801VO;
 import rmsoft.ams.seoul.st.st008.vo.St00802VO;
 import rmsoft.ams.seoul.st.st008.vo.St00802pVO;
 
+import java.util.List;
+
 /**
  * The type Cl 008 controller.
  */
@@ -51,6 +53,28 @@ public class St008Controller extends BaseController {
     @PostMapping
     public ApiResponse saveStTakeoutRequest(@RequestBody St00801VO vo) {
         ApiResponse apiResponse = st008Service.saveStTakeoutRequest(vo);
+        if(apiResponse.getStatus() == -1) {
+            throw new ApiException(ApiStatus.SYSTEM_ERROR, apiResponse.getMessage());
+        }
+        return apiResponse;
+
+    }
+
+    @PutMapping("/01/save01")
+    @PostMapping
+    public ApiResponse saveStTakeoutRequestList(@RequestBody List<St00801VO> list) {
+        ApiResponse apiResponse = st008Service.saveStTakeoutRequestList(list);
+        if(apiResponse.getStatus() == -1) {
+            throw new ApiException(ApiStatus.SYSTEM_ERROR, apiResponse.getMessage());
+        }
+        return apiResponse;
+
+    }
+
+    @PutMapping("/01/save02")
+    @PostMapping
+    public ApiResponse saveStTakeoutRecordResultList(@RequestBody List<St00802VO> list) {
+        ApiResponse apiResponse = st008Service.saveStTakeoutRecordResultList(list);
         if(apiResponse.getStatus() == -1) {
             throw new ApiException(ApiStatus.SYSTEM_ERROR, apiResponse.getMessage());
         }

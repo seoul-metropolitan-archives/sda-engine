@@ -41,6 +41,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         ACTIONS.dispatch(ACTIONS.STATUS_UPDATE,CANCEL_STATUS);
     },
     PAGE_SAVE : function (caller, act, data) {
+        data = fnObj.formView.getData();
         console.log('formViewData', data);
         /*if(fnObj.gridView03.getData().length  < 1){
             return;
@@ -68,7 +69,10 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     },
     PAGE_CLOSE: function (caller, act, data) {
         if (parent) {
-            parent.axboot.modal.callback(data);
+            if(parent.axboot.modalOpener == "modal")
+                parent.axboot.modal.callback(data);
+            else if(parent.axboot.modalOpener == "commonModal")
+                parent.axboot.commonModal.callback(data);
         }
     },
     PAGE_CLASSIFY: function (caller, act, data) {
@@ -108,7 +112,11 @@ var ACTIONS = axboot.actionExtend(fnObj, {
 
 fnObj.pageStart = function () {
     var _this = this;
-    parentsData = parent.axboot.modal.getData();
+    if(parent.axboot.modalOpener == "modal")
+        parentsData = parent.axboot.modal.getData();
+    else if(parent.axboot.modalOpener == "commonModal")
+        parentsData = parent.axboot.commonModal.getData();
+
     $.ajax({
         url: "/assets/js/controller/simple_controller.js",
         dataType: "script",
@@ -241,11 +249,11 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
                 this.focus = true;
             }
         });
-        $(".btn_s").click(function() {
-            //if (this.textContent == "Save") {
-                ACTIONS.dispatch(ACTIONS.PAGE_SAVE, fnObj.formView.getData());
-            //}
-        });
+        // $(".btn_s").click(function() {
+        //     //if (this.textContent == "Save") {
+        //         ACTIONS.dispatch(ACTIONS.PAGE_SAVE, fnObj.formView.getData());
+        //     //}
+        // });
         $(".close_popup").click(function(){
             ACTIONS.dispatch(ACTIONS.PAGE_CLOSE);
         });
@@ -271,9 +279,9 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
         };
         accordion.click('.accordion > ul');
     },
-    changeView: function () {
-        var requestTypeUuid = getRequestTypeUuidFromRadio();
-        if( requestTypeUuid == 'AF04136D-3508-4E1C-A85B-F1A1FEDDB607'){
+    changeView: function (requestTypeUuid) {
+
+        if( requestTypeUuid == 'AF04136D-3508-4E1C-A85B-F1A1FEDDB607' || requestTypeUuid == null || requestTypeUuid == undefined){
             // 직원
             $('#innerWorker').show();
             $('#outerWorker').hide();
@@ -308,9 +316,14 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
         var radioTag = "";
         for(var i = 0; i < codes.length; i++)
         {
-            if(codes[i] == parent.axboot.modal.getData().takeoutRequestUuid){
+            if(parent.axboot.modal.getData().takeoutRequestUuid){
                 // 수정
-                radioTag += '<label for="authType' + i + '"><input type="radio" id="authType' + i + '"  name="radio" class="no_border" value="' + codes[i] + '" checked="checked">' + names[i] + '</label>'
+                var checked ='';
+                if( codes[i] == parentsData.requestTypeUuid){
+                    // 외부, 내부 직원인지에따라 checked
+                    checked = 'checked="checked"';
+                }
+                radioTag += '<label for="authType' + i + '"><input type="radio" id="authType' + i + '"  name="radio" class="no_border" value="' + codes[i] + '" '+ checked +'>' + names[i] + '</label>'
             }else{
                 // 새로 작성
                 var checked ='';
@@ -326,10 +339,11 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
 
         $(".rdo_box").append(radioTag);
         // 최초 한번 호출
-        fnObj.formView.changeView();
+        fnObj.formView.changeView( parentsData.requestTypeUuid );
         // 라디오 이벤트를 걸어주자.
         $('.rdo_box input[type=radio]').change(function(){
-            fnObj.formView.changeView();
+            var requestTypeUuid = getRequestTypeUuidFromRadio();
+            fnObj.formView.changeView(requestTypeUuid);
         })
 
     },
