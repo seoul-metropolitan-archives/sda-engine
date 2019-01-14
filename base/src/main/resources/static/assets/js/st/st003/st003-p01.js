@@ -52,11 +52,18 @@ var ACTIONS = axboot.actionExtend(fnObj, {
 
         for(var i=0;i<fnObj.gridView03.getJsonData().length;i++){
             send[i]['containerUuid'] = parentsData.containerUuid;
+            // st013 용
+            send[i]['inoutExceptUuid'] = parentsData.classUuid;
         }
 
+        var url = "/api/v1/st/st003/03/save";
+        if( parentsData.fromWhere == 'st013'){
+            // st013 에서 공통으로 씀
+            url = '/api/v1/st/st013/02/save01';
+        }
         axboot.ajax({
             type: "PUT",
-            url: "/api/v1/st/st003/03/save",
+            url: url,
             data: JSON.stringify(send),
             callback: function (res) {
                 ACTIONS.dispatch(ACTIONS.PAGE_CLOSE,{classUuid:parentsData.classUuid});

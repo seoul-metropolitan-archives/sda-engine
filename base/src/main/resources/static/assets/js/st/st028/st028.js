@@ -90,7 +90,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 return data;
             },
             callback: function (data) {
-                debugger
+
                 $("input[data-ax-path='InZoneName']").val(data["ZONE_NAME"])
                 $("input[data-ax-path='InZoneName']").attr("InZoneName",data["ZONE_NAME"])
                 parentInZoneUuid = data['ZONE_UUID'];
@@ -108,7 +108,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 return data;
             },
             callback: function (data) {
-                debugger
+
                 $("input[data-ax-path='outZoneName']").val(data["ZONE_NAME"])
                 $("input[data-ax-path='outZoneName']").attr("outZoneName",data["ZONE_NAME"])
                 parentOutZoneUuid = data['ZONE_UUID'];

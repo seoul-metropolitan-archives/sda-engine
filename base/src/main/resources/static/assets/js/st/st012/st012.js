@@ -523,3 +523,43 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
 
 });
 
+
+function getFormattedDate(date, isStart) {
+    var day;
+    var tempDate;
+    if (isStart) {
+        date.setDate(date.getDate() - 10);
+        tempDate = date.getDate();
+    } else {
+        tempDate = date.getDate();
+    }
+    day = tempDate.toString();
+
+    var year = date.getFullYear();
+    var month = (1 + date.getMonth()).toString();
+    month = month.length > 1 ? month : '0' + month;
+    day = day.length > 1 ? day : '0' + day;
+    return year + '-' + month + '-' + day;
+}
+
+function checkDate(date) {
+    var result = true;
+    var strValue = date;
+    var chk1 = /^(19|20)\d{2}-([1-9]|1[012])-([1-9]|[12][0-9]|3[01])$/;
+    //var chk2 = /^(19|20)\d{2}\/([0][1-9]|1[012])\/(0[1-9]|[12][0-9]|3[01])$/;
+    var chk2 = /^(19|20)\d{2}-([0][1-9]|1[012])-([012][1-9]|3[01])$/;
+    if (strValue == "") { // 공백이면 무시
+        return result;
+    }
+//-------------------------------------------------------------------------------
+// 유효성 검사- 입력형식에 맞게 들왔는지 // 예) 2000-1-1, 2000-01-01 2가지 형태 지원
+//-------------------------------------------------------------------------------
+    if (chk1.test(strValue) == false && chk2.test(strValue) == false) { // 유효성 검사에 둘다 성공하지 못했다면
+        //alert("1999-1-1 형식 또는 \r\n1999-01-01 형식으로 날자를 입력해주세요.");
+        axToast.push(axboot.getCommonMessage("AA011"));
+        result = false;
+
+    }
+    return result;
+}
+

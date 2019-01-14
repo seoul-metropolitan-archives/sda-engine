@@ -94,7 +94,7 @@
                 ]]>
 
             </if>
-            <if test="title != null">
+            <if test="repositoryUuid != null">
                 AND  repository.REPOSITORY_UUID = #{repositoryUuid}
             </if>
             <if test="shelfUuid != null">

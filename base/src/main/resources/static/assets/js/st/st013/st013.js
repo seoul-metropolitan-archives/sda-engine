@@ -2,7 +2,7 @@ var fnObj = {};
 var inoutExceptUuid = "";
 var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH: function (caller, act, data) {
-        debugger
+
         ACTIONS.dispatch(ACTIONS.PAGE_SEARCH01);
     },
     PAGE_SEARCH01: function (caller, act, data) {
@@ -107,7 +107,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         } else {
             //여긴 신규다
             if(fnObj.gridView01.gridObj.isDataChanged()){
-                
+
                 var exceptReason = $('textarea[data-ax-path="except_reason"]').val()
 
 
@@ -197,15 +197,16 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         }
 
         axboot.modal.open({
-            modalType: "CLASSIFY_POPUP2",
+            modalType: "ARRANGE_POPUP",
             header: {
-                title: "CLASSIFY - " + fnObj.gridView01.gridObj.getSelectedData().requestName
+                title: fnObj.gridView01.gridObj.getSelectedData().requestName
             },
             sendData: function () {
                 return {
                     classUuid : inoutExceptUuid,
                     flag : "inout",
-                    description : fnObj.gridView01.gridObj.getSelectedData().requestName
+                    description : fnObj.gridView01.gridObj.getSelectedData().requestName,
+                    fromWhere : 'st013',
                 };
             },
             callback: function (data) {
@@ -305,6 +306,12 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
         this.model = new ax5.ui.binder();
         this.model.setModel(this.getDefaultData(), this.target);
         this.modelFormatter = new axboot.modelFormatter(this.model); // 모델 포메터 시작
+        this.target.find('[data-ax5picker="date"]').ax5picker({
+            direction: "auto",
+            content: {
+                type: 'date'
+            }
+        });
         this.initEvent();
         this.bindEvent();
     },
