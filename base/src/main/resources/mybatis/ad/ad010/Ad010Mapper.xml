@@ -238,4 +238,15 @@
       )
   )
   </select>
+	<select id="getNoticeList" resultType="ad01002VO" parameterType="ad01002VO" statementType="PREPARED">
+	  SELECT
+	  	NOTICE_UUID as noticeUuid,
+        TITLE as title,
+        FC_AC_USER_NM(REGISTER_UUID) as registerUuid,
+        TO_CHAR(REGISTER_DATE,'yyyy-MM-dd') as registerDate,
+        CONTENTS as contents,
+        FILE_NAME as fileName,
+        FILE_PATH as filePath
+	  FROM AD_NOTICE
+  </select>
 </mapper>
