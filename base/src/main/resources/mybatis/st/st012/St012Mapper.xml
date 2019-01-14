@@ -104,7 +104,7 @@
                 AND B.descStrDate <![CDATA[>=]]> TO_DATE(#{descStrDate},'yyyy-mm-dd')
             </if>
             <if test="descEdDate != null">
-                AND B.descEdDate <![CDATA[<]]> TO_DATE(#{descEdDate},'yyyy-mm-dd')+1
+                AND B.descEdDate <![CDATA[<]]> TO_DATE(#{descEdDate},'yyyy-mm-dd')
             </if>
         </where>
     </select>

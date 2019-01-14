@@ -50,6 +50,30 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         });
         return false;
     },
+    DETAIL_NOTICE: function (caller, act, data) {
+        axboot.modal.open({
+            modalType: "NOTICE_POPUP",
+            header: {
+                title: "NOTICE DETAIL"
+            },
+            sendData: function () {
+                return {
+                    noticeUuid : data.noticeUuid,
+                    title : data.title,
+                    registerUuid : data.registerUuid,
+                    registerDate : data.registerDate,
+                    contents : data.contents,
+                    fileName : data.fileName,
+                    filePath : data.filePath
+                };
+            },
+            callback: function (data) {
+                if(this) this.close();
+                if(data){
+                }
+            }
+        });
+    },
     TOGGLE_ASIDE: function (caller, act, data) {
         caller.frameView.toggleAside();
     },
@@ -1033,13 +1057,17 @@ fnObj.gridView01 = axboot.viewExtend(axboot.axGridView, {
             showLineNumber: true,
             target: $('[data-ax5grid="grid-view-01"]'),
             columns: [
-                {key: "title", label: "제목", width: 243, align: "center", sortable: false},
+                {key: "title", label: "제목", width: 200, align: "left", sortable: false},
                 {key: "registerUuid", label: "작성자", width: 120, align: "center", sortable: false},
-                {key: "registerDate", label: "작성일자",width: 100, align: "center", sortable: false}
+                {key: "registerDate", label: "작성일자",width: 143, align: "center", sortable: false},
+                {key: "contents", label: "내용",width: 0, align: "center", sortable: false},
+                {key: "fileName", label: "파일명",width: 0, align: "center", sortable: false},
+                {key: "filePath", label: "파일경로",width: 0, align: "center", sortable: false}
             ],
             body: {
                 onClick: function () {
                     this.self.select(this.dindex);
+                    ACTIONS.dispatch(ACTIONS.DETAIL_NOTICE,this.list[this.dindex])
                 }
             },
             onPageChange: function (pageNumber) {

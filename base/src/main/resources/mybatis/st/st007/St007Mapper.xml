@@ -24,26 +24,27 @@
                container.CONTAINER_TYPE_UUID containerTypeUuid,
                container.CONTAINER_NAME containerName
         FROM
-             (                SELECT
-                                  *
-                              FROM
-                                   (                        select
-                                                                   A.*,
-                                                                   (select
-                                                                           count(*)
-                                                                    from
-                                                                         rc_item B
-                                                                           inner join
-                                                                             RS_RECORD_SCHEDULE_RESULT C
-                                                                             ON B.ITEM_UUID = C.ITEM_UUID
-                                                                    where
-                                                                        B.AGGREGATION_UUID = A.AGGREGATION_UUID
-                                                                      and disposal_complete_date is null                              ) as  cnt
-                                                            from
-                                                                 RC_AGGREGATION A) main
-                              WHERE
-                                  main.cnt >= 1                  ) schedule_result
-               INNER JOIN
+            (        SELECT
+                          *
+                      FROM
+                    (      select
+                                   A.*,
+                                   (select
+                                           count(*)
+                                    from
+                                         rc_item B
+                                           inner join
+                                             RS_RECORD_SCHEDULE_RESULT C
+                                             ON B.ITEM_UUID = C.ITEM_UUID
+                                    where
+                                        B.AGGREGATION_UUID = A.AGGREGATION_UUID
+                                      and disposal_complete_date is null  ) as  cnt
+                            from
+                                 RC_AGGREGATION A) main
+                      WHERE
+                          main.cnt >= 1
+            ) schedule_result
+        INNER JOIN
                  (
                  SELECT
                         ar.AGGREGATION_UUID,
@@ -56,22 +57,22 @@
                  GROUP BY ar.AGGREGATION_UUID, ar.CONTAINER_UUID
                  ) etc
                  ON etc.AGGREGATION_UUID = schedule_result.AGGREGATION_UUID
-               INNER JOIN
+        INNER JOIN
                  ST_ARRANGE_CONTAINERS_RESULT acr
                  ON acr.CONTAINER_UUID = etc.CONTAINER_UUID
-               INNER JOIN
+        INNER JOIN
                  ST_LOCATION location
                  ON location.LOCATION_UUID = acr.LOCATION_UUID
-               INNER JOIN
+        INNER JOIN
                  ST_CONTAINER container
                  ON container.CONTAINER_UUID = etc.CONTAINER_UUID
-               INNER JOIN
+        INNER JOIN
                  ST_SHELF shelf
                  ON shelf.SHELF_UUID = location.SHELF_UUID
-               INNER JOIN
+        INNER JOIN
                  ST_REPOSITORY repository
                  ON repository.REPOSITORY_UUID = shelf.REPOSITORY_UUID
-               INNER JOIN
+        INNER JOIN
                  (
                  SELECT
                         AGGREGATION_UUID                                                                         as uuid,
