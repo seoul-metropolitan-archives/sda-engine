@@ -28,6 +28,7 @@ spring:
       file-size-threshold: 0
       max-file-size: 8192Mb
       max-request-size: 8192Mb
+      location: /Users/jspark226/devspace/upload/dip/tmp
 
     # HTTP Encoding
     encoding:
@@ -73,18 +74,25 @@ dip.process:
     cron: "0 0 5 31 12 *"
   #tmp.dir: D:\seoul-ams-repo\dip\tmp\
   #digital.file.dir: D:\seoul-ams-repo\dip\tmp\
-  tmp.dir: /Users/jspark226/devspace/upload/dip/tmp/
-  digital.file.dir: /Users/jspark226/devspace/upload/dip/tmp/
+  tmp.dir: F:/work/yangjae/seoul_ams/devspace/upload/dip/tmp/
+  digital.file.dir: F:/work/yangjae/seoul_ams/devspace/upload/dip/tmp/
+dashboard:
+  batch:
+    enable: false
+    cron: "0 0 1 * * *"
 #개발
 #window
 #workflow.module.path: D:\02.DreamAntDev\git-workspaces\java\seoul-ams\base\src\main\resources\workflow-modules\
 #mac
 workflow.module.path: /Users/jspark226/IdeaProjects/seoul-ams/base/src/main/resources/workflow-modules/
+service.module.path: /Users/jspark226/IdeaProjects/seoul-ams/base/src/main/resources/service-modules/
 
 #운영
 #workflow.module.path: /app/www/WEB-INF/classes/native-libs/
-streaming.url: http://98.33.1.163
-streaming.port: 18080
+#streaming.url: http://98.33.1.163
+streaming.url: http://192.168.0.5
+streaming.port: 18088
+#streaming.port: 18080
 streaming.context: /streamdocs
 streaming.param: /v3/documents/sftp?sftpPath=sftp://
 
@@ -100,11 +108,10 @@ taskExecutor:
 repository:
   #upload: /Users/younghyunshin/Downloads/upload
   #contents: /Users/younghyunshin/Downloads/contents
-  upload: D:/devspace/upload
-  contents: D:/devspace/contents
-  temp: D:/devspace/contents/temp
-  streamDoc : D:/devspace/contents/stream
-
+  upload: F:/work/yangjae/seoul_ams/devspace/upload
+  contents: F:/work/yangjae/seoul_ams/devspace/contents
+  streamDoc: F:/work/yangjae/seoul_ams/devspace/streamDoc
+  temp: F:/work/yangjae/seoul_ams/devspace/contents/temp
 
 # ONSEMIRO
 onsemiro:

@@ -5,8 +5,8 @@
 
 <mapper namespace="rmsoft.ams.seoul.st.st012.dao.St012Mapper">
     <select id="getStWithoutNoticeInoutHistResult" resultType="St01201VO" parameterType="St01201VO" statementType="PREPARED">
-        SELECT inout_record.AGGREGATION_UUID,
-               inout_record.WITHOUT_NOTICE_IO_RECORD_UUID,
+        SELECT inout_record.AGGREGATION_UUID aggregationUuid,
+               inout_record.WITHOUT_NOTICE_IO_RECORD_UUID withoutNoticeIoRecordUuid,
                B.code,
                B.title,
                B."level",
@@ -15,27 +15,31 @@
                B.author,
                B.descStrDate,
                B.descEdDate,
-               repository.REPOSITORY_NAME,
-               shelf.SHELF_NAME,
+                repository.REPOSITORY_UUID repositoryUuid,
+                repository.REPOSITORY_NAME repositoryName,
+                shelf.SHELF_UUID shelfUuid,
+                shelf.SHELF_NAME shelfName,
                (location.ROW_NO || '행 ' || location.COLUMN_NO || '열') as locationName
         FROM ST_WITHOUT_NOTICE_INOUT_RECORD inout_record
-          INNER JOIN (
+        INNER JOIN ST_WITHOUT_NOTICE_INOUT_HIST inout_hist
+          ON inout_hist.WITHOUT_NOTICE_IO_RECORD_UUID = inout_record.WITHOUT_NOTICE_IO_RECORD_UUID
+        INNER JOIN (
             SELECT ar.AGGREGATION_UUID, ar.CONTAINER_UUID    FROM RC_ITEM item
               INNER JOIN ST_ARRANGE_RECORDS_RESULT ar
                 ON ar.AGGREGATION_UUID = item.AGGREGATION_UUID
             ) etc
           ON etc.AGGREGATION_UUID = inout_record.AGGREGATION_UUID
-          INNER JOIN ST_ARRANGE_CONTAINERS_RESULT acr
+        INNER JOIN ST_ARRANGE_CONTAINERS_RESULT acr
             ON acr.CONTAINER_UUID = etc.CONTAINER_UUID
-          INNER JOIN ST_LOCATION location
+        INNER JOIN ST_LOCATION location
             ON location.LOCATION_UUID = acr.LOCATION_UUID
-          INNER JOIN ST_CONTAINER container
+        INNER JOIN ST_CONTAINER container
             ON container.CONTAINER_UUID = etc.CONTAINER_UUID
-          INNER JOIN ST_SHELF shelf
+        INNER JOIN ST_SHELF shelf
             ON shelf.SHELF_UUID = location.SHELF_UUID
-          INNER JOIN ST_REPOSITORY repository
+        INNER JOIN ST_REPOSITORY repository
             ON repository.REPOSITORY_UUID = shelf.REPOSITORY_UUID
-          INNER JOIN (SELECT AGGREGATION_UUID                                                                         as uuid,
+        INNER JOIN (SELECT AGGREGATION_UUID                                                                         as uuid,
                              1                                                                                        as orderNo,
                              (SELECT CODE_NAME
                               FROM AD_CODE_DETAIL
@@ -45,7 +49,7 @@
                              (SELECT CODE_NAME
                               FROM AD_CODE_DETAIL
                               WHERE CODE_DETAIL_UUID = Z1.TYPE_UUID)                                                  as "type",
-                             (SELECT TO_CHAR(LEVEL_NO)
+                             (SELECT LEVEL_NAME
                               FROM RC_LEVEL
                               WHERE LEVEL_UUID = Z1.LEVEL_UUID)                                                       as "level",
                              AUTHOR                                                                                   as author,
@@ -78,8 +82,29 @@
                                 FROM RC_ITEM Z1) B on B.UUID = inout_record.AGGREGATION_UUID
         <where>
             1=1
-            <if test="inoutExceptUuid != null">
-                AND INOUT_EXCEPT_UUID = #{inoutExceptUuid}
+            AND inout_record.REASON is null
+            <if test="code != null">
+                <![CDATA[
+                   AND B.code  LIKE '%' || #{code} || '%'
+                ]]>
+            </if>
+            <if test="title != null">
+                <![CDATA[
+                   AND B.title  LIKE '%' || #{title} || '%'
+                ]]>
+
+            </if>
+            <if test="title != null">
+                AND  repository.REPOSITORY_UUID = #{repositoryUuid}
+            </if>
+            <if test="shelfUuid != null">
+                AND  shelf.SHELF_UUID = #{shelfUuid}
+            </if>
+            <if test="descStrDate != null">
+                AND B.descStrDate <![CDATA[>=]]> TO_DATE(#{descStrDate},'yyyy-mm-dd')
+            </if>
+            <if test="descEdDate != null">
+                AND B.descEdDate <![CDATA[<]]> TO_DATE(#{descEdDate},'yyyy-mm-dd')+1
             </if>
         </where>
     </select>
@@ -101,9 +126,7 @@
         ST_INOUT_EXCEPT
         <where>
             1=1
-            <if test="requestName != null">
-                AND REQUEST_NAME LIKE '%' || #{requestName} || '%'
-            </if>
+
         </where>
     </select>
 

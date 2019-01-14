@@ -1,19 +1,33 @@
 package rmsoft.ams.seoul.st.st006.service;
 
+import io.onsemiro.core.api.response.ApiResponse;
+import io.onsemiro.core.code.ApiStatus;
 import io.onsemiro.core.domain.BaseService;
 import io.onsemiro.core.parameter.RequestParams;
+import io.onsemiro.utils.DateUtils;
+import io.onsemiro.utils.ModelMapperUtils;
+import io.onsemiro.utils.UUIDUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import rmsoft.ams.seoul.common.domain.StArrangeContainersResult;
 import rmsoft.ams.seoul.common.repository.ClClassConRepository;
 import rmsoft.ams.seoul.common.repository.ClClassRepository;
 import rmsoft.ams.seoul.common.repository.ClClassifyRecordResultRepository;
+import rmsoft.ams.seoul.st.st004.service.St004Service;
+import rmsoft.ams.seoul.st.st004.vo.St004;
+import rmsoft.ams.seoul.st.st004.vo.St00401VO;
 import rmsoft.ams.seoul.st.st006.dao.St006Mapper;
 import rmsoft.ams.seoul.st.st006.vo.St00601VO;
 import rmsoft.ams.seoul.st.st006.vo.St00603VO;
+import rmsoft.ams.seoul.utils.CommonCodeUtils;
 
 import javax.inject.Inject;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -25,6 +39,8 @@ public class St006Service extends BaseService {
 
     @Inject
     private St006Mapper st006Mapper;
+    @Inject
+    private St004Service st004Service;
     @Autowired
     private ClClassRepository clClassRepository;
     @Autowired
@@ -42,14 +58,19 @@ public class St006Service extends BaseService {
     public Page<St00601VO> getStContainer(Pageable pageable, RequestParams<St00601VO> requestParams) {
 
         St00601VO st00601VO = new St00601VO();
-        // st00601VO.setClassUuid(requestParams.getString("classUuid"));
-        // st00601VO.setStatusUuid(requestParams.getString("statusUuid01"));
-//        st00601VO.setAggregationCode(requestParams.getString("aggregationCode"));
-//        st00601VO.setTitle(requestParams.getString("title"));
-//        st00601VO.setTypeUuid(requestParams.getString("typeUuid"));
-//        st00601VO.setArrangedFromDate(requestParams.getString("arrangedFromDate01"));
-//        st00601VO.setArrangedToDate(requestParams.getString("arrangedToDate01"));
-//        st00601VO.setContainerUuid(requestParams.getString("containerUuid"));
+        st00601VO.setContainerUuid(requestParams.getString("containerUuid"));
+        st00601VO.setStatusUuid(requestParams.getString("statusUuid"));
+         st00601VO.setContainerName(requestParams.getString("containerName"));
+
+        st00601VO.setContainerTypeUuid(requestParams.getString("containerTypeUuid"));
+        // st00601VO.setParentContainerName(requestParams.getString("parentContainerName"));
+        st00601VO.setParentContainerUuid(requestParams.getString("parentContainerUuid"));
+        st00601VO.setControlNumber(requestParams.getString("controlNumber"));
+        st00601VO.setProvenance(requestParams.getString("provenance"));
+        st00601VO.setCreationStartDate(requestParams.getString("creationStartDate"));
+        st00601VO.setCreationEndDate(requestParams.getString("creationEndDate"));
+
+
         return filter(st006Mapper.getStContainer(st00601VO), pageable, "", St00601VO.class);
     }
 
@@ -61,6 +82,21 @@ public class St006Service extends BaseService {
 //        vo.setStatusUuid(requestParams.getString("statusUuid02"));
         List<St00603VO> ddd = st006Mapper.getSelectedItem(vo);
         return filter(ddd, pageable, "", St00603VO.class);
+    }
+
+    @Transactional
+    public ApiResponse saveArrangeRecordList(St00401VO requestParams) {
+
+
+        // 해당 container 의 자신포함 하위node 싹 가져옴
+        List<St00401VO> aList = st006Mapper.getContainerTree(requestParams);
+        for( St00401VO eachContainer : aList){
+            // 필요한게 location uuid 이므로 넣어줌.
+            eachContainer.setLocationUuid(requestParams.getLocationUuid());
+        }
+        // 모든 하위 노드에 ST_ARRANGE_RECORDS_RESULT uuid 공통으로 넣음.
+        st004Service.saveArrangeRecordList(aList);
+        return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");
     }
 
     /*public ApiResponse updateStatus(List<St00601VO> list) {

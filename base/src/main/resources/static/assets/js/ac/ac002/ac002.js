@@ -23,12 +23,11 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH: function (caller, act, data) {
         axboot.ajax({
             type: "GET",
-            url: "/api/v1/ad003/04/save",
+            url: "/api/v1/ad/ad010/01/getList01",
             async : false,
-            data: $.extend({}, {pageSize: 1000},{ crntPwd:$("#crntPwd").val(), newPwd:$("#newPwd").val(), userUuid:sessionJson.userUuid }),
+            data: null,
             callback: function (res) {
-                axToast.push(axboot.getCommonMessage("AC002_03"));
-                popupReset();
+                fnObj.formView.setData(res);
             },
             options: {
                 onError: axboot.viewError
@@ -36,10 +35,12 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         });
         return false;
     },
+    PAGE_NOTICE: function (caller, act, data) {
+
+    },
     TOGGLE_ASIDE: function (caller, act, data) {
         caller.frameView.toggleAside();
     },
-
     MENU_OPEN: function (caller, act, data) {
         caller.tabView.open(data);
     },
@@ -61,10 +62,11 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             }
         });
     },
-    RECORD_SEARCH: function (caller,act, data) {
-        var item = getMenu("record explorer");
-        item.menuParams = $.extend({},{type: "search", searchWord:"기록물"});
-        fnObj.tabView.open(item);
+    PAGE_MOVE: function (caller,act, data) {
+        var item = getMenu(data.pageName);
+        var parentsObj = parent.window.fnObj;
+        item.menuParams = $.extend({},{type: data.type,searchWord:data.param});
+        parentsObj.tabView.open(item);
     },
     dispatch: function (caller, act, data) {
         var result = ACTIONS.exec(caller, act, data);
@@ -85,8 +87,8 @@ fnObj.pageStart = function () {
     this.tabView.initView();
     this.activityTimerView.initView();
     this.gridView01.initView();
+    this.formView.initView();
     leftcloseView();
-
 };
 
 fnObj.pageResize = function () {
@@ -202,9 +204,6 @@ fnObj.frameView = axboot.viewExtend({
             this.asideView.initView();
             this.asideView.print();
         }
-        $("#searchBtn").click(function (){
-            ACTIONS.dispatch(ACTIONS.RECORD_SEARCH);
-        });
         $("#userNm").click(function (){
             if($(".user_edit").css("display") == "block"){
                 $(".user_edit").css("display", "none");
@@ -1048,6 +1047,68 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
                 ACTIONS.dispatch(ACTIONS.ITEM_ADD);
             }
         });
+    }
+});
+
+fnObj.formView = axboot.viewExtend(axboot.formView, {
+    getDefaultData: function () {
+        return $.extend({}, axboot.formView.defaultData, {useYn: ""});
+    },
+    initView: function () {
+        this.target = $("#formView01");
+        this.model = new ax5.ui.binder();
+        this.model.setModel(this.getDefaultData(), this.target);
+        this.modelFormatter = new axboot.modelFormatter(this.model); // 모델 포메터 시작
+        this.initEvent();
+    },
+    initEvent: function () {
+        var _this = this;
+        $("#searchBtn").click(function (){
+            ACTIONS.dispatch(ACTIONS.PAGE_MOVE,{pageName: "record explorer",type: "search",param: $("[data-ax-path='searchInput']").val()});
+        });
+        $(".temporaryRecords").click(function (){
+            ACTIONS.dispatch(ACTIONS.PAGE_MOVE,{pageName: "record explorer",type: '', param:''});
+        });
+        $("#classificationScheme").click(function (){
+            ACTIONS.dispatch(ACTIONS.PAGE_MOVE,{pageName: "classification scheme",param:''});
+        });
+        $("#class").click(function (){
+            ACTIONS.dispatch(ACTIONS.PAGE_MOVE,{pageName: "class",param:''});
+        });
+        $(".classifyRecords").click(function (){
+            ACTIONS.dispatch(ACTIONS.PAGE_MOVE,{pageName: "classify records",param:''});
+        });
+        $("#generalRecordsSchedule").click(function (){
+            ACTIONS.dispatch(ACTIONS.PAGE_MOVE,{pageName: "general records schedule",param:''});
+        });
+        $("#recordSchedule").click(function (){
+            ACTIONS.dispatch(ACTIONS.PAGE_MOVE,{pageName: "record schedule",param:''});
+        });
+        $(".recordScheduling").click(function (){
+            ACTIONS.dispatch(ACTIONS.PAGE_MOVE,{pageName: "record scheduling",param:''});
+        });
+        $("#disposalFreezeEvent").click(function (){
+            ACTIONS.dispatch(ACTIONS.PAGE_MOVE,{pageName: "disposal freeze event",param:''});
+        });
+        $("#disposalFreezeDegree").click(function (){
+            ACTIONS.dispatch(ACTIONS.PAGE_MOVE,{pageName: "disposal freeze degree",param:''});
+        });
+        $(".disposalFreezeRecords").click(function (){
+            ACTIONS.dispatch(ACTIONS.PAGE_MOVE,{pageName: "disposal freeze records",param:''});
+        });
+        $("#dfRecordDraft").click(function (){
+            ACTIONS.dispatch(ACTIONS.PAGE_MOVE,{pageName: "disposal records",param:''});
+        });
+        ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+    },
+    setData: function (data) {
+        if (typeof data === "undefined") data = this.getDefaultData();
+        data = $.extend({}, data);
+
+        this.target.find('[data-ax-path="key"]').attr("readonly", "readonly");
+
+        this.model.setModel(data);
+        this.modelFormatter.formatting(); // 입력된 값을 포메팅 된 값으로 변경
     }
 });
 /**

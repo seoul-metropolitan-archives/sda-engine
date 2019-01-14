@@ -409,7 +409,7 @@
           AND
           ROWNUM = 1
           AND
-          LOWER(Z1.PROGRAM_NAME) = #{progNm}
+          LOWER(TRIM(Z1.PROGRAM_NAME)) = #{progNm}
     </select>
 
 

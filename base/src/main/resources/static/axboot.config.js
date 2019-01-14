@@ -172,8 +172,8 @@
 
             },
             "ARRANGE_NOT_ARRANGED_CONTAINER_POPUP" :{
-                width: 600,
-                height: 300,
+                width: 900,
+                height: 700,
                 iframe: {
                     url: "/st/st006/st006-p01"
                 }

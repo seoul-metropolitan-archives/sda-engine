@@ -11,4 +11,6 @@ public interface St012Mapper extends MyBatisMapper {
     List<St01201VO> getStInoutExcept(St01201VO vo);
 
     List<St01201VO> getStExceptRecordResult(St01201VO vo);
+    List<St01201VO> getStWithoutNoticeInoutHistResult(St01201VO vo);
+
 }

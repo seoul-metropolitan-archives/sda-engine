@@ -178,17 +178,23 @@
             /*.bottom_close{ margin-bottom: -3px}*/
 
         }
-        #first, #second, #third, #fourth,#fifth {
-            display: inline-block;
-            vertical-align: top;
-            font-size: 12px;
-            height: 100%;
-            margin-right: -4px;
-            width: 20%;
-        }
-        .content_frame {
-            isplay:table; width:70%; padding-left:10px; float:left
-        }
+        .panel-sub { display: inline-block; vertical-align: top; font-size: 12px; height: 100%; margin-bottom: 0px!important;min-width: 240px!important; }
+        #searchBtn { width: 50px; height: 100%; border: 0px; background: #41a679; outline: none; float: right; color: #ffffff; margin: 0px; font-size: 18px; }
+        .gallery {overflow: auto!important;}
+        .content_frame { display:table; width:70%; padding-left:10px; float:left; }
+        .panel-heading {font-size: 14px}
+        .panel-heading01 { border: 0px!important; background: #ddd!important; color: #101010!important; font-size: 15px!important;font-weight: bold!important; }
+        .panel-right { margin-bottom: 19px;border: 1px solid #ddd; }
+        .panel-end { margin-bottom: 0;border: 1px solid #ddd;}
+        .number-label { font-size : 12px!important;}
+        .panel-sub > .panel {margin-bottom: 0px!important;}
+        ul>li>label {font-weight: bold;font-size : 13px;text-overflow: ellipsis!important;}
+        ul>ul>li>label {font-weight:normal; font-size : 12px;text-overflow: ellipsis!important;}
+        ul>li {padding-left:7px!important;text-overflow: ellipsis!important;}
+        ul>ul>li {padding-left:14px!important; height: 18px;text-overflow: ellipsis!important;}
+        li {text-overflow: ellipsis!important;}
+        ul{list-style-type: disc!important;}
+        label {padding: 0px!important;margin: 0!important;}
     </style>
 </head>
 <body class="ax-body" th:classappend="${axbody_class}" onselectstart="return false;">
@@ -303,50 +309,157 @@
 
         <!--나의 메뉴인 즐겨찾기와 최근메뉴-->
         <div id="main-content" class="ax-frame-contents" style="left: 0%; padding-left: 0px; background: white">
-            <div class="contents_wrap" style="padding: 60px 75px 180px 75px">
-                <div class="div_tablerow" style="width: 100%;">
-                    <div style="text-align: center; margin-bottom: 50px;">
-                        <div style="display: inline-block; height: 52px;width: 700px;border: 1px solid #41a679;background: #ffffff;">
-                            <input type="text" data-ax-path="searchInput" placeholder="검색어 입력" style="font-size: 24px;width: 640px;padding: 10px;border: 0px;outline: none;float: left;height: 100%">
-                            <button id="searchBtn" style="width: 50px;height: 100%;border: 0px; background: #41a679;outline: none;float: right;color: #ffffff;margin: 0px; font-size: 18px">검색<button>
+            <form name="formView01" id="formView01" method="post" onsubmit="return false">
+                <div class="contents_wrap" style="padding: 60px 75px 180px 75px">
+                    <div class="div_tablerow" style="width: 100%;height: 107px;">
+                        <div style="text-align: center; margin-bottom: 50px;">
+                            <div style="display: inline-block; height: 52px;width: 700px;border: 1px solid #41a679;background: #ffffff;">
+                                <input type="text" data-ax-path="searchInput" placeholder="검색어 입력" style="font-size: 24px;width: 640px;padding: 10px;border: 0px;outline: none;float: left;height: 100%">
+                                <button id="searchBtn">검색</button>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="div_tablerow" style="width: 100%;height: 100%;">
-                    <div style="display:table; width:30%; padding-right: 10px; float:left">
-                        <div style="width: 100%;" class="div_tablerow bdb" >
-                            <div class="panel panel-default" style="margin-bottom: 0px;border: 1px solid #41a679;">
-                                <p class="panel-heading" style="border: 0px; background: #41a679;color: #ffffff;font-size: 15px">공지사항</p>
-                                <div class="panel-body gallery" style="height: 100%;width: 100%;padding:2px">
-                                    <div data-ax5grid="grid-view-01" data-fit-height-content="grid-view-01" style="height: 516px;"></div>
+                    <div style="width: 100%;height: 100%;">
+                        <div style="display:table; width:30%; padding-right: 10px; float:left">
+                            <div style="width: 100%;" class="div_tablerow bdb" >
+                                <div class="panel panel-default panel-end">
+                                    <p class="panel-heading panel-heading01">Notice</p>
+                                    <div class="panel-body gallery" style="height: 100%;width: 100%;padding:2px">
+                                        <div data-ax5grid="grid-view-01" data-fit-height-content="grid-view-01" style="height: 546px;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="content_frame">
+                            <div class="panel panel-default panel-right">
+                                <p class="panel-heading panel-heading01">Record Statistics</p>
+                                <div class="gallery" style="width: 100%; padding:5px">
+                                    <div style="height: 351px">
+                                        <div class="panel-sub">
+                                            <div class="panel panel-default">
+                                                <p class="panel-heading">ㆍRecords</p>
+                                                <div class="panel-body gallery" style="height: 314px;width: 100%;padding:10px 2px;">
+                                                    <ul style="height: 100%">
+                                                        <li class="temporaryRecords"><label class="li-bold">- Temporary Records</label> </li>
+                                                        <li class="temporaryRecords" style="padding-left: 20px!important;"><label> : &nbsp;</label><label class="number-label" data-ax-path="temporaryAggregation"></label><label>/</label><label data-ax-path="temporaryItem"></label></li>
+                                                        <ul>
+                                                            <li><label>ㆍAggregation :&nbsp; </label><label data-ax-path="temporaryAggregation"></label></li>
+                                                            <li><label>ㆍItem :&nbsp; </label><label data-ax-path="temporaryItem"/></li>
+                                                        </ul>
+                                                        <li class="temporaryRecords"><label id="normalRecords" class="li-bold"> - Normal Records </label></li>
+                                                        <li class="temporaryRecords" style="padding-left: 20px!important;"><label> : &nbsp;</label><label data-ax-path="normalRecords"></label><label>/</label><label data-ax-path="normalItem"/></li>
+                                                        <ul>
+                                                            <li><label>ㆍRecord Group : &nbsp;</label><label data-ax-path="normalRecordGroup"/></li>
+                                                            <li><label>ㆍSeries : &nbsp;</label><label data-ax-path="normalSeries"/></li>
+                                                            <li><label>ㆍFile : &nbsp;</label><label data-ax-path="normalFile"/></li>
+                                                            <li><label>ㆍNone : &nbsp;</label><label data-ax-path="normalNone"/></li>
+                                                            <li><label>ㆍItem : &nbsp;</label><label data-ax-path="normalItem"/></li>
+                                                        </ul>
+                                                        <li class="temporaryRecords"><label class="li-bold" id="publishedRecords"> - Published Records</label></li>
+                                                        <li class="temporaryRecords" style="padding-left: 20px!important;"><label> : &nbsp;</label><label data-ax-path="publishedRecords"></label><label>/</label><label data-ax-path="publishedItem"></label></li>
+                                                        <ul>
+                                                            <li><label>ㆍRecord Group : &nbsp;</label><label data-ax-path="publishedRecordGroup"/></li>
+                                                            <li><label>ㆍSeries : &nbsp;</label><label data-ax-path="publishedSeries"/></li>
+                                                            <li><label>ㆍFile : &nbsp;</label><label data-ax-path="publishedFile"/></li>
+                                                            <li><label>ㆍItem : &nbsp;</label><label data-ax-path="publishedItem"/></li>
+                                                        </ul>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="panel-sub">
+                                            <div class="panel panel-default">
+                                                <p class="panel-heading">ㆍClassification</p>
+                                                <div class="panel-body gallery" style="height: 314px;width: 100%;padding:10px 2px;">
+                                                    <ul style="height: 100%">
+                                                        <li id="classificationScheme"><label class="li-bold"> - Classification Scheme : &nbsp;</label><label data-ax-path="classificationScheme"></label> </li>
+                                                        <ul>
+                                                            <li><label>ㆍDraft : &nbsp;</label><label data-ax-path="classificationDraft"/></li>
+                                                            <li><label>ㆍConfirm : &nbsp;</label><label data-ax-path="classificationConfirm"/></li>
+                                                        </ul>
+                                                        <li id="class"><label class="li-bold"> - Class : &nbsp;</label><label data-ax-path="class"></label> </li>
+                                                        <ul>
+                                                            <li><label>ㆍDraft : &nbsp;</label><label data-ax-path="classDraft"/></li>
+                                                            <li><label>ㆍConfirm : &nbsp;</label><label data-ax-path="classConfirm"/></li>
+                                                        </ul>
+                                                        <li class="classifyRecords"><label class="li-bold"> - Classify Records(aggregation)</label></li>
+                                                        <li class="classifyRecords" style="padding-left: 20px!important;"><label> : &nbsp;</label><label data-ax-path="classifyRecord"></label><label>/</label><label data-ax-path="normalRecord"></label></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="panel-sub">
+                                            <div class="panel panel-default">
+                                                <p class="panel-heading">ㆍRecord Schedule</p>
+                                                <div class="panel-body gallery" style="height: 314px;width: 100%;padding:10px 2px;">
+                                                    <ul style="height: 100%">
+                                                        <li id="generalRecordsSchedule"><label class="li-bold"> - GRS : &nbsp;</label><label data-ax-path="generalRecordsSchedule"></label> </li>
+                                                        <ul>
+                                                            <li><label>ㆍDraft : &nbsp;</label><label data-ax-path="grsDraft"/></li>
+                                                            <li><label>ㆍConfirm : &nbsp;</label><label data-ax-path="grsConfirm"/></li>
+                                                        </ul>
+                                                        <li id="recordSchedule"><label class="li-bold"> - Records Schedule(RS) : &nbsp;</label><label data-ax-path="recordSchedule"></label> </li>
+                                                        <ul>
+                                                            <li><label>ㆍDraft : &nbsp;</label><label data-ax-path="rsDraft"/></li>
+                                                            <li><label>ㆍConfirm : &nbsp;</label><label data-ax-path="rsConfirm"/></li>
+                                                        </ul>
+                                                        <li class="recordScheduling"><label class="li-bold"> - Record Scheduling(item)</label></li>
+                                                        <li class="recordScheduling" style="padding-left: 20px!important;"><label> : &nbsp;</label><label data-ax-path="rsSchedulingRecord"></label><label>/</label><label data-ax-path="normalRecordItem"></label></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="panel-sub">
+                                            <div class="panel panel-default">
+                                                <p class="panel-heading">ㆍDisposal Freeze</p>
+                                                <div class="panel-body gallery" style="height: 314px;width: 100%;padding:10px 2px;">
+                                                    <ul style="height: 100%">
+                                                        <li id="disposalFreezeEvent"><label class="li-bold"> - Disposal Freeze Event : &nbsp;</label><label data-ax-path="disposalFreezeEvent"></label> </li>
+                                                        <ul>
+                                                            <li><label>ㆍDraft : &nbsp;</label><label data-ax-path="dfEventDraft"/></li>
+                                                            <li><label>ㆍConfirm : &nbsp;</label><label data-ax-path="dfEventConfirm"/></li>
+                                                        </ul>
+                                                        <li id="disposalFreezeDegree"><label class="li-bold"> - Disposal Freeze Degree :  &nbsp;</label><label data-ax-path="disposalFreezeDegree"></label> </li>
+                                                        <ul>
+                                                            <li><label>ㆍDraft : &nbsp;</label><label data-ax-path="dfDegreeDraft"/></li>
+                                                            <li><label>ㆍConfirm : &nbsp;</label><label data-ax-path="dfDegreeConfirm"/></li>
+                                                        </ul>
+                                                        <li class="disposalFreezeRecords"><label class="li-bold"> - Disposal Freeze Records(item)</label></li>
+                                                        <li class="disposalFreezeRecords" style="padding-left: 20px!important;"><label> : &nbsp;</label><label data-ax-path="dfFreezeRecord"></label><label>/</label><label data-ax-path="normalRecordItem"></label></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="panel-sub">
+                                            <div class="panel panel-default">
+                                                <p class="panel-heading">ㆍDisposal Records</p>
+                                                <div class="panel-body gallery" style="height: 314px;width: 100%;padding:10px 2px;">
+                                                    <ul style="height: 100%">
+                                                        <li id="dfRecordDraft"><label class="li-bold"> - Record for Disposal : &nbsp;</label><label data-ax-path="dfRecordDraft"></label><label>/</label><label data-ax-path="dfRecordConfirm"></label><label>/</label><label data-ax-path="dfRecordComplete"></label></li>
+                                                        <ul>
+                                                            <li><label>ㆍDraft : &nbsp;</label><label data-ax-path="dfRecordDraft"/></li>
+                                                            <li><label>ㆍConfirm : &nbsp;</label><label data-ax-path="dfRecordConfirm"/></li>
+                                                            <li><label>ㆍComplete : &nbsp;</label><label data-ax-path="dfRecordComplete"/></li>
+                                                        </ul>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="content_frame">
+                            <div class="panel panel-default panel-end">
+                                <p class="panel-heading panel-heading01">Storage Statistics</p>
+                                <div class="gallery" style="width: 100%">
+                                    <div style="height: 131px"></div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="content_frame">
-                        <div class="panel panel-default" style="margin-bottom: 19px;border: 1px solid #41a679;">
-                            <p class="panel-heading" style="border: 0px; background: #41a679;color: #ffffff;font-size: 15px">전자 기록물</p>
-                            <div class="gallery" style="width: 100%">
-                                <div style="height: 331px;">
-                                    <div id="first">First</div>
-                                    <div id="second">Second</div>
-                                    <div id="third">Third</div>
-                                    <div id="fourth">Fourth</div>
-                                    <div id="fifth">Fifth</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="content_frame">
-                        <div class="panel panel-default" style="margin-bottom: 0;border: 1px solid #41a679;">
-                            <p class="panel-heading" style="border: 0px; background: #41a679;color: #ffffff;font-size: 15px">비전자 기록물</p>
-                            <div class="gallery" style="width: 100%">
-                                <div style="height: 131px"></div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
-            </div>
+            </form>
         </div>
 
         <div layout:fragment="contents" style="visibility: hidden"></div>

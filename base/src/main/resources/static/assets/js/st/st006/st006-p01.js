@@ -1,6 +1,11 @@
 
 var fnObj = {};
 var parentsData;
+
+var repositoryUuid;
+var shelfUuid;
+var locationUuid;
+
 var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH_TREE: function (caller, act, data) {
         axboot.ajax({
@@ -51,10 +56,13 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         }
 */
 
+        var data = $.extend({repositoryUuid: repositoryUuid, shelfUuid:shelfUuid, locationUuid: locationUuid}, data);
+
         axboot.ajax({
             type: "PUT",
             url: "/api/v1/st/st006/01/save",
             data: JSON.stringify(data),
+
             callback: function (res) {
                 ACTIONS.dispatch(ACTIONS.PAGE_CLOSE, data);
             },
@@ -66,8 +74,12 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         return false;
     },
     PAGE_CLOSE: function (caller, act, data) {
+
         if (parent) {
-            parent.axboot.modal.callback(data);
+            if(parent.axboot.modalOpener == "modal")
+                parent.axboot.modal.callback(data);
+            else if(parent.axboot.modalOpener == "commonModal")
+                parent.axboot.commonModal.callback(data);
         }
     },
     PAGE_CLASSIFY: function (caller, act, data) {
@@ -94,6 +106,92 @@ var ACTIONS = axboot.actionExtend(fnObj, {
 
         return false;
     },
+    SEARCH_CONTAINER_SCH: function(caller, act, data){
+        axboot.modal.open({
+            modalType: "COMMON_POPUP",
+            preSearch : data["preSearch"],
+            sendData: function () {
+                return data;
+            },
+            callback: function (data) {
+                $("input[data-ax-path='parentContainerName']").val(data["CONTAINER_NAME"])
+                $("input[data-ax-path='parentContainerName']").attr("parentContainerName",data["CONTAINER_NAME"])
+                parentContainerUuid = data['CONTAINER_UUID'];
+                if(this.close)
+                    this.close();
+                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1,data);
+            }
+        });
+    },
+    SEARCH_CLASS_SCH : function(caller, act, data)
+    {
+        axboot.modal.open({
+            modalType: "COMMON_POPUP",
+            preSearch : data["preSearch"],
+            sendData: function () {
+                return data;
+            },
+            callback: function (data) {
+                $("input[data-ax-path='classificationCode']").val(data["CLASSIFICATION_NAME"])
+                $("input[data-ax-path='classificationCode']").attr("classificationCode",data["CLASSIFICATION_CODE"])
+                classificationSchemeUuid = data['CLASSIFICATION_SCHEME_UUID'];
+                selectedTreeItem = {orderKey:"", classTreeName:"",classificationSchemeUuid:"",orderNo:"",parentClassUuid:""};
+                if(this.close)
+                    this.close();
+                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH2,data);
+            }
+        });
+    },
+    SEARCH_REPOSITORY_SCH : function(caller, act, data)
+    {
+        axboot.modal.open({
+            modalType: "COMMON_POPUP",
+            preSearch : data["preSearch"],
+            sendData: function () {
+                return data;
+            },
+            callback: function (data) {
+                $("input[data-ax-path='repositoryName']").val(data["REPOSITORY_NAME"])
+                repositoryUuid = data['REPOSITORY_UUID'];
+                if(this.close) this.close();
+            }
+        });
+    },
+    SEARCH_SHELF_SCH : function(caller, act, data)
+    {
+        axboot.modal.open({
+            modalType: "COMMON_POPUP",
+            preSearch : data["preSearch"],
+            sendData: function () {
+                return data;
+            },
+            callback: function (data) {
+                $("input[data-ax-path='shelfName']").val(data["SHELF_NAME"])
+                shelfUuid = data['SHELF_UUID'];
+                statusUuid = data['STATUS_UUID'];
+                if(this.close) this.close();
+            }
+        });
+    },
+    SEARCH_LOCATION_SCH : function(caller, act, data)
+    {
+        axboot.modal.open({
+            modalType: "COMMON_POPUP",
+            preSearch : data["preSearch"],
+            sendData: function () {
+                return data;
+            },
+            callback: function (data) {
+
+                var text = `${data["ROWNO"]}행 ${data["COLUMNNO"]}열`;
+
+                $("input[data-ax-path='locationName']").val(text)
+                locationUuid = data['LOCATIONUUID'];
+                console.log('locationUuid', locationUuid);
+                if(this.close) this.close();
+            }
+        });
+    },
     dispatch: function (caller, act, data) {
         var result = ACTIONS.exec(caller, act, data);
         if (result != "error") {
@@ -107,7 +205,11 @@ var ACTIONS = axboot.actionExtend(fnObj, {
 
 fnObj.pageStart = function () {
     var _this = this;
-    parentsData = parent.axboot.modal.getData();
+    if(parent.axboot.modalOpener == "modal")
+        parentsData = parent.axboot.modal.getData();
+    else if(parent.axboot.modalOpener == "commonModal")
+        parentsData = parent.axboot.commonModal.getData();
+
     $.ajax({
         url: "/assets/js/controller/simple_controller.js",
         dataType: "script",
@@ -140,6 +242,7 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
     initView: function () {
         this.target = $("#formView01");
         this.model = new ax5.ui.binder();
+        console.log('qqqqqqqqq', this.getDefaultData());
         this.model.setModel(this.getDefaultData(), this.target);
         this.modelFormatter = new axboot.modelFormatter(this.model); // 모델 포메터 시작
         this.initEvent();
@@ -173,7 +276,7 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
             //}
         });
         $(".close_popup").click(function(){
-            ACTIONS.dispatch(ACTIONS.PAGE_CLOSE);
+            ACTIONS.dispatch(ACTIONS.PAGE_CLOSE );
         });
 
         var accordion = {
@@ -196,6 +299,110 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
             }
         };
         accordion.click('.accordion > ul');
+
+        var _this = this;
+        $("input[data-ax-path='repositoryName']").parents().eq(1).find("a").click(function(){
+            var data = {
+                popupCode : "PU137",
+                searchData : $("input[data-ax-path='repositoryName']").val().trim(),
+                preSearch : false
+            };
+            ACTIONS.dispatch(ACTIONS.SEARCH_REPOSITORY_SCH,data);
+        });
+
+        $("input[data-ax-path='shelfName']").parents().eq(1).find("a").click(function(){
+            if("" != repositoryUuid) {
+                var data = {
+                    popupCode: "PU138",
+                    searchData: repositoryUuid,
+                    preSearch: false
+                };
+                ACTIONS.dispatch(ACTIONS.SEARCH_SHELF_SCH, data);
+            }
+        });
+        $("input[data-ax-path='locationName']").parents().eq(1).find("a").click(function(){
+            if("" != shelfUuid) {
+                var data = {
+                    popupCode: "PU147",
+                    searchData: shelfUuid,
+                    preSearch: false
+                };
+                ACTIONS.dispatch(ACTIONS.SEARCH_LOCATION_SCH, data);
+            }
+        });
+
+        $("input[data-ax-path='parentContainerName']").parents().eq(1).find("a").click(function(){
+            var data = {
+                popupCode : "PU135",
+                searchData : $("input[data-ax-path='parentContainerName']").val().trim(),
+                preSearch : false
+            };
+            ACTIONS.dispatch(ACTIONS.SEARCH_CONTAINER_SCH,data);
+        });
+        $("input[data-ax-path='parentContainerName']").focusout(function(){
+
+            if("" != $(this).val().trim())
+            {
+                var data = {
+                    popupCode : "PU135",
+                    searchData : $(this).val().trim()
+                };
+                ACTIONS.dispatch(ACTIONS.SEARCH_CONTAINER_SCH,data);
+            }
+
+        });
+        $("input[data-ax-path='containerName']").focusout(function(){
+
+            if("" == $(this).val().trim())
+            {
+                $("input[data-ax-path='containerName']").val("");
+            }
+        });
+        $("input[data-ax-path='provenance']").focusout(function(){
+
+            if("" == $(this).val().trim())
+            {
+                $("input[data-ax-path='provenance']").val("");
+            }
+        });
+
+        $("input[data-ax-path='containerName'],input[data-ax-path='provenance'] ,input[data-ax-path='controlNumber']").keyup(function(){
+            if(13 == event.keyCode)
+                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+        });
+        $("select[data-ax-path='statusUuid'], select[data-ax-path='containerTypeUuid']").change(function() {
+            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+        });
+
+        $(".bdb").delegate("#rg_tree_allopen", "click", function () {
+            _this.expandAll();
+        });
+        $(".bdb").delegate("#rg_tree_allclose", "click", function () {
+            _this.collapseAll();
+        });
+
+        $("input[data-ax-path='creationStartDate']").keyup(function () {
+            var date = this.value;
+            if (date.match(/^\d{4}$/) !== null) {
+                this.value = date + '-';
+            } else if (date.match(/^\d{4}\-\d{2}$/) !== null) {
+                this.value = date + '-';
+            }
+        });
+        $("input[data-ax-path='creationStartDate']").keypress(function () {
+            if ((event.keyCode < 48) || (event.keyCode > 57)) event.returnValue = false;
+        });
+        $("input[data-ax-path='creationEndDate']").keyup(function () {
+            var date = this.value;
+            if (date.match(/^\d{4}$/) !== null) {
+                this.value = date + '-';
+            } else if (date.match(/^\d{4}\-\d{2}$/) !== null) {
+                this.value = date + '-';
+            }
+        });
+        $("input[data-ax-path='creationEndDate']").keypress(function () {
+            if ((event.keyCode < 48) || (event.keyCode > 57)) event.returnValue = false;
+        });
     },
     getData: function () {
         var data = this.modelFormatter.getClearData(this.model.get()); // 모델의 값을 포멧팅 전 값으로 치환.

@@ -19,16 +19,28 @@
                 <div style=" height:30px; width:100%" class="bgf7 div_tablerow">
                     <ul class="bdb">
                         <th:block layout:insert="~{/fragments/page-buttons :: bookmark}"/>
+                        <li style="text-align:right; width:50%;">
+                            <button class="btn_co btn_arrange" th:id="arrange">
+                                <span class="btn_icon_co">&nbsp;</span>
+                                <span class="btn_main_txt">Arrange</span>
+                            </button>
+                            <button class="btn_i" th:id="inquiry">
+                                <span class="btn_icon">&nbsp;</span>
+                                <span class="btn_main_txt">Inquiry(I)</span>
+                            </button>
+                        </li>
                     </ul>
                 </div>
                 <!-- 상단검색 -->
                 <div class="bdb div_tablerow">
                     <dl>
+
                         <dt class="w150">Container Name</dt>
                         <dd>
                             <input type=text style="width:135px" data-ax-path="containerName">
                         </dd>
-                        <th:block layout:insert="~{/fragments/page-buttons :: searchInputYellow ('Parent Container Name','parentContainerName')}"/>
+                        <th:block
+                                layout:insert="~{/fragments/page-buttons :: searchInput ('Parent Container Name','parentContainerName')}"/>
                         <dt class="mgl_5 w120">Container Type</dt>
                         <dd>
                             <select data-ax-path="containerTypeUuid" style="width:135px;">
@@ -48,16 +60,20 @@
                         <dt>Creation Date</dt>
                         <dd class="w_auto">
                             <div class="input-group" data-ax5picker="date">
-                                <div class="cld_box" style="background-color: #fffdd6">
-                                    <input type="text" data-ax-path="creationStartDate" style="background-color: #fffdd6;ime-mode:disabled;"
+                                <div class="cld_box" style=" ">
+                                    <input type="text" data-ax-path="creationStartDate"
+                                           style=" ime-mode:disabled;"
                                            placeholder="YYYY-MM-DD" maxlength="10">
-                                    <img title="calendar" class="ui-datepicker-trigger" alt="..." src="/assets/images/ams/calendar.png" >
+                                    <img title="calendar" class="ui-datepicker-trigger" alt="..."
+                                         src="/assets/images/ams/calendar.png">
                                 </div>
                                 ~
-                                <div class="cld_box" style="background-color: #fffdd6">
-                                    <input type="text" data-ax-path="creationEndDate" style="background-color: #fffdd6;ime-mode:disabled;"
+                                <div class="cld_box" style=" ">
+                                    <input type="text" data-ax-path="creationEndDate"
+                                           style=" ime-mode:disabled;"
                                            placeholder="YYYY-MM-DD" maxlength="10">
-                                    <img title="calendar" class="ui-datepicker-trigger" alt="..." src="/assets/images/ams/calendar.png">
+                                    <img title="calendar" class="ui-datepicker-trigger" alt="..."
+                                         src="/assets/images/ams/calendar.png">
                                 </div>
                             </div>
                         </dd>
@@ -73,14 +89,14 @@
                                 <th:block layout:insert="~{/fragments/page-buttons :: dot('미배치 Container')}"/>
                                 <li style="text-align:right; width:83%;">
 
-                                    <button class="btn_co btn_arrange" th:id="arrange">
-                                        <span class="btn_icon_co">&nbsp;</span>
-                                        <span class="btn_main_txt">Arrange</span>
-                                    </button>
-                                    <button class="btn_i" th:id="inquiry">
-                                        <span class="btn_icon">&nbsp;</span>
-                                        <span class="btn_main_txt">Inquiry(I)</span>
-                                    </button>
+                                    <!--<button class="btn_co btn_arrange" th:id="arrange">-->
+                                    <!--<span class="btn_icon_co">&nbsp;</span>-->
+                                    <!--<span class="btn_main_txt">Arrange</span>-->
+                                    <!--</button>-->
+                                    <!--<button class="btn_i" th:id="inquiry">-->
+                                    <!--<span class="btn_icon">&nbsp;</span>-->
+                                    <!--<span class="btn_main_txt">Inquiry(I)</span>-->
+                                    <!--</button>-->
                                     <!--<button class="btn_a">-->
                                     <!--<span class="btn_icon">&nbsp;</span>-->
                                     <!--<span class="btn_main_txt">Add</span>-->
@@ -117,7 +133,6 @@
                             </div>
                         </div>
                     </div>
-
 
 
                 </div>

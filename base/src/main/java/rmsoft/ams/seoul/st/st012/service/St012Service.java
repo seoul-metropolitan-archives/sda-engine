@@ -13,11 +13,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import rmsoft.ams.seoul.common.domain.StInoutExcept;
+import rmsoft.ams.seoul.common.domain.StWithoutNoticeInoutRecord;
 import rmsoft.ams.seoul.common.repository.StExceptRecordResultRepository;
 import rmsoft.ams.seoul.common.repository.StInoutExceptRepository;
 
+import rmsoft.ams.seoul.common.repository.StWithoutNoticeInoutRecordRepository;
 import rmsoft.ams.seoul.st.st012.dao.St012Mapper;
 import rmsoft.ams.seoul.st.st012.vo.St01201VO;
+import rmsoft.ams.seoul.st.st012.vo.St01202VO;
 
 import javax.inject.Inject;
 import java.sql.Timestamp;
@@ -30,11 +33,22 @@ public class St012Service extends BaseService {
     private St012Mapper st012Mapper;
 
     @Autowired
-    private StInoutExceptRepository stInoutExceptRepository;
+    private StWithoutNoticeInoutRecordRepository stWithoutNoticeInoutRecordRepository;
 
-    @Autowired
-    private StExceptRecordResultRepository stExceptRecordResultRepository;
 
+    public Page<St01201VO> getStWithoutNoticeInoutHistResult(Pageable pageable, RequestParams<St01201VO> requestParams) {
+        St01201VO St01201VO = new St01201VO();
+
+        St01201VO.setCode(requestParams.getString("code"));
+        St01201VO.setTitle(requestParams.getString("title"));
+        St01201VO.setRepositoryUuid(requestParams.getString("repositoryUuid"));
+        St01201VO.setShelfUuid(requestParams.getString("shelfUuid"));
+        St01201VO.setDescStrDate(requestParams.getString("descStrDate"));
+        St01201VO.setDescEdDate(requestParams.getString("descEdDate"));
+        // St01201VO.setStatusUuid (requestParams.getString("statusUuid"));
+
+        return filter(st012Mapper.getStWithoutNoticeInoutHistResult(St01201VO), pageable, "", St01201VO.class);
+    }
 
     public Page<St01201VO> getStInoutExcept(Pageable pageable, RequestParams<St01201VO> requestParams) {
         St01201VO St01201VO = new St01201VO();
@@ -43,29 +57,35 @@ public class St012Service extends BaseService {
 
         return filter(st012Mapper.getStInoutExcept(St01201VO), pageable, "", St01201VO.class);
     }
-    @Transactional
-    public ApiResponse saveInoutExcept(List<St01201VO> list) {
-        List<StInoutExcept> stInoutExceptList = ModelMapperUtils.mapList(list, StInoutExcept.class);
-        StInoutExcept orgStInoutExcept = null;
-        int cnt = 0;
 
-        for(StInoutExcept stInoutExcept : stInoutExceptList){
-            if(stInoutExcept.isDeleted()){
-                stInoutExceptRepository.delete(stInoutExcept);
+    public Page<St01201VO> getStExceptRecordResult(Pageable pageable, RequestParams<St01201VO> requestParams) {
+        St01201VO St01201VO = new St01201VO();
+        //St01201VO.setRequestName(requestParams.getString("requestName"));
+        //검색조건 추가시
+
+        return filter(st012Mapper.getStExceptRecordResult(St01201VO), pageable, "", St01201VO.class);
+    }
+
+    @Transactional
+    public ApiResponse saveStWithoutNoticeInoutRecordList(List<St01202VO> list) {
+        List<StWithoutNoticeInoutRecord> aStWithoutNoticeInoutRecord = ModelMapperUtils.mapList(list, StWithoutNoticeInoutRecord.class);
+        StWithoutNoticeInoutRecord orgStWithoutNoticeInoutRecord = null;
+
+        for (StWithoutNoticeInoutRecord stWithoutNoticeInoutRecord : aStWithoutNoticeInoutRecord) {
+            if (stWithoutNoticeInoutRecord.isDeleted()) {
+                stWithoutNoticeInoutRecordRepository.delete(stWithoutNoticeInoutRecord);
 
                 //여기서 st_except_record_result도 삭제 해야된다.
-            }else{
-                if(stInoutExcept.isCreated()){
-                    stInoutExcept.setRequestorUuid(SessionUtils.getCurrentLoginUserUuid());
-                    stInoutExcept.setRequestDate(Timestamp.valueOf(DateUtils.convertToString(LocalDateTime.now(), DateUtils.DATE_TIME_PATTERN)));
-                }else if(stInoutExcept.isModified()){
-                    orgStInoutExcept = stInoutExceptRepository.findOne(stInoutExcept.getId());
-                    stInoutExcept.setRequestorUuid(SessionUtils.getCurrentLoginUserUuid());
-                    stInoutExcept.setInsertDate(orgStInoutExcept.getInsertDate());
-                    stInoutExcept.setInsertUuid(orgStInoutExcept.getInsertUuid());
-                }
+            } else {
 
-                stInoutExceptRepository.save(stInoutExcept);
+                orgStWithoutNoticeInoutRecord = stWithoutNoticeInoutRecordRepository.findOne(stWithoutNoticeInoutRecord.getId());
+                stWithoutNoticeInoutRecord.setDisposerUuid(stWithoutNoticeInoutRecord.getDisposerUuid());
+                stWithoutNoticeInoutRecord.setInsertDate(orgStWithoutNoticeInoutRecord.getInsertDate());
+                stWithoutNoticeInoutRecord.setInsertUuid(orgStWithoutNoticeInoutRecord.getInsertUuid());
+                stWithoutNoticeInoutRecord.setUpdateUuid(SessionUtils.getCurrentLoginUserUuid());
+                stWithoutNoticeInoutRecord.setUpdateDate(Timestamp.valueOf(DateUtils.convertToString(LocalDateTime.now(), DateUtils.DATE_TIME_PATTERN)));
+
+                stWithoutNoticeInoutRecordRepository.save(stWithoutNoticeInoutRecord);
             }
         }
 

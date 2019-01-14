@@ -12,13 +12,15 @@ import java.sql.Timestamp;
 @EqualsAndHashCode(callSuper = false)
 public class St01202VO extends BaseVO {
 
-    private String inoutExceptUuid;
-    private String requestName;
-    private String requestorUuid;
-    private Timestamp requestDate;
-    private Timestamp exceptStartDate;
-    private Timestamp exceptEndDate;
-    private String exceptReason;
+    private String withoutNoticeIoRecordUuid;
+
+    private String aggregationUuid;
+
+    private String disposerUuid;
+
+    private Timestamp disposalDate;
+
+    private String reason;
 
 
 }
