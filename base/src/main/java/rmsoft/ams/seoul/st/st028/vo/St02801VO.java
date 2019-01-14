@@ -13,8 +13,6 @@ public class St02801VO extends BaseVO {
 
     private String gateUuid;
 
-    private int no;
-
     private String gateId;
 
     private String gateName;

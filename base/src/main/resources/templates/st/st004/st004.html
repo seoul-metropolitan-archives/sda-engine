@@ -20,7 +20,7 @@
                     <ul class="bdb">
                         <th:block layout:insert="~{/fragments/page-buttons :: bookmark}"/>
                         <li style="text-align:right; width:48%;">
-                            <button class="btn_co" id="popArrangeBtn">
+                            <button class="btn_co" id="arrange">
                                 <span class="btn_icon_co">&nbsp;</span>
                                 <span class="btn_main_txt">Arrange</span>
                             </button>
@@ -72,11 +72,11 @@
                                     <span class="btn_icon_co">&nbsp;</span>
                                     <span class="btn_main_txt">Inquiry</span>
                                 </button>
-                                <button class="btn_co">
+                                <button class="btn_co" th:id="confirm">
                                     <span class="btn_icon_co">&nbsp;</span>
                                     <span class="btn_main_txt">Confirm</span>
                                 </button>
-                                <button class="btn_co">
+                                <button class="btn_co" th:id="cancel">
                                     <span class="btn_icon_co">&nbsp;</span>
                                     <span class="btn_main_txt">Cancel</span>
                                 </button>
@@ -100,7 +100,7 @@
                                         </select>
                                     </dd>
                                     <dt class="w130">Container Name</dt>
-                                    <dd><input type=text style="width:135px"></dd>
+                                    <dd><input type=text style="width:135px" data-ax-path="containerName"></dd>
                                 </dl>
                                 <dl style="width: 630px">
                                     <dt class="mgl_5 w120">Container Type</dt>
@@ -117,8 +117,8 @@
                         </ul>
                         <ul class="bdb div_tablerow" style="height:25px;">
                             <li style="width:100%; text-align:left;">
-                                <input type=text class="yeongye"  readonly style="width: 90px; text-align: right" data-ax-path="selectedRowNo">
-                                <input type=text class="yeongye"  readonly style="width: 84px;text-align: right" data-ax-path="selectedColumnNo">
+                                ROW : <input type=text class="yeongye"  readonly style="width: 90px; text-align: right" data-ax-path="selectedRowNo">
+                                COLUMN : <input type=text class="yeongye"  readonly style="width: 84px;text-align: right" data-ax-path="selectedColumnNo">
                             </li>
                         </ul>
                         <div style="height:100%; width:100%" class="div_tablerow bdb">

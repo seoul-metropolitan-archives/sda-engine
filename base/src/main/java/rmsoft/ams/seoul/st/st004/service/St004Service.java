@@ -14,14 +14,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import rmsoft.ams.seoul.common.domain.StArrangeContainersResult;
 import rmsoft.ams.seoul.common.repository.StArrangeContainersResultRepository;
+import rmsoft.ams.seoul.st.st001.vo.St00103VO;
 import rmsoft.ams.seoul.st.st004.dao.St004Mapper;
 import rmsoft.ams.seoul.st.st004.vo.St00401VO;
+import rmsoft.ams.seoul.st.st004.vo.St00402VO;
 import rmsoft.ams.seoul.utils.CommonCodeUtils;
 
 import javax.inject.Inject;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class St004Service extends BaseService {
@@ -50,6 +53,9 @@ public class St004Service extends BaseService {
             stArrangeContainersResult.setStatusUuid(CommonCodeUtils.getCodeDetailUuid("CD138",changeStatus));
             stArrangeContainersResult.setInsertDate(orgStArrangeContainerResult.getInsertDate());
             stArrangeContainersResult.setInsertUuid(orgStArrangeContainerResult.getInsertUuid());
+            stArrangeContainersResult.setArrangedDate(orgStArrangeContainerResult.getArrangedDate());
+            stArrangeContainersResult.setContainerUuid(orgStArrangeContainerResult.getContainerUuid());
+            stArrangeContainersResult.setLocationUuid(orgStArrangeContainerResult.getLocationUuid());
             stArrangeContainersResultRepository.save(stArrangeContainersResult);
             index++;
         }
@@ -68,17 +74,55 @@ public class St004Service extends BaseService {
                     orgStArrangeContainerResult = stArrangeContainersResultRepository.findOne(stArrangeContainersResult.getId());
                     stArrangeContainersResult.setInsertDate(orgStArrangeContainerResult.getInsertDate());
                     stArrangeContainersResult.setInsertUuid(orgStArrangeContainerResult.getInsertUuid());
+                    stArrangeContainersResultRepository.save(stArrangeContainersResult);
                 }
                 else{
-                    stArrangeContainersResult.setArrangeContainersResultUuid(UUIDUtils.getUUID());
-                    stArrangeContainersResult.setStatusUuid(CommonCodeUtils.getCodeDetailUuid("CD138","Draft"));
-                    stArrangeContainersResult.setArrangedDate(Timestamp.valueOf(DateUtils.convertToString(LocalDateTime.now(), DateUtils.DATE_TIME_PATTERN)));
-                    stArrangeContainersResult.setDescription("");
+                    //이쪽에서 들어 가야 되는데 전부 다 들어 가야된다!?
+                    //자식을 전부다 빼와야 된다?
+
+                    StringBuilder sb = new StringBuilder();
+                    sb.append(" select * from ( ");
+                    sb.append(" SELECT");
+                    sb.append("       CONTAINER_UUID as containerUuid ");
+                    sb.append(" FROM ST_CONTAINER A ");
+                    sb.append(" WHERE FC_AD_CODE_NM(STATUS_UUID) = 'Confirm' ");
+                    sb.append(" START WITH A.CONTAINER_UUID = '"+stArrangeContainersResult.getContainerUuid()+"' ");
+                    sb.append(" CONNECT BY PRIOR CONTAINER_UUID = PARENT_CONTAINER_UUID ");
+                    sb.append(" ORDER SIBLINGS BY ORDER_KEY ) main ");
+                    sb.append(" MINUS ");
+                    sb.append(" select CONTAINER_UUID as containerUuid ");
+                    sb.append(" from ST_ARRANGE_CONTAINERS_RESULT ");
+                    sb.append(" WHERE LOCATION_UUID = '"+stArrangeContainersResult.getLocationUuid()+"' ");
+
+
+                    List<Map<String, Object>> resultList = jdbcTemplate.queryForList(sb.toString());
+
+
+                    for(int i = 0 ; i < resultList.size() ; i++){
+                        stArrangeContainersResult.setArrangeContainersResultUuid(UUIDUtils.getUUID());
+                        stArrangeContainersResult.setStatusUuid(CommonCodeUtils.getCodeDetailUuid("CD138","Draft"));
+                        stArrangeContainersResult.setArrangedDate(Timestamp.valueOf(DateUtils.convertToString(LocalDateTime.now(), DateUtils.DATE_TIME_PATTERN)));
+                        stArrangeContainersResult.setDescription("");
+                        stArrangeContainersResult.setContainerUuid(String.valueOf(resultList.get(i).get("containerUuid")));
+
+                        stArrangeContainersResultRepository.save(stArrangeContainersResult);
+                    }
+
                 }
-                stArrangeContainersResultRepository.save(stArrangeContainersResult);
             }
 
         }
         return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");
+    }
+
+    public Page<St00402VO> getLocationList(Pageable pageable, RequestParams<St00402VO> requestParams) {
+        St00402VO st00402VO = new St00402VO();
+        st00402VO.setShelfUuid(requestParams.getString("shelfUuid"));
+        st00402VO.setRowNo(requestParams.getString("rowNo"));
+        st00402VO.setColumnNo(requestParams.getString("columnNo"));
+        st00402VO.setStatusUuid (requestParams.getString("statusUuid"));
+        st00402VO.setUseYn(requestParams.getString("useYn"));
+
+        return filter(st004Mapper.getLocationList(st00402VO), pageable, "", St00402VO.class);
     }
 }

@@ -24,7 +24,7 @@ var st00102 =
                 },
                 {
                     sortNo: 2,
-                    width:50,
+                    width:80,
                     name: "statusUuid",
                     text: "Status",
                     editable: false,
@@ -46,7 +46,7 @@ var st00102 =
                     sortNo: 4,
                     name: "shelfName",
                     text: "Shelf Name",
-                    width: 120,
+                    width: 180,
                     editable: true,
                     dataType: "text",
                     required: true
@@ -55,7 +55,7 @@ var st00102 =
                     sortNo: 5,
                     name: "maxContainer",
                     text: "Max Container",
-                    width: 120,
+                    width: 100,
                     editable: false,
                     dataType: "text"
                 },
@@ -63,7 +63,7 @@ var st00102 =
                     sortNo: 6,
                     name: "description",
                     text: "Description",
-                    width: 70,
+                    width: 200,
                     editable: true,
                     dataType: "multiline"
                 },
@@ -71,7 +71,7 @@ var st00102 =
                     sortNo: 7,
                     name: "notes",
                     text: "Notes",
-                    width: 120,
+                    width: 200,
                     editable: true,
                     dataType: "text"
                 },

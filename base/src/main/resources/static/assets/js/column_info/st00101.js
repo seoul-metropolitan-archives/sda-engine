@@ -36,7 +36,7 @@ var st00101 =
                     sortNo: 3,
                     name: "repositoryName",
                     text: "Repository Name",
-                    width: 120,
+                    width: 180,
                     editable: true,
                     dataType: "text",
                     required: true
@@ -45,7 +45,7 @@ var st00101 =
                     sortNo: 4,
                     name: "description",
                     text: "Description",
-                    width: 70,
+                    width: 200,
                     editable: true,
                     dataType: "multiline"
                 },
@@ -53,7 +53,7 @@ var st00101 =
                     sortNo: 5,
                     name: "notes",
                     text: "Notes",
-                    width: 120,
+                    width: 200,
                     editable: true,
                     dataType: "text"
                 },

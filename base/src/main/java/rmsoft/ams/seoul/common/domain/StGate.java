@@ -26,8 +26,8 @@ public class StGate extends SimpleJpaModel<StGate.StGateId> {
     @Column(name = "GATE_UUID", length = 36, nullable = false)
     private String gateUuid;
 
-    @Column(name = "NO", length = 8, nullable = false)
-    private int no;
+    /*@Column(name = "NO", length = 8, nullable = false)
+    private int no;*/
 
 
     @Column(name = "GATE_ID", length = 36, nullable = false)

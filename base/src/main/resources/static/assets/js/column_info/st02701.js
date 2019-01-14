@@ -11,7 +11,7 @@ var st02701 =
                     required: false,
                     visible: false
                 },
-                {
+               /* {
                     sortNo: 1,
                     name: "no",
                     text: "NO",
@@ -20,12 +20,12 @@ var st02701 =
                     dataType: "code",
                     required: false,
                     visible: true
-                },
+                },*/
                 {
                     sortNo: 2,
                     name: "zoneId",
-                    text: "ZONE ID",
-                    width: 120,
+                    text: "존 ID",
+                    width: 250,
                     editable: true,
                     dataType: "text",
                     required: true,
@@ -34,8 +34,8 @@ var st02701 =
                 {
                     sortNo: 3,
                     name: "zoneName",
-                    text: "ZONE NAME",
-                    width: 120,
+                    text: "존 명",
+                    width: 250,
                     editable: true,
                     dataType: "text",
                     required: true,

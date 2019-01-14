@@ -60,7 +60,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     },
     STATUS_UPDATE01: function (caller, act, data) {
 
-        debugger
+
         if (fnObj.gridView01.isChangeData() == true) {
             axDialog.confirm({
                 msg: axboot.getCommonMessage("AA006")

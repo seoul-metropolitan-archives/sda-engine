@@ -7,7 +7,6 @@
 
     <select id="getStZone" resultType="St02701VO" parameterType="St02701VO" statementType="PREPARED">
         SELECT A.ZONE_UUID as zoneUuid,
-               A.NO as no,
                A.ZONE_ID as zoneId,
                A.ZONE_NAME as zoneName,
                <include refid="Common.UserName"><property name="userUuid" value="INSERT_UUID"/></include> as insertUuid,
@@ -24,7 +23,7 @@
                   AND ZONE_NAME LIKE '%' || #{zoneName} || '%'
               </if>
           </where>
-        ORDER BY A.NO
+        ORDER BY A.ZONE_ID
     </select>
 
 </mapper>

@@ -21,18 +21,13 @@
                         <th:block layout:insert="~{/fragments/page-buttons :: save-and-inquiry('show','none')}"/>
                     </ul>
                 </div>
-                <!--<div class="bdb div_tablerow searchFields">
-                    <dl>
-                        <dd class="mgl_5 w_auto">
-                            <div class="rdo_box">
-                                <span class="rdo_box_title">Type</span>
-                            </div>
-                        </dd>
-                    </dl>
+
+                <div style="    margin: 10px">
+                    <th:block
+                            layout:insert="~{/fragments/page-buttons :: searchInputYellow ('조치자','disposerName')}"/>
                 </div>
--->
-                <div style="height:100%; width:100%" class="bgf7 div_tablerow">
-                    <div style="display:table; height:100%; width:100%; float:right">
+                <div style="height:45%; width:100%" class="bgf7 div_tablerow">
+                    <div style="display:table; height:50%; width:100%; float:right">
                         <!--<ul class="bdb bdt div_tablerow" style="height:30px;">
                             <th:block layout:insert="~{/fragments/page-buttons :: dot('Authority')}"/>
                         </ul>-->
@@ -42,25 +37,28 @@
                                     <div style="width:100%;height:100%;" class="bgf7 div_tablerow">
                                         <div data-ax-tbl class="ax-search-tbl">
 
-                                            <th:block
-                                                    layout:insert="~{/fragments/table :: tr-td(text='조치자', style='width: 250px')}">
-                                                <div layout:fragment="wrap">
-                                                    <input type="text" data-ax-path="requestName"
-                                                           class="form-control"
 
-                                                           readonly/>
-                                                </div>
-                                            </th:block>
+                                            <!-- <th:block
+                                                     layout:insert="~{/fragments/table :: tr-td(text='조치자', style='width: 250px')}">
+                                                 <div layout:fragment="wrap">
+                                                     <input type="text" data-ax-path="disposerName"
+                                                            class="form-control"
+
+                                                            style="background-color: #fffdd6"
+                                                            readonly/>
+                                                 </div>
+                                             </th:block>-->
 
 
                                             <th:block
                                                     layout:insert="~{/fragments/table :: tr-td(text='조치일', style='width: 250px')}">
                                                 <div layout:fragment="wrap">
-                                                    <div class="input-group" data-ax5picker="date">
+                                                    <div class="input-group" data-ax5picker="date"
+                                                         style="background-color: #fffdd6">
                                                         <div class="cld_box">
                                                             <input type="text"
-                                                                   data-ax-path="takeoutDate"
-                                                                   style=""
+                                                                   data-ax-path="disposalDate"
+                                                                   style="background-color: #fffdd6"
                                                                    placeholder="YYYY-MM-DD" maxlength="10">
                                                             <img title="calendar"
                                                                  class="ui-datepicker-trigger" alt="..."
@@ -75,35 +73,34 @@
                                             <th:block
                                                     layout:insert="~{/fragments/table :: tr-td(text='사유', style='width: 100%;height: 150px;')}">
                                                 <div layout:fragment="wrap">
-                                                        <textarea data-ax-path="takeoutPropose"
-                                                                  class="form-control" style="height:100%"></textarea>
+                                                        <textarea data-ax-path="reason"
+                                                                  class="form-control"
+                                                                  style="height:100%;background-color: #fffdd6"></textarea>
                                                 </div>
                                             </th:block>
                                             <th:block
                                                     layout:insert="~{/fragments/table :: tr-td(text='Code', style='width: 250px')}">
                                                 <div layout:fragment="wrap">
-                                                    <input type="text" data-ax-path="requestName"
-                                                           class="form-control"/>
+                                                    <input type="text" data-ax-path="code"
+                                                           class="form-control" readonly/>
                                                 </div>
                                             </th:block>
                                             <th:block
                                                     layout:insert="~{/fragments/table :: tr-td(text='Title', style='width: 250px')}">
                                                 <div layout:fragment="wrap">
-                                                    <input type="text" data-ax-path="requestName"
-                                                           class="form-control"/>
+                                                    <input type="text" data-ax-path="title"
+                                                           class="form-control" readonly/>
                                                 </div>
                                             </th:block>
                                             <th:block
                                                     layout:insert="~{/fragments/table :: tr-td(text='서고서가 정보', style='width: 250px')}">
                                                 <div layout:fragment="wrap">
-                                                    <input type="text" data-ax-path="requestName"
-                                                           class="form-control"/>
+                                                    <input type="text" data-ax-path="containerInfo"
+                                                           class="form-control" readonly/>
                                                 </div>
                                             </th:block>
 
-                                            <div style="height:100%; width:100%" class="div_tablerow bdb">
-                                                <div id="realgrid02" style="width:100%; height:100%"></div>
-                                            </div>
+
                                         </div>
 
                                     </div>
@@ -112,7 +109,15 @@
                         </div>
                     </div>
                 </div>
+                <div style="height:50%; width:100%" class="bgf7 div_tablerow">
+
+                    <div id="realgrid02" style="width:100%; height:100%;padding: 10px;padding-top: 30px;"></div>
+
+                </div>
+
+
             </div>
+
         </div><!--오른쪽 내용영역 전체 e -->
     </form>
 </div>

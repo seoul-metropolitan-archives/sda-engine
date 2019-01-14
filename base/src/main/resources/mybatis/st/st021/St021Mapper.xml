@@ -67,7 +67,7 @@
                                                        (SELECT CODE_NAME
                                                         FROM AD_CODE_DETAIL
                                                         WHERE CODE_DETAIL_UUID = Z1.TYPE_UUID)                                                  as "type",
-                                                       (SELECT TO_CHAR(LEVEL_NO)
+                                                       (SELECT LEVEL_NAME
                                                         FROM RC_LEVEL
                                                         WHERE LEVEL_UUID = Z1.LEVEL_UUID)                                                       as "level",
                                                        AUTHOR                                                                                   as author,

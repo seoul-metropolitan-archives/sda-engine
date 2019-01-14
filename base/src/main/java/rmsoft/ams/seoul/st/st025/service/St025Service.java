@@ -49,8 +49,8 @@ public class St025Service extends BaseService {
                 stReaderMachineRepository.delete(stReaderMachine);
             }else{
                 if(stReaderMachine.isCreated()){
-                    int no = jdbcTemplate.queryForObject("SELECT ST_READER_MACHINE_SEQ.NEXTVAL FROM dual", int.class);
-                    stReaderMachine.setNo(no);
+                    /*int no = jdbcTemplate.queryForObject("SELECT ST_READER_MACHINE_SEQ.NEXTVAL FROM dual", int.class);
+                    stReaderMachine.setNo(no);*/
                 }else if(stReaderMachine.isModified()){
                     orgStReaderMachine = stReaderMachineRepository.findOne(stReaderMachine.getId());
                     stReaderMachine.setInsertDate(orgStReaderMachine.getInsertDate());

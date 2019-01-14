@@ -25,8 +25,8 @@ public class StZone extends SimpleJpaModel<StZone.StZoneId> {
     @Column(name = "ZONE_UUID", length = 36, nullable = false)
     private String zoneUuid;
 
-    @Column(name = "NO", length = 4, nullable = false)
-    private int no;
+    /*@Column(name = "NO", length = 4, nullable = false)
+    private int no;*/
 
     @Column(name = "ZONE_ID", length = 36, nullable = false)
     private String zoneId;

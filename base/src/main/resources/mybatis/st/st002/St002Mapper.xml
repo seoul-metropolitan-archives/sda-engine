@@ -14,7 +14,8 @@
              '[' || FC_AD_CODE_NM(CONTAINER_TYPE_UUID) || '] ' || CONTAINER_NAME as containerTreeName,
             ORDER_NO as orderNo,
             ORDER_KEY as orderKey,
-            SUBSTR(SYS_CONNECT_BY_PATH(ROWNUM, '.'), 2 , length(SYS_CONNECT_BY_PATH(ROWNUM, '.'))) as orderKey1
+            SUBSTR(SYS_CONNECT_BY_PATH(ROWNUM, '.'), 2 , length(SYS_CONNECT_BY_PATH(ROWNUM, '.'))) as orderKey1,
+            CONNECT_BY_ISLEAF LEAF
         FROM
             ST_CONTAINER A
             START WITH PARENT_CONTAINER_UUID IS NULL
@@ -43,7 +44,10 @@
         <include refid="Common.UserName"><property name="userUuid" value="INSERT_UUID"/></include> as insertUuid,
         INSERT_DATE as insertDate,
         <include refid="Common.UserName"><property name="userUuid" value="UPDATE_UUID"/></include> as updateUuid,
-        UPDATE_DATE as updateDate
+        UPDATE_DATE as updateDate,
+        (SELECT COUNT(*)
+        FROM ST_ARRANGE_RECORDS_RESULT STARR
+        WHERE STARR.CONTAINER_UUID = A.CONTAINER_UUID) as recordCount
         FROM
         ST_CONTAINER A
         <where>
@@ -69,6 +73,7 @@
                 AND USE_YN = #{useYn}
             </if>
         </where>
+        ORDER BY CONTAINER_NAME
     </select>
     <select id="getSelectedContainerList" resultType="St00201VO" parameterType="St00201VO" statementType="PREPARED">
         SELECT
@@ -91,7 +96,8 @@
         insertUuid,
         insertDate,
         updateUuid,
-        updateDate
+        updateDate,
+        recordCount
         FROM
         (
             SELECT
@@ -118,7 +124,10 @@
                 <include refid="Common.UserName"><property name="userUuid" value="INSERT_UUID"/></include> as insertUuid,
                 INSERT_DATE as insertDate,
                 <include refid="Common.UserName"><property name="userUuid" value="UPDATE_UUID"/></include> as updateUuid,
-                UPDATE_DATE as updateDate
+                UPDATE_DATE as updateDate,
+                (SELECT COUNT(*)
+                FROM ST_ARRANGE_RECORDS_RESULT STARR
+                WHERE STARR.CONTAINER_UUID = A.CONTAINER_UUID) as recordCount
             FROM
                 ST_CONTAINER A
             START WITH PARENT_CONTAINER_UUID IS NULL

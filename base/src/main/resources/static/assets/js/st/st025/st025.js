@@ -183,9 +183,9 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     entityName: "ST_READER_MACHINE",
     initView: function () {
         this.initInstance();
-        this.gridObj.setFixedOptions({
+        /*this.gridObj.setFixedOptions({
             colCount: 2
-        });
+        });*/
         this.setColumnInfo(st02501.column_info);
         this.makeGrid();
         this.gridObj.itemClick(this.itemClick);

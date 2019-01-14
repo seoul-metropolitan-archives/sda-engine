@@ -1,5 +1,8 @@
 var fnObj = {};
 var inoutExceptUuid = "";
+var repositoryUuid;
+var shelfUuid;
+var locationUuid;
 var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH: function (caller, act, data) {
         ACTIONS.dispatch(ACTIONS.PAGE_SEARCH01);
@@ -8,7 +11,9 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         axboot.ajax({
             type: "GET",
             url: "/api/v1/st/st007/01/list01",
-            data: $.extend({}, this.formView.getData()),
+            data: $.extend({}, {pageSize: 1000}, this.formView.getData(),
+            {repositoryUuid : repositoryUuid, shelfUuid : shelfUuid, locationUuid : locationUuid}
+            ),
             callback: function (res) {
                 fnObj.gridView01.setData(res.list);
                 //fnObj.gridView01.disabledColumn();
@@ -244,7 +249,26 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 if(this.close) this.close();
             }
         });
-    }
+    },
+    SEARCH_LOCATION_SCH : function(caller, act, data)
+    {
+        axboot.modal.open({
+            modalType: "COMMON_POPUP",
+            preSearch : data["preSearch"],
+            sendData: function () {
+                return data;
+            },
+            callback: function (data) {
+
+                var text = `${data["ROWNO"]}행 ${data["COLUMNNO"]}열`;
+
+                $("input[data-ax-path='locationName']").val(text)
+                locationUuid = data['LOCATIONUUID'];
+                console.log('locationUuid', locationUuid);
+                if(this.close) this.close();
+            }
+        });
+    },
 });
 
 fnObj.pageStart = function () {
@@ -286,6 +310,15 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
         this.model = new ax5.ui.binder();
         this.model.setModel(this.getDefaultData(), this.target);
         this.modelFormatter = new axboot.modelFormatter(this.model); // 모델 포메터 시작
+        this.target.find('[data-ax5picker="date"]').ax5picker({
+            direction: "auto",
+            content: {
+                type: 'date'
+            }
+        });
+
+        $("input[data-ax-path='disposalDueDateStart']").val(getFormattedDate(new Date(), true));
+        $("input[data-ax-path='disposalDueDateEnd']").val(getFormattedDate(new Date()));
         this.initEvent();
         this.bindEvent();
     },
@@ -310,6 +343,44 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
                 };
                 ACTIONS.dispatch(ACTIONS.SEARCH_SHELF_SCH, data);
             }
+        });
+
+        $("input[data-ax-path='locationName']").parents().eq(1).find("a").click(function(){
+            if("" != shelfUuid) {
+                var data = {
+                    popupCode: "PU147",
+                    searchData: shelfUuid,
+                    preSearch: false
+                };
+                ACTIONS.dispatch(ACTIONS.SEARCH_LOCATION_SCH, data);
+            }
+        });
+
+        $("input[data-ax-path='disposalDueDateStart']").keyup(function () {
+            var date = this.value;
+            if (date.match(/^\d{4}$/) !== null) {
+                this.value = date + '-';
+            } else if (date.match(/^\d{4}\-\d{2}$/) !== null) {
+                this.value = date + '-';
+            }
+        });
+        $("input[data-ax-path='disposalDueDateStart']").keypress(function () {
+            if ((event.keyCode < 48) || (event.keyCode > 57)) event.returnValue = false;
+        });
+        $("input[data-ax-path='disposalDueDateEnd']").keyup(function () {
+            var date = this.value;
+            if (date.match(/^\d{4}$/) !== null) {
+                this.value = date + '-';
+            } else if (date.match(/^\d{4}\-\d{2}$/) !== null) {
+                this.value = date + '-';
+            }
+        });
+        $("input[data-ax-path='disposalDueDateEnd']").keypress(function () {
+            if ((event.keyCode < 48) || (event.keyCode > 57)) event.returnValue = false;
+        });
+
+        $("select[data-ax-path='statusUuid'], select[data-ax-path='containerTypeUuid']").change(function() {
+            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
         });
 
     },
@@ -528,3 +599,43 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
         }*/
     },
 });
+
+function getFormattedDate(date, isStart) {
+    var day;
+    var tempDate;
+    if (isStart) {
+        date.setDate(date.getDate() - 30);
+        tempDate = date.getDate();
+    } else {
+        tempDate = date.getDate();
+    }
+    day = tempDate.toString();
+
+    var year = date.getFullYear();
+    var month = (1 + date.getMonth()).toString();
+    month = month.length > 1 ? month : '0' + month;
+    day = day.length > 1 ? day : '0' + day;
+    return year + '-' + month + '-' + day;
+}
+
+function checkDate(date) {
+    var result = true;
+    var strValue = date;
+    var chk1 = /^(19|20)\d{2}-([1-9]|1[012])-([1-9]|[12][0-9]|3[01])$/;
+    //var chk2 = /^(19|20)\d{2}\/([0][1-9]|1[012])\/(0[1-9]|[12][0-9]|3[01])$/;
+    var chk2 = /^(19|20)\d{2}-([0][1-9]|1[012])-([012][1-9]|3[01])$/;
+    if (strValue == "") { // 공백이면 무시
+        return result;
+    }
+//-------------------------------------------------------------------------------
+// 유효성 검사- 입력형식에 맞게 들왔는지 // 예) 2000-1-1, 2000-01-01 2가지 형태 지원
+//-------------------------------------------------------------------------------
+    if (chk1.test(strValue) == false && chk2.test(strValue) == false) { // 유효성 검사에 둘다 성공하지 못했다면
+        //alert("1999-1-1 형식 또는 \r\n1999-01-01 형식으로 날자를 입력해주세요.");
+        axToast.push(axboot.getCommonMessage("AA011"));
+        result = false;
+
+    }
+    return result;
+}
+

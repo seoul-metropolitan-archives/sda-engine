@@ -123,6 +123,24 @@ var st00402 =
                     editable: false,
                     disable: true,
                     dataType: "timestamp"
+                },
+                {
+                    sortNo: 13,
+                    width:140,
+                    name: "orderKey1",
+                    text: "ORDER_KEY",
+                    editable: false,
+                    dataType: "code",
+                    visible : false
+                },
+                {
+                    sortNo: 14,
+                    width:140,
+                    name: "choiceYn",
+                    text: "choiceYn",
+                    editable: false,
+                    dataType: "code",
+                    visible : false
                 }
             ]
     }

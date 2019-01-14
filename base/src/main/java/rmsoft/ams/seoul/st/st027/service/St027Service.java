@@ -49,8 +49,8 @@ public class St027Service extends BaseService {
                 //TODO : 삭제시 ST_GATE도 같이 삭제해주어야 한다.
             }else{
                 if(stZone.isCreated()){
-                    int no = jdbcTemplate.queryForObject("SELECT ST_ZONE_SEQ.NEXTVAL FROM dual", int.class);
-                    stZone.setNo(no);
+                    /*int no = jdbcTemplate.queryForObject("SELECT ST_ZONE_SEQ.NEXTVAL FROM dual", int.class);
+                    stZone.setNo(no);*/
                 }else if(stZone.isModified()){
                     orgStZone = stZoneRepository.findOne(stZone.getId());
                     stZone.setInsertDate(orgStZone.getInsertDate());

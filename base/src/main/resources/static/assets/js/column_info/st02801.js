@@ -11,7 +11,7 @@ var st02801 =
                     required: false,
                     visible: false
                 },
-                {
+               /* {
                     sortNo: 1,
                     name: "no",
                     text: "NO",
@@ -20,12 +20,12 @@ var st02801 =
                     dataType: "code",
                     required: false,
                     visible: true
-                },
+                },*/
                 {
                     sortNo: 2,
                     name: "gateId",
                     text: "게이트 ID",
-                    width: 120,
+                    width: 200,
                     editable: true,
                     dataType: "text",
                     required: true,
@@ -35,7 +35,7 @@ var st02801 =
                     sortNo: 3,
                     name: "gateName",
                     text: "게이트 명",
-                    width: 120,
+                    width: 200,
                     editable: true,
                     dataType: "text",
                     required: true,
@@ -43,15 +43,15 @@ var st02801 =
                 },
                 {
                     sortNo: 4,
-                    width: 80,
+                    width: 150,
                     name: "modeUuid",
                     text: "운영모드",
                     editable: true,
                     disable : false,
                     required: true,
                     visible: true,
-                    values: axboot.commonCodeFilter("CD202").codeArr,
-                    labels: axboot.commonCodeFilter("CD202").nameArr,
+                    values: axboot.commonCodeFilter("CD223").codeArr,
+                    labels: axboot.commonCodeFilter("CD223").nameArr,
                     dataType : "combo"
                 },
                 {
@@ -71,7 +71,7 @@ var st02801 =
                     sortNo: 7,
                     name: "inZoneName",
                     text: "In Zone",
-                    width: 120,
+                    width: 250,
                     editable: true,
                     dataType: "popup",
                     popupCode : "PU146",
@@ -83,7 +83,7 @@ var st02801 =
                     sortNo: 7,
                     name: "outZoneName",
                     text: "Out Zone",
-                    width: 120,
+                    width: 250,
                     editable: true,
                     dataType: "popup",
                     popupCode : "PU146",
@@ -98,7 +98,7 @@ var st02801 =
                     text: "경광등",
                     editable: true,
                     disable : false,
-                    required: true,
+                    required: false,
                     visible: true,
                     values: axboot.commonCodeFilter("CD207").codeArr,
                     labels: axboot.commonCodeFilter("CD207").nameArr,

@@ -60,8 +60,8 @@ public class St026Service extends BaseService {
                 //여기서 st_except_record_result도 삭제 해야된다.
             }else{
                 if(stRfidMachine.isCreated()){
-                    int no = jdbcTemplate.queryForObject("SELECT ST_READER_MACHINE_SEQ.NEXTVAL FROM dual", int.class);
-                    stRfidMachine.setNo(no);
+                    /*int no = jdbcTemplate.queryForObject("SELECT ST_READER_MACHINE_SEQ.NEXTVAL FROM dual", int.class);
+                    stRfidMachine.setNo(no);*/
                 }else if(stRfidMachine.isModified()){
                     orgStRfidMachine = stRfidMachineRepository.findOne(stRfidMachine.getId());
                     stRfidMachine.setInsertDate(orgStRfidMachine.getInsertDate());

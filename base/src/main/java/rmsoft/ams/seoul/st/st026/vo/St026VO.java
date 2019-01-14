@@ -17,7 +17,6 @@ import static java.util.stream.Collectors.toList;
 public class St026VO extends BaseVO {
 
     private String rfidMachineUuid;
-    private String no;
     private String machineTypeUuid;
     private String machineId;
     private String machineName;

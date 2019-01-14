@@ -29,4 +29,6 @@ public class St00201VO extends BaseVO {
 	private String path;
 	private String changeStatus;
 	private String parentContainerName;
+	private int recordCount;
+	private String leaf;
 }

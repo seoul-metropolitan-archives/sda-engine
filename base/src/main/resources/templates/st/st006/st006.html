@@ -40,7 +40,7 @@
                             <input type=text style="width:135px" data-ax-path="containerName">
                         </dd>
                         <th:block
-                                layout:insert="~{/fragments/page-buttons :: searchInputYellow ('Parent Container Name','parentContainerName')}"/>
+                                layout:insert="~{/fragments/page-buttons :: searchInput ('Parent Container Name','parentContainerName')}"/>
                         <dt class="mgl_5 w120">Container Type</dt>
                         <dd>
                             <select data-ax-path="containerTypeUuid" style="width:135px;">
@@ -60,17 +60,17 @@
                         <dt>Creation Date</dt>
                         <dd class="w_auto">
                             <div class="input-group" data-ax5picker="date">
-                                <div class="cld_box" style="background-color: #fffdd6">
+                                <div class="cld_box" style=" ">
                                     <input type="text" data-ax-path="creationStartDate"
-                                           style="background-color: #fffdd6;ime-mode:disabled;"
+                                           style=" ime-mode:disabled;"
                                            placeholder="YYYY-MM-DD" maxlength="10">
                                     <img title="calendar" class="ui-datepicker-trigger" alt="..."
                                          src="/assets/images/ams/calendar.png">
                                 </div>
                                 ~
-                                <div class="cld_box" style="background-color: #fffdd6">
+                                <div class="cld_box" style=" ">
                                     <input type="text" data-ax-path="creationEndDate"
-                                           style="background-color: #fffdd6;ime-mode:disabled;"
+                                           style=" ime-mode:disabled;"
                                            placeholder="YYYY-MM-DD" maxlength="10">
                                     <img title="calendar" class="ui-datepicker-trigger" alt="..."
                                          src="/assets/images/ams/calendar.png">

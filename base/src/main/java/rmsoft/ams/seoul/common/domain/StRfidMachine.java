@@ -26,8 +26,8 @@ public class StRfidMachine extends SimpleJpaModel<StRfidMachine.StRfidMachineId>
     @Column(name = "RFID_MACHINE_UUID", length = 36, nullable = false)
     private String rfidMachineUuid;
 
-    @Column(name = "NO", length = 30, nullable = false)
-    private int no;
+    /*@Column(name = "NO", length = 30, nullable = false)
+    private int no;*/
 
     @Column(name = "MACHINE_TYPE_UUID", length = 36, nullable = false)
     private String machineTypeUuid;

@@ -10,6 +10,7 @@ var st01202 =
                     width: 140,
                     editable: false,
                     dataType: "date",
+                    visible: true,
                     disable: true
                 },
                 {
@@ -18,6 +19,7 @@ var st01202 =
                     text: "존",
                     width: 250,
                     editable: false,
+                    visible: true,
                     dataType: "text"
                 },
             ]

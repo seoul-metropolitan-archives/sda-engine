@@ -8,7 +8,6 @@
         SELECT
 
         RFID_MACHINE_UUID as rfidMachineUuid,
-        NO as no,
         MACHINE_TYPE_UUID as machineTypeUuid,
         MACHINE_ID as machineId,
         MACHINE_NAME as machineName,

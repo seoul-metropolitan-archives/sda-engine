@@ -82,16 +82,20 @@
         SHELF_UUID as shelfUuid,
         ROW_NO as rowNo,
         COLUMN_NO as columnNo,
-        TOTAL_CONTAINER as totalContainer,
+        /*TOTAL_CONTAINER as totalContainer, 실제 배치된 container로 바꾼다*/
         DESCRIPTION as description,
         NOTES as notes,
         USE_YN as useYn,
         <include refid="Common.UserName"><property name="userUuid" value="INSERT_UUID"/></include> as insertUuid,
         INSERT_DATE as insertDate,
         <include refid="Common.UserName"><property name="userUuid" value="UPDATE_UUID"/></include> as updateUuid,
-        UPDATE_DATE as updateDate
+        UPDATE_DATE as updateDate,
+        (SELECT COUNT(*)
+        FROM ST_ARRANGE_CONTAINERS_RESULT STACR
+        WHERE STACR.LOCATION_UUID = STL.LOCATION_UUID
+        ) as totalContainer
         FROM
-        ST_LOCATION
+        ST_LOCATION STL
         <where>
             <if test="statusUuid != null">
                 STATUS_UUID = #{statusUuid}
