@@ -21,4 +21,6 @@ public class St00401VO extends BaseVO {
 	private String containerTree;
 	private String changeStatus;
 	private Timestamp arrangedDate;
+	private String orderKey1;
+	private String choiceYn = "Y";
 }

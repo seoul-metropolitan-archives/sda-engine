@@ -34,8 +34,7 @@ var st01201 =
                     name: "title",
                     text: "Title",
                     width: 200,
-                    required: true,
-                    editable: true,
+                    editable: false,
                     dataType: "text"
                 },
                 {

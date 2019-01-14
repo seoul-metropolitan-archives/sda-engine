@@ -7,7 +7,6 @@
 
     <select id="getReaderMachine" resultType="St02501VO" parameterType="St02501VO" statementType="PREPARED">
         SELECT  A.READER_MACHINE_UUID as readerMachineUuid,
-                A.NO as no,
                 A.MACHINE_ID as machineId,
                 A.MACHINE_NAME as machineName,
                 A.GATE_UUID as gateUuid,

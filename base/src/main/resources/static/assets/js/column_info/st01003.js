@@ -26,7 +26,7 @@ var st01003 =
                     sortNo: 3,
                     name: "rowNo",
                     text: "Row",
-                    width: 120,
+                    width: 200,
                     editable: true,
                     dataType: "text",
                     required: true
@@ -35,7 +35,7 @@ var st01003 =
                     sortNo: 4,
                     name: "columnNo",
                     text: "Column",
-                    width: 120,
+                    width: 200,
                     editable: true,
                     dataType: "text",
                     required: true
@@ -44,7 +44,7 @@ var st01003 =
                     sortNo: 5,
                     name: "totalContainer",
                     text: "Total Container",
-                    width: 120,
+                    width: 200,
                     editable: true,
                     dataType: "text",
                     required: true

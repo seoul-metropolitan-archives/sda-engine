@@ -23,7 +23,7 @@ var st00301_p01_02 =
                 sortNo: 3,
                 name: "itemTitle",
                 text: "Title",
-                width: 300,
+                width: 400,
                 editable: false,
                 dataType: "text"
             },
@@ -31,7 +31,7 @@ var st00301_p01_02 =
                 sortNo: 4,
                 name: "catPath",
                 text: "Aggregation Path",
-                width: 300,
+                width: 400,
                 editable: false,
                 dataType: "text"
             },
@@ -55,7 +55,7 @@ var st00301_p01_02 =
                 sortNo: 7,
                 name: "notes",
                 text: "Notes",
-                width: 100,
+                width: 300,
                 editable: false,
                 dataType: "text"
             },

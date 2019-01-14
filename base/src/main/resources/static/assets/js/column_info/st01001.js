@@ -24,7 +24,7 @@ var st01001 =
                     sortNo: 3,
                     name: "repositoryName",
                     text: "Repository Name",
-                    width: 120,
+                    width: 400,
                     editable: true,
                     dataType: "text",
                     required: true

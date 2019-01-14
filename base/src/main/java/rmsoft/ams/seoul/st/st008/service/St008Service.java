@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import rmsoft.ams.seoul.common.domain.*;
 import rmsoft.ams.seoul.common.repository.*;
+import rmsoft.ams.seoul.st.st003.vo.St00301VO;
 import rmsoft.ams.seoul.st.st008.dao.St008Mapper;
 import rmsoft.ams.seoul.st.st008.vo.St00801VO;
 import rmsoft.ams.seoul.st.st008.vo.St00802VO;
@@ -76,9 +77,37 @@ public class St008Service extends BaseService {
     }
 
     @Transactional
+    public ApiResponse saveStTakeoutRequestList(List<St00801VO> list) {
+        // 삭제만 가능
+        List<StTakeoutRequest> stTakeoutRequestList = ModelMapperUtils.mapList(list,StTakeoutRequest.class);
+
+        for(StTakeoutRequest stTakeoutRequest : stTakeoutRequestList) {
+            if(stTakeoutRequest.isDeleted()){
+                stTakeoutRequestRepository.delete(stTakeoutRequest);
+            }
+        }
+        return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");
+    }
+
+    @Transactional
+    public ApiResponse saveStTakeoutRecordResultList(List<St00802VO> list) {
+        // 삭제만 가능
+        List<StTakeoutRecordResult> stTakeoutRequestList = ModelMapperUtils.mapList(list,StTakeoutRecordResult.class);
+
+        for(StTakeoutRecordResult stTakeoutRecordResult : stTakeoutRequestList) {
+            if(stTakeoutRecordResult.isDeleted()){
+                stTakeoutRecordResultRepository.delete(stTakeoutRecordResult);
+            }
+        }
+        return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");
+    }
+
+    @Transactional
     public ApiResponse saveStTakeoutRequest(St00801VO vo) {
 
         vo.setRequestorUuid(SessionUtils.getCurrentLoginUserUuid());
+        // 투두 : return date 가 not null 이므로 duedate 를 일단 넣어주자. 나중에 물어볼것. return date 가 뭔지.
+        vo.setReturnDate(vo.getReturnDueDate());
         boolean isCreateOrModify = false;
         String uuid = vo.getTakeoutRequestUuid();
         if( uuid == null) {
@@ -92,7 +121,7 @@ public class St008Service extends BaseService {
                 refinedCodeSeq = "0" + refinedCodeSeq;
             }
             String requestName = DateUtils.convertToString(LocalDateTime.now(), "yyyyMMdd") + "-" + refinedCodeSeq;
-            vo.setTakeoutRequestUuid(orgCodeSeq);
+            vo.setTakeoutRequestUuid(UUIDUtils.getUUID());
             vo.setRequestName(requestName);
 
             vo.setInsertDate(Timestamp.valueOf(DateUtils.convertToString(LocalDateTime.now(), DateUtils.DATE_TIME_PATTERN)));
@@ -115,6 +144,7 @@ public class St008Service extends BaseService {
             orgClClass.setTakeoutDate(stTakeoutRequest.getTakeoutDate());
             orgClClass.setReturnDueDate(stTakeoutRequest.getReturnDueDate());
             orgClClass.setTakeoutPropose(stTakeoutRequest.getTakeoutPropose());
+            orgClClass.setRequestTypeUuid(stTakeoutRequest.getRequestTypeUuid());
             orgClClass.setStatusUuid(stTakeoutRequest.getStatusUuid());
             orgClClass.setOutsourcingDepartment(stTakeoutRequest.getOutsourcingDepartment());
             orgClClass.setOutsourcingPosition(stTakeoutRequest.getOutsourcingPosition());

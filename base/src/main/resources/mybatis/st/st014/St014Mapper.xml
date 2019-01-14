@@ -46,7 +46,7 @@
                              (SELECT CODE_NAME
                               FROM AD_CODE_DETAIL
                               WHERE CODE_DETAIL_UUID = Z1.TYPE_UUID)                                                  as "type",
-                             (SELECT TO_CHAR(LEVEL_NO)
+                             (SELECT LEVEL_NAME
                               FROM RC_LEVEL
                               WHERE LEVEL_UUID = Z1.LEVEL_UUID)                                                       as "level",
                              AUTHOR                                                                                   as author,
@@ -84,7 +84,7 @@
     </select>
 
     <select id="getStWithoutNoticeInoutHist" resultType="St01402VO" parameterType="St01402VO" statementType="PREPARED">
-        SELECT hist.INOUT_DATE_TIME, gate.ZONE_NAME FROM ST_WITHOUT_NOTICE_INOUT_HIST hist
+        SELECT hist.WITHOUT_NOTICE_IO_RECORD_UUID, hist.INOUT_DATE_TIME inoutDateTime, gate.ZONE_NAME zoneName FROM ST_WITHOUT_NOTICE_INOUT_HIST hist
           INNER JOIN (
             SELECT * FROM ST_GATE gate
               INNER JOIN ST_ZONE zone

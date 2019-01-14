@@ -238,7 +238,7 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
         accordion.click('.accordion > ul');
 
         $("input[data-ax-path='employeeYn']").change(function(){
-            debugger
+
             if($(this).val() == "Y"){
                 //직원
 

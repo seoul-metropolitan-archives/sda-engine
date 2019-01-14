@@ -12,7 +12,6 @@ public class St02701VO extends BaseVO {
 
     private String zoneUuid;
 
-    private int no;
 
     private String zoneId;
 

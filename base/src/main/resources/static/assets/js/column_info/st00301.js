@@ -87,7 +87,7 @@ var st00301 =
                     sortNo: 8,
                     name: "aggregationTree",
                     text: "Aggregation Tree",
-                    width: 50,
+                    width: 500,
                     disable: true,
                     type: "text",
                     editable: false
@@ -96,7 +96,7 @@ var st00301 =
                     sortNo: 9,
                     name: "arrangedDate",
                     text: "Arranged Date",
-                    width: 50,
+                    width: 100,
                     disable: true,
                     type: "text",
                     editable: false

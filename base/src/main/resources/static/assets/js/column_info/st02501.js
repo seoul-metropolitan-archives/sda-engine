@@ -13,18 +13,18 @@ var st02501 =
                 },
                 {
                     sortNo: 1,
-                    name: "no",
-                    text: "NO",
-                    disable: true,
-                    editable: false,
-                    dataType: "code",
-                    required: false,
+                    name: "machineId",
+                    text: "장비 ID",
+                    width: 120,
+                    editable: true,
+                    dataType: "text",
+                    required: true,
                     visible: true
                 },
                 {
                     sortNo: 2,
-                    name: "machineId",
-                    text: "MACHINE ID",
+                    name: "machineName",
+                    text: "장비명",
                     width: 120,
                     editable: true,
                     dataType: "text",
@@ -33,18 +33,8 @@ var st02501 =
                 },
                 {
                     sortNo: 3,
-                    name: "machineName",
-                    text: "MACHINE NAME",
-                    width: 120,
-                    editable: true,
-                    dataType: "text",
-                    required: true,
-                    visible: true
-                },
-                {
-                    sortNo: 5,
                     name: "parentGateName",
-                    text: "GATE NAME",
+                    text: "설치 GATE",
                     width: 120,
                     editable: true,
                     dataType: "popup",
@@ -72,7 +62,7 @@ var st02501 =
                     visible: false
                 },
                 {
-                    sortNo: 6,
+                    sortNo: 5,
                     name: "ip",
                     text: "IP",
                     width: 120,
@@ -82,7 +72,7 @@ var st02501 =
                     visible: true
                 },
                 {
-                    sortNo: 7,
+                    sortNo: 6,
                     name: "subnetmask",
                     text: "SUBNETMASK",
                     width: 120,
@@ -92,7 +82,7 @@ var st02501 =
                     visible: true
                 },
                 {
-                    sortNo: 8,
+                    sortNo: 7,
                     name: "gateway",
                     text: "GATEWAY",
                     width: 120,
@@ -102,9 +92,9 @@ var st02501 =
                     visible: true
                 },
                 {
-                    sortNo: 9,
+                    sortNo: 8,
                     name: "printDecrease",
-                    text: "PRINT DECREASE",
+                    text: "출력감쇄",
                     width: 120,
                     editable: true,
                     dataType: "text",
@@ -112,7 +102,7 @@ var st02501 =
                     visible: true
                 },
                 {
-                    sortNo: 10,
+                    sortNo: 9,
                     name: "macAddr",
                     text: "MAC ADDR",
                     width: 120,
@@ -122,9 +112,9 @@ var st02501 =
                     visible: true
                 },
                 {
-                    sortNo: 11,
+                    sortNo: 10,
                     name: "antennaCnt",
-                    text: "ANTENNA CNT",
+                    text: "안테나수",
                     width: 120,
                     editable: true,
                     dataType: "text",
@@ -132,14 +122,16 @@ var st02501 =
                     visible: true
                 },
                 {
-                    sortNo: 12,
+                    sortNo: 11,
                     width: 80,
                     name: "statusUuid",
-                    text: "Status",
+                    text: "장비상태",
                     values: axboot.commonCodeFilter("CD201").codeArr,
                     labels: axboot.commonCodeFilter("CD201").nameArr,
                     dataType : "combo",
-                    required : true
+                    required : true,
+                    editable: false,
+                    disable : true
                 },
 
             ]

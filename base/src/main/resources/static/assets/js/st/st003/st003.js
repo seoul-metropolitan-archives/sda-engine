@@ -7,7 +7,7 @@ var CONFIRM_STATUS = "Confirm";
 var CANCEL_STATUS = "Draft";
 var currentContainerUuid = "";
 var aggregationUuid = "";
-
+var leaf = "";
 var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH: function (caller, act, data) {
         if(currentContainerUuid != "") {
@@ -135,27 +135,33 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
     },
     PAGE_ARRANGE: function (caller, act, data) {
-        axboot.modal.open({
-            modalType: "ARRANGE_POPUP",
-            width: 1600,
-            height: 800,
-            header: {
-                title: "ARRANGE"
-            },
-            sendData: function () {
-                return {
-                    confirmBtn:"Arrange",
-                    description: fnObj.formView.getData().aggInContainerName,
-                    containerUuid :  currentContainerUuid
-                };
-            },
-            callback: function (data) {
-                if(this) this.close();
-                if(data){
-                    ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1,data);
+
+        if(leaf == "1"){
+            axboot.modal.open({
+                modalType: "ARRANGE_POPUP",
+                width: 1600,
+                height: 800,
+                header: {
+                    title: "ARRANGE"
+                },
+                sendData: function () {
+                    return {
+                        confirmBtn:"Arrange",
+                        description: fnObj.formView.getData().aggInContainerName,
+                        containerUuid :  currentContainerUuid
+                    };
+                },
+                callback: function (data) {
+                    if(this) this.close();
+                    if(data){
+                        ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1,data);
+                    }
                 }
-            }
-        });
+            });
+        }else{
+            axToast.push(axboot.getCommonMessage("ST003_01"));
+        }
+
     },
     dispatch: function (caller, act, data) {
         var result = ACTIONS.exec(caller, act, data);
@@ -242,8 +248,8 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
             }
         });
 
-        $("input[data-ax-path='arrangedFromDate01']").val(getFormattedDate(new Date(), true));
-        $("input[data-ax-path='arrangedToDate01']").val(getFormattedDate(new Date()));
+        /*$("input[data-ax-path='arrangedFromDate01']").val(getFormattedDate(new Date(), true));
+        $("input[data-ax-path='arrangedToDate01']").val(getFormattedDate(new Date()));*/
 
         this.initEvent();
 
@@ -411,6 +417,9 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
         }
     },
     itemClick: function (data, index) {
+
+        leaf = data.leaf;
+
         if(data != null){
             ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, data);
             fnObj.gridView03.clearData();
@@ -433,12 +442,12 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
     initView: function () {
         this.initInstance();
         this.setColumnInfo(st00301.column_info);
-        this.gridObj.setFixedOptions({
+        /*this.gridObj.setFixedOptions({
             colCount: 3
-        });
+        });*/
         this.gridObj.setOption({
             checkBar: {visible: true},
-            indicator: {visible: true}
+            /*indicator: {visible: true}*/
         })
         this.makeGrid();
         this.gridObj.itemClick(this.itemClick);
@@ -478,10 +487,12 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
             }
         }
 
-        //confirm인경우 물어보고 삭제
+        //confirm인경우 삭제 못함
         if(state == CONFIRM_STATUS){
-            this.setRunDel(true);
-            this.setConfirmYn(true,"ST004_01");
+            axToast.push(axboot.getCommonMessage("RS001_01"));
+            this.setRunDel(false);
+            /*this.setRunDel(true);
+            this.setConfirmYn(true,"ST004_01");*/
         }else{
             //draft인 경우는 그냥 삭제
             this.setRunDel(true);

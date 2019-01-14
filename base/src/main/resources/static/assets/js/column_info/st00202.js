@@ -35,7 +35,7 @@ var st00202 =
                 },
                 {
                     sortNo: 2,
-                    width: 100,
+                    width: 200,
                     name: "containerName",
                     text: "Container Name",
                     editable: true,
@@ -70,7 +70,7 @@ var st00202 =
                 },
                 {
                     sortNo: 5,
-                    width: 80,
+                    width: 120,
                     name: "containerTypeUuid",
                     text: "Container Type",
                     values: axboot.commonCodeFilter("CD139").codeArr,
@@ -102,7 +102,7 @@ var st00202 =
                     sortNo: 9,
                     name: "creationStartDate",
                     text: "Creation Start Date",
-                    width: 100,
+                    width: 120,
                     editable: true,
                     dataType : "date",
                     required : false
@@ -111,7 +111,7 @@ var st00202 =
                     sortNo: 10,
                     name: "creationEndDate",
                     text: "Creation End Date",
-                    width: 100,
+                    width: 120,
                     editable: true,
                     dataType : "date",
                     required : false,
@@ -199,6 +199,16 @@ var st00202 =
                     text: "OrderKey",
                     width: 140,
                     visible: false
-                }
+                },
+                {
+                    sortNo: 18,
+                    width:30,
+                    name: "recordCount",
+                    text: "recordCount",
+                    editable: false,
+                    dataType: "code",
+                    required: false,
+                    visible: false
+                },
             ]
     }
