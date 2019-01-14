@@ -54,21 +54,21 @@
                (location.ROW_NO || '행 ' || location.COLUMN_NO || '열') as locationName -- 행렬단
 
         FROM ST_TAKEOUT_RECORD_RESULT record_result
-                  LEFT JOIN (
+                  INNER JOIN (
                     SELECT ar.AGGREGATION_UUID, ar.CONTAINER_UUID    FROM RC_ITEM item
                       INNER JOIN ST_ARRANGE_RECORDS_RESULT ar  -- 이부분 arrange 가 안돼있어도 되는건지 노은에게 물어볼것
                         ON ar.AGGREGATION_UUID = item.AGGREGATION_UUID
                     ) etc
                   ON etc.AGGREGATION_UUID = record_result.AGGREGATION_UUID
-                  LEFT JOIN ST_ARRANGE_CONTAINERS_RESULT acr
+                  INNER JOIN ST_ARRANGE_CONTAINERS_RESULT acr
                     ON acr.CONTAINER_UUID = etc.CONTAINER_UUID
-                  LEFT JOIN ST_LOCATION location
+                  INNER JOIN ST_LOCATION location
                     ON location.LOCATION_UUID = acr.LOCATION_UUID
-                  LEFT JOIN ST_CONTAINER container
+                  INNER JOIN ST_CONTAINER container
                     ON container.CONTAINER_UUID = etc.CONTAINER_UUID
-                  LEFT JOIN ST_SHELF shelf
+                  INNER JOIN ST_SHELF shelf
                     ON shelf.SHELF_UUID = location.SHELF_UUID
-                  LEFT JOIN ST_REPOSITORY repository
+                  INNER JOIN ST_REPOSITORY repository
                     ON repository.REPOSITORY_UUID = shelf.REPOSITORY_UUID
                   INNER JOIN (SELECT AGGREGATION_UUID                                                                         as uuid,
                                      1                                                                                        as orderNo,

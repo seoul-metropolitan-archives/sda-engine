@@ -47,8 +47,8 @@ public class St007Service extends BaseService {
     public Page<St00702VO> getDisposalItem(Pageable pageable, RequestParams<St00702VO> requestParams) {
 
         St00702VO st00702VO = new St00702VO();
-        st00702VO.setDisposalDueDateStart(requestParams.getTimestamp("disposalDueDateStart"));
-        st00702VO.setDisposalDueDateEnd(requestParams.getTimestamp("disposalDueDateEnd"));
+        st00702VO.setDisposalDueDateStart(requestParams.getString("disposalDueDateStart"));
+        st00702VO.setDisposalDueDateEnd(requestParams.getString("disposalDueDateEnd"));
 
         //st00702VO.setAggregationUuid(requestParams.getString("aggregationUuid"));
         //검색조건 추가시

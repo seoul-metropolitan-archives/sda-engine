@@ -17,7 +17,8 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             callback: function (res) {
                 fnObj.gridView01.setData(res.list);
                 //fnObj.gridView01.disabledColumn();
-                fnObj.gridView02.clearData();
+                //fnObj.gridView02.clearData();
+                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH02);
             },
             options: {
                 onError: axboot.viewError
@@ -33,7 +34,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         axboot.ajax({
             type: "GET",
             url: "/api/v1/st/st007/01/list02",
-            data: $.extend({}, {pageSize: 1000}, fnObj.gridView01.getSelectedData()),
+            data: $.extend({}, {pageSize: 1000}, fnObj.gridView01.getSelectedData(), this.formView.getData()),
             callback: function (res) {
                 fnObj.gridView02.setData(res.list);
                 // fnObj.gridView02.disabledColumn();
@@ -319,6 +320,10 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
 
         $("input[data-ax-path='disposalDueDateStart']").val(getFormattedDate(new Date(), true));
         $("input[data-ax-path='disposalDueDateEnd']").val(getFormattedDate(new Date()));
+        // 초기값을 이렇게 넣어줘야 최초 호출시 값이 들어감.
+        fnObj.formView.setFormData("disposalDueDateStart", $("input[data-ax-path='disposalDueDateStart']").val());
+        fnObj.formView.setFormData("disposalDueDateEnd", $("input[data-ax-path='disposalDueDateEnd']").val());
+
         this.initEvent();
         this.bindEvent();
     },
@@ -355,6 +360,7 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
                 ACTIONS.dispatch(ACTIONS.SEARCH_LOCATION_SCH, data);
             }
         });
+
 
         $("input[data-ax-path='disposalDueDateStart']").keyup(function () {
             var date = this.value;
