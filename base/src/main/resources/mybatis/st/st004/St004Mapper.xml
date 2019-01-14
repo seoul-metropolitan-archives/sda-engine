@@ -27,13 +27,73 @@
             <include refid="Common.UserName"><property name="userUuid" value="S1.INSERT_UUID"/></include> as insertUuid,
             S1.INSERT_DATE as insertDate,
             <include refid="Common.UserName"><property name="userUuid" value="S1.UPDATE_UUID"/></include> as updateUuid,
-            S1.UPDATE_DATE as updateDate
-        FROM ST_ARRANGE_CONTAINERS_RESULT S1, ST_CONTAINER S2
+            S1.UPDATE_DATE as updateDate,
+        SUBSTR(SYS_CONNECT_BY_PATH(S1.ARRANGE_CONTAINERS_RESULT_UUID,
+        '.'),
+        2 ,
+        length(SYS_CONNECT_BY_PATH(S1.ARRANGE_CONTAINERS_RESULT_UUID,
+        '.'))) as orderKey1
+        FROM ST_ARRANGE_CONTAINERS_RESULT S1 INNER JOIN  ST_CONTAINER S2
+        ON S1.CONTAINER_UUID = S2.CONTAINER_UUID
         <where>
             S1.CONTAINER_UUID = S2.CONTAINER_UUID
             <if test="locationUuid != null">
                 AND S1.LOCATION_UUID = #{locationUuid}
             </if>
+            <if test="statusUuid != null">
+                AND S1.STATUS_UUID = #{statusUuid}
+            </if>
+            <if test="containerType != null">
+                AND S2.CONTAINER_TYPE_UUID = #{containerType}
+            </if>
+            <if test="containerName != null">
+                AND S2.CONTAINER_NAME LIKE '%' || #{containerName} || '%'
+            </if>
+        </where>
+        START WITH S2.PARENT_CONTAINER_UUID IS NULL
+        CONNECT BY PRIOR S2.CONTAINER_UUID = S2.PARENT_CONTAINER_UUID
+        ORDER SIBLINGS BY S2.ORDER_KEY
+    </select>
+
+    <select id="getLocationList" resultType="St00103VO" parameterType="St00103VO" statementType="PREPARED">
+        SELECT
+        LOCATION_UUID as locationUuid,
+        STATUS_UUID as statusUuid,
+        SHELF_UUID as shelfUuid,
+        ROW_NO as rowNo,
+        COLUMN_NO as columnNo,
+        /*TOTAL_CONTAINER as totalContainer, 실제 배치된 container로 바꾼다*/
+        DESCRIPTION as description,
+        NOTES as notes,
+        USE_YN as useYn,
+        <include refid="Common.UserName"><property name="userUuid" value="INSERT_UUID"/></include> as insertUuid,
+        INSERT_DATE as insertDate,
+        <include refid="Common.UserName"><property name="userUuid" value="UPDATE_UUID"/></include> as updateUuid,
+        UPDATE_DATE as updateDate,
+        (SELECT COUNT(*)
+        FROM ST_ARRANGE_CONTAINERS_RESULT STACR
+        WHERE STACR.LOCATION_UUID = STL.LOCATION_UUID
+        ) as totalContainer
+        FROM
+        ST_LOCATION STL
+        <where>
+            1=1
+            <if test="statusUuid != null">
+                AND STATUS_UUID = #{statusUuid}
+            </if>
+            <if test="rowNo != null">
+                AND ROW_NO = #{rowNo}
+            </if>
+            <if test="columnNo != null">
+                AND COLUMN_NO = #{columnNo}
+            </if>
+            <if test="useYn != null">
+                AND USE_YN = #{useYn}
+            </if>
+            <if test="shelfUuid != null">
+                AND SHELF_UUID = #{shelfUuid}
+            </if>
+            AND FC_AD_CODE_NM(STATUS_UUID) = 'Confirm'
         </where>
     </select>
 </mapper>

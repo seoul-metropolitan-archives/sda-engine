@@ -385,6 +385,7 @@ fnObj.treeView01 = axboot.viewExtend(axboot.commonView, {
 fnObj.pageStart = function () {
     var _this = this;
     parentsData = parent.axboot.modal.getData();
+
     $.ajax({
         url: "/assets/js/controller/simple_controller.js",
         dataType: "script",
@@ -430,6 +431,7 @@ fnObj.pageStart = function () {
 
     ACTIONS.dispatch(ACTIONS.PAGE_SEARCH_TREE, this.formView.getData());
     //ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+    $("span[data-ax-path='popUpContainerName']").html(parentsData.description);
 };
 
 fnObj.formView = axboot.viewExtend(axboot.formView, {

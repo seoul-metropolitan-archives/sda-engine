@@ -8,12 +8,13 @@ var CANCEL_STATUS = "Draft";
 var repositoryUuid = "";
 var shelfUuid = "";
 var statusUuid = "";
+var gridData = [];
 
 var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH: function (caller, act, data) {
         axboot.ajax({
             type: "GET",
-            url: "/api/v1/st/st001/01/list03",
+            url: "/api/v1/st/st004/01/list02",
             async : false,
             data: $.extend({}, {pageSize: 1000}, this.formView.getData(),{repositoryUuid:repositoryUuid,shelfUuid:shelfUuid,statusUuid03:statusUuid}),
             callback: function (res) {
@@ -33,12 +34,16 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             type: "GET",
             url: "/api/v1/st/st004/01/list01",
             async : false,
-            data: $.extend({},data),
+            data: $.extend({},data,{statusUuid : $('select[data-ax-path="statusUuid"]').val()},{containerTypeUuid : $('select[data-ax-path="containerTypeUuid"]').val()},{containerName : $('input[data-ax-path="containerName"]').val()}),
             callback: function (res) {
-                if(res.list == null || res.list.length <= 0){
+                /*if(res.list == null || res.list.length <= 0){
                     fnObj.gridView02.setData([]);
                     return;
                 }
+                fnObj.gridView02.setData(res.list);*/
+                fnObj.gridView02.clearData();
+                gridData = [];
+                gridData = ax5.util.deepCopy(res.list);
                 fnObj.gridView02.setData(res.list);
             },
             options: {
@@ -49,12 +54,46 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH2: function (caller, act, data) {
     },
     STATUS_UPDATE: function (caller, act, data) {
+        if (fnObj.gridView02.isChangeData() == true) {
+            axDialog.confirm({
+                msg: axboot.getCommonMessage("AA006")
+            }, function () {
+                if (this.key == "ok") {
+                    ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
+                    return;
+                }
+            });
+        }else{
+
+            var rows = fnObj.gridView02.gridObj.getCheckedList();
+            if (!rows || rows.length < 1) return;
+            var params = rows.filter(function (item) {
+                item.changeStatus = data;
+                return item.arrangeContainersResultUuid != "";
+            });
+
+
+            axboot.ajax({
+                type: "PUT",
+                url: "/api/v1/st/st004/02/confirm",
+                data: JSON.stringify(params),
+                callback: function (res) {
+
+                    ACTIONS.dispatch(ACTIONS.PAGE_SEARCH01);
+                },
+                options: {
+                    onError: axboot.viewError
+                }
+            });
+        }
     },
     ERROR_SEARCH: function (caller, act, data) {
     },
     PAGE_CONFIRM: function (caller, act, data) {
+        ACTIONS.dispatch(ACTIONS.STATUS_UPDATE,CONFIRM_STATUS);
     },
     PAGE_CANCEL: function (caller, act, data) {
+        ACTIONS.dispatch(ACTIONS.STATUS_UPDATE,CANCEL_STATUS);
     },
     PAGE_SAVE: function (caller, act, data) {
         if (!this.gridView02.gridObj.validate()) {
@@ -253,6 +292,12 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
                 $(".btn_inquiry01").trigger('click');
         });
 
+        $("select[data-ax-path='statusUuid'], select[data-ax-path='containerTypeUuid']").change(function() {
+            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH01);
+        });
+
+
+
     },
     bindEvent : function()
     {
@@ -302,8 +347,6 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     initView: function () {
         this.initInstance();
         this.setColumnInfo(st00401.column_info);
-        this.gridObj.setOption({
-        })
         this.makeGrid();
         this.gridObj.itemClick(this.itemClick);
         this.removeRowBeforeEvent(this.cancelDelete);
@@ -332,13 +375,39 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
 fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
     tagId : "realgrid02",
     initView: function () {
-        this.initInstance();
+        /*this.initInstance();
         this.setColumnInfo(st00402.column_info);
         this.gridObj.setOption({
+            checkBar: {visible: true}
         })
         this.makeGrid();
         this.gridObj.itemClick(this.itemClick);
-        this.removeRowBeforeEvent(this.cancelDelete);
+        this.removeRowBeforeEvent(this.cancelDelete);*/
+
+        this.gridObj = new TreeGridWrapper("realgrid02", "/assets/js/libs/realgrid", true);
+        this.gridObj.setGridStyle("100%", "100%")
+            .setOption({
+                header: { visible: true },
+                checkBar: {visible: true},
+                indicator: {visible: true},
+                lineVisible: false
+            });
+        this.gridObj.setColumnInfo(st00402.column_info).makeGrid();
+        this.gridObj.onItemChecked(this.onItemChecked);
+        this.gridObj.setDisplayOptions({
+            fitStyle:"evenFill"
+        });
+        // this.gridObj.gridView.setSelectOptions({
+        //         style: "none"
+        //     }
+        // )
+        this.gridObj.gridView.setCheckBar({
+            checkableExpression: "values['choiceYn'] match 'Y'"
+        });
+        this.gridObj.gridView.applyCheckables();
+        //this.gridObj.itemClick(this.itemClick);
+        //this.removeRowBeforeEvent(this.cancelDelete);
+
     },
     isChangeData: function () {
         if (this.getData().length > 0) {
@@ -354,6 +423,9 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
     },
     getData: function () {
         return this.gridObj.getData();
+    },
+    setData: function (list) {
+        this.gridObj.setTreeDataForArray(list, "orderKey1");
     },
 });
 /**

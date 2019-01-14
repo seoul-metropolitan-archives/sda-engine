@@ -64,5 +64,14 @@ var st00201 =
                     editable: false,
                     dataType: "code"
                 },
+                {
+                    sortNo: 7,
+                    width:140,
+                    name: "leaf",
+                    text: "leaf",
+                    editable: false,
+                    dataType: "code",
+                    visible : false
+                },
             ]
     }

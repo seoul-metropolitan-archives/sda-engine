@@ -13,8 +13,6 @@ import java.sql.Timestamp;
 public class St02501VO extends BaseVO {
     private String readerMachineUuid;
 
-    private int no;
-
     private String machineId;
 
     private String machineName;

@@ -356,12 +356,12 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
     initView: function () {
         this.initInstance();
         this.setColumnInfo(st00202.column_info);
-        this.gridObj.setFixedOptions({
+        /*this.gridObj.setFixedOptions({
             colCount: 3
-        });
+        });*/
         this.gridObj.setOption({
             checkBar: {visible: true},
-            indicator: {visible: true}
+            /*indicator: {visible: true}*/
         })
         this.makeGrid();
         // this.gridObj.itemClick(this.itemClick);
@@ -412,6 +412,15 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
             }
         }
 
+        //container안에 기록물이 있으면 삭제를 할수 없도록 한다. 비어있으면 그냥 삭제
+        if(parseInt(fnObj.gridView02.getSelectedData().recordCount) >= 1){
+            axToast.push(axboot.getCommonMessage("ST002_01"));
+            this.setRunDel(false);
+            return;
+        }
+
+
+
         if(state == CONFIRM_STATUS){
             axToast.push(axboot.getCommonMessage("DF001_01"));
 
@@ -419,6 +428,8 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
         }else{
             this.setRunDel(true);
         }
+
+
     }
 });
 /**

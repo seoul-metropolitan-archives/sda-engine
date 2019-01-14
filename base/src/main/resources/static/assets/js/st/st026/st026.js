@@ -145,6 +145,10 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
     },
     initEvent: function () {
         var _this = this;
+
+        $("select[data-ax-path='machineTypeUuid']").change(function() {
+            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+        });
     },
     getData: function () {
         var data = this.modelFormatter.getClearData(this.model.get()); // 모델의 값을 포멧팅 전 값으로 치환.
@@ -190,9 +194,9 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     entityName: "ST_READER_MACHINE",
     initView: function () {
         this.initInstance();
-        this.gridObj.setFixedOptions({
+        /*this.gridObj.setFixedOptions({
             colCount: 2
-        });
+        });*/
         this.setColumnInfo(st02601.column_info);
         this.makeGrid();
         this.gridObj.itemClick(this.itemClick);

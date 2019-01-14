@@ -34,7 +34,7 @@ var st01002 =
                     sortNo: 4,
                     name: "shelfName",
                     text: "Shelf Name",
-                    width: 120,
+                    width: 300,
                     editable: true,
                     dataType: "text",
                     required: true

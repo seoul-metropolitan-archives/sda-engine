@@ -24,7 +24,7 @@ var st00103 =
                 },
                 {
                     sortNo: 2,
-                    width:50,
+                    width:80,
                     name: "statusUuid",
                     text: "Status",
                     editable: false,
@@ -38,7 +38,7 @@ var st00103 =
                     sortNo: 3,
                     name: "rowNo",
                     text: "Row",
-                    width: 120,
+                    width: 50,
                     editable: true,
                     dataType: "text",
                     required: true
@@ -47,7 +47,7 @@ var st00103 =
                     sortNo: 4,
                     name: "columnNo",
                     text: "Column",
-                    width: 120,
+                    width: 50,
                     editable: true,
                     dataType: "text",
                     required: true
@@ -56,7 +56,7 @@ var st00103 =
                     sortNo: 5,
                     name: "totalContainer",
                     text: "Total Container",
-                    width: 120,
+                    width: 100,
                     editable: true,
                     dataType: "text",
                     required: true
@@ -65,7 +65,7 @@ var st00103 =
                     sortNo: 6,
                     name: "description",
                     text: "Description",
-                    width: 70,
+                    width: 200,
                     editable: true,
                     dataType: "multiline"
                 },
@@ -73,7 +73,7 @@ var st00103 =
                     sortNo: 7,
                     name: "notes",
                     text: "Notes",
-                    width: 120,
+                    width: 200,
                     editable: true,
                     dataType: "text"
                 },
@@ -123,6 +123,16 @@ var st00103 =
                     editable: false,
                     disable: true,
                     dataType: "timestamp"
-                }
+                },
+                {
+                    sortNo: 13,
+                    name: "containerCount",
+                    text: "containerCount",
+                    width: 120,
+                    editable: true,
+                    dataType: "code",
+                    required: false,
+                    visible: false
+                },
             ]
     }

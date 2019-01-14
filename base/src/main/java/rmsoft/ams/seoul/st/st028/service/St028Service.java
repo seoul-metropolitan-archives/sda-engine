@@ -30,6 +30,11 @@ public class St028Service extends BaseService {
     public Page<St02801VO> getStGate(Pageable pageable, RequestParams<St02801VO> requestParams) {
         St02801VO st02801VO = new St02801VO();
         st02801VO.setGateId(requestParams.getString("gateId"));
+        st02801VO.setGateName(requestParams.getString("gateName"));
+        st02801VO.setModeUuid(requestParams.getString("modeUuid"));
+        st02801VO.setSensorUseYn(requestParams.getString("sensorUseYn"));
+        st02801VO.setInZoneUuid(requestParams.getString("inZoneUuid"));
+        st02801VO.setOutZoneUuid(requestParams.getString("outZoneUuid"));
         //검색조건 추가시
 
         return filter(st028Mapper.getStGate(st02801VO), pageable, "", St02801VO.class);
@@ -44,8 +49,8 @@ public class St028Service extends BaseService {
                 stGateRepository.delete(stGate);
             }else{
                 if(stGate.isCreated()){
-                    int no = jdbcTemplate.queryForObject("SELECT ST_GATE_SEQ.NEXTVAL FROM dual", int.class);
-                    stGate.setNo(no);
+                    /*int no = jdbcTemplate.queryForObject("SELECT ST_GATE_SEQ.NEXTVAL FROM dual", int.class);
+                    stGate.setNo(no);*/
                 }else if(stGate.isModified()){
                     orgStGate = stGateRepository.findOne(stGate.getId());
                     stGate.setInsertDate(orgStGate.getInsertDate());

@@ -1,15 +1,17 @@
 var fnObj = {};
-
+var parentInZoneUuid = "";
+var parentOutZoneUuid = "";
 var ACTIONS = axboot.actionExtend(fnObj, {
     // JOB 조회
     PAGE_SEARCH: function (caller, act, data) {
         axboot.ajax({
             type: "GET",
             url: "/api/v1/st/st028/01/list01",
-            data: $.extend({}, {pageSize: 1000}, this.formView.getData()),
+            data: $.extend({}, {pageSize: 1000}, this.formView.getData(),{inZoneUuid: parentInZoneUuid},{outZoneUuid: parentOutZoneUuid}),
             callback: function (res) {
-                fnObj.gridView01.setData(res.list);
                 fnObj.gridView01.resetCurrent();
+                fnObj.gridView01.setData(res.list);
+
             },
             options: {
                 onError: axboot.viewError
@@ -79,7 +81,43 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         } else {
             return false;
         }
-    }
+    },
+    SEARCH_INZONE_SCH: function(caller, act, data){
+        axboot.modal.open({
+            modalType: "COMMON_POPUP",
+            preSearch : data["preSearch"],
+            sendData: function () {
+                return data;
+            },
+            callback: function (data) {
+                debugger
+                $("input[data-ax-path='InZoneName']").val(data["ZONE_NAME"])
+                $("input[data-ax-path='InZoneName']").attr("InZoneName",data["ZONE_NAME"])
+                parentInZoneUuid = data['ZONE_UUID'];
+                if(this.close)
+                    this.close();
+                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+            }
+        });
+    },
+    SEARCH_OUTZONE_SCH: function(caller, act, data){
+        axboot.modal.open({
+            modalType: "COMMON_POPUP",
+            preSearch : data["preSearch"],
+            sendData: function () {
+                return data;
+            },
+            callback: function (data) {
+                debugger
+                $("input[data-ax-path='outZoneName']").val(data["ZONE_NAME"])
+                $("input[data-ax-path='outZoneName']").attr("outZoneName",data["ZONE_NAME"])
+                parentOutZoneUuid = data['ZONE_UUID'];
+                if(this.close)
+                    this.close();
+                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+            }
+        });
+    },
 });
 
 
@@ -117,6 +155,34 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
     },
     initEvent: function () {
         var _this = this;
+
+        $("select[data-ax-path='modeUuid']").change(function () {
+            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+        });
+
+        $("select[data-ax-path='sensorUseYn']").change(function () {
+            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+        });
+
+        $("input[data-ax-path='InZoneName']").parents().eq(1).find("a").click(function(){
+            var data = {
+                popupCode : "PU146",
+                /*searchData : $("input[data-ax-path='parentContainerName']").val().trim(),*/
+                preSearch : false
+            };
+            ACTIONS.dispatch(ACTIONS.SEARCH_INZONE_SCH,data);
+        });
+
+        $("input[data-ax-path='outZoneName']").parents().eq(1).find("a").click(function(){
+            var data = {
+                popupCode : "PU146",
+                /*searchData : $("input[data-ax-path='parentContainerName']").val().trim(),*/
+                preSearch : false
+            };
+            ACTIONS.dispatch(ACTIONS.SEARCH_OUTZONE_SCH,data);
+        });
+
+
     },
     getData: function () {
         var data = this.modelFormatter.getClearData(this.model.get()); // 모델의 값을 포멧팅 전 값으로 치환.

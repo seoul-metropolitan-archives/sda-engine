@@ -7,7 +7,6 @@
 
     <select id="getStGate" resultType="St02801VO" parameterType="St02801VO" statementType="PREPARED">
         select A.GATE_UUID as gateUuid,
-               A.NO as no,
                A.GATE_ID as gateId,
                A.GATE_NAME as gateName,
                A.MODE_UUID as modeUuid,
@@ -21,7 +20,27 @@
               ON A.IN_ZONE_UUID = B.ZONE_UUID
           LEFT OUTER JOIN ST_ZONE C
               ON A.OUT_ZONE_UUID = C.ZONE_UUID
-          WHERE 1=1
+        <where>
+            1=1
+            <if test="gateId != null">
+                AND A.GATE_ID LIKE '%' || #{gateId} || '%'
+            </if>
+            <if test="gateName != null">
+                AND A.GATE_NAME LIKE '%' || #{gateName} || '%'
+            </if>
+            <if test="modeUuid != null">
+                AND A.MODE_UUID = #{modeUuid}
+            </if>
+            <if test="sensorUseYn != null">
+                AND A.SENSOR_USE_YN = #{sensorUseYn}
+            </if>
+            <if test="inZoneUuid != null">
+                AND A.IN_ZONE_UUID = #{inZoneUuid}
+            </if>
+            <if test="outZoneUuid != null">
+                AND A.OUT_ZONE_UUID = #{outZoneUuid}
+            </if>
+        </where>
     </select>
 
 </mapper>

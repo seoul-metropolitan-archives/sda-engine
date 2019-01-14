@@ -17,9 +17,31 @@
         <div class="cssBody" style="top:80px">
             <div class="contents_wrap">
                 <div style=" height:30px; width:100%" class="bgf7 div_tablerow">
-                    <ul class="bdb">
+                    <ul class="bdb" style="border:none">
                         <th:block layout:insert="~{/fragments/page-buttons :: bookmark}"/>
-                        <th:block layout:insert="~{/fragments/page-buttons :: arrange-and-save-and-inquiry}"/>
+                        <!--<th:block layout:insert="~{/fragments/page-buttons :: arrange-and-save-and-inquiry}"/>-->
+                        <li style="text-align:right; width:48%;">
+                            <button class="btn_co" th:id="arrange">
+                                <span class="btn_icon_co">&nbsp;</span>
+                                <span class="btn_main_txt">Arrange</span>
+                            </button>
+                            <button class="btn_co" th:id="confirm">
+                                <span class="btn_icon_co" >&nbsp;</span>
+                                <span class="btn_main_txt">Confirm</span>
+                            </button>
+                            <button class="btn_co" th:id="cancel">
+                                <span class="btn_icon_co">&nbsp;</span>
+                                <span class="btn_main_txt">Cancel</span>
+                            </button>
+                            <button class="btn_s" th:id="save">
+                                <span class="btn_icon">&nbsp;</span>
+                                <span class="btn_main_txt">Save(S)</span>
+                            </button>
+                            <button class="btn_i" th:id="inquiry">
+                                <span class="btn_icon">&nbsp;</span>
+                                <span class="btn_main_txt">Inquiry(I)</span>
+                            </button>
+                        </li>
                     </ul>
                 </div>
                 <div style="height:100%; width:100%" class="div_tablerow">
@@ -46,7 +68,13 @@
                     <div style="display:table; height:50%; width:84%; float:left">
                         <ul class="bdb div_tablerow bgf7" style="height:30px;">
                             <th:block layout:insert="~{/fragments/page-buttons :: dot('Aggregation')}"/>
-                            <th:block layout:insert="~{/fragments/page-buttons :: arrange-and-confirm-and-cancel-and-save-and-inquiry}"/>
+                            <!--<th:block layout:insert="~{/fragments/page-buttons :: arrange-and-confirm-and-cancel-and-save-and-inquiry}"/>-->
+                            <li style="text-align:right; width:48%;">
+                                <button class="btn_d">
+                                    <span class="btn_icon">&nbsp;</span>
+                                    <span class="btn_main_txt">Delete</span>
+                                </button>
+                            </li>
                         </ul>
                         <div class="div_tablerow" style="height:50px; width: 100%">
                             <dl>
@@ -63,10 +91,10 @@
                                 <dd>
                                     <input type=text style="width:135px" data-ax-path="containerName">
                                 </dd>
-                                <th:block layout:insert="~{/fragments/page-buttons :: searchInputYellow ('Aggregation Code','aggregationCode')}"/>
+                                <th:block layout:insert="~{/fragments/page-buttons :: searchInput ('Aggregation Code','aggregationCode')}"/>
                                 <dt>Title</dt>
                                 <dd>
-                                    <input type=text style="width:135px" data-ax-path="title">
+                                    <input type=text style="width:200px" data-ax-path="title">
                                 </dd>
                             </dl>
                             <dl>
@@ -83,17 +111,17 @@
                                 <dd class="w_auto">
                                 <dd class="w_auto">
                                     <div class="input-group" data-ax5picker="date">
-                                        <div class="cld_box" style="background-color: #fffdd6">
+                                        <div class="cld_box">
                                             <input type="text" data-ax-path="arrangedFromDate01"
-                                                   style="background-color: #fffdd6;ime-mode:disabled;"
+                                                   style="ime-mode:disabled;"
                                                    placeholder="YYYY-MM-DD" maxlength="10">
                                             <img title="calendar" class="ui-datepicker-trigger" alt="..."
                                                  src="/assets/images/ams/calendar.png">
                                         </div>
                                         ~
-                                        <div class="cld_box" style="background-color: #fffdd6">
+                                        <div class="cld_box">
                                             <input type="text" data-ax-path="arrangedToDate01"
-                                                   style="background-color: #fffdd6;ime-mode:disabled;"
+                                                   style="ime-mode:disabled;"
                                                    placeholder="YYYY-MM-DD" maxlength="10">
                                             <img title="calendar" class="ui-datepicker-trigger" alt="..."
                                                  src="/assets/images/ams/calendar.png">
@@ -118,7 +146,7 @@
 
                         <ul class="bdb bdt div_tablerow bgf7" style="height:30px;">
                             <th:block layout:insert="~{/fragments/page-buttons :: dot('Item')}"/>
-                            <th:block layout:insert="~{/fragments/page-buttons :: inquiry-and-and-confirm-and-cancel}"/>
+                            <!--<th:block layout:insert="~{/fragments/page-buttons :: inquiry-and-and-confirm-and-cancel}"/>-->
                         </ul>
                        <!-- <div class="div_tablerow" style="height:50px; width: 100%">
                             <dl>

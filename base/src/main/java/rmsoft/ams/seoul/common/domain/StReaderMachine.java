@@ -25,9 +25,9 @@ public class StReaderMachine extends SimpleJpaModel<StReaderMachine.StReaderMach
     @Id
     @Column(name = "READER_MACHINE_UUID", length = 36, nullable = false)
     private String readerMachineUuid;
-
+/*
     @Column(name = "NO", length = 4, nullable = false)
-    private int no;
+    private int no;*/
 
     @Column(name = "MACHINE_ID", length = 36, nullable = false)
     private String machineId;
