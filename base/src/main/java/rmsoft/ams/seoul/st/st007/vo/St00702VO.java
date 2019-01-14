@@ -20,8 +20,8 @@ public class St00702VO extends BaseVO {
     private Timestamp descriptionEndDate;
     private Timestamp initialDate;
     private Timestamp disposalDueDate;
-    private Timestamp disposalDueDateStart;
-    private Timestamp disposalDueDateEnd;
+    private String disposalDueDateStart; //filter 인애들은 string 을 주자
+    private String disposalDueDateEnd;//filter 인애들은 string 을 주자
     private Timestamp disposalCompleteDate;
 
 

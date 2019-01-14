@@ -18,7 +18,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         //     // 이렇게 해줘야 앞에서 저장된 parentContainerUuid 을 reset 할 수 있음.
         //     parentContainerUuid = undefined;
         // }
-        console.log($("input[data-ax-path='parentContainerName']").attr("parentContainerName"));
+
         axboot.ajax({
             type: "GET",
             url: "/api/v1/st/st006/01/list01",
