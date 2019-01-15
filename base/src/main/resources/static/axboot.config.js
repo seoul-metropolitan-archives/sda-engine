@@ -339,6 +339,13 @@
                     url: "/rc/rc005/p_rc005"
                 }
             },
+            "NOTICE_POPUP": {
+                width: 600,
+                height: 550,
+                iframe: {
+                    url: "/ad/ad010/ad010-p01"
+                }
+            }
         };
     }
 
