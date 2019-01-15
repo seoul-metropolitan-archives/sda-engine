@@ -3,6 +3,7 @@ var inoutExceptUuid = "";
 var repositoryUuid;
 var shelfUuid;
 var locationUuid;
+var zoneUuid;
 var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH: function (caller, act, data) {
         ACTIONS.dispatch(ACTIONS.PAGE_SEARCH01);
@@ -11,7 +12,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         axboot.ajax({
             type: "GET",
             url: "/api/v1/st/st021/01/list01",
-            data: $.extend({pageSize: 1000}, this.formView.getData(), {repositoryUuid: repositoryUuid, shelfUuid: shelfUuid, locationUuid: locationUuid}),
+            data: $.extend({pageSize: 1000}, this.formView.getData(), {repositoryUuid: repositoryUuid, shelfUuid: shelfUuid, locationUuid: locationUuid, zoneUuid : zoneUuid}),
             callback: function (res) {
                 fnObj.gridView01.setData(res.list);
                 //fnObj.gridView01.disabledColumn();
@@ -266,6 +267,24 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             }
         });
     },
+    SEARCH_ZONE_SCH: function(caller, act, data){
+        axboot.modal.open({
+            modalType: "COMMON_POPUP",
+            preSearch : data["preSearch"],
+            sendData: function () {
+                return data;
+            },
+            callback: function (data) {
+
+                $("input[data-ax-path='zoneName']").val(data["ZONE_NAME"])
+                $("input[data-ax-path='zoneName']").attr("zoneName",data["ZONE_NAME"])
+                zoneUuid = data['ZONE_UUID'];
+                if(this.close)
+                    this.close();
+                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+            }
+        });
+    },
 });
 
 fnObj.pageStart = function () {
@@ -353,7 +372,7 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
         $("select[data-ax-path='statusUuid'], select[data-ax-path='containerTypeUuid']").change(function () {
             ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
         });
-        $("input[data-ax-path='takeoutDateFrom']").keyup(function () {
+        $("input[data-ax-path='inoutDateTimeFrom']").keyup(function () {
             var date = this.value;
             if (date.match(/^\d{4}$/) !== null) {
                 this.value = date + '-';
@@ -361,10 +380,10 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
                 this.value = date + '-';
             }
         });
-        $("input[data-ax-path='takeoutDateFrom']").keypress(function () {
+        $("input[data-ax-path='inoutDateTimeFrom']").keypress(function () {
             if ((event.keyCode < 48) || (event.keyCode > 57)) event.returnValue = false;
         });
-        $("input[data-ax-path='takeoutDateTo']").keyup(function () {
+        $("input[data-ax-path='inoutDateTimeTo']").keyup(function () {
             var date = this.value;
             if (date.match(/^\d{4}$/) !== null) {
                 this.value = date + '-';
@@ -372,10 +391,17 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
                 this.value = date + '-';
             }
         });
-        $("input[data-ax-path='takeoutDateTo']").keypress(function () {
+        $("input[data-ax-path='inoutDateTimeTo']").keypress(function () {
             if ((event.keyCode < 48) || (event.keyCode > 57)) event.returnValue = false;
         });
-
+        $("input[data-ax-path='zoneName']").parents().eq(1).find("a").click(function(){
+            var data = {
+                popupCode : "PU146",
+                /*searchData : $("input[data-ax-path='parentContainerName']").val().trim(),*/
+                preSearch : false
+            };
+            ACTIONS.dispatch(ACTIONS.SEARCH_ZONE_SCH,data);
+        });
 
     },
     getData: function () {
@@ -436,7 +462,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
         this.initInstance();
         this.setColumnInfo(st02101.column_info);
         this.gridObj.setOption({
-            checkBar: {visible: true}
+            checkBar: {visible: false}
         })
         this.makeGrid();
         this.gridObj.itemClick(this.itemClick);

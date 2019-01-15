@@ -19,7 +19,8 @@ var st01802 =
                     text: "순번",
                     width: 120,
                     editable: false,
-                    dataType: "number"
+                    dataType: "number",
+                    visible: false,
                 },
                 {
                     sortNo: 2,

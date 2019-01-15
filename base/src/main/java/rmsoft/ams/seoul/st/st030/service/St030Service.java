@@ -26,6 +26,7 @@ import rmsoft.ams.seoul.st.st030.vo.St03001VO;
 import javax.inject.Inject;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class St030Service extends BaseService {
@@ -46,31 +47,46 @@ public class St030Service extends BaseService {
         St03001VO.setLocationUuid(requestParams.getString("locationUuid"));
         St03001VO.setCode(requestParams.getString("code"));
         St03001VO.setTitle(requestParams.getString("title"));
-        
+
+        St03001VO.setContainerUuid(requestParams.getString("containerUuid"));
+        St03001VO.setRepublishYn(requestParams.getString("republishYn"));
+        St03001VO.setRequestDateFrom(requestParams.getString("requestDateFrom"));
+        St03001VO.setRequestDateTo(requestParams.getString("requestDateTo"));
+        St03001VO.setSourceTypeUuid(requestParams.getString("sourceTypeUuid"));
+
+
+
+
         return filter(st030Mapper.getStMissArrangeRequest(St03001VO), pageable, "", St03001VO.class);
     }
 
     @Transactional
-    public ApiResponse saveStMissArrangeRecordReq(St03001VO vo) {
-        StMissArrangeRecordReq stMissArrangeRecordReq = ModelMapperUtils.map(vo, StMissArrangeRecordReq.class);
+    public ApiResponse saveStMissArrangeRecordReq(List<St03001VO> aParameter) {
 
-        // - 실제 보존상자 기준으로 기록물을 재배치 합니다.
+        for( int i =0  ; i< aParameter.size(); i++) {
+            St03001VO vo = aParameter.get(i);
+            StMissArrangeRecordReq stMissArrangeRecordReq = ModelMapperUtils.map(vo, StMissArrangeRecordReq.class);
+            StMissArrangeRecordReq orgStMissArrangeRecordReq = stMissArrangeRecordReqRepository.findOne(stMissArrangeRecordReq.getId());
+            // - 실제 보존상자 기준으로 기록물을 재배치 합니다.
 
-        // - [0]st_arrange_records_result 에 Container정보를 Update합니다.
-        St003VO stArrangeRecordsResultVO = st030Mapper.getStArrangeRecordsResult(vo);
-        StArrangeRecordsResult stArrangeRecordsResult = ModelMapperUtils.map(stArrangeRecordsResultVO, StArrangeRecordsResult.class);
-        StArrangeRecordsResult orgStArrangeRecordResult = stArrangeRecordsResultRepository.findOne(stArrangeRecordsResult.getId());
-        orgStArrangeRecordResult.setContainerUuid( stMissArrangeRecordReq.getContainerUuid() ); // 콘테이너 재배치
-        orgStArrangeRecordResult.setUpdateUuid(SessionUtils.getCurrentLoginUserUuid());
-        orgStArrangeRecordResult.setUpdateDate(Timestamp.valueOf(DateUtils.convertToString(LocalDateTime.now(), DateUtils.DATE_TIME_PATTERN)));
-        stArrangeRecordsResultRepository.save(orgStArrangeRecordResult);
+            // - [1]ST_MISS_ARRANGE_RECORD_REQ 에 Arrange yn, Arrange Date를 UPDATE합니다.
+            orgStMissArrangeRecordReq.setRepublishYn("Y");
+            orgStMissArrangeRecordReq.setRepublishDate(DateUtils.convertToString(LocalDateTime.now(), DateUtils.DATE_TIME_PATTERN));
+            orgStMissArrangeRecordReq.setUpdateUuid(SessionUtils.getCurrentLoginUserUuid());
+            orgStMissArrangeRecordReq.setUpdateDate(Timestamp.valueOf(DateUtils.convertToString(LocalDateTime.now(), DateUtils.DATE_TIME_PATTERN)));
+            orgStMissArrangeRecordReq.setCurrentContainerUuid(orgStMissArrangeRecordReq.getContainerUuid()); // 올바른 콘테이너로 재배치.
+            stMissArrangeRecordReqRepository.save(orgStMissArrangeRecordReq);
+            // - [0]st_arrange_records_result 에 Container정보를 Update합니다.
+            St003VO stArrangeRecordsResultVO = st030Mapper.getStArrangeRecordsResult(vo);
+            StArrangeRecordsResult stArrangeRecordsResult = ModelMapperUtils.map(stArrangeRecordsResultVO, StArrangeRecordsResult.class);
+            StArrangeRecordsResult orgStArrangeRecordResult = stArrangeRecordsResultRepository.findOne(stArrangeRecordsResult.getId());
+            orgStArrangeRecordResult.setContainerUuid(orgStMissArrangeRecordReq.getContainerUuid()); // 콘테이너 재배치
 
-        // - [1]ST_MISS_ARRANGE_RECORD_REQ 에 Arrange yn, Arrange Date를 UPDATE합니다.
-        stMissArrangeRecordReq.setRepublishYn("Y");
-        stMissArrangeRecordReq.setRepublishDate(DateUtils.convertToString(LocalDateTime.now(), DateUtils.DATE_TIME_PATTERN));
-        orgStArrangeRecordResult.setUpdateUuid(SessionUtils.getCurrentLoginUserUuid());
-        orgStArrangeRecordResult.setUpdateDate(Timestamp.valueOf(DateUtils.convertToString(LocalDateTime.now(), DateUtils.DATE_TIME_PATTERN)));
-        stMissArrangeRecordReqRepository.save(stMissArrangeRecordReq);
+            orgStArrangeRecordResult.setUpdateUuid(SessionUtils.getCurrentLoginUserUuid());
+            orgStArrangeRecordResult.setUpdateDate(Timestamp.valueOf(DateUtils.convertToString(LocalDateTime.now(), DateUtils.DATE_TIME_PATTERN)));
+            stArrangeRecordsResultRepository.save(orgStArrangeRecordResult);
+        }
+
 
         return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");
     }

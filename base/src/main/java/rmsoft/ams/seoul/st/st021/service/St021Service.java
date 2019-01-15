@@ -39,6 +39,11 @@ public class St021Service extends BaseService {
         St02101VO.setLocationUuid(requestParams.getString("locationUuid"));
         St02101VO.setCode(requestParams.getString("code"));
         St02101VO.setTitle(requestParams.getString("title"));
+        St02101VO.setZoneUuid(requestParams.getString("zoneUuid"));
+        St02101VO.setInoutDateTimeFrom(requestParams.getString("inoutDateTimeFrom"));
+        St02101VO.setInoutDateTimeTo(requestParams.getString("inoutDateTimeTo"));
+
+
 
         return filter(st021Mapper.getStWithoutNoticeInoutHistStatistic(St02101VO), pageable, "", St02101VO.class);
     }

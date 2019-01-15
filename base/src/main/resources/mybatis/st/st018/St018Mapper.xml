@@ -14,7 +14,7 @@ SELECT
        B.publishedStatus,
        A.PUBLISHED_STATUS_UUID publishedStatusUuid,
         FC_AD_CODE_NM(RFID_TAG.PUBLISH_STATUS_UUID) publishStatus,
-        RFID_TAG.PUBLISH_STATUS_UUID publishStatusUuid,-- 태그발행 uuid
+        RFID_TAG.PUBLISH_STATUS_UUID publishStatusUuid,
         RFID_TAG.PUBLISH_DATE publishDate,
        B.author,
        B.descStrDate,
@@ -145,7 +145,7 @@ FROM RC_AGGREGATION A
             1=1
             AND tag.AGGREGATION_UUID = #{aggregationUuid}
         </where>
-        ORDER BY PUBLISH_DATE desc
+        ORDER BY PUBLISH_DATE
     </select>
 
 

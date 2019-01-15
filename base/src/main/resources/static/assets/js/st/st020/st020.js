@@ -16,6 +16,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 fnObj.gridView01.setData(res.list);
                 //fnObj.gridView01.disabledColumn();
                 fnObj.gridView02.clearData();
+                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH02);
             },
             options: {
                 onError: axboot.viewError
@@ -30,7 +31,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         axboot.ajax({
             type: "GET",
             url: "/api/v1/st/st018/01/list02",
-            data: $.extend({pageSize: 1000}, this.formView.getData(), {inoutExceptUuid: fnObj.gridView01.getSelectedData().inoutExceptUuid}, {repositoryUuid: repositoryUuid, shelfUuid: shelfUuid, locationUuid: locationUuid}),
+            data: $.extend({pageSize: 1000}, this.formView.getData(), {aggregationUuid: fnObj.gridView01.getSelectedData().aggregationUuid}, {repositoryUuid: repositoryUuid, shelfUuid: shelfUuid, locationUuid: locationUuid}),
             callback: function (res) {
                 fnObj.gridView02.setData(res.list);
                 // fnObj.gridView02.disabledColumn();
@@ -291,6 +292,8 @@ fnObj.pageStart = function () {
         success: function () {
         }
     });
+
+
     _this.formView.initView();
     _this.gridView01.initView();
     _this.gridView02.initView();
@@ -306,6 +309,13 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
         this.model = new ax5.ui.binder();
         this.model.setModel(this.getDefaultData(), this.target);
         this.modelFormatter = new axboot.modelFormatter(this.model); // 모델 포메터 시작
+        this.target.find('[data-ax5picker="date"]').ax5picker({
+            direction: "auto",
+            content: {
+                type: 'date'
+            }
+        });
+
         this.initEvent();
         this.bindEvent();
     },
@@ -331,6 +341,48 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
                 ACTIONS.dispatch(ACTIONS.SEARCH_SHELF_SCH, data);
             }
         });
+
+        $("input[data-ax-path='locationName']").parents().eq(1).find("a").click(function () {
+            if ("" != shelfUuid) {
+                var data = {
+                    popupCode: "PU147",
+                    searchData: shelfUuid,
+                    preSearch: false
+                };
+                ACTIONS.dispatch(ACTIONS.SEARCH_LOCATION_SCH, data);
+            }
+        });
+
+
+        $("input[data-ax-path='publishDateFrom']").keyup(function () {
+            var date = this.value;
+            if (date.match(/^\d{4}$/) !== null) {
+                this.value = date + '-';
+            } else if (date.match(/^\d{4}\-\d{2}$/) !== null) {
+                this.value = date + '-';
+            }
+        });
+        $("input[data-ax-path='publishDateFrom']").keypress(function () {
+            if ((event.keyCode < 48) || (event.keyCode > 57)) event.returnValue = false;
+        });
+        $("input[data-ax-path='publishDateTo']").keyup(function () {
+            var date = this.value;
+            if (date.match(/^\d{4}$/) !== null) {
+                this.value = date + '-';
+            } else if (date.match(/^\d{4}\-\d{2}$/) !== null) {
+                this.value = date + '-';
+            }
+        });
+        $("input[data-ax-path='publishDateTo']").keypress(function () {
+            if ((event.keyCode < 48) || (event.keyCode > 57)) event.returnValue = false;
+        });
+
+
+
+        $("select[data-ax-path='statusUuid'], select[data-ax-path='containerTypeUuid'], select[data-ax-path='publishStatusUuid']").change(function () {
+            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+        });
+
 
     },
     getData: function () {
@@ -391,7 +443,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
         this.initInstance();
         this.setColumnInfo(st02001.column_info);
         this.gridObj.setOption({
-            checkBar: {visible: true}
+            checkBar: {visible: false}
         })
         this.makeGrid();
         this.gridObj.itemClick(this.itemClick);
@@ -465,7 +517,7 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
         this.initInstance();
         this.setColumnInfo(st01802.column_info);
         this.gridObj.setOption({
-            checkBar: {visible: true}
+            checkBar: {visible: false}
         })
         this.makeGrid();
         //this.gridObj.itemClick(this.itemClick);

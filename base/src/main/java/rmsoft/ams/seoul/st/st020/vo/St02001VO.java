@@ -34,4 +34,8 @@ public class St02001VO extends BaseVO {
     private String publishStatusUuid;
     private int publishCount;
     private String publishDate;
+    private String publishStatus;
+
+    private String publishDateFrom;
+    private String publishDateTo;
 }

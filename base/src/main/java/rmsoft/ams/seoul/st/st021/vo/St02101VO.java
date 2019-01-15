@@ -36,6 +36,9 @@ public class St02101VO extends BaseVO {
     private String inoutName;
     private String inoutDateTime;
     private String zoneName;
+    private String zoneUuid;
+    private String inoutDateTimeFrom;
+    private String inoutDateTimeTo;
 
 
 

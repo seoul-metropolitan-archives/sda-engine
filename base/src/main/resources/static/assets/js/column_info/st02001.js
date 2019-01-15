@@ -34,8 +34,8 @@ var st02001 =
                     name: "title",
                     text: "Title",
                     width: 200,
-                    required: true,
-                    editable: true,
+                    required: false,
+                    editable: false,
                     dataType: "text"
                 },
                 {
@@ -56,42 +56,7 @@ var st02001 =
                     dataType: "text",
                     disable: true
                 },
-                {
-                    sortNo: 5,
-                    name: "publishedStatus",
-                    text: "Published Status",
-                    width: 100,
-                    editable: false,
-                    dataType: "text",
-                    disable: true
-                },
-                {
-                    sortNo: 6,
-                    name: "author",
-                    text: "Author",
-                    width: 140,
-                    editable: false,
-                    dataType: "text",
-                    disable: true
-                },
-                {
-                    sortNo: 7,
-                    name: "descStrDate",
-                    text: "Start Date",
-                    width: 140,
-                    editable: false,
-                    dataType: "date",
-                    disable: true
-                },
-                {
-                    sortNo: 8,
-                    name: "descEdDate",
-                    text: "End Date",
-                    width: 140,
-                    editable: false,
-                    dataType: "date",
-                    disable: true
-                },
+
                 {
                     sortNo: 9,
                     name: "repositoryName",
@@ -132,7 +97,7 @@ var st02001 =
                     sortNo: 13,
                     name: "publishCount",
                     text: "Publish Count",
-                    width: 70,
+                    width: 100,
                     editable: false,
                     dataType: "number"
                 },

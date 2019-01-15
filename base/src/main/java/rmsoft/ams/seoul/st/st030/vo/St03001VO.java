@@ -9,9 +9,10 @@ import java.sql.Timestamp;
 
 @Data
 @NoArgsConstructor
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = true)
 public class St03001VO extends BaseVO {
 
+    private String missArrangeRecordUuid;
     private String aggregationUuid;
     private String code;
     private String title;
@@ -32,5 +33,7 @@ public class St03001VO extends BaseVO {
     private Timestamp republishDate;
     private String containerUuid;
     private String containerName;
+    private String requestDateFrom;
+    private String requestDateTo;
 
 }

@@ -1,8 +1,10 @@
 package rmsoft.ams.seoul.st.st030.controller;
 
 import io.onsemiro.controller.BaseController;
+import io.onsemiro.core.api.ApiException;
 import io.onsemiro.core.api.response.ApiResponse;
 import io.onsemiro.core.api.response.Responses;
+import io.onsemiro.core.code.ApiStatus;
 import io.onsemiro.core.parameter.RequestParams;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,7 +14,9 @@ import rmsoft.ams.seoul.st.st030.service.St030Service;
 import rmsoft.ams.seoul.st.st030.vo.St03001VO;
 
 
+
 import javax.inject.Inject;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/v1/st/st030")
@@ -29,8 +33,13 @@ public class St030Controller extends BaseController {
 
     @PutMapping(value = "/01/save01")
     @PostMapping
-    public ApiResponse saveStMissArrangeRecordReq(@RequestBody St03001VO requestParams) {
-       return service.saveStMissArrangeRecordReq(requestParams);
+    public ApiResponse saveStMissArrangeRecordReq(@RequestBody List<St03001VO> requestParams) {
+        ApiResponse apiResponse = service.saveStMissArrangeRecordReq(requestParams);
+        if(apiResponse.getStatus() == -1) {
+            throw new ApiException(ApiStatus.SYSTEM_ERROR, apiResponse.getMessage());
+        }
+        return apiResponse;
+
     }
 
    /* @GetMapping("/01/list02")

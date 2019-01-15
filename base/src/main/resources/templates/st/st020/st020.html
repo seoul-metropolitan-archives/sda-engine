@@ -39,20 +39,20 @@
                 <div class="bdb div_tablerow">
                     <dl>
 
-                        <th:block layout:insert="~{/fragments/page-buttons :: searchInputYellow ('서고','repositoryName')}"/>
-                        <th:block layout:insert="~{/fragments/page-buttons :: searchInputYellow ('서가','shelfName')}"/>
-                        <th:block layout:insert="~{/fragments/page-buttons :: searchInputYellow ('행렬단','locationName')}"/>
+                        <th:block layout:insert="~{/fragments/page-buttons :: searchInput ('서고','repositoryName')}"/>
+                        <th:block layout:insert="~{/fragments/page-buttons :: searchInput ('서가','shelfName')}"/>
+                        <th:block layout:insert="~{/fragments/page-buttons :: searchInput ('행렬단','locationName')}"/>
                         <dt>발행 일자</dt>
                         <dd class="w_auto">
                             <div class="input-group" data-ax5picker="date">
-                                <div class="cld_box" style="background-color: #fffdd6">
-                                    <input type="text" data-ax-path="startFromDate" style="background-color: #fffdd6;ime-mode:disabled;"
+                                <div class="cld_box" style="">
+                                    <input type="text" data-ax-path="publishDateFrom" style=";ime-mode:disabled;"
                                            placeholder="YYYY-MM-DD" maxlength="10">
                                     <img title="calendar" class="ui-datepicker-trigger" alt="..." src="/assets/images/ams/calendar.png" >
                                 </div>
                                 ~
-                                <div class="cld_box" style="background-color: #fffdd6">
-                                    <input type="text" data-ax-path="startToDate" style="background-color: #fffdd6;ime-mode:disabled;"
+                                <div class="cld_box" style="">
+                                    <input type="text" data-ax-path="publishDateTo" style=";ime-mode:disabled;"
                                            placeholder="YYYY-MM-DD" maxlength="10">
                                     <img title="calendar" class="ui-datepicker-trigger" alt="..." src="/assets/images/ams/calendar.png">
                                 </div>
@@ -71,9 +71,9 @@
                         </dd>
                         <dt class="w120 mgl_5">Publish Status</dt>
                         <dd>
-                            <select data-ax-path="statusUuid" style="width:135px;">
+                            <select data-ax-path="publishStatusUuid" style="width:135px;">
                                 <option value="" ></option>
-                                <option th:each="item : ${statusUuid}"
+                                <option th:each="item : ${publishStatusUuid}"
                                         th:value="${item.codeDetailUUID}"
                                         th:text="${item.codeName}"/>
                             </select>
