@@ -34,6 +34,11 @@ public class St021Service extends BaseService {
         St02101VO St02101VO = new St02101VO();
         //St02101VO.setRequestName(requestParams.getString("requestName"));
         //검색조건 추가시
+        St02101VO.setRepositoryUuid(requestParams.getString("repositoryUuid"));
+        St02101VO.setShelfUuid(requestParams.getString("shelfUuid"));
+        St02101VO.setLocationUuid(requestParams.getString("locationUuid"));
+        St02101VO.setCode(requestParams.getString("code"));
+        St02101VO.setTitle(requestParams.getString("title"));
 
         return filter(st021Mapper.getStWithoutNoticeInoutHistStatistic(St02101VO), pageable, "", St02101VO.class);
     }

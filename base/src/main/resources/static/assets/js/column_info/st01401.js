@@ -34,8 +34,8 @@ var st01401 =
                     name: "title",
                     text: "Title",
                     width: 200,
-                    required: true,
-                    editable: true,
+                    required: false,
+                    editable: false,
                     dataType: "text"
                 },
                 {
@@ -115,6 +115,15 @@ var st01401 =
                     width: 250,
                     editable: false,
                     dataType: "text"
+                },
+                {
+                    sortNo: 10,
+                    name: "inoutDateTime",
+                    text: "출입일시",
+                    width: 140,
+                    editable: false,
+                    dataType: "date",
+                    disable: true
                 },
             ]
     }

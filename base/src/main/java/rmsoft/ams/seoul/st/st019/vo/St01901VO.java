@@ -19,13 +19,22 @@ public class St01901VO extends BaseVO {
     private String level;
     private String type;
     private String publishedStatus;
+
+    private String repositoryUuid;
+    private String shelfUuid;
+    private String containerTypeUuid;
+    private String locationUuid;
+
     private String author;
     private String descStrDate;
     private String descEdDate;
     private String repositoryName;
     private String shelfName;
     private String locationName;
+    private String publishSourceTypeUuid;
     private String requestDate;
+    private String requestDateFrom;
+    private String requestDateTo;
     private String republishYn;
     private String republishDate;
 

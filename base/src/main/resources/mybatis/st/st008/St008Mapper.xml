@@ -5,7 +5,7 @@
 
 <mapper namespace="rmsoft.ams.seoul.st.st008.dao.St008Mapper">
     <select id="getStTakeoutRequest" resultType="St00801VO" statementType="PREPARED">
-        <![CDATA[
+
             select
                    TAKEOUT_REQUEST_UUID takeoutRequestUuid,
                    REQUEST_NAME requestName,
@@ -31,9 +31,29 @@
                 ON USER_UUID = request.REQUESTOR_UUID
               INNER JOIN AC_USER_GROUP user_group
                 ON user_group.USER_GROUP_UUID = group_user.USER_GROUP_UUID
+            <where>
+                1=1
+                <if test="requestName != null">
+                    AND REQUEST_NAME LIKE '%' || #{requestName} || '%'
+                </if>
+                <if test="requestorUuid != null">
+                    AND request.REQUESTOR_UUID  = #{requestorUuid}
+                </if>
+                <if test="takeoutDateFrom != null">
+                    AND request.TAKEOUT_DATE <![CDATA[>=]]> TO_DATE(#{takeoutDateFrom},'yyyy-mm-dd')
+                </if>
+                <if test="takeoutDateTo != null">
+                    AND request.TAKEOUT_DATE <![CDATA[<]]> TO_DATE(#{takeoutDateTo},'yyyy-mm-dd')
+                </if>
+                <if test="returnDueDateFrom != null">
+                    AND request.RETURN_DUE_DATE <![CDATA[>=]]> TO_DATE(#{returnDueDateFrom},'yyyy-mm-dd')
+                </if>
+                <if test="returnDueDateTo != null">
+                    AND request.RETURN_DUE_DATE <![CDATA[<]]> TO_DATE(#{returnDueDateTo},'yyyy-mm-dd')
+                </if>
+            </where>
             ORDER BY requestName
 
-        ]]>
     </select>
     <select id="getStTakeoutRecordResult" resultType="St00802VO" statementType="PREPARED">
 
@@ -54,21 +74,21 @@
                (location.ROW_NO || '행 ' || location.COLUMN_NO || '열') as locationName -- 행렬단
 
         FROM ST_TAKEOUT_RECORD_RESULT record_result
-                  INNER JOIN (
+                  LEFT JOIN (
                     SELECT ar.AGGREGATION_UUID, ar.CONTAINER_UUID    FROM RC_ITEM item
                       INNER JOIN ST_ARRANGE_RECORDS_RESULT ar  -- 이부분 arrange 가 안돼있어도 되는건지 노은에게 물어볼것
                         ON ar.AGGREGATION_UUID = item.AGGREGATION_UUID
                     ) etc
                   ON etc.AGGREGATION_UUID = record_result.AGGREGATION_UUID
-                  INNER JOIN ST_ARRANGE_CONTAINERS_RESULT acr
+                  LEFT JOIN ST_ARRANGE_CONTAINERS_RESULT acr
                     ON acr.CONTAINER_UUID = etc.CONTAINER_UUID
-                  INNER JOIN ST_LOCATION location
+                  LEFT JOIN ST_LOCATION location
                     ON location.LOCATION_UUID = acr.LOCATION_UUID
-                  INNER JOIN ST_CONTAINER container
+                  LEFT JOIN ST_CONTAINER container
                     ON container.CONTAINER_UUID = etc.CONTAINER_UUID
-                  INNER JOIN ST_SHELF shelf
+                  LEFT JOIN ST_SHELF shelf
                     ON shelf.SHELF_UUID = location.SHELF_UUID
-                  INNER JOIN ST_REPOSITORY repository
+                  LEFT JOIN ST_REPOSITORY repository
                     ON repository.REPOSITORY_UUID = shelf.REPOSITORY_UUID
                   INNER JOIN (SELECT AGGREGATION_UUID                                                                         as uuid,
                                      1                                                                                        as orderNo,
@@ -114,6 +134,17 @@
         <where>
             1=1
             AND record_result.TAKEOUT_REQUEST_UUID = #{takeoutRequestUuid}
+            <if test="code != null">
+                <![CDATA[
+                   AND B.code  LIKE '%' || #{code} || '%'
+                ]]>
+            </if>
+            <if test="title != null">
+                <![CDATA[
+                   AND B.title  LIKE '%' || #{title} || '%'
+                ]]>
+
+            </if>
         </where>
 
      </select>

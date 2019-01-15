@@ -45,35 +45,35 @@
                         <dd>
                             <input type=text style="width:135px" data-ax-path="requestName">
                         </dd>
-                        <th:block layout:insert="~{/fragments/page-buttons :: searchInputYellow ('서고','repositoryName')}"/>
-                        <th:block layout:insert="~{/fragments/page-buttons :: searchInputYellow ('서가','shelfName')}"/>
+                        <th:block layout:insert="~{/fragments/page-buttons :: searchInput ('서고','repositoryName')}"/>
+                        <th:block layout:insert="~{/fragments/page-buttons :: searchInput ('서가','shelfName')}"/>
+
                         <dt class="w150">Aggregation Code</dt>
                         <dd>
-                            <input type=text style="width:135px" data-ax-path="test1">
+                            <input type=text style="width:135px" data-ax-path="code">
                         </dd>
                         <dt class="w150">Aggregation Title</dt>
                         <dd>
-                            <input type=text style="width:135px" data-ax-path="test2">
+                            <input type=text style="width:135px" data-ax-path="title">
                         </dd>
                     </dl>
                     <dl>
-                        <dt class="w150">작성자</dt>
-                        <dd>
-                            <input type=text style="width:135px" data-ax-path="test3">
-                        </dd>
+                        <th:block layout:insert="~{/fragments/page-buttons :: searchInput ('작성자','requestorName')}"/>
                         <dt>제외 일자</dt>
                         <dd class="w_auto">
                             <div class="input-group" data-ax5picker="date">
-                                <div class="cld_box" style="background-color: #fffdd6">
-                                    <input type="text" data-ax-path="startFromDate" style="background-color: #fffdd6;ime-mode:disabled;"
+                                <div class="cld_box">
+                                    <input type="text" data-ax-path="exceptStartDateFrom" style=" ime-mode:disabled;"
                                            placeholder="YYYY-MM-DD" maxlength="10">
-                                    <img title="calendar" class="ui-datepicker-trigger" alt="..." src="/assets/images/ams/calendar.png" >
+                                    <img title="calendar" class="ui-datepicker-trigger" alt="..."
+                                         src="/assets/images/ams/calendar.png">
                                 </div>
                                 ~
-                                <div class="cld_box" style="background-color: #fffdd6">
-                                    <input type="text" data-ax-path="startToDate" style="background-color: #fffdd6;ime-mode:disabled;"
+                                <div class="cld_box" style=" ">
+                                    <input type="text" data-ax-path="exceptStartDateTo" style=" ime-mode:disabled;"
                                            placeholder="YYYY-MM-DD" maxlength="10">
-                                    <img title="calendar" class="ui-datepicker-trigger" alt="..." src="/assets/images/ams/calendar.png">
+                                    <img title="calendar" class="ui-datepicker-trigger" alt="..."
+                                         src="/assets/images/ams/calendar.png">
                                 </div>
                             </div>
                         </dd>

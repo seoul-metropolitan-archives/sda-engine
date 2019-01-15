@@ -19,6 +19,11 @@ public class St00802VO extends BaseVO {
     private String takeoutRequestUuid;
     private String aggregationUuid;
     private String code;
+    private String repositoryUuid;
+    private String shelfUuid;
+    private String containerTypeUuid;
+    private String locationUuid;
+
     private String title;
     private String level;
     private String type;

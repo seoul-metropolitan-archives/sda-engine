@@ -11,7 +11,7 @@ public class St018ViewRouter extends BaseController {
 
     @GetMapping("/st/st018/st018")
     public String view(ModelMap model) {
-        model.addAttribute("statusUuid", CommonCodeUtils.get("CD220"));
+        model.addAttribute("publishStatusUuid", CommonCodeUtils.get("CD220"));
         model.addAttribute("aggregationTypeUuid", CommonCodeUtils.get("CD127"));
         //model.addAttribute("containerTypeUuid", CommonCodeUtils.get("CD139"));
         return "/st/st018/st018";

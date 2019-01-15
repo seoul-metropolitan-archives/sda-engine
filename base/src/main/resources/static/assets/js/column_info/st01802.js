@@ -15,7 +15,7 @@ var st01802 =
 
                 {
                     sortNo: 1,
-                    name: "Seq",
+                    name: "seq",
                     text: "순번",
                     width: 120,
                     editable: false,
@@ -23,7 +23,7 @@ var st01802 =
                 },
                 {
                     sortNo: 2,
-                    width: 80,
+                    width: 140,
                     name: "publishSourceTypeUuid",
                     text: "Publish Source Type",
                     editable: false,

@@ -1,5 +1,7 @@
 var fnObj = {};
-
+var repositoryUuid;
+var shelfUuid;
+var locationUuid;
 var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH: function (caller, act, data) {
         ACTIONS.dispatch(ACTIONS.PAGE_SEARCH01);
@@ -8,7 +10,11 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         axboot.ajax({
             type: "GET",
             url: "/api/v1/st/st011/01/list01",
-            data: $.extend({}, {pageSize: 10000},this.formView.getData()),
+            data: $.extend({}, {pageSize: 1000}, this.formView.getData(), {
+                repositoryUuid: repositoryUuid,
+                shelfUuid: shelfUuid,
+                locationUuid: locationUuid
+            }),
             callback: function (res) {
                 fnObj.gridView01.setData(res.list);
                 fnObj.gridView02.clearData();
@@ -19,7 +25,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         });
     },
     PAGE_SEARCH02: function (caller, act, data) {
-        if(fnObj.gridView01.getSelectedData() == null){
+        if (fnObj.gridView01.getSelectedData() == null) {
             return;
         }
 
@@ -27,7 +33,11 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         axboot.ajax({
             type: "GET",
             url: "/api/v1/st/st011/01/list02",
-            data: $.extend({}, this.formView.getData(),{aggregationUuid : fnObj.gridView01.getSelectedData().uuid}),
+            data: $.extend({pageSize: 1000}, this.formView.getData(), {aggregationUuid: fnObj.gridView01.getSelectedData().uuid}, {
+                repositoryUuid: repositoryUuid,
+                shelfUuid: shelfUuid,
+                locationUuid: locationUuid
+            }),
             callback: function (res) {
                 fnObj.gridView02.setData(res.list);
             },
@@ -41,15 +51,15 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     MENU_OPEN: function (caller, act, data) {
 
     },
-    POP_OPEN: function(caller, act, data){
+    POP_OPEN: function (caller, act, data) {
         axboot.modal.open({
             modalType: "COMMON_POPUP",
-            preSearch : false,
+            preSearch: false,
             sendData: function () {
                 return data;
             },
             callback: function (data) {
-                if(this.close)
+                if (this.close)
                     this.close();
 
             }
@@ -118,6 +128,63 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
     },
     initEvent: function () {
         var _this = this;
+        $("input[data-ax-path='repositoryName']").parents().eq(1).find("a").click(function () {
+            var data = {
+                popupCode: "PU137",
+                searchData: $("input[data-ax-path='repositoryName']").val().trim(),
+                preSearch: false
+            };
+            ACTIONS.dispatch(ACTIONS.SEARCH_REPOSITORY_SCH, data);
+        });
+
+        $("input[data-ax-path='shelfName']").parents().eq(1).find("a").click(function () {
+            if ("" != repositoryUuid) {
+                var data = {
+                    popupCode: "PU138",
+                    searchData: repositoryUuid,
+                    preSearch: false
+                };
+                ACTIONS.dispatch(ACTIONS.SEARCH_SHELF_SCH, data);
+            }
+        });
+
+        $("input[data-ax-path='locationName']").parents().eq(1).find("a").click(function () {
+            if ("" != shelfUuid) {
+                var data = {
+                    popupCode: "PU147",
+                    searchData: shelfUuid,
+                    preSearch: false
+                };
+                ACTIONS.dispatch(ACTIONS.SEARCH_LOCATION_SCH, data);
+            }
+        });
+
+        $("select[data-ax-path='statusUuid'], select[data-ax-path='containerTypeUuid']").change(function () {
+            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+        });
+        $("input[data-ax-path='takeoutDateFrom']").keyup(function () {
+            var date = this.value;
+            if (date.match(/^\d{4}$/) !== null) {
+                this.value = date + '-';
+            } else if (date.match(/^\d{4}\-\d{2}$/) !== null) {
+                this.value = date + '-';
+            }
+        });
+        $("input[data-ax-path='takeoutDateFrom']").keypress(function () {
+            if ((event.keyCode < 48) || (event.keyCode > 57)) event.returnValue = false;
+        });
+        $("input[data-ax-path='takeoutDateTo']").keyup(function () {
+            var date = this.value;
+            if (date.match(/^\d{4}$/) !== null) {
+                this.value = date + '-';
+            } else if (date.match(/^\d{4}\-\d{2}$/) !== null) {
+                this.value = date + '-';
+            }
+        });
+        $("input[data-ax-path='takeoutDateTo']").keypress(function () {
+            if ((event.keyCode < 48) || (event.keyCode > 57)) event.returnValue = false;
+        });
+
     },
     getData: function () {
         var data = this.modelFormatter.getClearData(this.model.get()); // 모델의 값을 포멧팅 전 값으로 치환.
@@ -149,8 +216,7 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
         this.model.setModel(this.getDefaultData());
         this.target.find('[data-ax-path="key"]').removeAttr("readonly");
     },
-    bindEvent : function()
-    {
+    bindEvent: function () {
         var _this = this;
 
     },

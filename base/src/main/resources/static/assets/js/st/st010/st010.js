@@ -3,8 +3,9 @@ var CONFIRM_STATUS = "Confirm";
 var CANCEL_STATUS = "Draft";
 var beforeData01 = null;
 var beforeData02 = null;
-var repositoryUuid = '';
-var shelfUuid ='';
+var repositoryUuid;
+var shelfUuid;
+var locationUuid;
 var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH: function (caller, act, data) {
         /*beforeData01 = null;

@@ -19,7 +19,8 @@
                 repository.REPOSITORY_NAME repositoryName,
                 shelf.SHELF_UUID shelfUuid,
                 shelf.SHELF_NAME shelfName,
-               (location.ROW_NO || '행 ' || location.COLUMN_NO || '열') as locationName
+               (location.ROW_NO || '행 ' || location.COLUMN_NO || '열') as locationName,
+               inout_hist.INOUT_DATE_TIME inoutDateTime
         FROM ST_WITHOUT_NOTICE_INOUT_RECORD inout_record
         INNER JOIN ST_WITHOUT_NOTICE_INOUT_HIST inout_hist
           ON inout_hist.WITHOUT_NOTICE_IO_RECORD_UUID = inout_record.WITHOUT_NOTICE_IO_RECORD_UUID
@@ -100,11 +101,11 @@
             <if test="shelfUuid != null">
                 AND  shelf.SHELF_UUID = #{shelfUuid}
             </if>
-            <if test="descStrDate != null">
-                AND B.descStrDate <![CDATA[>=]]> TO_DATE(#{descStrDate},'yyyy-mm-dd')
+            <if test="inoutDateTimeFrom != null">
+                AND inout_hist.INOUT_DATE_TIME <![CDATA[>=]]> TO_DATE(#{inoutDateTimeFrom},'yyyy-mm-dd')
             </if>
-            <if test="descEdDate != null">
-                AND B.descEdDate <![CDATA[<]]> TO_DATE(#{descEdDate},'yyyy-mm-dd')
+            <if test="inoutDateTimeTo != null">
+                AND inout_hist.INOUT_DATE_TIME <![CDATA[<]]> TO_DATE(#{inoutDateTimeTo},'yyyy-mm-dd')
             </if>
         </where>
     </select>

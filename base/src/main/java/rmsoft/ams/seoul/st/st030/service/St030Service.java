@@ -41,6 +41,12 @@ public class St030Service extends BaseService {
         //St03001VO.setRequestName(requestParams.getString("requestName"));
         //검색조건 추가시
 
+        St03001VO.setRepositoryUuid(requestParams.getString("repositoryUuid"));
+        St03001VO.setShelfUuid(requestParams.getString("shelfUuid"));
+        St03001VO.setLocationUuid(requestParams.getString("locationUuid"));
+        St03001VO.setCode(requestParams.getString("code"));
+        St03001VO.setTitle(requestParams.getString("title"));
+        
         return filter(st030Mapper.getStMissArrangeRequest(St03001VO), pageable, "", St03001VO.class);
     }
 

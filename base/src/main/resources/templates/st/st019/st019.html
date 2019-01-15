@@ -21,12 +21,12 @@
                         <li style="text-align:right; width:48%;">
 
                             <button class="btn_co btn_tag_publish">
-                                <span class="btn_icon_co" >&nbsp;</span>
+                                <span class="btn_icon_co">&nbsp;</span>
                                 <span class="btn_main_txt">태그 재발행</span>
                             </button>
                             <!--<button class="btn_s" th:id="save">-->
-                                <!--<span class="btn_icon">&nbsp;</span>-->
-                                <!--<span class="btn_main_txt">Save(S)</span>-->
+                            <!--<span class="btn_icon">&nbsp;</span>-->
+                            <!--<span class="btn_main_txt">Save(S)</span>-->
                             <!--</button>-->
                             <button class="btn_i" th:id="inquiry">
                                 <span class="btn_icon">&nbsp;</span>
@@ -39,22 +39,35 @@
                 <div class="bdb div_tablerow">
                     <dl>
 
-                        <th:block layout:insert="~{/fragments/page-buttons :: searchInputYellow ('서고','repositoryName')}"/>
-                        <th:block layout:insert="~{/fragments/page-buttons :: searchInputYellow ('서가','shelfName')}"/>
-                        <th:block layout:insert="~{/fragments/page-buttons :: searchInputYellow ('행렬단','locationName')}"/>
-                        <dt>발행 일자</dt>
+                        <th:block layout:insert="~{/fragments/page-buttons :: searchInput ('서고','repositoryName')}"/>
+                        <th:block layout:insert="~{/fragments/page-buttons :: searchInput ('서가','shelfName')}"/>
+                        <th:block layout:insert="~{/fragments/page-buttons :: searchInput ('행렬단','locationName')}"/>
+
+                        <dt class="w120 mgl_5">Publish Source Type</dt>
+                        <dd>
+                            <select data-ax-path="publishSourceTypeUuid" style="width:135px;">
+                                <option value=""></option>
+                                <option th:each="item : ${publishSourceTypeUuid}"
+                                        th:value="${item.codeDetailUUID}"
+                                        th:text="${item.codeName}"/>
+                            </select>
+                        </dd>
+
+                        <dt>Request Date</dt>
                         <dd class="w_auto">
                             <div class="input-group" data-ax5picker="date">
-                                <div class="cld_box" style="background-color: #fffdd6">
-                                    <input type="text" data-ax-path="startFromDate" style="background-color: #fffdd6;ime-mode:disabled;"
+                                <div class="cld_box" style="">
+                                    <input type="text" data-ax-path="requestDateFrom" style=";ime-mode:disabled;"
                                            placeholder="YYYY-MM-DD" maxlength="10">
-                                    <img title="calendar" class="ui-datepicker-trigger" alt="..." src="/assets/images/ams/calendar.png" >
+                                    <img title="calendar" class="ui-datepicker-trigger" alt="..."
+                                         src="/assets/images/ams/calendar.png">
                                 </div>
                                 ~
-                                <div class="cld_box" style="background-color: #fffdd6">
-                                    <input type="text" data-ax-path="startToDate" style="background-color: #fffdd6;ime-mode:disabled;"
+                                <div class="cld_box" style="">
+                                    <input type="text" data-ax-path="requestDateTo" style=";ime-mode:disabled;"
                                            placeholder="YYYY-MM-DD" maxlength="10">
-                                    <img title="calendar" class="ui-datepicker-trigger" alt="..." src="/assets/images/ams/calendar.png">
+                                    <img title="calendar" class="ui-datepicker-trigger" alt="..."
+                                         src="/assets/images/ams/calendar.png">
                                 </div>
                             </div>
                         </dd>
@@ -63,22 +76,30 @@
 
                         <dt class="w150">Aggregation Code</dt>
                         <dd>
-                            <input type=text style="width:135px" data-ax-path="test1">
+                            <input type=text style="width:135px" data-ax-path="code">
                         </dd>
                         <dt class="w150">Title</dt>
                         <dd>
-                            <input type=text style="width:135px" data-ax-path="test3">
+                            <input type=text style="width:135px" data-ax-path="title">
                         </dd>
-                        <dt class="w120 mgl_5">Publish Status</dt>
-                        <dd>
-                            <select data-ax-path="statusUuid" style="width:135px;">
-                                <option value="" ></option>
-                                <option th:each="item : ${statusUuid}"
-                                        th:value="${item.codeDetailUUID}"
-                                        th:text="${item.codeName}"/>
-                            </select>
+                        <dt class="w_auto">Republish YN</dt>
+                        <dd class="w_auto mgl_5">
+                            <div class="rdo_box">
+
+                                <label>
+                                    <input type="radio" name="radio" data-ax-path="republishYn" class="no_border"
+                                           value="Y">Yes</label>
+                                <label>
+                                    <input type="radio" name="radio" data-ax-path="republishYn" class="no_border"
+                                           value="N">No</label>
+                                <label>
+                                    <input type="radio" name="radio" data-ax-path="republishYn" class="no_border"
+                                           value="" checked>All</label>
+                            </div>
                         </dd>
                     </dl>
+
+
                 </div>
 
                 <div style="height:100%; width:100%" class="div_tablerow">
@@ -89,12 +110,12 @@
                                 <th:block layout:insert="~{/fragments/page-buttons :: dot('태그 발행 대상')}"/>
                                 <li style="text-align:right; width:83%;">
                                     <!--<button class="btn_a">-->
-                                        <!--<span class="btn_icon">&nbsp;</span>-->
-                                        <!--<span class="btn_main_txt">Add</span>-->
+                                    <!--<span class="btn_icon">&nbsp;</span>-->
+                                    <!--<span class="btn_main_txt">Add</span>-->
                                     <!--</button>-->
                                     <!--<button class="btn_d">-->
-                                        <!--<span class="btn_icon">&nbsp;</span>-->
-                                        <!--<span class="btn_main_txt">Delete</span>-->
+                                    <!--<span class="btn_icon">&nbsp;</span>-->
+                                    <!--<span class="btn_main_txt">Delete</span>-->
                                     <!--</button>-->
                                 </li>
                             </ul>
@@ -113,8 +134,8 @@
                                         <span class="btn_main_txt">Add</span>
                                     </button>-->
                                     <!--<button class="btn_d">-->
-                                        <!--<span class="btn_icon">&nbsp;</span>-->
-                                        <!--<span class="btn_main_txt">Delete</span>-->
+                                    <!--<span class="btn_icon">&nbsp;</span>-->
+                                    <!--<span class="btn_main_txt">Delete</span>-->
                                     <!--</button>-->
                                 </li>
                             </ul>
@@ -123,7 +144,6 @@
                             </div>
                         </div>
                     </div>
-
 
 
                 </div>

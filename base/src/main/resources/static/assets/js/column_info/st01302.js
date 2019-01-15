@@ -40,8 +40,8 @@ var st01302 =
                     name: "title",
                     text: "Title",
                     width: 400,
-                    required: true,
-                    editable: true,
+                    required: false,
+                    editable: false,
                     dataType: "text"
                 },
                 {

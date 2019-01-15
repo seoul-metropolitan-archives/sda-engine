@@ -31,6 +31,10 @@ public class St00801VO extends BaseVO
     private Timestamp takeoutDate; //  반출일자
     private Timestamp returnDate; //  반입일
     private Timestamp returnDueDate; //  반입예정일
+    private String takeoutDateFrom;
+    private String takeoutDateTo;
+    private String returnDueDateFrom;
+    private String returnDueDateTo;
     private String status; //  상태
     private String takeoutPropose ; // 반출목적
 

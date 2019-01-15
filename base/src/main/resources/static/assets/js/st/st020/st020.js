@@ -1,5 +1,8 @@
 var fnObj = {};
 var inoutExceptUuid = "";
+var repositoryUuid;
+var shelfUuid;
+var locationUuid;
 var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH: function (caller, act, data) {
         ACTIONS.dispatch(ACTIONS.PAGE_SEARCH01);
@@ -8,7 +11,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         axboot.ajax({
             type: "GET",
             url: "/api/v1/st/st020/01/list01",
-            data: $.extend({}, this.formView.getData()),
+            data: $.extend({pageSize: 1000}, this.formView.getData(), {repositoryUuid: repositoryUuid, shelfUuid: shelfUuid, locationUuid: locationUuid}),
             callback: function (res) {
                 fnObj.gridView01.setData(res.list);
                 //fnObj.gridView01.disabledColumn();
@@ -27,7 +30,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         axboot.ajax({
             type: "GET",
             url: "/api/v1/st/st018/01/list02",
-            data: $.extend({}, this.formView.getData(), {inoutExceptUuid: fnObj.gridView01.getSelectedData().inoutExceptUuid}),
+            data: $.extend({pageSize: 1000}, this.formView.getData(), {inoutExceptUuid: fnObj.gridView01.getSelectedData().inoutExceptUuid}, {repositoryUuid: repositoryUuid, shelfUuid: shelfUuid, locationUuid: locationUuid}),
             callback: function (res) {
                 fnObj.gridView02.setData(res.list);
                 // fnObj.gridView02.disabledColumn();
@@ -242,7 +245,26 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 if (this.close) this.close();
             }
         });
-    }
+    },
+    SEARCH_LOCATION_SCH : function(caller, act, data)
+    {
+        axboot.modal.open({
+            modalType: "COMMON_POPUP",
+            preSearch : data["preSearch"],
+            sendData: function () {
+                return data;
+            },
+            callback: function (data) {
+
+                var text = `${data["ROWNO"]}행 ${data["COLUMNNO"]}열`;
+
+                $("input[data-ax-path='locationName']").val(text)
+                locationUuid = data['LOCATIONUUID'];
+                console.log('locationUuid', locationUuid);
+                if(this.close) this.close();
+            }
+        });
+    },
 });
 
 fnObj.pageStart = function () {

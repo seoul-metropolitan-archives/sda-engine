@@ -1,7 +1,9 @@
 var fnObj = {};
 var takeoutRequestUuid = "";
 var TAKEOUT_CONFIRM_STATUS = "반출서 작성";
-
+var repositoryUuid;
+var shelfUuid;
+var locationUuid;
 var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH: function (caller, act, data) {
 

@@ -17,6 +17,12 @@ public class St03001VO extends BaseVO {
     private String title;
     private String level;
     private String type;
+
+    private String repositoryUuid;
+    private String shelfUuid;
+    private String containerTypeUuid;
+    private String locationUuid;
+
     private String currentContainerUuid;
     private String currentContainerName;
     private String sourceTypeUuid;

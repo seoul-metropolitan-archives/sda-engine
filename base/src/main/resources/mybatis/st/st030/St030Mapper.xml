@@ -92,7 +92,27 @@
 
         <where>
             1=1
+            <if test="code != null">
+                <![CDATA[
+                   AND B.code  LIKE '%' || #{code} || '%'
+                ]]>
+            </if>
+            <if test="title != null">
+                <![CDATA[
+                   AND B.title  LIKE '%' || #{title} || '%'
+                ]]>
 
+            </if>
+            <if test="repositoryUuid != null">
+                AND  repository.REPOSITORY_UUID  = #{repositoryUuid}
+            </if>
+            <if test="shelfUuid != null">
+                AND  shelf.SHELF_UUID = #{shelfUuid}
+            </if>
+
+            <if test="locationUuid != null">
+                AND location.LOCATION_UUID = #{locationUuid}
+            </if>
         </where>
         ORDER BY record_req.REQUEST_DATE
     </select>
