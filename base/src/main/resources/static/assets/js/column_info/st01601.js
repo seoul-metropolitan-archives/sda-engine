@@ -1,4 +1,4 @@
-var st01501 =
+var st01601 =
     {
         column_info:
             [
@@ -19,7 +19,8 @@ var st01501 =
                     width: 120,
                     editable: true,
                     dataType: "text",
-                    required: true
+                    required: true,
+                    disable : true,
                 },
                 {
                     sortNo: 2,
@@ -31,7 +32,8 @@ var st01501 =
                     popupCode : "PU107",
                     sqlColumn : {USER_UUID : "plannerUuid", USER_NAME : "plannerName"},
                     required: true,
-                    visible: true
+                    visible: true,
+                    disable : true,
                 },
                 {
                     sortNo: 3,
@@ -41,7 +43,7 @@ var st01501 =
                     editable: true,
                     dataType: "code",
                     required: true,
-                    visible: false
+                    visible: false,
                 },
                 {
                     sortNo: 4,
@@ -53,7 +55,8 @@ var st01501 =
                     required : true,
                     styles: {
                         "datetimeFormat": "yyyy.MM.dd"
-                    }
+                    },
+                    disable : true,
                 },
                 {
                     sortNo: 5,
@@ -65,7 +68,8 @@ var st01501 =
                     required : true,
                     styles: {
                         "datetimeFormat": "yyyy.MM.dd"
-                    }
+                    },
+                    disable : true,
                 },
                 {
                     sortNo: 6,
@@ -78,7 +82,8 @@ var st01501 =
                     popupCallback : fnObj.gridView01.popupCallback,
                     sqlColumn : {REPOSITORY_UUID : "repositoryUuid", REPOSITORY_NAME : "repositoryName"},*/
                     required: true,
-                    visible: true
+                    visible: true,
+                    disable : true,
                 },
                 {
                     sortNo: 7,
@@ -101,7 +106,8 @@ var st01501 =
                     sqlColumn : {SHELF_UUID : "shelfUuid", SHELF_NAME : "shelfName"},*/
                     required: true,
                     visible: true,
-                    preSearch  :true
+                    preSearch  :true,
+                    disable : true,
                 },
                 {
                     sortNo: 9,
@@ -111,7 +117,8 @@ var st01501 =
                     editable: true,
                     dataType: "code",
                     required: true,
-                    visible: false
+                    visible: false,
+                    disable : true,
                 },
                 {
                     sortNo: 8,
@@ -124,7 +131,8 @@ var st01501 =
                     sqlColumn : {LOCATION_UUID : "locationUuid", LOCATION_NAME : "locationName"},*/
                     required: false,
                     visible: true,
-                    preSearch  :true
+                    preSearch  :true,
+                    disable : true,
                 },
                 {
                     sortNo: 9,

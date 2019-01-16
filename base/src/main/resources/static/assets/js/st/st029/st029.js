@@ -102,6 +102,82 @@ fnObj.pageStart = function () {
 
     // Data 조회
     ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+
+
+    UPLOAD = new ax5.ui.uploader({
+        debug: false,
+        target: $('[data-ax5uploader="upload1"]'),
+        form: {
+            action: "/api/v1/common/upload",
+            fileName: "file"
+        },
+        multiple: false,
+        manualUpload: false,
+        progressBox: true,
+        progressBoxDirection: "left",
+        dropZone: {
+            target: $('[data-uploaded-box="upload1"]'),
+            ondrop: function () {
+
+            },
+            ondragover: function () {
+                $('[data-ax5uploader="upload1"]').show();
+            },
+            ondragout: function () {
+                $('[data-ax5uploader="upload1"]').hide();
+            },
+            onclick: function () {
+                $('[data-ax5uploader="upload1"]').hide();
+            }
+        },
+        validateSelectedFiles: function () {
+
+            if (this.uploadedFiles.length + this.selectedFiles.length > 1) {
+                axDialog.alert({
+                    theme: "primary",
+                    msg: "파일은 1개이상 업로드할 수 없습니다."
+                });
+                return false;
+            }
+            return true;
+        },
+        onuploaderror: function () {
+            $('[data-ax5uploader="upload1"]').hide();
+            axDialog.alert({
+                title: 'Onsemiro Uploader',
+                theme: "default",
+                msg: this.error.message
+            });
+        },
+        onuploaded: function () {
+        },
+        onuploadComplete: function () {
+            $('[data-ax5uploader="upload1"]').hide();
+            axToast.push("File Upload Complete");
+            /*fnObj.gridView02.gridObj.setValue(fnObj.gridView02.gridObj.gridView.getSelectedItems()[0],'refUploadFilePath',UPLOAD.uploadedFiles[0].fileName);
+            fnObj.gridView03.gridObj.setValue(0,'uploadFilePath',UPLOAD.uploadedFiles[0].fileName);
+            // 마지막으로 업로드 된 파일의 실제 경로를 저장한다.
+            var lastUploadFilePath = "/" + UPLOAD.uploadedFiles[0].filePath +"/" + UPLOAD.uploadedFiles[0].saveName;
+            fnObj.gridView02.gridObj.setValue(fnObj.gridView02.gridObj.gridView.getSelectedItems()[0],'lastUploadFilePath',lastUploadFilePath);
+            axToast.push("File Upload Complete");
+            UPLOAD.removeFileAll();
+            saveCurrentParameter(fnObj.gridView02.gridObj.gridView.getSelectedItems()[0]);*/
+        },
+        abortCallback: function(){
+            $('[data-ax5uploader="upload1"]').hide();
+            axToast.push("업로드를 취소하였습니다.");
+        },
+        onprogress: function () {
+
+            if(!($('[data-ax5uploader="upload1"]').is($('[data-ax5uploader="upload1"]').show()))) {
+                $('[data-ax5uploader="upload1"]').show();
+            }else{
+                //$('[data-ax5uploader="upload1"]').show();
+            }
+        }
+    });
+
+
 };
 
 fnObj.formView = axboot.viewExtend(axboot.formView, {
@@ -113,10 +189,32 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
         this.model = new ax5.ui.binder();
         this.model.setModel(this.getDefaultData(), this.target);
         this.modelFormatter = new axboot.modelFormatter(this.model); // 모델 포메터 시작
+
+        this.target.find('[data-ax5picker="date"]').ax5picker({
+            direction: "auto",
+            content: {
+                type: 'date'
+            }
+        });
+
         this.initEvent();
     },
     initEvent: function () {
         var _this = this;
+
+        $("input[data-ax-path='arrangedFromDate01']").keyup(function () {
+            var date = this.value;
+            if (date.match(/^\d{4}$/) !== null) {
+                this.value = date + '-';
+            } else if (date.match(/^\d{4}\-\d{2}$/) !== null) {
+                this.value = date + '-';
+            }
+        });
+        $("input[data-ax-path='arrangedFromDate01']").keypress(function () {
+            if ((event.keyCode < 48) || (event.keyCode > 57)) event.returnValue = false;
+        });
+
+
     },
     getData: function () {
         var data = this.modelFormatter.getClearData(this.model.get()); // 모델의 값을 포멧팅 전 값으로 치환.
@@ -163,7 +261,9 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
         this.gridObj.itemClick(this.itemClick);
     },
     itemClick: function (data, index) {
-
+        if(index.fieldName == "uploadFilePath"){
+            $('.btn-primary').trigger('click');
+        }
     }
 
 });
