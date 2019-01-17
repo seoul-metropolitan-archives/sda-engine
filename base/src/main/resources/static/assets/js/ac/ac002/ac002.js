@@ -57,20 +57,21 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 title: "NOTICE DETAIL"
             },
             sendData: function () {
-                return {
-                    noticeUuid : data.noticeUuid,
-                    title : data.title,
-                    registerUuid : data.registerUuid,
-                    registerDate : data.registerDate,
-                    contents : data.contents,
-                    fileName : data.fileName,
-                    filePath : data.filePath
-                };
+                if(data != null)
+                    return {
+                        noticeUuid : data.noticeUuid ,
+                        title : data.title,
+                        registerUuid : data.registerUuid,
+                        registerDate : data.registerDate,
+                        contents : data.contents,
+                        fileName : data.fileName,
+                        filePath : data.filePath,
+                        registerName : data.registerName
+                    };
+                else return null;
             },
-            callback: function (data) {
-                if(this) this.close();
-                if(data){
-                }
+            callback: function () {
+                ACTIONS.dispatch(ACTIONS.PAGE_NOTICE);
             }
         });
     },
@@ -225,6 +226,13 @@ fnObj.frameView = axboot.viewExtend({
         this.target = $("#ax-frame-root");
         this.asideHandle = $("#ax-aside-handel");
         this.aside = $("#ax-frame-aside");
+
+        if("Admin" == axboot.commonCodeValueByUuid("CD107", sessionJson.userTypeUuid)){
+            $(".btn_a").show();
+        }else{
+            $(".btn_a").hide();
+        }
+
         this.asideHandle.on("click", function () {
             ACTIONS.dispatch(ACTIONS.TOGGLE_ASIDE);
         });
@@ -1058,11 +1066,12 @@ fnObj.gridView01 = axboot.viewExtend(axboot.axGridView, {
             target: $('[data-ax5grid="grid-view-01"]'),
             columns: [
                 {key: "title", label: "제목", width: 200, align: "left", sortable: false},
-                {key: "registerUuid", label: "작성자", width: 120, align: "center", sortable: false},
+                {key: "registerName", label: "작성자", width: 120, align: "center", sortable: false},
                 {key: "registerDate", label: "작성일자",width: 143, align: "center", sortable: false},
                 {key: "contents", label: "내용",width: 0, align: "center", sortable: false},
                 {key: "fileName", label: "파일명",width: 0, align: "center", sortable: false},
-                {key: "filePath", label: "파일경로",width: 0, align: "center", sortable: false}
+                {key: "filePath", label: "파일경로",width: 0, align: "center", sortable: false},
+                {key: "registerUuid", label: "작성자Uuid",width: 0, align: "center", sortable: false}
             ],
             body: {
                 onClick: function () {
@@ -1140,6 +1149,9 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
         });
         $("#dfRecordDraft").click(function (){
             ACTIONS.dispatch(ACTIONS.PAGE_MOVE,{pageName: "disposal records",param:''});
+        });
+        $(".btn_a").click(function(){
+            ACTIONS.dispatch(ACTIONS.DETAIL_NOTICE);
         });
         ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
         ACTIONS.dispatch(ACTIONS.PAGE_NOTICE);
