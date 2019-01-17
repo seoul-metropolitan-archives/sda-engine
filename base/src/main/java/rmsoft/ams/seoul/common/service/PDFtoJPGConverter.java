@@ -15,6 +15,9 @@ public class PDFtoJPGConverter {
         File destinationFile = new File(destination);
 
         if (!destinationFile.exists()) {
+            destinationFile.setExecutable(false, true);
+            destinationFile.setReadable(true);
+            destinationFile.setWritable(false, true);
             destinationFile.mkdir();
             //System.out.println("DESTINATION FOLDER CREATED -> " + destinationFile.getAbsolutePath());
         }else if(destinationFile.exists()){

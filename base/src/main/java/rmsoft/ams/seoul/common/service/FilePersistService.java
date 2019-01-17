@@ -6,6 +6,7 @@ package rmsoft.ams.seoul.common.service;
 
 import io.onsemiro.core.code.Types;
 import io.onsemiro.utils.JsonUtils;
+import lombok.extern.slf4j.Slf4j;
 import net.coobird.thumbnailator.Thumbnails;
 import net.coobird.thumbnailator.geometry.Positions;
 import net.coobird.thumbnailator.name.Rename;
@@ -28,6 +29,7 @@ import static java.util.stream.Collectors.toList;
  * Created by jung-young-il on 28/03/2017.
  */
 @Service
+@Slf4j
 public class FilePersistService implements InitializingBean {
 
     @Value("${repository.upload}")
@@ -58,7 +60,7 @@ public class FilePersistService implements InitializingBean {
                 File tempFile = pdFtoJPGConverter.convertPdfToImage(file, fileSavePath);
                 makeThumbnail(tempFile, ax5File.getThumbnailFileName().replace(".pdf", ".jpg"));
             } catch (Exception ex) {
-                ex.printStackTrace();
+                log.error(ex.getMessage());
             }
         }
 
@@ -82,6 +84,7 @@ public class FilePersistService implements InitializingBean {
                 }
             }
         } catch (IOException e) {
+            log.error(e.getMessage());
         }
     }
 
@@ -95,7 +98,7 @@ public class FilePersistService implements InitializingBean {
             try {
                 return getAx5File(file);
             } catch (Exception e) {
-                e.printStackTrace();
+                log.error(e.getMessage());
             }
             return null;
         }).collect(toList());

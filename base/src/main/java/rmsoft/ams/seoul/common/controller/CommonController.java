@@ -165,7 +165,7 @@ public class CommonController extends BaseController {
 
         } catch (Exception e) {
             // 사용자 취소 Exception 은 콘솔 출력 제외
-            if (!e.getClass().getName().equals("org.apache.catalina.connector.ClientAbortException")) e.printStackTrace();
+            if (!e.getClass().getName().equals("org.apache.catalina.connector.ClientAbortException")) log.error(e.getMessage());;
         }
     }
 

@@ -2,6 +2,7 @@ package rmsoft.ams.seoul.common.controller;
 
 import io.onsemiro.core.context.AppContextManager;
 import io.onsemiro.core.parameter.RequestParams;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -23,6 +24,7 @@ import java.util.Map;
 /**
  * The type Common api controller.
  */
+@Slf4j
 @RestController
 @RequestMapping("/api/v1/common")
 public class CommonAPIController extends MessageBaseController {
@@ -76,7 +78,7 @@ public class CommonAPIController extends MessageBaseController {
             return method.invoke(controller, inputParams);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
         }
 
         return null;
@@ -157,7 +159,7 @@ public class CommonAPIController extends MessageBaseController {
                             methods[i].invoke(obj, map.get(keyAttribute));
                         }
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        log.error(e.getMessage());
                     }
                 }
             }

@@ -435,7 +435,7 @@ public class DIPBatchExecutor {
                 fullPath = fullPath + folders[i] + "/";
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
         }
     }
 }

@@ -1906,7 +1906,12 @@ fnObj.iconView = axboot.viewExtend({
                                         });
 
                                         $('#componentView >div').draggable({
-                                            helper: "clone",
+                                            helper: function (event, ui) {
+                                                var wrapper = "<div id='explorerDragWrapper'></div>";
+                                                $('#ax-base-root').append(wrapper);
+
+                                                return $('#explorerDragWrapper').append($(event.delegateTarget).clone());
+                                            },
                                             opacity: 0.7
                                         });
                                     }
@@ -2297,6 +2302,7 @@ fnObj.iconView = axboot.viewExtend({
                 // Record Frame은 부모가 componentView 일때만 받아들인다.
                 if (ui.draggable.parent().attr("id") != "componentView") return;
 
+                $('#explorerDragWrapper').remove();
                 var compUuid = ui.draggable.attr("uuid");
                 axDialog.confirm({
                     msg: "Component를 Item으로 변경하시겠습니까?"

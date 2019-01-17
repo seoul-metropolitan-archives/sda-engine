@@ -180,7 +180,7 @@ public class Rc005Service extends BaseService {
 
                 componentList.add(dataMap);
             }catch(Exception e){
-
+                log.error(e.getMessage());
             }
         }
 

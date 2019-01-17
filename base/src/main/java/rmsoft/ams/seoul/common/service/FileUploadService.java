@@ -113,7 +113,7 @@ public class FileUploadService {
                 try {
                     FileUtils.copyFileToDirectory(FileUtils.getFile(pathContents + File.separator + component.get("filePath") + File.separator + component.get("originalFileName")), new File(pathTemp + File.separator + instantTempPath + File.separator + component.get("filePath")), true);
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    log.error(e.getMessage());
                 }
             });
 
@@ -156,7 +156,7 @@ public class FileUploadService {
             httpHeaders.setContentDispositionFormData("attachment", fileName);
         } catch (Exception e) {
             log.error("아이템 내보내기 프로그램 실행중 에러가 발생하였습니다.");
-            e.printStackTrace();
+            log.error(e.getMessage());
         }
 
         return new ResponseEntity<>(bytes, httpHeaders, HttpStatus.OK);

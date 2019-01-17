@@ -46,7 +46,9 @@ public class CommonConfigUtils {
         commonConfigList = null;
         commonConfigList = getRepository().findAll();
 
-        return commonConfigList;
+        List<AdConfiguration> configurationList = commonConfigList;
+
+        return configurationList;
     }
 
     /**

@@ -54,7 +54,7 @@ public class Ad001Controller extends MessageBaseController {
             Resource[] resources = context.getResources("classpath*:service-modules/*.jar");
             log.info("Service Modules...");
         }catch(Exception e){
-            e.printStackTrace();
+            log.error(e.getMessage());
         }
 
         //dipBatchExecutor.runDipProcess()
