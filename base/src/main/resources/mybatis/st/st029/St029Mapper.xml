@@ -7,7 +7,6 @@
 
     <select id="getStProgram" resultType="St02901VO" parameterType="St02901VO" statementType="PREPARED">
         select PROGRAM_UUID as PROGRAM_UUID,
-               NO as no,
                MACHINE_TYPE_UUID as machineTypeUuid,
                MACHINE_NAME as machineName,
                PROGRAM_NAME as programName,

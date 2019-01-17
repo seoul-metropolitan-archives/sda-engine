@@ -11,6 +11,34 @@ var st03001 =
                     required: false,
                     visible: false
                 },
+                {
+                    sortNo: 0,
+                    name: "missArrangeRecordUuid",
+                    text: "missArrangeRecordUuid",
+                    editable: false,
+                    dataType: "code",
+                    required: false,
+                    visible: false
+                },
+                {
+                    sortNo: 0,
+                    name: "containerUuid",
+                    text: "containerUuid",
+                    editable: false,
+                    dataType: "code",
+                    required: false,
+                    visible: false
+                },
+
+                {
+                    sortNo: 0,
+                    name: "currentContainerUuid",
+                    text: "currentContainerUuid",
+                    editable: false,
+                    dataType: "code",
+                    required: false,
+                    visible: false
+                },
 
                 {
                     sortNo: 1,
@@ -26,8 +54,8 @@ var st03001 =
                     name: "title",
                     text: "Title",
                     width: 200,
-                    required: true,
-                    editable: true,
+                    required: false,
+                    editable: false,
                     dataType: "text"
                 },
                 {
@@ -78,7 +106,7 @@ var st03001 =
                 {
                     sortNo: 9,
                     name: "republishYn",
-                    text: "Republish Yn",
+                    text: "Arrange YN",
                     width: 250,
                     editable: false,
                     dataType: "text"

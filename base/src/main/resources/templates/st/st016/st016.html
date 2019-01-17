@@ -1,0 +1,103 @@
+<!DOCTYPE HTML>
+<!--
+  ~ Copyright (c) 2017. RMSoft Co.,Ltd. All rights reserved
+  -->
+
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout/base}">
+
+<!-- ===== [ script ] ===== -->
+<script layout:fragment="script" type="text/javascript" th:src="@{/assets/js/st/st016/st016.js}"></script>
+<!-- ===== [ script ] _END_ ===== -->
+
+<!-- ===== [ base-content ] ===== -->
+<div layout:fragment="base-content" class="ax-base-content">
+    <form name="formView01" id="formView01" method="post" onsubmit="return false">
+        <div class="cssBody" style="top:80px">
+            <div class="contents_wrap">
+                <div style=" height:30px; width:100%" class="bgf7 div_tablerow">
+                    <ul class="bdb" style="border:none">
+                        <th:block layout:insert="~{/fragments/page-buttons :: bookmark}"/>
+                        <th:block layout:insert="~{/fragments/page-buttons :: inquiry}"/>
+                    </ul>
+                </div>
+                <div class="bdb div_tablerow">
+                    <dl>
+                        <dt class="w150">계획서명</dt>
+                        <dd>
+                            <input type=text style="width:135px" data-ax-path="controlNumber">
+                        </dd>
+                        <th:block layout:insert="~{/fragments/page-buttons :: searchInput ('Repository','parentContainerName')}"/>
+                        <th:block layout:insert="~{/fragments/page-buttons :: searchInput ('Shelf','parentContainerName')}"/>
+                        <dt class="w150">Aggregation Code</dt>
+                        <dd>
+                            <input type=text style="width:135px" data-ax-path="aggregationCode">
+                        </dd>
+                        <dt class="w150">Aggregation Title</dt>
+                        <dd>
+                            <input type=text style="width:135px" data-ax-path="aggregationTitle">
+                        </dd>
+                    </dl>
+                    <dl>
+                        <th:block layout:insert="~{/fragments/page-buttons :: searchInput ('작성자','parentContainerName')}"/>
+                        <dt class="w130">계획 일자</dt>
+                        <dd class="w_auto">
+                            <div class="input-group" data-ax5picker="date">
+                                <div class="cld_box">
+                                    <input type="text" data-ax-path="arrangedFromDate01"
+                                           style="ime-mode:disabled;"
+                                           placeholder="YYYY-MM-DD" maxlength="10">
+                                    <img title="calendar" class="ui-datepicker-trigger" alt="..."
+                                         src="/assets/images/ams/calendar.png">
+                                </div>
+                                ~
+                                <div class="cld_box">
+                                    <input type="text" data-ax-path="arrangedToDate01"
+                                           style="ime-mode:disabled;"
+                                           placeholder="YYYY-MM-DD" maxlength="10">
+                                    <img title="calendar" class="ui-datepicker-trigger" alt="..."
+                                         src="/assets/images/ams/calendar.png">
+                                </div>
+                            </div>
+                        </dd>
+                    </dl>
+                </div>
+
+                <div style="height:100%; width:100%" class="div_tablerow">
+                    <div style="display:table; height:50%; width:50%; float:left" class="bdr">
+
+                        <ul class="bdb bdt bgf7 div_tablerow" style="height:30px;">
+                            <th:block layout:insert="~{/fragments/page-buttons :: dot ('ST_INVENTORY_PLAN')}"/>
+                            <th:block layout:insert="~{/fragments/page-buttons :: add-and-delete}"/>
+                        </ul>
+                        <div style="height:100%; width:100%" class="div_tablerow bdb">
+                            <div id="realgrid01" style="width:100%; height:100%"></div>
+                        </div>
+                    </div>
+                    <div style="display:table; height:50%; width:50%; float:left">
+                        <ul class="bdb bdt bgf7 div_tablerow" style="height:30px;">
+                            <th:block layout:insert="~{/fragments/page-buttons :: dot ('ST_INVENTORY_CONTAINER_RESULT')}"/>
+                            <!--<th:block layout:insert="~{/fragments/page-buttons :: add-and-delete}"/>-->
+                        </ul>
+
+                        <div style="height:100%; width:100%" class="div_tablerow bdb">
+                            <div id="realgrid02" style="width:100%; height:100%"></div>
+                        </div>
+                    </div>
+                    <div style="display:table; height:50%; width:100%">
+                        <ul class="bdb bdt div_tablerow bgf7" style="height:30px;">
+                            <th:block layout:insert="~{/fragments/page-buttons :: dot('ST_INVENTORY_RECORD_RESULT')}"/>
+                            <!--<th:block layout:insert="~{/fragments/page-buttons :: add-and-delete}"/>-->
+                        </ul>
+                        <div style="height:100%; width:100%" class="div_tablerow bdb">
+                            <div id="realgrid03" style="width:100%; height:100%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><!--오른쪽 내용영역 전체 e -->
+    </form>
+</div>
+<!-- ===== [ base-content ] _END_ ===== -->
+</html>

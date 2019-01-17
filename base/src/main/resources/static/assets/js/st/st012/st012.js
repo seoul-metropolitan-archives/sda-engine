@@ -1,6 +1,7 @@
 var fnObj = {};
 var repositoryUuid;
 var shelfUuid;
+var locationUuid;
 var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH: function (caller, act, data) {
         ACTIONS.dispatch(ACTIONS.PAGE_SEARCH01);
@@ -10,7 +11,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             type: "GET",
             url: "/api/v1/st/st012/01/list01",
             data: $.extend({}, {pageSize: 1000}, this.formView.getData(),
-                {repositoryUuid : repositoryUuid, shelfUuid : shelfUuid}
+                {repositoryUuid: repositoryUuid, shelfUuid: shelfUuid, locationUuid: locationUuid}
                 ),
             callback: function (res) {
                 fnObj.gridView01.setData(res.list);
@@ -29,7 +30,9 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         axboot.ajax({
             type: "GET",
             url: "/api/v1/st/st012/01/list02",
-            data: $.extend({}, this.formView.getData(),{inoutExceptUuid : fnObj.gridView01.getSelectedData().inoutExceptUuid}),
+            data: $.extend({pageSize: 1000}, this.formView.getData(),{inoutExceptUuid : fnObj.gridView01.getSelectedData().inoutExceptUuid},
+                {repositoryUuid: repositoryUuid, shelfUuid: shelfUuid, locationUuid: locationUuid}
+            ),
             callback: function (res) {
                 fnObj.gridView02.setData(res.list);
                 // fnObj.gridView02.disabledColumn();
@@ -283,6 +286,25 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             }
         });
     }
+    ,SEARCH_LOCATION_SCH : function(caller, act, data)
+    {
+        axboot.modal.open({
+            modalType: "COMMON_POPUP",
+            preSearch : data["preSearch"],
+            sendData: function () {
+                return data;
+            },
+            callback: function (data) {
+
+                var text = `${data["ROWNO"]}행 ${data["COLUMNNO"]}열`;
+
+                $("input[data-ax-path='locationName']").val(text)
+                locationUuid = data['LOCATIONUUID'];
+                console.log('locationUuid', locationUuid);
+                if(this.close) this.close();
+            }
+        });
+    },
 });
 
 fnObj.pageStart = function () {
@@ -340,17 +362,17 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
             ACTIONS.dispatch(ACTIONS.MODAL_OPEN, '사유 등록');
         });
 
-        $("input[data-ax-path='repositoryName']").parents().eq(1).find("a").click(function(){
+        $("input[data-ax-path='repositoryName']").parents().eq(1).find("a").click(function () {
             var data = {
-                popupCode : "PU137",
-                searchData : $("input[data-ax-path='repositoryName']").val().trim(),
-                preSearch : false
+                popupCode: "PU137",
+                searchData: $("input[data-ax-path='repositoryName']").val().trim(),
+                preSearch: false
             };
-            ACTIONS.dispatch(ACTIONS.SEARCH_REPOSITORY_SCH,data);
+            ACTIONS.dispatch(ACTIONS.SEARCH_REPOSITORY_SCH, data);
         });
 
-        $("input[data-ax-path='shelfName']").parents().eq(1).find("a").click(function(){
-            if("" != repositoryUuid) {
+        $("input[data-ax-path='shelfName']").parents().eq(1).find("a").click(function () {
+            if ("" != repositoryUuid) {
                 var data = {
                     popupCode: "PU138",
                     searchData: repositoryUuid,
@@ -360,7 +382,21 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
             }
         });
 
-        $("input[data-ax-path='descStrDate']").keyup(function () {
+        $("input[data-ax-path='locationName']").parents().eq(1).find("a").click(function () {
+            if ("" != shelfUuid) {
+                var data = {
+                    popupCode: "PU147",
+                    searchData: shelfUuid,
+                    preSearch: false
+                };
+                ACTIONS.dispatch(ACTIONS.SEARCH_LOCATION_SCH, data);
+            }
+        });
+
+        $("select[data-ax-path='statusUuid'], select[data-ax-path='containerTypeUuid']").change(function () {
+            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+        });
+        $("input[data-ax-path='takeoutDateFrom']").keyup(function () {
             var date = this.value;
             if (date.match(/^\d{4}$/) !== null) {
                 this.value = date + '-';
@@ -368,10 +404,10 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
                 this.value = date + '-';
             }
         });
-        $("input[data-ax-path='descStrDate']").keypress(function () {
+        $("input[data-ax-path='takeoutDateFrom']").keypress(function () {
             if ((event.keyCode < 48) || (event.keyCode > 57)) event.returnValue = false;
         });
-        $("input[data-ax-path='descEdDate']").keyup(function () {
+        $("input[data-ax-path='takeoutDateTo']").keyup(function () {
             var date = this.value;
             if (date.match(/^\d{4}$/) !== null) {
                 this.value = date + '-';
@@ -379,7 +415,31 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
                 this.value = date + '-';
             }
         });
-        $("input[data-ax-path='descEdDate']").keypress(function () {
+        $("input[data-ax-path='takeoutDateTo']").keypress(function () {
+            if ((event.keyCode < 48) || (event.keyCode > 57)) event.returnValue = false;
+        });
+
+
+        $("input[data-ax-path='inoutDateTimeFrom']").keyup(function () {
+            var date = this.value;
+            if (date.match(/^\d{4}$/) !== null) {
+                this.value = date + '-';
+            } else if (date.match(/^\d{4}\-\d{2}$/) !== null) {
+                this.value = date + '-';
+            }
+        });
+        $("input[data-ax-path='inoutDateTimeFrom']").keypress(function () {
+            if ((event.keyCode < 48) || (event.keyCode > 57)) event.returnValue = false;
+        });
+        $("input[data-ax-path='inoutDateTimeTo']").keyup(function () {
+            var date = this.value;
+            if (date.match(/^\d{4}$/) !== null) {
+                this.value = date + '-';
+            } else if (date.match(/^\d{4}\-\d{2}$/) !== null) {
+                this.value = date + '-';
+            }
+        });
+        $("input[data-ax-path='inoutDateTimeTo']").keypress(function () {
             if ((event.keyCode < 48) || (event.keyCode > 57)) event.returnValue = false;
         });
     },

@@ -203,6 +203,7 @@
             ON code_detail.CODE_DETAIL_UUID = general.RETENTION_PERIOD_UUID
         <where>
           1 = 1
+            AND A.AGGREGATION_UUID = #{aggregationUuid}
             <if test="disposalDueDateStart != null">
                 AND result.DISPOSAL_DUE_DATE <![CDATA[>=]]> TO_DATE(#{disposalDueDateStart},'yyyy-mm-dd')
             </if>

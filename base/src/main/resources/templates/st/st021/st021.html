@@ -37,21 +37,19 @@
                         <!--<dt class="w150">의뢰서명</dt>-->
                         <dt class="w150">Aggregation Code</dt>
                         <dd>
-                            <input type=text style="width:135px" data-ax-path="test1">
+                            <input type=text style="width:135px" data-ax-path="code">
                         </dd>
                         <dt class="w150">Aggregation Title</dt>
                         <dd>
-                            <input type=text style="width:135px" data-ax-path="test2">
+                            <input type=text style="width:135px" data-ax-path="title">
                         </dd>
-                        <dd>
-                            <input type=text style="width:135px" data-ax-path="requestName">
-                        </dd>
-                        <th:block layout:insert="~{/fragments/page-buttons :: searchInputYellow ('서고','repositoryName')}"/>
-                        <th:block layout:insert="~{/fragments/page-buttons :: searchInputYellow ('서가','shelfName')}"/>
+
+                        <th:block layout:insert="~{/fragments/page-buttons :: searchInput ('서고','repositoryName')}"/>
+                        <th:block layout:insert="~{/fragments/page-buttons :: searchInput ('서가','shelfName')}"/>
 
                     </dl>
                     <dl>
-                        <dt>Code</dt>
+                        <!--<dt>Code</dt>
                         <dd>
                             <select data-ax-path="codeTypeUuid" style="width:135px;" id="codeList">
                                 <option value=""></option>
@@ -59,27 +57,24 @@
                                         th:value="${item.codeDetailUUID}"
                                         th:text="${item.codeName}"/>
                             </select>
-                        </dd>
+                        </dd>-->
                         <dt>출입일시</dt>
                         <dd class="w_auto">
                             <div class="input-group" data-ax5picker="date">
-                                <div class="cld_box" style="background-color: #fffdd6">
-                                    <input type="text" data-ax-path="startFromDate" style="background-color: #fffdd6;ime-mode:disabled;"
+                                <div class="cld_box" style="">
+                                    <input type="text" data-ax-path="inoutDateTimeFrom" style=";ime-mode:disabled;"
                                            placeholder="YYYY-MM-DD" maxlength="10">
                                     <img title="calendar" class="ui-datepicker-trigger" alt="..." src="/assets/images/ams/calendar.png" >
                                 </div>
                                 ~
-                                <div class="cld_box" style="background-color: #fffdd6">
-                                    <input type="text" data-ax-path="startToDate" style="background-color: #fffdd6;ime-mode:disabled;"
+                                <div class="cld_box" style="">
+                                    <input type="text" data-ax-path="inoutDateTimeTo" style=";ime-mode:disabled;"
                                            placeholder="YYYY-MM-DD" maxlength="10">
                                     <img title="calendar" class="ui-datepicker-trigger" alt="..." src="/assets/images/ams/calendar.png">
                                 </div>
                             </div>
                         </dd>
-                        <dt class="mgl_5">존</dt>
-                        <dd>
-                            <input type=text data-ax-path="zoneName" style="width:135px">
-                        </dd>
+                        <th:block layout:insert="~{/fragments/page-buttons :: searchInput ('존','zoneName')}"/>
                     </dl>
                 </div>
 

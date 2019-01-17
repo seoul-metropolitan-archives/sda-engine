@@ -14,11 +14,14 @@ public class St01301VO extends BaseVO {
 
     private String inoutExceptUuid;
     private String requestName;
+
     private String requestorUuid;
     private Timestamp requestDate;
     private Timestamp exceptStartDate;
     private Timestamp exceptEndDate;
     private String exceptReason;
+    private String exceptStartDateFrom;
+    private String exceptStartDateTo;
 
 
 }

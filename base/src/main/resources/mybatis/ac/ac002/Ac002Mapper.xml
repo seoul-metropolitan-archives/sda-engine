@@ -25,4 +25,14 @@
       ]]>
           Z1.PROGRAM_UUID = #{startProgramUuid}
     </select>
+
+    <select id="getBookmark" resultType="Ac00201VO" parameterType="Ac00201VO" statementType="PREPARED">
+        SELECT
+            BOOKMARK_UUID AS bookmarkUuid,
+            MENU_UUID AS menuUuid,
+            MENU_NAME AS menuName
+        FROM
+            AD_BOOKMARK
+        WHERE USER_UUID = #{userUuid}
+    </select>
 </mapper>

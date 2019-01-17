@@ -58,7 +58,7 @@ public class WorkflowExecutor extends ClassLoader {
             URLClassLoader urlClassLoader = new URLClassLoader(classLoaderUrls);
             Class loadedMyClass = urlClassLoader.loadClass(wf00302VO.getApi());
 
-            System.out.println("Loaded class name: " + loadedMyClass.getName());
+            //System.out.println("Loaded class name: " + loadedMyClass.getName());
 
             Constructor constructor = loadedMyClass.getConstructor();
             Object myClassObject = constructor.newInstance();
@@ -97,11 +97,11 @@ public class WorkflowExecutor extends ClassLoader {
                 }
 
                 method.invoke(myClassObject, parameterObject);
-                System.out.println("Invoked method name: " + method.getName());
+                //System.out.println("Invoked method name: " + method.getName());
             }
 
             Method runMethod = loadedMyClass.getMethod("runProcess");
-            System.out.println("Invoked Run Process method");
+            //System.out.println("Invoked Run Process method");
 
             Object resultObject = runMethod.invoke(myClassObject);
             callResult = (WorkflowResponse) resultObject;

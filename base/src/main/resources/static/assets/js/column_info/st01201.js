@@ -115,5 +115,14 @@ var st01201 =
                     editable: false,
                     dataType: "text"
                 },
+                {
+                    sortNo: 10,
+                    name: "inoutDateTime",
+                    text: "출입일시",
+                    width: 140,
+                    editable: false,
+                    dataType: "date",
+                    disable: true
+                },
             ]
     }

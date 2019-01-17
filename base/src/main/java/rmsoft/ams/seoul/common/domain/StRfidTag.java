@@ -23,7 +23,7 @@ public class StRfidTag extends SimpleJpaModel<StRfidTag.StRfidTagId> {
 
 
     @Id
-    @Column(name = "RFID_MACHINE_UUID", length = 36, nullable = false)
+    @Column(name = "RFID_TAG_UUID", length = 36, nullable = false)
     private String rfidTagUuid;
 
     @Column(name = "AGGREGATION_UUID", length = 36, nullable = false)

@@ -42,6 +42,12 @@ public class St013Service extends BaseService {
     public Page<St01301VO> getStInoutExcept(Pageable pageable, RequestParams<St01301VO> requestParams) {
         St01301VO st01301VO = new St01301VO();
         st01301VO.setRequestName(requestParams.getString("requestName"));
+
+
+        st01301VO.setRequestorUuid(requestParams.getString("requestorUuid")); // 작성자
+        st01301VO.setExceptStartDateFrom(requestParams.getString("exceptStartDateFrom"));
+        st01301VO.setExceptStartDateTo(requestParams.getString("exceptStartDateTo"));
+
         //검색조건 추가시
 
         return filter(st013Mapper.getStInoutExcept(st01301VO), pageable, "", St01301VO.class);
@@ -94,6 +100,10 @@ public class St013Service extends BaseService {
     public Page<St01302VO> getStExceptRecordResult(Pageable pageable, RequestParams<St01302VO> requestParams) {
         St01302VO st01302VO = new St01302VO();
         st01302VO.setInoutExceptUuid(requestParams.getString("inoutExceptUuid"));
+        st01302VO.setRepositoryUuid(requestParams.getString("repositoryUuid"));
+        st01302VO.setShelfUuid(requestParams.getString("shelfUuid"));
+        st01302VO.setCode(requestParams.getString("code"));
+        st01302VO.setTitle(requestParams.getString("title"));
         return filter(st013Mapper.getStExceptRecordResult(st01302VO), pageable, "", St01302VO.class);
 
     }

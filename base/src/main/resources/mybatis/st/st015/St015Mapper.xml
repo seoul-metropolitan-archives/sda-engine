@@ -16,17 +16,17 @@
                a.SHELF_UUID as shelfUuid,
                c.SHELF_NAME as shelfName,
                a.LOCATION_UUID as locationUuid,
-               (d.COLUMN_NO || d.ROW_NO) as locationName,
                a.STATUS_UUID as statusUuid,
                a.PLAN_RESULT_UUID as planResultUuid,
                a.NOTES as notes,
-               a.EXCEPT_REASON as exceptReason
+               a.EXCEPT_REASON as exceptReason,
+               (d.ROW_NO || '행 ' || d.COLUMN_NO || '열') as locationName
           from ST_INVENTORY_PLAN a left outer join ST_REPOSITORY b
             ON a.REPOSITORY_UUID = b.REPOSITORY_UUID
             left outer join ST_SHELF c
             ON a.SHELF_UUID = C.SHELF_UUID
             left outer join ST_LOCATION d
-            ON a.SHELF_UUID = d.LOCATION_UUID
+            ON a.LOCATION_UUID = d.LOCATION_UUID
     </select>
 
     <select id="getStInventoryContainerResult" resultType="St01502VO" parameterType="St01502VO" statementType="PREPARED">
@@ -40,7 +40,11 @@
                 FROM ST_CONTAINER I
                 WHERE I.CONTAINER_UUID = S.PARENT_CONTAINER_UUID) parentContainerName,
                S.CONTAINER_TYPE_UUID as containerTypeUuid,
-               S.CONTROL_NUMBER as controlNumber
+               S.CONTROL_NUMBER as controlNumber,
+                (SELECT (STL.ROW_NO || '행 ' || STL.COLUMN_NO || '열')
+                FROM ST_LOCATION STL INNER JOIN ST_ARRANGE_CONTAINERS_RESULT STARCR
+                ON STL.LOCATION_UUID = STARCR.LOCATION_UUID
+                WHERE STARCR.CONTAINER_UUID = a.CONTAINER_UUID ) as locationName
         from ST_INVENTORY_CONTAINER_RESULT a INNER JOIN ST_CONTAINER S
         ON a.CONTAINER_UUID = S.CONTAINER_UUID
         <where>
@@ -131,10 +135,6 @@ FROM ST_INVENTORY_RECORD_RESULT A LEFT OUTER JOIN ST_ARRANGE_RECORDS_RESULT SARR
             <if test="inventoryPlanUuid != null">
                 AND A.INVENTORY_PLAN_UUID = #{inventoryPlanUuid}
             </if>
-            <if test="containerUuid != null">
-                AND A.CONTAINER_UUID = #{containerUuid}
-            </if>
-
         </where>
     </select>
 </mapper>

@@ -1,6 +1,8 @@
 package rmsoft.ams.seoul.common.domain;
 
+import io.onsemiro.core.annotations.Comment;
 import io.onsemiro.core.domain.BaseJpaModel;
+import io.onsemiro.core.domain.SimpleJpaModel;
 import lombok.*;
 import org.apache.ibatis.type.Alias;
 import org.hibernate.annotations.DynamicInsert;
@@ -18,7 +20,7 @@ import java.io.Serializable;
 @Table(name = "ST_MISS_ARRANGE_RECORD_REQ")
 @IdClass(StMissArrangeRecordReq.StMissArrangeRecordReqId.class)
 @Alias("StMissArrangeRecordReq")
-public class StMissArrangeRecordReq extends BaseJpaModel<StMissArrangeRecordReq.StMissArrangeRecordReqId> {
+public class StMissArrangeRecordReq extends SimpleJpaModel<StMissArrangeRecordReq.StMissArrangeRecordReqId> {
 
 
     @Id
@@ -50,6 +52,7 @@ public class StMissArrangeRecordReq extends BaseJpaModel<StMissArrangeRecordReq.
     public StMissArrangeRecordReqId getId() {
         return StMissArrangeRecordReqId.of(missArrangeRecordUuid);
     }
+
 
     @Embeddable
     @Data

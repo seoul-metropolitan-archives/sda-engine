@@ -158,6 +158,67 @@
         return true;
     }
 
+    var getMenuId = function(){
+        var arrParam = location.search.replace("?", "").split("&");
+        var menuId = "";
+
+        $.each(arrParam, function(idx, item){
+            var arrTmp = item.split("=");
+            if(arrTmp.length == 2 && arrTmp[0] == "menuId"){
+                menuId = arrTmp[1];
+                return false;
+            }
+        });
+
+        return menuId;
+    }
+
+    var getBookmarkUuid = function(menuUuid){
+        var uuid = "";
+
+        $.each(window.parent.BOOKMARK_LIST, function(idx, item){
+            if(item["menuUuid"] == menuUuid){
+                uuid = item["bookmarkUuid"];
+                return false;
+            }
+        });
+
+        return uuid;;
+    }
+
+    var toggleBookmark = function(){
+
+    }
+
+    $(".bookmark_star,bookmark_star_on").on("click", function(){
+        var menuUuid = getMenuId();
+        var bookmarkUuid = getBookmarkUuid(menuUuid);
+
+        axboot.ajax({
+            url: "/api/v1/ac002/01/addBookmark",
+            data: JSON.stringify({bookmarkUuid : bookmarkUuid, menuUuid : menuUuid}),
+            dataType: "JSON",
+            type: "PUT",
+            callback: function (res) {
+                if(bookmarkUuid == ""){
+                    $(".bookmark_star").addClass("bookmark_star_on");
+                    $(".bookmark_star").removeClass("bookmark_star");
+                    axToast.push("북마크에 추가 되었습니다.");
+                }else{
+                    $(".bookmark_star_on").addClass("bookmark_star");
+                    $(".bookmark_star_on").removeClass("bookmark_star_on");
+                    axToast.push("북마크에서 삭제 되었습니다.");
+                }
+
+                window.parent.ACTIONS.dispatch(window.parent.ACTIONS.GET_BOOKMARK);
+            },
+            options: {
+                onError: axboot.viewError
+            }
+        });
+    });
+
+
 </script>
 <script>
     $("docuemnt").ready(function(){
@@ -179,6 +240,16 @@
                     );
             }
         });
+
+        var bookmarkUuid = getBookmarkUuid(getMenuId());
+
+        if(bookmarkUuid != ""){
+            $(".bookmark_star").addClass("bookmark_star_on");
+            $(".bookmark_star").removeClass("bookmark_star");
+        }else{
+            $(".bookmark_star_on").addClass("bookmark_star");
+            $(".bookmark_star_on").removeClass("bookmark_star_on");
+        }
     });
 
 

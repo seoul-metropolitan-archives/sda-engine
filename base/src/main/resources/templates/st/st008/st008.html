@@ -50,67 +50,66 @@
                     <dl>
                         <dt class="w150">반출의뢰서</dt>
                         <dd>
-                            <input type=text style="width:135px" data-ax-path="containerName">
+                            <input type=text style="width:135px" data-ax-path="requestName">
                         </dd>
-                        <dl>
 
-                            <dt>반출일자</dt>
-                            <dd class="w_auto">
-                                <div class="input-group" data-ax5picker="date">
-                                    <div class="cld_box" style="background-color: #fffdd6">
-                                        <input type="text" data-ax-path="creationStartDate"
-                                               style="background-color: #fffdd6;ime-mode:disabled;"
-                                               placeholder="YYYY-MM-DD" maxlength="10">
-                                        <img title="calendar" class="ui-datepicker-trigger" alt="..."
-                                             src="/assets/images/ams/calendar.png">
-                                    </div>
-                                    ~
-                                    <div class="cld_box" style="background-color: #fffdd6">
-                                        <input type="text" data-ax-path="creationEndDate"
-                                               style="background-color: #fffdd6;ime-mode:disabled;"
-                                               placeholder="YYYY-MM-DD" maxlength="10">
-                                        <img title="calendar" class="ui-datepicker-trigger" alt="..."
-                                             src="/assets/images/ams/calendar.png">
-                                    </div>
-                                </div>
-                            </dd>
-                        </dl>
-                        <dl>
 
-                            <dt>반입예정일자</dt>
-                            <dd class="w_auto">
-                                <div class="input-group" data-ax5picker="date">
-                                    <div class="cld_box" style="background-color: #fffdd6">
-                                        <input type="text" data-ax-path="creationStartDate"
-                                               style="background-color: #fffdd6;ime-mode:disabled;"
-                                               placeholder="YYYY-MM-DD" maxlength="10">
-                                        <img title="calendar" class="ui-datepicker-trigger" alt="..."
-                                             src="/assets/images/ams/calendar.png">
-                                    </div>
-                                    ~
-                                    <div class="cld_box" style="background-color: #fffdd6">
-                                        <input type="text" data-ax-path="creationEndDate"
-                                               style="background-color: #fffdd6;ime-mode:disabled;"
-                                               placeholder="YYYY-MM-DD" maxlength="10">
-                                        <img title="calendar" class="ui-datepicker-trigger" alt="..."
-                                             src="/assets/images/ams/calendar.png">
-                                    </div>
+                        <dt>반출일자</dt>
+                        <dd class="w_auto">
+                            <div class="input-group" data-ax5picker="date">
+                                <div class="cld_box" style=" ">
+                                    <input type="text" data-ax-path="takeoutDateFrom"
+                                           style=" ime-mode:disabled;"
+                                           placeholder="YYYY-MM-DD" maxlength="10">
+                                    <img title="calendar" class="ui-datepicker-trigger" alt="..."
+                                         src="/assets/images/ams/calendar.png">
                                 </div>
-                            </dd>
-                        </dl>
+                                ~
+                                <div class="cld_box" style=" ">
+                                    <input type="text" data-ax-path="takeoutDateTo"
+                                           style=" ime-mode:disabled;"
+                                           placeholder="YYYY-MM-DD" maxlength="10">
+                                    <img title="calendar" class="ui-datepicker-trigger" alt="..."
+                                         src="/assets/images/ams/calendar.png">
+                                </div>
+                            </div>
+                        </dd>
+
+
+                        <dt>반입예정일자</dt>
+                        <dd class="w_auto">
+                            <div class="input-group" data-ax5picker="date">
+                                <div class="cld_box" style=" ">
+                                    <input type="text" data-ax-path="returnDueDateFrom"
+                                           style=" ime-mode:disabled;"
+                                           placeholder="YYYY-MM-DD" maxlength="10">
+                                    <img title="calendar" class="ui-datepicker-trigger" alt="..."
+                                         src="/assets/images/ams/calendar.png">
+                                </div>
+                                ~
+                                <div class="cld_box" style=" ">
+                                    <input type="text" data-ax-path="returnDueDateTo"
+                                           style=" ime-mode:disabled;"
+                                           placeholder="YYYY-MM-DD" maxlength="10">
+                                    <img title="calendar" class="ui-datepicker-trigger" alt="..."
+                                         src="/assets/images/ams/calendar.png">
+                                </div>
+                            </div>
+                        </dd>
+
                     </dl>
                     <dl>
-                        <dd>
-                            <th:block
-                                    layout:insert="~{/fragments/page-buttons :: searchInputYellow ('반출자','requestorUuid')}"/>
-                        </dd>
+
+                        <th:block
+                                layout:insert="~{/fragments/page-buttons :: searchInput ('반출자','requestorName')}"/>
+
                         <dt class="w150">Aggregation Code</dt>
                         <dd>
-                            <input type=text style="width:135px" data-ax-path="test1">
+                            <input type=text style="width:135px" data-ax-path="code">
                         </dd>
                         <dt class="w150">Aggregation Title</dt>
                         <dd>
-                            <input type=text style="width:135px" data-ax-path="test2">
+                            <input type=text style="width:135px" data-ax-path="title">
                         </dd>
                     </dl>
                 </div>
@@ -162,14 +161,14 @@
                             <th:block layout:insert="~{/fragments/page-buttons :: dot('반출 의뢰 대상')}"/>
                             <th:block layout:insert="~{/fragments/page-buttons :: delete-and-save}"/>
                             <!--<li style="text-align:right; width:83%;">-->
-                                <!--<button class="btn_a">
-                                    <span class="btn_icon">&nbsp;</span>
-                                    <span class="btn_main_txt">Add</span>
-                                </button>-->
-                                <!--<button class="btn_d">-->
-                                <!--<span class="btn_icon">&nbsp;</span>-->
-                                <!--<span class="btn_main_txt">Delete</span>-->
-                                <!--</button>-->
+                            <!--<button class="btn_a">
+                                <span class="btn_icon">&nbsp;</span>
+                                <span class="btn_main_txt">Add</span>
+                            </button>-->
+                            <!--<button class="btn_d">-->
+                            <!--<span class="btn_icon">&nbsp;</span>-->
+                            <!--<span class="btn_main_txt">Delete</span>-->
+                            <!--</button>-->
                             <!--</li>-->
                         </ul>
                         <div style="height:100%; width:100%" class="div_tablerow bdb">

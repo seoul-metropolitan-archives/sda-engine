@@ -1,33 +1,42 @@
 var fnObj = {};
 var inoutExceptUuid = "";
+var requestorUuid;
+var repositoryUuid;
+var shelfUuid;
+var locationUuid;
 var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH: function (caller, act, data) {
 
         ACTIONS.dispatch(ACTIONS.PAGE_SEARCH01);
     },
     PAGE_SEARCH01: function (caller, act, data) {
-       axboot.ajax({
+        axboot.ajax({
             type: "GET",
             url: "/api/v1/st/st013/01/list01",
-            data: $.extend({}, this.formView.getData()),
+            data: $.extend({}, {pageSize: 1000}, this.formView.getData(),
+                {repositoryUuid: repositoryUuid, shelfUuid: shelfUuid, locationUuid: locationUuid, requestorUuid : requestorUuid}
+            ),
             callback: function (res) {
                 fnObj.gridView01.setData(res.list);
                 //fnObj.gridView01.disabledColumn();
                 fnObj.gridView02.clearData();
+                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH02);
             },
             options: {
                 onError: axboot.viewError
             }
-       });
+        });
     },
     PAGE_SEARCH02: function (caller, act, data) {
-        if(fnObj.gridView01.getSelectedData() == null){
+        if (fnObj.gridView01.getSelectedData() == null) {
             return;
         }
         axboot.ajax({
             type: "GET",
             url: "/api/v1/st/st013/01/list02",
-            data: $.extend({}, this.formView.getData(),{inoutExceptUuid : fnObj.gridView01.getSelectedData().inoutExceptUuid}),
+            data: $.extend({pageSize: 1000}, this.formView.getData(), {inoutExceptUuid: fnObj.gridView01.getSelectedData().inoutExceptUuid,},
+                {repositoryUuid: repositoryUuid, shelfUuid: shelfUuid, locationUuid: locationUuid, requestorUuid : requestorUuid}
+            ),
             callback: function (res) {
                 fnObj.gridView02.setData(res.list);
                 // fnObj.gridView02.disabledColumn();
@@ -106,29 +115,28 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             return false;
         } else {
             //여긴 신규다
-            if(fnObj.gridView01.gridObj.isDataChanged()){
+            if (fnObj.gridView01.gridObj.isDataChanged()) {
 
                 var exceptReason = $('textarea[data-ax-path="except_reason"]').val()
-
 
 
                 fnObj.gridView01.gridObj.setValue(fnObj.gridView01.getJsonData().length - 1, "exceptReason", exceptReason);
 
                 ACTIONS.dispatch(ACTIONS.TOP_GRID_SAVE01);
-            }else{
+            } else {
                 //데이터가 바뀌지 않았다
                 var jsonData = fnObj.gridView01.getJsonData();
 
                 var exceptReason = $('textarea[data-ax-path="except_reason"]').val();
                 //null이 아닌경우
-                if(exceptReason != ""){
+                if (exceptReason != "") {
                     //click한애가 있다
-                    if(inoutExceptUuid != ""){
+                    if (inoutExceptUuid != "") {
 
-                        for(var i=0;i<jsonData.length;i++){
-                            if(jsonData[i].inoutExceptUuid == inoutExceptUuid){
+                        for (var i = 0; i < jsonData.length; i++) {
+                            if (jsonData[i].inoutExceptUuid == inoutExceptUuid) {
                                 fnObj.gridView01.gridObj.setValue(i, "exceptReason", exceptReason);
-                            }else{
+                            } else {
                                 fnObj.gridView01.gridObj.setValue(i, "exceptReason", jsonData[i].exceptReason);
                             }
                         }
@@ -138,7 +146,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 }
             }
 
-            if(fnObj.gridView02.gridObj.isDataChanged()){
+            if (fnObj.gridView02.gridObj.isDataChanged()) {
                 ACTIONS.dispatch(ACTIONS.TOP_GRID_SAVE02);
             }
         }
@@ -152,7 +160,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             callback: function (res) {
                 ACTIONS.dispatch(ACTIONS.PAGE_SEARCH01);
             }
-            })
+        })
             .done(function () {
                 fnObj.gridView01.commit();
                 $('textarea[data-ax-path="except_reason"]').val('');
@@ -192,68 +200,72 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         }
     },
     PAGE_CLASSIFY: function (caller, act, data) {
-        if(inoutExceptUuid == ""){
+        if (inoutExceptUuid == "") {
             return
         }
 
         axboot.modal.open({
             modalType: "ARRANGE_POPUP",
             header: {
-                title: fnObj.gridView01.gridObj.getSelectedData().requestName
+                title: "제외 대상 - " + fnObj.gridView01.gridObj.getSelectedData().requestName
             },
             sendData: function () {
                 return {
-                    classUuid : inoutExceptUuid,
-                    flag : "inout",
-                    description : fnObj.gridView01.gridObj.getSelectedData().requestName,
-                    fromWhere : 'st013',
+                    inoutExceptUuid: inoutExceptUuid,
+                    confirmBtn:"Arrange",
+                    flag: "inout",
+                    description: fnObj.gridView01.gridObj.getSelectedData().requestName,
+                    fromWhere: 'st013',
                 };
             },
             callback: function (data) {
-                if(this) this.close();
+                if (this) this.close();
                 ACTIONS.dispatch(ACTIONS.PAGE_SEARCH02);
             }
         });
     },
-    SEARCH_CLASS_SCH : function(caller, act, data)
-    {
+    SEARCH_CLASS_SCH: function (caller, act, data) {
         axboot.modal.open({
             modalType: "COMMON_POPUP",
-            preSearch : data["preSearch"],
+            preSearch: data["preSearch"],
             sendData: function () {
                 return data;
             },
             callback: function (data) {
                 $("input[data-ax-path='classificationCode']").val(data["CLASSIFICATION_NAME"])
-                $("input[data-ax-path='classificationCode']").attr("classificationCode",data["CLASSIFICATION_CODE"])
+                $("input[data-ax-path='classificationCode']").attr("classificationCode", data["CLASSIFICATION_CODE"])
                 classificationSchemeUuid = data['CLASSIFICATION_SCHEME_UUID'];
-                selectedTreeItem = {orderKey:"", classTreeName:"",classificationSchemeUuid:"",orderNo:"",parentClassUuid:""};
-                if(this.close)
+                selectedTreeItem = {
+                    orderKey: "",
+                    classTreeName: "",
+                    classificationSchemeUuid: "",
+                    orderNo: "",
+                    parentClassUuid: ""
+                };
+                if (this.close)
                     this.close();
-                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH2,data);
+                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH2, data);
             }
         });
     },
-    SEARCH_REPOSITORY_SCH : function(caller, act, data)
-    {
+    SEARCH_REPOSITORY_SCH: function (caller, act, data) {
         axboot.modal.open({
             modalType: "COMMON_POPUP",
-            preSearch : data["preSearch"],
+            preSearch: data["preSearch"],
             sendData: function () {
                 return data;
             },
             callback: function (data) {
                 $("input[data-ax-path='repositoryName']").val(data["REPOSITORY_NAME"])
                 repositoryUuid = data['REPOSITORY_UUID'];
-                if(this.close) this.close();
+                if (this.close) this.close();
             }
         });
     },
-    SEARCH_SHELF_SCH : function(caller, act, data)
-    {
+    SEARCH_SHELF_SCH: function (caller, act, data) {
         axboot.modal.open({
             modalType: "COMMON_POPUP",
-            preSearch : data["preSearch"],
+            preSearch: data["preSearch"],
             sendData: function () {
                 return data;
             },
@@ -261,10 +273,47 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 $("input[data-ax-path='shelfName']").val(data["SHELF_NAME"])
                 shelfUuid = data['SHELF_UUID'];
                 statusUuid = data['STATUS_UUID'];
+                if (this.close) this.close();
+            }
+        });
+    },
+    SEARCH_LOCATION_SCH : function(caller, act, data)
+    {
+        axboot.modal.open({
+            modalType: "COMMON_POPUP",
+            preSearch : data["preSearch"],
+            sendData: function () {
+                return data;
+            },
+            callback: function (data) {
+
+                var text = `${data["ROWNO"]}행 ${data["COLUMNNO"]}열`;
+
+                $("input[data-ax-path='locationName']").val(text)
+                locationUuid = data['LOCATIONUUID'];
+                console.log('locationUuid', locationUuid);
                 if(this.close) this.close();
             }
         });
-    }
+    },
+
+    SEARCH_USER_SCH: function (caller, act, data) {
+        axboot.modal.open({
+            modalType: "COMMON_POPUP",
+            preSearch: data["preSearch"],
+            sendData: function () {
+                return data;
+            },
+            callback: function (data) {
+
+                $("input[data-ax-path='requestorName']").val(data['USER_NAME'])
+                requestorUuid = data['USER_UUID'];
+                console.log('requestorUuid', requestorUuid);
+                if (this.close) this.close();
+            }
+        });
+    },
+
 });
 
 fnObj.pageStart = function () {
@@ -318,17 +367,28 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
     initEvent: function () {
         var _this = this;
 
-        $("input[data-ax-path='repositoryName']").parents().eq(1).find("a").click(function(){
+        $("input[data-ax-path='requestorName']").parents().eq(1).find("a").click(function () {
+
             var data = {
-                popupCode : "PU137",
-                searchData : $("input[data-ax-path='repositoryName']").val().trim(),
-                preSearch : false
+                popupCode: "PU107",
+                searchData: null,
+                preSearch: false
             };
-            ACTIONS.dispatch(ACTIONS.SEARCH_REPOSITORY_SCH,data);
+            ACTIONS.dispatch(ACTIONS.SEARCH_USER_SCH, data);
+
         });
 
-        $("input[data-ax-path='shelfName']").parents().eq(1).find("a").click(function(){
-            if("" != repositoryUuid) {
+        $("input[data-ax-path='repositoryName']").parents().eq(1).find("a").click(function () {
+            var data = {
+                popupCode: "PU137",
+                searchData: $("input[data-ax-path='repositoryName']").val().trim(),
+                preSearch: false
+            };
+            ACTIONS.dispatch(ACTIONS.SEARCH_REPOSITORY_SCH, data);
+        });
+
+        $("input[data-ax-path='shelfName']").parents().eq(1).find("a").click(function () {
+            if ("" != repositoryUuid) {
                 var data = {
                     popupCode: "PU138",
                     searchData: repositoryUuid,
@@ -338,8 +398,44 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
             }
         });
 
+        $("input[data-ax-path='locationName']").parents().eq(1).find("a").click(function () {
+            if ("" != shelfUuid) {
+                var data = {
+                    popupCode: "PU147",
+                    searchData: shelfUuid,
+                    preSearch: false
+                };
+                ACTIONS.dispatch(ACTIONS.SEARCH_LOCATION_SCH, data);
+            }
+        });
 
 
+        $("input[data-ax-path='exceptStartDateFrom']").keyup(function () {
+            var date = this.value;
+            if (date.match(/^\d{4}$/) !== null) {
+                this.value = date + '-';
+            } else if (date.match(/^\d{4}\-\d{2}$/) !== null) {
+                this.value = date + '-';
+            }
+        });
+        $("input[data-ax-path='exceptStartDateFrom']").keypress(function () {
+            if ((event.keyCode < 48) || (event.keyCode > 57)) event.returnValue = false;
+        });
+        $("input[data-ax-path='exceptStartDateTo']").keyup(function () {
+            var date = this.value;
+            if (date.match(/^\d{4}$/) !== null) {
+                this.value = date + '-';
+            } else if (date.match(/^\d{4}\-\d{2}$/) !== null) {
+                this.value = date + '-';
+            }
+        });
+        $("input[data-ax-path='exceptStartDateTo']").keypress(function () {
+            if ((event.keyCode < 48) || (event.keyCode > 57)) event.returnValue = false;
+        });
+
+        $("select[data-ax-path='statusUuid'], select[data-ax-path='containerTypeUuid']").change(function () {
+            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+        });
 
     },
     getData: function () {
@@ -373,26 +469,25 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
         this.model.setModel(this.getDefaultData());
         this.target.find('[data-ax-path="key"]').removeAttr("readonly");
     },
-    bindEvent : function()
-    {
-       /* var _this = this;
-        $(".btn_confirm01").click(function(){
-            ACTIONS.dispatch(ACTIONS.STATUS_UPDATE01,CONFIRM_STATUS);
-        });
-        $(".btn_cancel01").click(function(){
-            ACTIONS.dispatch(ACTIONS.STATUS_UPDATE01,CANCEL_STATUS);
-        });
-        $(".btn_confirm02").click(function(){
-            ACTIONS.dispatch(ACTIONS.STATUS_UPDATE02,CONFIRM_STATUS);
-        });
-        $(".btn_cancel02").click(function(){
-            ACTIONS.dispatch(ACTIONS.STATUS_UPDATE02,CANCEL_STATUS);
-        });*/
+    bindEvent: function () {
+        /* var _this = this;
+         $(".btn_confirm01").click(function(){
+             ACTIONS.dispatch(ACTIONS.STATUS_UPDATE01,CONFIRM_STATUS);
+         });
+         $(".btn_cancel01").click(function(){
+             ACTIONS.dispatch(ACTIONS.STATUS_UPDATE01,CANCEL_STATUS);
+         });
+         $(".btn_confirm02").click(function(){
+             ACTIONS.dispatch(ACTIONS.STATUS_UPDATE02,CONFIRM_STATUS);
+         });
+         $(".btn_cancel02").click(function(){
+             ACTIONS.dispatch(ACTIONS.STATUS_UPDATE02,CANCEL_STATUS);
+         });*/
 
-       $('#btn_deleteWithOutNoticeApproval').click(function(){
-           fnObj.gridView02.gridObj.getDataProvider().removeRows(fnObj.gridView02.gridObj.gridView.getCheckedRows(), false);
-           fnObj.gridView02.gridObj.dispatch("onRemoveRow");
-       });
+        $('#btn_deleteWithOutNoticeApproval').click(function () {
+            fnObj.gridView02.gridObj.getDataProvider().removeRows(fnObj.gridView02.gridObj.gridView.getCheckedRows(), false);
+            fnObj.gridView02.gridObj.dispatch("onRemoveRow");
+        });
 
     },
 });
@@ -430,9 +525,9 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
 
         inoutExceptUuid = data.inoutExceptUuid;
 
-        if(data.exceptReason != undefined){
+        if (data.exceptReason != undefined) {
             $('textarea[data-ax-path="except_reason"]').val(data.exceptReason);
-        }else{
+        } else {
             $('textarea[data-ax-path="except_reason"]').val('');
         }
 
@@ -452,7 +547,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
         ACTIONS.dispatch(ACTIONS.PAGE_SEARCH02);
 
     },
-    cancelDelete: function(){
+    cancelDelete: function () {
         var codes = axboot.commonCodeFilter("CD138").codeArr;
         var names = axboot.commonCodeFilter("CD138").nameArr;
         var state = undefined;
@@ -463,11 +558,11 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
             }
         }
 
-        if(state == CONFIRM_STATUS){
+        if (state == CONFIRM_STATUS) {
             axToast.push(axboot.getCommonMessage("DF001_01"));
 
             this.setRunDel(false);
-        }else{
+        } else {
             this.setRunDel(true);
         }
     },
@@ -496,24 +591,24 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
     },
     disabledColumn: function () {
         var state = axboot.commonCodeValueByCodeName("CD138", CONFIRM_STATUS);
-        this.gridObj.setCustomCellStyleRows("disable", function(row){
+        this.gridObj.setCustomCellStyleRows("disable", function (row) {
             if (row["statusUuid"] == state)
                 return true;
-            else if(fnObj.gridView02.getSelectedData().useYn == "Y")
+            else if (fnObj.gridView02.getSelectedData().useYn == "Y")
                 return true;
             else return false;
-        },function(row){
-            if(row["statusUuid"] == state) {
+        }, function (row) {
+            if (row["statusUuid"] == state) {
                 return ["statusUuid", "shelfCode", "shelfName", "maxContainer", "description"];
-            }else {
+            } else {
                 return ["useYn"];
             }
         });
-   },
+    },
     itemClick: function (data) {
 
     },
-    cancelDelete: function(){
+    cancelDelete: function () {
 
     },
 });

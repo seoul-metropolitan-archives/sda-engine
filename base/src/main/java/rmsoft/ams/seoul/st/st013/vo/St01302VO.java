@@ -12,11 +12,19 @@ public class St01302VO extends BaseVO{
 
     private String exceptRecordResultUuid;
     private String inoutExceptUuid;
-    private String aggregationUuid;
+
     private String uuid;
+    private String aggregationUuid;
     private String publishedStatus;
+
+    private String repositoryUuid;
+    private String shelfUuid;
+    private String containerTypeUuid;
+    private String locationUuid;
     private String code;
     private String title;
+
+
     private String type;
     private String level;
     private String author;

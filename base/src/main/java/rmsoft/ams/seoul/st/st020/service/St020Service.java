@@ -42,7 +42,15 @@ public class St020Service extends BaseService {
         St02001VO St02001VO = new St02001VO();
         //St02001VO.setRequestName(requestParams.getString("requestName"));
         //검색조건 추가시
+        St02001VO.setRepositoryUuid(requestParams.getString("repositoryUuid"));
+        St02001VO.setShelfUuid(requestParams.getString("shelfUuid"));
+        St02001VO.setLocationUuid(requestParams.getString("locationUuid"));
+        St02001VO.setCode(requestParams.getString("code"));
+        St02001VO.setTitle(requestParams.getString("title"));
 
+        St02001VO.setPublishDateFrom(requestParams.getString("publishDateFrom"));
+        St02001VO.setPublishDateTo(requestParams.getString("publishDateTo"));
+        St02001VO.setPublishStatusUuid(requestParams.getString("publishStatusUuid"));
         return filter(st020Mapper.getStRfidTag(St02001VO), pageable, "", St02001VO.class);
     }
 

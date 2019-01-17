@@ -19,6 +19,12 @@ public class St02101VO extends BaseVO {
     private String level;
     private String type;
     private String publishedStatus;
+
+    private String repositoryUuid;
+    private String shelfUuid;
+    private String containerTypeUuid;
+    private String locationUuid;
+
     private String author;
     private String descStrDate;
     private String descEdDate;
@@ -30,6 +36,11 @@ public class St02101VO extends BaseVO {
     private String inoutName;
     private String inoutDateTime;
     private String zoneName;
+    private String zoneUuid;
+    private String inoutDateTimeFrom;
+    private String inoutDateTimeTo;
+
+
 
 
 }

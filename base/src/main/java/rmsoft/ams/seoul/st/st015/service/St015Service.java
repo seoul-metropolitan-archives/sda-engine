@@ -5,6 +5,8 @@ import io.onsemiro.core.code.ApiStatus;
 import io.onsemiro.core.domain.BaseService;
 import io.onsemiro.core.parameter.RequestParams;
 import io.onsemiro.utils.ModelMapperUtils;
+import io.onsemiro.utils.UUIDUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -32,7 +34,10 @@ import rmsoft.ams.seoul.st.st029.vo.St02901VO;
 import rmsoft.ams.seoul.utils.CommonCodeUtils;
 
 import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class St015Service extends BaseService {
@@ -88,8 +93,6 @@ public class St015Service extends BaseService {
                 stInventoryPlanRepository.delete(stInventoryPlan);
             }else{
                 if(stInventoryPlan.isCreated()){
-                    stInventoryPlan.setRepositoryUuid("53A20890-F09A-493B-8B43-24B14D003E00");
-                    stInventoryPlan.setShelfUuid("E082DAE1-0ABA-45F6-9802-08A1F72DAEE3");
                     stInventoryPlan.setStatusUuid(CommonCodeUtils.getCodeDetailUuid("CD216","Draft"));
                 }else if(stInventoryPlan.isModified()){
                     orgStInventoryPlan = stInventoryPlanRepository.findOne(stInventoryPlan.getId());
@@ -104,29 +107,135 @@ public class St015Service extends BaseService {
         return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");
     }
 
+    public static String ListToString(List<Map<String,Object>> list){
+        List<String> resultList = new ArrayList();
+
+        for(int i = 0 ; i < list.size(); i++){
+            resultList.add(String.valueOf(list.get(i).get("locationUuid")));
+        }
+
+        return String.join(",", resultList);
+    }
+
     public ApiResponse updateStIventoryPlanStatus(List<St01501VO> list) {
         List<StInventoryPlan> stInventoryPlanList = ModelMapperUtils.mapList(list, StInventoryPlan.class);
         StInventoryPlan orgStInventoryPlan = null;
         int index = 0;
         String changeStatus = "";
 
-        StInventoryContainerResult stInventoryContainerResult = null;
-
         for(StInventoryPlan stInventoryPlan : stInventoryPlanList){
             changeStatus = list.get(index).getChangeStatus() == "" ? "Draft" : list.get(index).getChangeStatus();
             //바뀌는 값이 confirm일때
-            if(changeStatus.equals("confirm")){
-                //서고 서가 행렬단에 있는 location이 없을수도 있다. location이 없으면 모든 하위 container uuid를 가져와야한다.
+            if(changeStatus.equals("Confirm")){
+
+                //서고 서가 행렬단에 있는 location이 없을수도 있다.
+                //location이 없으면 shelf로 검색해서 모든 location에 있는 애들을 전부 가져 와야 한다.
 
 
-                //location값이 있는경우
-                List<String> ContainerList = jdbcTemplate.queryForList("select CONTAINER_UUID from ST_ARRANGE_CONTAINERS_RESULT where LOCATION_UUID =", String.class);
+                String locationUuid = stInventoryPlan.getLocationUuid();
+                String shelfUuid = stInventoryPlan.getShelfUuid();
 
-                //location값이 없는경우 서가 밑에 모든 container를 가져와야한다.
+                if(StringUtils.isEmpty(locationUuid)){
+                    //location값이 없는경우 서가 밑에 모든 container를 가져와야한다.
+                    StringBuilder sb = new StringBuilder();
+                    sb.append(" select LOCATION_UUID as locationUuid from ST_LOCATION ");
+                    sb.append(" where SHELF_UUID = '"+shelfUuid+"' ");
+                    List<Map<String, Object>> locationList = jdbcTemplate.queryForList(sb.toString());
+                    String location = ListToString(locationList);
+
+                    StringBuilder sb2 = new StringBuilder();
+                    sb2.append(" select CONTAINER_UUID as containerUuid from ST_ARRANGE_CONTAINERS_RESULT ");
+                    sb2.append(" where LOCATION_UUID IN ('"+location+"') ");
+                    List<Map<String, Object>> containerList = jdbcTemplate.queryForList(sb2.toString());
+                    for(int i = 0 ; i < containerList.size(); i++){
+                        StInventoryContainerResult stInventoryContainerResult = new StInventoryContainerResult();
+                        stInventoryContainerResult.setInventoryContResultUuid(UUIDUtils.getUUID());
+                        stInventoryContainerResult.setInventoryPlanUuid(stInventoryPlan.getInventoryPlanUuid());
+                        stInventoryContainerResult.setContainerUuid(String.valueOf(containerList.get(i).get("containerUuid")));
+
+                        stInventoryContainerResultRepository.save(stInventoryContainerResult);
+                    }
+
+                    for(int j = 0 ; j < containerList.size(); j++){
+
+                        StringBuilder sb3 = new StringBuilder();
+                        sb3.append(" select AGGREGATION_UUID as aggregationUuid from ST_ARRANGE_RECORDS_RESULT ");
+                        sb3.append(" where CONTAINER_UUID = '"+String.valueOf(containerList.get(j).get("containerUuid"))+"' ");
+                        List<Map<String, Object>> aggregationList = jdbcTemplate.queryForList(sb3.toString());
+
+                        for(int k = 0 ; k < aggregationList.size();k++){
+                            StInventoryRecordResult stInventoryRecordResult = new StInventoryRecordResult();
+                            stInventoryRecordResult.setInventoryRecordResultUuid(UUIDUtils.getUUID());
+                            stInventoryRecordResult.setInventoryPlanUuid(stInventoryPlan.getInventoryPlanUuid());
+                            stInventoryRecordResult.setContainerUuid(String.valueOf(containerList.get(j).get("containerUuid")));
+                            stInventoryRecordResult.setAggregationUuid(String.valueOf(aggregationList.get(k).get("aggregationUuid")));
+                            stInventoryRecordResultRepository.save(stInventoryRecordResult);
+                        }
+
+                    }
+
+                }else{
+                    //location값이 있는경우
+                    StringBuilder sb = new StringBuilder();
+                    sb.append(" select CONTAINER_UUID as containerUuid from ST_ARRANGE_CONTAINERS_RESULT ");
+                    sb.append(" where LOCATION_UUID = '"+locationUuid+"' ");
+                    List<Map<String, Object>> containerList = jdbcTemplate.queryForList(sb.toString());
+
+                    for(int i = 0 ; i < containerList.size(); i++){
+                        StInventoryContainerResult stInventoryContainerResult = new StInventoryContainerResult();
+                        stInventoryContainerResult.setInventoryContResultUuid(UUIDUtils.getUUID());
+                        stInventoryContainerResult.setInventoryPlanUuid(stInventoryPlan.getInventoryPlanUuid());
+                        stInventoryContainerResult.setContainerUuid(String.valueOf(containerList.get(i).get("containerUuid")));
+
+                        stInventoryContainerResultRepository.save(stInventoryContainerResult);
+                    }
+
+                    //ST_INVENTORY_RECORD_RESULT
+                    for(int j = 0 ; j < containerList.size(); j++){
+
+                        StringBuilder sb2 = new StringBuilder();
+                        sb2.append(" select AGGREGATION_UUID as aggregationUuid from ST_ARRANGE_RECORDS_RESULT ");
+                        sb2.append(" where CONTAINER_UUID = '"+String.valueOf(containerList.get(j).get("containerUuid"))+"' ");
+                        List<Map<String, Object>> aggregationList = jdbcTemplate.queryForList(sb2.toString());
+
+                        for(int k = 0 ; k < aggregationList.size();k++){
+                            StInventoryRecordResult stInventoryRecordResult = new StInventoryRecordResult();
+                            stInventoryRecordResult.setInventoryRecordResultUuid(UUIDUtils.getUUID());
+                            stInventoryRecordResult.setInventoryPlanUuid(stInventoryPlan.getInventoryPlanUuid());
+                            stInventoryRecordResult.setContainerUuid(String.valueOf(containerList.get(j).get("containerUuid")));
+                            stInventoryRecordResult.setAggregationUuid(String.valueOf(aggregationList.get(k).get("aggregationUuid")));
+                            stInventoryRecordResultRepository.save(stInventoryRecordResult);
+                        }
+
+                    }
 
 
+                }
 
-                //stInventoryContainerResultRepository.save()
+            }else{
+
+                StringBuilder sb = new StringBuilder();
+                sb.append(" SELECT INVENTORY_CONT_RESULT_UUID as inventoryContResultUuid  FROM ST_INVENTORY_CONTAINER_RESULT ");
+                sb.append(" WHERE INVENTORY_PLAN_UUID = '"+stInventoryPlan.getInventoryPlanUuid()+"' ");
+                List<Map<String, Object>> inventoryContainter = jdbcTemplate.queryForList(sb.toString());
+
+                for(int i = 0 ; i < inventoryContainter.size(); i++){
+                    StInventoryContainerResult stInventoryContainerResult = new StInventoryContainerResult();
+                    stInventoryContainerResult.setInventoryContResultUuid(String.valueOf(inventoryContainter.get(i).get("inventoryContResultUuid")));
+                    stInventoryContainerResultRepository.delete(stInventoryContainerResult);
+                }
+
+                StringBuilder sb2 = new StringBuilder();
+                sb2.append(" SELECT INVENTORY_RECORD_RESULT_UUID as inventoryRecordResultUuid  FROM ST_INVENTORY_RECORD_RESULT ");
+                sb2.append(" WHERE INVENTORY_PLAN_UUID = '"+stInventoryPlan.getInventoryPlanUuid()+"' ");
+                List<Map<String, Object>> inventoryRecord = jdbcTemplate.queryForList(sb2.toString());
+
+                for(int j = 0 ; j < inventoryRecord.size(); j++){
+                    StInventoryRecordResult stInventoryRecordResult = new StInventoryRecordResult();
+                    stInventoryRecordResult.setInventoryRecordResultUuid(String.valueOf(inventoryRecord.get(j).get("inventoryRecordResultUuid")));
+                    stInventoryRecordResultRepository.delete(stInventoryRecordResult);
+                }
+
             }
 
 

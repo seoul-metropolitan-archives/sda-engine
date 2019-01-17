@@ -39,42 +39,61 @@
                 <!-- 상단검색 -->
                 <div class="bdb div_tablerow">
                     <dl>
-                        <dt class="w150">의뢰서명</dt>
+                        <th:block layout:insert="~{/fragments/page-buttons :: searchInput ('보존상자','containerName')}"/>
+                        <dt class="w120 mgl_5">Source Type</dt>
                         <dd>
-                            <input type=text style="width:135px" data-ax-path="requestName">
+                            <select data-ax-path="sourceTypeUuid" style="width:135px;">
+                                <option value="" ></option>
+                                <option th:each="item : ${sourceTypeUuid}"
+                                        th:value="${item.codeDetailUUID}"
+                                        th:text="${item.codeName}"/>
+                            </select>
                         </dd>
-                        <th:block layout:insert="~{/fragments/page-buttons :: searchInputYellow ('서고','repositoryName')}"/>
-                        <th:block layout:insert="~{/fragments/page-buttons :: searchInputYellow ('서가','shelfName')}"/>
-                        <dt class="w150">Aggregation Code</dt>
-                        <dd>
-                            <input type=text style="width:135px" data-ax-path="test1">
-                        </dd>
-                        <dt class="w150">Aggregation Title</dt>
-                        <dd>
-                            <input type=text style="width:135px" data-ax-path="test2">
-                        </dd>
-                    </dl>
-                    <dl>
-                        <dt class="w150">작성자</dt>
-                        <dd>
-                            <input type=text style="width:135px" data-ax-path="test3">
-                        </dd>
-                        <dt>제외 일자</dt>
+
+                        <dt>Request Date</dt>
                         <dd class="w_auto">
                             <div class="input-group" data-ax5picker="date">
-                                <div class="cld_box" style="background-color: #fffdd6">
-                                    <input type="text" data-ax-path="startFromDate" style="background-color: #fffdd6;ime-mode:disabled;"
+                                <div class="cld_box" style="">
+                                    <input type="text" data-ax-path="requestDateFrom" style=";ime-mode:disabled;"
                                            placeholder="YYYY-MM-DD" maxlength="10">
                                     <img title="calendar" class="ui-datepicker-trigger" alt="..." src="/assets/images/ams/calendar.png" >
                                 </div>
                                 ~
-                                <div class="cld_box" style="background-color: #fffdd6">
-                                    <input type="text" data-ax-path="startToDate" style="background-color: #fffdd6;ime-mode:disabled;"
+                                <div class="cld_box" style="">
+                                    <input type="text" data-ax-path="requestDateTo" style=";ime-mode:disabled;"
                                            placeholder="YYYY-MM-DD" maxlength="10">
                                     <img title="calendar" class="ui-datepicker-trigger" alt="..." src="/assets/images/ams/calendar.png">
                                 </div>
                             </div>
                         </dd>
+
+                    </dl>
+                    <dl>
+
+                        <dt class="w150">Aggregation Code</dt>
+                        <dd>
+                            <input type=text style="width:135px" data-ax-path="code">
+                        </dd>
+                        <dt class="w150">Aggregation Title</dt>
+                        <dd>
+                            <input type=text style="width:135px" data-ax-path="title">
+                        </dd>
+                        <dt class="w_auto">Arrange YN</dt>
+                        <dd class="w_auto mgl_5">
+                            <div class="rdo_box">
+
+                                <label>
+                                    <input type="radio" name="radio" data-ax-path="republishYn" class="no_border"
+                                           value="Y">Yes</label>
+                                <label>
+                                    <input type="radio" name="radio" data-ax-path="republishYn" class="no_border"
+                                           value="N">No</label>
+                                <label>
+                                    <input type="radio" name="radio" data-ax-path="republishYn" class="no_border"
+                                           value="" checked>All</label>
+                            </div>
+                        </dd>
+
                     </dl>
                 </div>
 

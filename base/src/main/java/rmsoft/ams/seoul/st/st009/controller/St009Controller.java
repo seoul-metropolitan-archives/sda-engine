@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 import rmsoft.ams.seoul.common.repository.StTakeoutRecordResultRepository;
 import rmsoft.ams.seoul.common.repository.StTakeoutRequestRepository;
+import rmsoft.ams.seoul.st.st008.vo.St00801VO;
 import rmsoft.ams.seoul.st.st009.service.St009Service;
 import rmsoft.ams.seoul.st.st009.vo.St00901VO;
 import rmsoft.ams.seoul.st.st009.vo.St00902VO;
@@ -47,6 +48,27 @@ public class St009Controller extends BaseController {
             throw new ApiException(ApiStatus.SYSTEM_ERROR, apiResponse.getMessage());
         }
         return apiResponse;
+    }
+
+    @PutMapping("/01/confirm02")
+    @PostMapping
+    public ApiResponse updateStatus02(@RequestBody List<St00901VO> requestParams) {
+        ApiResponse apiResponse = st009Service.updateTakeoutRequest2(requestParams);
+        if(apiResponse.getStatus() == -1) {
+            throw new ApiException(ApiStatus.SYSTEM_ERROR, apiResponse.getMessage());
+        }
+        return apiResponse;
+    }
+
+    @PutMapping("/01/save")
+    @PostMapping
+    public ApiResponse saveStTakeoutRequest(@RequestBody St00901VO vo) {
+        ApiResponse apiResponse = st009Service.saveStTakeoutRequest(vo);
+        if(apiResponse.getStatus() == -1) {
+            throw new ApiException(ApiStatus.SYSTEM_ERROR, apiResponse.getMessage());
+        }
+        return apiResponse;
+
     }
 }
 

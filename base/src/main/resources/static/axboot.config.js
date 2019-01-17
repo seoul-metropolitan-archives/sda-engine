@@ -218,7 +218,7 @@
             },
             "CREATE_TAKE_IN_POPUP" :{
                 width: 750,
-                height: 200,
+                height: 500,
                 iframe: {
                     url: "/st/st009/st009-p01"
                 }

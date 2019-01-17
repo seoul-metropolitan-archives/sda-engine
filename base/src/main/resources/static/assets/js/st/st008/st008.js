@@ -1,6 +1,11 @@
 var fnObj = {};
 var containerUuid = "";
 var selectedRowForContainer = {};
+var requestorUuid;
+var repositoryUuid;
+var shelfUuid;
+var locationUuid;
+
 var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH: function (caller, act, data) {
         ACTIONS.dispatch(ACTIONS.PAGE_SEARCH01);
@@ -10,7 +15,9 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         axboot.ajax({
             type: "GET",
             url: "/api/v1/st/st008/01/list01",
-            data: $.extend({}, {pageSize: 1000, sort: "requestName"}, this.formView.getData()),
+            data: $.extend({}, {pageSize: 1000 }, this.formView.getData(),
+        {repositoryUuid: repositoryUuid, shelfUuid: shelfUuid, locationUuid: locationUuid, requestorUuid : requestorUuid}
+            ),
             callback: function (res) {
 
                 fnObj.gridView01.setData(res.list);
@@ -33,7 +40,9 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         axboot.ajax({
             type: "GET",
             url: "/api/v1/st/st008/01/list02",
-            data: $.extend({}, {pageSize: 1000 }, this.formView.getData(), {takeoutRequestUuid: selectedRow.takeoutRequestUuid}),
+            data: $.extend({}, {pageSize: 1000 }, this.formView.getData(), {takeoutRequestUuid: selectedRow.takeoutRequestUuid},
+                {repositoryUuid: repositoryUuid, shelfUuid: shelfUuid, locationUuid: locationUuid, requestorUuid : requestorUuid}
+                ),
             callback: function (res) {
                 fnObj.gridView02.setData(res.list);
                 // fnObj.gridView02.disabledColumn();
@@ -152,7 +161,8 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         } else if (title == '반출서 수정') {
             modalOption.modalType = 'MODIFY_TAKE_OUT_POPUP';
         } else if (title == '대상 추가') {
-            modalOption.modalType = 'ADD_TAKE_OUT_POPUP';
+            modalOption.modalType = 'ARRANGE_POPUP';
+            modalOption.title = "대상 추가 - " + fnObj.gridView01.gridObj.getSelectedData().requestName
         } else if (title == '반출서 출력') {
             modalOption.modalType = 'PRINT_TAKE_OUT_POPUP';
         } else {
@@ -187,9 +197,17 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 }
                 var selectedRow = fnObj.gridView01.getSelectedData();
 
-                console.log('selectedRow', selectedRow);
-                // selectedRow.confirmBtn = "Arrange";
-                return selectedRow;
+                if( modalOption.modalType == 'ARRANGE_POPUP'){
+                    return {
+                        takeoutRequestUuid: selectedRow.takeoutRequestUuid,
+                        confirmBtn:"Arrange",
+                        flag: "inout",
+                        description: selectedRow.requestName,
+                        fromWhere: 'st008',
+                    };
+                }else {
+                    return selectedRow;
+                }
 
             },
             callback: function (data) {
@@ -289,6 +307,41 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             }
         });
     }
+    ,SEARCH_LOCATION_SCH : function(caller, act, data)
+    {
+        axboot.modal.open({
+            modalType: "COMMON_POPUP",
+            preSearch : data["preSearch"],
+            sendData: function () {
+                return data;
+            },
+            callback: function (data) {
+
+                var text = `${data["ROWNO"]}행 ${data["COLUMNNO"]}열`;
+
+                $("input[data-ax-path='locationName']").val(text)
+                locationUuid = data['LOCATIONUUID'];
+                console.log('locationUuid', locationUuid);
+                if(this.close) this.close();
+            }
+        });
+    },
+    SEARCH_USER_SCH: function (caller, act, data) {
+        axboot.modal.open({
+            modalType: "COMMON_POPUP",
+            preSearch: data["preSearch"],
+            sendData: function () {
+                return data;
+            },
+            callback: function (data) {
+
+                $("input[data-ax-path='requestorName']").val(data['USER_NAME'])
+                requestorUuid = data['USER_UUID'];
+                console.log('requestorUuid', requestorUuid);
+                if (this.close) this.close();
+            }
+        });
+    },
 });
 
 fnObj.pageStart = function () {
@@ -344,6 +397,7 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
     initEvent: function () {
         var _this = this;
 
+
         $('#btn_createTakeOut').click(function () {
             ACTIONS.dispatch(ACTIONS.MODAL_OPEN, '반출서 작성');
         });
@@ -356,6 +410,18 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
         $('#btn_printTakeOut').click(function () {
             ACTIONS.dispatch(ACTIONS.MODAL_OPEN, '반출서 출력');
         });
+
+        $("input[data-ax-path='requestorName']").parents().eq(1).find("a").click(function () {
+
+            var data = {
+                popupCode: "PU107",
+                searchData: null,
+                preSearch: false
+            };
+            ACTIONS.dispatch(ACTIONS.SEARCH_USER_SCH, data);
+
+        });
+
 
         $("input[data-ax-path='repositoryName']").parents().eq(1).find("a").click(function () {
             var data = {
@@ -375,6 +441,69 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
                 };
                 ACTIONS.dispatch(ACTIONS.SEARCH_SHELF_SCH, data);
             }
+        });
+
+        $("input[data-ax-path='locationName']").parents().eq(1).find("a").click(function () {
+            if ("" != shelfUuid) {
+                var data = {
+                    popupCode: "PU147",
+                    searchData: shelfUuid,
+                    preSearch: false
+                };
+                ACTIONS.dispatch(ACTIONS.SEARCH_LOCATION_SCH, data);
+            }
+        });
+
+
+        $("input[data-ax-path='takeoutDateFrom']").keyup(function () {
+            var date = this.value;
+            if (date.match(/^\d{4}$/) !== null) {
+                this.value = date + '-';
+            } else if (date.match(/^\d{4}\-\d{2}$/) !== null) {
+                this.value = date + '-';
+            }
+        });
+        $("input[data-ax-path='takeoutDateFrom']").keypress(function () {
+            if ((event.keyCode < 48) || (event.keyCode > 57)) event.returnValue = false;
+        });
+        $("input[data-ax-path='takeoutDateTo']").keyup(function () {
+            var date = this.value;
+            if (date.match(/^\d{4}$/) !== null) {
+                this.value = date + '-';
+            } else if (date.match(/^\d{4}\-\d{2}$/) !== null) {
+                this.value = date + '-';
+            }
+        });
+        $("input[data-ax-path='takeoutDateTo']").keypress(function () {
+            if ((event.keyCode < 48) || (event.keyCode > 57)) event.returnValue = false;
+        });
+
+
+        $("input[data-ax-path='returnDueDateFrom']").keyup(function () {
+            var date = this.value;
+            if (date.match(/^\d{4}$/) !== null) {
+                this.value = date + '-';
+            } else if (date.match(/^\d{4}\-\d{2}$/) !== null) {
+                this.value = date + '-';
+            }
+        });
+        $("input[data-ax-path='returnDueDateFrom']").keypress(function () {
+            if ((event.keyCode < 48) || (event.keyCode > 57)) event.returnValue = false;
+        });
+        $("input[data-ax-path='returnDueDateTo']").keyup(function () {
+            var date = this.value;
+            if (date.match(/^\d{4}$/) !== null) {
+                this.value = date + '-';
+            } else if (date.match(/^\d{4}\-\d{2}$/) !== null) {
+                this.value = date + '-';
+            }
+        });
+        $("input[data-ax-path='returnDueDateTo']").keypress(function () {
+            if ((event.keyCode < 48) || (event.keyCode > 57)) event.returnValue = false;
+        });
+
+        $("select[data-ax-path='statusUuid'], select[data-ax-path='containerTypeUuid']").change(function () {
+            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
         });
 
     },

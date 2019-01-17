@@ -39,15 +39,23 @@ public class St018Service extends BaseService {
     private StRfidTagRepository stRfidTagRepository;
 
     public Page<St01801VO> getRcAggregation(Pageable pageable, RequestParams<St01801VO> requestParams) {
-        St01801VO St01801VO = new St01801VO();
-        //St01801VO.setRequestName(requestParams.getString("requestName"));
+        St01801VO st01801VO = new St01801VO();
         //검색조건 추가시
+        st01801VO.setRepositoryUuid(requestParams.getString("repositoryUuid"));
+        st01801VO.setShelfUuid(requestParams.getString("shelfUuid"));
+        st01801VO.setLocationUuid(requestParams.getString("locationUuid"));
+        st01801VO.setCode(requestParams.getString("code"));
+        st01801VO.setTitle(requestParams.getString("title"));
 
-        return filter(st018Mapper.getRcAggregation(St01801VO), pageable, "", St01801VO.class);
+        st01801VO.setPublishDateFrom(requestParams.getString("publishDateFrom"));
+        st01801VO.setPublishDateTo(requestParams.getString("publishDateTo"));
+        st01801VO.setPublishStatusUuid(requestParams.getString("publishStatusUuid"));
+
+        return filter(st018Mapper.getRcAggregation(st01801VO), pageable, "", St01801VO.class);
     }
     public Page<St01802VO> getStRfidTag(Pageable pageable, RequestParams<St01802VO> requestParams) {
         St01802VO st01802VO = new St01802VO();
-        //St01802VO.setRequestName(requestParams.getString("requestName"));
+        st01802VO.setAggregationUuid(requestParams.getString("aggregationUuid"));
         //검색조건 추가시
 
         return filter(st018Mapper.getStRfidTag(st01802VO), pageable, "", St01802VO.class);
@@ -73,6 +81,7 @@ public class St018Service extends BaseService {
         //        02	발행
         //        03	재발행
         St01802VO st01802VO = new St01802VO();
+        st01802VO.setAggregationUuid( requestParams.getAggregationUuid() );
         // RC_AGGREGATION 이 StRfidTag 목록을 가지는지 체크하기 위함.
         // aggregation 으로 join 함
 

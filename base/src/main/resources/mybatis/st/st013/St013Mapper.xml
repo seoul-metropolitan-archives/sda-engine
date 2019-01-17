@@ -24,6 +24,15 @@
             <if test="requestName != null">
                 AND REQUEST_NAME LIKE '%' || #{requestName} || '%'
             </if>
+            <if test="requestorUuid != null">
+                AND REQUESTOR_UUID  = #{requestorUuid}
+            </if>
+            <if test="exceptStartDateFrom != null">
+                AND EXCEPT_START_DATE <![CDATA[>=]]> TO_DATE(#{exceptStartDateFrom},'yyyy-mm-dd')
+            </if>
+            <if test="exceptStartDateTo != null">
+                AND EXCEPT_START_DATE <![CDATA[<]]> TO_DATE(#{exceptStartDateTo},'yyyy-mm-dd')
+            </if>
         </where>
     </select>
 
@@ -111,6 +120,28 @@
             <if test="inoutExceptUuid != null">
                 AND INOUT_EXCEPT_UUID = #{inoutExceptUuid}
             </if>
+            <if test="code != null">
+                <![CDATA[
+                   AND B.code  LIKE '%' || #{code} || '%'
+                ]]>
+            </if>
+            <if test="title != null">
+                <![CDATA[
+                   AND B.title  LIKE '%' || #{title} || '%'
+                ]]>
+
+            </if>
+            <if test="repositoryUuid != null">
+                AND  SR.REPOSITORY_UUID  = #{repositoryUuid}
+            </if>
+            <if test="shelfUuid != null">
+                AND  SS.SHELF_UUID = #{shelfUuid}
+            </if>
+
+            <if test="locationUuid != null">
+                AND SL.LOCATION_UUID = #{locationUuid}
+            </if>
+
         </where>
     </select>
 </mapper>

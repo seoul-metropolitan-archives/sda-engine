@@ -29,5 +29,9 @@ public class St01201VO extends BaseVO {
     private String shelfName;
     private String locationName;
 
+    private String inoutDateTime;
+    private String inoutDateTimeFrom;
+    private String inoutDateTimeTo;
+
 
 }

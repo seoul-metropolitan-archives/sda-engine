@@ -39,7 +39,7 @@ import java.util.UUID;
 
 @Service
 public class St019Service extends BaseService {
-    
+
     @Inject
     private St019Mapper st019Mapper;
     @Inject
@@ -52,6 +52,17 @@ public class St019Service extends BaseService {
         St01901VO St01901VO = new St01901VO();
         //St01901VO.setRequestName(requestParams.getString("requestName"));
         //검색조건 추가시
+        St01901VO.setRepositoryUuid(requestParams.getString("repositoryUuid"));
+        St01901VO.setShelfUuid(requestParams.getString("shelfUuid"));
+        St01901VO.setLocationUuid(requestParams.getString("locationUuid"));
+        St01901VO.setCode(requestParams.getString("code"));
+        St01901VO.setTitle(requestParams.getString("title"));
+
+        St01901VO.setPublishSourceTypeUuid(requestParams.getString("publishSourceTypeUuid"));
+        St01901VO.setRequestDateFrom(requestParams.getString("requestDateFrom"));
+        St01901VO.setRequestDateTo(requestParams.getString("requestDateTo"));
+        St01901VO.setRepublishYn(requestParams.getString("republishYn"));
+
 
         return filter(st019Mapper.getStRfidTagPublishRequest(St01901VO), pageable, "", St01901VO.class);
     }

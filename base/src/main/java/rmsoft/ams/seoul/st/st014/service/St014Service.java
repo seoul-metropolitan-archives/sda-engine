@@ -34,7 +34,12 @@ public class St014Service extends BaseService {
         St01401VO St01401VO = new St01401VO();
         //St01401VO.setRequestName(requestParams.getString("requestName"));
         //검색조건 추가시
-
+        St01401VO.setCode(requestParams.getString("code"));
+        St01401VO.setTitle(requestParams.getString("title"));
+        St01401VO.setRepositoryUuid(requestParams.getString("repositoryUuid"));
+        St01401VO.setShelfUuid(requestParams.getString("shelfUuid"));
+        St01401VO.setInoutDateTimeFrom(requestParams.getString("inoutDateTimeFrom"));
+        St01401VO.setInoutDateTimeTo(requestParams.getString("inoutDateTimeTo"));
         return filter(st014Mapper.getStWithoutNoticeInoutRecord(St01401VO), pageable, "", St01401VO.class);
     }
     public Page<St01402VO> getStWithoutNoticeInoutHist(Pageable pageable, RequestParams<St01402VO> requestParams) {

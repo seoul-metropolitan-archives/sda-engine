@@ -47,8 +47,8 @@ public class St029Service extends BaseService {
                 stProgramRepository.delete(stProgram);
             }else{
                 if(stProgram.isCreated()){
-                    int no = jdbcTemplate.queryForObject("SELECT ST_PROGRAM_SEQ.NEXTVAL FROM dual", int.class);
-                    stProgram.setNo(no);
+                    /*int no = jdbcTemplate.queryForObject("SELECT ST_PROGRAM_SEQ.NEXTVAL FROM dual", int.class);
+                    stProgram.setNo(no);*/
                 }else if(stProgram.isModified()){
                     orgStProgram = stProgramRepository.findOne(stProgram.getId());
                     stProgram.setInsertDate(orgStProgram.getInsertDate());

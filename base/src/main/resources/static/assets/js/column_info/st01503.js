@@ -31,9 +31,10 @@ var st01503 =
                     name: "title",
                     text: "Title",
                     width: 400,
-                    required: true,
+                    required: false,
                     editable: true,
-                    dataType: "text"
+                    dataType: "text",
+                    disable : true
                 },
                 {
                     sortNo: 4,
@@ -55,55 +56,70 @@ var st01503 =
                 },
                 {
                     sortNo: 6,
-                    name: "publishedStatus",
-                    text: "Published Status",
-                    width: 100,
+                    name: "workerUuid",
+                    text: "workerUuid",
+                    width: 80,
                     editable: false,
                     dataType: "text",
-                    disable: true
+                    disable: true,
+                    visible: false
                 },
                 {
-                    sortNo: 7,
-                    name: "author",
-                    text: "Author",
-                    width: 70,
+                    sortNo: 6,
+                    name: "workerName",
+                    text: "작업자",
+                    width: 80,
                     editable: false,
                     dataType: "text",
-                    disable: true
+                    disable: true,
+                    visible: true
                 },
                 {
-                    sortNo: 8,
-                    name: "descStrDate",
-                    text: "Start Date",
-                    width: 140,
+                    sortNo: 6,
+                    name: "intentoryDate",
+                    text: "작업일",
+                    width: 80,
                     editable: false,
-                    dataType: "date",
-                    disable: true
+                    dataType: "text",
+                    disable: true,
+                    visible: true
                 },
                 {
                     sortNo: 9,
-                    name: "descEdDate",
-                    text: "End Date",
-                    width: 140,
+                    width: 150,
+                    name: "inventoryResultUuid",
+                    text: "결과",
                     editable: false,
-                    dataType: "date",
-                    disable: true
+                    disable : true,
+                    required : true,
+                    values: axboot.commonCodeFilter("CD217").codeArr,
+                    labels: axboot.commonCodeFilter("CD218").nameArr,
+                    dataType : "combo"
                 },
                 {
-                    sortNo: 10,
-                    name: "description",
-                    text: "Description",
-                    width: 250,
+                    sortNo: 9,
+                    width: 150,
+                    name: "tagStatusUuid",
+                    text: "태그상태",
                     editable: false,
-                    dataType: "richtext"
+                    disable : true,
+                    required : true,
+                    values: axboot.commonCodeFilter("CD219").codeArr,
+                    labels: axboot.commonCodeFilter("CD219").nameArr,
+                    dataType : "combo"
                 },
                 {
-                    sortNo: 11,
-                    name: "notes",
-                    text: "Notes",
-                    width: 250,
+                    sortNo: 9,
+                    width: 150,
+                    name: "recordStatusUuid",
+                    text: "기록물 상태",
                     editable: false,
-                    dataType: "richtext"
+                    disable : true,
+                    required : true,
+                    values: axboot.commonCodeFilter("CD219").codeArr,
+                    labels: axboot.commonCodeFilter("CD219").nameArr,
+                    dataType : "combo"
                 }
+
             ]
     }

@@ -37,17 +37,17 @@ public class St012Service extends BaseService {
 
 
     public Page<St01201VO> getStWithoutNoticeInoutHistResult(Pageable pageable, RequestParams<St01201VO> requestParams) {
-        St01201VO St01201VO = new St01201VO();
+        St01201VO st01201VO = new St01201VO();
 
-        St01201VO.setCode(requestParams.getString("code"));
-        St01201VO.setTitle(requestParams.getString("title"));
-        St01201VO.setRepositoryUuid(requestParams.getString("repositoryUuid"));
-        St01201VO.setShelfUuid(requestParams.getString("shelfUuid"));
-        St01201VO.setDescStrDate(requestParams.getString("descStrDate"));
-        St01201VO.setDescEdDate(requestParams.getString("descEdDate"));
+        st01201VO.setCode(requestParams.getString("code"));
+        st01201VO.setTitle(requestParams.getString("title"));
+        st01201VO.setRepositoryUuid(requestParams.getString("repositoryUuid"));
+        st01201VO.setShelfUuid(requestParams.getString("shelfUuid"));
+        st01201VO.setInoutDateTimeFrom(requestParams.getString("inoutDateTimeFrom"));
+        st01201VO.setInoutDateTimeTo(requestParams.getString("inoutDateTimeTo"));
         // St01201VO.setStatusUuid (requestParams.getString("statusUuid"));
 
-        return filter(st012Mapper.getStWithoutNoticeInoutHistResult(St01201VO), pageable, "", St01201VO.class);
+        return filter(st012Mapper.getStWithoutNoticeInoutHistResult(st01201VO), pageable, "", St01201VO.class);
     }
 
     public Page<St01201VO> getStInoutExcept(Pageable pageable, RequestParams<St01201VO> requestParams) {

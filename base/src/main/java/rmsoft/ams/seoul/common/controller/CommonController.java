@@ -101,7 +101,7 @@ public class CommonController extends BaseController {
                 URL url = new URL(
                         streamingUrl + ":" + streamingPort + streamingContext + streamingParam + prefix + path + rcComponent.getServiceFileName()
                 );
-                System.out.println("Stream URL => "+url);
+                //System.out.println("Stream URL => "+url);
                 conn = (HttpURLConnection) url.openConnection();
                 conn.setDoOutput(true);
                 conn.setRequestMethod("GET");
@@ -136,12 +136,12 @@ public class CommonController extends BaseController {
             }
 
         }
-        System.out.println("Stream Viewer response =>"+responseSB);
+        //System.out.println("Stream Viewer response =>"+responseSB);
         JSONObject obj = new JSONObject(responseSB);
 
         Map<String, Object> response = new HashMap<String, Object>();
         response.put("url", streamingUrl + ":" + streamingPort + streamingContext + streamingView + obj.getString("streamdocsId") + ";currentPage=1");
-        System.out.println(streamingUrl+":"+streamingPort+streamingContext+streamingView+obj.getString("streamdocsId")+";currentPage=1");
+        //System.out.println(streamingUrl+":"+streamingPort+streamingContext+streamingView+obj.getString("streamdocsId")+";currentPage=1");
         return response;
     }
 
@@ -165,7 +165,7 @@ public class CommonController extends BaseController {
 
         } catch (Exception e) {
             // 사용자 취소 Exception 은 콘솔 출력 제외
-            if (!e.getClass().getName().equals("org.apache.catalina.connector.ClientAbortException")) e.printStackTrace();
+            if (!e.getClass().getName().equals("org.apache.catalina.connector.ClientAbortException")) log.error(e.getMessage());;
         }
     }
 

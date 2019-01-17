@@ -1,7 +1,10 @@
 var fnObj = {};
 var takeoutRequestUuid = "";
 var TAKEOUT_CONFIRM_STATUS = "반출서 작성";
-
+var TAKEOUT_CONFIRM_STATUS2 = "반출 불가";
+var repositoryUuid;
+var shelfUuid;
+var locationUuid;
 var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH: function (caller, act, data) {
 
@@ -16,6 +19,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 fnObj.gridView01.setData(res.list);
                 //fnObj.gridView01.disabledColumn();
                 fnObj.gridView02.clearData();
+
             },
             options: {
                 onError: axboot.viewError
@@ -32,8 +36,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             data: $.extend({}, this.formView.getData(),{takeoutRequestUuid : fnObj.gridView01.getSelectedData().takeoutRequestUuid}),
             callback: function (res) {
                 fnObj.gridView02.setData(res.list);
-                // fnObj.gridView02.disabledColumn();
-                //fnObj.gridView03.clearData();
+
             },
             options: {
                 onError: axboot.viewError
@@ -67,8 +70,8 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 for (var i = 0; i < codes.length; i++) {
                     if (codes[i] == rows[j].statusUuid) {
                         state = names[i];
-                        if(state != "반출서 작성"){
-                            alert('반출서 작성만 반출승이 가능합니다.');
+                        if(state != "반입서 작성"){
+                            axToast.push("반입서 작성만 반출승인 가능합니다");
                             return;
                         }
                         break;
@@ -99,26 +102,56 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     },
     //승인블가
     STATUS_UPDATE02: function (caller, act, data) {
-        /*var rows = fnObj.gridView02.gridObj.getCheckedList();
+        if (fnObj.gridView01.isChangeData() == true) {
+            axDialog.confirm({
+                msg: axboot.getCommonMessage("AA006")
+            }, function () {
+                if (this.key == "ok") {
+                    ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
+                    return;
+                }
+            });
+        }else{
+            var rows = fnObj.gridView01.gridObj.getCheckedList();
+            if (!rows || rows.length < 1) return;
 
-        if (!rows || rows.length < 1) return;
+            var codes = axboot.commonCodeFilter("CD208").codeArr;
+            var names = axboot.commonCodeFilter("CD208").nameArr;
+            var state = undefined;
 
-        var params = rows.filter(function (item) {
-            item.changeStatus = data;
-            return item.shelfUuid != "";
-        });
-
-        axboot.ajax({
-            type: "PUT",
-            url: "/api/v1/st/st001/02/confirm02",
-            data: JSON.stringify(params),
-            callback: function (res) {
-                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH02);
-            },
-            options: {
-                onError: axboot.viewError
+            for(var j = 0 ; j < rows.length; j++){
+                for (var i = 0; i < codes.length; i++) {
+                    if (codes[i] == rows[j].statusUuid) {
+                        state = names[i];
+                        if(state != "반출서 작성"){
+                            axToast.push("반출서 작성만 반출 불가가 가능합니다");
+                            return;
+                        }
+                        break;
+                    }
+                }
             }
-        });*/
+
+
+
+
+            var params = rows.filter(function (item) {
+                item.changeStatus = data;
+                return item.takeoutRequestUuid != "";
+            });
+
+            axboot.ajax({
+                type: "PUT",
+                url: "/api/v1/st/st009/01/confirm02",
+                data: JSON.stringify(params),
+                callback: function (res) {
+                    ACTIONS.dispatch(ACTIONS.PAGE_SEARCH01);
+                },
+                options: {
+                    onError: axboot.viewError
+                }
+            });
+        }
     },
 /*    PAGE_CONFIRM: function (caller, act, data) {
         ACTIONS.dispatch(ACTIONS.STATUS_UPDATE, CONFIRM_STATUS);
@@ -261,29 +294,47 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     },*/
     MODAL_OPEN: function (caller, act, title) {
 
-        var rows = fnObj.gridView01.gridObj.getCheckedList();
-        if (!rows || rows.length < 1) return;
 
-
-        var modalOption ={ title : title };
-
-        axboot.modal.open({
-            modalType: 'CREATE_TAKE_IN_POPUP',
-            header: {
-                title: modalOption.title
-            },
-            sendData: function () {
-                var rows = fnObj.gridView01.gridObj.getCheckedList();
-
-                return rows;
-            },
-            callback: function (data) {
-                if(this) this.close();
-                if(data){
-                    ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1,data);
-                }
+        var codes = axboot.commonCodeFilter("CD208").codeArr;
+        var names = axboot.commonCodeFilter("CD208").nameArr;
+        var state = undefined;
+        for (var i = 0; i < codes.length; i++) {
+            if (codes[i] == fnObj.gridView01.getSelectedData().statusUuid) {
+                state = names[i];
+                break;
             }
-        });
+        }
+
+        if(state == "반출서 작성"){
+            var modalOption = { title : title };
+
+            axboot.modal.open({
+                modalType: 'CREATE_TAKE_IN_POPUP',
+                header: {
+                    title: modalOption.title
+                },
+                sendData: function () {
+                    var rows = fnObj.gridView01.getSelectedData();
+
+                    return rows;
+                },
+                callback: function (data) {
+                    if(this) this.close();
+
+                    $('input[data-ax-path="outsourcingDepartment"]').val(data.outsourcingDepartment ? data.outsourcingDepartment : "");
+                    $('input[data-ax-path="outsourcingPersonName"]').val(data.outsourcingPersonName ? data.outsourcingPersonName : "");
+                    $('input[data-ax-path="outsourcingPosition"]').val(data.outsourcingPosition ? data.outsourcingPosition : "");
+                    $('input[data-ax-path="returnDate"]').val(data.startDate ? data.startDate : "");
+
+
+                    ACTIONS.dispatch(ACTIONS.PAGE_SEARCH,data);
+                }
+            });
+        }else{
+            axToast.push("반출서 작성 완료만 반입의뢰서를 작성할수 있습니다.");
+        }
+
+
     },
 
 });
@@ -337,13 +388,6 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
             ACTIONS.dispatch(ACTIONS.MODAL_OPEN, '반입의뢰서 작성');
         });
 
-        /*$('#formView01 input[type="text"]').keydown(function(e){
-            if(e.keyCode == 13){
-                $('#inquiry').trigger('click');
-            }
-        });*/
-
-
     },
     getData: function () {
         var data = this.modelFormatter.getClearData(this.model.get()); // 모델의 값을 포멧팅 전 값으로 치환.
@@ -385,7 +429,7 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
         });
         //승인 불가 버튼시 상태 update
         $('.btn_takeoutNotApproval').click(function(){
-            ACTIONS.dispatch(ACTIONS.STATUS_UPDATE01,CONFIRM_STATUS);
+            ACTIONS.dispatch(ACTIONS.STATUS_UPDATE02,TAKEOUT_CONFIRM_STATUS2);
         });
 
     },
@@ -412,31 +456,13 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     },
     itemClick: function (data) {
 
-        takeoutRequestUuid = data.takeoutRequestUuid;
-
+        $('input[data-ax-path="outsourcingDepartment"]').val(data.outsourcingDepartment ? data.outsourcingDepartment : "");
+        $('input[data-ax-path="outsourcingPersonName"]').val(data.outsourcingPersonName ? data.outsourcingPersonName : "");
+        /*$('input[data-ax-path="outsourcingPhone"]').val(data.outsourcingPhone ? data.outsourcingPhone : "");*/
+        $('input[data-ax-path="outsourcingPosition"]').val(data.outsourcingPosition ? data.outsourcingPosition : "");
+        $('input[data-ax-path="returnDate"]').val(data.returnDate ? formatDate(data.returnDate) : "");
 
         //TODO : 아이템 클릭하면 반입 정보, 반입자, 소속, 직위, 반입일자가 들어 와야 하는데 모르겟다.
-
-
-
-        /*if(data.exceptReason != undefined){
-            $('textarea[data-ax-path="except_reason"]').val(data.exceptReason);
-        }else{
-            $('textarea[data-ax-path="except_reason"]').val('');
-        }*/
-
-
-       /* if (fnObj.gridView01.isChangeData() == true || fnObj.gridView02.isChangeData() == true) {
-            axDialog.confirm({
-                msg: axboot.getCommonMessage("AA006")
-            }, function () {
-                if (this.key == "ok") {
-                    ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
-                } else {
-                    ACTIONS.dispatch(ACTIONS.PAGE_SEARCH02);
-                }
-            });
-        }*/
 
         ACTIONS.dispatch(ACTIONS.PAGE_SEARCH02);
 
@@ -471,3 +497,15 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
 
     },
 });
+
+function formatDate(date) {
+    var d = new Date(date),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+    if (month.length < 2) month = '0' + month;
+    if (day.length < 2) day = '0' + day;
+
+    return [year, month, day].join('-');
+}

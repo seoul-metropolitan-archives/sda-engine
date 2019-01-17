@@ -55,14 +55,14 @@ public class St008Service extends BaseService {
     public Page<St00801VO> getStTakeoutRequest(Pageable pageable, RequestParams<St00801VO> requestParams) {
 
         St00801VO st00801VO = new St00801VO();
-        // st00801VO.setClassUuid(requestParams.getString("classUuid"));
-        // st00801VO.setStatusUuid(requestParams.getString("statusUuid01"));
-//        st00801VO.setAggregationCode(requestParams.getString("aggregationCode"));
-//        st00801VO.setTitle(requestParams.getString("title"));
-//        st00801VO.setTypeUuid(requestParams.getString("typeUuid"));
-//        st00801VO.setArrangedFromDate(requestParams.getString("arrangedFromDate01"));
-//        st00801VO.setArrangedToDate(requestParams.getString("arrangedToDate01"));
-//        st00801VO.setContainerUuid(requestParams.getString("containerUuid"));
+
+        st00801VO.setRequestName(requestParams.getString("requestName")); // 반출의뢰서
+        st00801VO.setTakeoutDateFrom(requestParams.getString("takeoutDateFrom"));
+        st00801VO.setTakeoutDateTo(requestParams.getString("takeoutDateTo"));
+        st00801VO.setReturnDueDateFrom(requestParams.getString("returnDueDateFrom"));
+        st00801VO.setReturnDueDateTo(requestParams.getString("returnDueDateTo"));
+        st00801VO.setRequestorUuid(requestParams.getString("requestorUuid")); // 반출자
+
         return filter(st008Mapper.getStTakeoutRequest(st00801VO), pageable, "", St00801VO.class);
     }
 
@@ -71,9 +71,11 @@ public class St008Service extends BaseService {
 
         St00802VO vo = new St00802VO();
         vo.setTakeoutRequestUuid(requestParams.getString("takeoutRequestUuid"));
-//        vo.setStatusUuid(requestParams.getString("statusUuid02"));
-        List<St00802VO> ddd = st008Mapper.getStTakeoutRecordResult(vo);
-        return filter(ddd, pageable, "", St00802VO.class);
+        vo.setCode(requestParams.getString("code"));
+        vo.setTitle(requestParams.getString("title"));
+
+        List<St00802VO> aStTakeOutRecordResult = st008Mapper.getStTakeoutRecordResult(vo);
+        return filter(aStTakeOutRecordResult, pageable, "", St00802VO.class);
     }
 
     @Transactional

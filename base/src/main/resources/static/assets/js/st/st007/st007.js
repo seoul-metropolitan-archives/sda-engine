@@ -17,7 +17,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             callback: function (res) {
                 fnObj.gridView01.setData(res.list);
                 //fnObj.gridView01.disabledColumn();
-                //fnObj.gridView02.clearData();
+                fnObj.gridView02.clearData();
                 ACTIONS.dispatch(ACTIONS.PAGE_SEARCH02);
             },
             options: {
@@ -34,7 +34,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         axboot.ajax({
             type: "GET",
             url: "/api/v1/st/st007/01/list02",
-            data: $.extend({}, {pageSize: 1000}, fnObj.gridView01.getSelectedData(), this.formView.getData()),
+            data: $.extend({}, {pageSize: 1000}, fnObj.gridView01.getSelectedData(), this.formView.getData(), {repositoryUuid: repositoryUuid, shelfUuid: shelfUuid, locationUuid: locationUuid}),
             callback: function (res) {
                 fnObj.gridView02.setData(res.list);
                 // fnObj.gridView02.disabledColumn();

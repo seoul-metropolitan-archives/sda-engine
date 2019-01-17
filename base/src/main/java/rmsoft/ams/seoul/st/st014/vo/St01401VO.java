@@ -14,8 +14,14 @@ public class St01401VO extends BaseVO {
 
     private String aggregationUuid;
     private String withoutNoticeIoRecordUuid;
+
+    private String repositoryUuid;
+    private String shelfUuid;
+    private String containerTypeUuid;
+    private String locationUuid;
     private String code;
     private String title;
+
     private String level;
     private String type;
     private String publishedStatus;
@@ -25,6 +31,10 @@ public class St01401VO extends BaseVO {
     private String repositoryName;
     private String shelfName;
     private String locationName;
+
+    private String inoutDateTime;
+    private String inoutDateTimeFrom;
+    private String inoutDateTimeTo;
 
 
 }
