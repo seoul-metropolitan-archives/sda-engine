@@ -239,7 +239,7 @@ public class Rc005Service extends BaseService {
                         URL url = new URL(
                                 streamingUrl + ":" + streamingPort + streamingContext + streamingParam + "seoul/merge/" + uuid + ".pdf"
                         );
-                        System.out.println("Stream URL => "+url);
+                        //System.out.println("Stream URL => "+url);
                         conn = (HttpURLConnection) url.openConnection();
                         conn.setDoOutput(true);
                         conn.setRequestMethod("GET");
@@ -258,11 +258,11 @@ public class Rc005Service extends BaseService {
                             if (null != br) br.close();
                         }
 
-                        System.out.println("Stream Viewer response =>"+responseSB);
+                        //System.out.println("Stream Viewer response =>"+responseSB);
                         JSONObject obj = new JSONObject(responseSB);
 
                         response.put("url", streamingUrl + ":" + streamingPort + streamingContext + streamingView + obj.getString("streamdocsId") + ";currentPage=1");
-                        System.out.println(streamingUrl+":"+streamingPort+streamingContext+streamingView+obj.getString("streamdocsId")+";currentPage=1");
+                        //System.out.println(streamingUrl+":"+streamingPort+streamingContext+streamingView+obj.getString("streamdocsId")+";currentPage=1");
                     } else {
                         log.info("Rc005Service mergeComponent :" + "PDF merge status is Failed");
                     }

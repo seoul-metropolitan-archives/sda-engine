@@ -24,9 +24,9 @@ public class RuntimeJarLoader {
                         try {
                             // URLClassLoader.addURL(URL url) 메소드 호출
                             method.invoke(loader, new Object[]{jar.toURI().toURL()});
-                            System.out.println(jar.getName() + " is loaded.");
+                            //System.out.println(jar.getName() + " is loaded.");
                         } catch (Exception e) {
-                            System.out.println(jar.getName() + " can't load.");
+                            //System.out.println(jar.getName() + " can't load.");
                         }
                     }
                     return false;

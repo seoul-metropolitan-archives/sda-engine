@@ -451,6 +451,9 @@ function exp_listView() {
     fnObj.pageView.resetPage();
     fnObj.pageView.setPageSize(126);
     ACTIONS.dispatch(ACTIONS.GET_SUBDATA, fnObj.naviView.getCurrent());
+
+    $("#searchView").show();
+    $("#searchResultView").hide();
 }
 
 function exp_gridView(isSearch) {
@@ -462,6 +465,8 @@ function exp_gridView(isSearch) {
     if(isSearch) {
         ACTIONS.dispatch(ACTIONS.GET_SEARCH_DATA, null);
     }else{
+        $("#searchView").show();
+        $("#searchResultView").hide();
         ACTIONS.dispatch(ACTIONS.GET_GRID_DATA, fnObj.naviView.getCurrent());
     }
 

@@ -1,5 +1,6 @@
 package rmsoft.ams.seoul.common.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.rendering.PDFRenderer;
 
@@ -7,7 +8,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 
-
+@Slf4j
 public class PDFtoJPGConverter {
     public File convertPdfToImage(File file, String destination) throws Exception {
 
@@ -15,11 +16,11 @@ public class PDFtoJPGConverter {
 
         if (!destinationFile.exists()) {
             destinationFile.mkdir();
-            System.out.println("DESTINATION FOLDER CREATED -> " + destinationFile.getAbsolutePath());
+            //System.out.println("DESTINATION FOLDER CREATED -> " + destinationFile.getAbsolutePath());
         }else if(destinationFile.exists()){
-            System.out.println("DESTINATION FOLDER ALLREADY CREATED!!!");
+            //System.out.println("DESTINATION FOLDER ALLREADY CREATED!!!");
         }else{
-            System.out.println("DESTINATION FOLDER NOT CREATED!!!");
+            //System.out.println("DESTINATION FOLDER NOT CREATED!!!");
         }
 
         if (file.exists()) {
@@ -36,7 +37,7 @@ public class PDFtoJPGConverter {
             doc.close();
             return convertedFile;
         } else {
-            System.err.println(file.getName() + " FILE DOES NOT EXIST");
+            log.error(file.getName() + " FILE DOES NOT EXIST");
         }
         return null;
     }

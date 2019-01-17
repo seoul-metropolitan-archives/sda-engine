@@ -23,69 +23,75 @@
                     </div>
 
                     <div class="div_tablerow searchFields recordSearchField">
-                        <div id="searchView" >
-                            <dl class="bdb">
-                                <dt>Level</dt>
-                                <dd>
-                                    <select data-ax-path="searchLevelUuid">
-                                        <option value=""></option>
-                                        <option th:each="item : ${levelList}"
-                                                th:value="${item.levelUuid}"
-                                                th:text="${item.levelName}"/>
-                                    </select>
-                                </dd>
-                                <dt>Type</dt>
-                                <dd>
-                                    <select data-ax-path="searchTypeUuid">
-                                        <option value=""></option>
-                                        <option th:each="item : ${aggregationTypeUuid}"
-                                                th:value="${item.codeDetailUUID}"
-                                                th:text="${item.codeName}"/>
-                                        <option th:each="item : ${itemTypeUuid}"
-                                                th:value="${item.codeDetailUUID}"
-                                                th:text="${item.codeName}"/>
-                                    </select>
-                                </dd>
-                                <dt>Published Status</dt>
-                                <dd>
-                                    <select data-ax-path="searchPublishedStatusUuid">
-                                        <option value=""></option>
-                                        <option th:each="item : ${publishedStatusUuid}"
-                                                th:value="${item.codeDetailUUID}"
-                                                th:text="${item.codeName}"/>
-                                    </select>
-                                </dd>
-                                <dt>Actors</dt>
-                                <dd>
-                                    <input type="text" style="width:135px" data-ax-path="searchAuthor">
-                                </dd>
-                                <dt>Description Date</dt>
-                                <dd class="w_auto">
-                                    <div class="input-group" data-ax5picker="date">
-                                        <div class="cld_box" style="background-color: #fffdd6">
-                                            <input type="text" data-ax-path="descriptionDateFrom" style= "background-color: #fffdd6;ime-mode:disabled;"
-                                                   placeholder="YYYY-MM-DD" maxlength="10">
-                                            <img title="calendar" class="ui-datepicker-trigger" alt="..." src="/assets/images/ams/calendar.png" >
+                        <div id="searchView" class="bdb" style="display: flex;">
+                            <div style="width: 90%; height: 24px;padding-top: 1px">
+                                <dl>
+                                    <dt>Level</dt>
+                                    <dd>
+                                        <select data-ax-path="searchLevelUuid">
+                                            <option value=""></option>
+                                            <option th:each="item : ${levelList}"
+                                                    th:value="${item.levelUuid}"
+                                                    th:text="${item.levelName}"/>
+                                        </select>
+                                    </dd>
+                                    <dt>Type</dt>
+                                    <dd>
+                                        <select data-ax-path="searchTypeUuid">
+                                            <option value=""></option>
+                                            <option th:each="item : ${aggregationTypeUuid}"
+                                                    th:value="${item.codeDetailUUID}"
+                                                    th:text="${item.codeName}"/>
+                                            <option th:each="item : ${itemTypeUuid}"
+                                                    th:value="${item.codeDetailUUID}"
+                                                    th:text="${item.codeName}"/>
+                                        </select>
+                                    </dd>
+                                    <dt>Published Status</dt>
+                                    <dd>
+                                        <select data-ax-path="searchPublishedStatusUuid">
+                                            <option value=""></option>
+                                            <option th:each="item : ${publishedStatusUuid}"
+                                                    th:value="${item.codeDetailUUID}"
+                                                    th:text="${item.codeName}"/>
+                                        </select>
+                                    </dd>
+                                    <dt>Actors</dt>
+                                    <dd>
+                                        <input type="text" style="width:135px" data-ax-path="searchAuthor">
+                                    </dd>
+                                    <dt>Description Date</dt>
+                                    <dd class="w_auto">
+                                        <div class="input-group" data-ax5picker="date">
+                                            <div class="cld_box" style="background-color: #fffdd6">
+                                                <input type="text" data-ax-path="descriptionDateFrom" style= "background-color: #fffdd6;ime-mode:disabled;"
+                                                       placeholder="YYYY-MM-DD" maxlength="10">
+                                                <img title="calendar" class="ui-datepicker-trigger" alt="..." src="/assets/images/ams/calendar.png" >
+                                            </div>
+                                            ~
+                                            <div class="cld_box" style="background-color: #fffdd6">
+                                                <input type="text" data-ax-path="descriptionDateTo" style="background-color: #fffdd6;ime-mode:disabled;"
+                                                       placeholder="YYYY-MM-DD" maxlength="10">
+                                                <img title="calendar" class="ui-datepicker-trigger" alt="..." src="/assets/images/ams/calendar.png">
+                                            </div>
                                         </div>
-                                        ~
-                                        <div class="cld_box" style="background-color: #fffdd6">
-                                            <input type="text" data-ax-path="descriptionDateTo" style="background-color: #fffdd6;ime-mode:disabled;"
-                                                   placeholder="YYYY-MM-DD" maxlength="10">
-                                            <img title="calendar" class="ui-datepicker-trigger" alt="..." src="/assets/images/ams/calendar.png">
-                                        </div>
-                                    </div>
-                                </dd>
-                                <dt>Title</dt>
-                                <dd>
-                                    <input type="text" style="width:100%" data-ax-path="searchTitle">
-                                </dd>
-                                <dd style="text-align:right;float: right">
-                                    <button class="btn_i" id="search">
-                                        <span class="btn_icon">&nbsp;</span>
-                                        <span class="btn_main_txt">Search</span>
-                                    </button>
-                                </dd>
-                            </dl>
+                                    </dd>
+                                    <dt>Title</dt>
+                                    <dd>
+                                        <input type="text" style="width:100%" data-ax-path="searchTitle">
+                                    </dd>
+                                </dl>
+                            </div>
+                            <div style="width: 10%">
+                                <dl>
+                                    <dd style="text-align:right;float: right;width: 100%;min-width: 130px">
+                                        <button class="btn_i" id="search">
+                                            <span class="btn_icon">&nbsp;</span>
+                                            <span class="btn_main_txt">Search</span>
+                                        </button>
+                                    </dd>
+                                </dl>
+                            </div>
                         </div>
 
                         <div id="searchResultView" style="display: none">

@@ -1,13 +1,13 @@
 package rmsoft.ams.seoul.ac.ac002.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import rmsoft.ams.seoul.ac.ac002.service.Ac002Service;
+import rmsoft.ams.seoul.ac.ac002.vo.Ac00201VO;
 import rmsoft.ams.seoul.ac.ac002.vo.Ac002VO;
 import rmsoft.ams.seoul.common.controller.MessageBaseController;
+
+import java.util.List;
 
 /**
  * Ac003Controller
@@ -21,7 +21,7 @@ import rmsoft.ams.seoul.common.controller.MessageBaseController;
 public class Ac002Controller extends MessageBaseController {
 
     @Autowired
-    private Ac002Service ac003Service;
+    private Ac002Service ac002Service;
 
     /**
      * Gets startup program.
@@ -32,7 +32,29 @@ public class Ac002Controller extends MessageBaseController {
     @GetMapping("/01/getStartupProgram")
     @ResponseBody
     public Ac002VO getStartupProgram(Ac002VO param) {
-        return ac003Service.getStartupProgram(param);
+        return ac002Service.getStartupProgram(param);
     }
 
+    /**
+     * Save api response.
+     *
+     * @param data the data
+     * @return the api response
+     */
+    @PutMapping("/01/addBookmark")
+    public List<Ac00201VO> addBookmark(@RequestBody Ac00201VO data)
+    {
+        return ac002Service.addBookMark(data);
+    }
+
+    /**
+     * Save api response.
+     *
+     * @return the api response
+     */
+    @GetMapping("/01/getBookmark")
+    public List<Ac00201VO> getBookmark()
+    {
+        return ac002Service.getBookMark();
+    }
 }
