@@ -195,7 +195,8 @@ public class Wf999Service extends BaseService {
                         rc00502VO.setFilePath(rc00502VO.getFilePath().replace(File.separator, "/"));
                         rc00502VO.setServiceFilePath(rc00502VO.getServiceFilePath().replace(File.separator, "/"));
                     }
-                    rc00502VO.setServiceFileName(rc00502VO.getOriginalFileName().substring(0, rc00502VO.getOriginalFileName().lastIndexOf( "." )) + ".pdf");
+                    //rc00502VO.setServiceFileName(rc00502VO.getOriginalFileName().substring(0, rc00502VO.getOriginalFileName().lastIndexOf( "." )) + ".pdf");
+                    rc00502VO.setServiceFileName(path.getFileName().toString().substring(0, path.getFileName().toString().lastIndexOf( "." )) + ".pdf");
                     rc00502VO.setFileName(path.getFileName().toString());
                     rc00502VO.setOriginalFileName(path.getFileName().toString());
                     componentsList.add(rc00502VO);
