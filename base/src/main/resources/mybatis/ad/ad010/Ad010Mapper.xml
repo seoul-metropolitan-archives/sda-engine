@@ -242,8 +242,9 @@
 	  SELECT
 	  	NOTICE_UUID as noticeUuid,
         TITLE as title,
-        FC_AC_USER_NM(REGISTER_UUID) as registerUuid,
-        TO_CHAR(REGISTER_DATE,'yyyy-MM-dd hh:mm:ss') as registerDate,
+        REGISTER_UUID as registerUuid,
+        FC_AC_USER_NM(REGISTER_UUID) as registerName,
+        TO_CHAR(REGISTER_DATE,'yyyy-MM-dd HH24:MI:SS') as registerDate,
         CONTENTS as contents,
         FILE_NAME as fileName,
         FILE_PATH as filePath
