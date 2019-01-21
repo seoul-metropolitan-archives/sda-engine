@@ -341,7 +341,7 @@
             },
             "NOTICE_POPUP": {
                 width: 600,
-                height: 550,
+                height: 600,
                 iframe: {
                     url: "/ad/ad010/ad010-p01"
                 }

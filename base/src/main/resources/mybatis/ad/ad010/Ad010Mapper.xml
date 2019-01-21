@@ -249,5 +249,6 @@
         FILE_NAME as fileName,
         FILE_PATH as filePath
 	  FROM AD_NOTICE
+	  ORDER BY REGISTER_DATE DESC
   </select>
 </mapper>

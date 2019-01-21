@@ -14,6 +14,8 @@ import rmsoft.ams.seoul.ad.ad010.service.Ad010Service;
 import rmsoft.ams.seoul.ad.ad010.vo.Ad01001VO;
 import rmsoft.ams.seoul.ad.ad010.vo.Ad01002VO;
 
+import java.io.IOException;
+
 @RestController
 @RequestMapping(value = "/api/v1/ad/ad010")
 public class Ad010Controller extends BaseController {
@@ -33,7 +35,7 @@ public class Ad010Controller extends BaseController {
 
     @PutMapping(value = "/02/save")
     @PostMapping
-    public ApiResponse saveNotice(@RequestBody Ad01002VO requestParams) {
+    public ApiResponse saveNotice(@RequestBody Ad01002VO requestParams) throws IOException {
         return ad010Service.saveNotice(requestParams);
     }
 

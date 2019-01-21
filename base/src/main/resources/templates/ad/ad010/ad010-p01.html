@@ -8,6 +8,10 @@
       layout:decorate="~{/layout/modal}">
 
 <!-- ===== [ script ] ===== -->
+<head>
+    <link rel="stylesheet" type="text/css" href="/assets/css/ax5uploader.css"/>
+</head>
+
 <script layout:fragment="script" type="text/javascript" th:src="@{/assets/js/ad/ad010/ad010-p01.js}"></script>
 <!-- ===== [ script ] _END_ ===== -->
 
@@ -50,7 +54,10 @@
                 </th:block>
                 <th:block layout:insert="~{/fragments/table :: tr-td(text='첨부파일', style='width: 100%')}">
                     <div layout:fragment="wrap">
-                        <input title="첨부파일" data-ax-path="fileName" class="form-control" style="height: 90%" >
+                        <div data-ax5uploader="upload1">
+                            <div data-uploaded-box="upload1" data-ax5uploader-uploaded-box="inline" style="min-height: 10px"></div>
+                            <button data-ax5uploader-button="selector" class="btn btn-primary" >Select File</button>
+                        </div>
                     </div>
                 </th:block>
             </div>
