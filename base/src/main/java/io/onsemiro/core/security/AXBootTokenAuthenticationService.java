@@ -168,7 +168,7 @@ public class AXBootTokenAuthenticationService {
                 userRoleList.forEach(role -> {
                     role.getRoleMenuList().stream().forEach(roleMenu -> {
 
-                        if (roleMenu.getMenu().getUseYn().equals(AXBootTypes.Used.YES)) {
+                        if (roleMenu.getMenu() != null && roleMenu.getMenu().getUseYn().equals(AXBootTypes.Used.YES)) {
                             Menu menu = roleMenu.getMenu();
                             menu.setSaveYn(roleMenu.getSaveYn());
                             menu.setInquiryYn(roleMenu.getInquiryYn());
