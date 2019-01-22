@@ -50,7 +50,7 @@ public class ArchiveUtils {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
         }
     }
 
@@ -71,7 +71,7 @@ public class ArchiveUtils {
             zipFile.extractAll(destinationFolderPath);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
         }
     }
 
@@ -105,7 +105,7 @@ public class ArchiveUtils {
             });*/
 
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
         }
     }
 }

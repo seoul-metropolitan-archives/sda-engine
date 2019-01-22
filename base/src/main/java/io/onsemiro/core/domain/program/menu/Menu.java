@@ -10,6 +10,7 @@ import io.onsemiro.core.domain.program.Program;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.type.Alias;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -35,6 +36,7 @@ import java.util.List;
  * @version 1.0.0
  * @since 2017-09-12 오전 10:53
  **/
+@Slf4j
 public class Menu extends BaseJpaModel<String> {
 
     @Id
@@ -103,7 +105,7 @@ public class Menu extends BaseJpaModel<String> {
             menu.setChildren(new ArrayList<>());
             return menu;
         } catch (Exception e) {
-            // ignore
+            log.error(e.getMessage());
         }
         return null;
     }

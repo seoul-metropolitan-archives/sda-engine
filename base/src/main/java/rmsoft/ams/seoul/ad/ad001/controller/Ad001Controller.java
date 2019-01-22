@@ -54,7 +54,7 @@ public class Ad001Controller extends MessageBaseController {
             Resource[] resources = context.getResources("classpath*:service-modules/*.jar");
             log.info("Service Modules...");
         }catch(Exception e){
-            e.printStackTrace();
+            log.error(e.getMessage());
         }
 
         //dipBatchExecutor.runDipProcess()
@@ -88,7 +88,7 @@ public class Ad001Controller extends MessageBaseController {
             URLClassLoader urlClassLoader = new URLClassLoader(classLoaderUrls);
             Class loadedMyClass = urlClassLoader.loadClass(wf00302VO.getApi());
 
-            System.out.println("Loaded class name: " + loadedMyClass.getName());
+            //System.out.println("Loaded class name: " + loadedMyClass.getName());
         } catch (Exception e) {
             e.printStackTrace();
         }

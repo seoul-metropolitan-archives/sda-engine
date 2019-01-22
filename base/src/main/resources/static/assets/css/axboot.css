@@ -26092,7 +26092,7 @@ a.leftmenu7_close {
     text-indent: -25px;
 }
 
-.bookmark_star:hover {
+.bookmark_star:hover, .bookmark_star_on:hover {
     /*background-image: url(../images/icon_main.png);
     background-position: -186px -228px;*/
     text-indent: -25px;
@@ -28069,5 +28069,4 @@ a.small_open {
 div.recordSearchField dt, div.recordSearchField dd{
     width: fit-content;
     padding-left: 10px;
-    padding-bottom: 5px;
 }

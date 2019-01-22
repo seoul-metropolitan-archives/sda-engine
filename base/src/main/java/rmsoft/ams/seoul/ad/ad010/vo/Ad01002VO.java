@@ -11,8 +11,10 @@ public class Ad01002VO extends BaseVO {
 	private String noticeUuid;
 	private String title;
 	private String registerUuid;
+	private String registerName;
 	private String registerDate;
 	private String contents;
 	private String filePath;
 	private String fileName;
+	private String filePathTemp;
 }

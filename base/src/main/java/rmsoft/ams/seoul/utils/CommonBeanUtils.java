@@ -16,7 +16,7 @@ public class CommonBeanUtils {
 
         String[] names = applicationContext.getBeanDefinitionNames();
         for (int i = 0; i < names.length; i++) {
-            System.out.println(names[i]);
+            //System.out.println(names[i]);
         }
 
 

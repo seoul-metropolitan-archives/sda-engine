@@ -1,4 +1,5 @@
 var fnObj = {};
+var BOOKMARK_LIST = new Array();
 
 var getMenu = function(searchData)
 {
@@ -57,20 +58,21 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 title: "NOTICE DETAIL"
             },
             sendData: function () {
-                return {
-                    noticeUuid : data.noticeUuid,
-                    title : data.title,
-                    registerUuid : data.registerUuid,
-                    registerDate : data.registerDate,
-                    contents : data.contents,
-                    fileName : data.fileName,
-                    filePath : data.filePath
-                };
+                if(data != null)
+                    return {
+                        noticeUuid : data.noticeUuid ,
+                        title : data.title,
+                        registerUuid : data.registerUuid,
+                        registerDate : data.registerDate,
+                        contents : data.contents,
+                        fileName : data.fileName,
+                        filePath : data.filePath,
+                        registerName : data.registerName
+                    };
+                else return null;
             },
-            callback: function (data) {
-                if(this) this.close();
-                if(data){
-                }
+            callback: function () {
+                ACTIONS.dispatch(ACTIONS.PAGE_NOTICE);
             }
         });
     },
@@ -104,6 +106,19 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         item.menuParams = $.extend({},{type: data.type,searchWord:data.param});
         parentsObj.tabView.open(item);
     },
+    GET_BOOKMARK: function (caller, act, data) {
+        axboot.ajax({
+            url: "/api/v1/ac002/01/getBookmark",
+            type: "GET",
+            callback: function (res) {
+                BOOKMARK_LIST = res;
+                fnObj.leftMenuViewMy.setData(res);
+            },
+            options: {
+                onError: axboot.viewError
+            }
+        });
+    },
     dispatch: function (caller, act, data) {
         var result = ACTIONS.exec(caller, act, data);
         if (result != "error") {
@@ -118,12 +133,15 @@ var ACTIONS = axboot.actionExtend(fnObj, {
 // fnObj 기본 함수 스타트와 리사이즈
 fnObj.pageStart = function () {
     this.topMenuView.initView();
-    this.leftMenuView.initView();
+    this.leftMenuViewAll.initView();
+    this.leftMenuViewMy.initView();
     this.frameView.initView();
     this.tabView.initView();
     this.activityTimerView.initView();
     this.gridView01.initView();
     this.formView.initView();
+    ACTIONS.dispatch(ACTIONS.GET_BOOKMARK);
+
     leftcloseView();
 };
 
@@ -225,6 +243,13 @@ fnObj.frameView = axboot.viewExtend({
         this.target = $("#ax-frame-root");
         this.asideHandle = $("#ax-aside-handel");
         this.aside = $("#ax-frame-aside");
+
+        if("Admin" == axboot.commonCodeValueByUuid("CD107", sessionJson.userTypeUuid)){
+            $(".btn_a").show();
+        }else{
+            $(".btn_a").hide();
+        }
+
         this.asideHandle.on("click", function () {
             ACTIONS.dispatch(ACTIONS.TOGGLE_ASIDE);
         });
@@ -407,7 +432,7 @@ fnObj.topMenuView = axboot.viewExtend({
 });
 
 
-fnObj.leftMenuView = axboot.viewExtend({
+fnObj.leftMenuViewAll = axboot.viewExtend({
     initView: function () {
         var _this = this;
         var menuItems = ax5.util.deepCopy(TOP_MENU_DATA);
@@ -546,6 +571,153 @@ fnObj.leftMenuView = axboot.viewExtend({
                 $(this).val(changeTo).change();
             }
         });
+    }
+});
+
+fnObj.leftMenuViewMy = axboot.viewExtend({
+    initView: function () {
+        var _this = this;
+        var column_info = [
+            {
+                "name": "menuUuid",
+                "fieldName": "",
+                "width": "150",
+                "visible": false,
+                "styles": {
+                    "textAlignment": "near"
+                },
+                "header": {
+                    "text": ""
+                }
+            },
+            {
+                "name": "menuName",
+                "fieldName": "",
+                "width": "150",
+                "styles": {
+                    "textAlignment": "near"
+                },
+                editable: false,
+                "header": {
+                    "text": " "
+                }
+            }
+        ]
+        this.menus = {};
+        this.gridObj = new TreeGridWrapper("realgridM2", "/assets/js/libs/realgrid");
+        this.gridObj.setGridStyle("100%", "100%")
+            .setColumnInfo(column_info)
+            .makeGrid();
+        this.gridObj.onDataCellClicked(function (grid, index) {
+            var menu = fnObj.leftMenuViewAll.menus[grid.getDataProvider().getJsonRow(index.dataRow)["menuUuid"]];
+            if (menu["program"]) {
+                ACTIONS.dispatch(ACTIONS.MENU_OPEN, $.extend({}, menu["program"], {
+                    menuId: menu["menuId"],
+                    menuNm: menu["menuNm"]
+                }));
+            }
+        });
+        this.gridObj.onKeydown(function(grid, key, ctrl, shift, alt){
+            var index = grid.getCurrent();
+            if(key == 13)
+            {
+                var menu = _this.menus[grid.getDataProvider().getJsonRow(index.dataRow)["menuUuid"]];
+                if (menu["program"]) {
+                    ACTIONS.dispatch(ACTIONS.MENU_OPEN, $.extend({}, menu["program"], {
+                        menuId: menu["menuId"],
+                        menuNm: menu["menuNm"]
+                    }));
+                }
+            }
+        });
+        this.initEvent();
+        //console.log(leftMenuItems);
+    },
+    initEvent : function()
+    {
+        var _this = this;
+        $(".open_close.expendAll").click(function(){
+            _this.gridObj.expandAll();
+        });
+        $(".open_close.collapseAll").click(function(){
+            _this.gridObj.collapseAll();
+        });
+        $("#leftMenuParam").keydown(function(event){
+            if(13 == event.keyCode)
+                $("#searchLeftMenu").click();
+        })
+        $("#searchLeftMenu").click(function(){
+            if("" != $("#leftMenuParam").val())
+            {
+                _this.gridObj.search(["menuName"],$("#leftMenuParam").val())
+            }
+        });
+        $("#crntPwd","#newPwd","#reNewPwd").on('keypress', function(event){
+            var char = String.fromCharCode(event.which)
+            var txt = $(this).val()
+            if (txt.match(/[ㄱ-힣]/)){
+                var changeTo = txt.replace(char, '')
+                $(this).val(changeTo).change();
+            }
+        });
+    },
+    setData : function(list){
+        var _this = this;
+        var menuItems = ax5.util.deepCopy(list);
+
+        var leftMenuItems =
+            {
+                menus: new Array()
+            };
+        var menu_2_list = new Array();
+        var menu_3_list = new Array();
+
+        var secondList = undefined;
+        var thirdList = undefined;
+
+        for (var i = 0; i < menuItems.length; i++) {
+            this.menus[menuItems[i]["menuUuid"]] = menuItems[i];
+            menu_2_list = menuItems[i]["children"];
+
+            secondList = new Array();
+
+            if(menu_2_list){
+                for (var j = 0; j < menu_2_list.length; j++) {
+                    this.menus[menu_2_list[j]["menuUuid"]] = menu_2_list[j];
+                    menu_3_list = menu_2_list[j]["children"];
+                    thirdList = new Array();
+
+                    for (var k = 0; k < menu_3_list.length; k++) {
+                        this.menus[menu_3_list[k]["menuUuid"]] = menu_3_list[k];
+                        thirdList.push({
+                            icon: 0
+                            , menuUuid: menu_3_list[k]["menuUuid"]
+                            , menuName: menu_3_list[k]["menuName"].replace(/&amp;/g, '&')
+                            , program: menu_3_list[k]["program"]
+                        });
+                    }
+
+                    secondList.push({
+                        icon: 0
+                        , menuUuid: menu_2_list[j]["menuUuid"]
+                        , menuName: menu_2_list[j]["menuName"].replace(/&amp;/g, '&')
+                        , program: menu_2_list[j]["program"]
+                        , menus: thirdList
+                    });
+                    console.log(menu_2_list[j]["menuName"])
+                    thirdList = undefined;
+                }
+            }
+            leftMenuItems.menus.push({
+                icon: 0
+                , menuUuid: menuItems[i]["menuUuid"]
+                , menuName: menuItems[i]["menuName"].replace(/&amp;/g,'&')
+                , menus: secondList
+            });
+            secondList = undefined;
+        }
+        this.gridObj.setTreeData(leftMenuItems, "menus", "", "icon");
+        this.gridObj.expandAll();
     }
 });
 
@@ -1058,11 +1230,12 @@ fnObj.gridView01 = axboot.viewExtend(axboot.axGridView, {
             target: $('[data-ax5grid="grid-view-01"]'),
             columns: [
                 {key: "title", label: "제목", width: 200, align: "left", sortable: false},
-                {key: "registerUuid", label: "작성자", width: 120, align: "center", sortable: false},
+                {key: "registerName", label: "작성자", width: 120, align: "center", sortable: false},
                 {key: "registerDate", label: "작성일자",width: 143, align: "center", sortable: false},
                 {key: "contents", label: "내용",width: 0, align: "center", sortable: false},
                 {key: "fileName", label: "파일명",width: 0, align: "center", sortable: false},
-                {key: "filePath", label: "파일경로",width: 0, align: "center", sortable: false}
+                {key: "filePath", label: "파일경로",width: 0, align: "center", sortable: false},
+                {key: "registerUuid", label: "작성자Uuid",width: 0, align: "center", sortable: false}
             ],
             body: {
                 onClick: function () {
@@ -1141,6 +1314,9 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
         $("#dfRecordDraft").click(function (){
             ACTIONS.dispatch(ACTIONS.PAGE_MOVE,{pageName: "disposal records",param:''});
         });
+        $(".btn_a").click(function(){
+            ACTIONS.dispatch(ACTIONS.DETAIL_NOTICE);
+        });
         ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
         ACTIONS.dispatch(ACTIONS.PAGE_NOTICE);
     },
@@ -1188,8 +1364,8 @@ function leftopenView() {
     $(".left_close_open_btn a").css("margin-left", "");
     $(".ax-frame-header-tool").css("width", "");
 
-    fnObj.leftMenuView.gridObj.getGridView().resetSize();
-
+    fnObj.leftMenuViewAll.gridObj.getGridView().resetSize();
+    fnObj.leftMenuViewMy.gridObj.getGridView().resetSize();
 }
 
 function left7openView() {
@@ -1296,4 +1472,25 @@ function isValid() {
     }else{
         return false;
     }
+}
+
+
+function allmenuView(){
+    $("#realgridM1").show();
+    $("#realgridM2").hide();
+
+    $("#btnAllMenu").addClass("left-all-menu").removeClass("left-my-menu");
+    $("#btnMyMenu").removeClass("left-all-menu").addClass("left-my-menu");
+
+    fnObj.leftMenuViewAll.gridObj.getGridView().resetSize();
+}
+
+function myMenuView(){
+    $("#realgridM1").hide();
+    $("#realgridM2").show();
+
+    $("#btnAllMenu").removeClass("left-all-menu").addClass("left-my-menu");
+    $("#btnMyMenu").addClass("left-all-menu").removeClass("left-my-menu");
+
+    fnObj.leftMenuViewMy.gridObj.getGridView().resetSize();
 }
