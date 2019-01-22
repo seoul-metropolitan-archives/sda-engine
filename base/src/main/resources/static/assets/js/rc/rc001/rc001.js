@@ -2068,6 +2068,31 @@ fnObj.iconView = axboot.viewExtend({
                 $("#iconListArea").tooltip("enable");
             }
         });
+
+        $("#componentView").on("click", ">div" ,function (event) {
+            var componentUuid = $(event.currentTarget).attr("componentUuid");
+
+            if (componentUuid != null && componentUuid != "") {
+                $.ajax({
+                    url :"/api/v1/common/getStreamingUrl",
+                    data : JSON.stringify({componentUuid : componentUuid}),
+                    dataType : "json",
+                    type : "post",
+                    contentType : "application/json",
+                    success : function(res){
+                        if(res.url != undefined && res.url != null){
+                            window.open(res.url, "", "");
+                        }else if(res.componentUuid != undefined && res.componentUuid != null){
+                            window.open("/api/v1/common/video/" + res.componentUuid, "", "");
+                        }
+                    },
+                    error : function (a,b,c)
+                    {
+                        console.log(a);
+                    }
+                })
+            }
+        });
     },
     setData: function (list, isFirst) {
         var targetTag = $("#iconListArea");
