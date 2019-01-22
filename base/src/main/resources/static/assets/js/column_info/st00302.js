@@ -47,7 +47,7 @@ var st00302  =
                     sortNo: 5,
                     name: "description",
                     text: "Description",
-                    width: 100,
+                    width: 300,
                     editable: false,
                     dataType: "text"
                 },
@@ -55,7 +55,7 @@ var st00302  =
                     sortNo: 6,
                     name: "notes",
                     text: "Notes",
-                    width: 100,
+                    width: 500,
                     editable: false,
                     dataType: "text"
                 },

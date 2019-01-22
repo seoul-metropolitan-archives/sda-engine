@@ -15,9 +15,11 @@ import org.springframework.transaction.annotation.Transactional;
 import rmsoft.ams.seoul.common.domain.StArrangeContainersResult;
 import rmsoft.ams.seoul.common.repository.StArrangeContainersResultRepository;
 import rmsoft.ams.seoul.st.st001.vo.St00103VO;
+import rmsoft.ams.seoul.st.st002.vo.St00201VO;
 import rmsoft.ams.seoul.st.st004.dao.St004Mapper;
 import rmsoft.ams.seoul.st.st004.vo.St00401VO;
 import rmsoft.ams.seoul.st.st004.vo.St00402VO;
+import rmsoft.ams.seoul.st.st004.vo.St00403VO;
 import rmsoft.ams.seoul.utils.CommonCodeUtils;
 
 import javax.inject.Inject;
@@ -75,8 +77,12 @@ public class St004Service extends BaseService {
                     stArrangeContainersResult.setInsertDate(orgStArrangeContainerResult.getInsertDate());
                     stArrangeContainersResult.setInsertUuid(orgStArrangeContainerResult.getInsertUuid());
                     stArrangeContainersResultRepository.save(stArrangeContainersResult);
+                }else if(stArrangeContainersResult.getArrangeContainersResultUuid() != null){
+                    stArrangeContainersResultRepository.delete(stArrangeContainersResult);
                 }
                 else{
+
+
                     //이쪽에서 들어 가야 되는데 전부 다 들어 가야된다!?
                     //자식을 전부다 빼와야 된다?
 
@@ -124,5 +130,22 @@ public class St004Service extends BaseService {
         st00402VO.setUseYn(requestParams.getString("useYn"));
 
         return filter(st004Mapper.getLocationList(st00402VO), pageable, "", St00402VO.class);
+    }
+
+    public Page<St00403VO> getSelectedContainerList(Pageable pageable, RequestParams<St00403VO> requestParams) {
+
+        St00403VO st00403VO = new St00403VO();
+        st00403VO.setContainerUuid(requestParams.getString("containerUuid"));
+        st00403VO.setOrderNo(requestParams.getString("orderNo"));
+        st00403VO.setOrderKey(requestParams.getString("orderKey"));
+        st00403VO.setStatusUuid(requestParams.getString("statusUuid"));
+        st00403VO.setUseYn(requestParams.getString("useYn"));
+        st00403VO.setOrderKey1(requestParams.getString("orderKey1"));
+
+        //검색 조건 추가
+        st00403VO.setContainerName(requestParams.getString("containerName"));
+        st00403VO.setContainerTypeUuid(requestParams.getString("containerTypeUuid"));
+
+        return filter(st004Mapper.getSelectedContainerList(st00403VO), pageable, "", St00403VO.class);
     }
 }

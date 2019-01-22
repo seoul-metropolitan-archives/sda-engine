@@ -129,7 +129,7 @@ var st00901 =
                     name: "takeoutDate",
                     text: "반출일자",
                     width: 120,
-                    dataType: "timestamp",
+                    dataType: "date",
                     editable: false,
                     sortable: true,
                     disable:true
@@ -139,7 +139,7 @@ var st00901 =
                     name: "returnDueDate",
                     text: "반입예정일",
                     width: 120,
-                    dataType: "timestamp",
+                    dataType: "date",
                     editable: false,
                     sortable: true,
                     disable:true

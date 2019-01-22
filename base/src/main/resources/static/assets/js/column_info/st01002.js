@@ -28,7 +28,8 @@ var st01002 =
                     text: "Shelf Code",
                     width: 120,
                     editable: false,
-                    dataType: "text"
+                    dataType: "text",
+                    disable : true
                 },
                 {
                     sortNo: 4,
@@ -37,7 +38,8 @@ var st01002 =
                     width: 300,
                     editable: true,
                     dataType: "text",
-                    required: true
+                    required: true,
+                    disable : true
                 }
             ]
     }

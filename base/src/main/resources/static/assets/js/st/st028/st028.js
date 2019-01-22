@@ -182,6 +182,18 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
             ACTIONS.dispatch(ACTIONS.SEARCH_OUTZONE_SCH,data);
         });
 
+        $("input[data-ax-path='InZoneName']").keyup(function(e){
+            if($(this).val() == ""){
+                parentInZoneUuid = "";
+            }
+        });
+
+        $("input[data-ax-path='outZoneName']").keyup(function(e){
+            if($(this).val() == ""){
+                parentOutZoneUuid = "";
+            }
+        });
+
 
     },
     getData: function () {

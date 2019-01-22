@@ -154,7 +154,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 callback: function (data) {
                     if(this) this.close();
                     if(data){
-                        ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1,data);
+                        ACTIONS.dispatch(ACTIONS.PAGE_SEARCH,{currentContainerUuid : currentContainerUuid});
                     }
                 }
             });

@@ -5,6 +5,7 @@ var TAKEOUT_CONFIRM_STATUS2 = "반출 불가";
 var repositoryUuid;
 var shelfUuid;
 var locationUuid;
+var requestorUuid;
 var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH: function (caller, act, data) {
 
@@ -14,7 +15,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         axboot.ajax({
             type: "GET",
             url: "/api/v1/st/st009/01/list01",
-            data: $.extend({}, this.formView.getData()),
+            data: $.extend({}, this.formView.getData(),{requestorUuid : requestorUuid}),
             callback: function (res) {
                 fnObj.gridView01.setData(res.list);
                 //fnObj.gridView01.disabledColumn();
@@ -70,8 +71,8 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 for (var i = 0; i < codes.length; i++) {
                     if (codes[i] == rows[j].statusUuid) {
                         state = names[i];
-                        if(state != "반입서 작성"){
-                            axToast.push("반입서 작성만 반출승인 가능합니다");
+                        if(state != "반출서 작성"){
+                            //axToast.push("반입서 작성만 반출승인 가능합니다");
                             return;
                         }
                         break;
@@ -123,8 +124,8 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 for (var i = 0; i < codes.length; i++) {
                     if (codes[i] == rows[j].statusUuid) {
                         state = names[i];
-                        if(state != "반출서 작성"){
-                            axToast.push("반출서 작성만 반출 불가가 가능합니다");
+                        if(state != "반출완료"){
+                            //axToast.push("반출서 작성만 반출 불가가 가능합니다");
                             return;
                         }
                         break;
@@ -305,7 +306,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             }
         }
 
-        if(state == "반출서 작성"){
+        if(state == "반출완료"){
             var modalOption = { title : title };
 
             axboot.modal.open({
@@ -331,12 +332,26 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 }
             });
         }else{
-            axToast.push("반출서 작성 완료만 반입의뢰서를 작성할수 있습니다.");
+            axToast.push("반출 완료만 반입의뢰서를 작성할수 있습니다.");
         }
 
 
     },
+    SEARCH_USER_SCH: function (caller, act, data) {
+        axboot.modal.open({
+            modalType: "COMMON_POPUP",
+            preSearch: data["preSearch"],
+            sendData: function () {
+                return data;
+            },
+            callback: function (data) {
 
+                $("input[data-ax-path='requestorName']").val(data['USER_NAME'])
+                requestorUuid = data['USER_UUID'];
+                if (this.close) this.close();
+            }
+        });
+    },
 });
 
 fnObj.pageStart = function () {
@@ -378,6 +393,15 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
         this.model = new ax5.ui.binder();
         this.model.setModel(this.getDefaultData(), this.target);
         this.modelFormatter = new axboot.modelFormatter(this.model); // 모델 포메터 시작
+
+        this.target.find('[data-ax5picker="date"]').ax5picker({
+            direction: "auto",
+            content: {
+                type: 'date'
+            }
+        });
+
+
         this.initEvent();
         this.bindEvent();
     },
@@ -386,6 +410,49 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
 
         $('#btn_createTakeOut').click(function(){
             ACTIONS.dispatch(ACTIONS.MODAL_OPEN, '반입의뢰서 작성');
+        });
+
+        $("input[data-ax-path='requestorName']").parents().eq(1).find("a").click(function () {
+
+            var data = {
+                popupCode: "PU107",
+                searchData: null,
+                preSearch: false
+            };
+            ACTIONS.dispatch(ACTIONS.SEARCH_USER_SCH, data);
+
+        });
+
+        $("input[data-ax-path='takeoutDateFrom']").keyup(function () {
+            var date = this.value;
+            if (date.match(/^\d{4}$/) !== null) {
+                this.value = date + '-';
+            } else if (date.match(/^\d{4}\-\d{2}$/) !== null) {
+                this.value = date + '-';
+            }
+        });
+        $("input[data-ax-path='takeoutDateFrom']").keypress(function () {
+            if ((event.keyCode < 48) || (event.keyCode > 57)) event.returnValue = false;
+        });
+        $("input[data-ax-path='takeoutDateTo']").keyup(function () {
+            var date = this.value;
+            if (date.match(/^\d{4}$/) !== null) {
+                this.value = date + '-';
+            } else if (date.match(/^\d{4}\-\d{2}$/) !== null) {
+                this.value = date + '-';
+            }
+        });
+        $("input[data-ax-path='takeoutDateTo']").keypress(function () {
+            if ((event.keyCode < 48) || (event.keyCode > 57)) event.returnValue = false;
+        });
+
+
+
+
+        $("input[data-ax-path='requestorName']").keyup(function(e){
+            if($(this).val() == ""){
+                requestorUuid = "";
+            }
         });
 
     },
@@ -482,9 +549,9 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
     initView: function () {
         this.initInstance();
         this.setColumnInfo(st00902.column_info);
-        this.gridObj.setOption({
+        /*this.gridObj.setOption({
             checkBar: {visible: true}
-        })
+        })*/
         this.makeGrid();
     },
     getSelectedData: function () {

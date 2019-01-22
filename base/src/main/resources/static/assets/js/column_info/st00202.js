@@ -91,6 +91,42 @@ var st00202 =
                 {
                     sortNo: 7,
                     width: 120,
+                    name: "repositoryName",
+                    text: "서가",
+                    dataType: "text",
+                    visible: true,
+                    required : false,
+                    editable: false,
+                    disable: true
+
+                },
+                {
+                    sortNo: 8,
+                    width: 120,
+                    name: "shelfName",
+                    text: "서고",
+                    dataType: "text",
+                    visible: true,
+                    required : false,
+                    editable: false,
+                    disable: true
+
+                },
+                {
+                    sortNo: 9,
+                    width: 120,
+                    name: "locationName",
+                    text: "행렬단",
+                    dataType: "text",
+                    visible: true,
+                    required : false,
+                    editable: false,
+                    disable: true
+
+                },
+                {
+                    sortNo: 10,
+                    width: 120,
                     name: "provenance",
                     text: "Provenance",
                     dataType: "text",
@@ -99,7 +135,7 @@ var st00202 =
 
                 },
                 {
-                    sortNo: 9,
+                    sortNo: 11,
                     name: "creationStartDate",
                     text: "Creation Start Date",
                     width: 120,
@@ -108,7 +144,7 @@ var st00202 =
                     required : false
                 },
                 {
-                    sortNo: 10,
+                    sortNo: 12,
                     name: "creationEndDate",
                     text: "Creation End Date",
                     width: 120,
@@ -117,7 +153,7 @@ var st00202 =
                     required : false,
                 },
                 {
-                    sortNo: 11,
+                    sortNo: 13,
                     name: "orderNo",
                     text: "Order No",
                     width: 100,
@@ -125,7 +161,7 @@ var st00202 =
                     dataType : "number"
                 },
                 {
-                    sortNo: 12,
+                    sortNo: 14,
                     name: "description",
                     text: "Description",
                     width: 250,
@@ -134,7 +170,7 @@ var st00202 =
                     required: false
                 },
                 {
-                    sortNo: 13,
+                    sortNo: 15,
                     name: "notes",
                     text: "Notes",
                     width: 250,
@@ -143,7 +179,7 @@ var st00202 =
                     required: false
                 },
                 {
-                    sortNo: 14,
+                    sortNo: 16,
                     name: "useYn",
                     text: "Use",
                     width: 50,
@@ -154,7 +190,7 @@ var st00202 =
                     required: false
                 },
                 {
-                    sortNo: 15,
+                    sortNo: 17,
                     name: "insertUuid",
                     text: "Created By",
                     width: 80,
@@ -164,7 +200,7 @@ var st00202 =
                     required: false
                 },
                 {
-                    sortNo: 14,
+                    sortNo: 18,
                     name: "insertDate",
                     text: "Date/Time Created",
                     width: 140,
@@ -174,7 +210,7 @@ var st00202 =
                     required: false
                 },
                 {
-                    sortNo: 15,
+                    sortNo: 19,
                     name: "updateUuid",
                     text: "Modified By",
                     width: 80,
@@ -184,7 +220,7 @@ var st00202 =
                     required: false
                 },
                 {
-                    sortNo: 16,
+                    sortNo: 20,
                     name: "updateDate",
                     text: "Date/Time Modified",
                     width: 140,

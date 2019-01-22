@@ -45,11 +45,18 @@
         DESCRIPTION as description,
         NOTES as notes,
         USE_YN as useYn,
-        (
+       /* (
         SELECT COUNT(*)
         FROM ST_LOCATION I
         WHERE I.SHELF_UUID = A.SHELF_UUID
-        ) maxContainer,
+        ) maxContainer,*/
+        (
+        SELECT
+            COUNT(*)
+        FROM
+          ST_LOCATION I, ST_ARRANGE_CONTAINERS_RESULT STACR
+        WHERE I.SHELF_UUID = A.SHELF_UUID
+        AND I.LOCATION_UUID = STACR.LOCATION_UUID) maxContainer,
         <include refid="Common.UserName"><property name="userUuid" value="INSERT_UUID"/></include> as insertUuid,
         INSERT_DATE as insertDate,
         <include refid="Common.UserName"><property name="userUuid" value="UPDATE_UUID"/></include> as updateUuid,
