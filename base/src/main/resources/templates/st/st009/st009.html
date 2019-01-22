@@ -58,68 +58,71 @@
                     </ul>
                 </div>
                 <!-- 상단검색 -->
-                <div class="bdb div_tablerow searchFields">
+                <div class="bdb div_tablerow">
                     <dl>
                         <dt class="w150">반출의뢰서</dt>
                         <dd>
                             <input type=text style="width:135px" data-ax-path="requestName">
                         </dd>
+
+
                         <dt>반출일자</dt>
                         <dd class="w_auto">
                             <div class="input-group" data-ax5picker="date">
-                                <div class="cld_box" style="background-color: #fffdd6">
-                                    <input type="text" data-ax-path="startFromDate" style="background-color: #fffdd6;ime-mode:disabled;"
+                                <div class="cld_box" style=" ">
+                                    <input type="text" data-ax-path="takeoutDateFrom"
+                                           style=" ime-mode:disabled;"
                                            placeholder="YYYY-MM-DD" maxlength="10">
-                                    <img title="calendar" class="ui-datepicker-trigger" alt="..." src="/assets/images/ams/calendar.png" >
+                                    <img title="calendar" class="ui-datepicker-trigger" alt="..."
+                                         src="/assets/images/ams/calendar.png">
                                 </div>
                                 ~
-                                <div class="cld_box" style="background-color: #fffdd6">
-                                    <input type="text" data-ax-path="startToDate" style="background-color: #fffdd6;ime-mode:disabled;"
+                                <div class="cld_box" style=" ">
+                                    <input type="text" data-ax-path="takeoutDateTo"
+                                           style=" ime-mode:disabled;"
                                            placeholder="YYYY-MM-DD" maxlength="10">
-                                    <img title="calendar" class="ui-datepicker-trigger" alt="..." src="/assets/images/ams/calendar.png">
+                                    <img title="calendar" class="ui-datepicker-trigger" alt="..."
+                                         src="/assets/images/ams/calendar.png">
                                 </div>
                             </div>
                         </dd>
+
+
                         <dt>반입예정일자</dt>
                         <dd class="w_auto">
                             <div class="input-group" data-ax5picker="date">
-                                <div class="cld_box" style="background-color: #fffdd6">
-                                    <input type="text" data-ax-path="startFromDate2" style="background-color: #fffdd6;ime-mode:disabled;"
+                                <div class="cld_box" style=" ">
+                                    <input type="text" data-ax-path="returnDueDateFrom"
+                                           style=" ime-mode:disabled;"
                                            placeholder="YYYY-MM-DD" maxlength="10">
-                                    <img title="calendar" class="ui-datepicker-trigger" alt="..." src="/assets/images/ams/calendar.png" >
+                                    <img title="calendar" class="ui-datepicker-trigger" alt="..."
+                                         src="/assets/images/ams/calendar.png">
                                 </div>
                                 ~
-                                <div class="cld_box" style="background-color: #fffdd6">
-                                    <input type="text" data-ax-path="startToDate2" style="background-color: #fffdd6;ime-mode:disabled;"
+                                <div class="cld_box" style=" ">
+                                    <input type="text" data-ax-path="returnDueDateTo"
+                                           style=" ime-mode:disabled;"
                                            placeholder="YYYY-MM-DD" maxlength="10">
-                                    <img title="calendar" class="ui-datepicker-trigger" alt="..." src="/assets/images/ams/calendar.png">
+                                    <img title="calendar" class="ui-datepicker-trigger" alt="..."
+                                         src="/assets/images/ams/calendar.png">
                                 </div>
                             </div>
                         </dd>
+
                     </dl>
                     <dl>
-                        <dt class="w150">작성자</dt>
-                        <dd>
-                            <input type=text style="width:135px" data-ax-path="repositoryCode">
-                        </dd>
-                        <dt class="w150">상태</dt>
-                        <dd>
-                            <select data-ax-path="statusUuid" style="width:135px;">
-                                <option value=""></option>
-                                <option th:each="item : ${statusUuid}"
-                                        th:value="${item.codeDetailUUID}"
-                                        th:text="${item.codeName}"/>
-                            </select>
-                        </dd>
+
+                        <th:block
+                                layout:insert="~{/fragments/page-buttons :: searchInput ('반출자','requestorName')}"/>
+
                         <dt class="w150">Aggregation Code</dt>
                         <dd>
-                            <input type=text style="width:135px" data-ax-path="aggregationCode">
+                            <input type=text style="width:135px" data-ax-path="code">
                         </dd>
-                        <dt class="w150">Title</dt>
+                        <dt class="w150">Aggregation Title</dt>
                         <dd>
                             <input type=text style="width:135px" data-ax-path="title">
                         </dd>
-
                     </dl>
                 </div>
 
@@ -161,25 +164,25 @@
                                 <dl>
                                     <dt class="w150">반입자</dt>
                                     <dd>
-                                        <input type=text style="width:135px">
+                                        <input type=text style="width:135px" data-ax-path="outsourcingPersonName">
                                     </dd>
                                 </dl>
                                 <dl>
                                     <dt class="w150">소속</dt>
                                     <dd>
-                                        <input type=text style="width:135px">
+                                        <input type=text style="width:135px" data-ax-path="outsourcingDepartment">
                                     </dd>
                                 </dl>
                                 <dl>
                                     <dt class="w150">직위</dt>
                                     <dd>
-                                        <input type=text style="width:135px">
+                                        <input type=text style="width:135px" data-ax-path="outsourcingPosition">
                                     </dd>
                                 </dl>
                                 <dl>
                                     <dt class="w150">반입일자</dt>
                                     <dd>
-                                        <input type=text style="width:135px">
+                                        <input type=text style="width:135px" data-ax-path="returnDate">
                                     </dd>
                                 </dl>
                             </div>

@@ -1,5 +1,7 @@
 package rmsoft.ams.seoul.utils;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.io.File;
 import java.io.FileFilter;
 import java.lang.reflect.Field;
@@ -10,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("all")
+@Slf4j
 public class RuntimeJarLoader {
     public static void loadJarIndDir(String dir) {
         try {
@@ -24,9 +27,10 @@ public class RuntimeJarLoader {
                         try {
                             // URLClassLoader.addURL(URL url) 메소드 호출
                             method.invoke(loader, new Object[]{jar.toURI().toURL()});
-                            System.out.println(jar.getName() + " is loaded.");
+                            //System.out.println(jar.getName() + " is loaded.");
                         } catch (Exception e) {
-                            System.out.println(jar.getName() + " can't load.");
+                            log.error(jar.getName() + " can't load.");
+                            //System.out.println(jar.getName() + " can't load.");
                         }
                     }
                     return false;

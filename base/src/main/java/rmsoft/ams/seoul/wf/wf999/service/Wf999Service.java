@@ -98,7 +98,7 @@ public class Wf999Service extends BaseService {
                 // 하위 폴더 탐색하면서 집합체/아이템/컴포넌트 정보 생성
                 saveArchiveIngest(rootAggregationUUID, contentsPath + File.separator + getFileNameNoExt(rc00502VO.getOriginalFileName()));
             } catch (Exception e) {
-                e.printStackTrace();
+                log.error(e.getMessage());
 
                 return ApiResponse.of(ApiStatus.SYSTEM_ERROR, "아카이브 파일 해제중 에러가 발생하였습니다. 관리자에게 문의하세요");
             }
@@ -121,7 +121,7 @@ public class Wf999Service extends BaseService {
                 try {
                     FileUtils.moveToDirectory(file, fileToMove, true);
                 }catch (IOException e){
-                    e.printStackTrace();
+                    log.error(e.getMessage());
                 }
 
                 List<Rc00502VO> componentsList = new ArrayList<>();
@@ -195,7 +195,8 @@ public class Wf999Service extends BaseService {
                         rc00502VO.setFilePath(rc00502VO.getFilePath().replace(File.separator, "/"));
                         rc00502VO.setServiceFilePath(rc00502VO.getServiceFilePath().replace(File.separator, "/"));
                     }
-                    rc00502VO.setServiceFileName(rc00502VO.getOriginalFileName().substring(0, rc00502VO.getOriginalFileName().lastIndexOf( "." )) + ".pdf");
+                    //rc00502VO.setServiceFileName(rc00502VO.getOriginalFileName().substring(0, rc00502VO.getOriginalFileName().lastIndexOf( "." )) + ".pdf");
+                    rc00502VO.setServiceFileName(path.getFileName().toString().substring(0, path.getFileName().toString().lastIndexOf( "." )) + ".pdf");
                     rc00502VO.setFileName(path.getFileName().toString());
                     rc00502VO.setOriginalFileName(path.getFileName().toString());
                     componentsList.add(rc00502VO);
@@ -302,7 +303,7 @@ public class Wf999Service extends BaseService {
                 index++;
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
 
             return ApiResponse.of(ApiStatus.SYSTEM_ERROR, "아카이브 파일 해제중 에러가 발생하였습니다. 관리자에게 문의하세요");
         }

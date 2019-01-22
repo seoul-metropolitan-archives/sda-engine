@@ -49,6 +49,12 @@ public class CommonFileController extends BaseController {
         return fileUploadService.downloadItem(request, param);
     }
 
+    @GetMapping(value = "/download/notice")
+    @ResponseBody
+    public ResponseEntity<byte[]> downloadNoticeAttachment(HttpServletRequest request,@RequestParam String attch) throws IOException {
+        return fileUploadService.downloadNoticeAttachment(request, attch);
+    }
+
     @RequestMapping(value = "/preview", method = RequestMethod.GET)
     public void preview(HttpServletResponse response, @RequestParam String id) throws IOException {
         fileUploadService.preview(response, id);

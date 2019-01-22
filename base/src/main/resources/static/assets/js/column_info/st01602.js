@@ -1,4 +1,4 @@
-var st01502 =
+var st01602 =
     {
         column_info:
             [
@@ -38,7 +38,8 @@ var st01502 =
                     text: "행열단",
                     width: 120,
                     editable: false,
-                    dataType: "text"
+                    dataType: "text",
+                    disable : true,
                 },
                 {
                     sortNo: 4,

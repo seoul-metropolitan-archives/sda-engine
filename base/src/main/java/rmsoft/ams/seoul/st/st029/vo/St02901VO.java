@@ -13,8 +13,6 @@ public class St02901VO extends BaseVO {
 
     private String programUuid;
 
-    private int no;
-
     private String machineTypeUuid;
 
     private String machineName;

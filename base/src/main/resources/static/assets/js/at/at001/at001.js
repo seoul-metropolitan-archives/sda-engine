@@ -150,7 +150,6 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
     initEvent: function(){
 
         $('.split-panel-vertical').on("dragend",function(){
-            alert("adfasdfadsfafd");
         });
 
         $('input:radio[name="radio"]').change(function(){

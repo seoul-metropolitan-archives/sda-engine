@@ -25,8 +25,8 @@ public class StProgram extends SimpleJpaModel<StProgram.StProgramId> {
     @Column(name = "PROGRAM_UUID", length = 36, nullable = false)
     private String programUuid;
 
-    @Column(name = "NO", length = 8, nullable = false)
-    private int no;
+    /*@Column(name = "NO", length = 8, nullable = false)
+    private int no;*/
 
     @Column(name = "MACHINE_TYPE_UUID", length = 36, nullable = false)
     private String machineTypeUuid;

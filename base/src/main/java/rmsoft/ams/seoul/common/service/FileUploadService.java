@@ -45,6 +45,9 @@ public class FileUploadService {
     @Value("${repository.temp}")
     private String pathTemp;
 
+    @Value("${repository.notice}")
+    private String pathNotice;
+
     @Inject
     private FilePersistService filePersistService;
 
@@ -113,7 +116,7 @@ public class FileUploadService {
                 try {
                     FileUtils.copyFileToDirectory(FileUtils.getFile(pathContents + File.separator + component.get("filePath") + File.separator + component.get("originalFileName")), new File(pathTemp + File.separator + instantTempPath + File.separator + component.get("filePath")), true);
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    log.error(e.getMessage());
                 }
             });
 
@@ -156,7 +159,29 @@ public class FileUploadService {
             httpHeaders.setContentDispositionFormData("attachment", fileName);
         } catch (Exception e) {
             log.error("아이템 내보내기 프로그램 실행중 에러가 발생하였습니다.");
-            e.printStackTrace();
+            log.error(e.getMessage());
+        }
+
+        return new ResponseEntity<>(bytes, httpHeaders, HttpStatus.OK);
+    }
+
+    public ResponseEntity<byte[]> downloadNoticeAttachment(HttpServletRequest request, String attch) throws IOException {
+        byte[] bytes = null;
+        HttpHeaders httpHeaders = null;
+        try{
+            String downloadPath = pathNotice + File.separator + attch;
+            AX5File ax5File = filePersistService.getAx5TempFile(downloadPath);
+            bytes = FileUtils.readFileToByteArray(ax5File.getFile());
+            String fileName = getDisposition(request, ax5File.getFileName());
+
+            httpHeaders = new HttpHeaders();
+            httpHeaders.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+            httpHeaders.setContentLength(bytes.length);
+            httpHeaders.setContentDispositionFormData("attachment", fileName);
+
+        } catch (Exception e) {
+            log.error("첨부파일 다운로드중 에러가 발생하였습니다.");
+            log.error(e.getMessage());
         }
 
         return new ResponseEntity<>(bytes, httpHeaders, HttpStatus.OK);

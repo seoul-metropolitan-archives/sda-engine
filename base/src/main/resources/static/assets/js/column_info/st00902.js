@@ -2,8 +2,18 @@ var st00902 =
     {
         column_info :
             [
+                /****************************************************
+                 * sortNo: grid column number
+                 * name: 바인딩명 - VO 변수명과 일치
+                 * text: 그리드 헤더 텍스트
+                 * dataType : 입력방법
+                 * editable : 활성비활성 여유
+                 * required : 필수 여부
+                 * visible  : grid 포함여부
+                 ****************************************************/
                 {
                     sortNo: 0,
+                    width:30,
                     name: "takeoutRecordResultUuid",
                     text: "takeoutRecordResultUuid",
                     editable: false,
@@ -13,8 +23,9 @@ var st00902 =
                 },
                 {
                     sortNo: 0,
-                    name: "uuid",
-                    text: "UUID",
+                    width:30,
+                    name: "takeoutRequestUuid",
+                    text: "takeoutRequestUuid",
                     editable: false,
                     dataType: "code",
                     required: false,
@@ -22,8 +33,12 @@ var st00902 =
                 },
                 {
                     sortNo: 0,
-                    name: "nodeType",
-                    dataType: "text",
+                    width:30,
+                    name: "aggregationUuid",
+                    text: "aggregationUuid",
+                    editable: false,
+                    dataType: "code",
+                    required: false,
                     visible: false
                 },
                 {
@@ -39,9 +54,9 @@ var st00902 =
                     sortNo: 2,
                     name: "title",
                     text: "Title",
-                    width: 400,
-                    required: true,
-                    editable: true,
+                    width: 200,
+                    required: false,
+                    editable: false,
                     dataType: "text"
                 },
                 {
@@ -75,7 +90,7 @@ var st00902 =
                     sortNo: 6,
                     name: "author",
                     text: "Author",
-                    width: 70,
+                    width: 140,
                     editable: false,
                     dataType: "text",
                     disable: true
@@ -100,46 +115,27 @@ var st00902 =
                 },
                 {
                     sortNo: 9,
-                    name: "description",
-                    text: "Description",
-                    width: 250,
-                    editable: false,
-                    dataType: "richtext"
-                },
-                {
-                    sortNo: 10,
-                    name: "notes",
-                    text: "Notes",
-                    width: 250,
-                    editable: false,
-                    dataType: "richtext"
-                },
-                {
-                    sortNo: 11,
                     name: "repositoryName",
-                    text: "repositoryName",
-                    width: 70,
+                    text: "서고",
+                    width: 250,
                     editable: false,
-                    dataType: "text",
-                    disable: true
+                    dataType: "text"
                 },
                 {
-                    sortNo: 12,
+                    sortNo: 9,
                     name: "shelfName",
-                    text: "shelfName",
-                    width: 70,
+                    text: "서가",
+                    width: 250,
                     editable: false,
-                    dataType: "text",
-                    disable: true
+                    dataType: "text"
                 },
                 {
-                    sortNo: 13,
+                    sortNo: 9,
                     name: "locationName",
-                    text: "locationName",
-                    width: 70,
+                    text: "행렬단",
+                    width: 250,
                     editable: false,
-                    dataType: "text",
-                    disable: true
+                    dataType: "text"
                 },
             ]
     }

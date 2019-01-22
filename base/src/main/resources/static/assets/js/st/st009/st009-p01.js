@@ -2,19 +2,6 @@
 var fnObj = {};
 var parentsData;
 var ACTIONS = axboot.actionExtend(fnObj, {
-    PAGE_SEARCH_TREE: function (caller, act, data) {
-        axboot.ajax({
-            url: "/api/v1/st/st008/getAllNodes",
-            data: $.extend({},data,{nodeType:"normal"}),
-            callback: function (res) {
-                fnObj.treeView01.setData({}, res.list, data);
-            },
-            options: {
-                onError: axboot.viewError
-            }
-        });
-        return false;
-    },
     PAGE_SEARCH: function (caller, act, data) {
       axboot.ajax({
             type: "GET",
@@ -41,19 +28,12 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     },
     PAGE_SAVE : function (caller, act, data) {
         console.log('formViewData', data);
-        /*if(fnObj.gridView03.getData().length  < 1){
-            return;
-        }
-        var send = fnObj.gridView03.getData();
 
-        for(var i=0;i<fnObj.gridView03.getJsonData().length;i++){
-            send[i]['containerUuid'] = parentsData.containerUuid;
-        }
-*/
+        //여기서 직원, 외부 구분해야 된다.
 
         axboot.ajax({
             type: "PUT",
-            url: "/api/v1/st/st008/01/save",
+            url: "/api/v1/st/st009/01/save",
             data: JSON.stringify(data),
             callback: function (res) {
                 ACTIONS.dispatch(ACTIONS.PAGE_CLOSE, data);
@@ -71,7 +51,8 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         }
     },
     PAGE_CLASSIFY: function (caller, act, data) {
-        if(fnObj.gridView03.getData().length  < 1){
+        debugger
+        /*if(fnObj.gridView03.getData().length  < 1){
             return;
         }
         var send = fnObj.gridView03.getData();
@@ -92,7 +73,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             }
         });
 
-        return false;
+        return false;*/
     },
     dispatch: function (caller, act, data) {
         var result = ACTIONS.exec(caller, act, data);
@@ -189,12 +170,12 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
             if ((event.keyCode < 48) || (event.keyCode > 57)) event.returnValue = false;
         });
 
-        $("input[data-ax-path='startDate']").focusout(function () {
+       /* $("input[data-ax-path='startDate']").focusout(function () {
             if (!checkDate(this.value)) {
                 this.value = "";
                 this.focus = true;
             }
-        });
+        });*/
         $("input[data-ax-path='endDate']").focusout(function () {
             if (!checkDate(this.value)) {
                 this.value = "";
@@ -243,14 +224,14 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
                 //직원
 
                 //직원인경우 이름이 다시 자동셋팅 되어야 한다!?
-                $("input[data-ax-path='department']").prop('readonly', true);
-                $("input[data-ax-path='position']").prop('readonly', true);
-                $("input[data-ax-path='name']").prop('readonly', true);
+                $("input[data-ax-path='outsourcingDepartment']").prop('readonly', true);
+                $("input[data-ax-path='outsourcingPosition']").prop('readonly', true);
+                $("input[data-ax-path='outsourcingPersonName']").prop('readonly', true);
             }else{
                 //기타
-                $("input[data-ax-path='department']").prop('readonly', false);
-                $("input[data-ax-path='position']").prop('readonly', false);
-                $("input[data-ax-path='name']").prop('readonly', false);
+                $("input[data-ax-path='outsourcingDepartment']").prop('readonly', false);
+                $("input[data-ax-path='outsourcingPosition']").prop('readonly', false);
+                $("input[data-ax-path='outsourcingPersonName']").prop('readonly', false);
 
             }
         });

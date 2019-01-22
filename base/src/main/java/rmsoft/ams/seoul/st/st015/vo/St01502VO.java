@@ -29,5 +29,7 @@ public class St01502VO extends BaseVO {
 
     private String controlNumber;
 
+    private String locationName;
+
 
 }

@@ -57,19 +57,19 @@
                                                 <th:block
                                                         layout:insert="~{/fragments/table :: tr-td3(text1='소속', style1='width: 250px', text2='직위', style2='width: 250px', text3='성명', style3='width: 250px')}">
                                                     <div layout:fragment="wrap-1">
-                                                        <input type="text" data-ax-path="department"
+                                                        <input type="text" data-ax-path="outsourcingDepartment"
                                                                class="form-control"
                                                                th:placeholder="#{axboot.admin.login.status.message(${loginUser.userNm})}"
                                                                readonly>
                                                     </div>
                                                     <div layout:fragment="wrap-2">
-                                                        <input type="text" data-ax-path="position"
+                                                        <input type="text" data-ax-path="outsourcingPosition"
                                                                class="form-control"
                                                                th:placeholder="#{axboot.admin.login.status.message(${loginUser.userNm})}"
                                                                readonly>
                                                     </div>
                                                     <div layout:fragment="wrap-3">
-                                                        <input type="text" data-ax-path="name"
+                                                        <input type="text" data-ax-path="outsourcingPersonName"
                                                                class="form-control"
                                                                th:placeholder="#{axboot.admin.login.status.message(${loginUser.userNm})}"
                                                                readonly>
@@ -77,7 +77,7 @@
 
                                                 </th:block>
                                                 <div>
-                                                    <th:block layout:insert="~{/fragments/table :: tr-td(text='반출일자', style='width: 250px')}">
+                                                    <th:block layout:insert="~{/fragments/table :: tr-td(text='반입일자', style='width: 250px')}">
                                                         <div layout:fragment="wrap">
                                                             <div class="input-group" data-ax5picker="date">
                                                                 <div class="cld_box">
