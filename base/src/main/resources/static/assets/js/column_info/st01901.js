@@ -36,7 +36,8 @@ var st01901 =
                     width: 200,
                     required: false,
                     editable: false,
-                    dataType: "text"
+                    dataType: "text",
+                    disable: true
                 },
                 {
                     sortNo: 3,
@@ -63,7 +64,8 @@ var st01901 =
                     text: "서고",
                     width: 230,
                     editable: false,
-                    dataType: "text"
+                    dataType: "text",
+                    disable: true
                 },
                 {
                     sortNo: 10,
@@ -71,7 +73,8 @@ var st01901 =
                     text: "서가",
                     width: 230,
                     editable: false,
-                    dataType: "text"
+                    dataType: "text",
+                    disable: true
                 },
                 {
                     sortNo: 11,
@@ -79,31 +82,47 @@ var st01901 =
                     text: "행렬단",
                     width: 250,
                     editable: false,
-                    dataType: "text"
+                    dataType: "text",
+                    disable: true
                 },
                 {
                     sortNo: 12,
+                    width: 180,
+                    name: "publishSourceTypeUuid",
+                    text: "Publish Source Type",
+                    editable: false,
+                    values: axboot.commonCodeFilter("CD221").codeArr,
+                    labels: axboot.commonCodeFilter("CD221").nameArr,
+                    dataType : "combo",
+                    disable : true,
+                    required : true
+                },
+                {
+                    sortNo: 13,
                     name: "requestDate",
                     text: "Request Date",
                     width: 140,
                     editable: false,
-                    dataType: "date"
+                    dataType: "date",
+                    disable: true
                 },
                 {
-                    sortNo: 13,
+                    sortNo: 14,
                     name: "republishYn",
                     text: "Republish YN",
                     width: 80,
                     editable: false,
-                    dataType: "text"
+                    dataType: "text",
+                    disable: true
                 },
                 {
-                    sortNo: 14,
+                    sortNo: 15,
                     name: "republishDate",
                     text: "Republish Date",
                     width: 140,
                     editable: false,
-                    dataType: "date"
+                    dataType: "date",
+                    disable: true
                 },
 
             ]

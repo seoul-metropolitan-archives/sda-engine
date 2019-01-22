@@ -200,7 +200,9 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         }
     },
     PAGE_CLASSIFY: function (caller, act, data) {
+        inoutExceptUuid = fnObj.gridView01.getSelectedData().inoutExceptUuid;
         if (inoutExceptUuid == "") {
+            axToast.push("의뢰할 대상을 선택 하세요. ");
             return
         }
 
@@ -212,7 +214,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             sendData: function () {
                 return {
                     inoutExceptUuid: inoutExceptUuid,
-                    confirmBtn:"Arrange",
+                    confirmBtn:"제외 대상 추가",
                     flag: "inout",
                     description: fnObj.gridView01.gridObj.getSelectedData().requestName,
                     fromWhere: 'st013',

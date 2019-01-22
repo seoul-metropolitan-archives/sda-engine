@@ -120,7 +120,8 @@ var st00802 =
                     text: "서고",
                     width: 250,
                     editable: false,
-                    dataType: "text"
+                    dataType: "text",
+                    disable: true
                 },
                 {
                     sortNo: 9,
@@ -128,7 +129,8 @@ var st00802 =
                     text: "서가",
                     width: 250,
                     editable: false,
-                    dataType: "text"
+                    dataType: "text",
+                    disable: true
                 },
                 {
                     sortNo: 9,
@@ -136,7 +138,8 @@ var st00802 =
                     text: "행렬단",
                     width: 250,
                     editable: false,
-                    dataType: "text"
+                    dataType: "text",
+                    disable: true
                 },
             ]
     }
