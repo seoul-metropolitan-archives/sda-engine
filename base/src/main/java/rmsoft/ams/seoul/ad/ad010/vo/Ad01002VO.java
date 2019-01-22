@@ -16,4 +16,5 @@ public class Ad01002VO extends BaseVO {
 	private String contents;
 	private String filePath;
 	private String fileName;
+	private String filePathTemp;
 }
