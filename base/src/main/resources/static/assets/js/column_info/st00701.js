@@ -25,10 +25,11 @@ var st00701 =
                     sortNo: 2,
                     name: "title",
                     text: "Title",
-                    width: 200,
-                    required: true,
-                    editable: true,
-                    dataType: "text"
+                    width: 250,
+                    required: false,
+                    editable: false,
+                    dataType: "text",
+                    disable: true
                 },
                 {
                     sortNo: 3,
@@ -73,7 +74,8 @@ var st00701 =
                     text: "서고",
                     width: 140,
                     editable: false,
-                    dataType: "text"
+                    dataType: "text",
+                    disable: true
                 },
                 {
                     sortNo: 10,
@@ -81,7 +83,8 @@ var st00701 =
                     text: "서가",
                     width: 140,
                     editable: false,
-                    dataType: "text"
+                    dataType: "text",
+                    disable: true
                 },
                 {
                     sortNo: 11,
@@ -89,7 +92,8 @@ var st00701 =
                     text: "행렬단",
                     width: 140,
                     editable: false,
-                    dataType: "text"
+                    dataType: "text",
+                    disable: true
                 },
                 {
                     sortNo: 12,
@@ -97,7 +101,8 @@ var st00701 =
                     text: "보존상자",
                     width: 140,
                     editable: false,
-                    dataType: "text"
+                    dataType: "text",
+                    disable: true
                 },
             ]
     }

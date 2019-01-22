@@ -25,10 +25,11 @@ var st00702 =
                     sortNo: 2,
                     name: "title",
                     text: "Title",
-                    width: 200,
-                    required: true,
-                    editable: true,
-                    dataType: "text"
+                    width: 250,
+                    required: false,
+                    editable: false,
+                    dataType: "text",
+                    disable: true
                 },
                 {
                     sortNo: 3,
@@ -65,6 +66,7 @@ var st00702 =
                     width: 140,
                     editable: false,
                     dataType: "date",
+                    length: 8,
                     disable: true
                 },
                 {

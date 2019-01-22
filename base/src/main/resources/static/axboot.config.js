@@ -188,15 +188,15 @@
             },
 
             "CREATE_TAKE_OUT_POPUP" :{
-                width: 1200,
-                height: 700,
+                width: 1000,
+                height: 500,
                 iframe: {
                     url: "/st/st008/st008-p01"
                 }
             },
             "MODIFY_TAKE_OUT_POPUP" :{
-                width: 1200,
-                height: 700,
+                width: 1000,
+                height: 500,
                 iframe: {
                     url: "/st/st008/st008-p01"
                 }

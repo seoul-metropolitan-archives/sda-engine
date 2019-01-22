@@ -198,11 +198,12 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 var selectedRow = fnObj.gridView01.getSelectedData();
 
                 if( modalOption.modalType == 'ARRANGE_POPUP'){
+                    // 대상 추가
                     return {
                         takeoutRequestUuid: selectedRow.takeoutRequestUuid,
-                        confirmBtn:"Arrange",
+                        confirmBtn:"추가",
                         flag: "inout",
-                        description: selectedRow.requestName,
+                        description: "반출의뢰서 : "+selectedRow.requestName,
                         fromWhere: 'st008',
                     };
                 }else {
@@ -567,7 +568,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
         this.initInstance();
         this.setColumnInfo(st00801.column_info);
         this.gridObj.setOption({
-            checkBar: {visible: true}
+            checkBar: {visible: false}
         })
         this.makeGrid();
 
@@ -639,7 +640,7 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
         this.initInstance();
         this.setColumnInfo(st00802.column_info);
         this.gridObj.setOption({
-            checkBar: {visible: true}
+            checkBar: {visible: false}
         })
         this.makeGrid();
         //this.gridObj.itemClick(this.itemClick);

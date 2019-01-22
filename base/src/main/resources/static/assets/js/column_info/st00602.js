@@ -14,7 +14,7 @@ var st00602 =
                 },
                 {
                     sortNo: 2,
-                    name: "code",
+                    name: "itemCode",
                     text: "Code",
                     width: 130,
                     editable: false,
@@ -22,7 +22,7 @@ var st00602 =
                 },
                 {
                     sortNo: 3,
-                    name: "title",
+                    name: "itemTitle",
                     text: "Title",
                     width: 500,
                     editable: false,

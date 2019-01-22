@@ -462,7 +462,8 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
     initEvent: function () {
         var _this = this;
 
-        // $(".btn_main_txt01").text(parentsData.confirmBtn);
+        if( parentsData.confirmBtn )
+            $(".btn_main_txt01").text(parentsData.confirmBtn);
         //
         // $(".sltCont").text(parentsData.crrntAgg);
         //
