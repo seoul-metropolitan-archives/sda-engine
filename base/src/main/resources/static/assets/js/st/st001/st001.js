@@ -495,8 +495,27 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
 
             this.setRunDel(false);
         }else{
-            this.setRunDel(true);
-            this.setConfirmYn(true,"ST001_01");
+
+            //여기서 한번더 처리 draft인데 밑에서
+            var flag = true;
+            var shelfList = fnObj.gridView02.gridObj.getJsonRows();
+
+            for(var i = 0 ; i < shelfList.length; i++){
+                var shelf = shelfList[i];
+                if(shelf.statusUuid == "1A9F4963-6768-40E9-AA4F-5F83408A5113"){
+                    flag = false;
+                }
+            }
+
+
+
+            if(flag){
+                this.setRunDel(true);
+                this.setConfirmYn(true,"ST001_01");
+            }else{
+                this.setRunDel(false);
+            }
+
         }
     }
 

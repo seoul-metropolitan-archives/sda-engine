@@ -126,6 +126,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
     },
     SEARCH_CONTAINER_SCH: function(caller, act, data){
+        debugger
         axboot.modal.open({
             modalType: "COMMON_POPUP",
             preSearch : data["preSearch"],
@@ -205,6 +206,7 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
             };
             ACTIONS.dispatch(ACTIONS.SEARCH_CONTAINER_SCH,data);
         });
+
         $("input[data-ax-path='parentContainerName']").focusout(function(){
 
             if("" != $(this).val().trim())
@@ -245,6 +247,12 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
         });
         $(".bdb").delegate("#rg_tree_allclose", "click", function () {
             _this.collapseAll();
+        });
+
+        $("input[data-ax-path='parentContainerName']").keyup(function(e){
+            if($(this).val() == ""){
+                parentContainerUuid = "";
+            }
         });
 
     },

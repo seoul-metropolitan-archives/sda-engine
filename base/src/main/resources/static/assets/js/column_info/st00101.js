@@ -30,7 +30,8 @@ var st00101 =
                     text: "Repository Code",
                     width: 120,
                     editable: false,
-                    dataType: "text"
+                    dataType: "text",
+                    disable : true
                 },
                 {
                     sortNo: 3,

@@ -48,7 +48,7 @@ var st02501 =
                     },
                     pasteTarget : "popGateUuid",
                     disable : false,
-                    required: true,
+                    required: false,
                     visible: true
                 },
                 {
@@ -58,7 +58,7 @@ var st02501 =
                     width: 120,
                     editable: true,
                     dataType: "text",
-                    required: true,
+                    required: false,
                     visible: false
                 },
                 {
@@ -68,7 +68,7 @@ var st02501 =
                     width: 120,
                     editable: true,
                     dataType: "text",
-                    required: true,
+                    required: false,
                     visible: true
                 },
                 {
@@ -78,7 +78,7 @@ var st02501 =
                     width: 120,
                     editable: true,
                     dataType: "text",
-                    required: true,
+                    required: false,
                     visible: true
                 },
                 {
@@ -88,7 +88,7 @@ var st02501 =
                     width: 120,
                     editable: true,
                     dataType: "text",
-                    required: true,
+                    required: false,
                     visible: true
                 },
                 {
@@ -98,7 +98,7 @@ var st02501 =
                     width: 120,
                     editable: true,
                     dataType: "text",
-                    required: true,
+                    required: false,
                     visible: true
                 },
                 {
@@ -108,7 +108,7 @@ var st02501 =
                     width: 120,
                     editable: true,
                     dataType: "text",
-                    required: true,
+                    required: false,
                     visible: true
                 },
                 {
@@ -118,7 +118,7 @@ var st02501 =
                     width: 120,
                     editable: true,
                     dataType: "text",
-                    required: true,
+                    required: false,
                     visible: true
                 },
                 {

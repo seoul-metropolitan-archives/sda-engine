@@ -23,6 +23,13 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 fnObj.gridView02.clearData();
                 fnObj.gridView03.clearData();
                 fnObj.gridView04.clearData();
+
+
+                if(fnObj.gridView01.gridObj.getJsonRows().length != 0){
+                    ACTIONS.dispatch(ACTIONS.PAGE_SEARCH02);
+                }
+
+
             },
             options: {
                 onError: axboot.viewError
@@ -41,6 +48,10 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 fnObj.gridView02.setData(res.list);
                 fnObj.gridView03.clearData();
                 fnObj.gridView04.clearData();
+                if(fnObj.gridView02.gridObj.getJsonRows().length != 0){
+                    ACTIONS.dispatch(ACTIONS.PAGE_SEARCH03);
+                }
+
             },
             options: {
                 onError: axboot.viewError
