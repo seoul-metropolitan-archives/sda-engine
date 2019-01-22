@@ -37,11 +37,12 @@
             CONNECT BY PRIOR container.CONTAINER_UUID = container.PARENT_CONTAINER_UUID
         )
         <where>
+            1 = 1
             <if test="provenance != null">
-                provenance = #{provenance}
+                AND provenance = #{provenance}
             </if>
             <if test="parentContainerUuid != null">
-                AND  parentContainerUuid = #{parentContainerUuid}
+                AND  (parentContainerUuid = #{parentContainerUuid} OR containerUuid = #{parentContainerUuid}) -- 나 자신 도 포함 돼야 하므로 OR 이 들어감
             </if>
             <if test="containerName != null">
                 AND UPPER(containerName) LIKE '%'||#{containerName}||'%'

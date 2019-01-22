@@ -16,13 +16,13 @@ public class St00702VO extends BaseVO {
     private String code;
     private String title;
     private String retentionPeriodName; // 보존기간
-    private Timestamp descriptionStartDate;
-    private Timestamp descriptionEndDate;
-    private Timestamp initialDate;
-    private Timestamp disposalDueDate;
+    private String descriptionStartDate;
+    private String descriptionEndDate;
+    private String initialDate;
+    private String disposalDueDate;
     private String disposalDueDateStart; //filter 인애들은 string 을 주자
     private String disposalDueDateEnd;//filter 인애들은 string 을 주자
-    private Timestamp disposalCompleteDate;
+    private String disposalCompleteDate;
 
 
 }

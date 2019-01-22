@@ -33,5 +33,7 @@ public class St00701VO extends BaseVO {
     private String containerUuid;
     private String containerName;
 
+    private String disposalDueDateStart; //filter 인애들은 string 을 주자
+    private String disposalDueDateEnd;//filter 인애들은 string 을 주자
 
 }

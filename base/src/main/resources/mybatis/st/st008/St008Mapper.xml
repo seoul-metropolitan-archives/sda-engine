@@ -11,8 +11,18 @@
                    REQUEST_NAME requestName,
                    REQUEST_TYPE_UUID requestTypeUuid,
                    REQUESTOR_UUID requestorUuid,
-                   (SELECT USER_NAME FROM AC_USER WHERE USER_UUID = request.REQUESTOR_UUID) AS requestorName,
-                   user_group.USER_GROUP_NAME userGroupName,
+                   (CASE
+                      WHEN REQUEST_TYPE_UUID = 'AF04136D-3508-4E1C-A85B-F1A1FEDDB607'
+                              THEN ac_user.USER_NAME
+                      ELSE OUTSOURCING_PERSON_NAME
+                       END
+                   )                                                                               AS requestorName,
+                   (CASE
+                      WHEN REQUEST_TYPE_UUID = 'AF04136D-3508-4E1C-A85B-F1A1FEDDB607'
+                              THEN (SELECT CODE_NAME FROM AD_CODE_DETAIL WHERE CODE_DETAIL_UUID = ac_user.ORGANIZATION_UUID)
+                      ELSE OUTSOURCING_DEPARTMENT
+                       END
+                   )                                                                               AS userGroupName,
                    request.TAKEOUT_DATE takeoutDate,
                    request.RETURN_DATE returnDate,
                    request.RETURN_DUE_DATE returnDueDate,
@@ -31,6 +41,8 @@
                 ON USER_UUID = request.REQUESTOR_UUID
               INNER JOIN AC_USER_GROUP user_group
                 ON user_group.USER_GROUP_UUID = group_user.USER_GROUP_UUID
+              INNER JOIN AC_USER ac_user
+                ON ac_user.USER_UUID = request.REQUESTOR_UUID
             <where>
                 1=1
                 <if test="requestName != null">

@@ -57,7 +57,8 @@ var st00802 =
                     width: 200,
                     required: false,
                     editable: false,
-                    dataType: "text"
+                    dataType: "text",
+                    disable: true
                 },
                 {
                     sortNo: 3,

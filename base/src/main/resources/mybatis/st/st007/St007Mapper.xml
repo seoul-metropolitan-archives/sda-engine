@@ -36,9 +36,18 @@
                                            inner join
                                              RS_RECORD_SCHEDULE_RESULT C
                                              ON B.ITEM_UUID = C.ITEM_UUID
-                                    where
+                                    <where>
                                         B.AGGREGATION_UUID = A.AGGREGATION_UUID
-                                      and disposal_complete_date is null  ) as  cnt
+                                        AND DISPOSAL_COMPLETE_DATE is null
+                                        <if test="disposalDueDateStart != null">
+                                            AND DISPOSAL_DUE_DATE <![CDATA[>=]]> TO_DATE(#{disposalDueDateStart},'yyyy-mm-dd')
+                                        </if>
+                                        <if test="disposalDueDateEnd != null">
+                                            AND DISPOSAL_DUE_DATE <![CDATA[<]]> TO_DATE(#{disposalDueDateEnd},'yyyy-mm-dd')
+                                        </if>
+                                    </where>
+
+                                   ) as  cnt
                             from
                                  RC_AGGREGATION A) main
                       WHERE
@@ -172,6 +181,7 @@
             </if>
 
         </where>
+        ORDER BY CODE, REPOSITORY_NAME, locationName
     </select>
 
     <select id="getDisposalItem" resultType="St00702VO" parameterType="St00702VO" statementType="PREPARED">

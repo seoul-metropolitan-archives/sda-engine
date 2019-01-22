@@ -129,20 +129,44 @@ var st00801 =
                     name: "takeoutDate",
                     text: "반출일자",
                     width: 120,
-                    dataType: "timestamp",
+                    dataType: "date",
                     editable: false,
                     sortable: true,
                     disable:true
                 },
+                // {
+                //     sortNo: 5,
+                //     name: "returnDueDate",
+                //     text: "반입예정일",
+                //     width: 100,
+                //     dataType: "date",
+                //     includedFormat: true,
+                //     datetimeFormat: "yyyy-MM-dd",
+                //     length: 8,
+                //     required: false,
+                //     editable: false,
+                //     disable:true
+                // },
                 {
-                    sortNo: 5,
                     name: "returnDueDate",
-                    text: "반입예정일",
-                    width: 120,
-                    dataType: "timestamp",
+                    fieldName: "returnDueDate",
+                    header: {
+                        text: "Date/Time Modified",
+                    },
+                    width: 140,
                     editable: false,
-                    sortable: true,
-                    disable:true
+                    editor: {
+                        type: "date",
+                        datetimeFormat: "yyyy-MM-dd",
+                    },
+                    styles: {
+                        textAlignment: "near",
+                        background: "#f2f2f2",
+                        fontSize: 12,
+                        fontFamily: "nanum",
+                        datetimeFormat: "yyyy-MM-dd",
+                        fontBold: false
+                    }
                 },
                 {
                     sortNo: 6,

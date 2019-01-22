@@ -38,6 +38,8 @@ public class St007Service extends BaseService {
         St00701VO.setShelfUuid(requestParams.getString("shelfUuid"));
         St00701VO.setLocationUuid(requestParams.getString("locationUuid"));
         St00701VO.setContainerTypeUuid(requestParams.getString("containerTypeUuid"));
+        St00701VO.setDisposalDueDateStart(requestParams.getString("disposalDueDateStart"));
+        St00701VO.setDisposalDueDateEnd(requestParams.getString("disposalDueDateEnd"));
 
 
         //검색조건 추가시
