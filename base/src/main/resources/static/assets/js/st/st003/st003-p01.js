@@ -1,11 +1,10 @@
-
 var fnObj = {};
 var parentsData;
 var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH_TREE: function (caller, act, data) {
         axboot.ajax({
             url: "/api/v1/st/st003/getAllNodes",
-            data: $.extend({},data,{nodeType:"normal"}),
+            data: $.extend({}, data, {nodeType: "normal"}),
             callback: function (res) {
                 fnObj.treeView01.setData({}, res.list, data);
             },
@@ -16,11 +15,11 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         return false;
     },
     PAGE_SEARCH1: function (caller, act, data) {
-      axboot.ajax({
+        axboot.ajax({
             type: "GET",
             url: "/api/v1/cl/cl003/02/list01",
-            async : false,
-            data: $.extend({}, {pageSize: 10000},{aggregationUuid: data.uuid}),
+            async: false,
+            data: $.extend({}, {pageSize: 10000}, {aggregationUuid: data.uuid}),
             callback: function (res) {
                 fnObj.gridView02.resetCurrent();
                 fnObj.gridView02.setData(res.list);
@@ -34,10 +33,10 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     ERROR_SEARCH: function (caller, act, data) {
     },
     PAGE_CONFIRM: function (caller, act, data) {
-        ACTIONS.dispatch(ACTIONS.STATUS_UPDATE,CONFIRM_STATUS);
+        ACTIONS.dispatch(ACTIONS.STATUS_UPDATE, CONFIRM_STATUS);
     },
     PAGE_CANCEL: function (caller, act, data) {
-        ACTIONS.dispatch(ACTIONS.STATUS_UPDATE,CANCEL_STATUS);
+        ACTIONS.dispatch(ACTIONS.STATUS_UPDATE, CANCEL_STATUS);
     },
     PAGE_CLOSE: function (caller, act, data) {
         if (parent) {
@@ -45,12 +44,12 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         }
     },
     PAGE_CLASSIFY: function (caller, act, data) {
-        if(fnObj.gridView03.getData().length  < 1){
+        if (fnObj.gridView03.getData().length < 1) {
             return;
         }
         var send = fnObj.gridView03.getData();
 
-        for(var i=0;i<fnObj.gridView03.getJsonData().length;i++){
+        for (var i = 0; i < fnObj.gridView03.getJsonData().length; i++) {
             send[i]['containerUuid'] = parentsData.containerUuid;
             // st013 용
             send[i]['inoutExceptUuid'] = parentsData.inoutExceptUuid;
@@ -60,10 +59,10 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         }
 
         var url = "/api/v1/st/st003/03/save";
-        if( parentsData.fromWhere == 'st013'){
+        if (parentsData.fromWhere == 'st013') {
             // st013 에서 공통으로 씀
             url = '/api/v1/st/st013/02/save01';
-        }else if( parentsData.fromWhere == 'st008'){
+        } else if (parentsData.fromWhere == 'st008') {
             // st008 에서 공통으로 씀
             url = '/api/v1/st/st008/02/save01';
             send = {takeoutRequestUuid: parentsData.takeoutRequestUuid, st00802VOList: send};
@@ -73,7 +72,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             url: url,
             data: JSON.stringify(send),
             callback: function (res) {
-                ACTIONS.dispatch(ACTIONS.PAGE_CLOSE,{classUuid:parentsData.classUuid});
+                ACTIONS.dispatch(ACTIONS.PAGE_CLOSE, {classUuid: parentsData.classUuid});
             },
             options: {
                 onError: axboot.viewError
@@ -95,7 +94,7 @@ fnObj.treeView01 = axboot.viewExtend(axboot.commonView, {
     param: {},
     deletedList: [],
     newCount: 0,
-    otherParam : {},
+    otherParam: {},
 
     initView: function () {
         var _this = this;
@@ -111,7 +110,7 @@ fnObj.treeView01 = axboot.viewExtend(axboot.commonView, {
                 removeHoverDom: function (treeId, treeNode) {
                 }
             },
-            data : {
+            data: {
                 simpleData: {
                     enable: true,
                     idKey: "uuid",
@@ -122,62 +121,62 @@ fnObj.treeView01 = axboot.viewExtend(axboot.commonView, {
             check: {
                 enable: true,
                 chkStyle: "checkbox",
-                chkDisabledInherit:true,
-                chkboxType: { "Y": "ps", "N": "ps" }
+                chkDisabledInherit: true,
+                chkboxType: {"Y": "ps", "N": "ps"}
             },
 
             callback: {
                 onClick: function (e, treeId, treeNode, isCancel) {
-                    if(treeNode){
-                        ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1,treeNode);
+                    if (treeNode) {
+                        ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, treeNode);
                     }
                 },
-                onCheck: function (e,treeId,treeNode) {
+                onCheck: function (e, treeId, treeNode) {
                     var treeObj = $.fn.zTree.getZTreeObj(treeId);
-                    if(treeNode.getParentNode()){
-                        if(treeNode.getParentNode().getCheckStatus().checked && !treeNode.getParentNode().getCheckStatus().half){
-                            for (var i=0, l=treeNode.getParentNode().children.length; i < l; i++) {
-                                if(treeNode.getParentNode().children[i]["arrangeRecordsResultUuid"] == undefined || treeNode.getParentNode().children[i]["arrangeRecordsResultUuid"] == null) {
+                    if (treeNode.getParentNode()) {
+                        if (treeNode.getParentNode().getCheckStatus().checked && !treeNode.getParentNode().getCheckStatus().half) {
+                            for (var i = 0, l = treeNode.getParentNode().children.length; i < l; i++) {
+                                if (treeNode.getParentNode().children[i]["arrangeRecordsResultUuid"] == undefined || treeNode.getParentNode().children[i]["arrangeRecordsResultUuid"] == null) {
                                     treeObj.setChkDisabled(treeNode.getParentNode().children[i], true, false, true);
                                 }
                             }
                             fnObj.gridView03.clearData();
-                            fnObj.gridView03.setData(treeObj.getNodesByFilter(function(node){
+                            fnObj.gridView03.setData(treeObj.getNodesByFilter(function (node) {
                                 return !node.chkDisabled && node.getCheckStatus().checked && !node.getCheckStatus().half;
                             }));
                             return;
                         }
                     }
                     if (treeNode.children) {
-                        if(treeNode.getCheckStatus().checked){
-                            for (var i=0, l=treeNode.children.length; i < l; i++) {
-                                if(treeNode.children[i]["arrangeRecordsResultUuid"] == undefined || treeNode.children[i]["arrangeRecordsResultUuid"] == null) {
+                        if (treeNode.getCheckStatus().checked) {
+                            for (var i = 0, l = treeNode.children.length; i < l; i++) {
+                                if (treeNode.children[i]["arrangeRecordsResultUuid"] == undefined || treeNode.children[i]["arrangeRecordsResultUuid"] == null) {
                                     //treeObj.setChkDisabled(treeNode.children[i], true, false, true);
                                     treeObj.setChkDisabled(treeNode.children[i], false, false, true);
                                 }
                             }
                         }
                         fnObj.gridView03.clearData();
-                        fnObj.gridView03.setData(treeObj.getNodesByFilter(function(node){
+                        fnObj.gridView03.setData(treeObj.getNodesByFilter(function (node) {
                             //return !node.chkDisabled && node.getCheckStatus().checked && !node.getCheckStatus().half && !node.children.length != 0;
                             return !node.chkDisabled && node.checked && node.children.length == 0;
                         }));
                     }
                 },
-                beforeCheck : function (treeId, treeNode) {
+                beforeCheck: function (treeId, treeNode) {
                     var treeObj = $.fn.zTree.getZTreeObj(treeId);
                     if (treeNode.children) {
-                        if(treeNode.getCheckStatus().checked){
-                            for (var i=0, l=treeNode.children.length; i < l; i++) {
-                                if(treeNode.children[i]["arrangeRecordsResultUuid"] == undefined || treeNode.children[i]["arrangeRecordsResultUuid"] == null){
-                                    treeObj.setChkDisabled(treeNode.children[i], false,false,true);
+                        if (treeNode.getCheckStatus().checked) {
+                            for (var i = 0, l = treeNode.children.length; i < l; i++) {
+                                if (treeNode.children[i]["arrangeRecordsResultUuid"] == undefined || treeNode.children[i]["arrangeRecordsResultUuid"] == null) {
+                                    treeObj.setChkDisabled(treeNode.children[i], false, false, true);
                                 }
                             }
                             fnObj.treeView01.initStatus(treeNode.children);
                         }
                     }
                 },
-                onNodeCreated : function(event, treeId, treeNode) {
+                onNodeCreated: function (event, treeId, treeNode) {
                     var zTree = $.fn.zTree.getZTreeObj(treeId);
                     if (_this.reloadFlag) {
                         if (_this.checkFlag) {
@@ -188,7 +187,7 @@ fnObj.treeView01 = axboot.viewExtend(axboot.commonView, {
                         }
                     }
                 },
-                filter : function(node){
+                filter: function (node) {
                     return node.check && !node.half
                 },
                 onAsyncSuccess: function (event, treeId, treeNode, msg) {
@@ -196,14 +195,11 @@ fnObj.treeView01 = axboot.viewExtend(axboot.commonView, {
                     console.log(msg);
                     msg = JSON.parse(msg);
                     var _tree = msg.list;
-                    var matchingData = function(key, list)
-                    {
+                    var matchingData = function (key, list) {
                         var retList = new Array();
-                        for(var i = 0; i < list.length; i++)
-                        {
-                            if( key == list[i]["parentUuid"] )
-                            {
-                                list[i].children =  matchingData(list[i]["uuid"], list);
+                        for (var i = 0; i < list.length; i++) {
+                            if (key == list[i]["parentUuid"]) {
+                                list[i].children = matchingData(list[i]["uuid"], list);
                                 retList.push(list[i]);
                             }
                         }
@@ -212,12 +208,10 @@ fnObj.treeView01 = axboot.viewExtend(axboot.commonView, {
 
                     var treeData = undefined;
                     var treeList = new Array();
-                    for(var i = 0; i < _tree.length; i++)
-                    {
+                    for (var i = 0; i < _tree.length; i++) {
                         treeData = _tree[i];
-                        if(treeData["parentUuid"] == null)
-                        {
-                            treeData.children = matchingData(treeData["uuid"],_tree);
+                        if (treeData["parentUuid"] == null) {
+                            treeData.children = matchingData(treeData["uuid"], _tree);
                             treeList.push(treeData);
                         }
                     }
@@ -226,48 +220,52 @@ fnObj.treeView01 = axboot.viewExtend(axboot.commonView, {
                 }
             }
         }, []);
+
+        //initialize fuzzysearch function
+        // @param0 tree id
+        // @param1 하이라이트 할건지
+        // @param2 expand 할건지
+        fuzzySearch('ztree', true, true);
     },
-    convertTreeData : function(_tree)
-    {
+    convertTreeData: function (_tree) {
         var iconObj = undefined;
-        for(var i = 0; i < _tree.length; i++)
-        {
+        for (var i = 0; i < _tree.length; i++) {
             iconObj = this.getAggregationIcon(_tree[i]["nodeType"])
-            _tree[i] = $.extend({},_tree[i],iconObj);
+            _tree[i] = $.extend({}, _tree[i], iconObj);
             iconObj = {};
         }
         return _tree;
     },
-    getAggregationIcon : function(nodeType){
-        var iconObj = {open:false, iconSkin:nodeType};
+    getAggregationIcon: function (nodeType) {
+        var iconObj = {open: false, iconSkin: nodeType};
 
         return iconObj;
     },
-    initStatus: function(nodes){
+    initStatus: function (nodes) {
         var treeObj = $.fn.zTree.getZTreeObj("ztree");
         nodes = nodes == null ? treeObj.getNodes() : nodes;
 
-        for (var i=0, l=nodes.length; i < l; i++) {
-            if(nodes[i]["arrangeRecordsResultUuid"] != undefined && nodes[i]["arrangeRecordsResultUuid"] != null){
-                treeObj.checkNode(nodes[i], true);
-                treeObj.setChkDisabled(nodes[i], true,false,false);
+        for (var i = 0, l = nodes.length; i < l; i++) {
+            if (nodes[i]["arrangeRecordsResultUuid"] != undefined && nodes[i]["arrangeRecordsResultUuid"] != null) {
+                //treeObj.checkNode(nodes[i], true);
+                treeObj.setChkDisabled(nodes[i], true, false, false);
             }
-            if(parentsData.fromWhere == 'st013' || parentsData.fromWhere == 'st008'){
-                if(nodes[i].electronicRecordStatusUuid == 'true'){
+            if (parentsData.fromWhere == 'st013' || parentsData.fromWhere == 'st008') {
+                if (nodes[i].electronicRecordStatusUuid == 'true') {
                     // 전자인 애들은 disable
                     //treeObj.checkNode(nodes[i], true);
-                    treeObj.setChkDisabled(nodes[i], true,false,false);
+                    treeObj.setChkDisabled(nodes[i], true, false, false);
                 }
-            }else{
-                if(nodes[i].electronicRecordStatusUuid == 'false'){
+            } else {
+                if (nodes[i].electronicRecordStatusUuid == 'false') {
                     // 전자가 아닌애는 disable
                     //treeObj.checkNode(nodes[i], true);
-                    treeObj.setChkDisabled(nodes[i], true,false,false);
-                }    
+                    treeObj.setChkDisabled(nodes[i], true, false, false);
+                }
             }
-            
-            
-            if(nodes[i].children){
+
+
+            if (nodes[i].children) {
                 fnObj.treeView01.initStatus(nodes[i].children);
             }
         }
@@ -280,14 +278,11 @@ fnObj.treeView01 = axboot.viewExtend(axboot.commonView, {
         var data = undefined;
 
 
-        var matchingData = function(key, list)
-        {
+        var matchingData = function (key, list) {
             var retList = new Array();
-            for(var i = 0; i < list.length; i++)
-            {
-                if( key == list[i]["parentUuid"] )
-                {
-                    list[i].children =  matchingData(list[i]["uuid"], list);
+            for (var i = 0; i < list.length; i++) {
+                if (key == list[i]["parentUuid"]) {
+                    list[i].children = matchingData(list[i]["uuid"], list);
                     retList.push(list[i]);
                 }
             }
@@ -297,12 +292,10 @@ fnObj.treeView01 = axboot.viewExtend(axboot.commonView, {
 
         var treeData = undefined;
         _tree = this.convertTreeData(_tree);
-        for(var i = 0; i < _tree.length; i++)
-        {
+        for (var i = 0; i < _tree.length; i++) {
             treeData = _tree[i];
-            if(treeData["parentUuid"] == null)
-            {
-                treeData.children = matchingData(treeData["uuid"],_tree);
+            if (treeData["parentUuid"] == null) {
+                treeData.children = matchingData(treeData["uuid"], _tree);
                 treeList.push(treeData);
             }
         }
@@ -332,8 +325,7 @@ fnObj.treeView01 = axboot.viewExtend(axboot.commonView, {
             })(this.target.zTree, "uuid", _data.uuid);
         }*/
     },
-    updateNode : function(treeNode)
-    {
+    updateNode: function (treeNode) {
         var treeObj = $.fn.zTree.getZTreeObj("ztree");
         treeObj.updateNode(treeNode);
         treeObj.refresh();
@@ -389,23 +381,19 @@ fnObj.treeView01 = axboot.viewExtend(axboot.commonView, {
     deselectNode: function () {
         ACTIONS.dispatch(ACTIONS.TREEITEM_DESELECTE);
     },
-    getSelectedData : function()
-    {
+    getSelectedData: function () {
         var treeObj = $.fn.zTree.getZTreeObj("ztree");
         return treeObj.getSelectedNodes();
     },
-    getNodeByTId : function(tId)
-    {
+    getNodeByTId: function (tId) {
         var treeObj = $.fn.zTree.getZTreeObj("ztree");
         return treeObj.getNodeByTId(tId);
     },
-    moveNode : function(targetNode, treeNode)
-    {
+    moveNode: function (targetNode, treeNode) {
         var treeObj = $.fn.zTree.getZTreeObj("ztree");
         return treeObj.moveNode(targetNode, treeNode, "inner", false);
     },
-    getNodeByParam : function(key, value)
-    {
+    getNodeByParam: function (key, value) {
         var treeObj = $.fn.zTree.getZTreeObj("ztree");
         return treeObj.getNodeByParam(key, value, null);
     }
@@ -477,7 +465,7 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
     initEvent: function () {
         var _this = this;
 
-        if( parentsData.confirmBtn )
+        if (parentsData.confirmBtn)
             $(".btn_main_txt01").text(parentsData.confirmBtn);
         //
         // $(".sltCont").text(parentsData.crrntAgg);
@@ -498,27 +486,28 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
         //        $("#classDescription").css("background","#fffdd6");
         //    }
         // });
-        $(".open_close.collapseAll").click(function(){
+        $(".open_close.collapseAll").click(function () {
             _this.gridObj.collapseAll();
         });
-        $(".btn_exclude").click(function(){
+        $(".btn_exclude").click(function () {
             exportItemList();
         });
-        $(".btn_include").click(function(){
+        $(".btn_include").click(function () {
             importItemList();
         });
-        $(".btn_classify").click(function(){
+        $(".btn_classify").click(function () {
             ACTIONS.dispatch(ACTIONS.PAGE_CLASSIFY);
         });
 
-        $(".close_popup").click(function(){
+        $(".close_popup").click(function () {
             ACTIONS.dispatch(ACTIONS.PAGE_CLOSE);
         });
 
+
         var accordion = {
-            click: function(target) {
+            click: function (target) {
                 var $target = $(target);
-                $target.on('click', function() {
+                $target.on('click', function () {
 
                     if ($(this).hasClass('on')) {
                         slideUp($target);
@@ -569,18 +558,18 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
         this.model.setModel(this.getDefaultData());
         this.target.find('[data-ax-path="key"]').removeAttr("readonly");
     },
-    expandAll:function(){
+    expandAll: function () {
         fnObj.gridView01.gridObj.expandAll();
     },
-    collapseAll:function() {
+    collapseAll: function () {
         fnObj.gridView01.gridObj.collapseAll();
     }
 });
 
 fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
-    tagId : "realgrid02",
-    entityName : "arrangeRecordsResultUuid",
-    primaryKey : "arrangeRecordsResultUuid",
+    tagId: "realgrid02",
+    entityName: "arrangeRecordsResultUuid",
+    primaryKey: "arrangeRecordsResultUuid",
     initView: function () {
         this.initInstance();
         this.setColumnInfo(st00301_p01_02.column_info);
@@ -596,20 +585,20 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
             return false;
         }
     },
-    getRowData: function (){
+    getRowData: function () {
         return this.gridObj.getSelectedData();
     },
     itemClick: function (data, index) {
 
     },
-    onItemChecked: function(grid, itemIndex, checked){
+    onItemChecked: function (grid, itemIndex, checked) {
         // alert("adfaf");
     }
 
 });
 
 fnObj.gridView03 = axboot.viewExtend(axboot.gridView, {
-    tagId : "realgrid03",
+    tagId: "realgrid03",
     initView: function () {
         this.gridObj = new TreeGridWrapper("realgrid03", "/assets/js/libs/realgrid", true);
         this.gridObj.style.body = {
@@ -619,12 +608,12 @@ fnObj.gridView03 = axboot.viewExtend(axboot.gridView, {
         };
         this.gridObj.setGridStyle("100%", "100%")
             .setOption({
-                header: { visible: true },
+                header: {visible: true},
                 lineVisible: false
             });
         this.gridObj.setColumnInfo(cl00301_p01_02.column_info).makeGrid();
         this.gridObj.setDisplayOptions({
-            fitStyle:"evenFill"
+            fitStyle: "evenFill"
         });
 
         this.bindEvent();
@@ -636,17 +625,17 @@ fnObj.gridView03 = axboot.viewExtend(axboot.gridView, {
             return false;
         }
     },
-    getRowData: function (){
+    getRowData: function () {
         return this.gridObj.getSelectedData();
     },
     itemClick: function (data, index) {
     },
     getData: function () {
-        if(this.gridObj.getJsonRows().length < 1) return;
+        if (this.gridObj.getJsonRows().length < 1) return;
 
         var _tree = this.gridObj.getJsonRows();
 
-        for(var i=0;i<_tree.length;i++){
+        for (var i = 0; i < _tree.length; i++) {
             _tree[i]["choiceYn"] = 'Y';
         }
 
@@ -657,10 +646,10 @@ fnObj.gridView03 = axboot.viewExtend(axboot.gridView, {
                 item = {
                     title: n.name,
                     aggregationUuid: n.uuid,
-                    classifyRecordsUuid:n.classifyRecordsUuid == undefined ? '' : n.classifyRecordsUuid,
-                    choiceYn : n.choiceYn == undefined ? 'N' : n.choiceYn
+                    classifyRecordsUuid: n.classifyRecordsUuid == undefined ? '' : n.classifyRecordsUuid,
+                    choiceYn: n.choiceYn == undefined ? 'N' : n.choiceYn
                 };
-                if(n.rows) convertList(n.rows);
+                if (n.rows) convertList(n.rows);
                 _newTree.push(item);
             });
             return _newTree;
@@ -670,11 +659,11 @@ fnObj.gridView03 = axboot.viewExtend(axboot.gridView, {
     },
     setData: function (list) {
         var data = {
-            "children":list
+            "children": list
         }
 
         //실제 여기에
-        this.gridObj.setTreeDataForJSON(data,"children","","icon")
+        this.gridObj.setTreeDataForJSON(data, "children", "", "icon")
         // this.gridObj.setTreeDataForArray(list, "orderKey1");
     },
     getJsonData: function () {
@@ -695,8 +684,8 @@ isDataChanged = function () {
         return false;
     }
 }
-exportItemList = function() {
-    if(fnObj.gridView02.gridObj.getCheckedList().length > 0){
+exportItemList = function () {
+    if (fnObj.gridView02.gridObj.getCheckedList().length > 0) {
         //gridView03 목록에 추가
         fnObj.gridView03.setData(fnObj.gridView02.gridObj.getCheckedList());
         // fnObj.gridView02.gridObj.onItemChecked()
@@ -710,14 +699,167 @@ exportItemList = function() {
         //     else
         //         return false;
         // },["containerName","parentContainerName","containerTypeUuid","controlNumber","provenance","creationStartDate","creationEndDate","description","orderNo"]);
-    }else{
+    } else {
         alert("Select Arrange Item List")
     }
 }
-importItemList = function(){
+importItemList = function () {
     alert("import");
 }
 
-setCheckable = function(rows){
+setCheckable = function (rows) {
     // for()
+}
+
+
+/**
+ * http://www.treejs.cn/v3/demo.php#_516 << 여기 참조
+ * 해당 기능 사용 하기위해서는, frame.js 에 jquery.ztree.exhide.js 꽂아야됨.
+ * @param zTreeId the ztree id used to get the ztree object
+ * @param searchField selector of your input for fuzzy search
+ * @param isHighLight whether highlight the match words, default true
+ * @param isExpand whether to expand the node, default false
+ *
+ * @returns
+ */
+function fuzzySearch(zTreeId, isHighLight, isExpand) {
+    var zTreeObj = $.fn.zTree.getZTreeObj(zTreeId);//get the ztree object by ztree id
+    if (!zTreeObj) {
+        alert("fail to get ztree object");
+    }
+    var nameKey = zTreeObj.setting.data.key.name; //get the key of the node name
+    isHighLight = isHighLight === false ? false : true;//default true, only use false to disable highlight
+    isExpand = isExpand ? true : false; // not to expand in default
+    zTreeObj.setting.view.nameIsHTML = isHighLight; //allow use html in node name for highlight use
+
+    var metaChar = '[\\[\\]\\\\\^\\$\\.\\|\\?\\*\\+\\(\\)]'; //js meta characters
+    var rexMeta = new RegExp(metaChar, 'gi');//regular expression to match meta characters
+
+    // keywords filter function
+    function ztreeFilter(zTreeObj, _keywords, callBackFunc) {
+        if (!_keywords) {
+            _keywords = ''; //default blank for _keywords
+        }
+
+        // function to find the matching node
+        function filterFunc(node) {
+            if (node && node.oldname && node.oldname.length > 0) {
+                node[nameKey] = node.oldname; //recover oldname of the node if exist
+            }
+            zTreeObj.updateNode(node); //update node to for modifications take effect
+            if (_keywords.length == 0) {
+                //return true to show all nodes if the keyword is blank
+                zTreeObj.showNode(node);
+                zTreeObj.expandNode(node, isExpand);
+                return true;
+            }
+            //transform node name and keywords to lowercase
+            if (node[nameKey] && node[nameKey].toLowerCase().indexOf(_keywords.toLowerCase()) != -1) {
+                if (isHighLight) { //highlight process
+                    //a new variable 'newKeywords' created to store the keywords information
+                    //keep the parameter '_keywords' as initial and it will be used in next node
+                    //process the meta characters in _keywords thus the RegExp can be correctly used in str.replace
+                    var newKeywords = _keywords.replace(rexMeta, function (matchStr) {
+                        //add escape character before meta characters
+                        return '\\' + matchStr;
+                    });
+                    node.oldname = node[nameKey]; //store the old name
+                    var rexGlobal = new RegExp(newKeywords, 'gi');//'g' for global,'i' for ignore case
+                    //use replace(RegExp,replacement) since replace(/substr/g,replacement) cannot be used here
+                    node[nameKey] = node.oldname.replace(rexGlobal, function (originalText) {
+                        //highlight the matching words in node name
+                        var highLightText =
+                            '<span style="color: whitesmoke;background-color: darkred;">'
+                            + originalText
+                            + '</span>';
+                        return highLightText;
+                    });
+                    zTreeObj.updateNode(node); //update node for modifications take effect
+                }
+                zTreeObj.showNode(node);//show node with matching keywords
+                return true; //return true and show this node
+            }
+
+            zTreeObj.hideNode(node); // hide node that not matched
+            return false; //return false for node not matched
+        }
+
+        var nodesShow = zTreeObj.getNodesByFilter(filterFunc); //get all nodes that would be shown
+        processShowNodes(nodesShow, _keywords);//nodes should be reprocessed to show correctly
+    }
+
+    /**
+     * reprocess of nodes before showing
+     */
+    function processShowNodes(nodesShow, _keywords) {
+        if (nodesShow && nodesShow.length > 0) {
+            //process the ancient nodes if _keywords is not blank
+            if (_keywords.length > 0) {
+                $.each(nodesShow, function (n, obj) {
+                    var pathOfOne = obj.getPath();//get all the ancient nodes including current node
+                    if (pathOfOne && pathOfOne.length > 0) {
+                        //i < pathOfOne.length-1 process every node in path except self
+                        for (var i = 0; i < pathOfOne.length - 1; i++) {
+                            zTreeObj.showNode(pathOfOne[i]); //show node
+                            zTreeObj.expandNode(pathOfOne[i], true); //expand node
+                        }
+                    }
+                });
+            } else { //show all nodes when _keywords is blank and expand the root nodes
+                var rootNodes = zTreeObj.getNodesByParam('level', '0');//get all root nodes
+                $.each(rootNodes, function (n, obj) {
+                    zTreeObj.expandNode(obj, true); //expand all root nodes
+                });
+            }
+        }
+    }
+
+    // //listen to change in input element
+    // $(searchField).bind('input propertychange', function() {
+    //     var _keywords = $(this).val();
+    //     searchNodeLazy(_keywords); //call lazy load
+    // });
+    //
+    // var timeoutId = null;
+    // var lastKeyword = '';
+    // // excute lazy load once after input change, the last pending task will be cancled
+    // function searchNodeLazy(_keywords) {
+    //     if (timeoutId) {
+    //         //clear pending task
+    //         clearTimeout(timeoutId);
+    //     }
+    //     timeoutId = setTimeout(function() {
+    //         if (lastKeyword === _keywords) {
+    //             return;
+    //         }
+    //         ztreeFilter(zTreeObj,_keywords); //lazy load ztreeFilter function
+    //         // $(searchField).focus();//focus input field again after filtering
+    //         lastKeyword = _keywords;
+    //     }, 500);
+    // }
+
+    $("#leftMenuTreeParam").keydown(function (event) {
+        if (13 == event.keyCode)
+            $("#searchLeftTree").click();
+    })
+
+
+    $("#searchLeftTree").click(function () {
+        var _keywords = $("#leftMenuTreeParam").val();
+        searchNodeLazy(_keywords); //call lazy load
+    });
+
+    var lastKeyword = '';
+
+    // excute lazy load once after input change, the last pending task will be cancled
+    function searchNodeLazy(_keywords) {
+
+        if (lastKeyword === _keywords) {
+            return;
+        }
+        ztreeFilter(zTreeObj, _keywords); //lazy load ztreeFilter function
+        // $(searchField).focus();//focus input field again after filtering
+        lastKeyword = _keywords;
+
+    }
 }
