@@ -1885,6 +1885,7 @@ fnObj.iconView = axboot.viewExtend({
                                             imgTag = $("<img>");
                                             cloneTag.attr("uuid", data["itemComponentUuid"]);
                                             cloneTag.attr("componentUuid", data["componentUuid"]);
+                                            cloneTag.attr("status",data["status"]);
                                             cloneTag.attr("areaUuid", data["areaUuid"]);
                                             cloneTag.attr("label", data["title"]);
                                             cloneTag.attr("type", "comp");
@@ -2070,27 +2071,36 @@ fnObj.iconView = axboot.viewExtend({
         });
 
         $("#componentView").on("click", ">div" ,function (event) {
-            var componentUuid = $(event.currentTarget).attr("componentUuid");
+            var status = $(event.currentTarget).attr("status");
+            if(status == "Fail") {
+                axDialog.alert("변환에 실패하였습니다. 관리자에게 문의하세요");
+                return;
+            }else if(status == "Nothing"){
+                axDialog.alert("미리보기를 지원하지 않는 파일 양식입니다.");
+            }else if(status == "Success"){
+                var componentUuid = $(event.currentTarget).attr("componentUuid");
 
-            if (componentUuid != null && componentUuid != "") {
-                $.ajax({
-                    url :"/api/v1/common/getStreamingUrl",
-                    data : JSON.stringify({componentUuid : componentUuid}),
-                    dataType : "json",
-                    type : "post",
-                    contentType : "application/json",
-                    success : function(res){
-                        if(res.url != undefined && res.url != null){
-                            window.open(res.url, "", "");
-                        }else if(res.componentUuid != undefined && res.componentUuid != null){
-                            window.open("/api/v1/common/video/" + res.componentUuid, "", "");
+                if (componentUuid != null && componentUuid != "") {
+                    $.ajax({
+                        url: "/api/v1/common/getStreamingUrl",
+                        data: JSON.stringify({componentUuid: componentUuid}),
+                        dataType: "json",
+                        type: "post",
+                        contentType: "application/json",
+                        success: function (res) {
+                            if (res.url != undefined && res.url != null) {
+                                window.open(res.url, "", "");
+                            } else if (res.componentUuid != undefined && res.componentUuid != null) {
+                                window.open("/api/v1/common/video/" + res.componentUuid, "", "");
+                            }
+                        },
+                        error: function (a, b, c) {
+                            console.log(a);
                         }
-                    },
-                    error : function (a,b,c)
-                    {
-                        console.log(a);
-                    }
-                })
+                    })
+                }
+            }else {
+                axDialog.alert("변환 작업중입니다. 잠시후에 시도하세요");
             }
         });
     },
