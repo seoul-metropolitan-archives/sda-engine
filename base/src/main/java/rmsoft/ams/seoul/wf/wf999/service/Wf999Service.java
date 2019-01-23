@@ -12,6 +12,7 @@ import io.onsemiro.utils.JsonUtils;
 import io.onsemiro.utils.UUIDUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -148,6 +149,7 @@ public class Wf999Service extends BaseService {
     }
 
     private String aggregationUUID;
+    private File tmpFile;
 
     @Transactional
     public void saveArchiveIngest(String parentAggregationUUID, String unzippedFolderPath) {
@@ -168,7 +170,19 @@ public class Wf999Service extends BaseService {
                     rc002VO.setSystemMeta(rc00201VO);
                     rc002Service.saveIngestAggregation(rc002VO);
 
-                    saveArchiveIngest(aggregationUUID, path.toString());
+                    File dir = new File(unzippedFolderPath + File.separator + aggregationUUID);
+
+                    try {
+                        Files.move(path, dir.toPath());
+                    }catch(Exception ie){
+                        try {
+                            throw new IOException(ie);
+                        } catch (IOException e) {
+                            log.error(e.getMessage());
+                        }
+                    }
+
+                    saveArchiveIngest(aggregationUUID, dir.toString());
 
                 } else {
                     log.info("Item and Component:" + path.getFileName());
@@ -182,12 +196,28 @@ public class Wf999Service extends BaseService {
                     List<Rc00502VO> componentsList = new ArrayList<>();
                     Rc00502VO rc00502VO = new Rc00502VO();
                     rc00502VO.setTitle(getFileNameNoExt(path.getFileName().toString()));
+                    rc00502VO.setFileName(path.getFileName().toString());
+
+                    File file = new File(unzippedFolderPath + File.separator + path.getFileName());
 
                     try{
-                        rc00502VO.setContentsSize((int)Files.size(path));
+                        rc00502VO.setContentsSize((int)Files.size(file.toPath()));
                     }catch(IOException e){
                         log.error("Can not check file size. :: {}", e.getMessage());
                     }
+
+                    String fileName = UUIDUtils.getUUID() + "." + FilenameUtils.getExtension(file.getName());
+
+                    try {
+                        Files.move(file.toPath(), new File(file.getParent() + File.separator + fileName).toPath());
+                    }catch(Exception ie){
+                        try {
+                            throw new IOException(ie);
+                        } catch (IOException e) {
+                            log.error(e.getMessage());
+                        }
+                    }
+
 
                     rc00502VO.setFilePath(path.getParent().toString().replace(contentsPath, ""));
                     rc00502VO.setServiceFilePath(servicePath);
@@ -197,8 +227,7 @@ public class Wf999Service extends BaseService {
                     }
                     //rc00502VO.setServiceFileName(rc00502VO.getOriginalFileName().substring(0, rc00502VO.getOriginalFileName().lastIndexOf( "." )) + ".pdf");
                     rc00502VO.setServiceFileName(path.getFileName().toString().substring(0, path.getFileName().toString().lastIndexOf( "." )) + ".pdf");
-                    rc00502VO.setFileName(path.getFileName().toString());
-                    rc00502VO.setOriginalFileName(path.getFileName().toString());
+                    rc00502VO.setOriginalFileName(fileName);
                     componentsList.add(rc00502VO);
                     rc00501VO.setRc00502VoList(componentsList);
 
