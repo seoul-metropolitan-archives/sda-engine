@@ -34,15 +34,15 @@ var st01301 =
                     sortNo: 3,
                     name: "requestDate",
                     text: "등록일시",
-                    width: 120,
+                    width: 150,
                     editable: false,
                     disable: true,
-                    dataType: "timestamp"
                 },
+
                 {
                     sortNo: 4,
                     name: "exceptStartDate",
-                    text: "제외 날짜 시작",
+                    text: "제외 시작 일자",
                     width: 120,
                     editable: true,
                     dataType : "date",
@@ -54,7 +54,7 @@ var st01301 =
                 {
                     sortNo: 5,
                     name: "exceptEndDate",
-                    text: "제외 날짜 종료",
+                    text: "제외 종료 일자",
                     width: 120,
                     editable: true,
                     dataType : "date",

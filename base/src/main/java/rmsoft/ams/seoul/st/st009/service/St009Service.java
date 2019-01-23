@@ -56,6 +56,8 @@ public class St009Service extends BaseService {
     public Page<St00902VO> getTakeoutRecordResult(Pageable pageable, RequestParams<St00902VO> requestParams) {
         St00902VO st00902VO = new St00902VO();
         st00902VO.setTakeoutRequestUuid(requestParams.getString("takeoutRequestUuid"));
+        st00902VO.setCode(requestParams.getString("code"));
+        st00902VO.setTitle(requestParams.getString("title"));
         return filter(st009Mapper.getTakeoutRecordResult(st00902VO), pageable, "", St00902VO.class);
     }
 
@@ -131,6 +133,7 @@ public class St009Service extends BaseService {
         stTakeoutRequest.setReturnDueDate(orgStTakeoutRequest.getReturnDueDate());
         stTakeoutRequest.setTakeoutDate(orgStTakeoutRequest.getTakeoutDate());
         stTakeoutRequest.setTakeoutPropose(orgStTakeoutRequest.getTakeoutPropose());
+        stTakeoutRequest.setReturnDate(orgStTakeoutRequest.getReturnDate());
         //1이면 직원
         if(vo.getEmployeeYn().equals("Y")){
             stTakeoutRequest.setRequestorUuid(SessionUtils.getCurrentLoginUserUuid());

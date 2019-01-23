@@ -109,8 +109,13 @@ public class St002Service extends BaseService {
             changeStatus = list.get(index).getChangeStatus() == "" ? "Draft" : list.get(index).getChangeStatus();
             orgStContainer = stContainerRepository.findOne(stContainer.getId());
             stContainer.setStatusUuid(CommonCodeUtils.getCodeDetailUuid("CD138",changeStatus));
-            //stContainer.setCreationStartDate(stContainer.getCreationStartDate().replace("-","") );
-            //stContainer.setCreationEndDate(stContainer.getCreationEndDate().replace("-","") );
+            if(stContainer.getCreationStartDate()!=null){
+                stContainer.setCreationStartDate(stContainer.getCreationStartDate().replace("-","") );
+                stContainer.setCreationEndDate(stContainer.getCreationEndDate().replace("-","") );
+            }else{
+                stContainer.setCreationStartDate(orgStContainer.getCreationStartDate());
+                stContainer.setCreationEndDate(orgStContainer.getCreationEndDate());
+            }
             stContainer.setInsertDate(orgStContainer.getInsertDate());
             stContainer.setInsertUuid(orgStContainer.getInsertUuid());
             stContainerRepository.save(stContainer);

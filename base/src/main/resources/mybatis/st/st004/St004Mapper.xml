@@ -96,4 +96,99 @@
             AND FC_AD_CODE_NM(STATUS_UUID) = 'Confirm'
         </where>
     </select>
+
+    <select id="getSelectedContainerList" resultType="St00403VO" parameterType="St00403VO" statementType="PREPARED">
+        SELECT
+        containerUuid,
+        statusUuid,
+        containerName,
+        containerTypeUuid,
+        parentContainerUuid,
+        controlNumber,
+        provenance,
+        creationStartDate,
+        creationEndDate,
+        orderKey,
+        orderKey1,
+        orderNo,
+        parentContainerName,
+        useYn,
+        notes,
+        description,
+        insertUuid,
+        insertDate,
+        updateUuid,
+        updateDate,
+        recordCount,
+        locationCount
+        FROM
+        (
+        SELECT
+        CONTAINER_UUID as containerUuid,
+        STATUS_UUID as statusUuid,
+        CONTAINER_NAME as containerName,
+        CONTAINER_TYPE_UUID as containerTypeUuid,
+        PARENT_CONTAINER_UUID as parentContainerUuid,
+        CONTROL_NUMBER as controlNumber,
+        PROVENANCE as provenance,
+        TO_CHAR(TO_DATE(CREATION_START_DATE),'YYYY-MM-DD') as creationStartDate,
+        TO_CHAR(TO_DATE(CREATION_END_DATE),'YYYY-MM-DD') as creationEndDate,
+        SUBSTR(SYS_CONNECT_BY_PATH(ROWNUM, '.'), 2 , length(SYS_CONNECT_BY_PATH(ROWNUM, '.'))) as orderKey1,
+        (
+        SELECT CONTAINER_NAME
+        FROM ST_CONTAINER I
+        WHERE I.CONTAINER_UUID = A.PARENT_CONTAINER_UUID
+        ) parentContainerName,
+        ORDER_NO as orderNo,
+        ORDER_KEY as orderKey,
+        USE_YN as useYn,
+        DESCRIPTION as description,
+        NOTES as notes,
+        <include refid="Common.UserName"><property name="userUuid" value="INSERT_UUID"/></include> as insertUuid,
+        INSERT_DATE as insertDate,
+        <include refid="Common.UserName"><property name="userUuid" value="UPDATE_UUID"/></include> as updateUuid,
+        UPDATE_DATE as updateDate,
+        (SELECT COUNT(*)
+        FROM ST_ARRANGE_RECORDS_RESULT STARR
+        WHERE STARR.CONTAINER_UUID = A.CONTAINER_UUID) as recordCount,
+        (SELECT COUNT(*)
+        FROM ST_ARRANGE_CONTAINERS_RESULT STARCR
+        WHERE STARCR.CONTAINER_UUID = A.CONTAINER_UUID) as locationCount
+        FROM
+        ST_CONTAINER A
+        START WITH PARENT_CONTAINER_UUID IS NULL
+        CONNECT BY PRIOR CONTAINER_UUID = PARENT_CONTAINER_UUID
+        ORDER SIBLINGS BY ORDER_KEY
+        )
+
+        <where>
+            <if test="orderKey1 != null">
+                (orderKey1 LIKE  #{orderKey1} || '.' || '%'
+                OR orderKey1 =  #{orderKey1})
+            </if>
+            <if test="provenance != null">
+                PROVENANCE = #{provenance}
+            </if>
+            <if test="parentContainerUuid != null">
+                AND  PARENT_CONTAINER_UUID = #{parentContainerUuid}
+            </if>
+            <if test="containerName != null">
+                AND UPPER(containerName) LIKE '%'||#{containerName}||'%'
+            </if>
+            <if test="statusUuid != null">
+                AND statusUuid = #{statusUuid}
+            </if>
+            <if test="controlNumber != null">
+                AND CONTROL_NUMBER = #{controlNumber}
+            </if>
+            <if test="containerTypeUuid != null">
+                AND containerTypeUuid = #{containerTypeUuid}
+            </if>
+            <if test="useYn != null">
+                AND useYn = #{useYn}
+            </if>
+            AND parentContainerUuid is null
+            AND locationCount = 0
+        </where>
+    </select>
 </mapper>

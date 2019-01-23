@@ -24,32 +24,41 @@
     </select>
     <select id="getContainerList" resultType="St00201VO" parameterType="St00201VO" statementType="PREPARED">
         SELECT
-        CONTAINER_UUID as containerUuid,
-        STATUS_UUID as statusUuid,
-        CONTAINER_NAME as containerName,
-        CONTAINER_TYPE_UUID as containerTypeUuid,
-        PARENT_CONTAINER_UUID as parentContainerUuid,
-        CONTROL_NUMBER as controlNumber,
-        PROVENANCE as provenance,
-        TO_CHAR(TO_DATE(CREATION_START_DATE),'YYYY-MM-DD') as creationStartDate,
-        TO_CHAR(TO_DATE(CREATION_END_DATE),'YYYY-MM-DD') as creationEndDate,
+        A.CONTAINER_UUID as containerUuid,
+        A.STATUS_UUID as statusUuid,
+        A.CONTAINER_NAME as containerName,
+        A.CONTAINER_TYPE_UUID as containerTypeUuid,
+        A.PARENT_CONTAINER_UUID as parentContainerUuid,
+        A.CONTROL_NUMBER as controlNumber,
+        A.PROVENANCE as provenance,
+        TO_CHAR(TO_DATE(A.CREATION_START_DATE),'YYYY-MM-DD') as creationStartDate,
+        TO_CHAR(TO_DATE(A.CREATION_END_DATE),'YYYY-MM-DD') as creationEndDate,
         (SELECT CONTAINER_NAME
         FROM ST_CONTAINER I
         WHERE I.CONTAINER_UUID = A.PARENT_CONTAINER_UUID) parentContainerName,
-        ORDER_NO as orderNo,
-        ORDER_KEY as orderKey,
-        USE_YN as useYn,
-        DESCRIPTION as description,
-        NOTES as notes,
+        A.ORDER_NO as orderNo,
+        A.ORDER_KEY as orderKey,
+        A.USE_YN as useYn,
+        A.DESCRIPTION as description,
+        A.NOTES as notes,
         <include refid="Common.UserName"><property name="userUuid" value="INSERT_UUID"/></include> as insertUuid,
-        INSERT_DATE as insertDate,
+        A.INSERT_DATE as insertDate,
         <include refid="Common.UserName"><property name="userUuid" value="UPDATE_UUID"/></include> as updateUuid,
-        UPDATE_DATE as updateDate,
+        A.UPDATE_DATE as updateDate,
         (SELECT COUNT(*)
         FROM ST_ARRANGE_RECORDS_RESULT STARR
-        WHERE STARR.CONTAINER_UUID = A.CONTAINER_UUID) as recordCount
-        FROM
-        ST_CONTAINER A
+        WHERE STARR.CONTAINER_UUID = A.CONTAINER_UUID) as recordCount,
+        STR.REPOSITORY_NAME AS repositoryName,
+        STS.SHELF_NAME AS shelfName,
+        NVL2(STL.ROW_NO, STL.ROW_NO || '행 ' || STL.COLUMN_NO || '열', '' ) as locationName
+        FROM ST_CONTAINER A LEFT OUTER JOIN  ST_ARRANGE_CONTAINERS_RESULT STACR2
+        ON A.CONTAINER_UUID = STACR2.CONTAINER_UUID
+        LEFT OUTER JOIN ST_LOCATION STL
+        ON STACR2.LOCATION_UUID = STL.LOCATION_UUID
+        LEFT OUTER JOIN ST_SHELF STS
+        ON STL.SHELF_UUID = STS.SHELF_UUID
+        LEFT OUTER JOIN ST_REPOSITORY STR
+        ON STS.REPOSITORY_UUID = STR.REPOSITORY_UUID
         <where>
             <if test="provenance != null">
                 PROVENANCE = #{provenance}

@@ -34,6 +34,7 @@
                 AND EXCEPT_START_DATE <![CDATA[<]]> TO_DATE(#{exceptStartDateTo},'yyyy-mm-dd')
             </if>
         </where>
+        ORDER BY requestDate desc
     </select>
 
     <select id="getStExceptRecordResult" resultType="St01302VO" parameterType="St01302VO" statementType="PREPARED">

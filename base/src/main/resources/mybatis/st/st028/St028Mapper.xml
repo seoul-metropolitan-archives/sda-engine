@@ -41,6 +41,7 @@
                 AND A.OUT_ZONE_UUID = #{outZoneUuid}
             </if>
         </where>
+        ORDER BY A.GATE_ID
     </select>
 
 </mapper>

@@ -9,7 +9,8 @@ var repositoryUuid = "";
 var shelfUuid = "";
 var statusUuid = "";
 var gridData = [];
-
+var deletingList =  [];
+var currentLocationUuid = "";
 var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH: function (caller, act, data) {
         axboot.ajax({
@@ -96,16 +97,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         ACTIONS.dispatch(ACTIONS.STATUS_UPDATE,CANCEL_STATUS);
     },
     PAGE_SAVE: function (caller, act, data) {
-        if (!this.gridView02.gridObj.validate()) {
-            return false;
-        } else {
-            if(fnObj.gridView02.gridObj.isDataChanged()){
-                ACTIONS.dispatch(ACTIONS.TOP_GRID_SAVE);
-
-            }
-        }
-
-
+        ACTIONS.dispatch(ACTIONS.TOP_GRID_SAVE);
     },
     TOP_GRID_SAVE: function (caller, act, data) {
         var result = false;
@@ -113,18 +105,20 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         axboot.call({
             type: "PUT",
             url: "/api/v1/st/st004/02/save",
-            data: JSON.stringify(this.gridView02.getData()),
+            data: JSON.stringify(deletingList),
             callback: function (res) {
-                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH01);
+                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH01,{locationUuid : currentLocationUuid});
             }
         })
             .done(function () {
-                fnObj.gridView02.commit();
+                deletingList = [];
+                //fnObj.gridView02.commit();
                 axToast.push(axboot.getCommonMessage("AA007"));
             });
         return result;
     },
     CLOSE_TAB: function (caller, act, data) {
+        ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
     },
     PAGE_ARRANGE: function (caller, act, data) {
         // if(fnObj.formView.getData().aggInContainerName == "" ||fnObj.formView.getData().aggInContainerName == undefined ){
@@ -140,7 +134,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         axboot.modal.open({
             modalType: "ARRANGE_CONTAINER_POPUP",
             width: 1600,
-            height: 800,
+            height: 700,
             header: {
                 title: "ARRANGE"
             },
@@ -156,9 +150,9 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             },
             callback: function (data) {
                 if(this) this.close();
-                if(data){
-                    ACTIONS.dispatch(ACTIONS.PAGE_SEARCH01,data);
-                }
+
+                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH01,{locationUuid : currentLocationUuid});
+
             }
         });
     },
@@ -361,6 +355,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     itemClick: function (data, index) {
         $("input[data-ax-path='selectedRowNo']").val(data["rowNo"]);
         $("input[data-ax-path='selectedColumnNo']").val(data["columnNo"]);
+        currentLocationUuid = data.locationUuid;
         ACTIONS.dispatch(ACTIONS.PAGE_SEARCH01,data);
     },
     getData: function () {
@@ -406,7 +401,7 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
         });
         this.gridObj.gridView.applyCheckables();
         //this.gridObj.itemClick(this.itemClick);
-        //this.removeRowBeforeEvent(this.cancelDelete);
+        this.removeRowBeforeEvent(this.cancelDelete);
 
     },
     isChangeData: function () {
@@ -427,6 +422,50 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
     setData: function (list) {
         this.gridObj.setTreeDataForArray(list, "orderKey1");
     },
+    checkChildren : function(index,checked){
+        this.gridObj.checkChildren(index, checked, true, false);
+    },
+    onItemChecked: function(grid,itemIndex,checked) {
+        fnObj.gridView02.checkChildren(itemIndex,checked);
+    },
+    cancelDelete: function(){
+        var index = fnObj.gridView02.gridObj.getCurrent().dataRow;
+        var state = axboot.commonCodeValueByCodeName("CD138", "Confirm");
+        this.setRunDel(false);
+        if(fnObj.gridView02.gridObj.getSelectedData().statusUuid == state) {
+            // axToast.push(axboot.getCommonMessage("AD011_02"));
+            return;
+        }else if(fnObj.gridView02.gridObj.getSelectedData().choiceYn == "N") {
+            // axToast.push(axboot.getCommonMessage("AD011_02"));
+            return;
+        }else{
+            fnObj.gridView02.gridObj.gridView.commit(true);
+
+            if(fnObj.gridView02.gridObj.getDataProvider().getDescendants(index) != null){ //자식들이 있다면 추가
+                var _deletingList = [];
+                var convertList = function (items) {
+                    items.forEach(function(n){
+                        _deletingList.push(fnObj.gridView02.gridObj.getDataProvider().getJsonRow(n));
+                        if(fnObj.gridView02.gridObj.getDataProvider().getChildren(n)){
+                            convertList(fnObj.gridView02.gridObj.getDataProvider().getChildren(n));
+                        }
+                    })
+                    return _deletingList;
+                };
+
+                deletingList = deletingList.concat(convertList(fnObj.gridView02.gridObj.gridView.getSelectedRows()));
+            }else{
+                deletingList.push(fnObj.gridView02.gridObj.getSelectedData());//최상위 노드 ADD
+            }
+
+            fnObj.gridView02.gridObj.getDataProvider().removeRows(fnObj.gridView02.gridObj.gridView.getSelectedRows(), false);
+            // if(fnObj.gridView03.gridObj.getDataProvider().getDescendants(index) != null){
+            //     fnObj.gridView03.gridObj.getDataProvider().removeRows(fnObj.gridView03.gridObj.getDataProvider().getDescendants(index), false);
+            //
+            // }
+            fnObj.gridView02.gridObj.dispatch("onRemoveRow");
+        }
+    },
 });
 /**
  * [필수]
@@ -436,7 +475,7 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
  */
 
 isDataChanged = function () {
-    if (fnObj.gridView01.isChangeData() == true) {
+    if (fnObj.gridView02.isChangeData() == true) {
         return true;
     } else {
         return false;

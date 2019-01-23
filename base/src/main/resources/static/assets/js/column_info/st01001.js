@@ -10,7 +10,7 @@ var st01001 =
                     editable: false,
                     dataType: "code",
                     required: false,
-                    visible: false
+                    visible: false,
                 },
                 {
                     sortNo: 2,
@@ -18,16 +18,17 @@ var st01001 =
                     text: "Repository Code",
                     width: 120,
                     editable: false,
-                    dataType: "text"
+                    dataType: "text",
+                    disable : true
                 },
                 {
                     sortNo: 3,
                     name: "repositoryName",
                     text: "Repository Name",
                     width: 400,
-                    editable: true,
+                    editable: false,
                     dataType: "text",
-                    required: true
+                    disable : true
                 }
             ]
     }

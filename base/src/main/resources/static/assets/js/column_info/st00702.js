@@ -59,14 +59,37 @@ var st00702 =
                     dataType: "date",
                     disable: true
                 },
+                // {
+                //     name: "initialDate",
+                //     fieldName: "initialDate",
+                //     header: {
+                //         text: "Date/Time Modified",
+                //     },
+                //     width: 140,
+                //     editable: false,
+                //     editor: {
+                //         type: "date",
+                //         datetimeFormat: "yyyy-MM-dd",
+                //     },
+                //     styles: {
+                //         textAlignment: "near",
+                //         background: "#f2f2f2",
+                //         fontSize: 12,
+                //         fontFamily: "nanum",
+                //         datetimeFormat: "yyyy-MM-dd",
+                //         fontBold: false
+                //     }
+                // },
+
                 {
                     sortNo: 6,
                     name: "initialDate",
-                    text: "Initial Date",
+                    text: "Initial Date3",
                     width: 140,
                     editable: false,
                     dataType: "date",
-                    length: 8,
+                    format:'yyyy-mm-dd',
+                    length : 8,
                     disable: true
                 },
                 {

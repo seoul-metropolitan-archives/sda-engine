@@ -42,7 +42,8 @@ var st01302 =
                     width: 400,
                     required: false,
                     editable: false,
-                    dataType: "text"
+                    dataType: "text",
+                    disable: true
                 },
                 {
                     sortNo: 3,
@@ -104,7 +105,8 @@ var st01302 =
                     text: "Description",
                     width: 250,
                     editable: false,
-                    dataType: "richtext"
+                    dataType: "richtext",
+                    disable: true
                 },
                 {
                     sortNo: 10,
@@ -112,7 +114,8 @@ var st01302 =
                     text: "Notes",
                     width: 250,
                     editable: false,
-                    dataType: "richtext"
+                    dataType: "richtext",
+                    disable: true
                 }
             ]
     }

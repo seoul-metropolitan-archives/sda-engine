@@ -21,10 +21,11 @@ var st01802 =
                     editable: false,
                     dataType: "number",
                     visible: false,
+                    disable: true
                 },
                 {
                     sortNo: 2,
-                    width: 140,
+                    width: 180,
                     name: "publishSourceTypeUuid",
                     text: "Publish Source Type",
                     editable: false,
@@ -36,7 +37,7 @@ var st01802 =
                 },
                 {
                     sortNo: 3,
-                    width: 80,
+                    width: 180,
                     name: "publishStatusUuid",
                     text: "Publish Status",
                     editable: false,
@@ -50,7 +51,7 @@ var st01802 =
                     sortNo: 4,
                     name: "publishDate",
                     text: "Publish Date",
-                    width: 140,
+                    width: 180,
                     editable: false,
                     dataType: "date",
                     disable: true
@@ -61,7 +62,8 @@ var st01802 =
                     text: "Tag",
                     width: 250,
                     editable: false,
-                    dataType: "text"
+                    dataType: "text",
+                    disable: true
                 },
             ]
     }

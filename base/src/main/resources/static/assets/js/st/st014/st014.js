@@ -11,7 +11,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         axboot.ajax({
             type: "GET",
             url: "/api/v1/st/st014/01/list01",
-            data: $.extend({}, {pageSize: 1000}, this.formView.getData(),
+            data: $.extend({}, {pageSize: 1000}, this.formView.getData()
                 ,{repositoryUuid: repositoryUuid, shelfUuid: shelfUuid, locationUuid: locationUuid}
             ),
             callback: function (res) {
@@ -324,7 +324,35 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
     },
     initEvent: function () {
         var _this = this;
+        $("input[data-ax-path='parentContainerName']").keyup(function(e){
+            if($(this).val() == ""){
+                parentContainerUuid = "";
+            }
+        });
 
+        $("input[data-ax-path='containerName']").keyup(function(e){
+            if($(this).val() == ""){
+                containerUuid = "";
+            }
+        });
+
+        $("input[data-ax-path='repositoryName']").keyup(function(e){
+            if($(this).val() == ""){
+                repositoryUuid = "";
+            }
+        });
+
+        $("input[data-ax-path='shelfName']").keyup(function(e){
+            if($(this).val() == ""){
+                shelfUuid = "";
+            }
+        });
+
+        $("input[data-ax-path='locationName']").keyup(function(e){
+            if($(this).val() == ""){
+                locationUuid = "";
+            }
+        });
         $("input[data-ax-path='repositoryName']").parents().eq(1).find("a").click(function () {
             var data = {
                 popupCode: "PU137",

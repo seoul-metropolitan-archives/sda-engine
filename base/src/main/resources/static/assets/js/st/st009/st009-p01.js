@@ -34,7 +34,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         axboot.ajax({
             type: "PUT",
             url: "/api/v1/st/st009/01/save",
-            data: JSON.stringify(data),
+            data: JSON.stringify($.extend(data,{"employeeYn":$('input[data-ax-path="employeeYn"]:checked').val()})),
             callback: function (res) {
                 ACTIONS.dispatch(ACTIONS.PAGE_CLOSE, data);
             },

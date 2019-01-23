@@ -29,7 +29,7 @@ var st01003 =
                     width: 200,
                     editable: true,
                     dataType: "text",
-                    required: true
+                    disable : true
                 },
                 {
                     sortNo: 4,
@@ -38,7 +38,7 @@ var st01003 =
                     width: 200,
                     editable: true,
                     dataType: "text",
-                    required: true
+                    disable : true
                 },
                 {
                     sortNo: 5,
@@ -47,7 +47,8 @@ var st01003 =
                     width: 200,
                     editable: true,
                     dataType: "text",
-                    required: true
+                    disable : true
+
                 }
             ]
     }

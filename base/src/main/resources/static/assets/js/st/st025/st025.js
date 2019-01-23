@@ -6,7 +6,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         axboot.ajax({
             type: "GET",
             url: "/api/v1/st/st025/01/list01",
-            data: $.extend({}, {pageSize: 1000}, this.formView.getData(),{parentGateUuid: parentGateUuid}),
+            data: $.extend({}, {pageSize: 1000}, this.formView.getData(),{ gateUuid : parentGateUuid}),
             callback: function (res) {
                 fnObj.gridView01.setData(res.list);
                 fnObj.gridView01.resetCurrent();
