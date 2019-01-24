@@ -19,7 +19,7 @@ public class PrinterUtils {
 
     protected final static Logger logger = LoggerFactory.getLogger(PrinterUtils.class);
 
-    static String sixbitStr = "A#000001,B#000010,C#000011,D#000100,E#000101,F#000110,G#000111,H#001000,I#001001,J#001010,K#001011,L#001100,M#001101,N#001110,O#001111,P#010000,Q#010001,R#010010,S#010011,T#010100,U#010101,V#010110,W#010111,X#011000,Y#011001,Z#011010,0#011011,1#011100,2#011101,3#011110,4#011111,5#100000,6#100001,7#100010,8#100011,9#100100";
+    final static String sixbitStr = "A#000001,B#000010,C#000011,D#000100,E#000101,F#000110,G#000111,H#001000,I#001001,J#001010,K#001011,L#001100,M#001101,N#001110,O#001111,P#010000,Q#010001,R#010010,S#010011,T#010100,U#010101,V#010110,W#010111,X#011000,Y#011001,Z#011010,0#011011,1#011100,2#011101,3#011110,4#011111,5#100000,6#100001,7#100010,8#100011,9#100100";
 
 
     public static class ModelPrinter {
@@ -242,7 +242,7 @@ public class PrinterUtils {
     }
 
     // 라벨
-    public static List<String> asset(Map<String,String> param) {
+    private static List<String> asset(Map<String,String> param) {
         String barcNo = param.get("barcNo");				//바코드번호
         String mkOrgName = param.get("mkOrgName");			//생산기관
         String mkYear = param.get("mkYear");				//생산년도
@@ -281,7 +281,7 @@ public class PrinterUtils {
         return list;
     }
 
-    public static String stringToHex(String s) {
+    private static String stringToHex(String s) {
         String result = "";
 
         for (int i = 0; i < s.length(); i++) {
@@ -291,7 +291,7 @@ public class PrinterUtils {
         return result;
     }
 
-    public static String rpad(String str, int len, String padChar) {
+    private static String rpad(String str, int len, String padChar) {
 
         if (str == null)
             return "";
@@ -306,7 +306,7 @@ public class PrinterUtils {
         return str;
     }
 
-    public static String encSixbit(String str) {
+    private static String encSixbit(String str) {
         String encStr = "";
         StringBuffer sb = new StringBuffer();
 
@@ -338,7 +338,7 @@ public class PrinterUtils {
         return encStr.toUpperCase();
     }
 
-    public static String encSixbit_1(String str)
+    private static String encSixbit_1(String str)
     {
         String encStr = "";
         if( str != null && !"".equals(str) )
@@ -351,7 +351,7 @@ public class PrinterUtils {
         return encStr.toUpperCase();
     }
 
-    public static String get6Bit(String str)
+    private static String get6Bit(String str)
     {
         String sRet = "";
 
@@ -412,7 +412,7 @@ public class PrinterUtils {
         return sRet;
     }
 
-    public static String get2to16(String str)
+    private static String get2to16(String str)
     {
         String sRet = "";
 
