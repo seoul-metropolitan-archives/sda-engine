@@ -619,7 +619,7 @@ fnObj.gridView03 = axboot.viewExtend(axboot.gridView, {
         this.gridObj.setGridStyle("100%", "100%")
             .setOption({
                 header: { visible: true },
-                checkBar: {visible: true},
+                checkBar: {visible: false},
                 indicator: {visible: true},
                 lineVisible: false
             });
