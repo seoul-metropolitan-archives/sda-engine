@@ -176,9 +176,15 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
 
         $("#print").click(function(){
             if(fnObj.gridView01.gridObj.getCheckedList().length > 1 ){
+                fnObj.gridView01.gridObj.getCheckedList().forEach(function (n) {
+                    if(n.status != "Success"){
+                        axDialog.alert("Status 가  Success 인 목록만 선택해주세요 ");
+                        return;
+                    }
+                 });
                 ACTIONS.dispatch(ACTIONS.COMPONENT_PRINT);
             }else{
-
+                axDialog.alert("2개 이상 목록을 선택해 주세요");
             }
         });
 
@@ -467,25 +473,35 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
         return this.gridObj.getSelectedData();
     },
     itemClick: function (data, index) {
-        if (data.componentUuid != null && data.componentUuid != "") {
-            $.ajax({
-                url :"/api/v1/common/getStreamingUrl",
-                data : JSON.stringify({componentUuid:data.componentUuid}),
-                dataType : "json",
-                type : "post",
-                contentType : "application/json",
-                success : function(res){
-                    if(res.url != undefined && res.url != null){
-                        window.open(res.url, "", "");
-                    }else if(res.componentUuid != undefined && res.componentUuid != null){
-                        window.open("/api/v1/common/video/" + res.componentUuid, "", "");
+        var status = data.status;
+        if(status == "Fail") {
+            axDialog.alert("변환에 실패하였습니다. 관리자에게 문의하세요");
+            return;
+        }else if(status == "Nothing"){
+            axDialog.alert("미리보기를 지원하지 않는 파일 양식입니다.");
+        }else if(status == "Success"){
+            if (data.componentUuid != null && data.componentUuid != "") {
+                $.ajax({
+                    url :"/api/v1/common/getStreamingUrl",
+                    data : JSON.stringify({componentUuid:data.componentUuid}),
+                    dataType : "json",
+                    type : "post",
+                    contentType : "application/json",
+                    success : function(res){
+                        if(res.url != undefined && res.url != null){
+                            window.open(res.url, "", "");
+                        }else if(res.componentUuid != undefined && res.componentUuid != null){
+                            window.open("/api/v1/common/video/" + res.componentUuid, "", "");
+                        }
+                    },
+                    error : function (a,b,c)
+                    {
+                        console.log(a);
                     }
-                },
-                error : function (a,b,c)
-                {
-                    console.log(a);
-                }
-            })
+                })
+            }
+        }else {
+            axDialog.alert("변환 작업중입니다. 잠시후에 시도하세요");
         }
     }
 });
