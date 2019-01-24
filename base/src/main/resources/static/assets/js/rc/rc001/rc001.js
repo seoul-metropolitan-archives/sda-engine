@@ -739,27 +739,37 @@ function contextMenuClick(ui, treeData) {
             break;
         case "AGG_TYPE_NORMAL":
         case "AGG_TYPE_TEMP":
+        case "AGG_TO_NON_ELECTRONIC":
+            var sendData = null;
+
             if (ui.cmd == "AGG_TYPE_NORMAL") {
                 selectedData = treeData ? [treeData] : fnObj.iconView.getSelectedData();
                 msg = "Normal Aggregation으로 변경하시겠습니까?";
                 typeUuid = axboot.commonCodeValueByCodeName("CD127", "Normal");
                 typeName = "normal";
+                sendData = {uuid: selectedData[0].uuid, nodeType: typeUuid};
             } else if (ui.cmd == "AGG_TYPE_TEMP") {
                 selectedData = treeData ? [treeData] : fnObj.iconView.getSelectedData();
                 msg = "Temporay Aggregation으로 변경하시겠습니까?";
                 typeUuid = axboot.commonCodeValueByCodeName("CD127", "Temporary");
                 typeName = "temporary";
+                sendData = {uuid: selectedData[0].uuid, nodeType: typeUuid};
+            }  else if (ui.cmd == "AGG_TO_NON_ELECTRONIC") {
+                selectedData = treeData ? [treeData] : fnObj.iconView.getSelectedData();
+                msg = "Non-electronic Record로 변경하시겠습니까?";
+                typeUuid = axboot.commonCodeValueByCodeName("CD204", "Non-electronic Record");
+                typeName = "nonElectronic";
+                sendData = {uuid: selectedData[0].uuid, electronicRecordStatusUuid : typeUuid};
             }
 
             axDialog.confirm({
                 msg: msg
             }, function () {
                 if (this.key == "ok") {
-
                     axboot.ajax({
                         type: "GET",
                         url: "/rc/rc001/updateAggregationType",
-                        data: $.extend({}, {uuid: selectedData[0].uuid, nodeType: typeUuid}, null),
+                        data: $.extend({}, sendData, null),
                         callback: function (res) {
                             if (res.map.isSuccess == true) {
                                 if (res.map.list) {
@@ -775,6 +785,8 @@ function contextMenuClick(ui, treeData) {
                                             });
                                             return;
                                         }
+
+                                        if(typeName == "nonElectronic") return;
 
                                         nodeObj.iconSkin = typeName;
                                         nodeObj.nodeType = typeName;
@@ -940,7 +952,7 @@ function getContextMenu(ui, nodeType) {
                     {title: "View Item", cmd: "ITEM_VIEW", uiIcon: "ui-icon-info"},
                     {title: "----"},
                     {title: "Edit Item", cmd: "ITEM_EDIT", uiIcon: "ui-icon-wrench"},
-                    {title: "Delete Item", cmd: "NODE_DEL", uiIcon: "ui-icon-trash"},
+                    //{title: "Delete Item", cmd: "NODE_DEL", uiIcon: "ui-icon-trash"},
                     {title: "----"},
                     {title: "Export Item", cmd: "ITEM_EXPORT", uiIcon: "ui-icon-trash"},
                 ];
@@ -982,7 +994,8 @@ function getContextMenu(ui, nodeType) {
                     {title: "View Aggregation", cmd: "AGG_VIEW", uiIcon: "ui-icon-info"},
                     {title: "----"},
                     {title: "Edit Aggregation", cmd: "AGG_EDIT", uiIcon: "ui-icon-wrench"},
-                    {title: "Change Temporary Aggregation", cmd: "AGG_TYPE_TEMP", uiIcon: "ui-icon-transferthick-e-w"},
+                    {title: "Change to Temporary Aggregation", cmd: "AGG_TYPE_TEMP", uiIcon: "ui-icon-transferthick-e-w"},
+                    {title: "Change to Non-Electronic Record", cmd: "AGG_TO_NON_ELECTRONIC", uiIcon: "ui-icon-transferthick-e-w"},
                     //{title: "Publishing Aggregation", cmd: "AGG_PUBLISH", uiIcon: "ui-icon-transferthick-e-w" },
                 ];
 
@@ -1001,7 +1014,7 @@ function getContextMenu(ui, nodeType) {
                     {title: "Edit Aggregation", cmd: "AGG_EDIT", uiIcon: "ui-icon-wrench"},
                     {title: "----"},
                     {title: "Delete Aggregation", cmd: "NODE_DEL", uiIcon: "ui-icon-closethick"},
-                    {title: "Change Normal Aggregation", cmd: "AGG_TYPE_NORMAL", uiIcon: "ui-icon-transferthick-e-w"},
+                    {title: "Change to Normal Aggregation", cmd: "AGG_TYPE_NORMAL", uiIcon: "ui-icon-transferthick-e-w"},
                 ];
             } else if (nodeType == "virtual") {
                 menu = [

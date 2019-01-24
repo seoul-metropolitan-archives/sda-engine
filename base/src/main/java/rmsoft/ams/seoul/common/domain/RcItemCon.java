@@ -162,10 +162,6 @@ public class RcItemCon extends SimpleJpaModel<RcItemCon.RcItemConId> {
     @Comment(value = "RULES_CONVERSION_UUID")
     private String rulesConversionUuid;
 
-    @Column(name = "RECORD_SCHEDULE_UUID", length = 36, nullable = true)
-    @Comment(value = "RECORD_SCHEDULE_UUID")
-    private String recordScheduleUuid;
-
     @Column(name = "ACCESS_CONDITION", length = 500, nullable = true)
     @Comment(value = "ACCESS_CONDITION")
     private String accessCondition;

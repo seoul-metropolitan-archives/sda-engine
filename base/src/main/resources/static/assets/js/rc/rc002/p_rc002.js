@@ -437,7 +437,7 @@ fnObj.identificationArea = axboot.viewExtend({
         else
             this.popupCode = "PU123"
 
-        setTimeout(function(){
+        /*setTimeout(function(){
             $("select[data-ax-path='typeUuid']>option").each(function(){
                 if($(this).text().toLowerCase() == _this.nodeType)
                 {
@@ -447,7 +447,7 @@ fnObj.identificationArea = axboot.viewExtend({
                 }
             });
 
-        },50)
+        },50)*/
 
 
     },

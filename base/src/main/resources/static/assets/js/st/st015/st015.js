@@ -3,17 +3,18 @@ var CONFIRM_STATUS = "Confirm";
 var CANCEL_STATUS = "Draft";
 var repositoryUuid = "";
 var shelfUuid = "";
+var repositoryUuidPop ="";
+var shelfUuidPop = "";
+var plannerUuid;
 var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH: function (caller, act, data) {
-        /*beforeData01 = null;
-        beforeData02 = null;
-        ACTIONS.dispatch(ACTIONS.PAGE_SEARCH01);*/
+        ACTIONS.dispatch(ACTIONS.PAGE_SEARCH01);
     },
     PAGE_SEARCH01: function (caller, act, data) {
         axboot.ajax({
             type: "GET",
             url: "/api/v1/st/st015/01/list01",
-            data: $.extend({},  {repositoryCode : $("input[data-ax-path='repositoryCode']").val()},{ repositoryName : $("input[data-ax-path='repositoryName']").val()}),
+            data: $.extend({},this.formView.getData(),  {repositoryUuid : repositoryUuidPop},{ shelfUuid : shelfUuidPop},{plannerUuid : plannerUuid}),
             callback: function (res) {
                 fnObj.gridView01.setData(res.list);
                 fnObj.gridView01.disabledColumn();
@@ -32,7 +33,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         axboot.ajax({
             type: "GET",
             url: "/api/v1/st/st015/01/list02",
-            data: $.extend({}, {repositoryUuid : fnObj.gridView01.getSelectedData().inventoryPlanUuid}),
+            data: $.extend({}, {inventoryPlanUuid : fnObj.gridView01.getSelectedData().inventoryPlanUuid}),
             callback: function (res) {
                 fnObj.gridView02.setData(res.list);
                 fnObj.gridView03.clearData();
@@ -49,7 +50,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         axboot.ajax({
             type: "GET",
             url: "/api/v1/st/st015/01/list03",
-            data: $.extend({}, this.formView.getData(),{shelfUuid : fnObj.gridView02.getSelectedData().shelfUuid}),
+            data: $.extend({}, {shelfUuid : fnObj.gridView02.getSelectedData().shelfUuid}),
             callback: function (res) {
                 fnObj.gridView03.setData(res.list);
             },
@@ -295,6 +296,50 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             }
         });
     },
+    SEARCH_REPOSITORY_SCH_POP: function (caller, act, data) {
+        axboot.modal.open({
+            modalType: "COMMON_POPUP",
+            preSearch: data["preSearch"],
+            sendData: function () {
+                return data;
+            },
+            callback: function (data) {
+                $("input[data-ax-path='repositoryName']").val(data["REPOSITORY_NAME"])
+                repositoryUuidPop = data['REPOSITORY_UUID'];
+                if (this.close) this.close();
+            }
+        });
+    },
+    SEARCH_SHELF_SCH_POP: function (caller, act, data) {
+        axboot.modal.open({
+            modalType: "COMMON_POPUP",
+            preSearch: data["preSearch"],
+            sendData: function () {
+                return data;
+            },
+            callback: function (data) {
+                $("input[data-ax-path='shelfName']").val(data["SHELF_NAME"])
+                shelfUuidPop = data['SHELF_UUID'];
+                statusUuid = data['STATUS_UUID'];
+                if (this.close) this.close();
+            }
+        });
+    },
+    SEARCH_USER_SCH: function (caller, act, data) {
+        axboot.modal.open({
+            modalType: "COMMON_POPUP",
+            preSearch: data["preSearch"],
+            sendData: function () {
+                return data;
+            },
+            callback: function (data) {
+
+                $("input[data-ax-path='plannerName']").val(data['USER_NAME'])
+                plannerUuid = data['USER_UUID'];
+                if (this.close) this.close();
+            }
+        });
+    },
 });
 
 fnObj.pageStart = function () {
@@ -360,7 +405,7 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
     initEvent: function () {
         var _this = this;
 
-        $("input[data-ax-path='arrangedFromDate01']").keyup(function () {
+        $("input[data-ax-path='exceptStartDate']").keyup(function () {
             var date = this.value;
             if (date.match(/^\d{4}$/) !== null) {
                 this.value = date + '-';
@@ -368,9 +413,87 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
                 this.value = date + '-';
             }
         });
-        $("input[data-ax-path='arrangedFromDate01']").keypress(function () {
+        $("input[data-ax-path='exceptStartDate']").keypress(function () {
             if ((event.keyCode < 48) || (event.keyCode > 57)) event.returnValue = false;
         });
+
+        $("input[data-ax-path='exceptEndDate']").keyup(function () {
+            var date = this.value;
+            if (date.match(/^\d{4}$/) !== null) {
+                this.value = date + '-';
+            } else if (date.match(/^\d{4}\-\d{2}$/) !== null) {
+                this.value = date + '-';
+            }
+        });
+        $("input[data-ax-path='exceptEndDate']").keypress(function () {
+            if ((event.keyCode < 48) || (event.keyCode > 57)) event.returnValue = false;
+        });
+
+
+        $("input[data-ax-path='repositoryName']").parents().eq(1).find("a").click(function () {
+            var data = {
+                popupCode: "PU137",
+                searchData: $("input[data-ax-path='repositoryName']").val().trim(),
+                preSearch: false
+            };
+            ACTIONS.dispatch(ACTIONS.SEARCH_REPOSITORY_SCH_POP, data);
+        });
+
+        $("input[data-ax-path='shelfName']").parents().eq(1).find("a").click(function () {
+            if ("" != repositoryUuidPop) {
+                var data = {
+                    popupCode: "PU138",
+                    searchData: repositoryUuidPop,
+                    preSearch: false
+                };
+                ACTIONS.dispatch(ACTIONS.SEARCH_SHELF_SCH_POP, data);
+            }
+        });
+
+        $("input[data-ax-path='repositoryName']").keyup(function(e){
+            if($(this).val() == ""){
+                repositoryUuidPop = "";
+            }
+        });
+
+        $("input[data-ax-path='shelfName']").keyup(function(e){
+            if($(this).val() == ""){
+                shelfUuidPop = "";
+            }
+        });
+
+        $("input[data-ax-path='plannerName']").keyup(function(e){
+            if($(this).val() == ""){
+                plannerUuid = "";
+            }
+        });
+
+
+
+        $(document).on('keyup','#realgrid01_line',function(){
+            if($(this).val() ==""){
+                fnObj.gridView01.gridObj.gridView.commit(true)
+
+                fnObj.gridView01.gridObj.setValue(fnObj.gridView01.gridObj.getCurrent().itemIndex,"locationName","");
+
+                fnObj.gridView01.gridObj.setValue(fnObj.gridView01.gridObj.getCurrent().itemIndex,"locationUuid","");
+            }
+        });
+
+
+        $("input[data-ax-path='plannerName']").parents().eq(1).find("a").click(function () {
+
+            var data = {
+                popupCode: "PU107",
+                searchData: null,
+                preSearch: false
+            };
+            ACTIONS.dispatch(ACTIONS.SEARCH_USER_SCH, data);
+
+        });
+
+
+
     },
     getData: function () {
         var data = this.modelFormatter.getClearData(this.model.get()); // 모델의 값을 포멧팅 전 값으로 치환.
@@ -452,7 +575,18 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
         })
         this.makeGrid();
         this.gridObj.itemClick(this.itemClick);
+        this.gridObj.imageClick(this.imageClick);
         this.removeRowBeforeEvent(this.cancelDelete);
+    },
+    imageClick : function(data,index){
+        if(index.fieldName == "locationName"){
+            var data = {
+                popupCode: "PU147",
+                searchData: fnObj.gridView01.gridObj.getSelectedData().shelfUuid,
+                preSearch: false
+            };
+            ACTIONS.dispatch(ACTIONS.SEARCH_LOCATION_SCH, data);
+        }
     },
     getSelectedData: function () {
         return this.gridObj.getSelectedData()
@@ -483,23 +617,15 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
             };
             ACTIONS.dispatch(ACTIONS.SEARCH_SHELF_SCH, data);
         }else if(index.fieldName == "locationName"){
-            var data = {
+          /*  var data = {
                 popupCode: "PU147",
                 searchData: fnObj.gridView01.gridObj.getSelectedData().shelfUuid,
                 preSearch: false
             };
-            ACTIONS.dispatch(ACTIONS.SEARCH_LOCATION_SCH, data);
+            ACTIONS.dispatch(ACTIONS.SEARCH_LOCATION_SCH, data);*/
         }
 
         ACTIONS.dispatch(ACTIONS.PAGE_SEARCH02);
-    },
-    popupCallback : function(grid,data)
-    {
-        grid.commit(true);
-        var parentData = fnObj.gridView01.gridObj.getSelectedData();
-
-        console.log('test');
-
     },
     cancelDelete: function(){
         var codes = axboot.commonCodeFilter("CD216").codeArr;
