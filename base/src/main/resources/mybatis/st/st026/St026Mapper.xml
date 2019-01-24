@@ -23,6 +23,9 @@
         ST_RFID_MACHINE
         <where>
             1=1
+            <if test="rfidMachineUuid != null">
+                AND RFID_MACHINE_UUID = #{rfidMachineUuid}
+            </if>
             <if test="machineTypeUuid != null">
                 AND MACHINE_TYPE_UUID = #{machineTypeUuid}
             </if>

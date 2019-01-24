@@ -54,20 +54,22 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         // tag 발행
         var selectedData = fnObj.gridView01.getSelectedData();
         if (selectedData == null) {
+            axToast.push("먼저 태그발행 대상을 선택 해 주세요.");
             return;
         }
 
-        // var rows = fnObj.gridView01.gridObj.getCheckedList();
-        // if (!rows || rows.length < 1) return;
-        // var params = rows.filter(function (item) {
-        //     item.changeStatus = data;
-        //     return item.repositoryUuid != "";
-        // });
+
+        var rfidMachineUuid = $(".machine-combo").val( );
+
+        if( rfidMachineUuid == undefined){
+            axToast.push("먼저 프린터를 선택 해 주세요.");
+            return;
+        }
 
         axboot.ajax({
             type: "PUT",
             url: "/api/v1/st/st018/01/saveTagPublish",
-            data: JSON.stringify(selectedData),
+            data: JSON.stringify($.extend({rfidMachineUuid : rfidMachineUuid}, selectedData)),
             callback: function (res) {
                 ACTIONS.dispatch(ACTIONS.PAGE_SEARCH01);
                 ACTIONS.dispatch(ACTIONS.PAGE_SEARCH02);
@@ -298,6 +300,27 @@ fnObj.pageStart = function () {
         success: function () {
         }
     });
+
+    axboot.ajax({
+        type: "GET",
+        url: "/api/v1/st/st026/01/list01",
+
+        // machineTypeUuid : tag발행기만 필터링 해서 가져옴
+        data: $.extend({pageSize: 1000}, {machineTypeUuid : '3FDC9900-C009-4D29-A46B-88B270FA154C'} ),
+        callback: function (res) {
+            console.log( res.list);
+            res.list.forEach(function(value){
+                $(".machine-combo").append($("<option></option>").val( value.rfidMachineUuid ).html( value.machineName ));
+            })
+            // 첫번째 index 를 선택
+            $(".machine-combo").prop('selectedIndex', 0);
+
+        },
+        options: {
+            onError: axboot.viewError
+        }
+    });
+
     _this.formView.initView();
     _this.gridView01.initView();
     _this.gridView02.initView();
@@ -473,7 +496,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
         this.initInstance();
         this.setColumnInfo(st01801.column_info);
         this.gridObj.setOption({
-            checkBar: {visible: true}
+            checkBar: {visible: false}
         })
         this.makeGrid();
         this.gridObj.itemClick(this.itemClick);

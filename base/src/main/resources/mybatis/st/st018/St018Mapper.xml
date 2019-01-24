@@ -97,7 +97,7 @@ FROM RC_AGGREGATION A
         <where>
             1=1
             AND FC_AD_CODE( A.TYPE_UUID ) = 'NORMAL'
-            AND B."level" = 'File'
+            -- AND B."level" = 'File'
             <if test="code != null">
                 <![CDATA[
                    AND B.code  LIKE '%' || #{code} || '%'
@@ -149,4 +149,20 @@ FROM RC_AGGREGATION A
     </select>
 
 
+    <select id="getAggreationForPrint" resultType="St018PrinterVO" parameterType="St018PrinterVO" statementType="PREPARED">
+        SELECT A.AGGREGATION_UUID        aggregationUuid,
+               A.AGGREGATION_CODE        aggregationCode,
+               aggregation_con.CREATOR             creator,
+               aggregation_con.CREATION_START_DATE creationStartDate,
+               code_detail.CODE_NAME     retentionPeriodName -- 보존기간
+        FROM RC_AGGREGATION A
+               INNER JOIN RC_AGGREGATION_CON aggregation_con ON A.AGGREGATION_UUID = aggregation_con.AGGREGATION_UUID
+               -- 보존기간이 없더라도 가져오기 위해서 LEFT JOIN.
+               LEFT JOIN RS_RECORD_SCHEDULE schedule ON schedule.RECORD_SCHEDULE_UUID = aggregation_con.RECORD_SCHEDULE_UUID
+               LEFT JOIN RS_GENERAL_RECORD_SCHEDULE general
+                 ON general.GENERAL_RECORD_SCHEDULE_UUID = schedule.GENERAL_RECORD_SCHEDULE_UUID
+               LEFT JOIN AD_CODE_DETAIL code_detail ON code_detail.CODE_DETAIL_UUID = general.RETENTION_PERIOD_UUID
+        WHERE 1 = 1
+          AND A.AGGREGATION_UUID = #{aggregationUuid}
+    </select>
 </mapper>
