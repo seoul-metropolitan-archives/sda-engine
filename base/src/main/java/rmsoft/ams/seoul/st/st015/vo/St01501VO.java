@@ -21,7 +21,15 @@ public class St01501VO extends BaseVO {
 
     private String exceptStartDate;
 
+  /*  public String getExceptStartDate(){
+        return exceptStartDate.substring(0,10);
+    }*/
+
     private String exceptEndDate;
+
+    /*public String getExceptEndDate(){
+        return exceptEndDate.substring(0,10);
+    }*/
 
     private String repositoryUuid;
 
@@ -44,5 +52,10 @@ public class St01501VO extends BaseVO {
     private String exceptReason;
 
     private String changeStatus;
+
+    private String code;
+
+    private String title;
+
 
 }

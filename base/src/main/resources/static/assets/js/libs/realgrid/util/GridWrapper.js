@@ -1077,6 +1077,18 @@ GridWrapper.prototype.onInnerDrop = function(_event) { this.bind("onInnerDrop",_
     })
 };
 */
+
+GridWrapper.prototype.imageClick = function(_event){
+
+    this.bind("onImageButtonClicked",function(grid){
+        var index = grid.getCurrent();
+        if(-1 == index.dataRow)
+            return ;
+
+        _event(grid.getDataProvider().getJsonRow(index.dataRow),index);
+    });
+
+}
 GridWrapper.prototype.itemClick = function(_event)
 {
     this.bind("onDataCellClicked",function(grid){
@@ -1110,6 +1122,7 @@ GridWrapper.prototype.itemClick = function(_event)
 };
 GridWrapper.prototype.onItemChecked = function(_event) { this.bind("onItemChecked",_event); }
 GridWrapper.prototype.onDataCellClicked = function(_event) { this.bind("onDataCellClicked",_event); }
+GridWrapper.prototype.onImageButtonClicked = function(_event) { this.bind("onImageButtonClicked",_event); }
 GridWrapper.prototype.onEditChange = function(_event) { this.bind("onEditChange",_event); }
 GridWrapper.prototype.onDataCellDblClicked = function(_event) { this.bind("onDataCellDblClicked",_event); }
 //줄 추가 전에 호출되는 함수

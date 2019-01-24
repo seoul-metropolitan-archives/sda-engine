@@ -16,7 +16,7 @@ var st01501 =
                     sortNo: 1,
                     name: "planName",
                     text: "계획서명",
-                    width: 120,
+                    width: 250,
                     editable: true,
                     dataType: "text",
                     required: true
@@ -25,7 +25,7 @@ var st01501 =
                     sortNo: 2,
                     name: "plannerName",
                     text: "담당자",
-                    width: 120,
+                    width: 80,
                     editable: true,
                     dataType: "popup",
                     popupCode : "PU107",
@@ -46,7 +46,7 @@ var st01501 =
                 {
                     sortNo: 4,
                     name: "exceptStartDate",
-                    text: "예정일 시작",
+                    text: "시작 예정일",
                     width: 100,
                     editable: true,
                     dataType : "date",
@@ -58,7 +58,7 @@ var st01501 =
                 {
                     sortNo: 5,
                     name: "exceptEndDate",
-                    text: "예정일 종료",
+                    text: "종료 예정일",
                     width: 100,
                     editable: true,
                     dataType : "date",
@@ -70,7 +70,7 @@ var st01501 =
                 {
                     sortNo: 6,
                     name: "repositoryName",
-                    text: "서가",
+                    text: "서고",
                     width: 120,
                     editable: true,
                     dataType: "popup",
@@ -93,7 +93,7 @@ var st01501 =
                 {
                     sortNo: 8,
                     name: "shelfName",
-                    text: "서고",
+                    text: "서가",
                     width: 120,
                     editable: true,
                     dataType: "popup",
@@ -140,7 +140,7 @@ var st01501 =
                     sortNo: 10,
                     width: 80,
                     name: "statusUuid",
-                    text: "Status",
+                    text: "상태",
                     editable: false,
                     disable : true,
                     required : true,
@@ -159,7 +159,17 @@ var st01501 =
                     visible: true,
                     values: axboot.commonCodeFilter("CD217").codeArr,
                     labels: axboot.commonCodeFilter("CD217").nameArr,
-                    dataType : "combo"
-                }
+                    dataType : "combo",
+                    defaultValue : '904EC536-A5BA-47B8-A3C4-765BCE980AFB'
+                },
+                {
+                    sortNo: 12,
+                    name: "notes",
+                    text: "비고",
+                    width: 150,
+                    editable: true,
+                    dataType: "text",
+                    required: false
+                },
             ]
     }

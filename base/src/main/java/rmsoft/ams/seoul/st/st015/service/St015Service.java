@@ -58,7 +58,16 @@ public class St015Service extends BaseService {
 
     public Page<St01501VO> getStInventoryPlan(Pageable pageable, RequestParams<St01501VO> requestParams) {
         St01501VO st01501VO = new St01501VO();
-        //st02901VO.setGateId(requestParams.getString("gateId"));
+        st01501VO.setPlanName(requestParams.getString("planName"));
+        st01501VO.setRepositoryUuid(requestParams.getString("repositoryUuid"));
+        st01501VO.setShelfUuid(requestParams.getString("shelfUuid"));
+        st01501VO.setCode(requestParams.getString("code"));
+        st01501VO.setTitle(requestParams.getString("title"));
+        st01501VO.setPlannerUuid(requestParams.getString("plannerUuid"));
+        st01501VO.setExceptStartDate(requestParams.getString("exceptStartDate"));
+        st01501VO.setExceptEndDate(requestParams.getString("exceptEndDate"));
+
+
 
         return filter(st015Mapper.getStInventoryPlan(st01501VO), pageable, "", St01501VO.class);
     }
@@ -111,7 +120,7 @@ public class St015Service extends BaseService {
         List<String> resultList = new ArrayList();
 
         for(int i = 0 ; i < list.size(); i++){
-            resultList.add(String.valueOf(list.get(i).get("locationUuid")));
+            resultList.add("'"+String.valueOf(list.get(i).get("locationUuid"))+"'");
         }
 
         return String.join(",", resultList);
@@ -131,7 +140,6 @@ public class St015Service extends BaseService {
                 //서고 서가 행렬단에 있는 location이 없을수도 있다.
                 //location이 없으면 shelf로 검색해서 모든 location에 있는 애들을 전부 가져 와야 한다.
 
-
                 String locationUuid = stInventoryPlan.getLocationUuid();
                 String shelfUuid = stInventoryPlan.getShelfUuid();
 
@@ -145,7 +153,7 @@ public class St015Service extends BaseService {
 
                     StringBuilder sb2 = new StringBuilder();
                     sb2.append(" select CONTAINER_UUID as containerUuid from ST_ARRANGE_CONTAINERS_RESULT ");
-                    sb2.append(" where LOCATION_UUID IN ('"+location+"') ");
+                    sb2.append(" where LOCATION_UUID IN ("+location+") ");
                     List<Map<String, Object>> containerList = jdbcTemplate.queryForList(sb2.toString());
                     for(int i = 0 ; i < containerList.size(); i++){
                         StInventoryContainerResult stInventoryContainerResult = new StInventoryContainerResult();

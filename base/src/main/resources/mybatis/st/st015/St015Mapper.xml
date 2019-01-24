@@ -9,8 +9,8 @@
                a.PLAN_NAME as planName,
                a.PLANNER_UUID as plannerUuid,
                <include refid="Common.UserName"><property name="userUuid" value="PLANNER_UUID"/></include> as plannerName,
-               a.EXCEPT_START_DATE as exceptStartDate,
-               a.EXCEPT_END_DATE as exceptEndDate,
+               TO_CHAR(a.EXCEPT_START_DATE,'YYYY-MM-DD') as exceptStartDate,
+               TO_CHAR(a.EXCEPT_END_DATE,'YYYY-MM-DD') as exceptEndDate,
                a.REPOSITORY_UUID as repositoryUuid,
                b.REPOSITORY_NAME as repositoryName,
                a.SHELF_UUID as shelfUuid,
@@ -20,13 +20,35 @@
                a.PLAN_RESULT_UUID as planResultUuid,
                a.NOTES as notes,
                a.EXCEPT_REASON as exceptReason,
-               (d.ROW_NO || '행 ' || d.COLUMN_NO || '열') as locationName
+               NVL2(d.ROW_NO, d.ROW_NO || '행 ' || d.COLUMN_NO || '열' ,'') as locationName
           from ST_INVENTORY_PLAN a left outer join ST_REPOSITORY b
             ON a.REPOSITORY_UUID = b.REPOSITORY_UUID
             left outer join ST_SHELF c
             ON a.SHELF_UUID = C.SHELF_UUID
             left outer join ST_LOCATION d
             ON a.LOCATION_UUID = d.LOCATION_UUID
+        <where>
+            1=1
+            <if test="planName != null">
+                AND PLAN_NAME LIKE '%' || #{planName} || '%'
+            </if>
+            <if test="plannerUuid != null">
+                AND a.PLANNER_UUID  = #{plannerUuid}
+            </if>
+            <if test="exceptStartDate != null">
+                AND a.EXCEPT_START_DATE <![CDATA[>=]]> TO_DATE(#{exceptStartDate},'yyyy-mm-dd')
+            </if>
+            <if test="exceptEndDate != null">
+                AND a.EXCEPT_END_DATE <![CDATA[<]]> TO_DATE(#{exceptEndDate},'yyyy-mm-dd')
+            </if>
+            <if test="repositoryUuid != null">
+                AND a.REPOSITORY_UUID  = #{repositoryUuid}
+            </if>
+            <if test="shelfUuid != null">
+                AND a.SHELF_UUID  = #{shelfUuid}
+            </if>
+        </where>
+
     </select>
 
     <select id="getStInventoryContainerResult" resultType="St01502VO" parameterType="St01502VO" statementType="PREPARED">
