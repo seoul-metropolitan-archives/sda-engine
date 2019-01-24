@@ -85,6 +85,11 @@ fnObj.popupView = axboot.viewExtend({
         aggregationUuid = data["aggregationUuid"];
         nodeType = data["nodeType"];
 
+        if(nodeType == "item"){
+            $(".excelName").text("Item");
+        }else{
+            $(".excelName").text("Aggregation");
+        }
         this.initEvent();
     },
     initEvent : function()

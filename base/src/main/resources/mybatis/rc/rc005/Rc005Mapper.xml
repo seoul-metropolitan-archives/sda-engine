@@ -82,8 +82,6 @@
         <result property="findingAids" column="findingAids" />
         <result property="rulesConversionUuid" column="rulesConversionUuid" />
         <result property="rulesConversionName" column="rulesConversionName" />
-        <result property="recordScheduleUuid" column="recordScheduleUuid" />
-        <result property="recordScheduleName" column="recordScheduleName" />
         <result property="accessCondition" column="accessCondition" />
         <!--<result property="insertUuid2" column="insertUuid2" />
         <result property="insertDate2" column="insertDate2" />
@@ -175,8 +173,6 @@
             ZZ1.FINDING_AIDS as findingAids,
             ZZ1.RULES_CONVERSION_UUID as rulesConversionUuid,
             FC_AD_CODE_NM(ZZ1.RULES_CONVERSION_UUID) as rulesConversionName,
-            ZZ1.RECORD_SCHEDULE_UUID as recordScheduleUuid,
-            FC_AD_CODE_NM(ZZ1.RECORD_SCHEDULE_UUID) as recordScheduleName,
             ZZ1.ACCESS_CONDITION as accessCondition,
             ZZ1.INSERT_UUID2 as insertUuid2,
             ZZ1.INSERT_DATE2 as insertDate2,
@@ -254,7 +250,6 @@
                 '' as USE_CONDITION,
                 '' as FINDING_AIDS,
                 '' as RULES_CONVERSION_UUID,
-                '' as RECORD_SCHEDULE_UUID,
                 '' as ACCESS_CONDITION,
                 '' as INSERT_UUID2,
                 SYSDATE as INSERT_DATE2,
@@ -339,7 +334,6 @@
                     Z02.USE_CONDITION,
                     Z02.FINDING_AIDS,
                     Z02.RULES_CONVERSION_UUID,
-                    Z02.RECORD_SCHEDULE_UUID,
                     Z02.ACCESS_CONDITION,
                     Z02.INSERT_UUID AS INSERT_UUID2,
                     Z02.INSERT_DATE AS INSERT_DATE2,

@@ -5,6 +5,7 @@ import io.onsemiro.core.api.response.Responses;
 import io.onsemiro.utils.ModelMapperUtils;
 import io.onsemiro.utils.UUIDUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FilenameUtils;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -84,10 +85,10 @@ public class CommonController extends BaseController {
             //System.out.println(streamingUrl+":"+streamingPort+streamingContext+streamingParam+prefix+"/"]] +path+rcComponent.getFileName());
             String path = rcComponent.getServiceFilePath().replaceAll("\\\\\\\\", "/");
 
-            if("mp4,mkv,avi,mov,wmv".indexOf(rcComponent.getFileFormatUuid().toLowerCase()) > -1){
+
+            if("mp4,mkv,avi,mov,wmv".indexOf(FilenameUtils.getExtension(rcComponent.getFileName()).toLowerCase()) > -1){
                 Map<String, Object> response = new HashMap<String, Object>();
                 response.put("componentUuid", rcComponent.getComponentUuid());
-
                 return response;
             }
 

@@ -23,15 +23,6 @@ var cl00302 =
                 },
                 {
                     sortNo: 1,
-                    width:200,
-                    name: "title",
-                    text: "Title",
-                    editable: false,
-                    dataType: "code",
-                    required: false,
-                },
-                {
-                    sortNo: 2,
                     width: 120,
                     name: "statusUuid",
                     text: "Status",
@@ -40,6 +31,15 @@ var cl00302 =
                     labels: axboot.commonCodeFilter("CD111").nameArr,
                     dataType : "combo",
                     disable:true
+                },
+                {
+                    sortNo: 2,
+                    width:200,
+                    name: "title",
+                    text: "Title",
+                    editable: false,
+                    dataType: "code",
+                    required: false
                 },
                 {
                     sortNo: 5,

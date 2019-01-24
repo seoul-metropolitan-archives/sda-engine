@@ -8,7 +8,9 @@ import io.onsemiro.utils.DateUtils;
 import io.onsemiro.utils.ModelMapperUtils;
 import io.onsemiro.utils.SessionUtils;
 import io.onsemiro.utils.UUIDUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import rmsoft.ams.seoul.common.domain.*;
@@ -28,6 +30,7 @@ import rmsoft.ams.seoul.utils.CommonCodeUtils;
 import rmsoft.ams.seoul.utils.CommonMessageUtils;
 
 import javax.inject.Inject;
+import java.io.File;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -42,6 +45,9 @@ import java.util.Map;
 @Service("Rc001Service")
 public class Rc001Service extends BaseService
 {
+    @Value("${repository.streamDoc}")
+    private String servicePath;
+
     @Autowired
     private Rc001Mapper rc001Mapper;
 
@@ -68,6 +74,9 @@ public class Rc001Service extends BaseService
 
     @Autowired
     private RcAggregationRepository rcAggregationRepository;
+
+    @Autowired
+    private RcAggregationConRepository rcAggregationConRepository;
 
     @Autowired
     private JobConvRepository jobConvRepository;
@@ -468,30 +477,46 @@ public class Rc001Service extends BaseService
 
         Map rtnMap = new HashMap();
 
-        for (Rc00101VO item : aggList) {
-            if((item.getAggregationCnt() > 0 && item.getChildCnt() > 0)){
-                rtnMap.put("isSuccess", false);
-                rtnMap.put("message", "Normal Aggregation으로 변경시 Item은 최하위 Aggregation에 위치해야합니다.");
-                return Responses.MapResponse.of(rtnMap);
-            }else if(item.getClassifyCnt() > 0){
-                rtnMap.put("isSuccess", false);
-                rtnMap.put("message", "Classify Result에 등록된 정보가 있습니다.");
-                return Responses.MapResponse.of(rtnMap);
+        if(param.getElectronicRecordStatusUuid() == null) {
+            for (Rc00101VO item : aggList) {
+                if ((item.getAggregationCnt() > 0 && item.getChildCnt() > 0)) {
+                    rtnMap.put("isSuccess", false);
+                    rtnMap.put("message", "Normal Aggregation으로 변경시 Item은 최하위 Aggregation에 위치해야합니다.");
+                    return Responses.MapResponse.of(rtnMap);
+                } else if (item.getClassifyCnt() > 0) {
+                    rtnMap.put("isSuccess", false);
+                    rtnMap.put("message", "Classify Result에 등록된 정보가 있습니다.");
+                    return Responses.MapResponse.of(rtnMap);
+                }
+            }
+
+            for (Rc00101VO item : aggList) {
+                RcAggregation rcAggregation = new RcAggregation();
+
+                rcAggregation.setAggregationUuid(item.getUuid());
+                RcAggregation orgItem = rcAggregationRepository.findOne(rcAggregation.getId());
+
+                orgItem.setTypeUuid(param.getNodeType());
+                orgItem.setInsertDate(orgItem.getInsertDate());
+                orgItem.setInsertUuid(orgItem.getInsertUuid());
+
+                rcAggregationRepository.save(orgItem);
+            }
+        }else{
+            for (Rc00101VO item : aggList) {
+                RcAggregationCon rcAggregationCon = new RcAggregationCon();
+
+                rcAggregationCon.setAggregationUuid(item.getUuid());
+                RcAggregationCon orgItem = rcAggregationConRepository.findOne(rcAggregationCon.getId());
+
+                orgItem.setElectronicRecordStatusUuid(param.getElectronicRecordStatusUuid());
+                orgItem.setInsertDate(orgItem.getInsertDate());
+                orgItem.setInsertUuid(orgItem.getInsertUuid());
+
+                rcAggregationConRepository.save(orgItem);
             }
         }
 
-
-        for (Rc00101VO item : aggList) {
-            RcAggregation rcAggregation = new RcAggregation();
-
-            rcAggregation.setAggregationUuid(item.getUuid());
-            RcAggregation orgItem = rcAggregationRepository.findOne(rcAggregation.getId());
-            orgItem.setTypeUuid(param.getNodeType());
-            orgItem.setInsertDate(orgItem.getInsertDate());
-            orgItem.setInsertUuid(orgItem.getInsertUuid());
-
-            rcAggregationRepository.save(orgItem);
-        }
 
         rtnMap.put("isSuccess", true);
         rtnMap.put("list", aggList);
@@ -547,6 +572,15 @@ public class Rc001Service extends BaseService
             String componentUuid = UUIDUtils.getUUID();     //component Uuid생성
             String itemUuid = param.get(idx).getItemUuid();
 
+            rcComponent.setServiceFilePath(servicePath);
+            if(isWindows()){
+                rcComponent.setServiceFilePath(rcComponent.getServiceFilePath().replace(File.separator, "/"));
+            }
+
+            if("doc,docx,xls,xlsx,ppt,pptx,hwp,htm,html,dwg,dwf,jpg,bmp,tiff,gif".indexOf(FilenameUtils.getExtension(rcComponent.getOriginalFileName()).toLowerCase()) > -1){
+                rcComponent.setServiceFileName(rcComponent.getOriginalFileName().substring(0, rcComponent.getOriginalFileName().lastIndexOf( "." )) + ".pdf");
+            }
+
             rcComponent.setComponentUuid(componentUuid);
             rcComponentRepository.save(rcComponent);
 
@@ -558,14 +592,15 @@ public class Rc001Service extends BaseService
             rcItemComponent.setItemUuid(itemUuid);
             rcItemComponentRepository.save(rcItemComponent);
 
-            JobConv jobConv = new JobConv();
-            jobConv.setJobid(componentUuid);
-            jobConv.setDestfile("sftp://" + rcComponent.getServiceFilePath() + "/" + rcComponent.getServiceFileName());
-            jobConv.setSrcfile("sftp://" + rcComponent.getFilePath() + "/" + rcComponent.getOriginalFileName());
-            jobConv.setJobstatus("W");
-            jobConv.setReqdate(Timestamp.valueOf(DateUtils.convertToString(LocalDateTime.now(),DateUtils.DATE_TIME_PATTERN)));
-            jobConvRepository.save(jobConv);
-
+            if(!"".equals(rcComponent.getServiceFileName()) && null != rcComponent.getServiceFileName()){
+                JobConv jobConv = new JobConv();
+                jobConv.setJobid(componentUuid);
+                jobConv.setDestfile("sftp://" + rcComponent.getServiceFilePath() + "/" + rcComponent.getServiceFileName());
+                jobConv.setSrcfile("sftp://" + rcComponent.getFilePath() + "/" + rcComponent.getOriginalFileName());
+                jobConv.setJobstatus("W");
+                jobConv.setReqdate(Timestamp.valueOf(DateUtils.convertToString(LocalDateTime.now(),DateUtils.DATE_TIME_PATTERN)));
+                jobConvRepository.save(jobConv);
+            }
             idx++;
         }
 
@@ -587,5 +622,14 @@ public class Rc001Service extends BaseService
         pageData.setList(rc001Mapper.getSearchList(param));
 
         return pageData;
+    }
+
+    /**
+     * 서버OS의 Window 여부 리턴
+     * @return Boolean
+     */
+    private boolean isWindows() {
+        String os = System.getProperty("os.name").toLowerCase();
+        return (os.indexOf("win") >= 0);
     }
 }

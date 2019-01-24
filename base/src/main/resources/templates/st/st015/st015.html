@@ -26,26 +26,26 @@
                     <dl>
                         <dt class="w150">계획서명</dt>
                         <dd>
-                            <input type=text style="width:135px" data-ax-path="controlNumber">
+                            <input type=text style="width:135px" data-ax-path="planName">
                         </dd>
-                        <th:block layout:insert="~{/fragments/page-buttons :: searchInput ('Repository','parentContainerName')}"/>
-                        <th:block layout:insert="~{/fragments/page-buttons :: searchInput ('Shelf','parentContainerName')}"/>
+                        <th:block layout:insert="~{/fragments/page-buttons :: searchInput ('서고','repositoryName')}"/>
+                        <th:block layout:insert="~{/fragments/page-buttons :: searchInput ('서가','shelfName')}"/>
                         <dt class="w150">Aggregation Code</dt>
                         <dd>
-                            <input type=text style="width:135px" data-ax-path="aggregationCode">
+                            <input type=text style="width:135px" data-ax-path="code">
                         </dd>
                         <dt class="w150">Aggregation Title</dt>
                         <dd>
-                            <input type=text style="width:135px" data-ax-path="aggregationTitle">
+                            <input type=text style="width:135px" data-ax-path="title">
                         </dd>
                     </dl>
                     <dl>
-                        <th:block layout:insert="~{/fragments/page-buttons :: searchInput ('작성자','parentContainerName')}"/>
+                        <th:block layout:insert="~{/fragments/page-buttons :: searchInput ('작성자','plannerName')}"/>
                         <dt class="w130">계획 일자</dt>
                         <dd class="w_auto">
                             <div class="input-group" data-ax5picker="date">
                                 <div class="cld_box">
-                                    <input type="text" data-ax-path="arrangedFromDate01"
+                                    <input type="text" data-ax-path="exceptStartDate"
                                            style="ime-mode:disabled;"
                                            placeholder="YYYY-MM-DD" maxlength="10">
                                     <img title="calendar" class="ui-datepicker-trigger" alt="..."
@@ -53,7 +53,7 @@
                                 </div>
                                 ~
                                 <div class="cld_box">
-                                    <input type="text" data-ax-path="arrangedToDate01"
+                                    <input type="text" data-ax-path="exceptEndDate"
                                            style="ime-mode:disabled;"
                                            placeholder="YYYY-MM-DD" maxlength="10">
                                     <img title="calendar" class="ui-datepicker-trigger" alt="..."
