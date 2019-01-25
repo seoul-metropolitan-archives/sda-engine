@@ -268,6 +268,11 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         } else {
             return false;
         }
+    },
+    EXCEL_DOWN01 : function(caller, act, data){
+        var API_SERVER = "http://localhost:8888/";
+
+        location.href = API_SERVER + "/api/v1/st/st010/01/excelDown";
     }
 });
 
@@ -331,6 +336,12 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
     },
     initEvent: function () {
         var _this = this;
+
+        $('.btn_excelDown02').on('click',function(){
+            ACTIONS.dispatch(ACTIONS.EXCEL_DOWN01);
+        });
+
+
     },
     getData: function () {
         var data = this.modelFormatter.getClearData(this.model.get()); // 모델의 값을 포멧팅 전 값으로 치환.

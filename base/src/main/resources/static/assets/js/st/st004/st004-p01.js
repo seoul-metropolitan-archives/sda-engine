@@ -302,5 +302,12 @@ exportItemList = function() {
     }
 }
 importItemList = function(){
-    fnObj.gridView04.gridObj.dataProvider.removeRow(0);
+    var checkRow = fnObj.gridView04.gridObj.getCheckedRows();
+    if(checkRow.length > 0){
+        for(var i = 0 ; i < checkRow.length;i++){
+            fnObj.gridView04.gridObj.dataProvider.removeRow(checkRow[i]);
+        }
+
+    }
+
 }

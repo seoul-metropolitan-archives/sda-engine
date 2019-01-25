@@ -17,7 +17,9 @@
                c.SHELF_NAME as shelfName,
                a.LOCATION_UUID as locationUuid,
                a.STATUS_UUID as statusUuid,
+               FC_AD_CODE_NM(a.STATUS_UUID) as statusName,
                a.PLAN_RESULT_UUID as planResultUuid,
+               FC_AD_CODE_NM(a.PLAN_RESULT_UUID) as planResultName,
                a.NOTES as notes,
                a.EXCEPT_REASON as exceptReason,
                NVL2(d.ROW_NO, d.ROW_NO || '행 ' || d.COLUMN_NO || '열' ,'') as locationName

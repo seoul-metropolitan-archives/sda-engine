@@ -141,6 +141,11 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
 
         });
 
+        $("input[data-ax-path='parentGateName']").keyup(function(e){
+            if($(this).val() == ""){
+                parentGateUuid = "";
+            }
+        });
 
     },
     getData: function () {
