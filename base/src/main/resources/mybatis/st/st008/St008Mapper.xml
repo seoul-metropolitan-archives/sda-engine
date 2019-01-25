@@ -37,10 +37,7 @@
                    OUTSOURCING_PHONE outsourcingPhone
 
             FROM ST_TAKEOUT_REQUEST request
-              INNER JOIN AC_USER_GROUP_USER group_user
-                ON USER_UUID = request.REQUESTOR_UUID
-              INNER JOIN AC_USER_GROUP user_group
-                ON user_group.USER_GROUP_UUID = group_user.USER_GROUP_UUID
+
               INNER JOIN AC_USER ac_user
                 ON ac_user.USER_UUID = request.REQUESTOR_UUID
             <where>
@@ -86,7 +83,7 @@
                (location.ROW_NO || '행 ' || location.COLUMN_NO || '열') as locationName -- 행렬단
 
         FROM ST_TAKEOUT_RECORD_RESULT record_result
-                  INNER JOIN
+                  LEFT JOIN
                       ST_ARRANGE_RECORDS_RESULT etc
                   ON etc.AGGREGATION_UUID = record_result.AGGREGATION_UUID
                   LEFT JOIN ST_ARRANGE_CONTAINERS_RESULT acr

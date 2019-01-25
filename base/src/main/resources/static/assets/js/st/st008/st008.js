@@ -343,6 +343,17 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             }
         });
     },
+    EXCEL_DOWN01 : function(caller, act, data){
+
+
+        var selectedRow = fnObj.gridView01.getSelectedData();
+        if (selectedRow == null) {
+            axToast.push("출력할 대상을 선택 해 주세요.");
+            return;
+        }
+        var param = $.param( selectedRow );
+        location.href = "/api/v1/st/st008/01/excelDown?"+param;
+    }
 });
 
 fnObj.pageStart = function () {
@@ -397,6 +408,10 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
     },
     initEvent: function () {
         var _this = this;
+        $('.excelDown').on('click',function(){
+            ACTIONS.dispatch(ACTIONS.EXCEL_DOWN01);
+        });
+
         $("input[data-ax-path='parentContainerName']").keyup(function(e){
             if($(this).val() == ""){
                 parentContainerUuid = "";
