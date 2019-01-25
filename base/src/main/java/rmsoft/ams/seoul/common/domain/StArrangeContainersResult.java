@@ -1,6 +1,7 @@
 package rmsoft.ams.seoul.common.domain;
 
 import io.onsemiro.core.domain.BaseJpaModel;
+import io.onsemiro.core.domain.SimpleJpaModel;
 import lombok.*;
 import org.apache.ibatis.type.Alias;
 import org.hibernate.annotations.DynamicInsert;
@@ -19,7 +20,7 @@ import java.sql.Timestamp;
 @Table(name = "ST_ARRANGE_CONTAINERS_RESULT")
 @IdClass(StArrangeContainersResult.StArrangeContainersResultId.class)
 @Alias("StArrangeContainersResult")
-public class StArrangeContainersResult extends BaseJpaModel<StArrangeContainersResult.StArrangeContainersResultId> {
+public class StArrangeContainersResult extends SimpleJpaModel<StArrangeContainersResult.StArrangeContainersResultId> {
 
 	@Id
 	@Column(name = "ARRANGE_CONTAINERS_RESULT_UUID", length = 36, nullable = false)
@@ -36,13 +37,6 @@ public class StArrangeContainersResult extends BaseJpaModel<StArrangeContainersR
 
 	@Column(name = "ARRANGED_DATE", nullable = false)
 	private Timestamp arrangedDate;
-
-	@Column(name = "DESCRIPTION", length = 4000)
-	private String description;
-
-	@Column(name = "NOTES", length = 4000)
-	private String notes;
-
 
 	@Override
 	public StArrangeContainersResultId getId() {

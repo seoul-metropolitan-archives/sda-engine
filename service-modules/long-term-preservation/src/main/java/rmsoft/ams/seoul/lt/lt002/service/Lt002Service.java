@@ -64,7 +64,8 @@ public class Lt002Service extends BaseService {
                 }else if(saveItem.isModified()){
                     orgItem = repository.findOne(saveItem.getId());
 
-                    if( !saveItem.getSoftwareName().equals(orgItem.getSoftwareName()) || !saveItem.getSoftwareVersion().equals(orgItem.getSoftwareVersion())){
+                    if( !saveItem.getSoftwareName().equals(orgItem.getSoftwareName()) ||
+                            (saveItem.getSoftwareVersion() != null && !saveItem.getSoftwareVersion().equals(orgItem.getSoftwareVersion()))){
                         if (mapper.checkDelete(paramVO) > 0) {
                             return ApiResponse.error(ApiStatus.SYSTEM_ERROR, CommonMessageUtils.getMessage("AA003"));
                         }

@@ -594,10 +594,12 @@ function updateRecord(targetData, parentNode, isTree) {
                     $("#iconListArea >div.selected").remove();
                 }
 
-                if (targetNodeType != "item") {
-                    targetNode = fnObj.treeView01.getNodeByParam("uuid", targetUuid);
-                    fnObj.treeView01.moveNode(parentNode, targetNode);
-                }
+                $.each(selectedData, function (idx, item) {
+                    if(item.nodeType == "item") return true;
+
+                    var currentNode = fnObj.treeView01.getNodeByParam("uuid", item.uuid);
+                    fnObj.treeView01.moveNode(parentNode, currentNode);
+                });
 
                 axboot.getCommonMessage("AA007");
             }
@@ -943,19 +945,42 @@ function getContextMenu(ui, nodeType) {
     //컨트롤 누르고 클릭 시 해당 아이템들이 다중으로 선택되어야된다
     if ($(ui.target).attr("id") != "iconListArea") {
         if (fnObj.iconView.selectedItems && fnObj.iconView.selectedItems.length > 1) {
-            menu = [
-                {title: "Delete Items", cmd: "NODE_DEL", uiIcon: "ui-icon-trash"},
-            ];
+            var isNormal = false;
+
+            fnObj.iconView.selectedItems.forEach(function (item, idx) {
+                if (item.nodeType == "normal") {
+                    isNormal = true;
+                    return false;
+                }
+            });
+
+            if(!isNormal) {
+                menu = [
+                    {title: "Delete Items/Aggregations", cmd: "NODE_DEL", uiIcon: "ui-icon-trash"},
+                ];
+            }else{
+                menu = [];
+            }
         } else {
             if (nodeType == "item") {
-                menu = [
-                    {title: "View Item", cmd: "ITEM_VIEW", uiIcon: "ui-icon-info"},
-                    {title: "----"},
-                    {title: "Edit Item", cmd: "ITEM_EDIT", uiIcon: "ui-icon-wrench"},
-                    //{title: "Delete Item", cmd: "NODE_DEL", uiIcon: "ui-icon-trash"},
-                    {title: "----"},
-                    {title: "Export Item", cmd: "ITEM_EXPORT", uiIcon: "ui-icon-trash"},
-                ];
+                if(fnObj.naviView.getCurrent().nodeType == "normal") {
+                    menu = [
+                        {title: "View Item", cmd: "ITEM_VIEW", uiIcon: "ui-icon-info"},
+                        {title: "----"},
+                        {title: "Edit Item", cmd: "ITEM_EDIT", uiIcon: "ui-icon-wrench"},
+                        {title: "----"},
+                        {title: "Export Item", cmd: "ITEM_EXPORT", uiIcon: "ui-icon-arrowreturnthick-1-e"},
+                    ];
+                }else if(fnObj.naviView.getCurrent().nodeType == "temp"){
+                    menu = [
+                        {title: "View Item", cmd: "ITEM_VIEW", uiIcon: "ui-icon-info"},
+                        {title: "----"},
+                        {title: "Edit Item", cmd: "ITEM_EDIT", uiIcon: "ui-icon-wrench"},
+                        {title: "Delete Item", cmd: "NODE_DEL", uiIcon: "ui-icon-trash"},
+                        {title: "----"},
+                        {title: "Export Item", cmd: "ITEM_EXPORT", uiIcon: "ui-icon-arrowreturnthick-1-e"},
+                    ];
+                }
             } else if (nodeType == "normal") {
                 var treeData = null;
                 var selectedData = null;
@@ -1005,7 +1030,7 @@ function getContextMenu(ui, nodeType) {
                     menu.push({
                         title: "Classify Records",
                         cmd: "AGG_CLASSIFY_RECORDS",
-                        uiIcon: "ui-icon-transferthick-e-w"
+                        uiIcon: "ui-icon-disk"
                     });
                 }
             } else if (nodeType == "temporary") {
@@ -1013,7 +1038,7 @@ function getContextMenu(ui, nodeType) {
                     {title: "View Aggregation", cmd: "AGG_VIEW", uiIcon: "ui-icon-info"},
                     {title: "Edit Aggregation", cmd: "AGG_EDIT", uiIcon: "ui-icon-wrench"},
                     {title: "----"},
-                    {title: "Delete Aggregation", cmd: "NODE_DEL", uiIcon: "ui-icon-closethick"},
+                    {title: "Delete Aggregation", cmd: "NODE_DEL", uiIcon: "ui-icon-trash"},
                     {title: "Change to Normal Aggregation", cmd: "AGG_TYPE_NORMAL", uiIcon: "ui-icon-transferthick-e-w"},
                 ];
             } else if (nodeType == "virtual") {
@@ -1021,7 +1046,7 @@ function getContextMenu(ui, nodeType) {
                     {title: "View Aggregation", cmd: "AGG_VIEW", uiIcon: "ui-icon-info"},
                     {title: "----"},
                     {title: "Edit Aggregation", cmd: "AGG_EDIT", uiIcon: "ui-icon-wrench"},
-                    {title: "Delete Aggregation", cmd: "NODE_DEL", uiIcon: "ui-icon-closethick"},
+                    {title: "Delete Aggregation", cmd: "NODE_DEL", uiIcon: "ui-icon-trash"},
                 ];
             }
         }
@@ -2229,7 +2254,11 @@ fnObj.iconView = axboot.viewExtend({
                 return $('#explorerDragWrapper').append($('#iconListArea >div.selected').clone());
             },
             start: function (event, ui) {
-                $('[data-z-tree="tree-view-01"] [treenode_a]').droppable("option", "accept", "#iconListArea >div");
+                try {
+                    $('[data-z-tree="tree-view-01"] [treenode_a]').droppable("option", "accept", "#iconListArea >div");
+                }catch(e){
+                    console.log(e);
+                }
             }
         });
 
@@ -2337,7 +2366,11 @@ fnObj.iconView = axboot.viewExtend({
             tolerance: "pointer",
             drop: function (event, ui) {
                 // Record 영역에 드랍 될 때 트리영역 드랍되는 것을 방지
-                $('[data-z-tree="tree-view-01"] [treenode_a]').droppable("option", "accept", "#iconListArea .noAccept");
+                try{
+                    $('[data-z-tree="tree-view-01"] [treenode_a]').droppable("option", "accept", "#iconListArea .noAccept");
+                }catch(e){
+                    console.log(e);
+                }
 
                 // Normal/Virtual Aggregation으로는 Component 2 Item 생성 불가
                 if (fnObj.naviView.getCurrent()["nodeType"] == "normal" || fnObj.naviView.getCurrent()["nodeType"] == "virtual") {
@@ -2584,6 +2617,8 @@ fnObj.treeView01 = axboot.viewExtend(axboot.commonView, {
                         greedy: true,
                         hoverClass: "curSelectedNode",
                         drop: function (event, ui) {
+                            $('#explorerDragWrapper').remove();
+
                             var parentNode = fnObj.treeView01.getNodeByTId($(this).parent().attr("id"));
 
                             if (!updateRecord(ui.draggable, parentNode)) {

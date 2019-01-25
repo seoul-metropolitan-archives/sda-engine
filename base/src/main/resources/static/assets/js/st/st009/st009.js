@@ -66,7 +66,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             var codes = axboot.commonCodeFilter("CD208").codeArr;
             var names = axboot.commonCodeFilter("CD208").nameArr;
             var state = undefined;
-
+/*
             for(var j = 0 ; j < rows.length; j++){
                 for (var i = 0; i < codes.length; i++) {
                     if (codes[i] == rows[j].statusUuid) {
@@ -78,7 +78,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                         break;
                     }
                 }
-            }
+            }*/
 
 
 
@@ -120,7 +120,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             var names = axboot.commonCodeFilter("CD208").nameArr;
             var state = undefined;
 
-            for(var j = 0 ; j < rows.length; j++){
+           /* for(var j = 0 ; j < rows.length; j++){
                 for (var i = 0; i < codes.length; i++) {
                     if (codes[i] == rows[j].statusUuid) {
                         state = names[i];
@@ -132,7 +132,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                     }
                 }
             }
-
+*/
 
 
 

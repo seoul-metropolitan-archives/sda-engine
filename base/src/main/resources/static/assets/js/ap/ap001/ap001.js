@@ -96,7 +96,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             data: $.extend({}, {pageSize: 1000, sort: "", serviceId: "ad001", methodName: "getEnviromentList1"}, fnObj.searchView.getData()),
             callback: function (res) {
 
-                location.href = API_SERVER + "/api/v1/common/download/item?itemId=" + "85BEE949-4DF4-4AFA-8552-E242FCC7F9E1";
+                //location.href = API_SERVER + "/api/v1/common/download/item?itemUuid=" + "85BEE949-4DF4-4AFA-8552-E242FCC7F9E1";
 
                 //var fileUrl  = "/assets/01-20180928172530296.hwp";
                 //download_file(fileUrl , "테스트.hwp");

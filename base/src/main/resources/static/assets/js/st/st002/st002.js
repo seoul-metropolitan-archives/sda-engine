@@ -7,7 +7,7 @@ var CONFIRM_STATUS = "Confirm";
 var CANCEL_STATUS = "Draft";
 var selectedTreeItem = {orderKey:"", classTreeName:"",classificationSchemeUuid:"",orderNo:"",parentClassUuid:""}; //선택된 트리 아이템
 var isDetailChanged = false;
-
+var selectContainerTreeName ="";
 var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH: function (caller, act, data) {
         axboot.ajax({ //트리리스트조회
@@ -47,7 +47,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         axboot.ajax({
             type: "GET",
             url: "/api/v1/st/st002/01/list03",
-            data: $.extend({},  {pageSize: 1000},data),
+            data: $.extend({},this.formView.getData() , {pageSize: 1000},data),
             callback: function (res) {
                 fnObj.gridView02.resetCurrent();
                 fnObj.gridView02.setData(res.list);
@@ -239,7 +239,15 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
                 ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
         });
         $("select[data-ax-path='statusUuid'], select[data-ax-path='containerTypeUuid']").change(function() {
+
+            /*if(selectContainerTreeName == ""){
+                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+            }else{
+                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH2, {containerName : selectContainerTreeName});
+            }*/
+
             ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
+
         });
 
         $(".bdb").delegate("#rg_tree_allopen", "click", function () {
@@ -346,6 +354,8 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     },
     itemClick: function (data, index) {
         if(data != null){
+            selectContainerTreeName = data.containerName;
+
             $("input[data-ax-path='treeName']").val(data.containerTreeName);
             ACTIONS.dispatch(ACTIONS.PAGE_SEARCH2, data);
         }
