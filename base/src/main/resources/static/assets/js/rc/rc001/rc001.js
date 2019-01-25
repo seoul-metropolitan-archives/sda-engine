@@ -963,14 +963,24 @@ function getContextMenu(ui, nodeType) {
             }
         } else {
             if (nodeType == "item") {
-                menu = [
-                    {title: "View Item", cmd: "ITEM_VIEW", uiIcon: "ui-icon-info"},
-                    {title: "----"},
-                    {title: "Edit Item", cmd: "ITEM_EDIT", uiIcon: "ui-icon-wrench"},
-                    //{title: "Delete Item", cmd: "NODE_DEL", uiIcon: "ui-icon-trash"},
-                    {title: "----"},
-                    {title: "Export Item", cmd: "ITEM_EXPORT", uiIcon: "ui-icon-trash"},
-                ];
+                if(fnObj.naviView.getCurrent().nodeType == "normal") {
+                    menu = [
+                        {title: "View Item", cmd: "ITEM_VIEW", uiIcon: "ui-icon-info"},
+                        {title: "----"},
+                        {title: "Edit Item", cmd: "ITEM_EDIT", uiIcon: "ui-icon-wrench"},
+                        {title: "----"},
+                        {title: "Export Item", cmd: "ITEM_EXPORT", uiIcon: "ui-icon-trash"},
+                    ];
+                }else if(fnObj.naviView.getCurrent().nodeType == "temp"){
+                    menu = [
+                        {title: "View Item", cmd: "ITEM_VIEW", uiIcon: "ui-icon-info"},
+                        {title: "----"},
+                        {title: "Edit Item", cmd: "ITEM_EDIT", uiIcon: "ui-icon-wrench"},
+                        {title: "Delete Item", cmd: "NODE_DEL", uiIcon: "ui-icon-trash"},
+                        {title: "----"},
+                        {title: "Export Item", cmd: "ITEM_EXPORT", uiIcon: "ui-icon-trash"},
+                    ];
+                }
             } else if (nodeType == "normal") {
                 var treeData = null;
                 var selectedData = null;
