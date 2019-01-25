@@ -23488,7 +23488,7 @@ a.big_close{
 }
 
 .ax-body.frame-set #ax-frame-root.show-aside .ax-frame-header-tab {
-    padding-left: 220px
+    padding-left: 0px
 }
 
 .ax-body.frame-set #ax-frame-root.show-aside .ax-frame-aside {
@@ -25772,8 +25772,7 @@ a.big_close{
     font-size: 10px;
     color: #fff;
     margin-left: -20px;
-    left: 0%
-;
+    left: 0%;
 }
 
 a.leftmenu_close {

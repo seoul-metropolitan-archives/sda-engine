@@ -1354,7 +1354,7 @@ function leftopenView() {
     $(".left").css("top", "50px");
     $("a.leftmenu_open").hide();
     $("a.leftmenu_close").show();
-    $(".ax-frame-header-tab").css("left", "");
+    $(".ax-frame-header-tab").css("left", "220px");
     $(".ax-frame-header-tab").css("padding-left", "");
     $("#contents").css("left", ""); //오른쪽 부분 원상복귀
     $("#contents").css("padding-left", "220px"); //오른쪽 부분 복귀
