@@ -116,10 +116,11 @@ public class St008Service extends BaseService {
 
             // 새로 생성
             isCreateOrModify = true;
-            String orgCodeSeq = jdbcTemplate.queryForObject("SELECT ST_SHELF_CODE_SEQ.NEXTVAL FROM dual", String.class);
+            String orgCodeSeq = jdbcTemplate.queryForObject("SELECT ST_TAKEOUT_REQUEST_SEQ.NEXTVAL FROM dual", String.class);
             String refinedCodeSeq = orgCodeSeq;
             int cnt = 0;
-            for ( ; cnt < Math.abs(refinedCodeSeq.length() - 2); cnt++) {
+            // 년월일-시퀀스 두자리. ex)20181121-01. 하루에 99개밖에 못만들게 돼있음.
+            for ( ; cnt < orgCodeSeq.length() - 2; cnt++) {
                 refinedCodeSeq = "0" + refinedCodeSeq;
             }
             String requestName = DateUtils.convertToString(LocalDateTime.now(), "yyyyMMdd") + "-" + refinedCodeSeq;

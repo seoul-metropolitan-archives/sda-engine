@@ -41,24 +41,7 @@ var st00702 =
                     disable: true
                 },
 
-                {
-                    sortNo: 4,
-                    name: "descriptionStartDate",
-                    text: "Start Date",
-                    width: 140,
-                    editable: false,
-                    dataType: "date",
-                    disable: true
-                },
-                {
-                    sortNo: 5,
-                    name: "descriptionEndDate",
-                    text: "End Date",
-                    width: 140,
-                    editable: false,
-                    dataType: "date",
-                    disable: true
-                },
+
                 // {
                 //     name: "initialDate",
                 //     fieldName: "initialDate",
@@ -84,7 +67,7 @@ var st00702 =
                 {
                     sortNo: 6,
                     name: "initialDate",
-                    text: "Initial Date3",
+                    text: "Initial Date",
                     width: 140,
                     editable: false,
                     dataType: "date",

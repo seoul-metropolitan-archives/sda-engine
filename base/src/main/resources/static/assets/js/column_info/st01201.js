@@ -18,7 +18,8 @@ var st01201 =
                     editable: false,
                     dataType: "code",
                     required: false,
-                    visible: false
+                    visible: false,
+                    disable: true
                 },
                 {
                     sortNo: 1,
@@ -35,7 +36,8 @@ var st01201 =
                     text: "Title",
                     width: 200,
                     editable: false,
-                    dataType: "text"
+                    dataType: "text",
+                    disable: true
                 },
                 {
                     sortNo: 3,
@@ -97,7 +99,8 @@ var st01201 =
                     text: "서고",
                     width: 250,
                     editable: false,
-                    dataType: "text"
+                    dataType: "text",
+                    disable: true
                 },
                 {
                     sortNo: 9,
@@ -105,7 +108,8 @@ var st01201 =
                     text: "서가",
                     width: 250,
                     editable: false,
-                    dataType: "text"
+                    dataType: "text",
+                    disable: true
                 },
                 {
                     sortNo: 9,
@@ -113,7 +117,8 @@ var st01201 =
                     text: "행렬단",
                     width: 250,
                     editable: false,
-                    dataType: "text"
+                    dataType: "text",
+                    disable: true
                 },
                 {
                     sortNo: 10,

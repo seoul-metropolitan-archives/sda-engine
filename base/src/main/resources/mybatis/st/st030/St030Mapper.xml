@@ -30,26 +30,30 @@
                record_req.REQUEST_DATE requestDate,
                record_req.REPUBLISH_YN republishYn,
                record_req.REPUBLISH_DATE republishDate,
-               container.CONTAINER_UUID containerUuid,
-               container.CONTAINER_NAME containerName -- 실제 보존상자
+               -- container.CONTAINER_UUID containerUuid,
+               -- container.CONTAINER_NAME containerName
+               record_req.CONTAINER_UUID containerUuid,
+
+               (                  SELECT
+                                         CONTAINER_NAME
+                                  FROM
+                                       ST_CONTAINER con
+                                  WHERE
+                                      con.CONTAINER_UUID = record_req.CONTAINER_UUID                ) containerName -- 실제 보존상자
         FROM ST_MISS_ARRANGE_RECORD_REQ record_req
-              INNER JOIN (
-                          SELECT ar.AGGREGATION_UUID, ar.CONTAINER_UUID    FROM RC_ITEM item
-                                                                                  INNER JOIN ST_ARRANGE_RECORDS_RESULT ar
-                                                                                    ON ar.AGGREGATION_UUID = item.AGGREGATION_UUID
-                          ) etc
+              LEFT JOIN ST_ARRANGE_RECORDS_RESULT etc
                  ON etc.AGGREGATION_UUID = record_req.AGGREGATION_UUID
-              INNER JOIN ST_ARRANGE_CONTAINERS_RESULT acr
+              LEFT JOIN ST_ARRANGE_CONTAINERS_RESULT acr
                  ON acr.CONTAINER_UUID = etc.CONTAINER_UUID
-              INNER JOIN ST_LOCATION location
+              LEFT JOIN ST_LOCATION location
                  ON location.LOCATION_UUID = acr.LOCATION_UUID
-              INNER JOIN ST_CONTAINER container
+              LEFT JOIN ST_CONTAINER container
                  ON container.CONTAINER_UUID = etc.CONTAINER_UUID
-              INNER JOIN ST_SHELF shelf
+              LEFT JOIN ST_SHELF shelf
                  ON shelf.SHELF_UUID = location.SHELF_UUID
-              INNER JOIN ST_REPOSITORY repository
+              LEFT JOIN ST_REPOSITORY repository
                  ON repository.REPOSITORY_UUID = shelf.REPOSITORY_UUID
-              INNER JOIN (SELECT AGGREGATION_UUID                                                                         as uuid,
+              LEFT JOIN (SELECT AGGREGATION_UUID                                                                         as uuid,
                                   1                                                                                        as orderNo,
                                   (SELECT CODE_NAME
                                    FROM AD_CODE_DETAIL
@@ -147,11 +151,10 @@
               FROM ST_ARRANGE_RECORDS_RESULT result
                 INNER JOIN ST_MISS_ARRANGE_RECORD_REQ req
                   ON req.AGGREGATION_UUID = result.AGGREGATION_UUID
-                  AND req.CURRENT_CONTAINER_UUID = result.CONTAINER_UUID
+                  -- AND req.CURRENT_CONTAINER_UUID = result.CONTAINER_UUID
         <where>
             1=1
             AND result.AGGREGATION_UUID = #{aggregationUuid}
-            AND result.CONTAINER_UUID = #{currentContainerUuid}
 
         </where>
     </select>

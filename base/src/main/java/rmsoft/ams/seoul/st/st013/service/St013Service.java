@@ -47,6 +47,8 @@ public class St013Service extends BaseService {
         st01301VO.setRequestorUuid(requestParams.getString("requestorUuid")); // 작성자
         st01301VO.setExceptStartDateFrom(requestParams.getString("exceptStartDateFrom"));
         st01301VO.setExceptStartDateTo(requestParams.getString("exceptStartDateTo"));
+        st01301VO.setExceptEndDateFrom(requestParams.getString("exceptEndDateFrom"));
+        st01301VO.setExceptEndDateTo(requestParams.getString("exceptEndDateTo"));
 
         //검색조건 추가시
 

@@ -427,6 +427,10 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
             }
         });
 
+
+        $('.btn_i').click(function () {
+            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH01);
+        });
         $('#btn_createTakeOut').click(function () {
             ACTIONS.dispatch(ACTIONS.MODAL_OPEN, '반출서 작성');
         });

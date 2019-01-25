@@ -14,7 +14,7 @@ var st00602 =
                 },
                 {
                     sortNo: 2,
-                    name: "itemCode",
+                    name: "code",
                     text: "Code",
                     width: 130,
                     editable: false,
@@ -22,7 +22,7 @@ var st00602 =
                 },
                 {
                     sortNo: 3,
-                    name: "itemTitle",
+                    name: "title",
                     text: "Title",
                     width: 500,
                     editable: false,
@@ -38,11 +38,14 @@ var st00602 =
                 },
                 {
                     sortNo: 5,
-                    name: "type",
+                    width: 80,
+                    name: "typeUuid",
                     text: "Type",
-                    width: 100,
-                    editable: false,
-                    dataType: "text"
+                    disable: true,
+                    values: axboot.commonCodeFilter("CD127").codeArr,
+                    labels: axboot.commonCodeFilter("CD127").nameArr,
+                    dataType : "combo",
+                    editable : false
                 },
                 {
                     sortNo: 6,

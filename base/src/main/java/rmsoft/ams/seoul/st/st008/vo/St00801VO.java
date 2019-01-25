@@ -30,14 +30,24 @@ public class St00801VO extends BaseVO
     private String userGroupName; //  소속
     private String takeoutDate; //  반출일자
     public String getTakeoutDate(){
+
+        if( takeoutDate == null){
+            return null;
+        }
         return takeoutDate.substring(0, 10);
     }
     private String returnDate; //  반입일
     public String getReturnDate(){
+        if( returnDate == null){
+            return null;
+        }
         return returnDate.substring(0, 10);
     }
     private String returnDueDate; //  반입예정일
     public String getReturnDueDate(){
+        if( returnDueDate == null){
+            return null;
+        }
         return returnDueDate.substring(0, 10);
     }
     private String takeoutDateFrom;

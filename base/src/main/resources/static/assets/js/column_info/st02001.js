@@ -35,7 +35,7 @@ var st02001 =
                     sortNo: 2,
                     name: "title",
                     text: "Title",
-                    width: 200,
+                    width: 350,
                     required: false,
                     editable: false,
                     dataType: "text",
@@ -45,7 +45,7 @@ var st02001 =
                     sortNo: 3,
                     name: "level",
                     text: "Level",
-                    width: 110,
+                    width: 80,
                     editable: false,
                     dataType: "text",
                     disable: true
@@ -64,7 +64,7 @@ var st02001 =
                     sortNo: 9,
                     name: "repositoryName",
                     text: "서고",
-                    width: 250,
+                    width: 200,
                     editable: false,
                     dataType: "text",
                     disable: true
@@ -73,7 +73,7 @@ var st02001 =
                     sortNo: 10,
                     name: "shelfName",
                     text: "서가",
-                    width: 250,
+                    width: 200,
                     editable: false,
                     dataType: "text",
                     disable: true

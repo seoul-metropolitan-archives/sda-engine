@@ -20,7 +20,7 @@
                     <ul class="bdb">
                         <th:block layout:insert="~{/fragments/page-buttons :: bookmark}"/>
 
-                        <li style="text-align:right; width:40%;">
+                        <li style="text-align:right; width:50%;">
                             <button class="btn_co" th:id="btn_createTakeOut">
 
                                 <span class="btn_icon_co">&nbsp;</span>
@@ -39,9 +39,14 @@
                                 <span class="btn_icon_co">&nbsp;</span>
                                 <span class="btn_main_txt">반출서 출력</span>
                             </button>
+                            <button class="btn_i">
+                                <span class="btn_icon">&nbsp;</span>
+                                <span class="btn_main_txt">Inquiry(I)</span>
+                            </button>
                         </li>
+                        <!--<th:block layout:insert="~{/fragments/page-buttons :: save-and-inquiry('none','show')}"/>-->
                         <!--<th:block layout:insert="~{/fragments/page-buttons :: delete-and-cancel-and-save-and-inquiry}"/>-->
-                        <th:block layout:insert="~{/fragments/page-buttons :: save-and-inquiry('none','show')}"/>
+
                         <!--<th:block layout:insert="~{/fragments/page-buttons :: arrange-and-confirm-and-cancel-and-save-and-inquiry}"/>-->
                     </ul>
                 </div>
