@@ -969,7 +969,7 @@ function getContextMenu(ui, nodeType) {
                         {title: "----"},
                         {title: "Edit Item", cmd: "ITEM_EDIT", uiIcon: "ui-icon-wrench"},
                         {title: "----"},
-                        {title: "Export Item", cmd: "ITEM_EXPORT", uiIcon: "ui-icon-trash"},
+                        {title: "Export Item", cmd: "ITEM_EXPORT", uiIcon: "ui-icon-arrowreturnthick-1-e"},
                     ];
                 }else if(fnObj.naviView.getCurrent().nodeType == "temp"){
                     menu = [
@@ -978,7 +978,7 @@ function getContextMenu(ui, nodeType) {
                         {title: "Edit Item", cmd: "ITEM_EDIT", uiIcon: "ui-icon-wrench"},
                         {title: "Delete Item", cmd: "NODE_DEL", uiIcon: "ui-icon-trash"},
                         {title: "----"},
-                        {title: "Export Item", cmd: "ITEM_EXPORT", uiIcon: "ui-icon-trash"},
+                        {title: "Export Item", cmd: "ITEM_EXPORT", uiIcon: "ui-icon-arrowreturnthick-1-e"},
                     ];
                 }
             } else if (nodeType == "normal") {
@@ -1030,7 +1030,7 @@ function getContextMenu(ui, nodeType) {
                     menu.push({
                         title: "Classify Records",
                         cmd: "AGG_CLASSIFY_RECORDS",
-                        uiIcon: "ui-icon-transferthick-e-w"
+                        uiIcon: "ui-icon-disk"
                     });
                 }
             } else if (nodeType == "temporary") {
@@ -1038,7 +1038,7 @@ function getContextMenu(ui, nodeType) {
                     {title: "View Aggregation", cmd: "AGG_VIEW", uiIcon: "ui-icon-info"},
                     {title: "Edit Aggregation", cmd: "AGG_EDIT", uiIcon: "ui-icon-wrench"},
                     {title: "----"},
-                    {title: "Delete Aggregation", cmd: "NODE_DEL", uiIcon: "ui-icon-closethick"},
+                    {title: "Delete Aggregation", cmd: "NODE_DEL", uiIcon: "ui-icon-trash"},
                     {title: "Change to Normal Aggregation", cmd: "AGG_TYPE_NORMAL", uiIcon: "ui-icon-transferthick-e-w"},
                 ];
             } else if (nodeType == "virtual") {
@@ -1046,7 +1046,7 @@ function getContextMenu(ui, nodeType) {
                     {title: "View Aggregation", cmd: "AGG_VIEW", uiIcon: "ui-icon-info"},
                     {title: "----"},
                     {title: "Edit Aggregation", cmd: "AGG_EDIT", uiIcon: "ui-icon-wrench"},
-                    {title: "Delete Aggregation", cmd: "NODE_DEL", uiIcon: "ui-icon-closethick"},
+                    {title: "Delete Aggregation", cmd: "NODE_DEL", uiIcon: "ui-icon-trash"},
                 ];
             }
         }
