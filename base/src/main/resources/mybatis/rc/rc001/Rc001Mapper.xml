@@ -151,7 +151,7 @@
         SELECT * FROM (
             SELECT
             ZZ.*
-            ,ROW_NUMBER() OVER(ORDER BY orderNo ASC) AS NUM
+            ,ROW_NUMBER() OVER(ORDER BY orderNo ASC, name ASC) AS NUM
             FROM (
             <include refid="iconSQL"></include>
             ) ZZ
@@ -312,7 +312,7 @@
         SELECT * FROM (
         SELECT
         ZZ.*
-        ,ROW_NUMBER() OVER(ORDER BY orderNo ASC) AS NUM
+        ,ROW_NUMBER() OVER(ORDER BY orderNo ASC, title ASC) AS NUM
         FROM (
         <include refid="gridSQL"></include>
           ) ZZ
