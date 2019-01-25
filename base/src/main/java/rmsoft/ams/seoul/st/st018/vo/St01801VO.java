@@ -38,4 +38,6 @@ public class St01801VO extends BaseVO {
     private String publishDateFrom;
     private String publishDateTo;
 
+    private String rfidMachineUuid;
+
 }

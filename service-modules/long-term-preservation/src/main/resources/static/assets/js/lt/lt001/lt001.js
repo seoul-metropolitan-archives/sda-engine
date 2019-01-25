@@ -256,14 +256,12 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
 
     },
     cancelDelete: function(){
-        this.setRunDel(false);
-        // if(fnObj.gridView01.getSelectedData().freezeYN == FREEZE_STATUS){
-        //     axToast.push(axboot.getCommonMessage("lt001_01"));
-        //
-        //     this.setRunDel(false);
-        // }else{
-        //     this.setRunDel(true);
-        // }
+        if(fnObj.gridView01.getSelectedData().freezeYN == FREEZE_STATUS){
+            axToast.push(axboot.getCommonMessage("lt001_01"));
+            this.setRunDel(false);
+        }else{
+            this.setRunDel(true);
+        }
     }
 
 });

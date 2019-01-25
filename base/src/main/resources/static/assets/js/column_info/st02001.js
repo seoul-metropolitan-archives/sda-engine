@@ -9,7 +9,8 @@ var st02001 =
                     editable: false,
                     dataType: "code",
                     required: false,
-                    visible: false
+                    visible: false,
+                    disable: true
                 },
                 {
                     sortNo: 0,
@@ -18,7 +19,8 @@ var st02001 =
                     editable: false,
                     dataType: "code",
                     required: false,
-                    visible: false
+                    visible: false,
+                    disable: true
                 },
                 {
                     sortNo: 1,
@@ -36,7 +38,8 @@ var st02001 =
                     width: 200,
                     required: false,
                     editable: false,
-                    dataType: "text"
+                    dataType: "text",
+                    disable: true
                 },
                 {
                     sortNo: 3,
@@ -63,7 +66,8 @@ var st02001 =
                     text: "서고",
                     width: 250,
                     editable: false,
-                    dataType: "text"
+                    dataType: "text",
+                    disable: true
                 },
                 {
                     sortNo: 10,
@@ -71,15 +75,17 @@ var st02001 =
                     text: "서가",
                     width: 250,
                     editable: false,
-                    dataType: "text"
+                    dataType: "text",
+                    disable: true
                 },
                 {
                     sortNo: 11,
                     name: "locationName",
                     text: "행렬단",
-                    width: 250,
+                    width: 200,
                     editable: false,
-                    dataType: "text"
+                    dataType: "text",
+                    disable: true
                 },
                 {
                     sortNo: 12,
@@ -99,7 +105,8 @@ var st02001 =
                     text: "Publish Count",
                     width: 100,
                     editable: false,
-                    dataType: "number"
+                    dataType: "number",
+                    disable: true
                 },
                 {
                     sortNo: 14,

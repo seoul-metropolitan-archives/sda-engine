@@ -38,5 +38,5 @@ public class St01901VO extends BaseVO {
     private String republishYn;
     private String republishDate;
 
-
+    private String rfidMachineUuid;
 }

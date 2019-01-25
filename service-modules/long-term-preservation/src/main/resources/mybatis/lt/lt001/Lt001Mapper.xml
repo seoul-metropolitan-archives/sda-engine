@@ -60,7 +60,7 @@
         </if>
         <if test="null != extension and '' != extension">
             <![CDATA[
-          AND EXTENTION LIKE '%' || #{extension} || '%'
+          AND EXTENSION LIKE '%' || #{extension} || '%'
         ]]>
         </if>
         <if test="null != formatGroupUuid and '' != formatGroupUuid">
