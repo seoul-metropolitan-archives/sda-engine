@@ -107,17 +107,16 @@ div {
     width: 100%;
 }
 
-.left {
-    position: absolute;
-    top: 30px;
-    bottom: 0px;
-    width: 220px;
-    left: 0;
-    background-color: white;
-    display: block;
-    /*box-shadow: 2px 2px 5px #ccc;*/
-    z-index: 10;
-}
+/*.left {*/
+    /*position: absolute;*/
+    /*top: 30px;*/
+    /*bottom: 0px;*/
+    /*width: 0px;*/
+    /*left: 0;*/
+    /*background-color: white;*/
+    /*!*box-shadow: 2px 2px 5px #ccc;*!*/
+    /*z-index: 10;*/
+/*}*/
 
 .cssBody {
     position: absolute;
@@ -287,20 +286,20 @@ div {
     /*background-color:#aaa; */
     position: absolute;
     top: 500px;
-    left: 220px;
     width: 20px;
     height: 80px;
     line-height: 75px;
     text-align: center;
     font-size: 10px;
     color: #fff;
-    margin-left: -20px;
+    left: 0%;
+    margin-left: 0px;
 }
 
 a.leftmenu_close {
     border-top-left-radius: 10px 10px;
     border-bottom-left-radius: 10px 10px;
-    display: block;
+    display: none;
     background-color: #aaa;
     opacity: 0.5;
 }
@@ -308,7 +307,7 @@ a.leftmenu_close {
 a.leftmenu_open {
     border-top-right-radius: 10px 10px;
     border-bottom-right-radius: 10px 10px;
-    display: none;
+    display: block;
     background-color: #aaa;
     opacity: 0.5;
 }

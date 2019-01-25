@@ -142,7 +142,7 @@ fnObj.pageStart = function () {
     this.formView.initView();
     ACTIONS.dispatch(ACTIONS.GET_BOOKMARK);
 
-    leftcloseView();
+    // leftcloseView();
 };
 
 fnObj.pageResize = function () {
@@ -296,7 +296,7 @@ fnObj.frameView = axboot.viewExtend({
         });
     },
     toggleAside: function () {
-        this.target.toggleClass("show-aside");
+        // this.target.toggleClass("show-aside");
     },
     toggleFullScreen: function () {
         if (this.target.hasClass("full-screen")) {
@@ -1357,13 +1357,12 @@ function leftopenView() {
     $(".ax-frame-header-tab").css("left", "");
     $(".ax-frame-header-tab").css("padding-left", "");
     $("#contents").css("left", ""); //오른쪽 부분 원상복귀
-    $("#contents").css("padding-left", ""); //오른쪽 부분 복귀
+    $("#contents").css("padding-left", "220px"); //오른쪽 부분 복귀
     $(".ax-frame-contents").css("left", ""); //오른쪽 부분 원상복귀
     $(".ax-frame-contents").css("padding-left", ""); //오른쪽 부분 복귀
-    $(".left_close_open_btn a").css("left", "");
-    $(".left_close_open_btn a").css("margin-left", "");
+    $(".left_close_open_btn a").css("left", "220px");
+    $(".left_close_open_btn a").css("margin-left", "-20px");
     $(".ax-frame-header-tool").css("width", "");
-
     fnObj.leftMenuViewAll.gridObj.getGridView().resetSize();
     fnObj.leftMenuViewMy.gridObj.getGridView().resetSize();
 }
@@ -1376,7 +1375,7 @@ function left7openView() {
     $("a.leftmenu_close").hide();
     $("a.leftmenu7_close").show();
     $("#contents").css("left", ""); //오른쪽 부분 원상복귀
-    $("#contents").css("padding-left", ""); //오른쪽 부분 복귀
+    $("#contents").css("padding-left", "220px"); //오른쪽 부분 복귀
     $(".ax-frame-contents").css("left", ""); //오른쪽 부분 원상복귀
     $(".ax-frame-contents").css("padding-left", ""); //오른쪽 부분 복귀
     $(".left_close_open_btn a").css("left", "");
@@ -1426,7 +1425,7 @@ function bigView() {
 function smallView() {
     $("#cssBody").css("top", "30px");
     $(".ax-frame-header-tool").show();
-    $(".left").show();
+    $(".left").hide();
     $(".ax-frame-header-tab").show();
     $(".left").css("top", "50px");
     $("#contents").css("left", "");
@@ -1444,8 +1443,8 @@ function smallView() {
     $("a.leftmenu_close").show();
     $("a.leftmenu7_close").hide();
     $("a.leftmenu_open").hide();
-    $(".left_close_open_btn a").css("left", "");
-    $(".left_close_open_btn a").css("margin-left", "");
+    $(".left_close_open_btn a").css("left", "0%");
+    $(".left_close_open_btn a").css("margin-left", "0px");
 }
 function popupReset(){
     $("#crntPwd").val("");
