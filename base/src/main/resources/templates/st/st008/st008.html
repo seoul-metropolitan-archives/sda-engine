@@ -146,12 +146,17 @@
                         <div style="height:60%; width:100%" class="bdb div_tablerow">
                             <div id="realgrid01" style="width:100%; height:100%"></div>
                         </div>
+
                         <div style="height:40%; width:100%;border: 1px solid black;"
                              class="bdb bdt div_tablerow bgf7 ">
-                            반출 목적
+                            <ul class="bdb bdt div_tablerow bgf7" style="height:30px;">
+                                <th:block layout:insert="~{/fragments/page-buttons :: dot('반출 목적')}"/>
+                            </ul>
                             <textarea class="txtar" id="takeoutPropose"
-                                      style="height: 100%; width: 100%" readonly>
+                                      style="min-height: 240px; width: 100%" readonly>
                                 </textarea>
+
+
                         </div>
                     </div>
 

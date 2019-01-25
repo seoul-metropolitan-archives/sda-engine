@@ -160,33 +160,14 @@ fnObj.treeView01 = axboot.viewExtend(axboot.commonView, {
                 },
                 onCheck: function (e,treeId,treeNode) {
                     var treeObj = $.fn.zTree.getZTreeObj(treeId);
-                    if(treeNode.getParentNode()){
-                        if(treeNode.getParentNode().getCheckStatus().checked && !treeNode.getParentNode().getCheckStatus().half){
-                            for (var i=0, l=treeNode.getParentNode().children.length; i < l; i++) {
-                                if(treeNode.getParentNode().children[i]["classifyRecordsUuid"] == undefined || treeNode.getParentNode().children[i]["classifyRecordsUuid"] == null) {
-                                    treeObj.setChkDisabled(treeNode.getParentNode().children[i], true, false, true);
-                                }
-                            }
-                            fnObj.gridView03.clearData();
-                            fnObj.gridView03.setData(treeObj.getNodesByFilter(function(node){
-                                return !node.chkDisabled && node.getCheckStatus().checked && !node.getCheckStatus().half;
-                            }));
-                            return;
-                        }
-                    }
-                    if (treeNode.children) {
-                        if(treeNode.getCheckStatus().checked){
-                            for (var i=0, l=treeNode.children.length; i < l; i++) {
-                                if(treeNode.children[i]["classifyRecordsUuid"] == undefined || treeNode.children[i]["classifyRecordsUuid"] == null) {
-                                    treeObj.setChkDisabled(treeNode.children[i], true, false, true);
-                                }
-                            }
-                        }
-                        fnObj.gridView03.clearData();
-                        fnObj.gridView03.setData(treeObj.getNodesByFilter(function(node){
+                    fnObj.gridView03.clearData();
+                    fnObj.gridView03.setData(treeObj.getNodesByFilter(function(node){
+                        if(node.getParentNode()){
+                            return !node.chkDisabled && node.getCheckStatus().checked && !node.getCheckStatus().half && node.getParentNode().getCheckStatus().half;
+                        }else{
                             return !node.chkDisabled && node.getCheckStatus().checked && !node.getCheckStatus().half;
-                        }));
-                    }
+                        }
+                    }));
                 },
                 beforeCheck : function (treeId, treeNode) {
                     var treeObj = $.fn.zTree.getZTreeObj(treeId);
@@ -459,9 +440,9 @@ fnObj.pageStart = function () {
     });
 
     _this.formView.initView();
-    _this.gridView03.initView();
     fnObj.treeView01.initView();
     _this.gridView02.initView();
+    _this.gridView03.initView();
     ACTIONS.dispatch(ACTIONS.PAGE_SEARCH_TREE, this.formView.getData());
     ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
 };
@@ -601,6 +582,11 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
     initView: function () {
         this.initInstance();
         this.setColumnInfo(st00301_p01_02.column_info);
+        this.gridObj.style.body = {
+            borderRight: "#ccc,1px",
+            borderBottom: "#ccc,1px",
+            line: "#ffaaaaaa,0px"
+        };
         // this.gridObj.setFixedOptions({
         //     colCount: 3
         // });
@@ -629,16 +615,19 @@ fnObj.gridView03 = axboot.viewExtend(axboot.gridView, {
     tagId : "realgrid03",
     initView: function () {
         this.gridObj = new TreeGridWrapper("realgrid03", "/assets/js/libs/realgrid", true);
-        this.gridObj.style.body = {
-            borderRight: "#ccc,1px",
-            borderBottom: "#ccc,1px",
-            line: "#ffaaaaaa,0px"
-        };
+
         this.gridObj.setGridStyle("100%", "100%")
             .setOption({
                 header: { visible: true },
+                checkBar: {visible: false},
+                indicator: {visible: true},
                 lineVisible: false
             });
+
+        this.gridObj.setDisplayOptions({
+            fitStyle:"evenFill"
+        });
+
         this.gridObj.setColumnInfo(cl00301_p01_02.column_info).makeGrid();
                 this.gridObj.setDisplayOptions({
             fitStyle:"evenFill"

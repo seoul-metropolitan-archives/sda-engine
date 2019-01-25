@@ -24,9 +24,6 @@
        shelf.SHELF_NAME shelfName,
        (location.ROW_NO || '행 ' || location.COLUMN_NO || '열') as locationName
 FROM RC_AGGREGATION A
-       INNER JOIN RC_AGGREGATION_CON A_CON
-         ON A.AGGREGATION_UUID = A_CON.AGGREGATION_UUID
-              AND FC_AD_CODE(A_CON.ELECTRONIC_RECORD_STATUS_UUID) != '01' -- 비전자
          -- 가장 최근에 publicshing 된 애를 가져오기 위함
        INNER JOIN (SELECT tag.*
                    FROM (SELECT AGGREGATION_UUID, MAX(PUBLISH_DATE) as maxPublishDate
@@ -37,11 +34,7 @@ FROM RC_AGGREGATION A
                   ) RFID_TAG
          ON RFID_TAG.AGGREGATION_UUID = A.AGGREGATION_UUID
               AND FC_AD_CODE(RFID_TAG.PUBLISH_STATUS_UUID) != '01' -- 미발행이 아닌 경우
-       LEFT JOIN (
-                  SELECT ar.AGGREGATION_UUID, ar.CONTAINER_UUID    FROM RC_ITEM item
-                                                                          INNER JOIN ST_ARRANGE_RECORDS_RESULT ar
-                                                                            ON ar.AGGREGATION_UUID = item.AGGREGATION_UUID
-                  ) etc
+       LEFT JOIN ST_ARRANGE_RECORDS_RESULT etc
          ON etc.AGGREGATION_UUID = A.AGGREGATION_UUID
        LEFT JOIN ST_ARRANGE_CONTAINERS_RESULT acr
          ON acr.CONTAINER_UUID = etc.CONTAINER_UUID

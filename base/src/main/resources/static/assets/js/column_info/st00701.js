@@ -52,6 +52,15 @@ var st00701 =
                 },
                 {
                     sortNo: 7,
+                    name: "retentionPeriodName",
+                    text: "보존기간",
+                    width: 110,
+                    editable: false,
+                    dataType: "text",
+                    disable: true
+                },
+                {
+                    sortNo: 8,
                     name: "descStrDate",
                     text: "Start Date",
                     width: 140,
@@ -60,7 +69,7 @@ var st00701 =
                     disable: true
                 },
                 {
-                    sortNo: 8,
+                    sortNo: 9,
                     name: "descEdDate",
                     text: "End Date",
                     width: 140,
@@ -69,7 +78,7 @@ var st00701 =
                     disable: true
                 },
                 {
-                    sortNo: 9,
+                    sortNo: 10,
                     name: "repositoryName",
                     text: "서고",
                     width: 140,
@@ -78,7 +87,7 @@ var st00701 =
                     disable: true
                 },
                 {
-                    sortNo: 10,
+                    sortNo: 11,
                     name: "shelfName",
                     text: "서가",
                     width: 140,
@@ -87,7 +96,7 @@ var st00701 =
                     disable: true
                 },
                 {
-                    sortNo: 11,
+                    sortNo: 12,
                     name: "locationName",
                     text: "행렬단",
                     width: 140,
@@ -96,7 +105,7 @@ var st00701 =
                     disable: true
                 },
                 {
-                    sortNo: 12,
+                    sortNo: 13,
                     name: "containerName",
                     text: "보존상자",
                     width: 140,
