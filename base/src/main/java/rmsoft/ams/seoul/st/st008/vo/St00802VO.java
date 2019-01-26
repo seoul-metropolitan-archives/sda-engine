@@ -36,6 +36,7 @@ public class St00802VO extends BaseVO {
 
     private String publishedStatusUuid;
     private String locationName; // 행렬단
+    private String containerName;
 
 
 }

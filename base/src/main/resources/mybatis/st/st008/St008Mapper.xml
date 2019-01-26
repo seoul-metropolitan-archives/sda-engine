@@ -80,7 +80,8 @@
                B.descEdDate descEdDate,
                repository.REPOSITORY_NAME repositoryName, -- 서고
                shelf.SHELF_NAME shelfName, -- 서가
-               (location.ROW_NO || '행 ' || location.COLUMN_NO || '열') as locationName -- 행렬단
+               (location.ROW_NO || '행 ' || location.COLUMN_NO || '열') as locationName, -- 행렬단
+               container.CONTAINER_NAME as containerName
 
         FROM ST_TAKEOUT_RECORD_RESULT record_result
                   LEFT JOIN

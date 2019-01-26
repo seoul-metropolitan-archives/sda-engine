@@ -126,9 +126,9 @@ public class St008Service extends BaseService {
             isCreateOrModify = true;
             String orgCodeSeq = jdbcTemplate.queryForObject("SELECT ST_TAKEOUT_REQUEST_SEQ.NEXTVAL FROM dual", String.class);
             String refinedCodeSeq = orgCodeSeq;
-            int cnt = 0;
+
             // 년월일-시퀀스 두자리. ex)20181121-01. 하루에 99개밖에 못만들게 돼있음.
-            for (; cnt < orgCodeSeq.length() - 2; cnt++) {
+            for (int cnt =0; cnt < Math.abs(orgCodeSeq.length() - 2); cnt++) {
                 refinedCodeSeq = "0" + refinedCodeSeq;
             }
             String requestName = DateUtils.convertToString(LocalDateTime.now(), "yyyyMMdd") + "-" + refinedCodeSeq;
@@ -327,7 +327,7 @@ public class St008Service extends BaseService {
 
                 cell = row.createCell(columnIndex++); //Level
                 cell.setCellValue(eachObj.getLevel());
-                cell.setCellStyle(cellStyleLeft);
+                cell.setCellStyle(cellStyleCenter);
 
                 cell = row.createCell(columnIndex++); //Type
                 cell.setCellValue(eachObj.getType());
@@ -361,6 +361,10 @@ public class St008Service extends BaseService {
                 cell.setCellValue(eachObj.getLocationName());
                 cell.setCellStyle(cellStyleLeft);
 
+
+                cell = row.createCell(columnIndex++); //Container
+                cell.setCellValue(eachObj.getContainerName());
+                cell.setCellStyle(cellStyleLeft);
             }
 
             //기존 0 1새로운시트
