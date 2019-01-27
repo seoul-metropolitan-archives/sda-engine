@@ -47,7 +47,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         axboot.ajax({
             type: "GET",
             url: "/api/v1/st/st002/01/list03",
-            data: $.extend({},this.formView.getData() , {pageSize: 1000},data),
+            data: $.extend({},this.formView.getData() , {pageSize: 1000},{orderKey1 : data.orderKey1}),
             callback: function (res) {
                 fnObj.gridView02.resetCurrent();
                 fnObj.gridView02.setData(res.list);

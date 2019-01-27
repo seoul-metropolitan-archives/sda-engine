@@ -20,7 +20,7 @@
             ST_CONTAINER A
             START WITH PARENT_CONTAINER_UUID IS NULL
         CONNECT BY PRIOR CONTAINER_UUID = PARENT_CONTAINER_UUID
-        ORDER SIBLINGS BY CONTAINER_NAME
+        ORDER SIBLINGS BY ORDER_KEY
     </select>
     <select id="getContainerList" resultType="St00201VO" parameterType="St00201VO" statementType="PREPARED">
         SELECT
@@ -158,10 +158,10 @@
         )
 
         <where>
-            <!--<if test="orderKey1 != null">
+            <if test="orderKey1 != null">
                 (orderKey1 LIKE  #{orderKey1} || '.' || '%'
                 OR orderKey1 =  #{orderKey1})
-            </if>-->
+            </if>
             <if test="provenance != null">
                 provenance = #{provenance}
             </if>
