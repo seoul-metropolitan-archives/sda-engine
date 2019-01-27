@@ -76,7 +76,7 @@ public class St015Controller extends BaseController {
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-        httpHeaders.setContentDispositionFormData("attachment", "test.xlsx");
+        httpHeaders.setContentDispositionFormData("attachment", "st015.xlsx");
 
         return ResponseEntity
                 .ok()

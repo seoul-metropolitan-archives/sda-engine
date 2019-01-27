@@ -59,7 +59,8 @@ var st00103 =
                     width: 100,
                     editable: true,
                     dataType: "text",
-                    required: true
+                    required: false,
+                    disable : true
                 },
                 {
                     sortNo: 6,

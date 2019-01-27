@@ -18,8 +18,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import rmsoft.ams.seoul.st.st001.vo.St00101VO;
 import rmsoft.ams.seoul.st.st010.service.St010Service;
 import rmsoft.ams.seoul.st.st010.vo.St01004VO;
+import rmsoft.ams.seoul.st.st010.vo.St010Excel03VO;
+import rmsoft.ams.seoul.st.st010.vo.St010ExcelVO;
 
 import javax.annotation.Resource;
 import javax.inject.Inject;
@@ -47,20 +50,55 @@ public class St010Controller extends BaseController {
 
 
     @GetMapping("/01/excelDown")
-    public ResponseEntity<InputStreamResource> getExcelDown(HttpServletResponse response) throws IOException {
+    public ResponseEntity<InputStreamResource> getExcelDown(RequestParams<St010ExcelVO> requestParams) throws IOException {
 
 
-        ByteArrayInputStream in = st010Service.getExcelDown();
+        ByteArrayInputStream in = st010Service.getExcelDown(requestParams);
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-        httpHeaders.setContentDispositionFormData("attachment", "test.xlsx");
+        httpHeaders.setContentDispositionFormData("attachment", "st010_shelf.xlsx");
 
         return ResponseEntity
                 .ok()
                 .headers(httpHeaders)
                 .body(new InputStreamResource(in));
-}
+    }
+
+    @GetMapping("/02/excelDown")
+    public ResponseEntity<InputStreamResource> getExcelDown02(RequestParams<St010ExcelVO> requestParams) throws IOException {
+
+
+        ByteArrayInputStream in = st010Service.getExcelDown02(requestParams);
+
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        httpHeaders.setContentDispositionFormData("attachment", "st010_excel_location.xlsx");
+
+        return ResponseEntity
+                .ok()
+                .headers(httpHeaders)
+                .body(new InputStreamResource(in));
+    }
+
+    @GetMapping("/03/excelDown")
+    public ResponseEntity<InputStreamResource> getExcelDown03(RequestParams<St010Excel03VO> requestParams) throws IOException {
+
+
+        ByteArrayInputStream in = st010Service.getExcelDown03(requestParams);
+
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        httpHeaders.setContentDispositionFormData("attachment", "st010_excel_aggregation.xlsx");
+
+        return ResponseEntity
+                .ok()
+                .headers(httpHeaders)
+                .body(new InputStreamResource(in));
+    }
+
+
+
 
 
 
