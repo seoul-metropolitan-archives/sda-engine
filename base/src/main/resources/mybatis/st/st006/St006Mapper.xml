@@ -8,33 +8,38 @@
 
         SELECT *
         FROM (
-            select container.CONTAINER_UUID                                                                           containerUuid,
-                   container.STATUS_UUID                                                                              statusUuid,
-                   container.CONTAINER_NAME                                                                           containerName,
-                   container.CONTAINER_TYPE_UUID                                                                      containerTypeUuid,
-                   (SELECT con.CONTAINER_NAME FROM ST_CONTAINER con
-                    WHERE con.CONTAINER_UUID = container.PARENT_CONTAINER_UUID)                                       parentContainerName,
-                   container.PARENT_CONTAINER_UUID                                                                    parentContainerUuid,
-                   container.CONTROL_NUMBER                                                                           controlNumber,
-                   container.PROVENANCE                                                                               provenance,
-                   container.CREATION_START_DATE                                                                      creationStartDate,
-                   container.CREATION_END_DATE                                                                        creationEndDate,
-                   container.ORDER_NO                                                                                 orderNo,
-                   container.ORDER_KEY                                                                                orderKey,
-                   SUBSTR(SYS_CONNECT_BY_PATH(ROWNUM, '.'), 2, length(SYS_CONNECT_BY_PATH(ROWNUM, '.')))           as orderKey1,
-                   container.DESCRIPTION                                                                              description,
-                   container.NOTES                                                                                    notes,
-                   container.USE_YN                                                                                   useYn
-            from
-                ST_CONTAINER container
-                  LEFT JOIN
-                    ST_ARRANGE_CONTAINERS_RESULT container_result
-                    ON container.CONTAINER_UUID = container_result.CONTAINER_UUID
-            <!-- container_result에 포함되지 않은 애를 찾아라. -->
-            WHERE container_result.container_uuid is null
+                select container.CONTAINER_UUID                                                                 containerUuid,
+                       container.STATUS_UUID                                                                    statusUuid,
+                       container.CONTAINER_NAME                                                                 containerName,
+                       container.CONTAINER_TYPE_UUID                                                            containerTypeUuid,
+                       (SELECT con.CONTAINER_NAME
+                        FROM ST_CONTAINER con
+                        WHERE con.CONTAINER_UUID = container.PARENT_CONTAINER_UUID)                             parentContainerName,
+                       container.PARENT_CONTAINER_UUID                                                          parentContainerUuid,
+                       container.CONTROL_NUMBER                                                                 controlNumber,
+                       container.PROVENANCE                                                                     provenance,
+                       container.CREATION_START_DATE                                                            creationStartDate,
+                       container.CREATION_END_DATE                                                              creationEndDate,
+                       container.ORDER_NO                                                                       orderNo,
+                       container.ORDER_KEY                                                                      orderKey,
+                       SUBSTR(SYS_CONNECT_BY_PATH(ROWNUM, '.'), 2, length(SYS_CONNECT_BY_PATH(ROWNUM, '.'))) as orderKey1,
+                       container.DESCRIPTION                                                                    description,
+                       container.NOTES                                                                          notes,
+                       container.USE_YN
+                from ST_CONTAINER container
+                <!-- container_result에 포함되지 않은 애를 찾아라. -->
+                <!-- [0] location 에 할당되지 않은 root container 를 싹 가져옴  -->
+                <!-- [1] [0]에서 가져온애들에 connect by 함  -->
+                START WITH container.CONTAINER_UUID in (SELECT con.CONTAINER_UUID
+                                                        FROM ST_CONTAINER con
+                                                               LEFT JOIN ST_ARRANGE_CONTAINERS_RESULT container_result
+                                                                 ON con.CONTAINER_UUID = container_result.CONTAINER_UUID
+                                                        WHERE 1 = 1
+                                                          AND container_result.container_uuid is NULL
+                                                          AND con.PARENT_CONTAINER_UUID IS NULL)
+                CONNECT BY PRIOR container.CONTAINER_UUID = container.PARENT_CONTAINER_UUID
 
-            START WITH container.PARENT_CONTAINER_UUID IS NULL
-            CONNECT BY PRIOR container.CONTAINER_UUID = container.PARENT_CONTAINER_UUID
+
         )
         <where>
             1 = 1

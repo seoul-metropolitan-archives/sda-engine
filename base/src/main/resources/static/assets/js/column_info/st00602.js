@@ -10,7 +10,8 @@ var st00602 =
                     editable: false,
                     dataType: "code",
                     required: false,
-                    visible: false
+                    visible: false,
+                    disable:true
                 },
                 {
                     sortNo: 2,
@@ -18,7 +19,8 @@ var st00602 =
                     text: "Code",
                     width: 130,
                     editable: false,
-                    dataType: "text"
+                    dataType: "text",
+                    disable:true
                 },
                 {
                     sortNo: 3,
@@ -26,7 +28,8 @@ var st00602 =
                     text: "Title",
                     width: 500,
                     editable: false,
-                    dataType: "text"
+                    dataType: "text",
+                    disable:true
                 },
                 {
                     sortNo: 4,
@@ -34,7 +37,8 @@ var st00602 =
                     text: "Level",
                     width: 110,
                     editable: false,
-                    dataType: "text"
+                    dataType: "text",
+                    disable:true
                 },
                 {
                     sortNo: 5,
@@ -53,7 +57,8 @@ var st00602 =
                     text: "Published Status",
                     width: 100,
                     editable: false,
-                    dataType: "text"
+                    dataType: "text",
+                    disable:true
                 },
                 {
                     sortNo: 7,
@@ -61,7 +66,8 @@ var st00602 =
                     text: "Author",
                     width: 100,
                     editable: false,
-                    dataType: "text"
+                    dataType: "text",
+                    disable:true
                 },
                 {
                     sortNo: 8,

@@ -18,7 +18,8 @@ var st01402 =
                     text: "존",
                     width: 250,
                     editable: false,
-                    dataType: "text"
+                    dataType: "text",
+                    disable: true
                 },
             ]
     }
