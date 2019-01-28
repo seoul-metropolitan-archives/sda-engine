@@ -14,9 +14,9 @@ public class St01102VO  {
     private String requestTypeUuid;
     private String requestName;
     private String requestorUuid;
-    private Timestamp takeoutDate;
-    private Timestamp returnDueDate;
-    private Timestamp returnDate;
+    private String takeoutDate;
+    private String returnDueDate;
+    private String returnDate;
     private String takeoutPropose;
     private String statusUuid;
     private String outsourcingDepartment;
@@ -25,4 +25,17 @@ public class St01102VO  {
     private String outsourcingPhone;
     private String changeStatus;
     private String aggregationUuid;
+
+    private String approverUuid;
+    private String approvalName;
+    private String approveDate;
+    private String rejectorUuid;
+    private String rejectorName;
+    private String rejectDate;
+
+    private String requestorName;
+    private String userGroupName;
+
+
+
 }

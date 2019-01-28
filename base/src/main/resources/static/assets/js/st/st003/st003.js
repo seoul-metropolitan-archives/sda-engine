@@ -148,7 +148,8 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                     return {
                         confirmBtn:"Arrange",
                         description: fnObj.formView.getData().aggInContainerName,
-                        containerUuid :  currentContainerUuid
+                        containerUuid :  currentContainerUuid,
+                        fromWhere: 'st003'
                     };
                 },
                 callback: function (data) {

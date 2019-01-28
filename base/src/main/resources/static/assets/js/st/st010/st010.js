@@ -289,8 +289,10 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         location.href = "/api/v1/st/st010/02/excelDown?repositoryUuid="+repositoryUuid+"&repositoryCode="+repositoryCode+"&shelfUuid="+shelfUuid;
     },
     EXCEL_DOWN03 : function(caller, act, data){
+        var repositoryUuid = fnObj.gridView01.getSelectedData().repositoryUuid;
         var repositoryCode = fnObj.gridView01.getSelectedData().repositoryCode;
-        var locationUuid = fnObj.gridView03.getSelectedData().locationUuid
+        var shelfUuid = fnObj.gridView02.getSelectedData().shelfUuid;
+        var locationUuid = fnObj.gridView03.getSelectedData().locationUuid;
 
         if(locationUuid == "" || locationUuid == undefined || locationUuid == null){
             return;

@@ -1,7 +1,9 @@
 var fnObj = {};
+var requestorUuid;
 var repositoryUuid;
 var shelfUuid;
 var locationUuid;
+var containerUuid;
 var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH: function (caller, act, data) {
         ACTIONS.dispatch(ACTIONS.PAGE_SEARCH01);
@@ -10,11 +12,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         axboot.ajax({
             type: "GET",
             url: "/api/v1/st/st011/01/list01",
-            data: $.extend({}, {pageSize: 1000}, this.formView.getData(), {
-                repositoryUuid: repositoryUuid,
-                shelfUuid: shelfUuid,
-                locationUuid: locationUuid
-            }),
+            data: $.extend({}, {pageSize: 1000}, this.formView.getData(), {containerUuid : containerUuid}),
             callback: function (res) {
                 fnObj.gridView01.setData(res.list);
                 fnObj.gridView02.clearData();
@@ -33,11 +31,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         axboot.ajax({
             type: "GET",
             url: "/api/v1/st/st011/01/list02",
-            data: $.extend({pageSize: 1000}, this.formView.getData(), {aggregationUuid: fnObj.gridView01.getSelectedData().uuid}, {
-                repositoryUuid: repositoryUuid,
-                shelfUuid: shelfUuid,
-                locationUuid: locationUuid
-            }),
+            data: $.extend({pageSize: 1000}, this.formView.getData(), {aggregationUuid: fnObj.gridView01.getSelectedData().uuid},{requestorUuid : requestorUuid}),
             callback: function (res) {
                 fnObj.gridView02.setData(res.list);
             },
@@ -72,6 +66,84 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         } else {
             return false;
         }
+    },
+    SEARCH_REPOSITORY_SCH: function (caller, act, data) {
+        axboot.modal.open({
+            modalType: "COMMON_POPUP",
+            preSearch: data["preSearch"],
+            sendData: function () {
+                return data;
+            },
+            callback: function (data) {
+                $("input[data-ax-path='repositoryName']").val(data["REPOSITORY_NAME"])
+                repositoryUuid = data['REPOSITORY_UUID'];
+                if (this.close) this.close();
+            }
+        });
+    },
+    SEARCH_SHELF_SCH: function (caller, act, data) {
+        axboot.modal.open({
+            modalType: "COMMON_POPUP",
+            preSearch: data["preSearch"],
+            sendData: function () {
+                return data;
+            },
+            callback: function (data) {
+                $("input[data-ax-path='shelfName']").val(data["SHELF_NAME"])
+                shelfUuid = data['SHELF_UUID'];
+                statusUuid = data['STATUS_UUID'];
+                if (this.close) this.close();
+            }
+        });
+    }
+    ,SEARCH_LOCATION_SCH : function(caller, act, data)
+    {
+        axboot.modal.open({
+            modalType: "COMMON_POPUP",
+            preSearch : data["preSearch"],
+            sendData: function () {
+                return data;
+            },
+            callback: function (data) {
+
+                var text = `${data["ROWNO"]}행 ${data["COLUMNNO"]}열`;
+
+                $("input[data-ax-path='locationName']").val(text)
+                locationUuid = data['LOCATIONUUID'];
+                console.log('locationUuid', locationUuid);
+                if(this.close) this.close();
+            }
+        });
+    },
+    SEARCH_USER_SCH: function (caller, act, data) {
+        axboot.modal.open({
+            modalType: "COMMON_POPUP",
+            preSearch: data["preSearch"],
+            sendData: function () {
+                return data;
+            },
+            callback: function (data) {
+
+                $("input[data-ax-path='requestorName']").val(data['USER_NAME'])
+                requestorUuid = data['USER_UUID'];
+                console.log('requestorUuid', requestorUuid);
+                if (this.close) this.close();
+            }
+        });
+    },
+    SEARCH_CONTAINER_SCH : function (caller, act, data) {
+        axboot.modal.open({
+            modalType: "COMMON_POPUP",
+            preSearch: data["preSearch"],
+            sendData: function () {
+                return data;
+            },
+            callback: function (data) {
+                $("input[data-ax-path='containerName']").val(data["CONTAINER_NAME"])
+                containerUuid = data['CONTAINER_UUID'];
+                if (this.close) this.close();
+            }
+        });
     }
 });
 
@@ -185,6 +257,87 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
             if ((event.keyCode < 48) || (event.keyCode > 57)) event.returnValue = false;
         });
 
+        $("input[data-ax-path='repositoryName']").parents().eq(1).find("a").click(function () {
+            var data = {
+                popupCode: "PU137",
+                searchData: $("input[data-ax-path='repositoryName']").val().trim(),
+                preSearch: false
+            };
+            ACTIONS.dispatch(ACTIONS.SEARCH_REPOSITORY_SCH, data);
+        });
+
+        $("input[data-ax-path='shelfName']").parents().eq(1).find("a").click(function () {
+            if ("" != repositoryUuid) {
+                var data = {
+                    popupCode: "PU138",
+                    searchData: repositoryUuid,
+                    preSearch: false
+                };
+                ACTIONS.dispatch(ACTIONS.SEARCH_SHELF_SCH, data);
+            }
+        });
+
+        $("input[data-ax-path='locationName']").parents().eq(1).find("a").click(function () {
+            if ("" != shelfUuid) {
+                var data = {
+                    popupCode: "PU147",
+                    searchData: shelfUuid,
+                    preSearch: false
+                };
+                ACTIONS.dispatch(ACTIONS.SEARCH_LOCATION_SCH, data);
+            }
+        });
+
+        $("input[data-ax-path='requestorName']").parents().eq(1).find("a").click(function () {
+
+            var data = {
+                popupCode: "PU107",
+                searchData: null,
+                preSearch: false
+            };
+            ACTIONS.dispatch(ACTIONS.SEARCH_USER_SCH, data);
+
+        });
+
+        $("input[data-ax-path='containerName']").parents().eq(1).find("a").click(function () {
+
+            var data = {
+                popupCode: "PU148",
+                searchData: locationUuid,
+                preSearch: false
+            };
+            ACTIONS.dispatch(ACTIONS.SEARCH_CONTAINER_SCH, data);
+
+        });
+
+        $("input[data-ax-path='repositoryName']").keyup(function(e){
+            if($(this).val() == ""){
+                repositoryUuid = "";
+            }
+        });
+
+        $("input[data-ax-path='shelfName']").keyup(function(e){
+            if($(this).val() == ""){
+                shelfUuid = "";
+            }
+        });
+
+        $("input[data-ax-path='locationName']").keyup(function(e){
+            if($(this).val() == ""){
+                locationUuid = "";
+            }
+        });
+        $("input[data-ax-path='containerName']").keyup(function(e){
+            if($(this).val() == ""){
+                containerUuid = "";
+            }
+        });
+
+        $("input[data-ax-path='requestorName']").keyup(function(e){
+            if($(this).val() == ""){
+                requestorUuid = "";
+            }
+        });
     },
     getData: function () {
         var data = this.modelFormatter.getClearData(this.model.get()); // 모델의 값을 포멧팅 전 값으로 치환.

@@ -24,24 +24,24 @@
                 </div>
                 <div class="bdb div_tablerow">
                     <dl>
-                        <th:block layout:insert="~{/fragments/page-buttons :: searchInputYellow ('Repository','repositoryName')}"/>
-                        <th:block layout:insert="~{/fragments/page-buttons :: searchInputYellow ('Shelf','shelfName')}"/>
+                        <th:block layout:insert="~{/fragments/page-buttons :: searchInput('Repository','repositoryName')}"/>
+                        <th:block layout:insert="~{/fragments/page-buttons :: searchInput('Shelf','shelfName')}"/>
                         <!-- TO DO : location container팝업을 만들어야 한다. -->
-                        <th:block layout:insert="~{/fragments/page-buttons :: searchInputYellow ('Location','repositoryName')}"/>
-                        <th:block layout:insert="~{/fragments/page-buttons :: searchInputYellow ('Container','repositoryName')}"/>
+                        <th:block layout:insert="~{/fragments/page-buttons :: searchInput('Location','locationName')}"/>
+                        <th:block layout:insert="~{/fragments/page-buttons :: searchInput('Container','containerName')}"/>
                     </dl>
                     <dl>
-                        <th:block layout:insert="~{/fragments/page-buttons :: searchInputYellow ('반출자','repositoryName')}"/>
-                        <th:block layout:insert="~{/fragments/page-buttons :: searchInputYellow ('반입자','repositoryName')}"/>
+                        <th:block layout:insert="~{/fragments/page-buttons :: searchInput ('반출자','requestorName')}"/>
+                        <!--<th:block layout:insert="~{/fragments/page-buttons :: searchInput('반입자','repositoryName')}"/>-->
 
                         <dt class="w150">외부반출자</dt>
                         <dd>
-                            <input type=text style="width:135px" data-ax-path="test3">
+                            <input type=text style="width:135px" data-ax-path="outsourcingPersonName">
                         </dd>
-                        <dt class="w150">외부반입자</dt>
+                        <!--<dt class="w150">외부반입자</dt>
                         <dd>
                             <input type=text style="width:135px" data-ax-path="test4">
-                        </dd>
+                        </dd>-->
                     </dl>
                     <dl>
                         <dt class="w150">Aggregation Code</dt>

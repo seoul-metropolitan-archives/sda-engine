@@ -20,6 +20,9 @@ public class St011Service extends BaseService {
 
     public Page<St01101VO> getAggregation(Pageable pageable, RequestParams<St01101VO> requestParams) {
         St01101VO st01101VO = new St01101VO();
+        st01101VO.setContainerUuid(requestParams.getString("containerUuid"));
+        st01101VO.setCode(requestParams.getString("code"));
+        st01101VO.setTitle(requestParams.getString("title"));
 
         return filter(st011Mapper.getAggregation(st01101VO), pageable, "", St01101VO.class);
     }
@@ -28,6 +31,7 @@ public class St011Service extends BaseService {
 
         St01102VO st01102VO = new St01102VO();
         st01102VO.setAggregationUuid(requestParams.getString("aggregationUuid"));
+        st01102VO.setRequestorUuid(requestParams.getString("requestorUuid"));
         return filter(st011Mapper.getTakeInOutList(st01102VO), pageable, "", St01102VO.class);
     }
 }

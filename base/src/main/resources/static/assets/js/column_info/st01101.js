@@ -90,20 +90,29 @@ var st01101 =
                     disable: true
                 },
                 {
-                    sortNo: 10,
-                    name: "description",
-                    text: "Description",
+                    sortNo: 9,
+                    name: "repositoryName",
+                    text: "서고",
                     width: 250,
                     editable: false,
-                    dataType: "richtext"
+                    dataType: "text"
                 },
                 {
-                    sortNo: 11,
-                    name: "notes",
-                    text: "Notes",
+                    sortNo: 9,
+                    name: "shelfName",
+                    text: "서가",
                     width: 250,
                     editable: false,
-                    dataType: "richtext"
-                }
+                    dataType: "text"
+                },
+                {
+                    sortNo: 9,
+                    name: "locationName",
+                    text: "행렬단",
+                    width: 250,
+                    editable: false,
+                    dataType: "text"
+                },
+
             ]
     }

@@ -33,4 +33,10 @@ public class St010Excel03VO {
 
     private String locationName;
 
+    private String requestName;
+    private String status;
+    private String statusName;
+    private String takeoutDate;
+    private String returnDueDate;
+
 }

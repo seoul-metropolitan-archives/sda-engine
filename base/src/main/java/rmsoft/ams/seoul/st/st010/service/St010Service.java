@@ -325,22 +325,25 @@ public class St010Service extends BaseService {
                 cell.setCellValue(list.get(i).getLocationName());
 
                 cell = row.createCell(7); //반출서번호
-                cell.setCellValue("");
+                cell.setCellValue(list.get(i).getRequestName());
 
                 cell = row.createCell(8); //반입/반출
+                cell.setCellValue(list.get(i).getStatusName());
+
+                cell = row.createCell(9); //반출일
+                cell.setCellValue(list.get(i).getTakeoutDate());
+
+                cell = row.createCell(10); //반입예정일
+                cell.setCellValue(list.get(i).getReturnDueDate());
+
+                cell = row.createCell(11); //반입일
                 cell.setCellValue("");
 
-                cell = row.createCell(8); //반출일
-                cell.setCellValue("");
-
-                cell = row.createCell(8); //반입예정일
-                cell.setCellValue("");
-
-                cell = row.createCell(8); //반입일
-                cell.setCellValue("");
-
-                inCountTotal = inCountTotal + Integer.parseInt(list.get(i).getInCount());
-                outCountTotal = outCountTotal + Integer.parseInt(list.get(i).getOutCount());
+                if(list.get(i).getStatus().equals("01")){
+                    inCountTotal = inCountTotal + 1;
+                }else if(list.get(i).getStatus().equals("02")){
+                    outCountTotal = outCountTotal + 1;
+                }
             }
 
 

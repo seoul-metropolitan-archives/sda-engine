@@ -18,5 +18,10 @@ public class St01101VO {
     private String author;
     private String descStrDate;
     private String descEdDate;
+    private String repositoryName;
+    private String shelfName;
+    private String locationName;
+
+    private String containerUuid;
 
 }

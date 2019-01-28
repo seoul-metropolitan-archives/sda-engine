@@ -5,72 +5,131 @@
 
 <mapper namespace="rmsoft.ams.seoul.st.st011.dao.St011Mapper">
     <select id="getAggregation" resultType="St01101VO" parameterType="St01101VO" statementType="PREPARED">
-        SELECT AGGREGATION_UUID                                                                         as uuid,
+        SELECT Z1.AGGREGATION_UUID                                                                         as uuid,
        1                                                                                        as orderNo,
-       (SELECT CODE_NAME
-        FROM AD_CODE_DETAIL
-        WHERE CODE_DETAIL_UUID = Z1.PUBLISHED_STATUS_UUID)                                      as publishedStatus,
+       (SELECT CODE_NAME FROM AD_CODE_DETAIL WHERE CODE_DETAIL_UUID = Z1.PUBLISHED_STATUS_UUID) as publishedStatus,
        AGGREGATION_CODE                                                                         as code,
        TITLE                                                                                    as title,
-       (SELECT CODE_NAME
-        FROM AD_CODE_DETAIL
-        WHERE CODE_DETAIL_UUID = Z1.TYPE_UUID)                                                  as "type",
-       (SELECT LEVEL_NAME
-        FROM RC_LEVEL
-        WHERE LEVEL_UUID = Z1.LEVEL_UUID)                                                       as "level",
-       AUTHOR                                                                                   as author,
-       DESCRIPTION_START_DATE                                                                   as descStrDate,
-       DESCRIPTION_END_DATE                                                                     as descEdDate,
-       DESCRIPTION                                                                              as description,
-       NOTES                                                                                    as notes,
+       (SELECT CODE_NAME FROM AD_CODE_DETAIL WHERE CODE_DETAIL_UUID = Z1.TYPE_UUID)             as "type",
+       (SELECT LEVEL_NAME FROM RC_LEVEL WHERE LEVEL_UUID = Z1.LEVEL_UUID)                       as "level",
+       Z1.AUTHOR                                                                                   as author,
+       Z1.DESCRIPTION_START_DATE                                                                   as descStrDate,
+       Z1.DESCRIPTION_END_DATE                                                                     as descEdDate,
+       Z1.DESCRIPTION                                                                              as description,
+       Z1.NOTES                                                                                    as notes,
        ((SELECT COUNT(*) FROM RC_AGGREGATION WHERE PARENT_AGGREGATION_UUID = Z1.AGGREGATION_UUID) +
-        (SELECT COUNT(*)
-         FROM RC_ITEM
-         WHERE AGGREGATION_UUID = Z1.AGGREGATION_UUID))                                         as childCnt
-      FROM RC_AGGREGATION Z1
+        (SELECT COUNT(*) FROM RC_ITEM WHERE AGGREGATION_UUID = Z1.AGGREGATION_UUID))            as childCnt,
+        repository.REPOSITORY_NAME repositoryName, -- 서고
+       shelf.SHELF_NAME shelfName, -- 서가
+       (location.ROW_NO || '행 ' || location.COLUMN_NO || '열') as locationName -- 행렬단
+        FROM RC_AGGREGATION Z1 LEFT OUTER JOIN ST_ARRANGE_RECORDS_RESULT etc
+         ON etc.AGGREGATION_UUID = Z1.AGGREGATION_UUID
+                       LEFT JOIN ST_ARRANGE_CONTAINERS_RESULT acr
+         ON acr.CONTAINER_UUID = etc.CONTAINER_UUID
+                       LEFT JOIN ST_LOCATION location
+         ON location.LOCATION_UUID = acr.LOCATION_UUID
+                       LEFT JOIN ST_CONTAINER container
+         ON container.CONTAINER_UUID = etc.CONTAINER_UUID
+                       LEFT JOIN ST_SHELF shelf
+         ON shelf.SHELF_UUID = location.SHELF_UUID
+                       LEFT JOIN ST_REPOSITORY repository
+         ON repository.REPOSITORY_UUID = shelf.REPOSITORY_UUID
+        WHERE EXISTS(
+                SELECT *
+                FROM ST_ARRANGE_RECORDS_RESULT A
+                       INNER JOIN ST_ARRANGE_CONTAINERS_RESULT B ON A.CONTAINER_UUID = B.CONTAINER_UUID
+                WHERE A.AGGREGATION_UUID = Z1.AGGREGATION_UUID
+                  )
+        <if test="containerUuid != null">
+            AND container.CONTAINER_UUID = #{containerUuid}
+        </if>
+        <if test="code != null">
+            <![CDATA[
+                   AND AGGREGATION_CODE  LIKE '%' || #{code} || '%'
+                ]]>
+        </if>
+        <if test="title != null">
+            <![CDATA[
+                   AND TITLE  LIKE '%' || #{title} || '%'
+                ]]>
+
+        </if>
     </select>
 
     <select id="getTakeInOutList" resultType="St01102VO" parameterType="St01102VO" statementType="PREPARED">
-        SELECT
-           A.TAKEOUT_REQUEST_UUID as takeoutRequestUuid,
-           A.REQUEST_TYPE_UUID as requestTypeUuid,
-           A.REQUEST_NAME as requestName,
-           A.REQUESTOR_UUID as requestorUuid,
-           A.TAKEOUT_DATE as takeoutDate,
-           A.RETURN_DUE_DATE as returnDueDate,
-           A.RETURN_DATE as returnDate,
-           A.TAKEOUT_PROPOSE as takeoutPropose,
-           A.STATUS_UUID as statusUuid,
-           A.OUTSOURCING_DEPARTMENT as outsourcingDepartment,
-           A.OUTSOURCING_POSITION as outsourcingPosition,
-           A.OUTSOURCING_PERSON_NAME as outsourcingPersonName,
-           A.OUTSOURCING_PHONE as outsourcingPhone,
-           (SELECT
-                   USER_NAME
-            FROM
-                 AC_USER
-            WHERE
-                USER_UUID = INSERT_UUID
-              AND ROWNUM = 1)  as insertUuid,
-           A.INSERT_DATE as insertDate,
-           (SELECT
-                   USER_NAME
-            FROM
-                 AC_USER
-            WHERE
-                USER_UUID = UPDATE_UUID
-              AND ROWNUM = 1)  as updateUuid,
-           A.UPDATE_DATE as updateDate,
-           B.AGGREGATION_UUID
-    FROM
-         ST_TAKEOUT_REQUEST A INNER JOIN ST_TAKEOUT_RECORD_RESULT B
-         ON A.TAKEOUT_REQUEST_UUID = B.TAKEOUT_REQUEST_UUID
+
+        select
+        TAKEOUT_REQUEST_UUID takeoutRequestUuid,
+        REQUEST_NAME requestName,
+        REQUEST_TYPE_UUID requestTypeUuid,
+        REQUESTOR_UUID requestorUuid,
+        (CASE
+        WHEN REQUEST_TYPE_UUID = 'AF04136D-3508-4E1C-A85B-F1A1FEDDB607'
+        THEN ac_user.USER_NAME
+        ELSE OUTSOURCING_PERSON_NAME
+        END
+        )                                                                               AS requestorName,
+        (CASE
+        WHEN REQUEST_TYPE_UUID = 'AF04136D-3508-4E1C-A85B-F1A1FEDDB607'
+        THEN (SELECT CODE_NAME FROM AD_CODE_DETAIL WHERE CODE_DETAIL_UUID = ac_user.ORGANIZATION_UUID)
+        ELSE OUTSOURCING_DEPARTMENT
+        END
+        )                                                                               AS userGroupName,
+        /*user_group.USER_GROUP_NAME userGroupName,*/
+
+        TO_CHAR(TO_DATE(request.TAKEOUT_DATE),'YYYY-MM-DD') as  takeoutDate,
+        TO_CHAR(TO_DATE(request.RETURN_DATE),'YYYY-MM-DD') as returnDate,
+        TO_CHAR(TO_DATE(request.RETURN_DUE_DATE),'YYYY-MM-DD') as returnDueDate,
+        (SELECT CODE_NAME
+        FROM AD_CODE_DETAIL
+        WHERE CODE_DETAIL_UUID = request.STATUS_UUID) AS status,
+        request.STATUS_UUID statusUuid,
+        TAKEOUT_PROPOSE takeoutPropose,
+        OUTSOURCING_DEPARTMENT outsourcingDepartment,
+        OUTSOURCING_POSITION outsourcingPosition,
+        OUTSOURCING_PERSON_NAME outsourcingPersonName,
+        OUTSOURCING_PHONE outsourcingPhone,
+        request.APPROVER_UUID as approverUuid,
+        ac_user1.USER_NAME as approvalName,
+        TO_CHAR(TO_DATE(request.APPROVE_DATE),'YYYY-MM-DD')  as approveDate,
+        request.REJECTOR_UUID as rejectorUuid,
+        ac_user2.USER_NAME as rejectorName,
+        TO_CHAR(TO_DATE(request.REJECT_DATE),'YYYY-MM-DD')  as rejectDate
+        FROM ST_TAKEOUT_REQUEST request
+        INNER JOIN AC_USER_GROUP_USER group_user
+        ON USER_UUID = request.REQUESTOR_UUID
+        INNER JOIN AC_USER_GROUP user_group
+        ON user_group.USER_GROUP_UUID = group_user.USER_GROUP_UUID
+        INNER JOIN AC_USER ac_user
+        ON ac_user.USER_UUID = request.REQUESTOR_UUID
+        LEFT OUTER JOIN AC_USER ac_user1
+        ON ac_user1.USER_UUID = request.APPROVER_UUID
+        LEFT OUTER JOIN AC_USER ac_user2
+        ON ac_user2.USER_UUID = request.REJECTOR_UUID
         <where>
             1=1
-            <if test="aggregationUuid != null">
-               AND B.AGGREGATION_UUID = #{aggregationUuid}
+            AND EXISTS (
+                SELECT *
+                FROM ST_TAKEOUT_RECORD_RESULT STTRR
+                WHERE STTRR.TAKEOUT_REQUEST_UUID = request.TAKEOUT_REQUEST_UUID
+                AND STTRR.AGGREGATION_UUID = #{aggregationUuid}
+            )
+
+            <!--<if test="requestName != null">
+                AND REQUEST_NAME LIKE '%' || #{requestName} || '%'
+            </if>-->
+            <if test="requestorUuid != null">
+                AND request.REQUESTOR_UUID  = #{requestorUuid}
             </if>
+
+            <if test="outsourcingPersonName != null">
+                AND OUTSOURCING_PERSON_NAME LIKE '%' || #{outsourcingPersonName} || '%'
+            </if>
+
+
+
         </where>
+        ORDER BY requestName
 
     </select>
 </mapper>
