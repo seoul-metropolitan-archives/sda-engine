@@ -35,7 +35,7 @@ var st02101 =
                     sortNo: 2,
                     name: "title",
                     text: "Title",
-                    width: 200,
+                    width: 400,
                     required: false,
                     editable: false,
                     dataType: "text",
@@ -45,7 +45,7 @@ var st02101 =
                     sortNo: 3,
                     name: "level",
                     text: "Level",
-                    width: 110,
+                    width: 70,
                     editable: false,
                     dataType: "text",
                     disable: true
@@ -54,7 +54,7 @@ var st02101 =
                     sortNo: 4,
                     name: "type",
                     text: "Type",
-                    width: 80,
+                    width: 70,
                     editable: false,
                     dataType: "text",
                     disable: true
@@ -72,7 +72,7 @@ var st02101 =
                     sortNo: 6,
                     name: "author",
                     text: "Author",
-                    width: 140,
+                    width: 100,
                     editable: false,
                     dataType: "text",
                     disable: true
@@ -135,7 +135,7 @@ var st02101 =
                     sortNo: 13,
                     name: "inoutName",
                     text: "입출 구분",
-                    width: 100,
+                    width: 70,
                     editable: false,
                     dataType: "text",
                     disable: true

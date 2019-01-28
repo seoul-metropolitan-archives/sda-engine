@@ -20,16 +20,7 @@
                     <ul class="bdb">
                         <th:block layout:insert="~{/fragments/page-buttons :: bookmark}"/>
 
-                        <li style="text-align:right; width:40%;">
-                            <button class="btn_co" th:id="btn_setReason">
-
-                                <span class="btn_icon_co">&nbsp;</span>
-                                <span class="btn_main_txt">사유 등록</span>
-                            </button>
-
-
-                        </li>
-                        <th:block layout:insert="~{/fragments/page-buttons :: save-and-inquiry('none','show')}"/>
+                        <th:block layout:insert="~{/fragments/page-buttons :: reason-inquiry}"/>
                     </ul>
                 </div>
                 <!-- 상단검색 -->

@@ -54,7 +54,7 @@ var st00802 =
                     sortNo: 2,
                     name: "title",
                     text: "Title",
-                    width: 200,
+                    width: 400,
                     required: false,
                     editable: false,
                     dataType: "text",
@@ -64,7 +64,7 @@ var st00802 =
                     sortNo: 3,
                     name: "level",
                     text: "Level",
-                    width: 110,
+                    width: 70,
                     editable: false,
                     dataType: "text",
                     disable: true
@@ -73,7 +73,7 @@ var st00802 =
                     sortNo: 4,
                     name: "type",
                     text: "Type",
-                    width: 80,
+                    width: 70,
                     editable: false,
                     dataType: "text",
                     disable: true
@@ -91,7 +91,7 @@ var st00802 =
                     sortNo: 6,
                     name: "author",
                     text: "Author",
-                    width: 140,
+                    width: 100,
                     editable: false,
                     dataType: "text",
                     disable: true
@@ -118,7 +118,7 @@ var st00802 =
                     sortNo: 9,
                     name: "repositoryName",
                     text: "서고",
-                    width: 250,
+                    width: 200,
                     editable: false,
                     dataType: "text",
                     disable: true
@@ -127,7 +127,7 @@ var st00802 =
                     sortNo: 9,
                     name: "shelfName",
                     text: "서가",
-                    width: 250,
+                    width: 200,
                     editable: false,
                     dataType: "text",
                     disable: true
@@ -136,7 +136,7 @@ var st00802 =
                     sortNo: 9,
                     name: "locationName",
                     text: "행렬단",
-                    width: 250,
+                    width: 200,
                     editable: false,
                     dataType: "text",
                     disable: true

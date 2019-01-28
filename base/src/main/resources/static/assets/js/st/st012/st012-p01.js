@@ -222,7 +222,7 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
 
             fnObj.formView.setFormData("code", parentsData[0].code);
             fnObj.formView.setFormData("title", parentsData[0].title);
-            fnObj.formView.setFormData("containerInfo", `${parentsData[0].repositoryName}/${parentsData[0].shelfName}/${parentsData[0].locationName}`);
+            fnObj.formView.setFormData("containerInfo", `${parentsData[0].repositoryName ? parentsData[0].repositoryName : '' }/${parentsData[0].shelfName ? parentsData[0].shelfName : ''}/${parentsData[0].locationName ? parentsData[0].locationName : ''}`);
         }
 
 
@@ -498,7 +498,7 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
         this.initInstance();
         this.setColumnInfo(st01202.column_info);
         this.gridObj.setOption({
-            checkBar: {visible: true}
+            checkBar: {visible: false}
         })
         this.makeGrid();
         //this.gridObj.itemClick(this.itemClick);

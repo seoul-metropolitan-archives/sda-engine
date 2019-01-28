@@ -85,11 +85,14 @@ public class St008Controller extends BaseController {
     @PutMapping("/01/save01")
     @PostMapping
     public ApiResponse saveStTakeoutRequestList(@RequestBody List<St00801VO> list) {
-        ApiResponse apiResponse = st008Service.saveStTakeoutRequestList(list);
-        if(apiResponse.getStatus() == -1) {
-            throw new ApiException(ApiStatus.SYSTEM_ERROR, apiResponse.getMessage());
-        }
-        return apiResponse;
+
+            ApiResponse apiResponse = st008Service.saveStTakeoutRequestList(list);
+            if (apiResponse.getStatus() == -1) {
+                throw new ApiException(ApiStatus.SYSTEM_ERROR, apiResponse.getMessage());
+            }
+
+            return apiResponse;
+
 
     }
 

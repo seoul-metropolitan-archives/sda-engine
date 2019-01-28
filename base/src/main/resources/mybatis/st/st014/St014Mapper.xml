@@ -78,6 +78,7 @@
                                 FROM RC_ITEM Z1) B on B.UUID = inout_record.AGGREGATION_UUID
         <where>
             1=1
+            AND inout_record.AGGREGATION_UUID is not null
             <if test="code != null">
                 <![CDATA[
                    AND B.code  LIKE '%' || #{code} || '%'

@@ -18,6 +18,7 @@ public class St00701VO extends BaseVO {
     private String containerTypeUuid;
     private String locationUuid;
 
+    private String retentionPeriodName;
     private String code;
     private String title;
     private String level;

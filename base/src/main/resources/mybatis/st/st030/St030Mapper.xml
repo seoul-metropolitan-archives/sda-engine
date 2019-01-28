@@ -97,6 +97,7 @@
 
         <where>
             1=1
+            AND record_req.AGGREGATION_UUID is not NULL
             <if test="code != null">
                 <![CDATA[
                    AND B.code  LIKE '%' || #{code} || '%'

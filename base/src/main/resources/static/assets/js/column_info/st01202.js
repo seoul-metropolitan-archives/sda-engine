@@ -17,10 +17,11 @@ var st01202 =
                     sortNo: 1,
                     name: "zoneName",
                     text: "존",
-                    width: 250,
+                    width: 350,
                     editable: false,
                     visible: true,
-                    dataType: "text"
+                    dataType: "text",
+                    disable: true
                 },
             ]
     }

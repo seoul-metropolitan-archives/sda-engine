@@ -57,7 +57,7 @@ var st03001 =
                     sortNo: 2,
                     name: "title",
                     text: "Title",
-                    width: 350,
+                    width: 400,
                     required: false,
                     editable: false,
                     dataType: "text",

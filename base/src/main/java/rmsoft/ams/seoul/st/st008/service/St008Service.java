@@ -1,5 +1,6 @@
 package rmsoft.ams.seoul.st.st008.service;
 
+import io.onsemiro.core.api.ApiException;
 import io.onsemiro.core.api.response.ApiResponse;
 import io.onsemiro.core.code.ApiStatus;
 import io.onsemiro.core.domain.BaseService;
@@ -53,6 +54,7 @@ public class St008Service extends BaseService {
     private StTakeoutRecordResultRepository stTakeoutRecordResultRepository;
 
     private static short BORDER_STYLE = CellStyle.BORDER_THIN;
+
     /**
      * Gets classified record list.
      *
@@ -89,14 +91,27 @@ public class St008Service extends BaseService {
     @Transactional
     public ApiResponse saveStTakeoutRequestList(List<St00801VO> list) {
         // 삭제만 가능
+
         List<StTakeoutRequest> stTakeoutRequestList = ModelMapperUtils.mapList(list, StTakeoutRequest.class);
 
         for (StTakeoutRequest stTakeoutRequest : stTakeoutRequestList) {
             if (stTakeoutRequest.isDeleted()) {
-                stTakeoutRequestRepository.delete(stTakeoutRequest);
+                St00802VO vo = new St00802VO();
+                vo.setTakeoutRequestUuid(stTakeoutRequest.getTakeoutRequestUuid());
+                // 하위에 연결된 레코드가 없어야 삭제가능.
+                List<St00802VO> aStTakeOutRecordResult = st008Mapper.getStTakeoutRecordResult(vo);
+                if( aStTakeOutRecordResult.size() == 0){
+                    // 하위 레코드 ( 반출 신청 대상 ) 이 없음
+                    stTakeoutRequestRepository.delete(stTakeoutRequest);
+                }else{
+                    // 하위 레코드 ( 반출 신청 대상 ) 이 있음
+                    throw new ApiException(ApiStatus.SYSTEM_ERROR, "해당 반출서 하위에 있는 '반출신청대상'을 먼저 삭제 해 주세요.");
+                }
+
             }
         }
         return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");
+
     }
 
     @Transactional
@@ -128,7 +143,7 @@ public class St008Service extends BaseService {
             String refinedCodeSeq = orgCodeSeq;
 
             // 년월일-시퀀스 두자리. ex)20181121-01. 하루에 99개밖에 못만들게 돼있음.
-            for (int cnt =0; cnt < Math.abs(orgCodeSeq.length() - 2); cnt++) {
+            for (int cnt = 0; cnt < Math.abs(orgCodeSeq.length() - 2); cnt++) {
                 refinedCodeSeq = "0" + refinedCodeSeq;
             }
             String requestName = DateUtils.convertToString(LocalDateTime.now(), "yyyyMMdd") + "-" + refinedCodeSeq;
@@ -201,9 +216,9 @@ public class St008Service extends BaseService {
 
     public static XSSFCellStyle createCellStyle(XSSFWorkbook workBook, String type) {
         XSSFCellStyle cellStyle = workBook.createCellStyle();
-        if( type.equals("NO_BORDER")){
+        if (type.equals("NO_BORDER")) {
             // border 적용 안함
-        }else {
+        } else {
             // border 적용
             //CELL STYLE 적용
             cellStyle.setBorderTop(BORDER_STYLE);
@@ -212,11 +227,11 @@ public class St008Service extends BaseService {
             cellStyle.setBorderRight(BORDER_STYLE);
         }
 
-        if( type.equals("LEFT")){
+        if (type.equals("LEFT")) {
             cellStyle.setAlignment(HorizontalAlignment.LEFT);
-        }else if( type.equals("RIGHT")){
+        } else if (type.equals("RIGHT")) {
             cellStyle.setAlignment(HorizontalAlignment.RIGHT);
-        }else{
+        } else {
             // 나머지는 모두 center
             cellStyle.setAlignment(HorizontalAlignment.CENTER);
         }
@@ -225,11 +240,12 @@ public class St008Service extends BaseService {
 
         return cellStyle;
     }
+
     public static void mergeCell(XSSFWorkbook workBook, XSSFSheet sheet, int rNum, int columnIndex) {
         CellRangeAddress mergedCell = new CellRangeAddress(
                 rNum, //first row (0-based)
                 rNum, //last row  (0-based)
-                columnIndex-1, //first column (0-based)
+                columnIndex - 1, //first column (0-based)
                 columnIndex  //last column  (0-based)
         );
         sheet.addMergedRegion(mergedCell);
@@ -247,9 +263,10 @@ public class St008Service extends BaseService {
         cell.setCellValue(textToSet);
     }
 
-    public static String getNowWithoutTime(){
+    public static String getNowWithoutTime() {
         return DateUtils.convertToString(LocalDateTime.now(), DateUtils.DATE_TIME_PATTERN).substring(0, 10);
     }
+
     public ByteArrayInputStream getExcelDown(RequestParams<St00801VO> parameter) throws IOException {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         InputStream is = null;
@@ -386,7 +403,6 @@ public class St008Service extends BaseService {
         }
 
     }
-
 
 
 }

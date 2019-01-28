@@ -12,7 +12,7 @@
                   FROM AD_CODE_HEADER ZZ1,
                        AD_CODE_DETAIL ZZ2
                   WHERE ZZ1.CODE_HEADER_UUID = ZZ2.CODE_HEADER_UUID
-                    AND ZZ1.CATEGORY_CODE = 'CD129'
+                    -- AND ZZ1.CATEGORY_CODE = 'CD129'
                     AND ZZ2.CODE_DETAIL_UUID = hist.INOUT_TYPE_UUID
                ) inoutName
         FROM ST_WITHOUT_NOTICE_INOUT_HIST hist
@@ -102,6 +102,7 @@
 
         <where>
             1=1
+            AND record.aggregationUuid is not NULL
             <if test="code != null">
                 <![CDATA[
                    AND code  LIKE '%' || #{code} || '%'

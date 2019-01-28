@@ -35,7 +35,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         axboot.ajax({
             type: "GET",
             url: "/api/v1/st/st018/01/list02",
-            data: $.extend({}, this.formView.getData(), {aggregationUuid: fnObj.gridView01.getSelectedData().aggregationUuid},
+            data: $.extend({pageSize: 1000}, this.formView.getData(), {aggregationUuid: fnObj.gridView01.getSelectedData().aggregationUuid},
                 {repositoryUuid: repositoryUuid, shelfUuid: shelfUuid, locationUuid: locationUuid, requestorUuid : requestorUuid}
                 ),
             callback: function (res) {

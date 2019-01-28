@@ -89,12 +89,15 @@ public class St006Service extends BaseService {
 
 
         // 해당 container 의 자신포함 하위node 싹 가져옴
-        List<St00401VO> aList = st006Mapper.getContainerTree(requestParams);
-        for( St00401VO eachContainer : aList){
-            // 필요한게 location uuid 이므로 넣어줌.
-            eachContainer.setLocationUuid(requestParams.getLocationUuid());
-        }
+//        List<St00401VO> aList = st006Mapper.getContainerTree(requestParams);
+//        for( St00401VO eachContainer : aList){
+//            // 필요한게 location uuid 이므로 넣어줌.
+//            eachContainer.setLocationUuid(requestParams.getLocationUuid());
+//        }
         // 모든 하위 노드에 ST_ARRANGE_RECORDS_RESULT uuid 공통으로 넣음.
+
+        List<St00401VO> aList = new ArrayList<>();
+        aList.add(requestParams);
         st004Service.saveArrangeRecordList(aList);
         return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");
     }
