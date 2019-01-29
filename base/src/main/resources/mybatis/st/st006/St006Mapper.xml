@@ -65,7 +65,7 @@
                 AND creationStartDate <![CDATA[>=]]> TO_DATE(#{creationStartDate},'yyyy-mm-dd')
             </if>
             <if test="creationEndDate != null">
-                AND creationEndDate <![CDATA[<]]> TO_DATE(#{creationEndDate},'yyyy-mm-dd')
+                AND creationEndDate <![CDATA[<=]]> TO_DATE(#{creationEndDate},'yyyy-mm-dd')
             </if>
             <if test="useYn != null">
                 AND useYn = #{useYn}

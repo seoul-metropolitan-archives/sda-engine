@@ -111,7 +111,12 @@ public class St018Service extends BaseService {
         //생산기관
         modelPrinter.mkOrgName = st018PrinterVO.getCreator();
         //생산년도
-        modelPrinter.mkYear = st018PrinterVO.getCreationStartDate();
+        String mkYear = st018PrinterVO.getCreationStartDate();
+        if( mkYear != null && 3 < mkYear.length() ){
+            // 네자리로 잘라야 되므로.
+            mkYear = mkYear.substring(0, 4);
+        }
+        modelPrinter.mkYear = mkYear;
         //보존기간
         modelPrinter.consDtStr = st018PrinterVO.getRetentionPeriodName();
         //관리번호

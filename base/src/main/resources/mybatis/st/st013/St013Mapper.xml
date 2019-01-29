@@ -31,13 +31,13 @@
                 AND EXCEPT_START_DATE <![CDATA[>=]]> TO_DATE(#{exceptStartDateFrom},'yyyy-mm-dd')
             </if>
             <if test="exceptStartDateTo != null">
-                AND EXCEPT_START_DATE <![CDATA[<]]> TO_DATE(#{exceptStartDateTo},'yyyy-mm-dd')
+                AND EXCEPT_START_DATE <![CDATA[<=]]> TO_DATE(#{exceptStartDateTo},'yyyy-mm-dd')
             </if>
             <if test="exceptEndDateFrom != null">
                 AND EXCEPT_END_DATE <![CDATA[>=]]> TO_DATE(#{exceptEndDateFrom},'yyyy-mm-dd')
             </if>
             <if test="exceptEndDateTo != null">
-                AND EXCEPT_END_DATE <![CDATA[<]]> TO_DATE(#{exceptEndDateTo},'yyyy-mm-dd')
+                AND EXCEPT_END_DATE <![CDATA[<=]]> TO_DATE(#{exceptEndDateTo},'yyyy-mm-dd')
             </if>
         </where>
         ORDER BY requestDate desc

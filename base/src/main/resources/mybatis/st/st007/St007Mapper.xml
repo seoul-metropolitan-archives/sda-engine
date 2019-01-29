@@ -54,7 +54,7 @@
                                             AND DISPOSAL_DUE_DATE <![CDATA[>=]]> TO_DATE(#{disposalDueDateStart},'yyyy-mm-dd')
                                         </if>
                                         <if test="disposalDueDateEnd != null">
-                                            AND DISPOSAL_DUE_DATE <![CDATA[<]]> TO_DATE(#{disposalDueDateEnd},'yyyy-mm-dd')
+                                            AND DISPOSAL_DUE_DATE <![CDATA[<=]]> TO_DATE(#{disposalDueDateEnd},'yyyy-mm-dd')
                                         </if>
                                     </where>
 
@@ -220,7 +220,7 @@
                 AND result.DISPOSAL_DUE_DATE <![CDATA[>=]]> TO_DATE(#{disposalDueDateStart},'yyyy-mm-dd')
             </if>
             <if test="disposalDueDateEnd != null">
-                AND result.DISPOSAL_DUE_DATE <![CDATA[<]]> TO_DATE(#{disposalDueDateEnd},'yyyy-mm-dd')
+                AND result.DISPOSAL_DUE_DATE <![CDATA[<=]]> TO_DATE(#{disposalDueDateEnd},'yyyy-mm-dd')
             </if>
         </where>
     </select>

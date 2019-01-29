@@ -52,13 +52,13 @@
                     AND request.TAKEOUT_DATE <![CDATA[>=]]> TO_DATE(#{takeoutDateFrom},'yyyy-mm-dd')
                 </if>
                 <if test="takeoutDateTo != null">
-                    AND request.TAKEOUT_DATE <![CDATA[<]]> TO_DATE(#{takeoutDateTo},'yyyy-mm-dd')
+                    AND request.TAKEOUT_DATE <![CDATA[<=]]> TO_DATE(#{takeoutDateTo},'yyyy-mm-dd')
                 </if>
                 <if test="returnDueDateFrom != null">
                     AND request.RETURN_DUE_DATE <![CDATA[>=]]> TO_DATE(#{returnDueDateFrom},'yyyy-mm-dd')
                 </if>
                 <if test="returnDueDateTo != null">
-                    AND request.RETURN_DUE_DATE <![CDATA[<]]> TO_DATE(#{returnDueDateTo},'yyyy-mm-dd')
+                    AND request.RETURN_DUE_DATE <![CDATA[<=]]> TO_DATE(#{returnDueDateTo},'yyyy-mm-dd')
                 </if>
             </where>
             ORDER BY requestName
