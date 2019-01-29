@@ -19,7 +19,8 @@ var st01102 =
                     editable: false,
                     dataType: "code",
                     required: false,
-                    visible: false
+                    visible: false,
+                    disable: true,
                 },
                 {
                     sortNo: 0,
@@ -29,7 +30,8 @@ var st01102 =
                     editable: false,
                     dataType: "code",
                     required: false,
-                    visible: false
+                    visible: false,
+                    disable: true,
                 },
                 {
                     sortNo: 0,
@@ -39,7 +41,8 @@ var st01102 =
                     editable: false,
                     dataType: "code",
                     required: false,
-                    visible: false
+                    visible: false,
+                    disable: true,
                 },
                 {
                     sortNo: 0,
@@ -49,7 +52,8 @@ var st01102 =
                     editable: false,
                     dataType: "code",
                     required: false,
-                    visible: false
+                    visible: false,
+                    disable: true,
                 },
 
                 {
@@ -60,7 +64,8 @@ var st01102 =
                     editable: false,
                     dataType: "code",
                     required: false,
-                    visible: false
+                    visible: false,
+                    disable: true,
                 },
                 {
                     sortNo: 0,
@@ -70,7 +75,8 @@ var st01102 =
                     editable: false,
                     dataType: "code",
                     required: false,
-                    visible: false
+                    visible: false,
+                    disable: true,
                 },
                 {
                     sortNo: 0,
@@ -80,7 +86,8 @@ var st01102 =
                     editable: false,
                     dataType: "code",
                     required: false,
-                    visible: false
+                    visible: false,
+                    disable: true,
                 },
                 {
                     sortNo: 0,
@@ -90,7 +97,8 @@ var st01102 =
                     editable: false,
                     dataType: "code",
                     required: false,
-                    visible: false
+                    visible: false,
+                    disable: true,
                 },
 
                 {
