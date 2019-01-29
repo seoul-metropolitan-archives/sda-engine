@@ -57,7 +57,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     REPUBLISH: function (caller, act, data) {
         // tag 발행
 
-        var checkedList = fnObj.gridView01.gridObj.getCheckedList();
+        var checkedList = fnObj.gridView01.getSelectedData();
 
         if (checkedList.length == 0) {
             axToast.push('기록물을 선택 해 주세요')
@@ -543,7 +543,11 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     },
 
     getSelectedData: function () {
-        return this.gridObj.getSelectedData()
+        var aCheckedList = fnObj.gridView01.gridObj.getCheckedList();
+        if( aCheckedList.length == 0){
+            return [this.gridObj.getSelectedData()];
+        }
+        return aCheckedList;
     },
     disabledColumn: function () {
         var state = axboot.commonCodeValueByCodeName("CD138", CONFIRM_STATUS);

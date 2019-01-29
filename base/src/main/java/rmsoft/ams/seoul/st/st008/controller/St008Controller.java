@@ -7,14 +7,21 @@ import io.onsemiro.core.api.response.Responses;
 import io.onsemiro.core.code.ApiStatus;
 import io.onsemiro.core.parameter.RequestParams;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import rmsoft.ams.seoul.st.st008.service.St008Service;
 import rmsoft.ams.seoul.st.st008.vo.St00801VO;
 import rmsoft.ams.seoul.st.st008.vo.St00802VO;
 import rmsoft.ams.seoul.st.st008.vo.St00802pVO;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -49,6 +56,21 @@ public class St008Controller extends BaseController {
         return Responses.PageResponse.of(pages.getContent(), pages);
     }
 
+    @GetMapping("/01/excelDown")
+    public ResponseEntity<InputStreamResource> getExcelDown(RequestParams<St00801VO>  vo) throws IOException {
+
+
+        ByteArrayInputStream in = st008Service.getExcelDown(vo);
+
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        httpHeaders.setContentDispositionFormData("attachment", "st008.xlsx");
+
+        return ResponseEntity
+                .ok()
+                .headers(httpHeaders)
+                .body(new InputStreamResource(in));
+    }
     @PutMapping("/01/save")
     @PostMapping
     public ApiResponse saveStTakeoutRequest(@RequestBody St00801VO vo) {
@@ -63,11 +85,14 @@ public class St008Controller extends BaseController {
     @PutMapping("/01/save01")
     @PostMapping
     public ApiResponse saveStTakeoutRequestList(@RequestBody List<St00801VO> list) {
-        ApiResponse apiResponse = st008Service.saveStTakeoutRequestList(list);
-        if(apiResponse.getStatus() == -1) {
-            throw new ApiException(ApiStatus.SYSTEM_ERROR, apiResponse.getMessage());
-        }
-        return apiResponse;
+
+            ApiResponse apiResponse = st008Service.saveStTakeoutRequestList(list);
+            if (apiResponse.getStatus() == -1) {
+                throw new ApiException(ApiStatus.SYSTEM_ERROR, apiResponse.getMessage());
+            }
+
+            return apiResponse;
+
 
     }
 
@@ -91,59 +116,6 @@ public class St008Controller extends BaseController {
         }
         return apiResponse;
     }
-    /*
-    @GetMapping("/02/list01")
-    public Responses.PageResponse getStTakeoutRecordResult(Pageable pageable, RequestParams<St00803VO> requestParam) {
-        Page<St00803VO> pages  = st008Service.getStTakeoutRecordResult(pageable, requestParam);
-        return Responses.PageResponse.of(pages.getContent(), pages);
-    }
-    @RequestMapping("/02/list03")
-    public Cl00201VO getClassInfo(Pageable pageable, RequestParams<Cl00201VO> requestParams) {
-        return st008Service.getClassInfo(pageable, requestParams);
-    }
-    @GetMapping("/02/list04")
-    public Responses.PageResponse getStTakeoutRecordResultSchedule(Pageable pageable, RequestParams<St00803VO> requestParam) {
-        Page<St00803VO> pages  = st008Service.getStTakeoutRecordResultSchedule(pageable, requestParam);
-        return Responses.PageResponse.of(pages.getContent(), pages);
-    }
-    @PutMapping("/02/save")
-    @PostMapping
-    public ApiResponse saveClassifiedRecordList(@RequestBody St00802VO requestParams) {
-        ApiResponse apiResponse = st008Service.saveClassifiedRecordList(requestParams);
-        if(apiResponse.getStatus() == -1) {
-            throw new ApiException(ApiStatus.SYSTEM_ERROR, apiResponse.getMessage());
-        }
-        return apiResponse;
-    }
-    @PutMapping("/02/confirm")
-    @PostMapping
-    public ApiResponse updateStatus(@RequestBody List<St00801VO> requestParams) {
-        ApiResponse apiResponse = st008Service.updateStatus(requestParams);
-        if(apiResponse.getStatus() == -1) {
-            throw new ApiException(ApiStatus.SYSTEM_ERROR, apiResponse.getMessage());
-        }
-        return apiResponse;
-    }
-    @RequestMapping("/getAllNodes")
-    public Responses.ListResponse getAllNode(Rc00101VO param)
-    {
-        return Responses.ListResponse.of(st008Service.getAllNode(param));
-    }
 
-    @RequestMapping("/getAllNodeSchedule")
-    public Responses.ListResponse getAllNodeSchedule(Rc00101VO param)
-    {
-        return Responses.ListResponse.of(st008Service.getAllNodeSchedule(param));
-    }
 
-    @PutMapping("/02/save02")
-    @PostMapping
-    public ApiResponse saveClassDescription(@RequestBody Cl00201VO param)
-    {
-        ApiResponse apiResponse = st008Service.saveClassDescription(param);
-        if(apiResponse.getStatus() == -1) {
-            throw new ApiException(ApiStatus.SYSTEM_ERROR, apiResponse.getMessage());
-        }
-        return apiResponse;
-    }*/
 }

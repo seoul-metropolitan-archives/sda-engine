@@ -463,6 +463,30 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
             if ((event.keyCode < 48) || (event.keyCode > 57)) event.returnValue = false;
         });
 
+
+        $("input[data-ax-path='exceptEndDateFrom']").keyup(function () {
+            var date = this.value;
+            if (date.match(/^\d{4}$/) !== null) {
+                this.value = date + '-';
+            } else if (date.match(/^\d{4}\-\d{2}$/) !== null) {
+                this.value = date + '-';
+            }
+        });
+        $("input[data-ax-path='exceptEndDateFrom']").keypress(function () {
+            if ((event.keyCode < 48) || (event.keyCode > 57)) event.returnValue = false;
+        });
+        $("input[data-ax-path='exceptEndDateTo']").keyup(function () {
+            var date = this.value;
+            if (date.match(/^\d{4}$/) !== null) {
+                this.value = date + '-';
+            } else if (date.match(/^\d{4}\-\d{2}$/) !== null) {
+                this.value = date + '-';
+            }
+        });
+        $("input[data-ax-path='exceptEndDateTo']").keypress(function () {
+            if ((event.keyCode < 48) || (event.keyCode > 57)) event.returnValue = false;
+        });
+
         $("select[data-ax-path='statusUuid'], select[data-ax-path='containerTypeUuid']").change(function () {
             ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
         });

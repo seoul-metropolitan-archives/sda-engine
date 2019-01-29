@@ -54,16 +54,16 @@
                 AND request.REQUESTOR_UUID  = #{requestorUuid}
             </if>
             <if test="takeoutDateFrom != null">
-                AND request.TAKEOUT_DATE <![CDATA[>=]]> TO_DATE(#{takeoutDateFrom},'yyyy-mm-dd')
+                AND TO_DATE(TO_CHAR(request.TAKEOUT_DATE, 'yyyy-mm-dd'), 'yyyy-mm-dd') <![CDATA[>=]]> TO_DATE(#{takeoutDateFrom},'yyyy-mm-dd')
             </if>
             <if test="takeoutDateTo != null">
-                AND request.TAKEOUT_DATE <![CDATA[<]]> TO_DATE(#{takeoutDateTo},'yyyy-mm-dd')
+                AND TO_DATE(TO_CHAR(request.TAKEOUT_DATE, 'yyyy-mm-dd'), 'yyyy-mm-dd') <![CDATA[<=]]> TO_DATE(#{takeoutDateTo},'yyyy-mm-dd')
             </if>
             <if test="returnDueDateFrom != null">
-                AND request.RETURN_DUE_DATE <![CDATA[>=]]> TO_DATE(#{returnDueDateFrom},'yyyy-mm-dd')
+                AND TO_DATE(TO_CHAR(request.RETURN_DUE_DATE, 'yyyy-mm-dd'), 'yyyy-mm-dd') <![CDATA[>=]]> TO_DATE(#{returnDueDateFrom},'yyyy-mm-dd')
             </if>
             <if test="returnDueDateTo != null">
-                AND request.RETURN_DUE_DATE <![CDATA[<]]> TO_DATE(#{returnDueDateTo},'yyyy-mm-dd')
+                AND TO_DATE(TO_CHAR(request.RETURN_DUE_DATE, 'yyyy-mm-dd'), 'yyyy-mm-dd') <![CDATA[<=]]> TO_DATE(#{returnDueDateTo},'yyyy-mm-dd')
             </if>
         </where>
         ORDER BY requestName
@@ -89,11 +89,8 @@
         (location.ROW_NO || '행 ' || location.COLUMN_NO || '열') as locationName -- 행렬단
 
         FROM ST_TAKEOUT_RECORD_RESULT record_result
-        LEFT JOIN (
-        SELECT ar.AGGREGATION_UUID, ar.CONTAINER_UUID    FROM RC_ITEM item
-        INNER JOIN ST_ARRANGE_RECORDS_RESULT ar  -- 이부분 arrange 가 안돼있어도 되는건지 노은에게 물어볼것
-        ON ar.AGGREGATION_UUID = item.AGGREGATION_UUID
-        ) etc
+        INNER JOIN
+         ST_ARRANGE_RECORDS_RESULT etc
         ON etc.AGGREGATION_UUID = record_result.AGGREGATION_UUID
         LEFT JOIN ST_ARRANGE_CONTAINERS_RESULT acr
         ON acr.CONTAINER_UUID = etc.CONTAINER_UUID

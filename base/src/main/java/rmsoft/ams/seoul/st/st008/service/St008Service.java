@@ -1,6 +1,6 @@
 package rmsoft.ams.seoul.st.st008.service;
 
-import com.querydsl.core.types.Predicate;
+import io.onsemiro.core.api.ApiException;
 import io.onsemiro.core.api.response.ApiResponse;
 import io.onsemiro.core.code.ApiStatus;
 import io.onsemiro.core.domain.BaseService;
@@ -9,6 +9,15 @@ import io.onsemiro.utils.DateUtils;
 import io.onsemiro.utils.ModelMapperUtils;
 import io.onsemiro.utils.SessionUtils;
 import io.onsemiro.utils.UUIDUtils;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.ss.usermodel.VerticalAlignment;
+import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.ss.util.CellReference;
+import org.apache.poi.ss.util.CellUtil;
+import org.apache.poi.ss.util.RegionUtil;
+import org.apache.poi.xssf.usermodel.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,20 +25,19 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import rmsoft.ams.seoul.common.domain.*;
 import rmsoft.ams.seoul.common.repository.*;
-import rmsoft.ams.seoul.st.st003.vo.St00301VO;
 import rmsoft.ams.seoul.st.st008.dao.St008Mapper;
 import rmsoft.ams.seoul.st.st008.vo.St00801VO;
 import rmsoft.ams.seoul.st.st008.vo.St00802VO;
 import rmsoft.ams.seoul.st.st008.vo.St00802pVO;
-import rmsoft.ams.seoul.utils.CommonCodeUtils;
 
 import javax.inject.Inject;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
-
-import static rmsoft.ams.seoul.common.domain.QStShelf.stShelf;
 
 
 /**
@@ -44,6 +52,8 @@ public class St008Service extends BaseService {
     private StTakeoutRequestRepository stTakeoutRequestRepository;
     @Autowired
     private StTakeoutRecordResultRepository stTakeoutRecordResultRepository;
+
+    private static short BORDER_STYLE = CellStyle.BORDER_THIN;
 
     /**
      * Gets classified record list.
@@ -81,23 +91,36 @@ public class St008Service extends BaseService {
     @Transactional
     public ApiResponse saveStTakeoutRequestList(List<St00801VO> list) {
         // 삭제만 가능
-        List<StTakeoutRequest> stTakeoutRequestList = ModelMapperUtils.mapList(list,StTakeoutRequest.class);
 
-        for(StTakeoutRequest stTakeoutRequest : stTakeoutRequestList) {
-            if(stTakeoutRequest.isDeleted()){
-                stTakeoutRequestRepository.delete(stTakeoutRequest);
+        List<StTakeoutRequest> stTakeoutRequestList = ModelMapperUtils.mapList(list, StTakeoutRequest.class);
+
+        for (StTakeoutRequest stTakeoutRequest : stTakeoutRequestList) {
+            if (stTakeoutRequest.isDeleted()) {
+                St00802VO vo = new St00802VO();
+                vo.setTakeoutRequestUuid(stTakeoutRequest.getTakeoutRequestUuid());
+                // 하위에 연결된 레코드가 없어야 삭제가능.
+                List<St00802VO> aStTakeOutRecordResult = st008Mapper.getStTakeoutRecordResult(vo);
+                if( aStTakeOutRecordResult.size() == 0){
+                    // 하위 레코드 ( 반출 신청 대상 ) 이 없음
+                    stTakeoutRequestRepository.delete(stTakeoutRequest);
+                }else{
+                    // 하위 레코드 ( 반출 신청 대상 ) 이 있음
+                    throw new ApiException(ApiStatus.SYSTEM_ERROR, "해당 반출서 하위에 있는 '반출신청대상'을 먼저 삭제 해 주세요.");
+                }
+
             }
         }
         return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");
+
     }
 
     @Transactional
     public ApiResponse saveStTakeoutRecordResultList(List<St00802VO> list) {
         // 삭제만 가능
-        List<StTakeoutRecordResult> stTakeoutRequestList = ModelMapperUtils.mapList(list,StTakeoutRecordResult.class);
+        List<StTakeoutRecordResult> stTakeoutRequestList = ModelMapperUtils.mapList(list, StTakeoutRecordResult.class);
 
-        for(StTakeoutRecordResult stTakeoutRecordResult : stTakeoutRequestList) {
-            if(stTakeoutRecordResult.isDeleted()){
+        for (StTakeoutRecordResult stTakeoutRecordResult : stTakeoutRequestList) {
+            if (stTakeoutRecordResult.isDeleted()) {
                 stTakeoutRecordResultRepository.delete(stTakeoutRecordResult);
             }
         }
@@ -112,14 +135,15 @@ public class St008Service extends BaseService {
         vo.setReturnDate(vo.getReturnDueDate());
         boolean isCreateOrModify = false;
         String uuid = vo.getTakeoutRequestUuid();
-        if( uuid == null) {
+        if (uuid == null) {
 
             // 새로 생성
             isCreateOrModify = true;
-            String orgCodeSeq = jdbcTemplate.queryForObject("SELECT ST_SHELF_CODE_SEQ.NEXTVAL FROM dual", String.class);
+            String orgCodeSeq = jdbcTemplate.queryForObject("SELECT ST_TAKEOUT_REQUEST_SEQ.NEXTVAL FROM dual", String.class);
             String refinedCodeSeq = orgCodeSeq;
-            int cnt = 0;
-            for ( ; cnt < Math.abs(refinedCodeSeq.length() - 2); cnt++) {
+
+            // 년월일-시퀀스 두자리. ex)20181121-01. 하루에 99개밖에 못만들게 돼있음.
+            for (int cnt = 0; cnt < Math.abs(orgCodeSeq.length() - 2); cnt++) {
                 refinedCodeSeq = "0" + refinedCodeSeq;
             }
             String requestName = DateUtils.convertToString(LocalDateTime.now(), "yyyyMMdd") + "-" + refinedCodeSeq;
@@ -136,7 +160,7 @@ public class St008Service extends BaseService {
 
         StTakeoutRequest stTakeoutRequest = ModelMapperUtils.map(vo, StTakeoutRequest.class);
         StTakeoutRequest orgClClass = stTakeoutRequestRepository.findOne(stTakeoutRequest.getId());
-        if (isCreateOrModify ==  true) {
+        if (isCreateOrModify == true) {
             // 새로 생성
             // do nothing
         } else {
@@ -166,11 +190,11 @@ public class St008Service extends BaseService {
     @Transactional
     public ApiResponse saveStTakeoutAdd(St00802pVO st00802pVO) {
         List<St00802VO> st00802VOList = st00802pVO.getSt00802VOList();
-        List<StTakeoutRecordResult> clClassifiedRecordsList = ModelMapperUtils.mapList(st00802VOList,StTakeoutRecordResult.class);
+        List<StTakeoutRecordResult> clClassifiedRecordsList = ModelMapperUtils.mapList(st00802VOList, StTakeoutRecordResult.class);
         // StTakeoutRecordResult orgClClassifyRecordsResult = null;
         int i = 0;
-        for(StTakeoutRecordResult stTakeoutRecordResult : clClassifiedRecordsList) {
-            if(st00802pVO.getTakeoutRequestUuid()== null){ //삭제
+        for (StTakeoutRecordResult stTakeoutRecordResult : clClassifiedRecordsList) {
+            if (st00802pVO.getTakeoutRequestUuid() == null) { //삭제
                 stTakeoutRecordResultRepository.delete(stTakeoutRecordResult);
             }
 //            else if(null != clClassifyRecordsResult.getClassifyRecordsUuid() && !"".equals(clClassifyRecordsResult.getClassifyRecordsUuid())){
@@ -180,7 +204,7 @@ public class St008Service extends BaseService {
 //                orgClClassifyRecordsResult.setStatusUuid(CommonCodeUtils.getCodeDetailUuid("CD111","Confirm"));
 //                clClassifyRecordResultRepository.save(orgClClassifyRecordsResult);
 //            }
-            else{ //신규
+            else { //신규
                 stTakeoutRecordResult.setTakeoutRecordResultUuid(UUIDUtils.getUUID());
                 stTakeoutRecordResult.setTakeoutRequestUuid(st00802pVO.getTakeoutRequestUuid());
                 //stTakeoutRecordResult.setAggregationUuid(st00802pVO.getuu);
@@ -190,112 +214,195 @@ public class St008Service extends BaseService {
         return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");
     }
 
-    /*public ApiResponse updateStatus(List<St00801VO> list) {
-        List<ClClassifyRecordsResult> clClassifiedRecordsList = ModelMapperUtils.mapList(list,ClClassifyRecordsResult.class);
-        ClClassifyRecordsResult orgClClassifyRecordsResult = null;
-        int index = 0;
-        String changeStatus = "";
-        for(ClClassifyRecordsResult clClassifyRecordsResult : clClassifiedRecordsList) {
-            changeStatus = list.get(index).getChangeStatus() == "" ? "Draft" : list.get(index).getChangeStatus();
-            orgClClassifyRecordsResult = clClassifyRecordResultRepository.findOne(clClassifyRecordsResult.getId());
-            clClassifyRecordsResult.setStatusUuid(CommonCodeUtils.getCodeDetailUuid("CD111",changeStatus));
-            clClassifyRecordsResult.setInsertDate(orgClClassifyRecordsResult.getInsertDate());
-            clClassifyRecordsResult.setInsertUuid(orgClClassifyRecordsResult.getInsertUuid());
-            clClassifyRecordResultRepository.save(clClassifyRecordsResult);
-            index++;
+    public static XSSFCellStyle createCellStyle(XSSFWorkbook workBook, String type) {
+        XSSFCellStyle cellStyle = workBook.createCellStyle();
+        if (type.equals("NO_BORDER")) {
+            // border 적용 안함
+        } else {
+            // border 적용
+            //CELL STYLE 적용
+            cellStyle.setBorderTop(BORDER_STYLE);
+            cellStyle.setBorderBottom(BORDER_STYLE);
+            cellStyle.setBorderLeft(BORDER_STYLE);
+            cellStyle.setBorderRight(BORDER_STYLE);
         }
-        return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");
+
+        if (type.equals("LEFT")) {
+            cellStyle.setAlignment(HorizontalAlignment.LEFT);
+        } else if (type.equals("RIGHT")) {
+            cellStyle.setAlignment(HorizontalAlignment.RIGHT);
+        } else {
+            // 나머지는 모두 center
+            cellStyle.setAlignment(HorizontalAlignment.CENTER);
+        }
+        // vertical 은 모두 center
+        cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+
+        return cellStyle;
     }
-    @Transactional
-    public ApiResponse saveClassifiedRecordList(St00802VO st00802VO) {
-        List<St00801VO> st00801VOList = st00802VO.getst00801VOList();
-        List<ClClassifyRecordsResult> clClassifiedRecordsList = ModelMapperUtils.mapList(st00801VOList,ClClassifyRecordsResult.class);
-        ClClassifyRecordsResult orgClClassifyRecordsResult = null;
-        int i = 0;
-        for(ClClassifyRecordsResult clClassifyRecordsResult : clClassifiedRecordsList) {
-            if(st00802VO.getClassUuid()== null){ //삭제
-                clClassifyRecordResultRepository.delete(clClassifyRecordsResult);
-            }else if(null != clClassifyRecordsResult.getClassifyRecordsUuid() && !"".equals(clClassifyRecordsResult.getClassifyRecordsUuid())){ //수정
-                orgClClassifyRecordsResult = clClassifyRecordResultRepository.findOne(clClassifyRecordsResult.getId());
-                orgClClassifyRecordsResult.setChoiceYn(clClassifyRecordsResult.getChoiceYn());
-                orgClClassifyRecordsResult.setStatusUuid(CommonCodeUtils.getCodeDetailUuid("CD111","Confirm"));
-                clClassifyRecordResultRepository.save(orgClClassifyRecordsResult);
-            }else{ //신규
-                clClassifyRecordsResult.setClassifyRecordsUuid(UUIDUtils.getUUID());
-                clClassifyRecordsResult.setClassUuid(st00802VO.getClassUuid());
-                clClassifyRecordsResult.setStatusUuid(CommonCodeUtils.getCodeDetailUuid("CD111","Confirm"));
-                clClassifyRecordsResult.setClassifiedDate(Timestamp.valueOf(DateUtils.convertToString(LocalDateTime.now(), DateUtils.DATE_TIME_PATTERN)));
-                clClassifyRecordResultRepository.save(clClassifyRecordsResult);
+
+    public static void mergeCell(XSSFWorkbook workBook, XSSFSheet sheet, int rNum, int columnIndex) {
+        CellRangeAddress mergedCell = new CellRangeAddress(
+                rNum, //first row (0-based)
+                rNum, //last row  (0-based)
+                columnIndex - 1, //first column (0-based)
+                columnIndex  //last column  (0-based)
+        );
+        sheet.addMergedRegion(mergedCell);
+        RegionUtil.setBorderTop(BORDER_STYLE, mergedCell, sheet, workBook);
+        RegionUtil.setBorderBottom(BORDER_STYLE, mergedCell, sheet, workBook);
+        RegionUtil.setBorderLeft(BORDER_STYLE, mergedCell, sheet, workBook);
+        RegionUtil.setBorderRight(BORDER_STYLE, mergedCell, sheet, workBook);
+    }
+
+    public static void setTextToCell(XSSFSheet sheet, int rowNumber, String columnName, String textToSet, XSSFCellStyle cellStyle) {
+        int colIdx = CellReference.convertColStringToIndex(columnName.trim().toUpperCase());
+        // excel에서 보이는 row number 에서 -1 을 해야 됨.
+        Cell cell = CellUtil.getCell(sheet.getRow(rowNumber - 1), colIdx);
+        cell.setCellStyle(cellStyle);
+        cell.setCellValue(textToSet);
+    }
+
+    public static String getNowWithoutTime() {
+        return DateUtils.convertToString(LocalDateTime.now(), DateUtils.DATE_TIME_PATTERN).substring(0, 10);
+    }
+
+    public ByteArrayInputStream getExcelDown(RequestParams<St00801VO> parameter) throws IOException {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        InputStream is = null;
+        String requestTypeUuid = parameter.getString("requestTypeUuid");
+        boolean isInOrOutPerson = false;// 내부 : true,  외부 : false
+        if (requestTypeUuid == null || requestTypeUuid.equals("AF04136D-3508-4E1C-A85B-F1A1FEDDB607")) {
+            // 내부직원
+            isInOrOutPerson = true;
+        } else {
+            // 외부직원
+            isInOrOutPerson = false;
+        }
+        St00802VO resultVO = ModelMapperUtils.map(parameter.getMap(), St00802VO.class);
+
+        List<St00802VO> list = st008Mapper.getStTakeoutRecordResult(resultVO);
+        try {
+            is = St008Service.class.getClassLoader().getResourceAsStream("excelTemp/st008_excel.xlsx");
+
+            XSSFWorkbook workBook = new XSSFWorkbook(is);
+            XSSFSheet sheet = null;
+            XSSFRow row = null;
+            XSSFCell cell = null;
+
+            sheet = workBook.cloneSheet(0);
+            workBook.setSheetName(workBook.getSheetIndex(sheet), "Sheet");
+
+            XSSFCellStyle cellStyleCenter = createCellStyle(workBook, "CENTER");
+            XSSFCellStyle cellStyleLeft = createCellStyle(workBook, "LEFT");
+            XSSFCellStyle cellStyleRight = createCellStyle(workBook, "RIGHT");
+            XSSFCellStyle cellStyleNoBorder = createCellStyle(workBook, "NO_BORDER");
+            // 출력일자
+            setTextToCell(sheet, 5, "O", getNowWithoutTime(), cellStyleNoBorder);
+
+            setTextToCell(sheet, 8, "D", parameter.getString("takeoutDate"), cellStyleLeft); // 반출일자
+            setTextToCell(sheet, 9, "D", parameter.getString("returnDueDate"), cellStyleLeft); // 반입예정일
+
+            if (isInOrOutPerson == true) {
+                // 내부
+                setTextToCell(sheet, 8, "E", parameter.getString("userGroupName"), cellStyleCenter); // 소속
+                // 내부직원은 직급 없음
+                setTextToCell(sheet, 8, "G", "", cellStyleCenter); // 직급
+                setTextToCell(sheet, 8, "H", parameter.getString("requestorName"), cellStyleCenter); // 성명
+            } else {
+                // 외부
+                setTextToCell(sheet, 8, "E", parameter.getString("outsourcingDepartment"), cellStyleCenter); // 소속
+                setTextToCell(sheet, 8, "G", parameter.getString("outsourcingPosition"), cellStyleCenter); // 직급
+                setTextToCell(sheet, 8, "H", parameter.getString("outsourcingPersonName"), cellStyleCenter); // 성명
+            }
+
+            setTextToCell(sheet, 10, "D", parameter.getString("takeoutPropose"), cellStyleCenter); // 반출 목적
+
+            int rowStart = 14; // excel 에서 시작하는 row number
+            for (int i = 0; i < list.size(); i++) {
+
+                int rNum = rowStart - 1 + i; // rowStart -1 을 해야 맞음.
+                int columnIndex = 1; // 앞에 한칸이 비어있으므로 1부터 시작
+                row = sheet.createRow(rNum);
+                St00802VO eachObj = list.get(i);
+
+                cell = row.createCell(columnIndex++); // 일련번호
+                cell.setCellValue(rNum + 1);
+                cell.setCellStyle(cellStyleRight);
+
+
+                cell = row.createCell(columnIndex++); // Code
+                cell.setCellValue(eachObj.getCode());
+                cell.setCellStyle(cellStyleLeft);
+
+                cell = row.createCell(columnIndex++); //Title
+                cell.setCellValue(eachObj.getTitle());
+                cell.setCellStyle(cellStyleLeft);
+                mergeCell(workBook, sheet, rNum, columnIndex);
+                columnIndex++; // title 은 두칸이므로 한번더 ++
+
+
+                cell = row.createCell(columnIndex++); //Level
+                cell.setCellValue(eachObj.getLevel());
+                cell.setCellStyle(cellStyleCenter);
+
+                cell = row.createCell(columnIndex++); //Type
+                cell.setCellValue(eachObj.getType());
+                cell.setCellStyle(cellStyleLeft);
+
+                cell = row.createCell(columnIndex++); //Published Status
+                cell.setCellValue(eachObj.getPublishedStatus());
+                cell.setCellStyle(cellStyleLeft);
+
+                cell = row.createCell(columnIndex++); //Author
+                cell.setCellValue(eachObj.getAuthor());
+                cell.setCellStyle(cellStyleLeft);
+
+                cell = row.createCell(columnIndex++); //Start Date
+                cell.setCellValue(eachObj.getDescStrDate());
+                cell.setCellStyle(cellStyleLeft);
+
+                cell = row.createCell(columnIndex++); //End date
+                cell.setCellValue(eachObj.getDescEdDate());
+                cell.setCellStyle(cellStyleLeft);
+
+                cell = row.createCell(columnIndex++); //서고
+                cell.setCellValue(eachObj.getRepositoryName());
+                cell.setCellStyle(cellStyleLeft);
+
+                cell = row.createCell(columnIndex++); //서가
+                cell.setCellValue(eachObj.getShelfName());
+                cell.setCellStyle(cellStyleLeft);
+
+                cell = row.createCell(columnIndex++); //행렬단
+                cell.setCellValue(eachObj.getLocationName());
+                cell.setCellStyle(cellStyleLeft);
+
+
+                cell = row.createCell(columnIndex++); //Container
+                cell.setCellValue(eachObj.getContainerName());
+                cell.setCellStyle(cellStyleLeft);
+            }
+
+            //기존 0 1새로운시트
+            workBook.removeSheetAt(0);
+            workBook.write(out);
+
+            return new ByteArrayInputStream(out.toByteArray());
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        } finally {
+            try {
+                if (is != null) {
+                    is.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
-        return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");
+
     }
-    public Page<St00303VO> getStTakeoutRecordResult(Pageable pageable, RequestParams<St00303VO> requestParams) {
 
-        St00303VO st00303VO = new St00303VO();
-        st00303VO.setAggregationUuid(requestParams.getString("aggregationUuid"));
-        st00303VO.setClassUuid(requestParams.getString("classUuid"));
 
-        return filter(st008Mapper.getStTakeoutRecordResult(st00303VO), pageable, "", St00303VO.class);
-    }
-    public Page<St00303VO> getStTakeoutRecordResultSchedule(Pageable pageable, RequestParams<St00303VO> requestParams) {
-
-        St00303VO st00303VO = new St00303VO();
-        st00303VO.setAggregationUuid(requestParams.getString("aggregationUuid"));
-        st00303VO.setRecordScheduleUuid(requestParams.getString("recordScheduleUuid"));
-
-        return filter(st008Mapper.getStTakeoutRecordResultSchedule(st00303VO), pageable, "", St00303VO.class);
-    }
-    public Cl00201VO getClassInfo(Pageable pageable, RequestParams<Cl00201VO> params) {
-        Cl00201VO cl00201VO = new Cl00201VO();
-        cl00201VO.setClassUuid(params.getString("classUuid"));
-        ClClass clClass = ModelMapperUtils.map(cl00201VO, ClClass.class);
-        clClass = clClassRepository.findOne(clClass.getId());
-        cl00201VO = ModelMapperUtils.map(clClass,Cl00201VO.class);
-
-        ClClassCon clClassCon = ModelMapperUtils.map(cl00201VO, ClClassCon.class);
-        clClassCon = clClassConRepository.findOne(clClassCon.getId());
-
-        cl00201VO.setScopeContent(clClassCon.getScopeContent());
-        cl00201VO.setRulesConversionUuid(clClassCon.getRulesConversionUuid());
-        return cl00201VO;
-    }
-    public List<Rc00101VO> getAllNode(Rc00101VO param)
-    {
-        ArrayList<Rc00101VO> nodes = new ArrayList<Rc00101VO>();
-        nodes.addAll(st008Mapper.getAggregationNode(param));
-        return nodes;
-    }
-    public List<Rc00101VO> getAllNodeSchedule(Rc00101VO param)
-    {
-        ArrayList<Rc00101VO> nodes = new ArrayList<Rc00101VO>();
-        nodes.addAll(st008Mapper.getAggregationNodeSchedule(param));
-        return nodes;
-    }
-    @Transactional
-    public ApiResponse saveClassDescription(Cl00201VO cl00201VO){
-        ClClass clClass = ModelMapperUtils.map(cl00201VO, ClClass.class);
-        ClClass orgClClass = clClassRepository.findOne(clClass.getId());
-        if(orgClClass != null){
-            clClass = orgClClass;
-            clClass.setDescription(cl00201VO.getDescription());
-            clClass.setStatusDescription(cl00201VO.getStatusDescription());
-            clClass.setLevelOfDetailUuid(cl00201VO.getLevelOfDetailUuid());
-            clClassRepository.save(clClass);
-        }
-        ClClassCon clClassCon = ModelMapperUtils.map(cl00201VO, ClClassCon.class);
-        ClClassCon orgClClassCon = clClassConRepository.findOne(clClassCon.getId());
-
-        if(orgClClassCon != null){
-            orgClClassCon.setScopeContent(clClassCon.getScopeContent());
-            orgClClassCon.setRulesConversionUuid(clClassCon.getRulesConversionUuid());
-            orgClClassCon.setUpdateDate(null);
-            orgClClassCon.setUpdateUuid(null);
-            clClassConRepository.save(orgClClassCon);
-        }else{
-            clClassConRepository.save(clClassCon);
-        }
-
-        return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");
-    }*/
 }

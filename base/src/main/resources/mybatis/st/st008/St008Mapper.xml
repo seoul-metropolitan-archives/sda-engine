@@ -37,10 +37,7 @@
                    OUTSOURCING_PHONE outsourcingPhone
 
             FROM ST_TAKEOUT_REQUEST request
-              INNER JOIN AC_USER_GROUP_USER group_user
-                ON USER_UUID = request.REQUESTOR_UUID
-              INNER JOIN AC_USER_GROUP user_group
-                ON user_group.USER_GROUP_UUID = group_user.USER_GROUP_UUID
+
               INNER JOIN AC_USER ac_user
                 ON ac_user.USER_UUID = request.REQUESTOR_UUID
             <where>
@@ -83,14 +80,12 @@
                B.descEdDate descEdDate,
                repository.REPOSITORY_NAME repositoryName, -- 서고
                shelf.SHELF_NAME shelfName, -- 서가
-               (location.ROW_NO || '행 ' || location.COLUMN_NO || '열') as locationName -- 행렬단
+               (location.ROW_NO || '행 ' || location.COLUMN_NO || '열') as locationName, -- 행렬단
+               container.CONTAINER_NAME as containerName
 
         FROM ST_TAKEOUT_RECORD_RESULT record_result
-                  LEFT JOIN (
-                    SELECT ar.AGGREGATION_UUID, ar.CONTAINER_UUID    FROM RC_ITEM item
-                      INNER JOIN ST_ARRANGE_RECORDS_RESULT ar  -- 이부분 arrange 가 안돼있어도 되는건지 노은에게 물어볼것
-                        ON ar.AGGREGATION_UUID = item.AGGREGATION_UUID
-                    ) etc
+                  LEFT JOIN
+                      ST_ARRANGE_RECORDS_RESULT etc
                   ON etc.AGGREGATION_UUID = record_result.AGGREGATION_UUID
                   LEFT JOIN ST_ARRANGE_CONTAINERS_RESULT acr
                     ON acr.CONTAINER_UUID = etc.CONTAINER_UUID

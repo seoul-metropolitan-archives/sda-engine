@@ -24,6 +24,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                     return;
                 }
                 fnObj.gridView01.setData(res.list);
+                deletingList = [];
             },
             options: {
                 onError: axboot.viewError
@@ -35,7 +36,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             type: "GET",
             url: "/api/v1/st/st004/01/list01",
             async : false,
-            data: $.extend({},data,{statusUuid : $('select[data-ax-path="statusUuid"]').val()},{containerTypeUuid : $('select[data-ax-path="containerTypeUuid"]').val()},{containerName : $('input[data-ax-path="containerName"]').val()}),
+            data: $.extend({},data,{locationUuid : currentLocationUuid},{statusUuid : $('select[data-ax-path="statusUuid"]').val()},{containerTypeUuid : $('select[data-ax-path="containerTypeUuid"]').val()},{containerName : $('input[data-ax-path="containerName"]').val()}),
             callback: function (res) {
                 /*if(res.list == null || res.list.length <= 0){
                     fnObj.gridView02.setData([]);
@@ -46,6 +47,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 gridData = [];
                 gridData = ax5.util.deepCopy(res.list);
                 fnObj.gridView02.setData(res.list);
+                deletingList = [];
             },
             options: {
                 onError: axboot.viewError
@@ -355,6 +357,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     itemClick: function (data, index) {
         $("input[data-ax-path='selectedRowNo']").val(data["rowNo"]);
         $("input[data-ax-path='selectedColumnNo']").val(data["columnNo"]);
+        deletingList = [];
         currentLocationUuid = data.locationUuid;
         ACTIONS.dispatch(ACTIONS.PAGE_SEARCH01,data);
     },
@@ -431,6 +434,13 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
     cancelDelete: function(){
         var index = fnObj.gridView02.gridObj.getCurrent().dataRow;
         var state = axboot.commonCodeValueByCodeName("CD138", "Confirm");
+
+        //값이 있으면
+        if(fnObj.gridView02.gridObj.getSelectedData().parentContainerUuid != undefined){
+            this.setRunDel(false);
+            return;
+        }
+
         this.setRunDel(false);
         if(fnObj.gridView02.gridObj.getSelectedData().statusUuid == state) {
             // axToast.push(axboot.getCommonMessage("AD011_02"));

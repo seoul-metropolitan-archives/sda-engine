@@ -18,7 +18,8 @@ var st01401 =
                     editable: false,
                     dataType: "code",
                     required: false,
-                    visible: false
+                    visible: false,
+                    disable: true
                 },
                 {
                     sortNo: 1,
@@ -33,16 +34,17 @@ var st01401 =
                     sortNo: 2,
                     name: "title",
                     text: "Title",
-                    width: 200,
+                    width: 350,
                     required: false,
                     editable: false,
-                    dataType: "text"
+                    dataType: "text",
+                    disable: true
                 },
                 {
                     sortNo: 3,
                     name: "level",
                     text: "Level",
-                    width: 110,
+                    width: 80,
                     editable: false,
                     dataType: "text",
                     disable: true
@@ -69,7 +71,7 @@ var st01401 =
                     sortNo: 6,
                     name: "author",
                     text: "Author",
-                    width: 140,
+                    width: 100,
                     editable: false,
                     dataType: "text",
                     disable: true
@@ -96,25 +98,28 @@ var st01401 =
                     sortNo: 9,
                     name: "repositoryName",
                     text: "서고",
-                    width: 250,
+                    width: 150,
                     editable: false,
-                    dataType: "text"
+                    dataType: "text",
+                    disable: true
                 },
                 {
                     sortNo: 9,
                     name: "shelfName",
                     text: "서가",
-                    width: 250,
+                    width: 150,
                     editable: false,
-                    dataType: "text"
+                    dataType: "text",
+                    disable: true
                 },
                 {
                     sortNo: 9,
                     name: "locationName",
                     text: "행렬단",
-                    width: 250,
+                    width: 150,
                     editable: false,
-                    dataType: "text"
+                    dataType: "text",
+                    disable: true
                 },
                 {
                     sortNo: 10,

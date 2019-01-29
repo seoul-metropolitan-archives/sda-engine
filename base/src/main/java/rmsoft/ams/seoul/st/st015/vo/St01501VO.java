@@ -57,5 +57,9 @@ public class St01501VO extends BaseVO {
 
     private String title;
 
+    private String statusName;
+
+    private String planResultName;
+
 
 }

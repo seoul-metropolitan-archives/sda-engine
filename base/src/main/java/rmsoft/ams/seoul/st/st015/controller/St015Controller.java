@@ -6,8 +6,12 @@ import io.onsemiro.core.api.response.ApiResponse;
 import io.onsemiro.core.api.response.Responses;
 import io.onsemiro.core.code.ApiStatus;
 import io.onsemiro.core.parameter.RequestParams;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import rmsoft.ams.seoul.st.st001.vo.St00101VO;
 import rmsoft.ams.seoul.st.st015.service.St015Service;
@@ -18,6 +22,9 @@ import rmsoft.ams.seoul.st.st029.service.St029Service;
 import rmsoft.ams.seoul.st.st029.vo.St02901VO;
 
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -59,6 +66,22 @@ public class St015Controller extends BaseController {
             throw new ApiException(ApiStatus.SYSTEM_ERROR, apiResponse.getMessage());
         }
         return apiResponse;
+    }
+
+    @GetMapping("/01/excelDown")
+    public ResponseEntity<InputStreamResource> getExcelDown(HttpServletResponse response) throws IOException {
+
+
+        ByteArrayInputStream in = st015Service.getExcelDown();
+
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        httpHeaders.setContentDispositionFormData("attachment", "st015.xlsx");
+
+        return ResponseEntity
+                .ok()
+                .headers(httpHeaders)
+                .body(new InputStreamResource(in));
     }
 
 

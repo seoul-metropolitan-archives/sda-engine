@@ -58,7 +58,8 @@ var st00102 =
                     text: "Max Container",
                     width: 100,
                     editable: false,
-                    dataType: "text"
+                    dataType: "text",
+                    disable : true
                 },
                 {
                     sortNo: 6,

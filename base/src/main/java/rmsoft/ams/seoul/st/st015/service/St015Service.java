@@ -7,6 +7,8 @@ import io.onsemiro.core.parameter.RequestParams;
 import io.onsemiro.utils.ModelMapperUtils;
 import io.onsemiro.utils.UUIDUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.xssf.usermodel.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,6 +26,7 @@ import rmsoft.ams.seoul.common.repository.StInventoryPlanRepository;
 import rmsoft.ams.seoul.common.repository.StInventoryRecordResultRepository;
 import rmsoft.ams.seoul.common.repository.StProgramRepository;
 import rmsoft.ams.seoul.st.st001.vo.St00101VO;
+import rmsoft.ams.seoul.st.st010.service.St010Service;
 import rmsoft.ams.seoul.st.st015.dao.St015Mapper;
 import rmsoft.ams.seoul.st.st015.vo.St01501VO;
 import rmsoft.ams.seoul.st.st015.vo.St01502VO;
@@ -34,6 +37,10 @@ import rmsoft.ams.seoul.st.st029.vo.St02901VO;
 import rmsoft.ams.seoul.utils.CommonCodeUtils;
 
 import javax.inject.Inject;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -255,6 +262,87 @@ public class St015Service extends BaseService {
             index++;
         }
         return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");
+
+    }
+
+    public ByteArrayInputStream getExcelDown() throws IOException {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        InputStream is = null;
+
+        St01501VO st01501VO = new St01501VO();
+        /*st01501VO.setPlanName(requestParams.getString("planName"));
+        st01501VO.setRepositoryUuid(requestParams.getString("repositoryUuid"));
+        st01501VO.setShelfUuid(requestParams.getString("shelfUuid"));
+        st01501VO.setCode(requestParams.getString("code"));
+        st01501VO.setTitle(requestParams.getString("title"));
+        st01501VO.setPlannerUuid(requestParams.getString("plannerUuid"));
+        st01501VO.setExceptStartDate(requestParams.getString("exceptStartDate"));
+        st01501VO.setExceptEndDate(requestParams.getString("exceptEndDate"));*/
+
+        List<St01501VO> list = st015Mapper.getStInventoryPlan(st01501VO);
+
+
+        try {
+            is = St010Service.class.getClassLoader().getResourceAsStream("excelTemp/st015_excel.xlsx");
+
+            XSSFWorkbook workBook = new XSSFWorkbook(is);
+            XSSFSheet sheet = null;
+            XSSFRow row = null;
+            XSSFCell cell = null;
+
+            sheet = workBook.cloneSheet(0);
+            workBook.setSheetName(workBook.getSheetIndex(sheet), "테스트 시트");
+
+            //CELL STYLE 적용
+            XSSFCellStyle cellStyle = workBook.createCellStyle();
+            cellStyle.setBorderTop(CellStyle.BORDER_THIN);
+            cellStyle.setBorderBottom(CellStyle.BORDER_THIN);
+            cellStyle.setBorderLeft(CellStyle.BORDER_THIN);
+            cellStyle.setBorderRight(CellStyle.BORDER_THIN);
+
+            for(int i = 0; i < list.size();i++){
+                int rNum = 9+i;
+                row = sheet.createRow(rNum);
+                cell = row.createCell(0); //계획서명
+                cell.setCellValue(list.get(i).getPlanName()); cell.setCellStyle(cellStyle);
+                cell = row.createCell(1); //담당자
+                cell.setCellValue(list.get(i).getPlannerName()); cell.setCellStyle(cellStyle);
+                cell = row.createCell(2); //예정일 시작
+                cell.setCellValue(list.get(i).getExceptStartDate()); cell.setCellStyle(cellStyle);
+                cell = row.createCell(3); //예정일 종료
+                cell.setCellValue(list.get(i).getExceptEndDate()); cell.setCellStyle(cellStyle);
+                cell = row.createCell(4); //범위 서고
+                cell.setCellValue(list.get(i).getRepositoryName()); cell.setCellStyle(cellStyle);
+                cell = row.createCell(5); //서가
+                cell.setCellValue(list.get(i).getShelfName()); cell.setCellStyle(cellStyle);
+                cell = row.createCell(6); //행렬단
+                cell.setCellValue(list.get(i).getLocationName()); cell.setCellStyle(cellStyle);
+                cell = row.createCell(7); //상태
+                cell.setCellValue(list.get(i).getStatusName()); cell.setCellStyle(cellStyle);
+                cell = row.createCell(8); //점검결과
+                cell.setCellValue(list.get(i).getPlanResultName()); cell.setCellStyle(cellStyle);
+                cell = row.createCell(9); //비고
+                cell.setCellValue(list.get(i).getDescription()); cell.setCellStyle(cellStyle);
+            }
+
+            //기존 0 1새로운시트
+            workBook.removeSheetAt(0);
+            workBook.write(out);
+
+            return new ByteArrayInputStream(out.toByteArray());
+        }catch (Exception e){
+            e.printStackTrace();
+            throw e;
+        }finally {
+            try {
+                if (is != null) {
+                    is.close();
+                }
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
 
     }
 }

@@ -10,23 +10,26 @@ var st00602 =
                     editable: false,
                     dataType: "code",
                     required: false,
-                    visible: false
+                    visible: false,
+                    disable:true
                 },
                 {
                     sortNo: 2,
-                    name: "itemCode",
+                    name: "code",
                     text: "Code",
                     width: 130,
                     editable: false,
-                    dataType: "text"
+                    dataType: "text",
+                    disable:true
                 },
                 {
                     sortNo: 3,
-                    name: "itemTitle",
+                    name: "title",
                     text: "Title",
                     width: 500,
                     editable: false,
-                    dataType: "text"
+                    dataType: "text",
+                    disable:true
                 },
                 {
                     sortNo: 4,
@@ -34,15 +37,19 @@ var st00602 =
                     text: "Level",
                     width: 110,
                     editable: false,
-                    dataType: "text"
+                    dataType: "text",
+                    disable:true
                 },
                 {
                     sortNo: 5,
-                    name: "type",
+                    width: 80,
+                    name: "typeUuid",
                     text: "Type",
-                    width: 100,
-                    editable: false,
-                    dataType: "text"
+                    disable: true,
+                    values: axboot.commonCodeFilter("CD127").codeArr,
+                    labels: axboot.commonCodeFilter("CD127").nameArr,
+                    dataType : "combo",
+                    editable : false
                 },
                 {
                     sortNo: 6,
@@ -50,7 +57,8 @@ var st00602 =
                     text: "Published Status",
                     width: 100,
                     editable: false,
-                    dataType: "text"
+                    dataType: "text",
+                    disable:true
                 },
                 {
                     sortNo: 7,
@@ -58,7 +66,8 @@ var st00602 =
                     text: "Author",
                     width: 100,
                     editable: false,
-                    dataType: "text"
+                    dataType: "text",
+                    disable:true
                 },
                 {
                     sortNo: 8,

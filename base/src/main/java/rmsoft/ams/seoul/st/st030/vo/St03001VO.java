@@ -28,9 +28,9 @@ public class St03001VO extends BaseVO {
     private String currentContainerName;
     private String sourceTypeUuid;
     private String sourceTypeName;
-    private Timestamp requestDate;
+    private String requestDate;
     private String republishYn;
-    private Timestamp republishDate;
+    private String republishDate;
     private String containerUuid;
     private String containerName;
     private String requestDateFrom;

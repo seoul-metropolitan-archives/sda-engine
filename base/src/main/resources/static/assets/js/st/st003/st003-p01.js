@@ -246,11 +246,15 @@ fnObj.treeView01 = axboot.viewExtend(axboot.commonView, {
         nodes = nodes == null ? treeObj.getNodes() : nodes;
 
         for (var i = 0, l = nodes.length; i < l; i++) {
-            if (nodes[i]["arrangeRecordsResultUuid"] != undefined && nodes[i]["arrangeRecordsResultUuid"] != null) {
-                //treeObj.checkNode(nodes[i], true);
-                treeObj.setChkDisabled(nodes[i], true, false, false);
+
+            if (parentsData.fromWhere == 'st003') {
+                if (nodes[i]["arrangeRecordsResultUuid"] != undefined && nodes[i]["arrangeRecordsResultUuid"] != null) {
+                    //treeObj.checkNode(nodes[i], true);
+                    treeObj.setChkDisabled(nodes[i], true, false, false);
+                }
             }
-            if (parentsData.fromWhere == 'st013' || parentsData.fromWhere == 'st008') {
+
+            /*if (parentsData.fromWhere == 'st013' || parentsData.fromWhere == 'st008') {
                 if (nodes[i].electronicRecordStatusUuid == 'true') {
                     // 전자인 애들은 disable
                     //treeObj.checkNode(nodes[i], true);
@@ -262,8 +266,13 @@ fnObj.treeView01 = axboot.viewExtend(axboot.commonView, {
                     //treeObj.checkNode(nodes[i], true);
                     treeObj.setChkDisabled(nodes[i], true, false, false);
                 }
-            }
+            }*/
 
+            if (nodes[i].electronicRecordStatusUuid == 'false') {
+                // 전자가 아닌애는 disable
+                //treeObj.checkNode(nodes[i], true);
+                treeObj.setChkDisabled(nodes[i], true, false, false);
+            }
 
             if (nodes[i].children) {
                 fnObj.treeView01.initStatus(nodes[i].children);

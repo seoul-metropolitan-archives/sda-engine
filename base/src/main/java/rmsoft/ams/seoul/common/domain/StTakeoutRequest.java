@@ -61,6 +61,18 @@ public class StTakeoutRequest extends SimpleJpaModel<StTakeoutRequest.StTakeoutR
     @Column(name = "OUTSOURCING_PHONE", length = 10, nullable = false)
     private String outsourcingPhone;
 
+    @Column(name = "APPROVER_UUID", length = 36, nullable = false)
+    private String approverUuid;
+
+    @Column(name = "APPROVE_DATE", nullable = false)
+    private Timestamp approveDate;
+
+    @Column(name = "REJECTOR_UUID", length = 36, nullable = false)
+    private String rejectorUuid;
+
+    @Column(name = "REJECT_DATE", nullable = false)
+    private Timestamp rejectDate;
+
     @Override
     public StTakeoutRequestId getId() {return StTakeoutRequestId.of(takeoutRequestUuid);}
 

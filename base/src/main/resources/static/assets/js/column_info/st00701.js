@@ -25,8 +25,17 @@ var st00701 =
                     sortNo: 2,
                     name: "title",
                     text: "Title",
-                    width: 250,
+                    width: 400,
                     required: false,
+                    editable: false,
+                    dataType: "text",
+                    disable: true
+                },
+                {
+                    sortNo: 3,
+                    name: "retentionPeriodName",
+                    text: "보존기간",
+                    width: 110,
                     editable: false,
                     dataType: "text",
                     disable: true
@@ -50,15 +59,7 @@ var st00701 =
                     dataType: "text",
                     disable: true
                 },
-                {
-                    sortNo: 7,
-                    name: "retentionPeriodName",
-                    text: "보존기간",
-                    width: 110,
-                    editable: false,
-                    dataType: "text",
-                    disable: true
-                },
+
                 {
                     sortNo: 8,
                     name: "descStrDate",

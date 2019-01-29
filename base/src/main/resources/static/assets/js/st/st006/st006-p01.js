@@ -56,7 +56,19 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         }
 */
 
-        var data = $.extend({repositoryUuid: repositoryUuid, shelfUuid:shelfUuid, locationUuid: locationUuid}, data);
+        if( repositoryUuid == null){
+            axToast.push("Repository 를 선택 해 주세요");
+            return;
+        }
+        if( shelfUuid == null){
+            axToast.push("Shelf 를 선택 해 주세요");
+            return;
+        }
+        if( locationUuid == null){
+            axToast.push("Location 을 선택 해 주세요");
+            return;
+        }
+        var data = $.extend({repositoryUuid: repositoryUuid, shelfUuid:shelfUuid, locationUuid: locationUuid}, parentsData);
 
         axboot.ajax({
             type: "PUT",
@@ -270,11 +282,11 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
         //        $("#classDescription").css("background","#fffdd6");
         //    }
         // });
-        $(".btn_s").click(function() {
-            //if (this.textContent == "Save") {
-                ACTIONS.dispatch(ACTIONS.PAGE_SAVE, fnObj.formView.getData());
-            //}
-        });
+        // $(".btn_s").click(function() {
+        //     //if (this.textContent == "Save") {
+        //         ACTIONS.dispatch(ACTIONS.PAGE_SAVE, fnObj.formView.getData());
+        //     //}
+        // });
         $(".close_popup").click(function(){
             ACTIONS.dispatch(ACTIONS.PAGE_CLOSE );
         });

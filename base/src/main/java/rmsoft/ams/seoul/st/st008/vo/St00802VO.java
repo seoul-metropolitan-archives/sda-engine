@@ -20,7 +20,9 @@ public class St00802VO extends BaseVO {
     private String aggregationUuid;
     private String code;
     private String repositoryUuid;
+    private String repositoryName;
     private String shelfUuid;
+    private String shelfName;
     private String containerTypeUuid;
     private String locationUuid;
 
@@ -34,6 +36,7 @@ public class St00802VO extends BaseVO {
 
     private String publishedStatusUuid;
     private String locationName; // 행렬단
+    private String containerName;
 
 
 }

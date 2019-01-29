@@ -83,6 +83,13 @@ public class St009Service extends BaseService {
 
             stTakeoutRequest.setInsertDate(orgStTakeoutRequest.getInsertDate());
             stTakeoutRequest.setInsertUuid(orgStTakeoutRequest.getInsertUuid());
+
+            stTakeoutRequest.setApproverUuid(SessionUtils.getCurrentLoginUserUuid());
+            stTakeoutRequest.setApproveDate(Timestamp.valueOf(DateUtils.convertToString(LocalDateTime.now(), DateUtils.DATE_TIME_PATTERN)));
+
+            stTakeoutRequest.setRejectorUuid(orgStTakeoutRequest.getRejectorUuid());
+            stTakeoutRequest.setRejectDate(orgStTakeoutRequest.getRejectDate());
+
             stTakeoutRequestRepository.save(stTakeoutRequest);
             //index++;
         }
@@ -108,6 +115,13 @@ public class St009Service extends BaseService {
 
             stTakeoutRequest.setInsertDate(orgStTakeoutRequest.getInsertDate());
             stTakeoutRequest.setInsertUuid(orgStTakeoutRequest.getInsertUuid());
+
+            stTakeoutRequest.setApproverUuid(orgStTakeoutRequest.getApproverUuid());
+            stTakeoutRequest.setApproveDate(orgStTakeoutRequest.getApproveDate());
+
+            stTakeoutRequest.setRejectorUuid(SessionUtils.getCurrentLoginUserUuid());
+            stTakeoutRequest.setRejectDate(Timestamp.valueOf(DateUtils.convertToString(LocalDateTime.now(), DateUtils.DATE_TIME_PATTERN)));
+
             stTakeoutRequestRepository.save(stTakeoutRequest);
             //index++;
         }

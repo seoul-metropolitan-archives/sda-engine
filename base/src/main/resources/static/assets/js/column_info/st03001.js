@@ -9,7 +9,8 @@ var st03001 =
                     editable: false,
                     dataType: "code",
                     required: false,
-                    visible: false
+                    visible: false,
+                    disable: true
                 },
                 {
                     sortNo: 0,
@@ -18,7 +19,8 @@ var st03001 =
                     editable: false,
                     dataType: "code",
                     required: false,
-                    visible: false
+                    visible: false,
+                    disable: true
                 },
                 {
                     sortNo: 0,
@@ -27,7 +29,8 @@ var st03001 =
                     editable: false,
                     dataType: "code",
                     required: false,
-                    visible: false
+                    visible: false,
+                    disable: true
                 },
 
                 {
@@ -37,7 +40,8 @@ var st03001 =
                     editable: false,
                     dataType: "code",
                     required: false,
-                    visible: false
+                    visible: false,
+                    disable: true
                 },
 
                 {
@@ -53,16 +57,17 @@ var st03001 =
                     sortNo: 2,
                     name: "title",
                     text: "Title",
-                    width: 200,
+                    width: 400,
                     required: false,
                     editable: false,
-                    dataType: "text"
+                    dataType: "text",
+                    disable: true
                 },
                 {
                     sortNo: 3,
                     name: "level",
                     text: "Level",
-                    width: 110,
+                    width: 80,
                     editable: false,
                     dataType: "text",
                     disable: true
@@ -80,7 +85,7 @@ var st03001 =
                     sortNo: 5,
                     name: "currentContainerName",
                     text: "보존상자(AMS)",
-                    width: 200,
+                    width: 150,
                     editable: false,
                     dataType: "text",
                     disable: true
@@ -89,7 +94,7 @@ var st03001 =
                     sortNo: 5,
                     name: "sourceTypeName",
                     text: "Source Type",
-                    width: 200,
+                    width: 150,
                     editable: false,
                     dataType: "text",
                     disable: true
@@ -107,9 +112,10 @@ var st03001 =
                     sortNo: 9,
                     name: "republishYn",
                     text: "Arrange YN",
-                    width: 250,
+                    width: 80,
                     editable: false,
-                    dataType: "text"
+                    dataType: "text",
+                    disable: true
                 },
                 {
                     sortNo: 8,
@@ -125,9 +131,10 @@ var st03001 =
                     sortNo: 9,
                     name: "containerName",
                     text: "실제 보존상자",
-                    width: 250,
+                    width: 150,
                     editable: false,
-                    dataType: "text"
+                    dataType: "text",
+                    disable: true
                 },
             ]
     }

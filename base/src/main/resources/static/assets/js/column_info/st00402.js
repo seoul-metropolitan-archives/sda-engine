@@ -141,6 +141,16 @@ var st00402 =
                     editable: false,
                     dataType: "code",
                     visible : false
-                }
+                },
+                {
+                    sortNo: 15,
+                    name: "parentContainerUuid",
+                    text: "parentContainerUuid",
+                    width: 120,
+                    editable: false,
+                    dataType: "code",
+                    required: false,
+                    visible: false
+                },
             ]
     }

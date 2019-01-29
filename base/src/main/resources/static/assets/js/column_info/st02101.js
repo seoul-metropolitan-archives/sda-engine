@@ -9,7 +9,8 @@ var st02101 =
                     editable: false,
                     dataType: "code",
                     required: false,
-                    visible: false
+                    visible: false,
+                    disable: true
                 },
                 {
                     sortNo: 0,
@@ -18,7 +19,8 @@ var st02101 =
                     editable: false,
                     dataType: "code",
                     required: false,
-                    visible: false
+                    visible: false,
+                    disable: true
                 },
                 {
                     sortNo: 1,
@@ -33,16 +35,17 @@ var st02101 =
                     sortNo: 2,
                     name: "title",
                     text: "Title",
-                    width: 200,
+                    width: 400,
                     required: false,
                     editable: false,
-                    dataType: "text"
+                    dataType: "text",
+                    disable: true
                 },
                 {
                     sortNo: 3,
                     name: "level",
                     text: "Level",
-                    width: 110,
+                    width: 70,
                     editable: false,
                     dataType: "text",
                     disable: true
@@ -51,7 +54,7 @@ var st02101 =
                     sortNo: 4,
                     name: "type",
                     text: "Type",
-                    width: 80,
+                    width: 70,
                     editable: false,
                     dataType: "text",
                     disable: true
@@ -69,7 +72,7 @@ var st02101 =
                     sortNo: 6,
                     name: "author",
                     text: "Author",
-                    width: 140,
+                    width: 100,
                     editable: false,
                     dataType: "text",
                     disable: true
@@ -98,7 +101,8 @@ var st02101 =
                     text: "서고",
                     width: 150,
                     editable: false,
-                    dataType: "text"
+                    dataType: "text",
+                    disable: true
                 },
                 {
                     sortNo: 10,
@@ -106,7 +110,8 @@ var st02101 =
                     text: "서가",
                     width: 150,
                     editable: false,
-                    dataType: "text"
+                    dataType: "text",
+                    disable: true
                 },
                 {
                     sortNo: 11,
@@ -114,7 +119,8 @@ var st02101 =
                     text: "행렬단",
                     width: 150,
                     editable: false,
-                    dataType: "text"
+                    dataType: "text",
+                    disable: true
                 },
                 {
                     sortNo: 12,
@@ -122,15 +128,17 @@ var st02101 =
                     text: "Container",
                     width: 150,
                     editable: false,
-                    dataType: "text"
+                    dataType: "text",
+                    disable: true
                 },
                 {
                     sortNo: 13,
                     name: "inoutName",
                     text: "입출 구분",
-                    width: 100,
+                    width: 70,
                     editable: false,
-                    dataType: "text"
+                    dataType: "text",
+                    disable: true
                 },
                 {
                     sortNo: 14,
@@ -139,6 +147,7 @@ var st02101 =
                     width: 140,
                     editable: false,
                     dataType: "date",
+                    disable: true
                 },
                 {
                     sortNo: 15,
@@ -147,6 +156,7 @@ var st02101 =
                     width: 150,
                     editable: false,
                     dataType: "text",
+                    disable: true
                 },
             ]
     }

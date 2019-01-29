@@ -340,6 +340,11 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             }
         });
     },
+    EXCEL_DOWN01 : function(caller, act, data){
+        var API_SERVER = "http://localhost:8888/";
+
+        location.href = API_SERVER + "/api/v1/st/st015/01/excelDown";
+    }
 });
 
 fnObj.pageStart = function () {
@@ -492,7 +497,9 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
 
         });
 
-
+        $('.excelDown').on('click',function(){
+            ACTIONS.dispatch(ACTIONS.EXCEL_DOWN01);
+        });
 
     },
     getData: function () {

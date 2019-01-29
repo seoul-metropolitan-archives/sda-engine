@@ -26,6 +26,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         //     parentContainerUuid = undefined;
         // }
 
+
         axboot.ajax({
             type: "GET",
             url: "/api/v1/st/st006/01/list01",
@@ -35,6 +36,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 //fnObj.gridView01.disabledColumn();
                 // fnObj.gridView02.resetCurrent();
                 fnObj.gridView02.clearData();
+                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH02);
             },
             options: {
                 onError: axboot.viewError
@@ -615,7 +617,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
         this.gridObj.setGridStyle("100%", "100%")
             .setOption({
                 header: { visible: true },
-                checkBar: {visible: true},
+                checkBar: {visible: false},
                 indicator: {visible: true},
                 lineVisible: false
             });

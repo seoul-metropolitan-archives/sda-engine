@@ -17,21 +17,27 @@ public class St01301VO extends BaseVO {
 
     private String requestorUuid;
     private String requestDate;
-    public String getRequestDate(){
-        return requestDate.substring(0, 10);
-    }
+
     private String exceptStartDate;
     public String getExceptStartDate(){
+        if( exceptStartDate == null){
+            return null;
+        }
         return exceptStartDate.substring(0, 10);
     }
     private String exceptEndDate;
     public String getExceptEndDate(){
+        if( exceptEndDate == null){
+            return null;
+        }
         return exceptEndDate.substring(0, 10);
     }
     private String exceptReason;
-    private String exceptStartDateFrom;
 
+    private String exceptStartDateFrom;
     private String exceptStartDateTo;
+    private String exceptEndDateFrom;
+    private String exceptEndDateTo;
 
 
 }

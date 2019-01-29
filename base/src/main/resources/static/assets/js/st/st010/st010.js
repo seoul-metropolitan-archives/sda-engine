@@ -268,6 +268,37 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         } else {
             return false;
         }
+    },
+    EXCEL_DOWN01 : function(caller, act, data){
+
+        var repositoryUuid = fnObj.gridView01.getSelectedData().repositoryUuid;
+        var repositoryCode = fnObj.gridView01.getSelectedData().repositoryCode;
+
+        location.href = "/api/v1/st/st010/01/excelDown?repositoryUuid="+repositoryUuid+"&repositoryCode="+repositoryCode;
+    },
+    EXCEL_DOWN02 : function(caller, act, data){
+        var repositoryUuid = fnObj.gridView01.getSelectedData().repositoryUuid;
+        var repositoryCode = fnObj.gridView01.getSelectedData().repositoryCode;
+        var shelfUuid = fnObj.gridView02.getSelectedData().shelfUuid;
+
+        if(shelfUuid == "" || shelfUuid == undefined || shelfUuid == null){
+            return;
+        }
+
+
+        location.href = "/api/v1/st/st010/02/excelDown?repositoryUuid="+repositoryUuid+"&repositoryCode="+repositoryCode+"&shelfUuid="+shelfUuid;
+    },
+    EXCEL_DOWN03 : function(caller, act, data){
+        var repositoryUuid = fnObj.gridView01.getSelectedData().repositoryUuid;
+        var repositoryCode = fnObj.gridView01.getSelectedData().repositoryCode;
+        var shelfUuid = fnObj.gridView02.getSelectedData().shelfUuid;
+        var locationUuid = fnObj.gridView03.getSelectedData().locationUuid;
+
+        if(locationUuid == "" || locationUuid == undefined || locationUuid == null){
+            return;
+        }
+
+        location.href = "/api/v1/st/st010/03/excelDown?repositoryUuid="+repositoryUuid+"&repositoryCode="+repositoryCode+"&shelfUuid="+shelfUuid+"&locationUuid="+locationUuid
     }
 });
 
@@ -331,6 +362,20 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
     },
     initEvent: function () {
         var _this = this;
+
+        $('.btn_excelDown01').on('click',function(){
+            ACTIONS.dispatch(ACTIONS.EXCEL_DOWN01);
+        });
+        $('.btn_excelDown02').on('click',function(){
+            ACTIONS.dispatch(ACTIONS.EXCEL_DOWN02);
+        });
+        $('.btn_excelDown03').on('click',function(){
+            ACTIONS.dispatch(ACTIONS.EXCEL_DOWN03);
+        });
+
+
+
+
     },
     getData: function () {
         var data = this.modelFormatter.getClearData(this.model.get()); // 모델의 값을 포멧팅 전 값으로 치환.

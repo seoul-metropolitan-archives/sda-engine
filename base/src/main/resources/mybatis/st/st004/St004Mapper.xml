@@ -32,7 +32,8 @@
         '.'),
         2 ,
         length(SYS_CONNECT_BY_PATH(S1.ROWID,
-        '.'))) as orderKey1
+        '.'))) as orderKey1,
+        S2.PARENT_CONTAINER_UUID as parentContainerUuid
         FROM ST_ARRANGE_CONTAINERS_RESULT S1 INNER JOIN  ST_CONTAINER S2
         ON S1.CONTAINER_UUID = S2.CONTAINER_UUID
         AND S1.LOCATION_UUID = #{locationUuid}

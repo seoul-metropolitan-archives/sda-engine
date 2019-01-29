@@ -73,4 +73,229 @@
         </where>
     </select>
 
+    <select id="getExcelList01" resultType="St010ExcelVO" parameterType="St010ExcelVO" statementType="PREPARED">
+        SELECT A.REPOSITORY_UUID as repositoryUuid,
+               A.REPOSITORY_CODE as repositoryCode,
+               A.REPOSITORY_NAME as repositoryName,
+               B.SHELF_UUID as shelfUuid,
+               B.SHELF_CODE as shelfCode,
+               B.SHELF_NAME as shelfName,
+               (SELECT COUNT(*)
+                FROM ST_LOCATION C
+                       INNER JOIN ST_ARRANGE_CONTAINERS_RESULT D ON C.LOCATION_UUID = D.LOCATION_UUID
+                       INNER JOIN ST_ARRANGE_RECORDS_RESULT E ON D.CONTAINER_UUID = E.CONTAINER_UUID
+                WHERE C.SHELF_UUID = B.SHELF_UUID
+                  AND D.LOCATION_UUID = C.LOCATION_UUID) as aggregationCount,
+                (SELECT COUNT(*)
+                FROM ST_TAKEOUT_REQUEST STTR
+                INNER JOIN ST_TAKEOUT_RECORD_RESULT STTRR ON STTR.TAKEOUT_REQUEST_UUID = STTRR.TAKEOUT_REQUEST_UUID
+                WHERE FC_AD_CODE(STTR.STATUS_UUID) = '01'
+                AND EXISTS(
+                SELECT *
+                FROM ST_LOCATION C
+                INNER JOIN ST_ARRANGE_CONTAINERS_RESULT D ON C.LOCATION_UUID = D.LOCATION_UUID
+                INNER JOIN ST_ARRANGE_RECORDS_RESULT E ON D.CONTAINER_UUID = E.CONTAINER_UUID
+                WHERE C.SHELF_UUID = B.SHELF_UUID
+                AND D.LOCATION_UUID = C.LOCATION_UUID
+                AND STTRR.AGGREGATION_UUID = E.AGGREGATION_UUID
+                ))                             as inCount,
+                (SELECT COUNT(*)
+                FROM ST_TAKEOUT_REQUEST STTR
+                INNER JOIN ST_TAKEOUT_RECORD_RESULT STTRR ON STTR.TAKEOUT_REQUEST_UUID = STTRR.TAKEOUT_REQUEST_UUID
+                WHERE FC_AD_CODE(STTR.STATUS_UUID) = '02'
+                AND EXISTS(
+                SELECT *
+                FROM ST_LOCATION C
+                INNER JOIN ST_ARRANGE_CONTAINERS_RESULT D ON C.LOCATION_UUID = D.LOCATION_UUID
+                INNER JOIN ST_ARRANGE_RECORDS_RESULT E ON D.CONTAINER_UUID = E.CONTAINER_UUID
+                WHERE C.SHELF_UUID = B.SHELF_UUID
+                AND D.LOCATION_UUID = C.LOCATION_UUID
+                AND STTRR.AGGREGATION_UUID = E.AGGREGATION_UUID
+                ))                             as outCount
+        FROM ST_REPOSITORY A
+               INNER JOIN ST_SHELF B ON A.REPOSITORY_UUID = B.REPOSITORY_UUID
+        <where>
+            1=1
+            <if test="repositoryUuid != null">
+                AND A.REPOSITORY_UUID = #{repositoryUuid}
+            </if>
+        </where>
+
+    </select>
+
+    <select id="getExcelList02" resultType="St010ExcelVO" parameterType="St010ExcelVO" statementType="PREPARED">
+        SELECT STR.REPOSITORY_UUID                                             as repositoryUuid,
+        STR.REPOSITORY_CODE                                             as repositoryCode,
+        STR.REPOSITORY_NAME                                             as repositoryName,
+        STS.SHELF_UUID                                                  as shelfUuid,
+        STS.SHELF_CODE                                                  as shelfCode,
+        STS.SHELF_NAME                                                  as shelfName,
+        STL.LOCATION_UUID                                               as locationUuid,
+        STL.ROW_NO                                                      as rowNo,
+        STL.COLUMN_NO                                                   as columnNo,
+        (SELECT COUNT(*)
+        FROM ST_ARRANGE_CONTAINERS_RESULT D
+        INNER JOIN ST_ARRANGE_RECORDS_RESULT E ON D.CONTAINER_UUID = E.CONTAINER_UUID
+        WHERE D.LOCATION_UUID = STL.LOCATION_UUID)                     as aggregationCount,
+        (SELECT COUNT(*)
+        FROM ST_SHELF STS
+        WHERE STS.REPOSITORY_UUID = STR.REPOSITORY_UUID
+        AND STS.SHELF_UUID = '0A1CEA94-AC53-4416-B95A-A42463FAD58D') as shelfCount,
+        (SELECT COUNT(*)
+        FROM ST_SHELF STS
+        INNER JOIN ST_LOCATION STL ON STS.SHELF_UUID = STL.SHELF_UUID
+        WHERE STS.REPOSITORY_UUID = STR.REPOSITORY_UUID
+        AND STS.SHELF_UUID = '0A1CEA94-AC53-4416-B95A-A42463FAD58D') as rowCount,
+        (SELECT COUNT(*)
+        FROM ST_TAKEOUT_REQUEST STTR
+        INNER JOIN ST_TAKEOUT_RECORD_RESULT STTRR ON STTR.TAKEOUT_REQUEST_UUID = STTRR.TAKEOUT_REQUEST_UUID
+        WHERE FC_AD_CODE(STTR.STATUS_UUID) = '01'
+        AND EXISTS(
+        SELECT *
+        FROM ST_LOCATION C
+        INNER JOIN ST_ARRANGE_CONTAINERS_RESULT D ON C.LOCATION_UUID = D.LOCATION_UUID
+        INNER JOIN ST_ARRANGE_RECORDS_RESULT E ON D.CONTAINER_UUID = E.CONTAINER_UUID
+        WHERE C.SHELF_UUID = STS.SHELF_UUID
+        AND D.LOCATION_UUID = C.LOCATION_UUID
+        AND STTRR.AGGREGATION_UUID = E.AGGREGATION_UUID
+        AND C.LOCATION_UUID = STL.LOCATION_UUID
+        ))                                                   as inCount,
+        (SELECT COUNT(*)
+        FROM ST_TAKEOUT_REQUEST STTR
+        INNER JOIN ST_TAKEOUT_RECORD_RESULT STTRR ON STTR.TAKEOUT_REQUEST_UUID = STTRR.TAKEOUT_REQUEST_UUID
+        WHERE FC_AD_CODE(STTR.STATUS_UUID) = '02'
+        AND EXISTS(
+        SELECT *
+        FROM ST_LOCATION C
+        INNER JOIN ST_ARRANGE_CONTAINERS_RESULT D ON C.LOCATION_UUID = D.LOCATION_UUID
+        INNER JOIN ST_ARRANGE_RECORDS_RESULT E ON D.CONTAINER_UUID = E.CONTAINER_UUID
+        WHERE C.SHELF_UUID = STS.SHELF_UUID
+        AND D.LOCATION_UUID = C.LOCATION_UUID
+        AND STTRR.AGGREGATION_UUID = E.AGGREGATION_UUID
+        AND C.LOCATION_UUID = STL.LOCATION_UUID
+        ))                                                   as outCount
+        FROM ST_REPOSITORY STR
+        INNER JOIN ST_SHELF STS ON STR.REPOSITORY_UUID = STS.REPOSITORY_UUID
+        INNER JOIN ST_LOCATION STL ON STS.SHELF_UUID = STL.SHELF_UUID
+        <where>
+            1=1
+            <if test="repositoryUuid != null">
+                AND STR.REPOSITORY_UUID = #{repositoryUuid}
+            </if>
+            <if test="shelfUuid != null">
+                AND STS.SHELF_UUID = #{shelfUuid}
+            </if>
+        </where>
+
+    </select>
+
+    <select id="getExcelList03" resultType="St010Excel03VO" parameterType="St010Excel03VO" statementType="PREPARED">
+        SELECT A.ARRANGE_CONTAINERS_RESULT_UUID as arrangeContainersResultUuid,
+               A.LOCATION_UUID                  as locationUuid,
+               A.CONTAINER_UUID                 as containerUuid,
+               A.INSERT_DATE                    as insertDate,
+               A.UPDATE_DATE,
+               B.uuid,
+               B.orderNo,
+               B.publishedStatus,
+               B.code,
+               B.title,
+               B."type",
+               B."level",
+               B.author,
+               B.descStrDate,
+               B.descEdDate,
+               B.description,
+               B.notes,
+                (SELECT COUNT(*)
+                FROM ST_SHELF STS
+                WHERE STS.REPOSITORY_UUID = #{repositoryUuid}
+                AND STS.SHELF_UUID = #{shelfUuid}) as shelfCount,
+                (SELECT COUNT(*)
+                FROM ST_SHELF STS
+                INNER JOIN ST_LOCATION STL ON STS.SHELF_UUID = STL.SHELF_UUID
+                WHERE STS.REPOSITORY_UUID = #{repositoryUuid}
+                AND STS.SHELF_UUID = #{shelfUuid}) as rowCount,
+                (
+                select STR.REPOSITORY_NAME
+                from ST_REPOSITORY STR INNER JOIN ST_SHELF STS
+                ON STR.REPOSITORY_UUID = STS.REPOSITORY_UUID
+                INNER JOIN ST_LOCATION STL ON STS.SHELF_UUID = STL.SHELF_UUID
+                WHERE STL.LOCATION_UUID = #{locationUuid}
+                ) as repositoryName,
+                (
+                select STS.SHELF_NAME
+                from ST_REPOSITORY STR INNER JOIN ST_SHELF STS
+                ON STR.REPOSITORY_UUID = STS.REPOSITORY_UUID
+                INNER JOIN ST_LOCATION STL ON STS.SHELF_UUID = STL.SHELF_UUID
+                WHERE STL.LOCATION_UUID = #{locationUuid}
+                ) as shelfName,
+                (
+                select (STL.ROW_NO || '행 ' || STL.COLUMN_NO || '열') as locationName
+                from ST_REPOSITORY STR INNER JOIN ST_SHELF STS
+                ON STR.REPOSITORY_UUID = STS.REPOSITORY_UUID
+                INNER JOIN ST_LOCATION STL ON STS.SHELF_UUID = STL.SHELF_UUID
+                WHERE STL.LOCATION_UUID = #{locationUuid}
+                ) as locationName,
+                C.REQUEST_NAME as requestName,
+                NVL(FC_AD_CODE(C.STATUS_UUID),'false') as status,
+                FC_AD_CODE_NM(C.STATUS_UUID) as statusName,
+                TO_CHAR(TO_DATE(C.TAKEOUT_DATE),'YYYY-MM-DD') as takeoutDate,
+                TO_CHAR(TO_DATE(C.RETURN_DUE_DATE),'YYYY-MM-DD') as returnDueDate
+        FROM ST_ARRANGE_CONTAINERS_RESULT A
+               INNER JOIN ST_ARRANGE_RECORDS_RESULT SARR ON A.CONTAINER_UUID = SARR.CONTAINER_UUID
+               INNER JOIN (SELECT AGGREGATION_UUID                                                                                                                            as uuid,
+                                  1                                                                                                                                           as orderNo,
+                                  (SELECT CODE_NAME
+                                   FROM AD_CODE_DETAIL
+                                   WHERE CODE_DETAIL_UUID = Z1.PUBLISHED_STATUS_UUID)                                                                                         as publishedStatus,
+                                  AGGREGATION_CODE                                                                                                                            as code,
+                                  TITLE                                                                                                                                       as title,
+                                  (SELECT CODE_NAME
+                                   FROM AD_CODE_DETAIL
+                                   WHERE CODE_DETAIL_UUID = Z1.TYPE_UUID)                                                                                                     as "type",
+                                  (SELECT TO_CHAR(LEVEL_NO)
+                                   FROM RC_LEVEL
+                                   WHERE LEVEL_UUID = Z1.LEVEL_UUID)                                                                                                          as "level",
+                                  AUTHOR                                                                                                                                      as author,
+                                  DESCRIPTION_START_DATE                                                                                                                      as descStrDate,
+                                  DESCRIPTION_END_DATE                                                                                                                        as descEdDate,
+                                  DESCRIPTION                                                                                                                                 as description,
+                                  NOTES                                                                                                                                       as notes,
+                                  ((SELECT COUNT(*) FROM RC_AGGREGATION WHERE PARENT_AGGREGATION_UUID = Z1.AGGREGATION_UUID) + (
+                                                                                                                               SELECT COUNT(*)
+                                                                                                                               FROM RC_ITEM
+                                                                                                                               WHERE AGGREGATION_UUID = Z1.AGGREGATION_UUID)) as childCnt
+                           FROM RC_AGGREGATION Z1
+                           UNION
+                           ALL SELECT ITEM_UUID                                                                    as uuid,
+                                      2                                                                            as orderNo,
+                                      (SELECT CODE_NAME
+                                       FROM AD_CODE_DETAIL
+                                       WHERE CODE_DETAIL_UUID = Z1.PUBLISHED_STATUS_UUID)                          as publishedStatus,
+                                      ITEM_CODE                                                                    as code,
+                                      TITLE                                                                        as title,
+                                      (SELECT CODE_NAME FROM AD_CODE_DETAIL WHERE CODE_DETAIL_UUID = Z1.TYPE_UUID) as "type",
+                                      ''                                                                           as "level",
+                                      AUTHOR                                                                       as author,
+                                      DESCRIPTION_START_DATE                                                       as descStrDate,
+                                      DESCRIPTION_END_DATE                                                         as descEdDate,
+                                      DESCRIPTION                                                                  as description,
+                                      NOTES                                                                        as notes,
+                                      0                                                                            as childCnt
+                               FROM RC_ITEM Z1) B on SARR.AGGREGATION_UUID = B.uuid
+        LEFT OUTER JOIN (
+        SELECT *
+        FROM ST_TAKEOUT_REQUEST STTR
+        INNER JOIN ST_TAKEOUT_RECORD_RESULT STTRR ON STTR.TAKEOUT_REQUEST_UUID = STTRR.TAKEOUT_REQUEST_UUID
+        ) C ON B.uuid = C.AGGREGATION_UUID
+        <where>
+            1=1
+            <if test="locationUuid != null">
+                AND A.LOCATION_UUID = #{locationUuid}
+            </if>
+        </where>
+
+    </select>
+
 </mapper>

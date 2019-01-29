@@ -12,7 +12,7 @@
                   FROM AD_CODE_HEADER ZZ1,
                        AD_CODE_DETAIL ZZ2
                   WHERE ZZ1.CODE_HEADER_UUID = ZZ2.CODE_HEADER_UUID
-                    AND ZZ1.CATEGORY_CODE = 'CD129'
+                    -- AND ZZ1.CATEGORY_CODE = 'CD129'
                     AND ZZ2.CODE_DETAIL_UUID = hist.INOUT_TYPE_UUID
                ) inoutName
         FROM ST_WITHOUT_NOTICE_INOUT_HIST hist
@@ -42,24 +42,19 @@
                                     container.CONTAINER_NAME containerName,
                                     (location.ROW_NO || '행 ' || location.COLUMN_NO || '열') as locationName
                              FROM ST_WITHOUT_NOTICE_INOUT_RECORD inout_record
-                                    INNER JOIN (
-                                               SELECT ar.AGGREGATION_UUID, ar.CONTAINER_UUID
-                                                  FROM RC_ITEM item
-                                               INNER JOIN ST_ARRANGE_RECORDS_RESULT ar
-                                                 ON ar.AGGREGATION_UUID = item.AGGREGATION_UUID
-                                               ) etc
+                                    LEFT JOIN ST_ARRANGE_RECORDS_RESULT etc
                                       ON etc.AGGREGATION_UUID = inout_record.AGGREGATION_UUID
-                                    INNER JOIN ST_ARRANGE_CONTAINERS_RESULT acr
+                                    LEFT JOIN ST_ARRANGE_CONTAINERS_RESULT acr
                                       ON acr.CONTAINER_UUID = etc.CONTAINER_UUID
-                                    INNER JOIN ST_LOCATION location
+                                    LEFT JOIN ST_LOCATION location
                                       ON location.LOCATION_UUID = acr.LOCATION_UUID
-                                    INNER JOIN ST_CONTAINER container
+                                    LEFT JOIN ST_CONTAINER container
                                       ON container.CONTAINER_UUID = etc.CONTAINER_UUID
-                                    INNER JOIN ST_SHELF shelf
+                                    LEFT JOIN ST_SHELF shelf
                                       ON shelf.SHELF_UUID = location.SHELF_UUID
-                                    INNER JOIN ST_REPOSITORY repository
+                                    LEFT JOIN ST_REPOSITORY repository
                                       ON repository.REPOSITORY_UUID = shelf.REPOSITORY_UUID
-                                    INNER JOIN (SELECT AGGREGATION_UUID                                                                         as uuid,
+                                    LEFT JOIN (SELECT AGGREGATION_UUID                                                                         as uuid,
                                                        1                                                                                        as orderNo,
                                                        (SELECT CODE_NAME
                                                         FROM AD_CODE_DETAIL
@@ -107,6 +102,7 @@
 
         <where>
             1=1
+            AND record.aggregationUuid is not NULL
             <if test="code != null">
                 <![CDATA[
                    AND code  LIKE '%' || #{code} || '%'

@@ -1,5 +1,6 @@
 package rmsoft.ams.seoul.st.st030.service;
 
+import io.onsemiro.core.api.ApiException;
 import io.onsemiro.core.api.response.ApiResponse;
 import io.onsemiro.core.code.ApiStatus;
 import io.onsemiro.core.domain.BaseService;
@@ -77,7 +78,17 @@ public class St030Service extends BaseService {
             orgStMissArrangeRecordReq.setCurrentContainerUuid(orgStMissArrangeRecordReq.getContainerUuid()); // 올바른 콘테이너로 재배치.
             stMissArrangeRecordReqRepository.save(orgStMissArrangeRecordReq);
             // - [0]st_arrange_records_result 에 Container정보를 Update합니다.
+            if( vo.getAggregationUuid() == null){
+                throw new ApiException(ApiStatus.SYSTEM_ERROR, "AGGREGATION_UUID가 없습니다.");
+            }
+            if( vo.getCurrentContainerUuid() == null){
+                throw new ApiException(ApiStatus.SYSTEM_ERROR, "현재 배치된 실제 보존상자가 없습니다.");
+            }
             St003VO stArrangeRecordsResultVO = st030Mapper.getStArrangeRecordsResult(vo);
+            if( stArrangeRecordsResultVO == null){
+                throw new ApiException(ApiStatus.SYSTEM_ERROR, "ST_ARRANGE_RECORDS_RESULT 와 매칭되는 AGGREGATION_UUID를 찾을 수 없습니다. UUID:"+ vo.getAggregationUuid());
+            }
+
             StArrangeRecordsResult stArrangeRecordsResult = ModelMapperUtils.map(stArrangeRecordsResultVO, StArrangeRecordsResult.class);
             StArrangeRecordsResult orgStArrangeRecordResult = stArrangeRecordsResultRepository.findOne(stArrangeRecordsResult.getId());
             orgStArrangeRecordResult.setContainerUuid(orgStMissArrangeRecordReq.getContainerUuid()); // 콘테이너 재배치
