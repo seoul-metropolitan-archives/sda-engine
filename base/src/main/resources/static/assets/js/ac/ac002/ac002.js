@@ -1356,13 +1356,14 @@ function leftopenView() {
     $("a.leftmenu_close").show();
     $(".ax-frame-header-tab").css("left", "220px");
     $(".ax-frame-header-tab").css("padding-left", "");
-    $("#contents").css("left", ""); //오른쪽 부분 원상복귀
-    $("#contents").css("padding-left", "220px"); //오른쪽 부분 복귀
-    $(".ax-frame-contents").css("left", ""); //오른쪽 부분 원상복귀
+    $(".ax-frame-contents").css("left", "220px"); //오른쪽 부분 원상복귀
     $(".ax-frame-contents").css("padding-left", ""); //오른쪽 부분 복귀
     $(".left_close_open_btn a").css("left", "220px");
     $(".left_close_open_btn a").css("margin-left", "-20px");
     $(".ax-frame-header-tool").css("width", "");
+    $("#contents").css("left", ""); //오른쪽 부분 원상복귀
+    $("#contents").css("padding-left", "220px"); //오른쪽 부분 복귀
+    $("#main-content").css("left", ""); //오른쪽 부분 원상복귀
     fnObj.leftMenuViewAll.gridObj.getGridView().resetSize();
     fnObj.leftMenuViewMy.gridObj.getGridView().resetSize();
 }
@@ -1376,11 +1377,14 @@ function left7openView() {
     $("a.leftmenu7_close").show();
     $("#contents").css("left", ""); //오른쪽 부분 원상복귀
     $("#contents").css("padding-left", "220px"); //오른쪽 부분 복귀
-    $(".ax-frame-contents").css("left", ""); //오른쪽 부분 원상복귀
+    $(".ax-frame-contents").css("left", "220px"); //오른쪽 부분 원상복귀
     $(".ax-frame-contents").css("padding-left", ""); //오른쪽 부분 복귀
-    $(".left_close_open_btn a").css("left", "");
-    $(".left_close_open_btn a").css("margin-left", "");
+    $(".left_close_open_btn a").css("left", "220px");
+    $(".left_close_open_btn a").css("margin-left", "-20px");
     $(".ax-frame-header-tool").css("width", "");
+    $("#main-content").css("left", ""); //오른쪽 부분 원상복귀
+    fnObj.leftMenuViewAll.gridObj.getGridView().resetSize();
+    fnObj.leftMenuViewMy.gridObj.getGridView().resetSize();
 }
 
 function left7closeView() {
@@ -1427,6 +1431,8 @@ function smallView() {
     $(".ax-frame-header-tool").show();
     $(".left").hide();
     $(".ax-frame-header-tab").show();
+    $(".ax-frame-header-tab").css("left", "0%");
+    $(".ax-frame-header-tab").css("padding-left", "0");
     $(".left").css("top", "50px");
     $("#contents").css("left", "");
     $("#contents").css("top", "80px");
@@ -1440,9 +1446,9 @@ function smallView() {
     $("a.big_close").show();
     /*$(".zeta-menu-bar").show();*/
     $("a.leftmenu7_open").hide();
-    $("a.leftmenu_close").show();
+    $("a.leftmenu_close").hide();
     $("a.leftmenu7_close").hide();
-    $("a.leftmenu_open").hide();
+    $("a.leftmenu_open").show();
     $(".left_close_open_btn a").css("left", "0%");
     $(".left_close_open_btn a").css("margin-left", "0px");
 }
