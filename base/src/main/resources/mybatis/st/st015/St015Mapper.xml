@@ -41,7 +41,7 @@
                 AND a.EXCEPT_START_DATE <![CDATA[>=]]> TO_DATE(#{exceptStartDate},'yyyy-mm-dd')
             </if>
             <if test="exceptEndDate != null">
-                AND a.EXCEPT_END_DATE <![CDATA[<=]]> TO_DATE(#{exceptEndDate},'yyyy-mm-dd')
+                AND a.EXCEPT_END_DATE <![CDATA[<]]> TO_DATE(#{exceptEndDate},'yyyy-mm-dd')+1
             </if>
             <if test="repositoryUuid != null">
                 AND a.REPOSITORY_UUID  = #{repositoryUuid}

@@ -7,7 +7,7 @@
     <select id="getStTakeoutRequest" resultType="St00801VO" statementType="PREPARED">
 
             select
-                   TAKEOUT_REQUEST_UUID takeoutRequestUuid,
+                   request.TAKEOUT_REQUEST_UUID takeoutRequestUuid,
                    REQUEST_NAME requestName,
                    REQUEST_TYPE_UUID requestTypeUuid,
                    REQUESTOR_UUID requestorUuid,
@@ -40,6 +40,72 @@
 
               INNER JOIN AC_USER ac_user
                 ON ac_user.USER_UUID = request.REQUESTOR_UUID
+                -- 여기는 아래의 getStTakeoutRecordResult query 와 같으므로 아래 변경되면 똑같이 적용 해 줘야됨
+                -- code, title 이 필터링 되어야해서 이렇게 됨
+              INNER JOIN (select record_result.TAKEOUT_REQUEST_UUID
+                           FROM ST_TAKEOUT_RECORD_RESULT record_result
+                                  LEFT JOIN ST_ARRANGE_RECORDS_RESULT etc
+                                    ON etc.AGGREGATION_UUID = record_result.AGGREGATION_UUID
+                                  LEFT JOIN ST_ARRANGE_CONTAINERS_RESULT acr ON acr.CONTAINER_UUID = etc.CONTAINER_UUID
+                                  LEFT JOIN ST_LOCATION location ON location.LOCATION_UUID = acr.LOCATION_UUID
+                                  LEFT JOIN ST_CONTAINER container ON container.CONTAINER_UUID = etc.CONTAINER_UUID
+                                  LEFT JOIN ST_SHELF shelf ON shelf.SHELF_UUID = location.SHELF_UUID
+                                  LEFT JOIN ST_REPOSITORY repository ON repository.REPOSITORY_UUID = shelf.REPOSITORY_UUID
+                                  INNER JOIN (SELECT AGGREGATION_UUID                                                                                         as uuid,
+                                                     1                                                                                                        as orderNo,
+                                                     (SELECT CODE_NAME
+                                                      FROM AD_CODE_DETAIL
+                                                      WHERE CODE_DETAIL_UUID = Z1.PUBLISHED_STATUS_UUID)                                                      as publishedStatus,
+                                                     AGGREGATION_CODE                                                                                         as code,
+                                                     TITLE                                                                                                    as title,
+                                                     (SELECT CODE_NAME
+                                                      FROM AD_CODE_DETAIL
+                                                      WHERE CODE_DETAIL_UUID = Z1.TYPE_UUID)                                                                  as "type",
+                                                     (SELECT LEVEL_NAME
+                                                      FROM RC_LEVEL
+                                                      WHERE LEVEL_UUID = Z1.LEVEL_UUID)                                                                       as "level",
+                                                     AUTHOR                                                                                                   as author,
+                                                     DESCRIPTION_START_DATE                                                                                   as descStrDate,
+                                                     DESCRIPTION_END_DATE                                                                                     as descEdDate,
+                                                     DESCRIPTION                                                                                              as description,
+                                                     NOTES                                                                                                    as notes,
+                                                     ((SELECT COUNT(*)
+                                                       FROM RC_AGGREGATION
+                                                       WHERE PARENT_AGGREGATION_UUID = Z1.AGGREGATION_UUID) + (SELECT COUNT(*)
+                                                                                                               FROM RC_ITEM
+                                                                                                               WHERE AGGREGATION_UUID = Z1.AGGREGATION_UUID)) as childCnt
+                                              FROM RC_AGGREGATION Z1
+                                              UNION
+                                              ALL SELECT ITEM_UUID                                           as uuid,
+                                                         2                                                   as orderNo,
+                                                         (SELECT CODE_NAME
+                                                          FROM AD_CODE_DETAIL
+                                                          WHERE CODE_DETAIL_UUID = Z1.PUBLISHED_STATUS_UUID) as publishedStatus,
+                                                         ITEM_CODE                                           as code,
+                                                         TITLE                                               as title,
+                                                         (SELECT CODE_NAME
+                                                          FROM AD_CODE_DETAIL
+                                                          WHERE CODE_DETAIL_UUID = Z1.TYPE_UUID)             as "type",
+                                                         ''                                                  as "level",
+                                                         AUTHOR                                              as author,
+                                                         DESCRIPTION_START_DATE                              as descStrDate,
+                                                         DESCRIPTION_END_DATE                                as descEdDate,
+                                                         DESCRIPTION                                         as description,
+                                                         NOTES                                               as notes,
+                                                         0                                                   as childCnt
+                                                  FROM RC_ITEM Z1) B on B.UUID = record_result.AGGREGATION_UUID
+                          <where>
+                                1=1
+                                <if test="code != null">
+                                    AND B.code  LIKE '%' || #{code} || '%'
+                                </if>
+                                <if test="title != null">
+                                    AND B.title  LIKE '%' || #{title} || '%'
+                                </if>
+                          </where>
+                        group by record_result.TAKEOUT_REQUEST_UUID
+                          ) request_sub
+                 ON request_sub.TAKEOUT_REQUEST_UUID = request.TAKEOUT_REQUEST_UUID
             <where>
                 1=1
                 <if test="requestName != null">
@@ -52,20 +118,21 @@
                     AND request.TAKEOUT_DATE <![CDATA[>=]]> TO_DATE(#{takeoutDateFrom},'yyyy-mm-dd')
                 </if>
                 <if test="takeoutDateTo != null">
-                    AND request.TAKEOUT_DATE <![CDATA[<=]]> TO_DATE(#{takeoutDateTo},'yyyy-mm-dd')
+                    AND request.TAKEOUT_DATE <![CDATA[<]]> TO_DATE(#{takeoutDateTo},'yyyy-mm-dd')+1
                 </if>
                 <if test="returnDueDateFrom != null">
                     AND request.RETURN_DUE_DATE <![CDATA[>=]]> TO_DATE(#{returnDueDateFrom},'yyyy-mm-dd')
                 </if>
                 <if test="returnDueDateTo != null">
-                    AND request.RETURN_DUE_DATE <![CDATA[<=]]> TO_DATE(#{returnDueDateTo},'yyyy-mm-dd')
+                    AND request.RETURN_DUE_DATE <![CDATA[<]]> TO_DATE(#{returnDueDateTo},'yyyy-mm-dd')+1
                 </if>
             </where>
             ORDER BY requestName
 
     </select>
     <select id="getStTakeoutRecordResult" resultType="St00802VO" statementType="PREPARED">
-
+        -- 여기는 위의 getStTakeoutRequest query 와 같으므로 아래 변경되면 똑같이 적용 해 줘야됨
+        -- code, title 이 필터링 되어야해서 이렇게 됨
         select
                TAKEOUT_RECORD_RESULT_UUID takeoutRecordResultUuid,
                TAKEOUT_REQUEST_UUID takeoutRequestUuid,
@@ -142,15 +209,10 @@
             1=1
             AND record_result.TAKEOUT_REQUEST_UUID = #{takeoutRequestUuid}
             <if test="code != null">
-                <![CDATA[
                    AND B.code  LIKE '%' || #{code} || '%'
-                ]]>
             </if>
             <if test="title != null">
-                <![CDATA[
                    AND B.title  LIKE '%' || #{title} || '%'
-                ]]>
-
             </if>
         </where>
 

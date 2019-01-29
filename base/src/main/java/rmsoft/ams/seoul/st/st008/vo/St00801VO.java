@@ -56,5 +56,7 @@ public class St00801VO extends BaseVO
     private String returnDueDateTo;
     private String status; //  상태
     private String takeoutPropose ; // 반출목적
+    private String code ;
+    private String title ;
 
 }

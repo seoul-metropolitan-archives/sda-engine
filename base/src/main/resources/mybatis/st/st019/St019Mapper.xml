@@ -116,7 +116,7 @@
             </if>
 
             <if test="requestDateTo != null">
-                AND REQUEST_DATE <![CDATA[<=]]> TO_DATE(#{requestDateTo},'yyyy-mm-dd')
+                AND REQUEST_DATE <![CDATA[<]]> TO_DATE(#{requestDateTo},'yyyy-mm-dd')+1
             </if>
 
         </where>
