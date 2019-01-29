@@ -19,7 +19,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         axboot.ajax({ //트리 리스트
             type: "GET",
             url: "/api/v1/at/at001/01/list",
-            data: $.extend({}, {pageSize: 1000}, {authorityTypeUuid:authorityTypeUuid,authorityName:$("#AuthNm").val()}),
+            data: $.extend({}, {pageSize: 999999}, {authorityTypeUuid:authorityTypeUuid,authorityName:$("#AuthNm").val()}),
             callback: function (res) {
                 fnObj.formView.clear();
                 var gridData = [];
@@ -397,8 +397,8 @@ fnObj.childrenAuthInfo = axboot.viewExtend({
     "                                                                </select>" +
     "                                                            </li>" +
     "                                                            <li style='padding: 0 10px 0 0;'>" +
-    "                                                               <div class='src_box2'>" +
-    "                                                                <input type=text data-ax-path='relAuthorityName'  disabled class='form-control' placeholder='관련전거'>" +
+    "                                                               <div class='src_box2' style='width: 1000px!important;'>" +
+    "                                                                <input type=text data-ax-path='relAuthorityName' style='width: 1000px!important' disabled class='form-control' placeholder='관련전거'>" +
     "                                                                <input type=text data-ax-path='relAuthorityUuid' class='relAuthorityUuid' style='width: 0; display: none'>" +
     "                                                                <a href='#' class='searchAuthority' ><img src='/assets/images/ams/search_normal.png' alt='find'></a>" +
     "                                                            </div>" +
