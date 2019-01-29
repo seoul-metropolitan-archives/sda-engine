@@ -258,8 +258,8 @@ fnObj.childrenAuthInfo = axboot.viewExtend({
     "                                                                </select>" +
     "                                                            </li>" +
     "                                                            <li style='padding: 0 10px 0 0;'>" +
-    "                                                               <div class='src_box2'>" +
-    "                                                                <input type=text data-ax-path='relAuthorityName' class='form-control' placeholder='관련전거'>" +
+    "                                                               <div class='src_box2' style='width: 600px!important;'>" +
+    "                                                                <input type=text data-ax-path='relAuthorityName' style='width: 600px!important' disabled class='form-control' placeholder='관련전거'>" +
     "                                                                <input type=text data-ax-path='relAuthorityUuid' style='width: 0; display: none'>" +
         "                                                                <a href='#' class='searchAuthority' ><img src='/assets/images/ams/search_normal.png' alt='find'></a>" +
         "                                                            </div>" +

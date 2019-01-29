@@ -57,6 +57,42 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             }
         });
     },
+    SEARCH_CONTACT_PERSON: function (caller, act, data) {
+        axboot.modal.open({
+            modalType: "AUTHORITY_POPUP",
+            header: {
+                title: "Authority List"
+            },
+            sendData: function () {
+                return {
+                };
+            },
+            callback: function (data) {
+                if(this) this.close();
+                if(data){
+                    $("input[data-ax-path='contactPerson']").val(data["authorityName"]);
+                }
+            }
+        });
+    },
+    SEARCH_CREATOR: function (caller, act, data) {
+        axboot.modal.open({
+            modalType: "AUTHORITY_POPUP",
+            header: {
+                title: "Authority List"
+            },
+            sendData: function () {
+                return {
+                };
+            },
+            callback: function (data) {
+                if(this) this.close();
+                if(data){
+                    $("input[data-ax-path='creator']").val(data["authorityName"]);
+                }
+            }
+        });
+    },
     ERROR_SEARCH: function (caller, act, data) {
     },
     PAGE_CONFIRM: function (caller, act, data) {
@@ -127,6 +163,18 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
         this.initEvent();
     },
     initEvent: function () {
+        $("input[data-ax-path='contactPerson']").parents().eq(1).find("a").click(function(){
+            ACTIONS.dispatch(ACTIONS.SEARCH_CONTACT_PERSON);
+        });
+        $("input[data-ax-path='contactPerson']").focusout(function(){
+            ACTIONS.dispatch(ACTIONS.SEARCH_CONTACT_PERSON);
+        });
+        $("input[data-ax-path='creator']").parents().eq(1).find("a").click(function(){
+            ACTIONS.dispatch(ACTIONS.SEARCH_CREATOR);
+        });
+        $("input[data-ax-path='creator']").focusout(function(){
+            ACTIONS.dispatch(ACTIONS.SEARCH_CREATOR);
+        });
     },
     getData: function () {
         var data = this.modelFormatter.getClearData(this.model.get()); // 모델의 값을 포멧팅 전 값으로 치환.
