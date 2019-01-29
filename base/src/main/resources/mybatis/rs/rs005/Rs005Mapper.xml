@@ -9,7 +9,7 @@
             A1.RECORD_SCHEDULE_RESULT_UUID AS recordScheduleResultUuid,
             A1.RECORD_SCHEDULE_UUID AS recordScheduleUuid,
             A1.ITEM_UUID AS itemUuid,
-            A1.STATUS_UUID AS statusUuid,
+            A1.DISPOSAL_STATUS AS disposalStatus,
             A1.DISPOSAL_TYPE_UUID AS disposalTypeUuid,
             TO_CHAR(A1.INITIAL_DATE,'YYYY-MM-DD') AS initialDate,
             TO_CHAR(A1.DISPOSAL_DUE_DATE,'YYYY-MM-DD') AS disposalDueDate,
@@ -42,7 +42,7 @@
                         SELECT COUNT(*)
                         FROM DF_DISPOSAL_FREEZE_RESULT
                         WHERE ITEM_UUID = A1.ITEM_UUID
-                      )
+            )
             <if test="disposalStatus != null">
                 AND  A1.DISPOSAL_STATUS = #{disposalStatus}
             </if>

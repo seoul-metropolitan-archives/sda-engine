@@ -60,7 +60,7 @@ public class Cl003Service extends BaseService {
 
         Cl00301VO cl00301VO = new Cl00301VO();
         cl00301VO.setClassUuid(requestParams.getString("classUuid"));
-        cl00301VO.setStatusUuid(requestParams.getString("statusUuid01"));
+        cl00301VO.setStatusUuid(requestParams.getString("statusUuid"));
 //        cl00301VO.setAggregationCode(requestParams.getString("aggregationCode"));
 //        cl00301VO.setTitle(requestParams.getString("title"));
 //        cl00301VO.setTypeUuid(requestParams.getString("typeUuid"));

@@ -46,165 +46,155 @@
                         </div>
                     </div>
                     <div style="display:table; height:100%; width:70%; float:right">
-                        <div class="explorer_list" style="overflow-y: hidden;background-color: #ffffff">
-                            <div id="itemTabs" style="width:100%;position:relative;">
-                                <ul style="padding:0px;height: 29px;">
-                                    <li style="height: 29px"><a href="#itemTabs-1">Untitled01</a></li>
-                                    <li style="height: 29px"><a href="#itemTabs-2">Untitled02</a></li>
-                                </ul>
-                                <div id="itemTabs-1" class="padding-tab" style="width:100%;position:relative;border: 0px;">
-                                    <ul class="bdb bdt div_tablerow" style="height:30px;background-color: #f7f7f7">
-                                        <th:block layout:insert="~{/fragments/page-buttons :: dot('Detail')}"/>
-                                        <li style="text-align:right; width:68%;">
-                                            <button class="btn_adf">
-                                                <span class="btn_icon">&nbsp;</span>
-                                                <span class="btn_main_txt">Add</span>
-                                            </button>
-                                            <button class="btn_def">
-                                                <span class="btn_icon">&nbsp;</span>
-                                                <span class="btn_main_txt">Delete</span>
-                                            </button>
-                                        </li>
-                                    </ul>
-                                    <div style="height:100%; width:100%" class="div_tablerow bdb">
-                                        <div style="position:relative;width: 100%;height:100%;background:#ffffff;">
-                                            <div class="cont_wrap01" style="position: relative;padding-bottom: 30px" id="contentsArea">
-                                                <div style="width:100%" class="bgf7 div_tablerow" >
-                                                    <div data-ax-tbl class="ax-search-tbl" minWidth="500px">
-                                                        <th:block layout:insert="~{/fragments/table :: tr-td(text='Title', style='width: 100%')}">
-                                                            <div layout:fragment="wrap">
-                                                                <input type="text" data-ax-path="authorityName" style="background-color: #fffdd6" class="form-control"/>
+                        <ul class="bdb bdt div_tablerow" style="height:30px;">
+                            <th:block layout:insert="~{/fragments/page-buttons :: dot('Detail')}"/>
+                            <li style="text-align:right; width:68%;">
+                                <button class="btn_adf">
+                                    <span class="btn_icon">&nbsp;</span>
+                                    <span class="btn_main_txt">Add</span>
+                                </button>
+                                <button class="btn_def">
+                                    <span class="btn_icon">&nbsp;</span>
+                                    <span class="btn_main_txt">Delete</span>
+                                </button>
+                            </li>
+                        </ul>
+                        <div style="height:100%; width:100%" class="div_tablerow bdb">
+                            <div style="position:relative;width: 100%;height:100%;background:#ffffff;">
+                                <div class="cont_wrap01" style="position: absolute;padding-bottom: 30px" id="contentsArea">
+                                    <div style="width:100%" class="bgf7 div_tablerow" >
+                                        <div data-ax-tbl class="ax-search-tbl" minWidth="500px">
+                                            <th:block layout:insert="~{/fragments/table :: tr-td(text='Title', style='width: 100%')}">
+                                                <div layout:fragment="wrap">
+                                                    <input type="text" data-ax-path="authorityName" style="background-color: #fffdd6" class="form-control"/>
+                                                </div>
+                                            </th:block>
+                                            <div id="organizationArea">
+                                                <th:block
+                                                        layout:insert="~{/fragments/table :: tr-td3(text1='기관유형', style1='width: 350px', text2='설치일자', style2='width: 350px', text3='폐기일자', style3='width: 350px')}">
+                                                    <div layout:fragment="wrap-1">
+                                                        <select data-ax-path="orgTypeUuid" style="width:135px;background-color: #fffdd6" class="form-control W120" th:placeholder="성명입력필수">
+                                                            <option value=""></option>
+                                                            <option th:each="item : ${orgTypeUuid}"
+                                                                    th:value="${item.codeDetailUUID}"
+                                                                    th:text="${item.codeName}"/>
+                                                        </select>
+                                                    </div>
+                                                    <div layout:fragment="wrap-2">
+                                                        <div class="input-group" data-ax5picker="date">
+                                                            <div class="cld_box">
+                                                                <input type="text"
+                                                                       data-ax-path="startDate"
+                                                                       style="ime-mode:disabled;"
+                                                                       placeholder="YYYY-MM-DD" maxlength="10">
+                                                                <img title="calendar"
+                                                                     class="ui-datepicker-trigger" alt="..."
+                                                                     src="/assets/images/ams/calendar.png">
                                                             </div>
-                                                        </th:block>
-                                                        <div id="organizationArea">
-                                                            <th:block
-                                                                    layout:insert="~{/fragments/table :: tr-td3(text1='기관유형', style1='width: 350px', text2='설치일자', style2='width: 350px', text3='폐기일자', style3='width: 350px')}">
-                                                                <div layout:fragment="wrap-1">
-                                                                    <select data-ax-path="orgTypeUuid" style="width:135px;background-color: #fffdd6" class="form-control W120" th:placeholder="성명입력필수">
-                                                                        <option value=""></option>
-                                                                        <option th:each="item : ${orgTypeUuid}"
-                                                                                th:value="${item.codeDetailUUID}"
-                                                                                th:text="${item.codeName}"/>
-                                                                    </select>
-                                                                </div>
-                                                                <div layout:fragment="wrap-2">
-                                                                    <div class="input-group" data-ax5picker="date">
-                                                                        <div class="cld_box">
-                                                                            <input type="text"
-                                                                                   data-ax-path="startDate"
-                                                                                   style="ime-mode:disabled;"
-                                                                                   placeholder="YYYY-MM-DD" maxlength="10">
-                                                                            <img title="calendar"
-                                                                                 class="ui-datepicker-trigger" alt="..."
-                                                                                 src="/assets/images/ams/calendar.png">
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div layout:fragment="wrap-3">
-                                                                    <div class="input-group" data-ax5picker="date">
-                                                                        <div class="cld_box">
-                                                                            <input type="text"
-                                                                                   data-ax-path="endDate"
-                                                                                   style="ime-mode:disabled;"
-                                                                                   placeholder="YYYY-MM-DD" maxlength="10">
-                                                                            <img title="calendar"
-                                                                                 class="ui-datepicker-trigger" alt="..."
-                                                                                 src="/assets/images/ams/calendar.png">
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </th:block>
-                                                            <th:block layout:insert="~{/fragments/table :: tr-td(text='주요업무', style='width: 100%')}">
-                                                                <div layout:fragment="wrap">
-                                                                    <textarea data-ax-path="mainJob" class="form-control"></textarea>
-                                                                </div>
-                                                            </th:block>
                                                         </div>
-                                                        <div id="etcArea">
-                                                            <th:block layout:insert="~{/fragments/table :: tr-td(text='설명 (지역,인물,기능)', style='width: 100%')}">
-                                                                <div layout:fragment="wrap">
-                                                                    <textarea title="비고" data-ax-path="mainJob" class="form-control"></textarea>
-                                                                </div>
-                                                            </th:block>
+                                                    </div>
+                                                    <div layout:fragment="wrap-3">
+                                                        <div class="input-group" data-ax5picker="date">
+                                                            <div class="cld_box">
+                                                                <input type="text"
+                                                                       data-ax-path="endDate"
+                                                                       style="ime-mode:disabled;"
+                                                                       placeholder="YYYY-MM-DD" maxlength="10">
+                                                                <img title="calendar"
+                                                                     class="ui-datepicker-trigger" alt="..."
+                                                                     src="/assets/images/ams/calendar.png">
+                                                            </div>
                                                         </div>
-                                                        <th:block
-                                                                layout:insert="~{/fragments/table :: tr-td3(text1='기술일', style1='width: 350px', text2='기술자', style2='width: 350px', text3='기술정도', style3='width: 350px')}">
-                                                            <div layout:fragment="wrap-1">
-                                                                <div class="input-group" data-ax5picker="date">
-                                                                    <div class="cld_box">
-                                                                        <input type="text"
-                                                                               data-ax-path="descriptionDate"
-                                                                               style="ime-mode:disabled;"
-                                                                               placeholder="YYYY-MM-DD" maxlength="10">
-                                                                        <img title="calendar"
-                                                                             class="ui-datepicker-trigger" alt="..."
-                                                                             src="/assets/images/ams/calendar.png">
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div layout:fragment="wrap-2">
-                                                                <input type="text" data-ax-path="descriptorName" class="form-control" readonly/>
-                                                                <input type="text" data-ax-path="descriptorUuid" class="form-control" style="height: 0;display: none"/>
-                                                            </div>
-                                                            <div layout:fragment="wrap-3">
-                                                                <select data-ax-path="levelOfDetailUuid" style="width:135px;" class="form-control W120">
-                                                                    <option value=""></option>
-                                                                    <option th:each="item : ${lvDtlUuid}"
-                                                                            th:value="${item.codeDetailUUID}"
-                                                                            th:text="${item.codeName}"/>
-                                                                </select>
-                                                            </div>
-                                                        </th:block>
-                                                        <th:block layout:insert="~{/fragments/table :: tr-td(text='비고', style='width: 100%')}">
-                                                            <div layout:fragment="wrap">
-                                                                <textarea data-ax-path="notes" class="form-control"></textarea>
-                                                            </div>
-                                                        </th:block>
-                                                        <th:block layout:insert="~{/fragments/table :: tr-td(text='Description', style='width: 100%')}">
-                                                            <div layout:fragment="wrap">
-                                                                <textarea data-ax-path="description" class="form-control"></textarea>
-                                                                <textarea data-ax-path="authorityUuid" class="form-control" style="height: 0;display: none"></textarea>
-                                                                <textarea data-ax-path="authorityNo" class="form-control" style="height: 0;display: none"></textarea>
-                                                                <textarea data-ax-path="authorityTypeUuid" class="form-control" style="height: 0;display: none"></textarea>
-                                                                <textarea data-ax-path="__deleted__" th:value="false" class="form-control" style="height: 0;display: none"></textarea>
-                                                            </div>
-                                                        </th:block>
                                                     </div>
-                                                </div>
-                                                <div style="width:100%" class="bgf7 div_tablerow" >
-                                                    <div data-ax-tbl class="ax-search-tbl" minWidth="500px" style="border-top: 0px">
-                                                        <th:block
-                                                                layout:insert="~{/fragments/table :: tr-td(text='관련정보', style='width: 100%')}">
-                                                            <div layout:fragment="wrap">
-                                                                <div id="childrenAuthInfoArea">
-                                                                    <div class="togl01_show childDnrInfo" style="display: block">
-                                                                        <ul id="addAuthInfo">
-                                                                            <li style="width: 100%;">
-                                                                                <a href="#"><b style="color: red">+ Add New</b></a>
-                                                                            </li>
-                                                                        </ul>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </th:block>
+                                                </th:block>
+                                                <th:block layout:insert="~{/fragments/table :: tr-td(text='주요업무', style='width: 100%')}">
+                                                    <div layout:fragment="wrap">
+                                                        <textarea data-ax-path="mainJob" class="form-control"></textarea>
                                                     </div>
-                                                </div>
-                                                <div style="width:100%" class="bgf7 div_tablerow" >
-                                                    <div data-ax-tbl class="ax-search-tbl" minWidth="500px" style="border-top: 0px">
-                                                        <th:block
-                                                                layout:insert="~{/fragments/table :: tr-td(text='관련기록', style='width: 100%')}">
-                                                            <div layout:fragment="wrap">
-                                                                <ul>
-                                                                    <li style="width: 100%;">
-                                                                        <b style="color: blue">Aggregation : </b>
-                                                                        <b style="color: blue">Item : </b>
-                                                                    </li>
-                                                                </ul>
-                                                            </div>
-                                                        </th:block>
-                                                    </div>
-                                                </div>
+                                                </th:block>
                                             </div>
+                                            <div id="etcArea">
+                                                <th:block layout:insert="~{/fragments/table :: tr-td(text='설명 (지역,인물,기능)', style='width: 100%')}">
+                                                    <div layout:fragment="wrap">
+                                                        <textarea title="비고" data-ax-path="mainJob" class="form-control"></textarea>
+                                                    </div>
+                                                </th:block>
+                                            </div>
+                                            <th:block
+                                                    layout:insert="~{/fragments/table :: tr-td3(text1='기술일', style1='width: 350px', text2='기술자', style2='width: 350px', text3='기술정도', style3='width: 350px')}">
+                                                <div layout:fragment="wrap-1">
+                                                    <div class="input-group" data-ax5picker="date">
+                                                        <div class="cld_box">
+                                                            <input type="text"
+                                                                   data-ax-path="descriptionDate"
+                                                                   style="ime-mode:disabled;"
+                                                                   placeholder="YYYY-MM-DD" maxlength="10">
+                                                            <img title="calendar"
+                                                                 class="ui-datepicker-trigger" alt="..."
+                                                                 src="/assets/images/ams/calendar.png">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div layout:fragment="wrap-2">
+                                                    <input type="text" data-ax-path="descriptorName" class="form-control" readonly/>
+                                                    <input type="text" data-ax-path="descriptorUuid" class="form-control" style="height: 0;display: none"/>
+                                                </div>
+                                                <div layout:fragment="wrap-3">
+                                                    <select data-ax-path="levelOfDetailUuid" style="width:135px;" class="form-control W120">
+                                                        <option value=""></option>
+                                                        <option th:each="item : ${lvDtlUuid}"
+                                                                th:value="${item.codeDetailUUID}"
+                                                                th:text="${item.codeName}"/>
+                                                    </select>
+                                                </div>
+                                            </th:block>
+                                            <th:block layout:insert="~{/fragments/table :: tr-td(text='비고', style='width: 100%')}">
+                                                <div layout:fragment="wrap">
+                                                    <textarea data-ax-path="notes" class="form-control"></textarea>
+                                                </div>
+                                            </th:block>
+                                            <th:block layout:insert="~{/fragments/table :: tr-td(text='Description', style='width: 100%')}">
+                                                <div layout:fragment="wrap">
+                                                    <textarea data-ax-path="description" class="form-control"></textarea>
+                                                    <textarea data-ax-path="authorityUuid" class="form-control" style="height: 0;display: none"></textarea>
+                                                    <textarea data-ax-path="authorityNo" class="form-control" style="height: 0;display: none"></textarea>
+                                                    <textarea data-ax-path="authorityTypeUuid" class="form-control" style="height: 0;display: none"></textarea>
+                                                    <textarea data-ax-path="__deleted__" th:value="false" class="form-control" style="height: 0;display: none"></textarea>
+                                                </div>
+                                            </th:block>
+                                        </div>
+                                    </div>
+                                    <div style="width:100%" class="bgf7 div_tablerow" >
+                                        <div data-ax-tbl class="ax-search-tbl" minWidth="500px" style="border-top: 0px">
+                                            <th:block
+                                                    layout:insert="~{/fragments/table :: tr-td(text='관련정보', style='width: 100%')}">
+                                                <div layout:fragment="wrap">
+                                                    <div id="childrenAuthInfoArea">
+                                                        <div class="togl01_show childDnrInfo" style="display: block">
+                                                            <ul id="addAuthInfo">
+                                                                <li style="width: 100%;">
+                                                                    <a href="#"><b style="color: red">+ Add New</b></a>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </th:block>
+                                        </div>
+                                    </div>
+                                    <div style="width:100%" class="bgf7 div_tablerow" >
+                                        <div data-ax-tbl class="ax-search-tbl" minWidth="500px" style="border-top: 0px">
+                                            <th:block
+                                                    layout:insert="~{/fragments/table :: tr-td(text='관련기록', style='width: 100%')}">
+                                                <div layout:fragment="wrap">
+                                                    <ul>
+                                                        <li style="width: 100%;">
+                                                            <b style="color: blue">Aggregation : </b>
+                                                            <b style="color: blue">Item : </b>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </th:block>
                                         </div>
                                     </div>
                                 </div>

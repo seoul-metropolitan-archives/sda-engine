@@ -32,7 +32,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         axboot.ajax({ //트리 리스트
             type: "GET",
             url: "/api/v1/cl/cl003/01/list01",
-            data: $.extend({}, {pageSize: 10000}, {classUuid:crntClassUuid}),
+            data: $.extend({}, {pageSize: 10000}, {classUuid:crntClassUuid,statusUuid:fnObj.formView.getFormData('statusUuid')}),
             callback: function (res) {
                 fnObj.gridView03.clearData();
                 gridData = [];
@@ -243,12 +243,20 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
                 };
                 ACTIONS.dispatch(ACTIONS.SEARCH_CLASS_SCH,data);
             }
-
+        });
+        $(".bdb").delegate("#rg_tree_allopen", "click", function () {
+            _this.expandAll();
+        });
+        $(".bdb").delegate("#rg_tree_allclose", "click", function () {
+            _this.collapseAll();
         });
     },
     getData: function () {
         var data = this.modelFormatter.getClearData(this.model.get()); // 모델의 값을 포멧팅 전 값으로 치환.
         return $.extend({}, data);
+    },
+    getFormData: function (dataPath) {
+        return this.model.get(dataPath);
     },
     setFormData: function (dataPath, value) {
         this.model.set(dataPath, value);
@@ -275,13 +283,19 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
     clear: function () {
         this.model.setModel(this.getDefaultData());
         this.target.find('[data-ax-path="key"]').removeAttr("readonly");
+    },
+    expandAll:function(){
+        fnObj.gridView01.gridObj.expandAll();
+    },
+    collapseAll:function() {
+        fnObj.gridView01.gridObj.collapseAll();
     }
 });
 
 fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     tagId : "realgrid01",
     uuidFieldName : "classificationSchemeUuid",
-    entityName : "ClassName",
+    entityName : "CL_CLASS",
     initView: function () {
         this.gridObj = new TreeGridWrapper("realgrid01", "/assets/js/libs/realgrid", true);
         this.gridObj.setGridStyle("100%", "100%")

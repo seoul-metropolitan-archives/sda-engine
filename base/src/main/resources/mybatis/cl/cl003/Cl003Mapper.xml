@@ -99,6 +99,9 @@
                   <if test="classUuid != null">
                       CLASS_UUID = #{classUuid}
                   </if>
+                  <if test="statusUuid != null">
+                      AND STATUS_UUID = #{statusUuid}
+                  </if>
               </where>
             ) A,
         (

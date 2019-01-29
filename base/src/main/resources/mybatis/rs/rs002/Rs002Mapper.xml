@@ -25,10 +25,10 @@
                 STATUS_UUID = #{statusUuid}
             </if>
             <if test="triggerCode != null">
-                AND TRIGGER_CODE = #{triggerCode}
+                AND TRIGGER_CODE LIKE '%' || #{triggerCode} || '%'
             </if>
             <if test="triggerName != null">
-                AND TRIGGER_NAME = #{triggerName}
+                AND TRIGGER_NAME LIKE '%' || #{triggerName} || '%'
             </if>
             <if test="useYn != null">
                 AND USE_YN = #{useYn}

@@ -90,7 +90,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 return data;
             },
             callback: function (data) {
-                $("input[data-ax-path='grsCode']").val(data["GRS_NAME"])
+                $("input[data-ax-path='grsCode']").val(data["GRS_CODE"])
                 $("input[data-ax-path='grsCode']").attr("grsCode",data["GRS_CODE"])
                 if(this.close)
                     this.close();

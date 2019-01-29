@@ -285,6 +285,9 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
     setFormData: function (dataPath, value) {
         this.model.set(dataPath, value);
     },
+    getFormData: function (dataPath) {
+        return this.model.get(dataPath);
+    },
     setData: function (data) {
 
         if (typeof data === "undefined") data = this.getDefaultData();

@@ -14,6 +14,25 @@ var codes = [];
 
 var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SEARCH: function (caller, act, data) {
+
+        if(fnObj.formView.getFormData("disposalFromDueDate") == "" || fnObj.formView.getFormData("disposalFromDueDate") == null
+            || fnObj.formView.getFormData("disposalToDueDate") == "" || fnObj.formView.getFormData("disposalToDueDate") == null) {
+            axToast.push("Disposal Due Date 는 필수 입력 값입니다.");
+            return false;
+        }
+
+        if((fnObj.formView.getFormData("disposalFromConfirmDate") == "" || fnObj.formView.getFormData("disposalFromConfirmDate") == null) !=
+            (fnObj.formView.getFormData("disposalToConfirmDate") == "" || fnObj.formView.getFormData("disposalToConfirmDate") == null)) {
+            axToast.push("Disposal Confirm Date 는 사이값이(from~to) 있거나 없어야 합니다. ");
+            return false;
+        }
+
+        if((fnObj.formView.getFormData("disposalFromCompleteDate") == "" || fnObj.formView.getFormData("disposalFromCompleteDate") == null) !=
+            (fnObj.formView.getFormData("disposalToCompleteDate") == "" || fnObj.formView.getFormData("disposalToCompleteDate") == null)) {
+            axToast.push("Disposal Confirm Date 는 사이값이(from~to) 있거나 없어야 합니다. ");
+            return false;
+        }
+
         axboot.call({
             type: "GET",
             url: "/api/v1/common/controller",
@@ -33,9 +52,11 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 onError: axboot.viewError
             }
         })
-        .done(function () {
+            .done(function () {
                 fnObj.gridView01.commit();
-        });
+            });
+
+
         return false;
     },
     ERROR_SEARCH: function (caller, act, data) {
@@ -54,8 +75,8 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             axDialog.confirm({
                 msg: axboot.getCommonMessage("RS005_01")
             }, function () {
-                if (this.key != "ok") {
-                    return;
+                if (this.key == "ok") {
+                    ACTIONS.dispatch(ACTIONS.PAGE_UPDATE,state);
                 }
             });
         }else if(state == CONFIRM_STATUS){//confirm 버튼 클릭 시 체크
@@ -69,14 +90,18 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                     return;
                 }
             }
+            ACTIONS.dispatch(ACTIONS.PAGE_UPDATE,state);
         }else{//cancel 버틈 클릭 시
             for(var i=0;i<rows.length;i++){
                 if(rows[i]['disposalStatus'] != CONFIRM_STATUS_CD){
                     return;
                 }
             }
+            ACTIONS.dispatch(ACTIONS.PAGE_UPDATE,state);
         }
-
+    },
+    PAGE_UPDATE:function (caller, act, state) {
+        var rows = fnObj.gridView01.gridObj.getCheckedList();
         var params = rows.filter(function (item) {
             item.changeStatus = state;
             return item.recordScheduleResultUuid !== "";
@@ -204,6 +229,8 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
                 type: 'date'
             }
         });
+        fnObj.formView.setFormData("disposalFromDueDate",getFormattedDate(new Date()));
+        fnObj.formView.setFormData("disposalToDueDate",getFormattedDate(new Date()));
     },
     initEvent: function () {
         var _this = this;
@@ -217,6 +244,9 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
     },
     setFormData: function (dataPath, value) {
         this.model.set(dataPath, value);
+    },
+    getFormData: function (dataPath) {
+        return this.model.get(dataPath);
     },
     setData: function (data) {
 
@@ -298,7 +328,23 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
 
     }
 });
+function getFormattedDate(date, isStart) {
+    var day;
+    var tempDate;
+    if (isStart) {
+        date.setDate(date.getDate() - 10);
+        tempDate = date.getDate();
+    } else {
+        tempDate = date.getDate();
+    }
+    day = tempDate.toString();
 
+    var year = date.getFullYear();
+    var month = (1 + date.getMonth()).toString();
+    month = month.length > 1 ? month : '0' + month;
+    day = day.length > 1 ? day : '0' + day;
+    return year + '-' + month + '-' + day;
+}
 /**
  * [필수]
  * Grid 데이터 변경 여부를 체크하기 위한 함수

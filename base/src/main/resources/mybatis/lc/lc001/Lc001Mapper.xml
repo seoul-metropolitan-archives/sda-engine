@@ -28,16 +28,16 @@
       <where>
           1=1
           <if test="leadCaseNo != null">
-            AND Z.LEAD_CASE_NO = #{leadCaseNo}
+            AND Z.LEAD_CASE_NO LIKE '%' ||  #{leadCaseNo} || '%'
           </if>
           <if test="occupation != null">
-            AND Z.OCCUPATION = #{occupation}
+            AND Z.OCCUPATION LIKE '%' || #{occupation} || '%'
           </if>
           <if test="region != null">
-            AND Z.REGION = #{region}
+            AND Z.REGION LIKE '%' || #{region} || '%'
           </if>
           <if test="leadCaseName != null">
-            AND Z.LEAD_CASE_NAME = #{leadCaseName}
+            AND Z.LEAD_CASE_NAME LIKE '%' || #{leadCaseName} || '%'
           </if>
           <if test="majorClassificationUuid != null">
             AND Z.MAJOR_CLASSIFICATION_UUID = #{majorClassificationUuid}

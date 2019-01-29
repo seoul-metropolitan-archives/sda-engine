@@ -52,9 +52,15 @@ public class Rs005Service extends BaseService {
         for(RsRecordScheduleResult rsRecordScheduleResult : rsRecordScheduleResultList) {
             changeStatus = list.get(index).getChangeStatus() == "" ? "Draft" : list.get(index).getChangeStatus();
             orgRsRecordScheduleResult = rsRecordScheduleResultRepository.findOne(rsRecordScheduleResult.getId());
+            rsRecordScheduleResult.setStatusUuid(orgRsRecordScheduleResult.getStatusUuid());
             rsRecordScheduleResult.setDisposalStatus(CommonCodeUtils.getCodeDetailUuid("CD137",changeStatus));
             if("Complete".equals(changeStatus)) {
                 rsRecordScheduleResult.setDisposalCompleteDate(Timestamp.valueOf(DateUtils.convertToString(LocalDateTime.now(), DateUtils.DATE_TIME_PATTERN)));
+            }else if("Confirm".equals(changeStatus)){
+                rsRecordScheduleResult.setDisposalConfirmDate(DateUtils.convertToString(LocalDateTime.now(), DateUtils.DATE_PATTERN_DASH));
+            }else{
+                rsRecordScheduleResult.setDisposalConfirmDate("");
+                rsRecordScheduleResult.setDisposalConfirmReason("");
             }
             rsRecordScheduleResult.setInsertDate(orgRsRecordScheduleResult.getInsertDate());
             rsRecordScheduleResult.setInsertUuid(orgRsRecordScheduleResult.getInsertUuid());

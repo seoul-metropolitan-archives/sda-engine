@@ -147,7 +147,8 @@ public class Rs004Service extends BaseService {
                     rsRecordScheduleResult.setRecordScheduleUuid(rcAggregationCon.getRecordScheduleUuid());
                     rsRecordScheduleResult.setItemUuid(rcItem.getItemUuid());
                     rsRecordScheduleResult.setDisposalTypeUuid(rsRecordSchedule.getDisposalTypeUuid());
-                    rsRecordScheduleResult.setStatusUuid(CommonCodeUtils.getCodeDetailUuid("CD137","Draft"));
+                    rsRecordScheduleResult.setStatusUuid(CommonCodeUtils.getCodeDetailUuid("CD134","Confirm"));
+                    rsRecordScheduleResult.setDisposalStatus(CommonCodeUtils.getCodeDetailUuid("CD137","Draft"));
 
                     qRcItemCon = QRcItemCon.rcItemCon;
                     predicate = qRcItemCon.itemUuid.eq(rcItem.getItemUuid());
