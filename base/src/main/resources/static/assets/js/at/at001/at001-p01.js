@@ -299,7 +299,7 @@ fnObj.childrenAuthInfo = axboot.viewExtend({
                 searchData : ' ',
                 callback : function(data){
                     parentsTag.find("input[data-ax-path='relAuthorityUuid']").val(data["AUTHORITY_UUID"])
-                    parentsTag.find("input[data-ax-path='relAuthorityName']").val(data["AUTHORITY_NAME"])
+                    parentsTag.find("input[data-ax-path='relAuthorityName']").val("[" + data["AUTHORITY_NO"] +"] " + data["AUTHORITY_NAME"])
                 }
             };
             ACTIONS.dispatch(ACTIONS.SEARCH_AUTH_INFO,data);

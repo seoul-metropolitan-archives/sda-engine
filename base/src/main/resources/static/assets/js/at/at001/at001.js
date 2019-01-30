@@ -457,7 +457,7 @@ fnObj.childrenAuthInfo = axboot.viewExtend({
                     if(this) this.close();
                     if(data){
                         parentsTag.find("input[data-ax-path='relAuthorityUuid']").val(data["authorityUuid"]);
-                        parentsTag.find("input[data-ax-path='relAuthorityName']").val(data["authorityName"]);
+                        parentsTag.find("input[data-ax-path='relAuthorityName']").val("[" + data["authorityNo"] +"] " + data["authorityName"]);
                         parentsTag.find("input[data-ax-path='relAuthorityUuid']").trigger('change');
                     }
                 }
@@ -483,7 +483,7 @@ fnObj.childrenAuthInfo = axboot.viewExtend({
         if(data != null && data != undefined) {
             cloneTag = $("<ul>").addClass("auth_fit").attr("data-ax-path", "saveType").attr("saveType", "saved").html(this.template).clone();
             cloneTag.find("select").append($(option));
-            cloneTag.find("input[data-ax-path='relAuthorityName']").val(data["relAuthorityName"]);
+            cloneTag.find("input[data-ax-path='relAuthorityName']").val("[" + data["relAuthorityNo"] +"] " + data["relAuthorityName"]);
             cloneTag.find("input[data-ax-path='relAuthorityUuid']").val(data["relAuthorityUuid"]);
             cloneTag.find("input[data-ax-path='relationTypeUuid']").val(data["relationTypeUuid"]);
             cloneTag.find("input[data-ax-path='authorityRelationUuid']").val(data["authorityRelationUuid"]);

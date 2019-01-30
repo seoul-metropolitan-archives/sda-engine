@@ -17,4 +17,5 @@ public class At00102VO extends BaseVO {
     private String relationTypeUuid;
     private String relAuthorityUuid;
     private String relAuthorityName;
+    private String relAuthorityNo;
 }
