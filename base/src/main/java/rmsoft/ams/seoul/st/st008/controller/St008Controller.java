@@ -22,6 +22,7 @@ import rmsoft.ams.seoul.st.st008.vo.St00802pVO;
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 /**
@@ -56,6 +57,15 @@ public class St008Controller extends BaseController {
         return Responses.PageResponse.of(pages.getContent(), pages);
     }
 
+    /**
+     * 한글이 들어가면 깨지므로 http에 맞는 인코딩으로 변경
+     * @param orgFileName
+     * @return
+     * @throws UnsupportedEncodingException
+     */
+    public static String encodeExcelFileName(String orgFileName) throws UnsupportedEncodingException {
+        return new String(orgFileName.getBytes("UTF-8"),"iso-8859-1");
+    }
     @GetMapping("/01/excelDown")
     public ResponseEntity<InputStreamResource> getExcelDown(RequestParams<St00801VO>  vo) throws IOException {
 
@@ -64,7 +74,11 @@ public class St008Controller extends BaseController {
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-        httpHeaders.setContentDispositionFormData("attachment", "st008.xlsx");
+        String requestName = vo.getString("requestName");
+        String fileName = "반출의뢰서_"+ requestName +".xlsx";
+        // 한글이 들어가면 깨지므로 http에 맞는 인코딩으로 변경
+        fileName = encodeExcelFileName(fileName);
+        httpHeaders.setContentDispositionFormData("attachment", fileName);
 
         return ResponseEntity
                 .ok()

@@ -143,7 +143,7 @@ FROM RC_AGGREGATION A
             1=1
             AND tag.AGGREGATION_UUID = #{aggregationUuid}
         </where>
-        ORDER BY PUBLISH_DATE desc
+        ORDER BY PUBLISH_DATE asc
     </select>
 
 
@@ -151,10 +151,25 @@ FROM RC_AGGREGATION A
         SELECT A.AGGREGATION_UUID        aggregationUuid,
                A.AGGREGATION_CODE        aggregationCode,
                aggregation_con.CREATOR             creator,
+               authority.AUTHORITY_NAME authorityName,
                aggregation_con.CREATION_START_DATE creationStartDate,
                code_detail.CODE_NAME     retentionPeriodName -- 보존기간
         FROM RC_AGGREGATION A
                INNER JOIN RC_AGGREGATION_CON aggregation_con ON A.AGGREGATION_UUID = aggregation_con.AGGREGATION_UUID
+               LEFT JOIN (
+                                      -- 각 어그리게이션 중 가장 최근에 insert 한 유저를 가져오기 위함.
+                                      SELECT a.AGGREGATION_UUID, a.CREATOR_UUID FROM RC_AGGREGATION_CREATOR a
+                                        INNER JOIN (
+                                                   SELECT AGGREGATION_UUID, MAX(INSERT_DATE) max_insert_date FROM RC_AGGREGATION_CREATOR group by AGGREGATION_UUID
+                                                   ) grouped_creator
+                                          ON a.AGGREGATION_UUID = grouped_creator.AGGREGATION_UUID
+                                          AND a.INSERT_DATE = grouped_creator.max_insert_date
+                            ) creator
+                  ON creator.AGGREGATION_UUID = aggregation_con.AGGREGATION_UUID
+               LEFT JOIN at_authority authority
+                  ON authority.AUTHORITY_UUID = creator.CREATOR_UUID
+
+
                -- 보존기간이 없더라도 가져오기 위해서 LEFT JOIN.
                LEFT JOIN RS_RECORD_SCHEDULE schedule ON schedule.RECORD_SCHEDULE_UUID = aggregation_con.RECORD_SCHEDULE_UUID
                LEFT JOIN RS_GENERAL_RECORD_SCHEDULE general

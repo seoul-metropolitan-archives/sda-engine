@@ -42,6 +42,7 @@
                 ON ac_user.USER_UUID = request.REQUESTOR_UUID
                 -- 여기는 아래의 getStTakeoutRecordResult query 와 같으므로 아래 변경되면 똑같이 적용 해 줘야됨
                 -- code, title 이 필터링 되어야해서 이렇게 됨
+            <if test="code != null || title != null">
               INNER JOIN (select record_result.TAKEOUT_REQUEST_UUID
                            FROM ST_TAKEOUT_RECORD_RESULT record_result
                                   LEFT JOIN ST_ARRANGE_RECORDS_RESULT etc
@@ -103,9 +104,11 @@
                                     AND B.title  LIKE '%' || #{title} || '%'
                                 </if>
                           </where>
+                        -- group by 를 해줘야 같은데이터가 겹치지 않음
                         group by record_result.TAKEOUT_REQUEST_UUID
                           ) request_sub
                  ON request_sub.TAKEOUT_REQUEST_UUID = request.TAKEOUT_REQUEST_UUID
+                </if>
             <where>
                 1=1
                 <if test="requestName != null">

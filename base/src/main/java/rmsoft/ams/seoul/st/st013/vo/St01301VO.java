@@ -14,6 +14,12 @@ public class St01301VO extends BaseVO {
 
     private String inoutExceptUuid;
     private String requestName;
+    private String repositoryUuid;
+    private String shelfUuid;
+    private String containerTypeUuid;
+    private String locationUuid;
+    private String code;
+    private String title;
 
     private String requestorUuid;
     private String requestDate;
