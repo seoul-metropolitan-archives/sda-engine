@@ -133,7 +133,7 @@
                 AND hist.INOUT_DATE_TIME <![CDATA[>=]]> TO_DATE(#{inoutDateTimeFrom},'yyyy-mm-dd')
             </if>
             <if test="inoutDateTimeTo != null">
-                AND hist.INOUT_DATE_TIME <![CDATA[<]]> TO_DATE(#{inoutDateTimeTo},'yyyy-mm-dd')
+                AND hist.INOUT_DATE_TIME <![CDATA[<]]> TO_DATE(#{inoutDateTimeTo},'yyyy-mm-dd')+1
             </if>
         </where>
     </select>

@@ -109,9 +109,14 @@ public class St018Service extends BaseService {
         //////////  Tag 발행규칙
         ///////// ex) {"서울기록원","2010","30년","0000000000002547","0000000000002547","KKRBSAA1234A"}
         //생산기관
-        modelPrinter.mkOrgName = st018PrinterVO.getCreator();
+        modelPrinter.mkOrgName = st018PrinterVO.getAuthorityName();
         //생산년도
-        modelPrinter.mkYear = st018PrinterVO.getCreationStartDate();
+        String mkYear = st018PrinterVO.getCreationStartDate();
+        if( mkYear != null && 3 < mkYear.length() ){
+            // 네자리로 잘라야 되므로.
+            mkYear = mkYear.substring(0, 4);
+        }
+        modelPrinter.mkYear = mkYear;
         //보존기간
         modelPrinter.consDtStr = st018PrinterVO.getRetentionPeriodName();
         //관리번호

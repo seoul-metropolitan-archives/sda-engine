@@ -133,7 +133,7 @@
                 AND record_req.REQUEST_DATE <![CDATA[>=]]> TO_DATE(#{requestDateFrom},'yyyy-mm-dd')
             </if>
             <if test="requestDateTo != null">
-                AND record_req.REQUEST_DATE <![CDATA[<]]> TO_DATE(#{requestDateTo},'yyyy-mm-dd')
+                AND record_req.REQUEST_DATE <![CDATA[<]]> TO_DATE(#{requestDateTo},'yyyy-mm-dd')+1
             </if>
 
         </where>

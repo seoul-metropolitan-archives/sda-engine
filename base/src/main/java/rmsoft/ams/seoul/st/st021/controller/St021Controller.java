@@ -11,6 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import rmsoft.ams.seoul.st.st008.controller.St008Controller;
 import rmsoft.ams.seoul.st.st008.vo.St00801VO;
 import rmsoft.ams.seoul.st.st021.service.St021Service;
 import rmsoft.ams.seoul.st.st021.vo.St02101VO;
@@ -18,6 +19,7 @@ import rmsoft.ams.seoul.st.st021.vo.St02101VO;
 import javax.inject.Inject;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+
 
 @RestController
 @RequestMapping(value = "/api/v1/st/st021")
@@ -39,7 +41,10 @@ public class St021Controller extends BaseController {
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-        httpHeaders.setContentDispositionFormData("attachment", "st021.xlsx");
+        String fileName = "무단유출통계.xlsx";
+        // 한글이 들어가면 깨지므로 http에 맞는 인코딩으로 변경
+        fileName = St008Controller.encodeExcelFileName(fileName);
+        httpHeaders.setContentDispositionFormData("attachment", fileName);
 
         return ResponseEntity
                 .ok()

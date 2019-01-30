@@ -121,7 +121,7 @@ FROM RC_AGGREGATION A
                 AND PUBLISH_DATE <![CDATA[>=]]> TO_DATE(#{publishDateFrom},'yyyy-mm-dd')
             </if>
             <if test="publishDateTo != null">
-                AND PUBLISH_DATE <![CDATA[<]]> TO_DATE(#{publishDateTo},'yyyy-mm-dd')
+                AND PUBLISH_DATE <![CDATA[<]]> TO_DATE(#{publishDateTo},'yyyy-mm-dd')+1
             </if>
         </where>
     </select>
