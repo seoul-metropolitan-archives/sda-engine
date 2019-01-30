@@ -29,9 +29,9 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         if (parent) {
             "modal" == MODAL_STATUS ? parent.axboot.modal.callback(list) : parent.axboot.commonModal.callback(list);
         }
-    /*else {
-        alert("선택된 목록이 없습니다.");
-    }*/
+        /*else {
+            alert("선택된 목록이 없습니다.");
+        }*/
     },
     dispatch: function (caller, act, data) {
         var result = ACTIONS.exec(caller, act, data);
@@ -46,7 +46,6 @@ var ACTIONS = axboot.actionExtend(fnObj, {
 
 var CODE = {};
 // fnObj 기본 함수 스타트와 리사이즈
-var searchField = "";
 fnObj.pageStart = function () {
     var parentsData = "";
     if(parent.axboot.modal.getData() == undefined){
@@ -57,8 +56,7 @@ fnObj.pageStart = function () {
         MODAL_STATUS = "modal";
     }
     this.popupCode = parentsData["popupCode"];
-    //$("#searchField").val(parentsData["searchData"]);
-    searchField = parentsData["searchData"];
+    $("#searchField").val(parentsData["searchData"]);
     fnObj.formView01.initView();
     fnObj.gridView01.initView();
 };
@@ -103,7 +101,6 @@ fnObj.formView01 = axboot.viewExtend(axboot.formView, {
         $("#clear").click(function(){
             $("#searchField").val("");
             $("#searchField").focus();
-            searchField = "";
         });
 
         $(".okPopup").click(function(){
@@ -117,7 +114,7 @@ fnObj.formView01 = axboot.viewExtend(axboot.formView, {
     getData: function () {
         var data = this.modelFormatter.getClearData(this.model.get()); // 모델의 값을 포멧팅 전 값으로 치환.
         console.log($.extend({}, data));
-        data = {popupCode : fnObj.popupCode,searchField : searchField,isTree : fnObj.isTree}
+        data = {popupCode : fnObj.popupCode,searchField : $("#searchField").val(),isTree : fnObj.isTree}
         return $.extend({}, data);
     },
     setFormData: function (dataPath, value) {
