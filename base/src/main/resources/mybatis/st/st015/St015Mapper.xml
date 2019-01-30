@@ -37,12 +37,27 @@
             <if test="plannerUuid != null">
                 AND a.PLANNER_UUID  = #{plannerUuid}
             </if>
-            <if test="exceptStartDate != null">
+            <!--<if test="exceptStartDate != null">
                 AND a.EXCEPT_START_DATE <![CDATA[>=]]> TO_DATE(#{exceptStartDate},'yyyy-mm-dd')
             </if>
             <if test="exceptEndDate != null">
                 AND a.EXCEPT_END_DATE <![CDATA[<]]> TO_DATE(#{exceptEndDate},'yyyy-mm-dd')+1
+            </if>-->
+
+            <if test="exceptStartDateFrom != null">
+                AND TO_DATE(TO_CHAR(a.EXCEPT_START_DATE, 'yyyy-mm-dd'), 'yyyy-mm-dd') <![CDATA[>=]]> TO_DATE(#{exceptStartDateFrom},'yyyy-mm-dd')
             </if>
+            <if test="exceptStartDateTo != null">
+                AND TO_DATE(TO_CHAR(a.EXCEPT_START_DATE, 'yyyy-mm-dd'), 'yyyy-mm-dd') <![CDATA[<]]> TO_DATE(#{exceptStartDateTo},'yyyy-mm-dd')+1
+            </if>
+            <if test="exceptEndDateFrom != null">
+                AND TO_DATE(TO_CHAR(a.EXCEPT_END_DATE, 'yyyy-mm-dd'), 'yyyy-mm-dd') <![CDATA[>=]]> TO_DATE(#{exceptEndDateFrom},'yyyy-mm-dd')
+            </if>
+            <if test="exceptEndDateTo != null">
+                AND TO_DATE(TO_CHAR(a.EXCEPT_END_DATE, 'yyyy-mm-dd'), 'yyyy-mm-dd') <![CDATA[<]]> TO_DATE(#{exceptEndDateTo},'yyyy-mm-dd')+1
+            </if>
+
+
             <if test="repositoryUuid != null">
                 AND a.REPOSITORY_UUID  = #{repositoryUuid}
             </if>
@@ -87,7 +102,7 @@
        A.WORKER_UUID as workerUuid,
        A.INVENTORY_DATE as inventoryDate,
        A.INVENTORY_RESULT_UUID as inventoryResultUuid,
-       A.TAG_STATUS_UUID as tagStatusUuid,
+        FC_AD_CODE_NM(A.TAG_STATUS_UUID) as tagStatusUuid,
        A.RECORD_STATUS_UUID as recordStatusUuid,
        B.uuid,
        B.orderNo,
@@ -159,6 +174,10 @@ FROM ST_INVENTORY_RECORD_RESULT A LEFT OUTER JOIN ST_ARRANGE_RECORDS_RESULT SARR
             <if test="inventoryPlanUuid != null">
                 AND A.INVENTORY_PLAN_UUID = #{inventoryPlanUuid}
             </if>
+            <if test="containerUuid != null">
+                AND A.CONTAINER_UUID = #{containerUuid}
+            </if>
+
         </where>
     </select>
 </mapper>

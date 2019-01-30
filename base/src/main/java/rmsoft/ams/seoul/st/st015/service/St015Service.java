@@ -71,8 +71,10 @@ public class St015Service extends BaseService {
         st01501VO.setCode(requestParams.getString("code"));
         st01501VO.setTitle(requestParams.getString("title"));
         st01501VO.setPlannerUuid(requestParams.getString("plannerUuid"));
-        st01501VO.setExceptStartDate(requestParams.getString("exceptStartDate"));
-        st01501VO.setExceptEndDate(requestParams.getString("exceptEndDate"));
+        st01501VO.setExceptStartDateFrom(requestParams.getString("exceptStartDateFrom"));
+        st01501VO.setExceptStartDateTo(requestParams.getString("exceptStartDateTo"));
+        st01501VO.setExceptEndDateFrom(requestParams.getString("exceptEndDateFrom"));
+        st01501VO.setExceptEndDateTo(requestParams.getString("exceptEndDateTo"));
 
 
 
@@ -93,7 +95,7 @@ public class St015Service extends BaseService {
         St01503VO st01503VO = new St01503VO();
         //st02901VO.setGateId(requestParams.getString("gateId"));
         st01503VO.setInventoryPlanUuid(requestParams.getString("inventoryPlanUuid"));
-        //st01503VO.setContainerUuid(requestParams.getString("containerUuid"));
+        st01503VO.setContainerUuid(requestParams.getString("containerUuid"));
 
         return filter(st015Mapper.getStInventoryRecordResult(st01503VO), pageable, "", St01503VO.class);
     }
@@ -343,6 +345,15 @@ public class St015Service extends BaseService {
                 e.printStackTrace();
             }
         }
+
+    }
+
+    public void deleteInventoryRecordResult(St01503VO obj) {
+        StInventoryRecordResult stInventoryRecordResult = new StInventoryRecordResult();
+        stInventoryRecordResult.setInventoryRecordResultUuid(obj.getInventoryRecordResultUuid());
+
+
+            stInventoryRecordResultRepository.delete(stInventoryRecordResult);
 
     }
 }

@@ -44,7 +44,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         }
     },
     PAGE_ARRANGE: function (caller, act, data) {
-       if(fnObj.gridView04.getData().length  < 1){
+       if(fnObj.gridView04.gridObj.getCheckedList().length  < 1){
             alert("Select Arrange Item List")
             return
         }
@@ -54,7 +54,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         axboot.ajax({
             type: "PUT",
             url: "/api/v1/st/st004/02/save",
-            data: JSON.stringify(fnObj.gridView04.getData()),
+            data: JSON.stringify(fnObj.gridView04.gridObj.getCheckedList()),
             callback: function (res) {
                 ACTIONS.dispatch(ACTIONS.PAGE_CLOSE);
             },
@@ -296,6 +296,7 @@ fnObj.gridView04 = axboot.viewExtend(axboot.gridView, {
 exportItemList = function() {
     if(fnObj.gridView03.gridObj.getCheckedList().length > 0){
         fnObj.gridView04.setData(fnObj.gridView03.gridObj.getCheckedList());
+        fnObj.gridView04.gridObj.gridView.checkAll();
 
     }else{
         alert("Select Arrange Item List")

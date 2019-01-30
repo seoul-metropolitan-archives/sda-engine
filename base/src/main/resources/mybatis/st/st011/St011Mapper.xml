@@ -40,6 +40,15 @@
                        INNER JOIN ST_ARRANGE_CONTAINERS_RESULT B ON A.CONTAINER_UUID = B.CONTAINER_UUID
                 WHERE A.AGGREGATION_UUID = Z1.AGGREGATION_UUID
                   )
+        <if test="repositoryUuid != null">
+            AND repository.REPOSITORY_UUID = #{repositoryUuid}
+        </if>
+        <if test="shelfUuid != null">
+            AND shelf.SHELF_UUID = #{shelfUuid}
+        </if>
+        <if test="locationUuid != null">
+            AND location.LOCATION_UUID = #{locationUuid}
+        </if>
         <if test="containerUuid != null">
             AND container.CONTAINER_UUID = #{containerUuid}
         </if>

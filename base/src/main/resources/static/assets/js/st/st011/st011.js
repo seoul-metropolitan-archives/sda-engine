@@ -12,7 +12,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         axboot.ajax({
             type: "GET",
             url: "/api/v1/st/st011/01/list01",
-            data: $.extend({}, {pageSize: 1000}, this.formView.getData(), {containerUuid : containerUuid}),
+            data: $.extend({}, {pageSize: 1000}, this.formView.getData(),{repositoryUuid : repositoryUuid},{shelfUuid : shelfUuid},{locationUuid : locationUuid}, {containerUuid : containerUuid}),
             callback: function (res) {
                 fnObj.gridView01.setData(res.list);
                 fnObj.gridView02.clearData();
@@ -68,8 +68,8 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         }
     },
     SEARCH_REPOSITORY_SCH: function (caller, act, data) {
-        axboot.modal.open({
-            modalType: "COMMON_POPUP",
+        axboot.modal.open2({
+            modalType: "COMMON_POPUP2",
             preSearch: data["preSearch"],
             sendData: function () {
                 return data;
@@ -82,8 +82,8 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         });
     },
     SEARCH_SHELF_SCH: function (caller, act, data) {
-        axboot.modal.open({
-            modalType: "COMMON_POPUP",
+        axboot.modal.open2({
+            modalType: "COMMON_POPUP2",
             preSearch: data["preSearch"],
             sendData: function () {
                 return data;
@@ -98,8 +98,8 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     }
     ,SEARCH_LOCATION_SCH : function(caller, act, data)
     {
-        axboot.modal.open({
-            modalType: "COMMON_POPUP",
+        axboot.modal.open2({
+            modalType: "COMMON_POPUP2",
             preSearch : data["preSearch"],
             sendData: function () {
                 return data;
@@ -132,8 +132,8 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         });
     },
     SEARCH_CONTAINER_SCH : function (caller, act, data) {
-        axboot.modal.open({
-            modalType: "COMMON_POPUP",
+        axboot.modal.open2({
+            modalType: "COMMON_POPUP2",
             preSearch: data["preSearch"],
             sendData: function () {
                 return data;
@@ -313,18 +313,30 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
         $("input[data-ax-path='repositoryName']").keyup(function(e){
             if($(this).val() == ""){
                 repositoryUuid = "";
+                shelfUuid = "";
+                $("input[data-ax-path='shelfName']").val('');
+                locationUuid = "";
+                $("input[data-ax-path='locationName']").val('');
+                containerUuid = "";
+                $("input[data-ax-path='containerName']").val('');
             }
         });
 
         $("input[data-ax-path='shelfName']").keyup(function(e){
             if($(this).val() == ""){
                 shelfUuid = "";
+                locationUuid = "";
+                $("input[data-ax-path='locationName']").val('');
+                containerUuid = "";
+                $("input[data-ax-path='containerName']").val('');
             }
         });
 
         $("input[data-ax-path='locationName']").keyup(function(e){
             if($(this).val() == ""){
                 locationUuid = "";
+                containerUuid = "";
+                $("input[data-ax-path='containerName']").val('');
             }
         });
         $("input[data-ax-path='containerName']").keyup(function(e){
@@ -332,6 +344,9 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
                 containerUuid = "";
             }
         });
+
+
+
 
         $("input[data-ax-path='requestorName']").keyup(function(e){
             if($(this).val() == ""){

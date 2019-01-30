@@ -50,7 +50,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         axboot.ajax({
             type: "GET",
             url: "/api/v1/st/st015/01/list03",
-            data: $.extend({}, {shelfUuid : fnObj.gridView02.getSelectedData().shelfUuid}),
+            data: $.extend({}, {inventoryPlanUuid : fnObj.gridView01.getSelectedData().inventoryPlanUuid},{containerUuid : fnObj.gridView02.getSelectedData().containerUuid}),
             callback: function (res) {
                 fnObj.gridView03.setData(res.list);
             },
@@ -341,9 +341,26 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         });
     },
     EXCEL_DOWN01 : function(caller, act, data){
-        var API_SERVER = "http://localhost:8888/";
 
-        location.href = API_SERVER + "/api/v1/st/st015/01/excelDown";
+        location.href = "/api/v1/st/st015/01/excelDown";
+    },
+    RECORD_DELETE : function (caller, act, data) {
+        console.log(data);
+
+        var result = false;
+        axboot.call({
+            type: "PUT",
+            url: "/api/v1/st/st015/01/delete",
+            data: JSON.stringify(data),
+            callback: function (res) {
+                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH03);
+            }
+        })
+            .done(function () {
+                fnObj.gridView01.commit();
+                axToast.push(axboot.getCommonMessage("AA007"));
+            });
+        return result;
     }
 });
 
@@ -410,7 +427,7 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
     initEvent: function () {
         var _this = this;
 
-        $("input[data-ax-path='exceptStartDate']").keyup(function () {
+        $("input[data-ax-path='exceptStartDateFrom']").keyup(function () {
             var date = this.value;
             if (date.match(/^\d{4}$/) !== null) {
                 this.value = date + '-';
@@ -418,11 +435,11 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
                 this.value = date + '-';
             }
         });
-        $("input[data-ax-path='exceptStartDate']").keypress(function () {
+        $("input[data-ax-path='exceptStartDateFrom']").keypress(function () {
             if ((event.keyCode < 48) || (event.keyCode > 57)) event.returnValue = false;
         });
 
-        $("input[data-ax-path='exceptEndDate']").keyup(function () {
+        $("input[data-ax-path='exceptStartDateTo']").keyup(function () {
             var date = this.value;
             if (date.match(/^\d{4}$/) !== null) {
                 this.value = date + '-';
@@ -430,6 +447,33 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
                 this.value = date + '-';
             }
         });
+
+        $("input[data-ax-path='exceptEndDateFrom']").keypress(function () {
+            if ((event.keyCode < 48) || (event.keyCode > 57)) event.returnValue = false;
+        });
+
+
+        $("input[data-ax-path='exceptEndDateFrom']").keyup(function () {
+            var date = this.value;
+            if (date.match(/^\d{4}$/) !== null) {
+                this.value = date + '-';
+            } else if (date.match(/^\d{4}\-\d{2}$/) !== null) {
+                this.value = date + '-';
+            }
+        });
+        $("input[data-ax-path='exceptEndDateTo']").keypress(function () {
+            if ((event.keyCode < 48) || (event.keyCode > 57)) event.returnValue = false;
+        });
+
+        $("input[data-ax-path='exceptEndDateTo']").keyup(function () {
+            var date = this.value;
+            if (date.match(/^\d{4}$/) !== null) {
+                this.value = date + '-';
+            } else if (date.match(/^\d{4}\-\d{2}$/) !== null) {
+                this.value = date + '-';
+            }
+        });
+
         $("input[data-ax-path='exceptEndDate']").keypress(function () {
             if ((event.keyCode < 48) || (event.keyCode > 57)) event.returnValue = false;
         });
@@ -499,6 +543,36 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
 
         $('.excelDown').on('click',function(){
             ACTIONS.dispatch(ACTIONS.EXCEL_DOWN01);
+        });
+
+        $('#exceptBtn').click(function(){
+            console.log('test');
+            debugger
+            //여기서 조건을 넣어주어야 한다.
+
+            var planResult = fnObj.gridView01.getSelectedData().planResultUuid;
+
+            //complete
+            if(planResult == "FC411D42-9C79-4FD0-BFBA-C67393916BA3"){
+                axToast.push("계획이 완료인 경우 삭제가 불가 합니다.");
+                return;
+            }else{
+                //incomplete
+                var inventoryResult = fnObj.gridView02.getSelectedData().inventoryResultUuid;
+                if(inventoryResult == "FC411D42-9C79-4FD0-BFBA-C67393916BA3"){
+                    axToast.push("Container 완료인 경우 삭제가 불가 합니다.");
+                    return;
+                }else{
+                    var inventoryRecordResult = fnObj.gridView03.getSelectedData().inventoryResultUuid;
+                    if(inventoryRecordResult == "FC411D42-9C79-4FD0-BFBA-C67393916BA3"){
+                        axToast.push("Aggregation 완료인 경우 삭제가 불가 합니다.");
+                        return;
+                    }
+                }
+            }
+
+            ACTIONS.dispatch(ACTIONS.RECORD_DELETE,fnObj.gridView03.getSelectedData());
+
         });
 
     },

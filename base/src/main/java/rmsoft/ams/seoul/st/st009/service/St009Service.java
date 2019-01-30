@@ -48,6 +48,8 @@ public class St009Service extends BaseService {
         st00901VO.setReturnDueDateFrom(requestParams.getString("returnDueDateFrom"));
         st00901VO.setReturnDueDateTo(requestParams.getString("returnDueDateTo"));
         st00901VO.setRequestorUuid(requestParams.getString("requestorUuid")); // 반출자
+        st00901VO.setCode(requestParams.getString("code"));
+        st00901VO.setTitle(requestParams.getString("title"));
 
 
         return filter(st009Mapper.getTakeoutRequest(st00901VO), pageable, "", St00901VO.class);

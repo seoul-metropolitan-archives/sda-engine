@@ -85,5 +85,12 @@ public class St015Controller extends BaseController {
     }
 
 
+    @PutMapping(value = "/01/delete")
+    @PostMapping
+    public void deleteInventoryRecordResult(@RequestBody St01503VO requestParams){
+        st015Service.deleteInventoryRecordResult(requestParams);
+    }
+
+
 }
 

@@ -8,7 +8,7 @@
     <select id="getTakeoutRequest" resultType="St00901VO" parameterType="St00901VO" statementType="PREPARED">
 
         select
-        TAKEOUT_REQUEST_UUID takeoutRequestUuid,
+        request.TAKEOUT_REQUEST_UUID takeoutRequestUuid,
         REQUEST_NAME requestName,
         REQUEST_TYPE_UUID requestTypeUuid,
         REQUESTOR_UUID requestorUuid,
@@ -24,7 +24,6 @@
         ELSE OUTSOURCING_DEPARTMENT
         END
         )                                                                               AS userGroupName,
-        /*user_group.USER_GROUP_NAME userGroupName,*/
         request.TAKEOUT_DATE takeoutDate,
         request.RETURN_DATE returnDate,
         request.RETURN_DUE_DATE returnDueDate,
@@ -39,12 +38,78 @@
         OUTSOURCING_PHONE outsourcingPhone
 
         FROM ST_TAKEOUT_REQUEST request
-        INNER JOIN AC_USER_GROUP_USER group_user
-        ON USER_UUID = request.REQUESTOR_UUID
-        INNER JOIN AC_USER_GROUP user_group
-        ON user_group.USER_GROUP_UUID = group_user.USER_GROUP_UUID
+
         INNER JOIN AC_USER ac_user
         ON ac_user.USER_UUID = request.REQUESTOR_UUID
+        -- 여기는 아래의 getStTakeoutRecordResult query 와 같으므로 아래 변경되면 똑같이 적용 해 줘야됨
+        -- code, title 이 필터링 되어야해서 이렇게 됨
+        <if test="code != null || title != null">
+            INNER JOIN (select record_result.TAKEOUT_REQUEST_UUID
+            FROM ST_TAKEOUT_RECORD_RESULT record_result
+            LEFT JOIN ST_ARRANGE_RECORDS_RESULT etc
+            ON etc.AGGREGATION_UUID = record_result.AGGREGATION_UUID
+            LEFT JOIN ST_ARRANGE_CONTAINERS_RESULT acr ON acr.CONTAINER_UUID = etc.CONTAINER_UUID
+            LEFT JOIN ST_LOCATION location ON location.LOCATION_UUID = acr.LOCATION_UUID
+            LEFT JOIN ST_CONTAINER container ON container.CONTAINER_UUID = etc.CONTAINER_UUID
+            LEFT JOIN ST_SHELF shelf ON shelf.SHELF_UUID = location.SHELF_UUID
+            LEFT JOIN ST_REPOSITORY repository ON repository.REPOSITORY_UUID = shelf.REPOSITORY_UUID
+            INNER JOIN (SELECT AGGREGATION_UUID                                                                                         as uuid,
+            1                                                                                                        as orderNo,
+            (SELECT CODE_NAME
+            FROM AD_CODE_DETAIL
+            WHERE CODE_DETAIL_UUID = Z1.PUBLISHED_STATUS_UUID)                                                      as publishedStatus,
+            AGGREGATION_CODE                                                                                         as code,
+            TITLE                                                                                                    as title,
+            (SELECT CODE_NAME
+            FROM AD_CODE_DETAIL
+            WHERE CODE_DETAIL_UUID = Z1.TYPE_UUID)                                                                  as "type",
+            (SELECT LEVEL_NAME
+            FROM RC_LEVEL
+            WHERE LEVEL_UUID = Z1.LEVEL_UUID)                                                                       as "level",
+            AUTHOR                                                                                                   as author,
+            DESCRIPTION_START_DATE                                                                                   as descStrDate,
+            DESCRIPTION_END_DATE                                                                                     as descEdDate,
+            DESCRIPTION                                                                                              as description,
+            NOTES                                                                                                    as notes,
+            ((SELECT COUNT(*)
+            FROM RC_AGGREGATION
+            WHERE PARENT_AGGREGATION_UUID = Z1.AGGREGATION_UUID) + (SELECT COUNT(*)
+            FROM RC_ITEM
+            WHERE AGGREGATION_UUID = Z1.AGGREGATION_UUID)) as childCnt
+            FROM RC_AGGREGATION Z1
+            UNION
+            ALL SELECT ITEM_UUID                                           as uuid,
+            2                                                   as orderNo,
+            (SELECT CODE_NAME
+            FROM AD_CODE_DETAIL
+            WHERE CODE_DETAIL_UUID = Z1.PUBLISHED_STATUS_UUID) as publishedStatus,
+            ITEM_CODE                                           as code,
+            TITLE                                               as title,
+            (SELECT CODE_NAME
+            FROM AD_CODE_DETAIL
+            WHERE CODE_DETAIL_UUID = Z1.TYPE_UUID)             as "type",
+            ''                                                  as "level",
+            AUTHOR                                              as author,
+            DESCRIPTION_START_DATE                              as descStrDate,
+            DESCRIPTION_END_DATE                                as descEdDate,
+            DESCRIPTION                                         as description,
+            NOTES                                               as notes,
+            0                                                   as childCnt
+            FROM RC_ITEM Z1) B on B.UUID = record_result.AGGREGATION_UUID
+            <where>
+                1=1
+                <if test="code != null">
+                    AND B.code  LIKE '%' || #{code} || '%'
+                </if>
+                <if test="title != null">
+                    AND B.title  LIKE '%' || #{title} || '%'
+                </if>
+            </where>
+            -- group by 를 해줘야 같은데이터가 겹치지 않음
+            group by record_result.TAKEOUT_REQUEST_UUID
+            ) request_sub
+            ON request_sub.TAKEOUT_REQUEST_UUID = request.TAKEOUT_REQUEST_UUID
+        </if>
         <where>
             1=1
             <if test="requestName != null">
@@ -67,6 +132,7 @@
             </if>
         </where>
         ORDER BY requestName
+
 
     </select>
 

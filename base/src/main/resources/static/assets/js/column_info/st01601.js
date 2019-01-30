@@ -48,7 +48,7 @@ var st01601 =
                 {
                     sortNo: 4,
                     name: "exceptStartDate",
-                    text: "예정일 시작",
+                    text: "시작 예정일",
                     width: 100,
                     editable: true,
                     dataType : "date",
@@ -61,7 +61,7 @@ var st01601 =
                 {
                     sortNo: 5,
                     name: "exceptEndDate",
-                    text: "예정일 종료",
+                    text: "종료 예정일",
                     width: 100,
                     editable: true,
                     dataType : "date",
