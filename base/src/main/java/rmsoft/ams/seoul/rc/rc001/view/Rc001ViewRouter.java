@@ -67,6 +67,8 @@ public class Rc001ViewRouter extends BaseController {
      */
     @PostMapping("/rc/rc001/p_rc00103")
     public String addRecordItemAggregation(ModelMap model) {
+        model.addAttribute("levelList", rc002Service.getLevel());
+
         return "/rc/rc001/p_rc00103";
     }
 

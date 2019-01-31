@@ -66,7 +66,7 @@ public class St010Service extends BaseService {
             XSSFCell cell = null;
 
             sheet = workBook.cloneSheet(0);
-            workBook.setSheetName(workBook.getSheetIndex(sheet), "테스트 시트");
+            workBook.setSheetName(workBook.getSheetIndex(sheet), "Sheet1");
 
             St010ExcelVO st010ExcelVO = new St010ExcelVO();
             st010ExcelVO.setRepositoryUuid(params.getString("repositoryUuid"));
@@ -117,11 +117,11 @@ public class St010Service extends BaseService {
             cell.setCellValue(outCountTotal);
 
             //하단셋팅
-            row = sheet.createRow(list.size() + 5);
+            /*row = sheet.createRow(list.size() + 5);
             cell = row.createCell(5);
             cell.setCellValue("반입완료상태");
             cell = row.createCell(6);
-            cell.setCellValue("반출완료상태");
+            cell.setCellValue("반출완료상태");*/
 
             //기존 0 1새로운시트
             workBook.removeSheetAt(0);
@@ -159,7 +159,7 @@ public class St010Service extends BaseService {
             XSSFCell cell = null;
 
             sheet = workBook.cloneSheet(0);
-            workBook.setSheetName(workBook.getSheetIndex(sheet), "테스트 시트");
+            workBook.setSheetName(workBook.getSheetIndex(sheet), "Sheet1");
 
             St010ExcelVO st010ExcelVO = new St010ExcelVO();
             st010ExcelVO.setRepositoryUuid(params.getString("repositoryUuid"));
@@ -241,11 +241,11 @@ public class St010Service extends BaseService {
             cell.setCellValue(outCountTotal);
 
             //하단셋팅
-            row = sheet.createRow(list.size() + 5);
+            /*row = sheet.createRow(list.size() + 5);
             cell = row.createCell(7);
             cell.setCellValue("반입완료상태");
             cell = row.createCell(8);
-            cell.setCellValue("반출완료상태");
+            cell.setCellValue("반출완료상태");*/
 
             //기존 0 1새로운시트
             workBook.removeSheetAt(0);
@@ -284,7 +284,7 @@ public class St010Service extends BaseService {
             XSSFCell cell = null;
 
             sheet = workBook.cloneSheet(0);
-            workBook.setSheetName(workBook.getSheetIndex(sheet), "테스트 시트");
+            workBook.setSheetName(workBook.getSheetIndex(sheet), "Sheet1");
 
             St010Excel03VO st010Excel03VO = new St010Excel03VO();
             st010Excel03VO.setRepositoryUuid(params.getString("repositoryUuid"));

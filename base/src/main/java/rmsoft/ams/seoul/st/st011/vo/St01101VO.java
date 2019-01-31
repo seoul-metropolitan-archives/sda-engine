@@ -27,5 +27,7 @@ public class St01101VO {
     private String shelfUuid;
     private String locationUuid;
 
+    private String requestorUuid;
+
 
 }

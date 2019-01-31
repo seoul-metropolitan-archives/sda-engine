@@ -1,6 +1,8 @@
 var fnObj = {};
 var aggregationUuid = "";
 var nodeType = "";
+var levelLabels = null;
+var levelValues = null;
 
 var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_CLOSE: function (caller, act, data) {
@@ -20,19 +22,30 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 item["publishedStatusUuid"] = axboot.commonCodeValueByCodeName("CD121", "Draft");
 
                 if(nodeType == "aggregation"){
-                    var cloneItem = JSON.parse(JSON.stringify(item));
-                    cloneItem["typeUuid"] = axboot.commonCodeValueByCodeName("CD127", "Temporary");
-                    cloneItem["parentAggregationUuid"] = aggregationUuid;
-                    item["systemMeta"] = cloneItem;
-                    item["contextualMeta"] = cloneItem;
+                    //cloneItem["typeUuid"] = axboot.commonCodeValueByCodeName("CD127", "Temporary");
+                    item["parentAggregationUuid"] = aggregationUuid;
                 }else if(nodeType == "item"){
-                    item["raAggregationUuid"] = aggregationUuid;
-                    item["riPublishedStatusUuid"] = axboot.commonCodeValueByCodeName("CD121", "Draft");
+                    item["aggregationUuid"] = aggregationUuid;
                 }
+
+                if(item["creationStartDate"] != null)
+                    item["creationStartDate"] = new Date(item["creationStartDate"]).format("yyyyMMdd");
+                if(item["creationEndDate"] != null)
+                    item["creationEndDate"] = new Date(item["creationEndDate"]).format("yyyyMMdd");
+
+                if(item["accumulationStartDate"] != null)
+                    item["accumulationStartDate"] = new Date(item["accumulationStartDate"]).format("yyyyMMdd");
+                if(item["accumulationEndDate"] != null)
+                    item["accumulationEndDate"] = new Date(item["accumulationEndDate"]).format("yyyyMMdd");
+
+                if(item["descriptionStartDate"] != null)
+                    item["descriptionStartDate"] = new Date(item["descriptionStartDate"]).format("yyyyMMdd");
+                if(item["descriptionEndDate"] != null)
+                    item["descriptionEndDate"] = new Date(item["descriptionEndDate"]).format("yyyyMMdd");
             });
 
             axboot.ajax({
-                url: "/rc/rc001/saveRecordsGrid",
+                url: "/rc/rc001/saveRecords",
                 data: JSON.stringify(data),
                 dataType : "JSON",
                 type : "POST",
@@ -68,6 +81,14 @@ var fnObj = {
             dataType: "script",
             async : false,
             success: function(){}
+        });
+
+        levelLabels = $.map($("[data-ax-path='levelUuid'] option") ,function(option) {
+            return $(option).text();
+        });
+
+        levelValues = $.map($("[data-ax-path='levelUuid'] option") ,function(option) {
+            return option.value;
         });
 
         fnObj.popupView.initView(parent.axboot.modal.getData());
@@ -110,6 +131,23 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView,{
     initView  : function()
     {
         this.initInstance();
+
+        $.each(rc00103_p03["column_info_" + nodeType], function(idx, item){
+            if(item.name == "levelUuid"){
+                item.labels = levelLabels;
+                item.values = levelValues;
+            }
+
+            if(item.name == "typeUuid" ){
+                if(nodeType == "aggregation"){
+                    item.required = true;
+                }else{
+                    item.required = false;
+                }
+
+            }
+        });
+
         this.setColumnInfo(rc00103_p03["column_info_" + nodeType]);
         this.makeGrid();
 

@@ -15,10 +15,7 @@ import rmsoft.ams.seoul.common.controller.MessageBaseController;
 import rmsoft.ams.seoul.common.vo.PageInfoVO;
 import rmsoft.ams.seoul.common.vo.ResponseForPaging;
 import rmsoft.ams.seoul.rc.rc001.service.Rc001Service;
-import rmsoft.ams.seoul.rc.rc001.vo.Rc00101VO;
-import rmsoft.ams.seoul.rc.rc001.vo.Rc00104VO;
-import rmsoft.ams.seoul.rc.rc001.vo.Rc00105VO;
-import rmsoft.ams.seoul.rc.rc001.vo.Rc00107VO;
+import rmsoft.ams.seoul.rc.rc001.vo.*;
 import rmsoft.ams.seoul.rc.rc005.vo.Rc00501VO;
 import rmsoft.ams.seoul.rc.rc005.vo.Rc00502VO;
 
@@ -121,7 +118,7 @@ public class Rc001Controller extends MessageBaseController {
      * @return the api response
      */
     @RequestMapping("/saveRecords")
-    public ApiResponse saveRecords(@RequestBody List<Map<String, String>> list) {
+    public ApiResponse saveRecords(@RequestBody List<Rc00103VO> list) {
         return rc001Service.saveRecords(list);
     }
 

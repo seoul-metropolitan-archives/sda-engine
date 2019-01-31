@@ -293,7 +293,7 @@ public class St015Service extends BaseService {
             XSSFCell cell = null;
 
             sheet = workBook.cloneSheet(0);
-            workBook.setSheetName(workBook.getSheetIndex(sheet), "테스트 시트");
+            workBook.setSheetName(workBook.getSheetIndex(sheet), "Sheet1");
 
             //CELL STYLE 적용
             XSSFCellStyle cellStyle = workBook.createCellStyle();

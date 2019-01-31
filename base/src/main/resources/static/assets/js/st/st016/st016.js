@@ -50,7 +50,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         axboot.ajax({
             type: "GET",
             url: "/api/v1/st/st015/01/list03",
-            data: $.extend({}, {shelfUuid : fnObj.gridView02.getSelectedData().shelfUuid}),
+            data: $.extend({}, {inventoryPlanUuid : fnObj.gridView01.getSelectedData().inventoryPlanUuid},{containerUuid : fnObj.gridView02.getSelectedData().containerUuid}),
             callback: function (res) {
                 fnObj.gridView03.setData(res.list);
             },
