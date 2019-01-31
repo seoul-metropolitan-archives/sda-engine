@@ -4,7 +4,7 @@ var st01503 =
             [
                 {
                     sortNo: 0,
-                    name: "uuid",
+                    name: "inventoryRecordResultUuid",
                     text: "UUID",
                     editable: false,
                     dataType: "code",

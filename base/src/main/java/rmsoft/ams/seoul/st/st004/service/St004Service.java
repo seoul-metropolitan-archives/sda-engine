@@ -52,13 +52,26 @@ public class St004Service extends BaseService {
         for(StArrangeContainersResult stArrangeContainersResult : stArrangeContainersResultList) {
             changeStatus = list.get(index).getChangeStatus() == "" ? "Draft" : list.get(index).getChangeStatus();
             orgStArrangeContainerResult = stArrangeContainersResultRepository.findOne(stArrangeContainersResult.getId());
-            stArrangeContainersResult.setStatusUuid(CommonCodeUtils.getCodeDetailUuid("CD138",changeStatus));
-            stArrangeContainersResult.setInsertDate(orgStArrangeContainerResult.getInsertDate());
-            stArrangeContainersResult.setInsertUuid(orgStArrangeContainerResult.getInsertUuid());
-            stArrangeContainersResult.setArrangedDate(orgStArrangeContainerResult.getArrangedDate());
-            stArrangeContainersResult.setContainerUuid(orgStArrangeContainerResult.getContainerUuid());
-            stArrangeContainersResult.setLocationUuid(orgStArrangeContainerResult.getLocationUuid());
-            stArrangeContainersResultRepository.save(stArrangeContainersResult);
+
+            orgStArrangeContainerResult.getContainerUuid();
+            StringBuilder sb = new StringBuilder();
+            sb.append(" select CONTAINER_UUID from ST_CONTAINER ");
+            sb.append(" START WITH CONTAINER_UUID = '"+orgStArrangeContainerResult.getContainerUuid()+"' ");
+            sb.append(" CONNECT BY PRIOR CONTAINER_UUID = PARENT_CONTAINER_UUID ");
+            List<Map<String, Object>> containerList = jdbcTemplate.queryForList(sb.toString());
+            for(int i = 0 ; i < containerList.size() ; i++){
+
+                String arrangeContainersResultUuid = jdbcTemplate.queryForObject("select ARRANGE_CONTAINERS_RESULT_UUID from ST_ARRANGE_CONTAINERS_RESULT where CONTAINER_UUID = '"+containerList.get(i).get("CONTAINER_UUID")+"' ",String.class);
+                /*stArrangeContainersResult.setArrangeContainersResultUuid(arrangeContainersResultUuid);
+                stArrangeContainersResult.setStatusUuid(CommonCodeUtils.getCodeDetailUuid("CD138",changeStatus));
+                stArrangeContainersResult.setInsertDate(orgStArrangeContainerResult.getInsertDate());
+                stArrangeContainersResult.setInsertUuid(orgStArrangeContainerResult.getInsertUuid());
+                stArrangeContainersResult.setArrangedDate(orgStArrangeContainerResult.getArrangedDate());
+                stArrangeContainersResult.setContainerUuid(orgStArrangeContainerResult.getContainerUuid());
+                stArrangeContainersResult.setLocationUuid(orgStArrangeContainerResult.getLocationUuid());
+                stArrangeContainersResultRepository.save(stArrangeContainersResult);*/
+                jdbcTemplate.update("UPDATE ST_ARRANGE_CONTAINERS_RESULT SET STATUS_UUID = '"+CommonCodeUtils.getCodeDetailUuid("CD138",changeStatus)+"' WHERE ARRANGE_CONTAINERS_RESULT_UUID = '" + arrangeContainersResultUuid + "' ");
+            }
             index++;
         }
         return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");

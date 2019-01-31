@@ -23,5 +23,9 @@ public class St01101VO {
     private String locationName;
 
     private String containerUuid;
+    private String repositoryUuid;
+    private String shelfUuid;
+    private String locationUuid;
+
 
 }

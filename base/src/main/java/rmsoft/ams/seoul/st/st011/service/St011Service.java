@@ -23,6 +23,10 @@ public class St011Service extends BaseService {
         st01101VO.setContainerUuid(requestParams.getString("containerUuid"));
         st01101VO.setCode(requestParams.getString("code"));
         st01101VO.setTitle(requestParams.getString("title"));
+        st01101VO.setRepositoryUuid(requestParams.getString("repositoryUuid"));
+        st01101VO.setShelfUuid(requestParams.getString("shelfUuid"));
+        st01101VO.setLocationUuid(requestParams.getString("locationUuid"));
+
 
         return filter(st011Mapper.getAggregation(st01101VO), pageable, "", St01101VO.class);
     }

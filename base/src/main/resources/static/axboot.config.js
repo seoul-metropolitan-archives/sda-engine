@@ -137,6 +137,16 @@
                     title: "팝업"
                 }
             },
+            "COMMON_POPUP2": {
+                width: 700,
+                height: 510,
+                iframe: {
+                    url: "/common/common-popup2"
+                },
+                header: {
+                    title: "팝업"
+                }
+            },
             "WORKFLOW_POPUP_01": {
                 width: 1340,
                 height: 430,

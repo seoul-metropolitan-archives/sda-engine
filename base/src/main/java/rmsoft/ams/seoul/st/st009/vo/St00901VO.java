@@ -49,4 +49,7 @@ public class St00901VO extends BaseVO {
     private String employeeYn;
     private Timestamp startDate;
 
+    private String code;
+    private String title;
+
 }

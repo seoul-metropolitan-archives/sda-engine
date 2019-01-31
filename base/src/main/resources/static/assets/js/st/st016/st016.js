@@ -347,7 +347,7 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
     initEvent: function () {
         var _this = this;
 
-        $("input[data-ax-path='exceptStartDate']").keyup(function () {
+        $("input[data-ax-path='exceptStartDateFrom']").keyup(function () {
             var date = this.value;
             if (date.match(/^\d{4}$/) !== null) {
                 this.value = date + '-';
@@ -355,11 +355,11 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
                 this.value = date + '-';
             }
         });
-        $("input[data-ax-path='exceptStartDate']").keypress(function () {
+        $("input[data-ax-path='exceptStartDateFrom']").keypress(function () {
             if ((event.keyCode < 48) || (event.keyCode > 57)) event.returnValue = false;
         });
 
-        $("input[data-ax-path='exceptEndDate']").keyup(function () {
+        $("input[data-ax-path='exceptStartDateTo']").keyup(function () {
             var date = this.value;
             if (date.match(/^\d{4}$/) !== null) {
                 this.value = date + '-';
@@ -367,6 +367,33 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
                 this.value = date + '-';
             }
         });
+
+        $("input[data-ax-path='exceptEndDateFrom']").keypress(function () {
+            if ((event.keyCode < 48) || (event.keyCode > 57)) event.returnValue = false;
+        });
+
+
+        $("input[data-ax-path='exceptEndDateFrom']").keyup(function () {
+            var date = this.value;
+            if (date.match(/^\d{4}$/) !== null) {
+                this.value = date + '-';
+            } else if (date.match(/^\d{4}\-\d{2}$/) !== null) {
+                this.value = date + '-';
+            }
+        });
+        $("input[data-ax-path='exceptEndDateTo']").keypress(function () {
+            if ((event.keyCode < 48) || (event.keyCode > 57)) event.returnValue = false;
+        });
+
+        $("input[data-ax-path='exceptEndDateTo']").keyup(function () {
+            var date = this.value;
+            if (date.match(/^\d{4}$/) !== null) {
+                this.value = date + '-';
+            } else if (date.match(/^\d{4}\-\d{2}$/) !== null) {
+                this.value = date + '-';
+            }
+        });
+
         $("input[data-ax-path='exceptEndDate']").keypress(function () {
             if ((event.keyCode < 48) || (event.keyCode > 57)) event.returnValue = false;
         });
