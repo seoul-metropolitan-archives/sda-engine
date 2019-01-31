@@ -41,9 +41,7 @@ var cl00101 =
                     text: "Classification Code",
                     width: 140,
                     dataType: "text",
-                    required: false,
-                    disable : true,
-                    editable : false
+                    required: true
                 },
                 {
                     sortNo: 3,

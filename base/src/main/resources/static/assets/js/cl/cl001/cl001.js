@@ -335,7 +335,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
                 return true;
             else
                 return false;
-        },["classificationName","classificationTypeUuid","orderNo","useYn","description"]);
+        },["classificationName","classificationCode","classificationTypeUuid","orderNo","useYn","description"]);
     },
     itemClick: function (data) {
         if (data.classificationSchemeUuid != null && data.classificationSchemeUuid != "") {

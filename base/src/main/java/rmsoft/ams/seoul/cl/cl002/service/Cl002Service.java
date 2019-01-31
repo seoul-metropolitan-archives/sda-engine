@@ -236,24 +236,24 @@ public class Cl002Service extends BaseService {
         int index = 0;
 
         for (ClClass clClass : clClassList) {
-                maxCode = getMaxClassCode(clClass.getClassificationSchemeUuid());
-                if (StringUtils.isNotEmpty(maxCode)) { //분류코드 조합
-                    maxDefaultCode = StringUtils.trim(maxCode).substring(0, 7);
-                    ctUuid = StringUtils.trim(maxCode).substring(7);
-                    ctUuid = String.valueOf(Integer.parseInt(ctUuid) + 1);
-
-                    if (ctUuid.length() == 1) {
-                        ctUuid = "000" + ctUuid;
-                    } else if (ctUuid.length() == 2) {
-                        ctUuid = "00" + ctUuid;
-                    } else if (ctUuid.length() == 3) {
-                        ctUuid = "0" + ctUuid;
-                    }
-                    detailCode = maxDefaultCode + ctUuid;
-                }
+//                maxCode = getMaxClassCode(clClass.getClassificationSchemeUuid());
+//                if (StringUtils.isNotEmpty(maxCode)) { //분류코드 조합
+//                    maxDefaultCode = StringUtils.trim(maxCode).substring(0, 7);
+//                    ctUuid = StringUtils.trim(maxCode).substring(7);
+//                    ctUuid = String.valueOf(Integer.parseInt(ctUuid) + 1);
+//
+//                    if (ctUuid.length() == 1) {
+//                        ctUuid = "000" + ctUuid;
+//                    } else if (ctUuid.length() == 2) {
+//                        ctUuid = "00" + ctUuid;
+//                    } else if (ctUuid.length() == 3) {
+//                        ctUuid = "0" + ctUuid;
+//                    }
+//                    detailCode = maxDefaultCode + ctUuid;
+//                }
             if (clClass.isCreated()){
-                ctUuid = jdbcTemplate.queryForObject("select FC_CL_CLS_CLASS_CODE('" + clClass.getClassificationSchemeUuid() + "') from dual", String.class);
-                clClass.setClassCode(ctUuid);
+//                ctUuid = jdbcTemplate.queryForObject("select FC_CL_CLS_CLASS_CODE('" + clClass.getClassificationSchemeUuid() + "') from dual", String.class);
+//                clClass.setClassCode(ctUuid);
                 // Oracle Function Call
                 orderKey = jdbcTemplate.queryForObject("select FC_CL_CLASS_SORTKEY('" + clClass.getParentClassUuid() + "' , '" + clClass.getOrderNo() + "') from dual", String.class);
                 clClass.setOrderKey(orderKey);

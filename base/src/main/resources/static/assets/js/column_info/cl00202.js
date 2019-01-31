@@ -49,9 +49,7 @@ var cl00202 =
                     text: "Class Code",
                     width: 120,
                     dataType: "code",
-                    editable: false,
-                    disable: true,
-                    required : false
+                    required : true
 
                 },
                 {
