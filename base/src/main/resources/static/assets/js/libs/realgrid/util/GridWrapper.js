@@ -634,10 +634,13 @@ var GridWrapper = function(p_id,p_rootContext) {
 
         var retData = undefined;
         var modalType = "COMMON_POPUP";
+
+        if(popupCode == "AUTHORITY_POPUP") modalType = popupCode;
+
         if(popupCode.search("POPUP") > -1){
             modalType = popupCode;
         }
-        axboot.modal.open({
+        axboot.commonModal.open({
             modalType: modalType,
             preSearch : preSearch,
             sendData: function () {
@@ -1470,6 +1473,16 @@ GridWrapper.prototype.setColumnInfo = function(list) {
                 obj.displayRegExp = "([0-9]{4})([0-9]{4})([0-9]{4})([0-9]{4})";
                 obj.displayReplace = "$1-$2-$3-$4";
                 break;
+            case "datetext":
+                _this.validateColumn[data.name] = function(value)
+                {
+                    var regexp = /[^0-9]/gi;
+                    var result = regexp.test(value);
+                    if(value)
+                        value = value.replace(regexp,"");
+                    return !result;
+                }
+                break;
             case "password":
                 obj.type = "text";
                 obj.renderer = {type : "text"};
@@ -1964,9 +1977,9 @@ GridWrapper.prototype.setCustomCellStyleRows = function(type, conditionFunc, col
         else {
             //setting에 영향을 안받을 경우에는 기본값으로 복원
             for (var column in _this.defaultEditColumnProperties) {
-                if(_this.getColumnInfo(column)["dataType"] == "check") {
+                if(_this.getColumnInfo(column) && _this.getColumnInfo(column)["dataType"] == "check") {
                     grid.setColumnProperty(column, "renderer", _this.defaultStyle.data.check);
-                }else{
+                }else if(_this.getColumnInfo(column)){
                     grid.setColumnProperty(column, "editable", _this.defaultEditColumnProperties[column]);
                 }
                 grid.setCellStyle(curr.dataRow, column, _this.defaultStyles[column], true);

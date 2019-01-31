@@ -200,86 +200,168 @@
     </select>
     <sql id="gridSQL">
         SELECT
-            AGGREGATION_UUID as uuid
-            , 1 as orderNo
-            ,(SELECT CODE_NAME FROM AD_CODE_DETAIL WHERE CODE_DETAIL_UUID = Z1.PUBLISHED_STATUS_UUID) as publishedStatus
-            , AGGREGATION_CODE as code
-            , TITLE as title
-            , (SELECT CODE_NAME FROM AD_CODE_DETAIL WHERE CODE_DETAIL_UUID = Z1.TYPE_UUID) as "type"
-            , (SELECT TO_CHAR(LEVEL_NO) FROM RC_LEVEL WHERE LEVEL_UUID = Z1.LEVEL_UUID) as "level"
-            , AUTHOR as author
-            , DESCRIPTION_START_DATE as descStrDate
-            , DESCRIPTION_END_DATE as descEdDate
-            , DESCRIPTION as description
-            , NOTES as notes
-            , (
+            Z1.AGGREGATION_UUID as uuid,
+            1 as orderNo,
+            PUBLISHED_STATUS_UUID as publishedStatusUuid,
+            AGGREGATION_CODE as code,
+            TITLE as title,
+            (SELECT CODE_NAME FROM AD_CODE_DETAIL WHERE CODE_DETAIL_UUID = Z1.TYPE_UUID) as "type",
+            LEVEL_UUID as "levelUuid",
+            Z1.DESCRIPTION_START_DATE as descriptionStartDate,
+            Z1.DESCRIPTION_END_DATE as descriptionEndDate,
+            Z1.DESCRIPTION as description,
+            Z1.NOTES as notes,
+            Z1.LANGUAGE_CODE as languageCode,
+            Z1.STATUS_DESCRIPTION as statusDescription,
+            Z1.LEVEL_OF_DETAIL_UUID as levelOfDetailUuid,
+            Z2.CREATOR as creator,
+            Z2.CREATION_START_DATE as creationStartDate,
+            Z2.CREATION_END_DATE as creationEndDate,
+            Z2.SOURCE_SYSTEM_UUID as sourceSystemUuid,
+            Z2.CREATION_SYSTEM_UUID as creationSystemUuid,
+            Z2.LEGAL_STATUS_UUID as legalStatusUuid,
+            Z2.REPOSITORIES_UUID as repositoriesUuid,
+            (SELECT AUTHORITY_NAME FROM AT_AUTHORITY WHERE AUTHORITY_UUID = Z2.REPOSITORIES_UUID) as repositoriesName,
+            Z2.ELECTRONIC_RECORD_STATUS_UUID as electronicRecordStatusUuid,
+            Z2.ACCUMULATION_START_DATE as accumulationStartDate,
+            Z2.ACCUMULATION_END_DATE as accumulationEndDate,
+            Z2.SCOPE_CONTENT as scopeContent,
+            Z2.ARRANGEMENT as arrangement,
+            Z2.ACCRUALS as accruals,
+            Z2.CUSTODIAL_HISTORY as custodialHistory,
+            Z2.SOURCE_ACQUISITION_UUID as sourceAcquisitionUuid,
+            (SELECT AUTHORITY_NAME FROM AT_AUTHORITY WHERE AUTHORITY_UUID = Z2.SOURCE_ACQUISITION_UUID) as sourceAcquisitionName,
+            Z2.PHYSICAL_CONDITION as physicalCondition,
+            Z2.USE_CONDITION as useCondition,
+            Z2.FINDING_AIDS as findingAids,
+            Z2.RULES_CONVERSION_UUID as rulesConversionUuid,
+            Z2.ACCESS_CONDITION as accessCondition,
+            Z2.RECORD_SCHEDULE_UUID as recordScheduleUuid,
+            '' as keyword,
+            (SELECT
+              DISTINCT(FIRST_VALUE(AGGREGATION_CREATOR_UUID) OVER(ORDER BY INSERT_DATE ASC)) AS AGGREGATION_CREATOR_UUID
+            FROM RC_AGGREGATION_CREATOR T1
+            WHERE AGGREGATION_UUID = Z1.AGGREGATION_UUID
+            ) AS recordCreatorUuid,
+            (SELECT
+              DISTINCT(FIRST_VALUE(CREATOR_UUID) OVER(ORDER BY INSERT_DATE ASC)) AS CREATOR_UUID
+            FROM RC_AGGREGATION_CREATOR T1
+            WHERE AGGREGATION_UUID = Z1.AGGREGATION_UUID) AS creatorUuid,
+            (SELECT
+              DISTINCT(FIRST_VALUE(AGGR_RELATED_AUTHORITY_UUID) OVER(ORDER BY INSERT_DATE ASC)) AS AGGR_RELATED_AUTHORITY_UUID
+            FROM RC_AGGR_RELATED_AUTHORITY T1
+            WHERE AGGREGATION_UUID = Z1.AGGREGATION_UUID) AS recordRelatedAuthorityUuid,
+            (SELECT
+              DISTINCT(FIRST_VALUE(AUTHORITY_UUID) OVER(ORDER BY INSERT_DATE ASC)) AS AUTHORITY_UUID
+            FROM RC_AGGR_RELATED_AUTHORITY T1
+            WHERE AGGREGATION_UUID = Z1.AGGREGATION_UUID) AS authorityUuid,
+            (
             (SELECT COUNT(*) FROM RC_AGGREGATION WHERE PARENT_AGGREGATION_UUID = Z1.AGGREGATION_UUID)
             +(SELECT COUNT(*) FROM RC_ITEM WHERE AGGREGATION_UUID = Z1.AGGREGATION_UUID)
             )as childCnt
         FROM
-          RC_AGGREGATION Z1
-        <if test="nodeType == 'virtual'">
-        </if>
+          RC_AGGREGATION Z1, RC_AGGREGATION_CON Z2
+        WHERE Z1.AGGREGATION_UUID = Z2.AGGREGATION_UUID(+)
         <if test=" null == uuid or '' == uuid">
-        WHERE
-            PARENT_AGGREGATION_UUID IS NULL
+        AND PARENT_AGGREGATION_UUID IS NULL
         </if>
         <if test=" null != uuid and '' != uuid">
-        WHERE
-            PARENT_AGGREGATION_UUID = #{uuid}
+        AND PARENT_AGGREGATION_UUID = #{uuid}
         </if>
         <if test=" null != uuid and '' != uuid">
-            UNION ALL
-            SELECT
-            ITEM_UUID as uuid
-            , 2 as orderNo
-            ,(SELECT CODE_NAME FROM AD_CODE_DETAIL WHERE CODE_DETAIL_UUID = Z1.PUBLISHED_STATUS_UUID) as publishedStatus
-            , ITEM_CODE as code
-            , TITLE as title
-            , (SELECT CODE_NAME FROM AD_CODE_DETAIL WHERE CODE_DETAIL_UUID = Z1.TYPE_UUID) as "type"
-            , '' as "level"
-            , AUTHOR as author
-            , DESCRIPTION_START_DATE as descStrDate
-            , DESCRIPTION_END_DATE as descEdDate
-            , DESCRIPTION as description
-            , NOTES as notes
-            , 0 as childCnt
-            FROM
-            RC_ITEM Z1
-            WHERE
-            AGGREGATION_UUID = #{uuid}
+        UNION ALL
+        SELECT
+            Z1.ITEM_UUID as uuid,
+            2 as orderNo,
+            PUBLISHED_STATUS_UUID as publishedStatusUuid,
+            ITEM_CODE as code,
+            TITLE as title,
+            (SELECT CODE_NAME FROM AD_CODE_DETAIL WHERE CODE_DETAIL_UUID = Z1.TYPE_UUID) as "type",
+            '' as "levelUuid",
+            Z1.DESCRIPTION_START_DATE as descriptionStartDate,
+            Z1.DESCRIPTION_END_DATE as descriptionEndDate,
+            Z1.DESCRIPTION as description,
+            Z1.NOTES as notes,
+            Z1.LANGUAGE_CODE as languageCode,
+            Z1.STATUS_DESCRIPTION as statusDescription,
+            Z1.LEVEL_OF_DETAIL_UUID as levelOfDetailUuid,
+            Z2.CREATOR as creator,
+            Z2.CREATION_START_DATE as creationStartDate,
+            Z2.CREATION_END_DATE as creationEndDate,
+            Z2.SOURCE_SYSTEM_UUID as sourceSystemUuid,
+            Z2.CREATION_SYSTEM_UUID as creationSystemUuid,
+            Z2.LEGAL_STATUS_UUID as legalStatusUuid,
+            Z2.REPOSITORIES_UUID as repositoriesUuid,
+            (SELECT AUTHORITY_NAME FROM AT_AUTHORITY WHERE AUTHORITY_UUID = Z2.REPOSITORIES_UUID) as repositoriesName,
+            Z2.ELECTRONIC_RECORD_STATUS_UUID as electronicRecordStatusUuid,
+            Z2.ACCUMULATION_START_DATE as accumulationStartDate,
+            Z2.ACCUMULATION_END_DATE as accumulationEndDate,
+            Z2.SCOPE_CONTENT as scopeContent,
+            '' as arrangement,
+            '' as accruals,
+            Z2.CUSTODIAL_HISTORY as custodialHistory,
+            Z2.SOURCE_ACQUISITION_UUID as sourceAcquisitionUuid,
+            (SELECT AUTHORITY_NAME FROM AT_AUTHORITY WHERE AUTHORITY_UUID = Z2.SOURCE_ACQUISITION_UUID) as sourceAcquisitionName,
+            Z2.PHYSICAL_CONDITION as physicalCondition,
+            Z2.USE_CONDITION as useCondition,
+            Z2.FINDING_AIDS as findingAids,
+            Z2.RULES_CONVERSION_UUID as rulesConversionUuid,
+            Z2.ACCESS_CONDITION as accessCondition,
+            '' as recordScheduleUuid,
+            Z2.KEYWORD as keyword,
+            (SELECT
+              DISTINCT(FIRST_VALUE(ITEM_CREATOR_UUID) OVER(ORDER BY INSERT_DATE ASC)) AS ITEM_CREATOR_UUID
+            FROM RC_ITEM_CREATOR T1
+            WHERE ITEM_UUID = Z1.ITEM_UUID) AS recordCreatorUuid,
+            (SELECT
+              DISTINCT(FIRST_VALUE(CREATOR_UUID) OVER(ORDER BY INSERT_DATE ASC)) AS CREATOR_UUID
+            FROM RC_ITEM_CREATOR T1
+            WHERE ITEM_UUID = Z1.ITEM_UUID) AS creatorUuid,
+            (SELECT
+              DISTINCT(FIRST_VALUE(ITEM_RELATED_AUTHORITY_UUID) OVER(ORDER BY INSERT_DATE ASC)) AS ITEM_RELATED_AUTHORITY_UUID
+            FROM RC_ITEM_RELATED_AUTHORITY T1
+            WHERE ITEM_UUID = Z1.ITEM_UUID) AS recordRelatedAuthorityUuid,
+            (SELECT
+              DISTINCT(FIRST_VALUE(AUTHORITY_UUID) OVER(ORDER BY INSERT_DATE ASC)) AS AUTHORITY_UUID
+            FROM RC_ITEM_RELATED_AUTHORITY T1
+            WHERE ITEM_UUID = Z1.ITEM_UUID) AS authorityUuid,
+            0 as childCnt
+        FROM
+            RC_ITEM Z1, RC_ITEM_CON Z2
+        WHERE Z1.ITEM_UUID = Z2.ITEM_UUID(+)
+        AND AGGREGATION_UUID = #{uuid}
         </if>
         <if test="nodeType == 'virtual'">
-            UNION ALL
-            SELECT
-                Z3.AGGREGATION_UUID as uuid
-                , 1 as orderNo
-                ,(SELECT CODE_NAME FROM AD_CODE_DETAIL WHERE CODE_DETAIL_UUID = Z3.PUBLISHED_STATUS_UUID) as publishedStatus
-                , Z3.AGGREGATION_CODE as code
-                , Z3.TITLE as title
-                , (SELECT CODE_NAME FROM AD_CODE_DETAIL WHERE CODE_DETAIL_UUID = Z3.TYPE_UUID) as "type"
-                , (SELECT TO_CHAR(LEVEL_NO) FROM RC_LEVEL WHERE LEVEL_UUID = Z3.LEVEL_UUID) as "level"
-                , Z3.AUTHOR as author
-                , Z3.DESCRIPTION_START_DATE as descStrDate
-                , Z3.DESCRIPTION_END_DATE as descEdDate
-                , Z3.DESCRIPTION as description
-                , Z3.NOTES as notes
-                , (
-                (SELECT COUNT(*) FROM RC_AGGREGATION WHERE PARENT_AGGREGATION_UUID = Z3.AGGREGATION_UUID)
-                +(SELECT COUNT(*) FROM RC_ITEM WHERE AGGREGATION_UUID = Z3.AGGREGATION_UUID)
-                )as childCnt
-            FROM
-                RC_AGGREGATION Z3,
-                RC_RECORD_REFERENCE Z4
-            WHERE
-              Z4.VIRTUAL_AGGREGATION_UUID = #{uuid}
-            AND
-              Z4.AGGREGATION_UUID = Z3.AGGREGATION_UUID
+        UNION ALL
+        SELECT
+            Z3.AGGREGATION_UUID as uuid
+            , 1 as orderNo
+            ,(SELECT CODE_NAME FROM AD_CODE_DETAIL WHERE CODE_DETAIL_UUID = Z3.PUBLISHED_STATUS_UUID) as publishedStatus
+            , Z3.AGGREGATION_CODE as code
+            , Z3.TITLE as title
+            , (SELECT CODE_NAME FROM AD_CODE_DETAIL WHERE CODE_DETAIL_UUID = Z3.TYPE_UUID) as "type"
+            , (SELECT TO_CHAR(LEVEL_NO) FROM RC_LEVEL WHERE LEVEL_UUID = Z3.LEVEL_UUID) as "level"
+            , Z3.AUTHOR as author
+            , Z3.DESCRIPTION_START_DATE as descStrDate
+            , Z3.DESCRIPTION_END_DATE as descEdDate
+            , Z3.DESCRIPTION as description
+            , Z3.NOTES as notes
+            , (
+            (SELECT COUNT(*) FROM RC_AGGREGATION WHERE PARENT_AGGREGATION_UUID = Z3.AGGREGATION_UUID)
+            +(SELECT COUNT(*) FROM RC_ITEM WHERE AGGREGATION_UUID = Z3.AGGREGATION_UUID)
+            )as childCnt
+        FROM
+            RC_AGGREGATION Z3,
+            RC_RECORD_REFERENCE Z4
+        WHERE
+          Z4.VIRTUAL_AGGREGATION_UUID = #{uuid}
+        AND
+          Z4.AGGREGATION_UUID = Z3.AGGREGATION_UUID
 
         </if>
         <if test="nodeType == 'virtual'">
-            UNION ALL
-            SELECT
+        UNION ALL
+        SELECT
             Z5.ITEM_UUID as uuid
             , 2 as orderNo
             ,(SELECT CODE_NAME FROM AD_CODE_DETAIL WHERE CODE_DETAIL_UUID = Z5.PUBLISHED_STATUS_UUID) as publishedStatus
@@ -311,8 +393,20 @@
     <select id="getGridList" resultType="Rc00103VO" parameterType="Rc00104VO" statementType="PREPARED">
         SELECT * FROM (
         SELECT
-        ZZ.*
-        ,ROW_NUMBER() OVER(ORDER BY orderNo ASC, title ASC) AS NUM
+        ZZ.*,
+        (SELECT
+          AUTHORITY_NAME
+        FROM
+          AT_AUTHORITY
+        WHERE
+          AUTHORITY_UUID = ZZ.creatorUuid) as creatorName,
+        (SELECT
+          AUTHORITY_NAME
+        FROM
+          AT_AUTHORITY
+        WHERE
+          AUTHORITY_UUID = ZZ.authorityUuid) as authorityName,
+        ROW_NUMBER() OVER(ORDER BY orderNo ASC, title ASC) AS NUM
         FROM (
         <include refid="gridSQL"></include>
           ) ZZ

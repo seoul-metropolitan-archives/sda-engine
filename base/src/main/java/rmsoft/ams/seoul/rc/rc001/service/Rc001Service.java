@@ -9,6 +9,7 @@ import io.onsemiro.utils.ModelMapperUtils;
 import io.onsemiro.utils.SessionUtils;
 import io.onsemiro.utils.UUIDUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -80,6 +81,18 @@ public class Rc001Service extends BaseService
 
     @Autowired
     private JobConvRepository jobConvRepository;
+
+    @Autowired
+    private RcAggregationCreatorRepository rcAggregationCreatorRepository;
+
+    @Autowired
+    private RcAggrRelatedAuthorityRepository rcAggrRelatedAuthorityRepository;
+
+    @Autowired
+    private RcItemCreatorRepository rcItemCreatorRepository;
+
+    @Autowired
+    private RcItemRelatedAuthorityRepository rcItemRelatedAuthorityRepository;
 
     /**
      * Gets all node.
@@ -208,29 +221,189 @@ public class Rc001Service extends BaseService
      * @return the api response
      */
     @Transactional
-    public ApiResponse saveRecords(List<Map<String,String>> list)
+    public ApiResponse saveRecords(List<Rc00103VO> list)
     {
-        RcItem rcItem = null;
+        /*RcItem rcItem = null;
+        RcItem orgItem = null;
+        RcItemCon rcItemCon = null;
+        RcItemCon orgItemCon = null;
         RcAggregation rcAggregation = null;
+        RcAggregation orgAggregation = null;
+        RcAggregationCon rcAggregationCon = null;
+        RcAggregationCon orgAggregationCon = null;*/
 
-        for (Map<String,String> data: list) {
-            if(data.get("nodeType").equals("item")){
-                rcItem = new RcItem();
-                rcItem.setItemUuid(data.get("uuid"));
-                rcItem = rcItemRepository.findOne(rcItem.getId());
-                rcItem.setTitle(data.get("title"));
-                rcItem.setDescription(data.get("description"));
-                rcItem.setNotes(data.get("notes"));
+        for (Rc00103VO data: list) {
+            String uuid = data.getUuid();
+            String code = "";
+
+            if(data.isCreated()){
+                uuid = UUIDUtils.getUUID();
+            }
+
+            if(data.getNodeType().equals("item")){
+                RcItem rcItem = ModelMapperUtils.map(data, RcItem.class);
+                rcItem.setItemUuid(uuid);
+
+                if(data.isModified()) {
+                    RcItem orgItem = rcItemRepository.findOne(rcItem.getId());
+
+                    rcItem.setItemCode(orgItem.getItemCode());
+                    rcItem.setAggregationUuid(orgItem.getAggregationUuid());
+                    rcItem.setTypeUuid(orgItem.getTypeUuid());
+                    rcItem.setInsertDate(orgItem.getInsertDate());
+                    rcItem.setInsertUuid(orgItem.getInsertUuid());
+                }else{
+                    code = jdbcTemplate.queryForObject("select fc_rc_item_code from dual", String.class);
+                    rcItem.setItemCode(code);
+                }
+
                 rcItemRepository.save(rcItem);
-            }else{
-                rcAggregation = new RcAggregation();
-                rcAggregation.setAggregationUuid(data.get("uuid"));
-                rcAggregation = rcAggregationRepository.findOne(rcAggregation.getId());
 
-                rcAggregation.setTitle(data.get("title"));
-                rcAggregation.setDescription(data.get("description"));
-                rcAggregation.setNotes(data.get("notes"));
+                RcItemCon rcItemCon = ModelMapperUtils.map(data, RcItemCon.class);
+                rcItemCon.setItemUuid(uuid);
+
+                if(data.isModified()) {
+                    RcItemCon orgItemCon = rcItemConRepository.findOne(rcItemCon.getId());
+
+                    if(orgItemCon != null) {
+                        rcItemCon.setKeyword(orgItemCon.getKeyword());
+                        rcItemCon.setAddMetaTemplateSetUuid(orgItemCon.getAddMetaTemplateSetUuid());
+                        rcItemCon.setAddMetadata01(orgItemCon.getAddMetadata01());
+                        rcItemCon.setAddMetadata02(orgItemCon.getAddMetadata02());
+                        rcItemCon.setAddMetadata03(orgItemCon.getAddMetadata03());
+                        rcItemCon.setAddMetadata04(orgItemCon.getAddMetadata04());
+                        rcItemCon.setAddMetadata05(orgItemCon.getAddMetadata05());
+                        rcItemCon.setAddMetadata06(orgItemCon.getAddMetadata06());
+                        rcItemCon.setAddMetadata07(orgItemCon.getAddMetadata07());
+                        rcItemCon.setAddMetadata08(orgItemCon.getAddMetadata08());
+                        rcItemCon.setAddMetadata09(orgItemCon.getAddMetadata09());
+                        rcItemCon.setAddMetadata10(orgItemCon.getAddMetadata10());
+                        rcItemCon.setExtraMetadata(orgItemCon.getExtraMetadata());
+                        rcItemCon.setInsertDate(orgItemCon.getInsertDate());
+                        rcItemCon.setInsertUuid(orgItemCon.getInsertUuid());
+                    }
+                }
+
+                rcItemConRepository.save(rcItemCon);
+
+                RcItemCreator rcItemCreator = new RcItemCreator();
+                rcItemCreator.setItemCreatorUuid(data.getRecordCreatorUuid());
+                rcItemCreator.setCreatorUuid(data.getCreatorUuid());
+                rcItemCreator.setItemUuid(uuid);
+
+                RcItemCreator orgItemCreator = null;
+                if(!StringUtils.isEmpty(data.getCreatorUuid())){
+                    if(!StringUtils.isEmpty(data.getRecordCreatorUuid())) {
+                        orgItemCreator = rcItemCreatorRepository.findOne(rcItemCreator.getId());
+
+                        rcItemCreator.setInsertUuid(orgItemCreator.getInsertUuid());
+                        rcItemCreator.setInsertDate(orgItemCreator.getInsertDate());
+                    }else{
+                        rcItemCreator.setItemCreatorUuid(UUIDUtils.getUUID());
+                    }
+
+                    rcItemCreatorRepository.save(rcItemCreator);
+                }
+
+                RcItemRelatedAuthority rcItemAuthority = new RcItemRelatedAuthority();
+                rcItemAuthority.setItemRelatedAuthorityUuid(data.getRecordRelatedAuthorityUuid());
+                rcItemAuthority.setAuthorityUuid(data.getAuthorityUuid());
+                rcItemAuthority.setItemUuid(uuid);
+
+                RcItemRelatedAuthority orgItemAuthority = null;
+                if(!StringUtils.isEmpty(data.getAuthorityUuid())){
+                    if(!StringUtils.isEmpty(data.getRecordRelatedAuthorityUuid())) {
+                        orgItemAuthority = rcItemRelatedAuthorityRepository.findOne(rcItemAuthority.getId());
+
+                        rcItemAuthority.setInsertUuid(orgItemAuthority.getInsertUuid());
+                        rcItemAuthority.setInsertDate(orgItemAuthority.getInsertDate());
+                    }else{
+                        rcItemAuthority.setItemRelatedAuthorityUuid(UUIDUtils.getUUID());
+                    }
+
+                    rcItemRelatedAuthorityRepository.save(rcItemAuthority);
+                }
+            }else{
+                RcAggregation rcAggregation = ModelMapperUtils.map(data, RcAggregation.class);
+                rcAggregation.setAggregationUuid(uuid);
+                if(data.isModified()) {
+                    RcAggregation orgAggregation = rcAggregationRepository.findOne(rcAggregation.getId());
+
+                    rcAggregation.setAggregationCode(orgAggregation.getAggregationCode());
+                    rcAggregation.setParentAggregationUuid(orgAggregation.getParentAggregationUuid());
+                    rcAggregation.setTypeUuid(orgAggregation.getTypeUuid());
+                    rcAggregation.setInsertDate(orgAggregation.getInsertDate());
+                    rcAggregation.setInsertUuid(orgAggregation.getInsertUuid());
+                }else{
+                    code = jdbcTemplate.queryForObject("select fc_rc_aggregation_code from dual", String.class);
+                    rcAggregation.setAggregationCode(code);
+                }
+
                 rcAggregationRepository.save(rcAggregation);
+
+                RcAggregationCon rcAggregationCon = ModelMapperUtils.map(data, RcAggregationCon.class);
+                rcAggregationCon.setAggregationUuid(uuid);
+
+                if(data.isModified()) {
+                    RcAggregationCon orgAggregationCon = rcAggregationConRepository.findOne(rcAggregationCon.getId());
+
+                    if(orgAggregationCon != null){
+                        rcAggregationCon.setAddMetaTemplateSetUuid(orgAggregationCon.getAddMetaTemplateSetUuid());
+                        rcAggregationCon.setAddMetadata01(orgAggregationCon.getAddMetadata01());
+                        rcAggregationCon.setAddMetadata02(orgAggregationCon.getAddMetadata02());
+                        rcAggregationCon.setAddMetadata03(orgAggregationCon.getAddMetadata03());
+                        rcAggregationCon.setAddMetadata04(orgAggregationCon.getAddMetadata04());
+                        rcAggregationCon.setAddMetadata05(orgAggregationCon.getAddMetadata05());
+                        rcAggregationCon.setAddMetadata06(orgAggregationCon.getAddMetadata06());
+                        rcAggregationCon.setAddMetadata07(orgAggregationCon.getAddMetadata07());
+                        rcAggregationCon.setAddMetadata08(orgAggregationCon.getAddMetadata08());
+                        rcAggregationCon.setAddMetadata09(orgAggregationCon.getAddMetadata09());
+                        rcAggregationCon.setAddMetadata10(orgAggregationCon.getAddMetadata10());
+                        rcAggregationCon.setExtraMetadata(orgAggregationCon.getExtraMetadata());
+                        rcAggregationCon.setInsertDate(orgAggregationCon.getInsertDate());
+                        rcAggregationCon.setInsertUuid(orgAggregationCon.getInsertUuid());
+                    }
+                }
+
+                rcAggregationConRepository.save(rcAggregationCon);
+
+                RcAggregationCreator rcAggCreator = new RcAggregationCreator();
+                rcAggCreator.setAggregationCreatorUuid(data.getRecordCreatorUuid());
+                rcAggCreator.setCreatorUuid(data.getCreatorUuid());
+                rcAggCreator.setAggregationUuid(uuid);
+
+                RcAggregationCreator orgAggCreator = null;
+                if(!StringUtils.isEmpty(data.getCreatorUuid())){
+                    if(!StringUtils.isEmpty(data.getRecordCreatorUuid())){
+                        orgAggCreator = rcAggregationCreatorRepository.findOne(rcAggCreator.getId());
+
+                        rcAggCreator.setInsertUuid(orgAggCreator.getInsertUuid());
+                        rcAggCreator.setInsertDate(orgAggCreator.getInsertDate());
+                    }else{
+                        rcAggCreator.setAggregationCreatorUuid(UUIDUtils.getUUID());
+                    }
+
+                    rcAggregationCreatorRepository.save(rcAggCreator);
+                }
+
+                RcAggrRelatedAuthority rcAggAuthority = new RcAggrRelatedAuthority();
+                rcAggAuthority.setAggrRelatedAuthorityUuid(data.getRecordRelatedAuthorityUuid());
+                rcAggAuthority.setAuthorityUuid(data.getAuthorityUuid());
+                rcAggAuthority.setAggregationUuid(uuid);
+
+                RcAggrRelatedAuthority orgAggAuthority = null;
+                if(!StringUtils.isEmpty(data.getAuthorityUuid())){
+                    if(!StringUtils.isEmpty(data.getRecordRelatedAuthorityUuid())) {
+                        orgAggAuthority = rcAggrRelatedAuthorityRepository.findOne(rcAggAuthority.getId());
+
+                        rcAggAuthority.setInsertUuid(orgAggAuthority.getInsertUuid());
+                        rcAggAuthority.setInsertDate(orgAggAuthority.getInsertDate());
+                    }else{
+                        rcAggAuthority.setAggrRelatedAuthorityUuid(UUIDUtils.getUUID());
+                    }
+
+                    rcAggrRelatedAuthorityRepository.save(rcAggAuthority);
+                }
             }
         }
 
