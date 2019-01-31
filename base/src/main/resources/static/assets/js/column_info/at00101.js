@@ -15,7 +15,7 @@ var at00101 =
                     name: "authorityNo",
                     text: "Authority No",
                     editable: false,
-                    width:170,
+                    width:100,
                     dataType: "text",
                     required: false
                 },
@@ -24,7 +24,7 @@ var at00101 =
                     name: "authorityName",
                     text: "Title",
                     dataType: "text",
-                    width:270,
+                    width:220,
                     editable: false
                 },
                 {
@@ -46,18 +46,20 @@ var at00101 =
                 {
                     sortNo: 5,
                     name: "startDate",
+                    text: "Start Date",
                     editable: false,
                     dataType: "code",
                     required: false,
-                    visible: false
+                    visible: true
                 },
                 {
                     sortNo: 6,
                     name: "endDate",
+                    text: "End Date",
                     editable: false,
                     dataType: "code",
                     required: false,
-                    visible: false
+                    visible: true
                 },
                 {
                     sortNo: 7,

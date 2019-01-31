@@ -35,8 +35,8 @@ public class Rc00202VO {
     private String legalStatusUuid;
     private String repositoriesUuid;
     private String electronicRecordStatusUuid;
-    private String AccumulationStartDate;
-    private String AccumulationEndDate;
+    private String accumulationStartDate;
+    private String accumulationEndDate;
     private String scopeContent;
     private String arrangement;
     private String accruals;
