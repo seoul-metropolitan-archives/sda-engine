@@ -12,7 +12,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         axboot.ajax({
             type: "GET",
             url: "/api/v1/st/st011/01/list01",
-            data: $.extend({}, {pageSize: 1000}, this.formView.getData(),{repositoryUuid : repositoryUuid},{shelfUuid : shelfUuid},{locationUuid : locationUuid}, {containerUuid : containerUuid}),
+            data: $.extend({}, {pageSize: 1000}, this.formView.getData(),{repositoryUuid : repositoryUuid},{shelfUuid : shelfUuid},{locationUuid : locationUuid}, {containerUuid : containerUuid},{requestorUuid : requestorUuid}),
             callback: function (res) {
                 fnObj.gridView01.setData(res.list);
                 fnObj.gridView02.clearData();
@@ -31,7 +31,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         axboot.ajax({
             type: "GET",
             url: "/api/v1/st/st011/01/list02",
-            data: $.extend({pageSize: 1000}, this.formView.getData(), {aggregationUuid: fnObj.gridView01.getSelectedData().uuid},{requestorUuid : requestorUuid}),
+            data: $.extend({pageSize: 1000}, this.formView.getData(), {aggregationUuid: fnObj.gridView01.getSelectedData().uuid}),
             callback: function (res) {
                 fnObj.gridView02.setData(res.list);
             },
@@ -77,6 +77,14 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             callback: function (data) {
                 $("input[data-ax-path='repositoryName']").val(data["REPOSITORY_NAME"])
                 repositoryUuid = data['REPOSITORY_UUID'];
+                shelfUuid = "";
+                $("input[data-ax-path='shelfName']").val('');
+                locationUuid = "";
+                $("input[data-ax-path='locationName']").val('');
+                containerUuid = "";
+                $("input[data-ax-path='containerName']").val('');
+
+
                 if (this.close) this.close();
             }
         });
@@ -92,6 +100,13 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 $("input[data-ax-path='shelfName']").val(data["SHELF_NAME"])
                 shelfUuid = data['SHELF_UUID'];
                 statusUuid = data['STATUS_UUID'];
+
+                locationUuid = "";
+                $("input[data-ax-path='locationName']").val('');
+                containerUuid = "";
+                $("input[data-ax-path='containerName']").val('');
+
+
                 if (this.close) this.close();
             }
         });
@@ -111,6 +126,8 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 $("input[data-ax-path='locationName']").val(text)
                 locationUuid = data['LOCATIONUUID'];
                 console.log('locationUuid', locationUuid);
+                containerUuid = "";
+                $("input[data-ax-path='containerName']").val('');
                 if(this.close) this.close();
             }
         });

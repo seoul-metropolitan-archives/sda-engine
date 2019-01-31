@@ -1,4 +1,4 @@
-package rmsoft.ams.seoul.st.st023.service;
+package rmsoft.ams.seoul.st.st023.dao;
 
 import io.onsemiro.core.mybatis.MyBatisMapper;
 import rmsoft.ams.seoul.st.st023.vo.St02301VO;

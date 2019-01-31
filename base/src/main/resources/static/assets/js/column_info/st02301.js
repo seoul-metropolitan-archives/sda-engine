@@ -1,4 +1,4 @@
-var st02201 =
+var st02301 =
     {
         column_info:
             [
@@ -34,8 +34,8 @@ var st02201 =
                 },
                 {
                     sortNo: 1,
-                    name: "container1",
-                    text: "Container상태 정상",
+                    name: "status1",
+                    text: "반출서 작성",
                     width: 250,
                     editable: false,
                     dataType: "text",
@@ -44,8 +44,8 @@ var st02201 =
                 },
                 {
                     sortNo: 1,
-                    name: "container2",
-                    text: "Container상태 훼손",
+                    name: "status2",
+                    text: "반출 승인",
                     width: 250,
                     editable: false,
                     dataType: "text",
@@ -54,8 +54,8 @@ var st02201 =
                 },
                 {
                     sortNo: 1,
-                    name: "container3",
-                    text: "Container상태 오보존",
+                    name: "status3",
+                    text: "반출거절",
                     width: 250,
                     editable: false,
                     dataType: "text",
@@ -64,8 +64,8 @@ var st02201 =
                 },
                 {
                     sortNo: 1,
-                    name: "tag1",
-                    text: "태그 상태 정상",
+                    name: "status4",
+                    text: "반출 완료",
                     width: 250,
                     editable: false,
                     dataType: "text",
@@ -74,48 +74,8 @@ var st02201 =
                 },
                 {
                     sortNo: 1,
-                    name: "tag2",
-                    text: "태그 상태 훼손",
-                    width: 250,
-                    editable: false,
-                    dataType: "text",
-                    required: false,
-                    disable : true,
-                },
-                {
-                    sortNo: 1,
-                    name: "record1",
-                    text: "기록물 상태 정상",
-                    width: 250,
-                    editable: false,
-                    dataType: "text",
-                    required: false,
-                    disable : true,
-                },
-                {
-                    sortNo: 1,
-                    name: "record2",
-                    text: "기록물 상태 훼손",
-                    width: 250,
-                    editable: false,
-                    dataType: "text",
-                    required: false,
-                    disable : true,
-                },
-                {
-                    sortNo: 1,
-                    name: "record3",
-                    text: "기록물 상태 분실",
-                    width: 250,
-                    editable: false,
-                    dataType: "text",
-                    required: false,
-                    disable : true,
-                },
-                {
-                    sortNo: 1,
-                    name: "record4",
-                    text: "기록물 상태 오보존",
+                    name: "status5",
+                    text: "반입 완료",
                     width: 250,
                     editable: false,
                     dataType: "text",

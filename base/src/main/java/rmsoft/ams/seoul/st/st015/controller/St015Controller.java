@@ -14,6 +14,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import rmsoft.ams.seoul.st.st001.vo.St00101VO;
+import rmsoft.ams.seoul.st.st008.controller.St008Controller;
 import rmsoft.ams.seoul.st.st015.service.St015Service;
 import rmsoft.ams.seoul.st.st015.vo.St01501VO;
 import rmsoft.ams.seoul.st.st015.vo.St01502VO;
@@ -69,14 +70,17 @@ public class St015Controller extends BaseController {
     }
 
     @GetMapping("/01/excelDown")
-    public ResponseEntity<InputStreamResource> getExcelDown(HttpServletResponse response) throws IOException {
+    public ResponseEntity<InputStreamResource> getExcelDown(RequestParams<St01501VO> requestParams) throws IOException {
 
 
         ByteArrayInputStream in = st015Service.getExcelDown();
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-        httpHeaders.setContentDispositionFormData("attachment", "st015.xlsx");
+        String fileName = "정수점검계획서.xlsx";
+        // 한글이 들어가면 깨지므로 http에 맞는 인코딩으로 변경
+        fileName = St008Controller.encodeExcelFileName(fileName);
+        httpHeaders.setContentDispositionFormData("attachment", fileName);
 
         return ResponseEntity
                 .ok()

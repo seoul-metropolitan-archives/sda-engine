@@ -19,9 +19,9 @@
        Z1.NOTES                                                                                    as notes,
        ((SELECT COUNT(*) FROM RC_AGGREGATION WHERE PARENT_AGGREGATION_UUID = Z1.AGGREGATION_UUID) +
         (SELECT COUNT(*) FROM RC_ITEM WHERE AGGREGATION_UUID = Z1.AGGREGATION_UUID))            as childCnt,
-        repository.REPOSITORY_NAME repositoryName, -- 서고
-       shelf.SHELF_NAME shelfName, -- 서가
-       (location.ROW_NO || '행 ' || location.COLUMN_NO || '열') as locationName -- 행렬단
+        repository.REPOSITORY_NAME repositoryName,
+       shelf.SHELF_NAME shelfName,
+       (location.ROW_NO || '행 ' || location.COLUMN_NO || '열') as locationName
         FROM RC_AGGREGATION Z1 LEFT OUTER JOIN ST_ARRANGE_RECORDS_RESULT etc
          ON etc.AGGREGATION_UUID = Z1.AGGREGATION_UUID
                        LEFT JOIN ST_ARRANGE_CONTAINERS_RESULT acr
@@ -40,6 +40,15 @@
                        INNER JOIN ST_ARRANGE_CONTAINERS_RESULT B ON A.CONTAINER_UUID = B.CONTAINER_UUID
                 WHERE A.AGGREGATION_UUID = Z1.AGGREGATION_UUID
                   )
+        <if test="requestorUuid != null">
+            AND EXISTS (
+            SELECT *
+            FROM ST_TAKEOUT_REQUEST STTR INNER JOIN ST_TAKEOUT_RECORD_RESULT STTRR
+            ON STTR.TAKEOUT_REQUEST_UUID = STTRR.TAKEOUT_REQUEST_UUID
+            WHERE STTRR.AGGREGATION_UUID = Z1.AGGREGATION_UUID
+            AND STTR.REQUESTOR_UUID = #{requestorUuid}
+            )
+        </if>
         <if test="repositoryUuid != null">
             AND repository.REPOSITORY_UUID = #{repositoryUuid}
         </if>
@@ -127,9 +136,9 @@
             <!--<if test="requestName != null">
                 AND REQUEST_NAME LIKE '%' || #{requestName} || '%'
             </if>-->
-            <if test="requestorUuid != null">
+            <!--<if test="requestorUuid != null">
                 AND request.REQUESTOR_UUID  = #{requestorUuid}
-            </if>
+            </if>-->
 
             <if test="outsourcingPersonName != null">
                 AND OUTSOURCING_PERSON_NAME LIKE '%' || #{outsourcingPersonName} || '%'
