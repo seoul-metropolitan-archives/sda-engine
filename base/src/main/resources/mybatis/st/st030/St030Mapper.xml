@@ -120,7 +120,7 @@
                 AND location.LOCATION_UUID = #{locationUuid}
             </if>
             <if test="containerUuid != null">
-                AND container.CONTAINER_UUID = #{containerUuid}
+                AND record_req.CURRENT_CONTAINER_UUID = #{containerUuid}
             </if>
 
             <if test="sourceTypeUuid != null">
