@@ -9,21 +9,14 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class St02401VO extends BaseVO {
+public class St02403VO extends BaseVO {
 
-    private String repositoryName;
-    private String shelfName;
-    private String locationName;
     private String count1;
     private String count2;
     private String count3;
     private String count4;
-
-    private String repositoryUuid;
-    private String shelfUuid;
-    private String locationUuid;
-
+    private String publishStatusName;
+    private String publishStatusUuid;
     private String code;
     private String title;
-
 }
