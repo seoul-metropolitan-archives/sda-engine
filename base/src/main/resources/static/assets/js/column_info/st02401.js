@@ -1,0 +1,76 @@
+var st02401 =
+    {
+        column_info:
+            [
+                {
+                    sortNo: 0,
+                    name: "repositoryName",
+                    text: "서고",
+                    width: 250,
+                    editable: false,
+                    dataType: "text",
+                    required: false,
+                    disable : true,
+                },
+                {
+                    sortNo: 1,
+                    name: "shelfName",
+                    text: "서가",
+                    width: 250,
+                    editable: false,
+                    dataType: "text",
+                    required: false,
+                    disable : true,
+                },
+                {
+                    sortNo: 2,
+                    name: "locationName",
+                    text: "행열단",
+                    width: 250,
+                    editable: false,
+                    dataType: "text",
+                    required: false,
+                    disable : true,
+                },
+                {
+                    sortNo: 3,
+                    name: "count1",
+                    text: "기록물 수량",
+                    width: 250,
+                    editable: false,
+                    dataType: "text",
+                    required: false,
+                    disable : true,
+                },
+                {
+                    sortNo: 4,
+                    name: "count2",
+                    text: "발행 수량",
+                    width: 250,
+                    editable: false,
+                    dataType: "text",
+                    required: false,
+                    disable : true,
+                },
+                {
+                    sortNo: 5,
+                    name: "count3",
+                    text: "재발행 수량",
+                    width: 250,
+                    editable: false,
+                    dataType: "text",
+                    required: false,
+                    disable : true,
+                },
+                {
+                    sortNo: 6,
+                    name: "count4",
+                    text: "미발행 수량",
+                    width: 250,
+                    editable: false,
+                    dataType: "text",
+                    required: false,
+                    disable : true,
+                }
+            ]
+    }

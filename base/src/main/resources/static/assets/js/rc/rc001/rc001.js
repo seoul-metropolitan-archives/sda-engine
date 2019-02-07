@@ -2,6 +2,9 @@ var fnObj = {};
 var isDetailChange = false;
 var API_SERVER = CONTEXT_PATH;
 
+var levelLabels = null;
+var levelValues = null;
+
 $(function () {
     $("#itemTabs").tabs();
 });
@@ -36,16 +39,22 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             data: $.extend({}, data, fnObj.pageView.getPageInfo()),
             callback: function (res) {
                 console.log(res.list);
+
+                $.each(rc00101.column_info, function(idx, item){
+                    if(item.name == "levelUuid"){
+                        item.labels = levelLabels;
+                        item.values = levelValues;
+                        return false;
+                    }
+                });
+
                 fnObj.gridView01.setColumnInfo(rc00101.column_info);
                 fnObj.gridView01.mode = "grid";
                 fnObj.gridView01.setData(res.list, true);
                 fnObj.pageView.setPage(res);
+                fnObj.gridView01.disabledColumn();
                 fnObj.gridView01.gridObj.getGridView().resetSize();
                 ACTIONS.dispatch(ACTIONS.GET_NAVI_DATA, data);
-                /*if (res.list.length > 0) {
-                    ACTIONS.dispatch(ACTIONS.PAGE_SEARCH1, res.list[0]);
-                }*/
-
             },
             options: {
                 onError: axboot.viewError
@@ -198,6 +207,24 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         } else {
             var data = fnObj.gridView01.getData();
 
+            $.each(data, function(idx, item){
+                if(item["creationStartDate"] != null)
+                    item["creationStartDate"] = item["creationStartDate"].replace(/-/gi, "");
+                if(item["creationEndDate"] != null)
+                    item["creationEndDate"] = item["creationEndDate"].replace(/-/gi, "");
+
+                if(item["accumulationStartDate"] != null)
+                    item["accumulationStartDate"] = item["accumulationStartDate"].replace(/-/gi, "");
+                if(item["accumulationEndDate"] != null)
+                    item["accumulationEndDate"] = item["accumulationEndDate"].replace(/-/gi, "");
+
+                if(item["descriptionStartDate"] != null)
+                    item["descriptionStartDate"] = item["descriptionStartDate"].replace(/-/gi, "");
+                if(item["descriptionEndDate"] != null)
+                    item["descriptionEndDate"] = item["descriptionEndDate"].replace(/-/gi, "");
+
+            });
+
             axboot.ajax({
                 url: "/rc/rc001/saveRecords",
                 data: JSON.stringify(data),
@@ -208,6 +235,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                         axWarningToast.push(res.message);
                     } else {
                         axboot.getCommonMessage("AA007");
+                        ACTIONS.dispatch(ACTIONS.GET_GRID_DATA, fnObj.naviView.getCurrent());
                     }
                 },
                 options: {
@@ -215,6 +243,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 }
             });
         }
+
     },
     ITEMS_SAVE: function (caller, act, list) {
 
@@ -911,7 +940,11 @@ function openRecordServicePopup(type, title, sendData, callback) {
             if (data && data.cmd) {
                 contextMenuClick({cmd: data.cmd}, sendData);
             } else {
-                ACTIONS.dispatch(ACTIONS.GET_SUBDATA, fnObj.naviView.getCurrent());
+                if(fnObj.gridView01.mode == "grid") {
+                    ACTIONS.dispatch(ACTIONS.GET_GRID_DATA, fnObj.naviView.getCurrent());
+                } else if(fnObj.gridView01.mode == "search") {
+                    ACTIONS.dispatch(ACTIONS.GET_SEARCH_DATA);
+                }
             }
         }
     }
@@ -1553,6 +1586,15 @@ var fnObj = {
 
         $("#extraMetaAll").on("change", function () {
             fnObj.gridView02.setFilter(!$(this).is(":checked"));
+        });
+
+
+        levelLabels = $.map($("[data-ax-path='levelUuid'] option") ,function(option) {
+            return $(option).text();
+        });
+
+        levelValues = $.map($("[data-ax-path='levelUuid'] option") ,function(option) {
+            return option.value;
         });
 
         // Data 조회
@@ -3023,7 +3065,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
         var _this = this;
         this.initInstance();
         this.gridObj.setFixedOptions({
-            colCount: 3
+            colCount: 3,
         });
 
         this.gridObj.onDataCellDblClicked(this.itemDbClick);
@@ -3032,9 +3074,13 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
         this.gridObj.addRowAfterEvent(this.addRowAfterEvent);
         this.gridObj.itemClick(this.itemClick);
 
-
+        this.gridObj.gridView.setHeader({
+            height: 40,                 // 헤더 높이 지정
+        });
     },
     itemDbClick: function (grid, index) {
+        if(index["column"] != "code") return;
+
         fnObj.pageView.resetPage();
         var reqData = fnObj.gridView01.gridObj.getSelectedData();
         if (reqData["iconType"] == "file") {
@@ -3110,12 +3156,27 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
             data["iconType"] = iconType;
             data["nodeType"] = nodeType;
 
+            data["creationStartDate"] = getFormattedDate(data["creationStartDate"]);
+            data["creationEndDate"] = getFormattedDate(data["creationEndDate"]);
+            data["accumulationStartDate"] = getFormattedDate(data["accumulationStartDate"]);
+            data["accumulationEndDate"] = getFormattedDate(data["accumulationEndDate"]);
+            data["descriptionStartDate"] = getFormattedDate(data["descriptionStartDate"]);
+            data["descriptionEndDate"] = getFormattedDate(data["descriptionEndDate"]);
         }
 
         this.gridObj.setData("set", list);
     },
     getSelectedData: function () {
         return this.gridObj.getSelectionData();
+    },
+    disabledColumn : function()
+    {
+        this.gridObj.setCustomCellStyleRows("disable",function(row){
+            if(row["type"] == "Normal" || row["type"] == "Temporary")
+                return false;
+            else
+                return true;
+        },["levelUuid"]);
     },
     validate: function () {
         var rs = this.model.validate();
@@ -3389,3 +3450,15 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
         this.target.find('[data-ax-path="key"]').removeAttr("readonly");
     }
 });
+
+
+function getFormattedDate(str) {
+    if(str == "undefined" || str == null) return;
+    if(str.length == 8) {
+        return str.substr(0, 4) + "-" + str.substr(4, 2) + "-" + str.substr(6);
+    }else if(str.length == 6) {
+        return str.substr(0, 4) + "-" + str.substr(4, 2);
+    }else{
+        return str;
+    }
+}

@@ -4,6 +4,161 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="rmsoft.ams.seoul.st.st024.dao.St024Mapper">
+    <select id="getTagList" resultType="St02401VO" parameterType="St02401VO" statementType="PREPARED">
+          SELECT STR.REPOSITORY_NAME                                                       as repositoryName,
+               STS.SHELF_NAME                                                            as shelfName,
+               NVL2(STL.ROW_NO, STL.ROW_NO || '행 ' || STL.COLUMN_NO || '열', '')          as locationName,
+               (SELECT COUNT(*)
+                FROM ST_ARRANGE_CONTAINERS_RESULT STACR
+                       INNER JOIN ST_ARRANGE_RECORDS_RESULT STARR ON STACR.CONTAINER_UUID = STARR.CONTAINER_UUID
+                WHERE STACR.LOCATION_UUID = STL.LOCATION_UUID)                           AS count1,
+               (SELECT COUNT(*)
+                FROM ST_ARRANGE_CONTAINERS_RESULT STACR
+                       INNER JOIN ST_ARRANGE_RECORDS_RESULT STARR ON STACR.CONTAINER_UUID = STARR.CONTAINER_UUID
+                       INNER JOIN ST_RFID_TAG STRT ON STARR.AGGREGATION_UUID = STRT.AGGREGATION_UUID
+                WHERE STACR.LOCATION_UUID = STL.LOCATION_UUID
+                  AND STRT.PUBLISH_STATUS_UUID = 'E114CE40-F0F4-44B8-8870-D3657C29590B') AS count2,
+               (SELECT COUNT(*)
+                FROM ST_ARRANGE_CONTAINERS_RESULT STACR
+                       INNER JOIN ST_ARRANGE_RECORDS_RESULT STARR ON STACR.CONTAINER_UUID = STARR.CONTAINER_UUID
+                       INNER JOIN ST_RFID_TAG STRT ON STARR.AGGREGATION_UUID = STRT.AGGREGATION_UUID
+                WHERE STACR.LOCATION_UUID = STL.LOCATION_UUID
+                  AND STRT.PUBLISH_STATUS_UUID = '62A7A59A-E820-4637-8B93-E78E9C1F7F67') AS count3,
+               (SELECT COUNT(*)
+                FROM ST_ARRANGE_CONTAINERS_RESULT STACR
+                       INNER JOIN ST_ARRANGE_RECORDS_RESULT STARR ON STACR.CONTAINER_UUID = STARR.CONTAINER_UUID
+                       INNER JOIN ST_RFID_TAG STRT ON STARR.AGGREGATION_UUID = STRT.AGGREGATION_UUID
+                WHERE STACR.LOCATION_UUID = STL.LOCATION_UUID
+                  AND STRT.PUBLISH_STATUS_UUID = 'C3AE3516-9076-4887-B45A-7AA888BB028B') AS count4
+        FROM ST_REPOSITORY STR
+               INNER JOIN ST_SHELF STS ON STR.REPOSITORY_UUID = STS.REPOSITORY_UUID
+               INNER JOIN ST_LOCATION STL ON STS.SHELF_UUID = STL.SHELF_UUID
+        <if test="code != null || title != null">
+               INNER JOIN ST_ARRANGE_CONTAINERS_RESULT STACR ON STL.LOCATION_UUID = STACR.LOCATION_UUID
+               INNER JOIN ST_ARRANGE_RECORDS_RESULT STARR ON STARR.CONTAINER_UUID = STACR.CONTAINER_UUID
+        </if>
+        <where>
+            1=1
+            <if test="repositoryUuid != null">
+                AND STR.REPOSITORY_UUID = #{repositoryUuid}
+            </if>
+            <if test="shelfUuid != null">
+                AND STS.SHELF_UUID = #{shelfUuid}
+            </if>
+            <if test="locationUuid != null">
+                AND STL.LOCATION_UUID = #{locationUuid}
+            </if>
+            <if test="code != null">
+                AND EXISTS(
+                SELECT *
+                FROM ST_RFID_TAG TAG
+                INNER JOIN RC_AGGREGATION RCA ON TAG.AGGREGATION_UUID = RCA.AGGREGATION_UUID
+                WHERE TAG.AGGREGATION_UUID = STARR.AGGREGATION_UUID
+                AND RCA.AGGREGATION_CODE LIKE '%' || #{code} || '%'
+                )
+            </if>
+            <if test="title != null">
+                AND EXISTS(
+                SELECT *
+                FROM ST_RFID_TAG TAG
+                INNER JOIN RC_AGGREGATION RCA ON TAG.AGGREGATION_UUID = RCA.AGGREGATION_UUID
+                WHERE TAG.AGGREGATION_UUID = STARR.AGGREGATION_UUID
+                AND RCA.TITLE LIKE '%' || #{title} || '%'
+                )
+            </if>
+        </where>
+        ORDER BY STR.REPOSITORY_NAME   ,  STS.SHELF_NAME   , STL.ROW_NO, STL.COLUMN_NO
+    </select>
+    <select id="getTagList02" resultType="St02402VO" parameterType="St02402VO" statementType="PREPARED">
+        SELECT A.INSERT_UUID,
+        <include refid="Common.UserName"><property name="userUuid" value="A.INSERT_UUID"/></include> as userName,
+       COUNT(*) as count1,
+       (SELECT COUNT(*)
+        FROM ST_RFID_TAG STRT
+        WHERE STRT.INSERT_UUID = A.INSERT_UUID
+        AND STRT.PUBLISH_STATUS_UUID = 'E114CE40-F0F4-44B8-8870-D3657C29590B') as count2,
+       (SELECT COUNT(*)
+        FROM ST_RFID_TAG STRT
+        WHERE STRT.INSERT_UUID = A.INSERT_UUID
+          AND STRT.PUBLISH_STATUS_UUID = '62A7A59A-E820-4637-8B93-E78E9C1F7F67') as count3,
+       (SELECT COUNT(*)
+        FROM ST_RFID_TAG STRT
+        WHERE STRT.INSERT_UUID = A.INSERT_UUID
+          AND STRT.PUBLISH_STATUS_UUID = 'C3AE3516-9076-4887-B45A-7AA888BB028B') as count4
+  FROM ST_RFID_TAG A
+        <where>
+            1=1
+            <if test="userUuid != null">
+                AND A.INSERT_UUID = #{userUuid}
+            </if>
+            <if test="createDateFrom != null">
+                AND TO_DATE(TO_CHAR(A.INSERT_DATE, 'yyyy-mm-dd'), 'yyyy-mm-dd') <![CDATA[>=]]> TO_DATE(#{createDateFrom},'yyyy-mm-dd')
+            </if>
+            <if test="createDateTo != null">
+                AND TO_DATE(TO_CHAR(A.INSERT_DATE, 'yyyy-mm-dd'), 'yyyy-mm-dd') <![CDATA[<]]> TO_DATE(#{createDateTo},'yyyy-mm-dd')+1
+            </if>
+            <if test="code != null">
+                AND EXISTS(
+                SELECT *
+                FROM RC_AGGREGATION RCA
+                WHERE RCA.AGGREGATION_UUID = A.AGGREGATION_UUID
+                AND RCA.AGGREGATION_CODE LIKE '%' || #{code} || '%'
+                )
+            </if>
+            <if test="title != null">
+                AND EXISTS(
+                SELECT *
+                FROM RC_AGGREGATION RCA
+                WHERE RCA.AGGREGATION_UUID = A.AGGREGATION_UUID
+                AND RCA.TITLE LIKE '%' || #{title} || '%'
+                )
+            </if>
+        </where>
+  GROUP BY INSERT_UUID
+
+    </select>
+
+    <select id="getTagList03" resultType="St02403VO" parameterType="St02403VO" statementType="PREPARED">
+
+    SELECT FC_AD_CODE_NM(A.PUBLISH_STATUS_UUID) as publishStatusName,
+           COUNT(*) as count1,
+           (SELECT COUNT(*)
+            FROM ST_RFID_TAG STRT
+            WHERE STRT.PUBLISH_STATUS_UUID = A.PUBLISH_STATUS_UUID
+              AND STRT.PUBLISH_STATUS_UUID = 'E114CE40-F0F4-44B8-8870-D3657C29590B') as count2,
+           (SELECT COUNT(*)
+            FROM ST_RFID_TAG STRT
+            WHERE STRT.PUBLISH_STATUS_UUID = A.PUBLISH_STATUS_UUID
+              AND STRT.PUBLISH_STATUS_UUID = '62A7A59A-E820-4637-8B93-E78E9C1F7F67') as count3,
+           (SELECT COUNT(*)
+            FROM ST_RFID_TAG STRT
+            WHERE STRT.PUBLISH_STATUS_UUID = A.PUBLISH_STATUS_UUID
+              AND STRT.PUBLISH_STATUS_UUID = 'C3AE3516-9076-4887-B45A-7AA888BB028B') as count4
+    FROM ST_RFID_TAG A
+        <where>
+            1=1
+            <if test="publishStatusUuid != null">
+                AND A.PUBLISH_STATUS_UUID = #{publishStatusUuid}
+            </if>
+            <if test="code != null">
+                AND EXISTS(
+                SELECT *
+                FROM RC_AGGREGATION RCA
+                WHERE RCA.AGGREGATION_UUID = A.AGGREGATION_UUID
+                AND RCA.AGGREGATION_CODE LIKE '%' || #{code} || '%'
+                )
+            </if>
+            <if test="title != null">
+                AND EXISTS(
+                SELECT *
+                FROM RC_AGGREGATION RCA
+                WHERE RCA.AGGREGATION_UUID = A.AGGREGATION_UUID
+                AND RCA.TITLE LIKE '%' || #{title} || '%'
+                )
+            </if>
+        </where>
+    GROUP BY PUBLISH_STATUS_UUID
+    </select>
 
 
 </mapper>

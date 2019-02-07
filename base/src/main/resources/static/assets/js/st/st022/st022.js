@@ -1,12 +1,15 @@
 var fnObj = {};
-
+var repositoryUuid;
+var shelfUuid;
+var locationUuid;
+var containerUuid;
 var ACTIONS = axboot.actionExtend(fnObj, {
     // JOB 조회
     PAGE_SEARCH: function (caller, act, data) {
         axboot.ajax({
             type: "GET",
-            url: "/api/v1/st/st028/01/list01",
-            data: $.extend({}, {pageSize: 1000}, this.formView.getData()),
+            url: "/api/v1/st/st022/01/list01",
+            data: $.extend({}, {pageSize: 1000}, this.formView.getData(),{repositoryUuid : repositoryUuid},{shelfUuid : shelfUuid},{locationUuid : locationUuid}, {containerUuid : containerUuid}),
             callback: function (res) {
                 fnObj.gridView01.setData(res.list);
                 fnObj.gridView01.resetCurrent();
@@ -16,58 +19,6 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             }
         });
         return false;
-    },
-    PAGE_SAVE: function (caller, act, data) {
-        if( !fnObj.gridView01.validate())
-            return ;
-
-        var result = false;
-        axboot.call({
-            type: "PUT",
-            url: "/api/v1/st/st028/01/save01",
-            data: JSON.stringify(this.gridView01.getData()),
-            callback: function (res) {
-                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
-            }
-        })
-            .done(function () {
-                fnObj.gridView01.commit();
-                axToast.push(axboot.getCommonMessage("AA007"));
-            });
-        return result;
-
-
-    },
-    FORM_CLEAR: function (caller, act, data) {
-        /*
-        axDialog.confirm({
-            msg: "정말 양식을 초기화 하시겠습니까?"
-        }, function () {
-            if (this.key == "ok") {
-                caller.formView01.clear();
-                caller.gridView02.clear();
-            }
-        });
-        */
-    },
-    ITEM_CLICK: function (caller, act, data) {
-    },
-    MODAL_OPEN: function (caller, act, data) {
-        axboot.modal.open({
-            modalType: "COMMON_POPUP",
-            param: "",
-            sendData: function () {
-                return {
-                    //jisaCode: fnObj.formView02.getData().jisaCode
-                };
-            },
-            callback: function (data) {
-                //$("#calleeEmpName").val(data.empName);
-                //$("#calleeEmpTelno").val(data.empPhoneNo);
-
-                this.close();
-            }
-        });
     },
     CLOSE_TAB: function (caller, act, data) {
         ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
@@ -79,6 +30,85 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         } else {
             return false;
         }
+    },
+    SEARCH_REPOSITORY_SCH: function (caller, act, data) {
+        axboot.modal.open2({
+            modalType: "COMMON_POPUP2",
+            preSearch: data["preSearch"],
+            sendData: function () {
+                return data;
+            },
+            callback: function (data) {
+                $("input[data-ax-path='repositoryName']").val(data["REPOSITORY_NAME"])
+                repositoryUuid = data['REPOSITORY_UUID'];
+                shelfUuid = "";
+                $("input[data-ax-path='shelfName']").val('');
+                locationUuid = "";
+                $("input[data-ax-path='locationName']").val('');
+                containerUuid = "";
+                $("input[data-ax-path='containerName']").val('');
+
+
+                if (this.close) this.close();
+            }
+        });
+    },
+    SEARCH_SHELF_SCH: function (caller, act, data) {
+        axboot.modal.open2({
+            modalType: "COMMON_POPUP2",
+            preSearch: data["preSearch"],
+            sendData: function () {
+                return data;
+            },
+            callback: function (data) {
+                $("input[data-ax-path='shelfName']").val(data["SHELF_NAME"])
+                shelfUuid = data['SHELF_UUID'];
+                statusUuid = data['STATUS_UUID'];
+
+                locationUuid = "";
+                $("input[data-ax-path='locationName']").val('');
+                containerUuid = "";
+                $("input[data-ax-path='containerName']").val('');
+
+
+                if (this.close) this.close();
+            }
+        });
+    }
+    ,SEARCH_LOCATION_SCH : function(caller, act, data)
+    {
+        axboot.modal.open2({
+            modalType: "COMMON_POPUP2",
+            preSearch : data["preSearch"],
+            sendData: function () {
+                return data;
+            },
+            callback: function (data) {
+
+                var text = `${data["ROWNO"]}행 ${data["COLUMNNO"]}열`;
+
+                $("input[data-ax-path='locationName']").val(text)
+                locationUuid = data['LOCATIONUUID'];
+                console.log('locationUuid', locationUuid);
+                containerUuid = "";
+                $("input[data-ax-path='containerName']").val('');
+                if(this.close) this.close();
+            }
+        });
+    },
+    SEARCH_CONTAINER_SCH : function (caller, act, data) {
+        axboot.modal.open2({
+            modalType: "COMMON_POPUP2",
+            preSearch: data["preSearch"],
+            sendData: function () {
+                return data;
+            },
+            callback: function (data) {
+                $("input[data-ax-path='containerName']").val(data["CONTAINER_NAME"])
+                containerUuid = data['CONTAINER_UUID'];
+                if (this.close) this.close();
+            }
+        });
     }
 });
 
@@ -89,7 +119,7 @@ fnObj.pageStart = function () {
 
     //TODO 추후에 삭제될 내용으로 /실제 Grid의 컬럼 정보는 DB에서 가져올 예정
     $.ajax({
-        url: "/assets/js/column_info/st02801.js",
+        url: "/assets/js/column_info/st02201.js",
         dataType: "script",
         async: false,
         success: function () {
@@ -98,7 +128,6 @@ fnObj.pageStart = function () {
 
     _this.formView.initView();
     _this.gridView01.initView();
-    //_this.gridView02.initView();
 
     // Data 조회
     ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
@@ -118,10 +147,83 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
     initEvent: function () {
         var _this = this;
 
-        $('#excelDown').on('click',function(){
-            console.log('test');
+        $("input[data-ax-path='repositoryName']").parents().eq(1).find("a").click(function () {
+            var data = {
+                popupCode: "PU137",
+                searchData: $("input[data-ax-path='repositoryName']").val().trim(),
+                preSearch: false
+            };
+            ACTIONS.dispatch(ACTIONS.SEARCH_REPOSITORY_SCH, data);
+        });
+
+        $("input[data-ax-path='shelfName']").parents().eq(1).find("a").click(function () {
+            if ("" != repositoryUuid) {
+                var data = {
+                    popupCode: "PU138",
+                    searchData: repositoryUuid,
+                    preSearch: false
+                };
+                ACTIONS.dispatch(ACTIONS.SEARCH_SHELF_SCH, data);
+            }
+        });
+
+        $("input[data-ax-path='locationName']").parents().eq(1).find("a").click(function () {
+            if ("" != shelfUuid) {
+                var data = {
+                    popupCode: "PU147",
+                    searchData: shelfUuid,
+                    preSearch: false
+                };
+                ACTIONS.dispatch(ACTIONS.SEARCH_LOCATION_SCH, data);
+            }
+        });
+        $("input[data-ax-path='containerName']").parents().eq(1).find("a").click(function () {
+
+            var data = {
+                popupCode: "PU148",
+                searchData: locationUuid,
+                preSearch: false
+            };
+            ACTIONS.dispatch(ACTIONS.SEARCH_CONTAINER_SCH, data);
 
         });
+
+        $("input[data-ax-path='repositoryName']").keyup(function(e){
+            if($(this).val() == ""){
+                repositoryUuid = "";
+                shelfUuid = "";
+                $("input[data-ax-path='shelfName']").val('');
+                locationUuid = "";
+                $("input[data-ax-path='locationName']").val('');
+                containerUuid = "";
+                $("input[data-ax-path='containerName']").val('');
+            }
+        });
+
+        $("input[data-ax-path='shelfName']").keyup(function(e){
+            if($(this).val() == ""){
+                shelfUuid = "";
+                locationUuid = "";
+                $("input[data-ax-path='locationName']").val('');
+                containerUuid = "";
+                $("input[data-ax-path='containerName']").val('');
+            }
+        });
+
+        $("input[data-ax-path='locationName']").keyup(function(e){
+            if($(this).val() == ""){
+                locationUuid = "";
+                containerUuid = "";
+                $("input[data-ax-path='containerName']").val('');
+            }
+        });
+        $("input[data-ax-path='containerName']").keyup(function(e){
+            if($(this).val() == ""){
+                containerUuid = "";
+            }
+        });
+
+
     },
     getData: function () {
         var data = this.modelFormatter.getClearData(this.model.get()); // 모델의 값을 포멧팅 전 값으로 치환.
@@ -163,7 +265,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     entityName: "ST_GATE",
     initView: function () {
         this.initInstance();
-        this.setColumnInfo(st02801.column_info);
+        this.setColumnInfo(st02201.column_info);
         this.makeGrid();
         this.gridObj.itemClick(this.itemClick);
     },

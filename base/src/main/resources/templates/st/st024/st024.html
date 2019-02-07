@@ -38,31 +38,32 @@
                         <div class="explorer_list" style="overflow-y: hidden;background-color: #ffffff">
                             <div id="itemTabs" style="width:100%;height:100%;position:relative;">
                                 <ul style="padding:0px;height: 29px;">
-                                    <li style="height: 29px"><a href="#itemTabs-1">Untitled01</a></li>
-                                    <li style="height: 29px"><a href="#itemTabs-2">Untitled02</a></li>
+                                    <li style="height: 29px"><a href="#itemTabs-1" th:id="tab1">서고별 태그 발행</a></li>
+                                    <li style="height: 29px"><a href="#itemTabs-2" th:id="tab2">생산자별 태그 발행</a></li>
+                                    <li style="height: 29px"><a href="#itemTabs-3" th:id="tab3">기록물 형태별 태그 발행</a></li>
                                 </ul>
                                 <div id="itemTabs-1" class="padding-tab" style="width:100%;height:100%;position:relative;border: 0px;">
                                     <div class="bdb div_tablerow searchFields">
                                         <dl>
-                                            <th:block layout:insert="~{/fragments/page-buttons :: searchInputYellow ('서고','InZoneName')}"/>
-                                            <th:block layout:insert="~{/fragments/page-buttons :: searchInputYellow ('서가','outZoneName')}"/>
-                                            <th:block layout:insert="~{/fragments/page-buttons :: searchInputYellow ('행렬단','InZoneName')}"/>
+                                            <th:block layout:insert="~{/fragments/page-buttons :: searchInput ('서고','repositoryName')}"/>
+                                            <th:block layout:insert="~{/fragments/page-buttons :: searchInput ('서가','shelfName')}"/>
+                                            <th:block layout:insert="~{/fragments/page-buttons :: searchInput ('행렬단','locationName')}"/>
                                         </dl>
                                         <dl>
                                             <dt class="mgl_5">Aggregation Code</dt>
                                             <dd>
-                                                <input type=text data-ax-path="test1" style="width:135px">
+                                                <input type=text data-ax-path="code" style="width:135px">
                                             </dd>
                                             <dt class="mgl_5">Title</dt>
                                             <dd>
-                                                <input type=text data-ax-path="test2" style="width:135px">
+                                                <input type=text data-ax-path="title" style="width:135px">
                                             </dd>
                                         </dl>
                                     </div>
-                                    <div style="height:100%; width:100%" class="">
+                                    <div style="height:90%; width:100%" class="">
                                         <div style="display:table; height:100%; width:100%">
                                             <ul class="bdb bdt div_tablerow bgf7" style="height:30px;">
-                                                <th:block layout:insert="~{/fragments/page-buttons :: dot('Workflow')}"/>
+                                                <th:block layout:insert="~{/fragments/page-buttons :: dot('서고별 태그 발행')}"/>
                                             </ul>
                                             <div style="height:100%; width:100%" class="div_tablerow bdb">
                                                 <div id="realgrid01" style="width:100%; height:100%"></div>
@@ -71,8 +72,81 @@
                                     </div>
 
                                 </div>
-                                <div id="itemTabs-2" class="padding-tab" style="width:100%;position:relative;border: 0px;">
-                                    와..
+                                <div id="itemTabs-2" class="padding-tab" style="width:100%;height:100%;position:relative;border: 0px;">
+                                    <div class="bdb div_tablerow searchFields">
+                                        <dl>
+                                            <th:block
+                                                    layout:insert="~{/fragments/page-buttons :: searchInput ('생산자','requestorName')}"/>
+                                            <dt>생산일자</dt>
+                                            <dd class="w_auto">
+                                                <div class="input-group" data-ax5picker="date">
+                                                    <div class="cld_box" style=" ">
+                                                        <input type="text" data-ax-path="createDateFrom"
+                                                               style=" ime-mode:disabled;"
+                                                               placeholder="YYYY-MM-DD" maxlength="10">
+                                                        <img title="calendar" class="ui-datepicker-trigger" alt="..."
+                                                             src="/assets/images/ams/calendar.png">
+                                                    </div>
+                                                    ~
+                                                    <div class="cld_box" style=" ">
+                                                        <input type="text" data-ax-path="createDateTo"
+                                                               style=" ime-mode:disabled;"
+                                                               placeholder="YYYY-MM-DD" maxlength="10">
+                                                        <img title="calendar" class="ui-datepicker-trigger" alt="..."
+                                                             src="/assets/images/ams/calendar.png">
+                                                    </div>
+                                                </div>
+                                            </dd>
+                                        </dl>
+                                        <dl>
+                                            <dt class="mgl_5">Aggregation Code</dt>
+                                            <dd>
+                                                <input type=text data-ax-path="code1" style="width:135px">
+                                            </dd>
+                                            <dt class="mgl_5">Title</dt>
+                                            <dd>
+                                                <input type=text data-ax-path="title1" style="width:135px">
+                                            </dd>
+                                        </dl>
+                                    </div>
+                                    <div style="height:90%; width:100%" class="">
+                                        <div style="display:table; height:100%; width:100%">
+                                            <ul class="bdb bdt div_tablerow bgf7" style="height:30px;">
+                                                <th:block layout:insert="~{/fragments/page-buttons :: dot('생산자별 태그 발행')}"/>
+                                            </ul>
+                                            <div style="height:100%; width:100%" class="div_tablerow bdb">
+                                                <div id="realgrid02" style="width:100%; height:100%"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="itemTabs-3" class="padding-tab" style="width:100%;height:100%;position:relative;border: 0px;">
+                                    <div class="bdb div_tablerow searchFields">
+                                        <dl>
+                                            <th:block
+                                                    layout:insert="~{/fragments/page-buttons :: searchInput ('기록물 형태','publishStatusName')}"/>
+                                        </dl>
+                                        <dl>
+                                            <dt class="mgl_5">Aggregation Code</dt>
+                                            <dd>
+                                                <input type=text data-ax-path="code2" style="width:135px">
+                                            </dd>
+                                            <dt class="mgl_5">Title</dt>
+                                            <dd>
+                                                <input type=text data-ax-path="title2" style="width:135px">
+                                            </dd>
+                                        </dl>
+                                    </div>
+                                    <div style="height:90%; width:100%" class="">
+                                        <div style="display:table; height:100%; width:100%">
+                                            <ul class="bdb bdt div_tablerow bgf7" style="height:30px;">
+                                                <th:block layout:insert="~{/fragments/page-buttons :: dot('기록물 형태별 태그 발행')}"/>
+                                            </ul>
+                                            <div style="height:100%; width:100%" class="div_tablerow bdb">
+                                                <div id="realgrid03" style="width:100%; height:100%"></div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

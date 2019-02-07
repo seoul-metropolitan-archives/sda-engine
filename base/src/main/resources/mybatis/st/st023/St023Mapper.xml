@@ -4,6 +4,77 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="rmsoft.ams.seoul.st.st023.dao.St023Mapper">
+    <select id="getInoutList" resultType="St02301VO" parameterType="St02301VO" statementType="PREPARED">
+        SELECT repositoryUuid,
+       (select REPOSITORY_NAME
+        from ST_REPOSITORY
+        where REPOSITORY_UUID = MAIN.repositoryUuid) as repositoryName,
+       shelfUuid,
+       (select SHELF_NAME
+        from ST_SHELF
+       where SHELF_UUID = MAIN.shelfUuid) as shelfName,
+       locationUuid,
+       (select NVL2(ROW_NO, ROW_NO || '행 ' || COLUMN_NO || '열' ,'')
+        from ST_LOCATION
+        WHERE LOCATION_UUID = MAIN.locationUuid) as locationName,
+       status1,
+       status2,
+       status3,
+       status4,
+       status5
+  FROM( SELECT STR.REPOSITORY_UUID repositoryUuid,
+       STS.SHELF_UUID shelfUuid,
+       STL.LOCATION_UUID locationUuid,
+       SUM((SELECT COUNT(A.STATUS_UUID)
+        FROM ST_TAKEOUT_REQUEST A
+               INNER JOIN ST_TAKEOUT_RECORD_RESULT B ON A.TAKEOUT_REQUEST_UUID = B.TAKEOUT_REQUEST_UUID
+        WHERE B.AGGREGATION_UUID = STARR.AGGREGATION_UUID
+          AND A.STATUS_UUID = '6B1C7487-99F3-4F04-B449-891AD4679E00' --반출서 작성
+       )) as status1,
+       SUM((SELECT COUNT(A.STATUS_UUID)
+        FROM ST_TAKEOUT_REQUEST A
+               INNER JOIN ST_TAKEOUT_RECORD_RESULT B ON A.TAKEOUT_REQUEST_UUID = B.TAKEOUT_REQUEST_UUID
+        WHERE B.AGGREGATION_UUID = STARR.AGGREGATION_UUID
+          AND A.STATUS_UUID = '8FFDD043-95D3-4E9E-8233-A42BB39F035E' -- 반출승인
+       )) as status2,
+       SUM((SELECT COUNT(A.STATUS_UUID)
+        FROM ST_TAKEOUT_REQUEST A
+               INNER JOIN ST_TAKEOUT_RECORD_RESULT B ON A.TAKEOUT_REQUEST_UUID = B.TAKEOUT_REQUEST_UUID
+        WHERE B.AGGREGATION_UUID = STARR.AGGREGATION_UUID
+          AND A.STATUS_UUID = 'F3E2D6C7-8AB7-4A21-B81C-531B7E24C068' -- 반출거절
+       )) as status3,
+       SUM((SELECT COUNT(A.STATUS_UUID)
+        FROM ST_TAKEOUT_REQUEST A
+               INNER JOIN ST_TAKEOUT_RECORD_RESULT B ON A.TAKEOUT_REQUEST_UUID = B.TAKEOUT_REQUEST_UUID
+        WHERE B.AGGREGATION_UUID = STARR.AGGREGATION_UUID
+          AND A.STATUS_UUID = 'A30E7CD3-AE06-418A-AB8A-D68B577239AE' -- 반출완료
+       )) as status4,
+       SUM((SELECT COUNT(A.STATUS_UUID)
+        FROM ST_TAKEOUT_REQUEST A
+               INNER JOIN ST_TAKEOUT_RECORD_RESULT B ON A.TAKEOUT_REQUEST_UUID = B.TAKEOUT_REQUEST_UUID
+        WHERE B.AGGREGATION_UUID = STARR.AGGREGATION_UUID
+          AND A.STATUS_UUID = 'BC2B97DB-20DA-415C-AF44-6079CD95328D' -- 반입완료
+       )) as status5
+FROM ST_REPOSITORY STR
+       INNER JOIN ST_SHELF STS ON STR.REPOSITORY_UUID = STS.REPOSITORY_UUID
+       INNER JOIN ST_LOCATION STL ON STS.SHELF_UUID = STL.SHELF_UUID
+       INNER JOIN ST_ARRANGE_CONTAINERS_RESULT STACR ON STACR.LOCATION_UUID = STL.LOCATION_UUID
+       INNER JOIN ST_ARRANGE_RECORDS_RESULT STARR ON STACR.CONTAINER_UUID = STARR.CONTAINER_UUID
+GROUP BY STR.REPOSITORY_UUID, STS.SHELF_UUID, STL.LOCATION_UUID ) MAIN
+        <where>
+            1=1
+            <if test="repositoryUuid != null">
+                AND repositoryUuid = #{repositoryUuid}
+            </if>
+            <if test="shelfUuid != null">
+                AND shelfUuid = #{shelfUuid}
+            </if>
+            <if test="locationUuid != null">
+                AND locationUuid = #{locationUuid}
+            </if>
+        </where>
+ORDER BY repositoryName, shelfName, locationName
 
+    </select>
 
 </mapper>

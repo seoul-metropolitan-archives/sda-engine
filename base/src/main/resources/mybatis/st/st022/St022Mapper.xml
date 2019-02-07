@@ -4,6 +4,71 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="rmsoft.ams.seoul.st.st022.dao.St022Mapper">
+    <select id="getInventoryPlanList" resultType="St02201VO" parameterType="St02201VO" statementType="PREPARED">
+        SELECT STR.REPOSITORY_NAME as repositoryName,
+       STS.SHELF_NAME as shelfName,
+       NVL2(STL.ROW_NO, STL.ROW_NO || '행 ' || STL.COLUMN_NO || '열' ,'') as locationName,
+       CASE
+           WHEN B.CONTAINER_STATUS_UUID = '9A8ECAC6-8E8A-40A9-A2CF-6A785C3D65E3' THEN 1
+           ELSE 0
+       END container1, --정상
+       CASE
+              WHEN B.CONTAINER_STATUS_UUID = '4684D112-4B6F-46BC-AF66-D3854FF57741' THEN 1
+              ELSE 0
+           END container2, --훼손
+       CASE
+              WHEN B.CONTAINER_STATUS_UUID = '5090CA5B-7695-4795-A38E-B2FC3B2DB683' THEN 1
+              ELSE 0
+           END container3, --오보존
 
+       CASE
+              WHEN  C.TAG_STATUS_UUID = 'D367D95A-87FF-461D-8842-9B9EA416962B' THEN 1
+              ELSE 0
+           END tag1, --정상
+       CASE
+              WHEN  C.TAG_STATUS_UUID = 'B87D771D-9CBD-4517-8FF8-4501258A31AC' THEN 1
+              ELSE 0
+           END tag2, --훼손
+
+       CASE
+              WHEN  C.RECORD_STATUS_UUID = 'B9E22D4D-D6CC-4600-8787-4FEFFAB84348' THEN 1
+              ELSE 0
+           END record1, --정상
+       CASE
+              WHEN  C.RECORD_STATUS_UUID = 'B836007A-C896-4916-B7A3-730C1E0FEC46' THEN 1
+              ELSE 0
+           END record2, --훼손
+       CASE
+              WHEN  C.RECORD_STATUS_UUID = 'E5B9C602-F293-44C6-A111-0CF6A5CA7CE9' THEN 1
+              ELSE 0
+           END record3, --분실
+       CASE
+              WHEN  C.RECORD_STATUS_UUID = 'B000A23C-5FCD-4CF7-BE33-1DDFF4FF6D15' THEN 1
+              ELSE 0
+           END record4, --오보존
+       C.AGGREGATION_UUID
+FROM ST_INVENTORY_PLAN A
+       INNER JOIN ST_INVENTORY_CONTAINER_RESULT B ON A.INVENTORY_PLAN_UUID = B.INVENTORY_PLAN_UUID
+       LEFT OUTER JOIN ST_INVENTORY_RECORD_RESULT C on B.INVENTORY_PLAN_UUID = C.INVENTORY_PLAN_UUID AND B.CONTAINER_UUID = C.CONTAINER_UUID
+       left outer join ST_REPOSITORY STR ON A.REPOSITORY_UUID = STR.REPOSITORY_UUID
+       left outer join ST_SHELF STS ON A.SHELF_UUID = STS.SHELF_UUID
+       left outer join ST_LOCATION STL ON A.LOCATION_UUID = STL.LOCATION_UUID
+        <where>
+            1=1
+            <if test="repositoryUuid != null">
+              AND A.REPOSITORY_UUID = #{repositoryUuid}
+            </if>
+            <if test="shelfUuid != null">
+              AND  A.SHELF_UUID = #{shelfUuid}
+            </if>
+            <if test="locationUuid != null">
+              AND A.LOCATION_UUID = #{locationUuid}
+            </if>
+            <if test="containerUuid != null">
+                AND B.CONTAINER_UUID = #{containerUuid}
+            </if>
+        </where>
+ORDER BY A.PLAN_NAME
+    </select>
 
 </mapper>

@@ -140,11 +140,14 @@ public class St008Service extends BaseService {
 
             // 새로 생성
             isCreateOrModify = true;
-            String orgCodeSeq = jdbcTemplate.queryForObject("SELECT ST_TAKEOUT_REQUEST_SEQ.NEXTVAL FROM dual", String.class);
-            String refinedCodeSeq = orgCodeSeq;
+            // String orgCodeSeq = jdbcTemplate.queryForObject("SELECT ST_TAKEOUT_REQUEST_SEQ.NEXTVAL FROM dual", String.class);
+            // 오늘자 들어가있는애들의 갯수를 가져와 시퀀스 생성
+            int count = jdbcTemplate.queryForObject("SELECT count(*) FROM ST_TAKEOUT_REQUEST WHERE to_char(INSERT_DATE, 'YYYY/MM/DD') = to_char(SYSDATE, 'YYYY/MM/DD')", Integer.class);
+            String todaySequence = Integer.toString(count + 1); // 하나 늘려주자
+            String refinedCodeSeq = todaySequence;
 
             // 년월일-시퀀스 두자리. ex)20181121-01. 하루에 99개밖에 못만들게 돼있음.
-            for (int cnt = 0; cnt < Math.abs(orgCodeSeq.length() - 2); cnt++) {
+            for (int cnt = 0; cnt < Math.abs(todaySequence.length() - 2); cnt++) {
                 refinedCodeSeq = "0" + refinedCodeSeq;
             }
             String requestName = DateUtils.convertToString(LocalDateTime.now(), "yyyyMMdd") + "-" + refinedCodeSeq;

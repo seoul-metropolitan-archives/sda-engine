@@ -93,7 +93,7 @@ var st01503 =
                     disable : true,
                     required : true,
                     values: axboot.commonCodeFilter("CD217").codeArr,
-                    labels: axboot.commonCodeFilter("CD218").nameArr,
+                    labels: axboot.commonCodeFilter("CD217").nameArr,
                     dataType : "combo"
                 },
                 {
@@ -104,8 +104,8 @@ var st01503 =
                     editable: false,
                     disable : true,
                     required : true,
-                    values: axboot.commonCodeFilter("CD219").codeArr,
-                    labels: axboot.commonCodeFilter("CD219").nameArr,
+                    values: axboot.commonCodeFilter("CD224").codeArr,
+                    labels: axboot.commonCodeFilter("CD224").nameArr,
                     dataType : "combo"
                 },
                 {
