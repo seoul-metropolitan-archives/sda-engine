@@ -124,7 +124,7 @@ public class St018Service extends BaseService {
         //바코드번호
         modelPrinter.barcNo = st018PrinterVO.getAggregationCode();
         // rfid 번호
-        modelPrinter.rfidNo = "KKRBSAA" + PrinterUtils.convertSequenceTo5Char(tagSequence); // KKRBSAA는 고정값.
+        modelPrinter.rfidNo = "KKRDSAA" + PrinterUtils.convertSequenceTo5Char(tagSequence); // KKRDSAA는 고정값.
 
         String rfidMachineUuid = requestParams.getRfidMachineUuid();
         St026VO tmpSt026VO = new St026VO();
