@@ -170,13 +170,13 @@ public class At001Service extends BaseService {
         }else{//create
             atAuthority.setAuthorityUuid(UUIDUtils.getUUID());
             atAuthority.setDescriptorUuid(SessionUtils.getCurrentLoginUserUuid());
-            if(! "ORG".equals(CommonCodeUtils.getDetailCode("CD161",at00101VO.getAuthorityTypeUuid()))){
+            if(! "OR".equals(CommonCodeUtils.getDetailCode("CD161",at00101VO.getAuthorityTypeUuid()))){
                 atAuthority.setOrgTypeUuid(" ");
             }
             String prefix  = CommonCodeUtils.getDetailCode("CD161",at00101VO.getAuthorityTypeUuid());
-            String cnt = jdbcTemplate.queryForObject("SELECT LPAD(TO_NUMBER(SUBSTR(MAX(AUTHORITY_NO),"+ (prefix.length()+3) + ")) + 1,4,'0') FROM AT_AUTHORITY WHERE AUTHORITY_NO LIKE '" + prefix +"' || '%'", String.class);
+            String cnt = jdbcTemplate.queryForObject("SELECT LPAD(TO_NUMBER(SUBSTR(MAX(AUTHORITY_NO),"+ (prefix.length()+3) + ")) + 1,5,'0') FROM AT_AUTHORITY WHERE AUTHORITY_NO LIKE '" + prefix +"' || '%'", String.class);
             if(cnt == null){
-                cnt = "0001";
+                cnt = "00001";
             }
             cnt = prefix + "-" + cnt;
             atAuthority.setAuthorityNo(cnt);
