@@ -71,8 +71,8 @@
                                             </th:block>
                                             <div id="organizationArea">
                                                 <th:block
-                                                        layout:insert="~{/fragments/table :: tr-td3(text1='기관유형', style1='width: 350px', text2='설치일자', style2='width: 350px', text3='폐기일자', style3='width: 350px')}">
-                                                    <div layout:fragment="wrap-1">
+                                                        layout:insert="~{/fragments/table :: tr-td3(text1='Type of Organization', style1='width: 350px;height:50px', text2='설치일자', style2='width: 350px;height:50px', text3='폐기일자', style3='width: 350px;height:50px')}">
+                                                    <div layout:fragment="wrap-1" style="vertical-align:middle;">
                                                         <select data-ax-path="orgTypeUuid" style="width:135px;background-color: #fffdd6" class="form-control W120" th:placeholder="성명입력필수">
                                                             <option value=""></option>
                                                             <option th:each="item : ${orgTypeUuid}"
@@ -80,7 +80,7 @@
                                                                     th:text="${item.codeName}"/>
                                                         </select>
                                                     </div>
-                                                    <div layout:fragment="wrap-2">
+                                                    <div layout:fragment="wrap-2" style="vertical-align:middle;">
                                                         <div class="input-group" data-ax5picker="date">
                                                             <div class="cld_box">
                                                                 <input type="text"
@@ -93,7 +93,7 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div layout:fragment="wrap-3">
+                                                    <div layout:fragment="wrap-3" style="vertical-align:middle;">
                                                         <div class="input-group" data-ax5picker="date">
                                                             <div class="cld_box">
                                                                 <input type="text"
@@ -107,7 +107,7 @@
                                                         </div>
                                                     </div>
                                                 </th:block>
-                                                <th:block layout:insert="~{/fragments/table :: tr-td(text='주요업무', style='width: 100%')}">
+                                                <th:block layout:insert="~{/fragments/table :: tr-td(text='History', style='width: 100%')}">
                                                     <div layout:fragment="wrap">
                                                         <textarea data-ax-path="mainJob" class="form-control"></textarea>
                                                     </div>
@@ -121,8 +121,8 @@
                                                 </th:block>
                                             </div>
                                             <th:block
-                                                    layout:insert="~{/fragments/table :: tr-td3(text1='기술일', style1='width: 350px', text2='기술자', style2='width: 350px', text3='기술정도', style3='width: 350px')}">
-                                                <div layout:fragment="wrap-1">
+                                                    layout:insert="~{/fragments/table :: tr-td3(text1='Dates of Description', style1='width: 350px;height:50px', text2='Actors of Description', style2='width: 350px;height:50px', text3='Level of Detail', style3='width: 350px;height:50px')}">
+                                                <div layout:fragment="wrap-1" style="vertical-align:middle;">
                                                     <div class="input-group" data-ax5picker="date">
                                                         <div class="cld_box">
                                                             <input type="text"
@@ -135,22 +135,17 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div layout:fragment="wrap-2">
+                                                <div layout:fragment="wrap-2" style="vertical-align:middle;">
                                                     <input type="text" data-ax-path="descriptorName" class="form-control" readonly/>
                                                     <input type="text" data-ax-path="descriptorUuid" class="form-control" style="height: 0;display: none"/>
                                                 </div>
-                                                <div layout:fragment="wrap-3">
+                                                <div layout:fragment="wrap-3" style="vertical-align:middle;">
                                                     <select data-ax-path="levelOfDetailUuid" style="width:135px;" class="form-control W120">
                                                         <option value=""></option>
                                                         <option th:each="item : ${lvDtlUuid}"
                                                                 th:value="${item.codeDetailUUID}"
                                                                 th:text="${item.codeName}"/>
                                                     </select>
-                                                </div>
-                                            </th:block>
-                                            <th:block layout:insert="~{/fragments/table :: tr-td(text='비고', style='width: 100%')}">
-                                                <div layout:fragment="wrap">
-                                                    <textarea data-ax-path="notes" class="form-control"></textarea>
                                                 </div>
                                             </th:block>
                                             <th:block layout:insert="~{/fragments/table :: tr-td(text='Description', style='width: 100%')}">
@@ -162,12 +157,17 @@
                                                     <textarea data-ax-path="__deleted__" th:value="false" class="form-control" style="height: 0;display: none"></textarea>
                                                 </div>
                                             </th:block>
+                                            <th:block layout:insert="~{/fragments/table :: tr-td(text='Notes', style='width: 100%')}">
+                                                <div layout:fragment="wrap">
+                                                    <textarea data-ax-path="notes" class="form-control"></textarea>
+                                                </div>
+                                            </th:block>
                                         </div>
                                     </div>
                                     <div style="width:100%" class="bgf7 div_tablerow" >
                                         <div data-ax-tbl class="ax-search-tbl" minWidth="500px" style="border-top: 0px">
                                             <th:block
-                                                    layout:insert="~{/fragments/table :: tr-td(text='관련정보', style='width: 100%')}">
+                                                    layout:insert="~{/fragments/table :: tr-td(text='Related Sources', style='width: 100%')}">
                                                 <div layout:fragment="wrap">
                                                     <div id="childrenAuthInfoArea">
                                                         <div class="togl01_show childDnrInfo" style="display: block">
@@ -185,7 +185,7 @@
                                     <div style="width:100%" class="bgf7 div_tablerow" >
                                         <div data-ax-tbl class="ax-search-tbl" minWidth="500px" style="border-top: 0px">
                                             <th:block
-                                                    layout:insert="~{/fragments/table :: tr-td(text='관련기록', style='width: 100%')}">
+                                                    layout:insert="~{/fragments/table :: tr-td(text='Related Records', style='width: 100%')}">
                                                 <div layout:fragment="wrap">
                                                     <ul>
                                                         <li style="width: 100%;">

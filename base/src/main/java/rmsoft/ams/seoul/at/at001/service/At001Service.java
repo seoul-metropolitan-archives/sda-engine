@@ -174,7 +174,7 @@ public class At001Service extends BaseService {
                 atAuthority.setOrgTypeUuid(" ");
             }
             String prefix  = CommonCodeUtils.getDetailCode("CD161",at00101VO.getAuthorityTypeUuid());
-            String cnt = jdbcTemplate.queryForObject("SELECT LPAD(TO_NUMBER(SUBSTR(MAX(AUTHORITY_NO),"+ (prefix.length()+3) + ")) + 1,5,'0') FROM AT_AUTHORITY WHERE AUTHORITY_NO LIKE '" + prefix +"' || '%'", String.class);
+            String cnt = jdbcTemplate.queryForObject("SELECT LPAD(TO_NUMBER(SUBSTR(MAX(AUTHORITY_NO),"+ (prefix.length()+2) + ")) + 1,5,'0') FROM AT_AUTHORITY WHERE AUTHORITY_NO LIKE '" + prefix +"' || '%'", String.class);
             if(cnt == null){
                 cnt = "00001";
             }
