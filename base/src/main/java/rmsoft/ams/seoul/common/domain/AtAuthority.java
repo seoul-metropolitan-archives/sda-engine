@@ -58,7 +58,7 @@ public class AtAuthority extends BaseJpaModel<AtAuthority.AtAuthorityId> {
     private String descriptorUuid;
 
     @Column(name = "DESCRIPTION_DATE", length = 4000)
-    private String descriptionDate;
+    private Timestamp descriptionDate;
 
     @Column(name = "LEVEL_OF_DETAIL_UUID", length = 36)
     private String levelOfDetailUuid;

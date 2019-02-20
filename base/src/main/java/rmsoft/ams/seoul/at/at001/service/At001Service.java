@@ -4,6 +4,7 @@ import io.onsemiro.core.api.response.ApiResponse;
 import io.onsemiro.core.code.ApiStatus;
 import io.onsemiro.core.domain.BaseService;
 import io.onsemiro.core.parameter.RequestParams;
+import io.onsemiro.utils.DateUtils;
 import io.onsemiro.utils.ModelMapperUtils;
 import io.onsemiro.utils.SessionUtils;
 import io.onsemiro.utils.UUIDUtils;
@@ -25,6 +26,8 @@ import rmsoft.ams.seoul.common.repository.AtAuthorityRepository;
 import rmsoft.ams.seoul.utils.CommonCodeUtils;
 
 import javax.inject.Inject;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -127,6 +130,7 @@ public class At001Service extends BaseService {
                 AtAuthority orgAtAuthority = atAuthorityRepository.findOne(atAuthority.getId());
                 atAuthority.setDescriptorUuid(SessionUtils.getCurrentLoginUserUuid());
                 atAuthority.setUseYn(orgAtAuthority.getUseYn());
+                atAuthority.setDescriptionDate(Timestamp.valueOf(DateUtils.convertToString(LocalDateTime.now(), DateUtils.DATE_TIME_PATTERN)));
                 atAuthority.setInsertDate(orgAtAuthority.getInsertDate());
                 atAuthority.setInsertUuid(orgAtAuthority.getInsertUuid());
                 atAuthorityRepository.save(atAuthority);
@@ -181,6 +185,7 @@ public class At001Service extends BaseService {
             cnt = prefix + "-" + cnt;
             atAuthority.setAuthorityNo(cnt);
             atAuthority.setUseYn("Y");
+            atAuthority.setDescriptionDate(Timestamp.valueOf(DateUtils.convertToString(LocalDateTime.now(), DateUtils.DATE_TIME_PATTERN)));
             atAuthorityRepository.save(atAuthority);
 
             //relation authority
