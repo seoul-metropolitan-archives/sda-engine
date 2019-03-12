@@ -73,7 +73,7 @@ public class St009Service extends BaseService {
         for(StTakeoutRequest stTakeoutRequest : stTakeoutRequestList){
             //changeStatus = list.get(index).getChangeStatus() == "" ? "반출완료" : list.get(index).getChangeStatus();
             orgStTakeoutRequest = stTakeoutRequestRepository.findOne(stTakeoutRequest.getId());
-            stTakeoutRequest.setStatusUuid(CommonCodeUtils.getCodeDetailUuid("CD208","반출완료"));
+            stTakeoutRequest.setStatusUuid(CommonCodeUtils.getCodeDetailUuid("CD208","반출승인"));
             stTakeoutRequest.setRequestTypeUuid(orgStTakeoutRequest.getRequestTypeUuid());
             stTakeoutRequest.setRequestorUuid(orgStTakeoutRequest.getRequestorUuid());
 

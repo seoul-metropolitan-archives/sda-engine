@@ -293,8 +293,16 @@ public class St015Service extends BaseService {
             XSSFCell cell = null;
 
             sheet = workBook.cloneSheet(0);
-            workBook.setSheetName(workBook.getSheetIndex(sheet), "Sheet1");
-
+            //2019-03-12 원본
+                //workBook.setSheetName(workBook.getSheetIndex(sheet), "Sheet1");
+            //2019-03-12 수정
+                try{
+                    workBook.setSheetName(workBook.getSheetIndex(sheet), "Sheet"+workBook.getSheetIndex(sheet));
+                }
+                catch(Exception ex){
+                    ex.printStackTrace();
+                    workBook.setSheetName(workBook.getSheetIndex(sheet), "Sheet2");
+                }
             //CELL STYLE 적용
             XSSFCellStyle cellStyle = workBook.createCellStyle();
             cellStyle.setBorderTop(CellStyle.BORDER_THIN);
