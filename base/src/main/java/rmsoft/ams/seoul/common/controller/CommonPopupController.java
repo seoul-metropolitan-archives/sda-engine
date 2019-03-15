@@ -51,5 +51,10 @@ public class CommonPopupController extends MessageBaseController {
 
         return Responses.ListResponse.of(commonPopupService.search(param));
     }
+    @RequestMapping("/search2Param")
+    public Responses.ListResponse search2Param(@RequestBody Map<String,Object> param ) {
+
+        return Responses.ListResponse.of(commonPopupService.search2Param(param));
+    }
 
 }

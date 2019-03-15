@@ -204,5 +204,15 @@ var st01102 =
                     dataType: "text",
                     required: false
                 },
+                {
+                    sortNo: 11,
+                    name: "returnDate",
+                    text: "반입일자",
+                    width: 100,
+                    editable: false,
+                    disable: true,
+                    dataType: "text",
+                    required: false
+                }
             ]
     }

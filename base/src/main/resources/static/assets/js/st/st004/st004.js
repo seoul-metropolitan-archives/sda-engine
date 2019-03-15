@@ -167,7 +167,8 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 return data;
             },
             callback: function (data) {
-                $("input[data-ax-path='repositoryName']").val(data["REPOSITORY_NAME"])
+                $("input[data-ax-path='repositoryName']").val(data["REPOSITORY_NAME"]);
+                $("input[data-ax-path='shelfName']").val('');
                 repositoryUuid = data['REPOSITORY_UUID'];
                 if(this.close) this.close();
             }
@@ -181,8 +182,8 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             preSearch: false
         };*/
 
-        axboot.modal.open({
-            modalType: "COMMON_POPUP",
+        axboot.modal.open3({
+            modalType: "COMMON_POPUP3",
             preSearch : data["preSearch"],
             sendData: function () {
                 return data;

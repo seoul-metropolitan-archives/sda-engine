@@ -46,7 +46,23 @@ public class CommonPopupService extends BaseService {
     {
         String sql = "";
         sql = commonPopupMapper.getSQL(param);
+        System.out.println("SQL==============================");
+        System.out.println(sql);
+        System.out.println("param===========================");
+        for(String str :param.keySet())
+            System.out.println("Key:"+str+"\tvalue:"+param.get(str));
         return commonPopupDAO.search(sql, param);
     }
 
+    public List<Map<String,Object>> search2Param(Map<String,Object> param)
+    {
+        String sql = "";
+        sql = commonPopupMapper.getSQL(param);
+        System.out.println("SQL==============================");
+        System.out.println(sql);
+        System.out.println("param===========================");
+        for(String str :param.keySet())
+            System.out.println("Key:"+str+"\tvalue:"+param.get(str));
+        return commonPopupDAO.search2Param(sql, param);
+    }
 }

@@ -33,4 +33,15 @@ public class CommonPopupDAO
         return jdbcTemplate.queryForList(sql);
     }
 
+    public List<Map<String,Object>> search2Param(String sql, Map<String,Object> param)
+    {
+        //param.get("searchField");\$([A-Z])*\$
+
+        sql = sql.replaceAll("@PARAM2", "'"+(null==param.get("searchField2")? "":param.get("searchField2").toString())+"'");
+
+        sql = sql.replaceAll("@([A-Za-z1-9_])*",null == param.get("searchField") ? "''" : "'"+param.get("searchField").toString()+"'");
+        sql = sql.replaceAll(";","");
+
+        return jdbcTemplate.queryForList(sql);
+    }
 }

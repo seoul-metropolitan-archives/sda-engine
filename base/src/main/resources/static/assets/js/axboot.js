@@ -1942,7 +1942,82 @@ axboot.modal = function () {
 
         window.axModal.open(modalConfig);
     };
+    var open3 = function open(modalConfig) {
+        var width = 0;
+        if ("COMMON_POPUP3" == modalConfig.modalType && modalConfig["sendData"]) {
+            var list = null;
+            var reqData = modalConfig.sendData();
+            var popupName = "";
+            axboot.ajax({
+                url: "/api/v1/common/popup/getPopupInfo",
+                dataType: "JSON",
+                type: "POST",
+                async: false,
+                data: JSON.stringify({
+                    popupCode: reqData["popupCode"],
+                    isTree: false
+                }),
+                callback: function (res) {
+                    console.log(res);
+                    for (var i = 0; i < res.map.columnInfo.length; i++) {
+                        if (parseInt(res.map.columnInfo[i]["width"])) {
+                            width += res.map.columnInfo[i]["width"];
+                        }
+                    }
+                    popupName = res.map.popupInfo["popupName"];
+                }
+            });
 
+
+            if ((undefined == modalConfig.preSearch || modalConfig.preSearch)) {
+                axboot.ajax({
+                    url: "/api/v1/common/popup/search",
+                    dataType: "JSON",
+                    type: "POST",
+                    async: false,
+                    data: JSON.stringify({
+                        popupCode: reqData["popupCode"],
+                        searchField: reqData["searchData"],
+                        isTree: false
+                    }),
+                    callback: function (res) {
+                        list = res.list;
+                    }
+                });
+                if (list && list.length == 1) {
+                    modalConfig.callback(list[0]);
+                    return;
+                }
+            }
+        }
+
+        modalConfig = $.extend(true, {}, defaultOption, modalConfig);
+        if (modalConfig.modalType) {
+
+            if (axboot.def.MODAL && axboot.def.MODAL[modalConfig.modalType]) {
+                if (modalConfig.param) {
+                    $.extend(true, modalConfig, {iframe: {param: modalConfig.param}});
+                }
+                var popupWidth = width;
+                if(popupWidth == 0)
+                    popupWidth = axboot.def.MODAL[modalConfig.modalType].width;
+                else if(popupWidth < 480)
+                {
+                    popupWidth = 480;
+                }
+                modalConfig = $.extend(true, {}, modalConfig, axboot.def.MODAL[modalConfig.modalType], {width: popupWidth + 70},{header : {title : popupName}});
+            }
+        }
+
+        $(document.body).addClass("modalOpened");
+
+        this.modalCallback = modalConfig.callback;
+        this.modalSendData = modalConfig.sendData;
+
+        axboot.modalOpener = "modal";
+
+        window.axModal.open(modalConfig);
+    };
     /**
      * ax5 modal css 를 적용합니다.
      * @method axboot.modal.css
@@ -2005,6 +2080,7 @@ axboot.modal = function () {
     return {
         "open": open,
         "open2": open2,
+        "open3": open3,
         "css": css,
         "align": align,
         "close": close,

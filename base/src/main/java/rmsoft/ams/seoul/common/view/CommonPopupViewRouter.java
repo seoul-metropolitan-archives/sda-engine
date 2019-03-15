@@ -28,5 +28,9 @@ public class CommonPopupViewRouter extends BaseController {
     public String viewModal2(ModelMap model) {
         return "/common/common-popup2";
     }
+    @PostMapping("/common/common-popup3")
+    public String viewModal3(ModelMap model) {
+        return "/common/common-popup3";
+    }
 }
 
