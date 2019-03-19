@@ -93,7 +93,7 @@ var st01603 =
                     disable : true,
                     required : true,
                     values: axboot.commonCodeFilter("CD217").codeArr,
-                    labels: axboot.commonCodeFilter("CD218").nameArr,
+                    labels: axboot.commonCodeFilter("CD217").nameArr,
                     dataType : "combo"
                 },
                 {

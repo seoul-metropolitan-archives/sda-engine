@@ -3,6 +3,7 @@ package rmsoft.ams.seoul.st.st015.service;
 import io.onsemiro.core.api.response.ApiResponse;
 import io.onsemiro.core.code.ApiStatus;
 import io.onsemiro.core.domain.BaseService;
+import io.onsemiro.core.domain.code.CommonCode;
 import io.onsemiro.core.parameter.RequestParams;
 import io.onsemiro.utils.ModelMapperUtils;
 import io.onsemiro.utils.UUIDUtils;
@@ -148,10 +149,10 @@ public class St015Service extends BaseService {
 
                 //서고 서가 행렬단에 있는 location이 없을수도 있다.
                 //location이 없으면 shelf로 검색해서 모든 location에 있는 애들을 전부 가져 와야 한다.
-
+                stInventoryPlan.setPlanResultUuid(CommonCodeUtils.getCodeDetailUuid("CD217", "Incomplete"));
                 String locationUuid = stInventoryPlan.getLocationUuid();
                 String shelfUuid = stInventoryPlan.getShelfUuid();
-
+                //stInventoryPlan.setPlanResultUuid(CommonCodeUtils.getCodeDetailUuid("CD217", "Incomplete"));
                 if(StringUtils.isEmpty(locationUuid)){
                     //location값이 없는경우 서가 밑에 모든 container를 가져와야한다.
                     StringBuilder sb = new StringBuilder();
@@ -167,6 +168,7 @@ public class St015Service extends BaseService {
                     for(int i = 0 ; i < containerList.size(); i++){
                         StInventoryContainerResult stInventoryContainerResult = new StInventoryContainerResult();
                         stInventoryContainerResult.setInventoryContResultUuid(UUIDUtils.getUUID());
+                        stInventoryContainerResult.setInventoryResultUuid(CommonCodeUtils.getCodeDetailUuid("CD217", "Incomplete"));
                         stInventoryContainerResult.setInventoryPlanUuid(stInventoryPlan.getInventoryPlanUuid());
                         stInventoryContainerResult.setContainerUuid(String.valueOf(containerList.get(i).get("containerUuid")));
 
@@ -183,6 +185,7 @@ public class St015Service extends BaseService {
                         for(int k = 0 ; k < aggregationList.size();k++){
                             StInventoryRecordResult stInventoryRecordResult = new StInventoryRecordResult();
                             stInventoryRecordResult.setInventoryRecordResultUuid(UUIDUtils.getUUID());
+                            stInventoryRecordResult.setInventoryResultUuid(CommonCodeUtils.getCodeDetailUuid("CD217", "Incomplete"));
                             stInventoryRecordResult.setInventoryPlanUuid(stInventoryPlan.getInventoryPlanUuid());
                             stInventoryRecordResult.setContainerUuid(String.valueOf(containerList.get(j).get("containerUuid")));
                             stInventoryRecordResult.setAggregationUuid(String.valueOf(aggregationList.get(k).get("aggregationUuid")));
@@ -190,7 +193,8 @@ public class St015Service extends BaseService {
                         }
 
                     }
-
+                    //모든 container 결과 처리 후
+                    //stInventoryPlan.setPlanResultUuid(CommonCodeUtils.getCodeDetailUuid("CD217","Incomplete"));
                 }else{
                     //location값이 있는경우
                     StringBuilder sb = new StringBuilder();
@@ -203,7 +207,7 @@ public class St015Service extends BaseService {
                         stInventoryContainerResult.setInventoryContResultUuid(UUIDUtils.getUUID());
                         stInventoryContainerResult.setInventoryPlanUuid(stInventoryPlan.getInventoryPlanUuid());
                         stInventoryContainerResult.setContainerUuid(String.valueOf(containerList.get(i).get("containerUuid")));
-
+                        stInventoryContainerResult.setInventoryResultUuid(CommonCodeUtils.getCodeDetailUuid("CD217", "Incomplete"));
                         stInventoryContainerResultRepository.save(stInventoryContainerResult);
                     }
 
@@ -219,17 +223,16 @@ public class St015Service extends BaseService {
                             StInventoryRecordResult stInventoryRecordResult = new StInventoryRecordResult();
                             stInventoryRecordResult.setInventoryRecordResultUuid(UUIDUtils.getUUID());
                             stInventoryRecordResult.setInventoryPlanUuid(stInventoryPlan.getInventoryPlanUuid());
+                            stInventoryRecordResult.setInventoryResultUuid(CommonCodeUtils.getCodeDetailUuid("CD217", "Incomplete"));
                             stInventoryRecordResult.setContainerUuid(String.valueOf(containerList.get(j).get("containerUuid")));
                             stInventoryRecordResult.setAggregationUuid(String.valueOf(aggregationList.get(k).get("aggregationUuid")));
                             stInventoryRecordResultRepository.save(stInventoryRecordResult);
                         }
 
                     }
-
-
                 }
 
-            }else{
+            }else{ // !changeStatus.equals("Confirm")
 
                 StringBuilder sb = new StringBuilder();
                 sb.append(" SELECT INVENTORY_CONT_RESULT_UUID as inventoryContResultUuid  FROM ST_INVENTORY_CONTAINER_RESULT ");
@@ -249,9 +252,9 @@ public class St015Service extends BaseService {
 
                 for(int j = 0 ; j < inventoryRecord.size(); j++){
                     StInventoryRecordResult stInventoryRecordResult = new StInventoryRecordResult();
-                    stInventoryRecordResult.setInventoryRecordResultUuid(String.valueOf(inventoryRecord.get(j).get("inventoryRecordResultUuid")));
-                    stInventoryRecordResultRepository.delete(stInventoryRecordResult);
-                }
+                stInventoryRecordResult.setInventoryRecordResultUuid(String.valueOf(inventoryRecord.get(j).get("inventoryRecordResultUuid")));
+                stInventoryRecordResultRepository.delete(stInventoryRecordResult);
+            }
 
             }
 

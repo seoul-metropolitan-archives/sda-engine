@@ -67,7 +67,7 @@ var st01401 =
                     dataType: "text",
                     disable: true
                 },
-                {
+               /* {
                     sortNo: 6,
                     name: "author",
                     text: "Author",
@@ -75,9 +75,9 @@ var st01401 =
                     editable: false,
                     dataType: "text",
                     disable: true
-                },
+                },*/
                 {
-                    sortNo: 7,
+                    sortNo: 6,
                     name: "descStrDate",
                     text: "Start Date",
                     width: 140,
@@ -86,7 +86,7 @@ var st01401 =
                     disable: true
                 },
                 {
-                    sortNo: 8,
+                    sortNo: 7,
                     name: "descEdDate",
                     text: "End Date",
                     width: 140,
@@ -95,7 +95,7 @@ var st01401 =
                     disable: true
                 },
                 {
-                    sortNo: 9,
+                    sortNo: 8,
                     name: "repositoryName",
                     text: "서고",
                     width: 150,
@@ -113,7 +113,7 @@ var st01401 =
                     disable: true
                 },
                 {
-                    sortNo: 9,
+                    sortNo: 10,
                     name: "locationName",
                     text: "행렬단",
                     width: 150,
@@ -121,7 +121,7 @@ var st01401 =
                     dataType: "text",
                     disable: true
                 },
-                {
+               /* {
                     sortNo: 10,
                     name: "inoutDateTime",
                     text: "출입일시",
@@ -129,6 +129,6 @@ var st01401 =
                     editable: false,
                     dataType: "date",
                     disable: true
-                },
+                },*/
             ]
     }

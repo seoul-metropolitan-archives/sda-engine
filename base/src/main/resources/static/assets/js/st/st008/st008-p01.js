@@ -251,11 +251,11 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
                 this.focus = true;
             }
         });
-        // $(".btn_s").click(function() {
-        //     //if (this.textContent == "Save") {
-        //         ACTIONS.dispatch(ACTIONS.PAGE_SAVE, fnObj.formView.getData());
-        //     //}
-        // });
+         $(".btn_s").click(function() {
+             if (this.textContent == "Save") {
+                 ACTIONS.dispatch(ACTIONS.PAGE_SAVE, fnObj.formView.getData());
+             }
+         });
         $(".close_popup").click(function(){
             ACTIONS.dispatch(ACTIONS.PAGE_CLOSE);
         });

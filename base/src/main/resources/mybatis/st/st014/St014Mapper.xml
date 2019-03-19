@@ -103,11 +103,29 @@
                 AND inout_hist.INOUT_DATE_TIME <![CDATA[<]]> TO_DATE(#{inoutDateTimeTo},'yyyy-mm-dd')+1
             </if>
         </where>
+        ORDER BY inout_record.AGGREGATION_UUID
     </select>
 
     <select id="getStWithoutNoticeInoutHist" resultType="St01402VO" parameterType="St01402VO" statementType="PREPARED">
-        SELECT hist.WITHOUT_NOTICE_IO_RECORD_UUID, hist.INOUT_DATE_TIME inoutDateTime, gate.ZONE_NAME zoneName FROM ST_WITHOUT_NOTICE_INOUT_HIST hist
-          INNER JOIN (
+        SELECT
+          hist.WITHOUT_NOTICE_IO_RECORD_UUID,
+          hist.INOUT_DATE_TIME    AS inoutDateTime,
+          gate.gate_name          AS gateName,
+          hist.INOUT_TYPE_UUID    AS inoutTypeUuid,
+          hist.without_notice_yn  AS withoutNoticeYn,
+          record.reason           AS reason,
+          usr.user_name           AS disposerName--gate.ZONE_NAME zoneName,
+
+        FROM
+          ST_WITHOUT_NOTICE_INOUT_HIST hist
+            LEFT JOIN
+              ST_WITHOUT_NOTICE_INOUT_RECORD record
+              ON hist.WITHOUT_NOTICE_IO_RECORD_UUID = record.WITHOUT_NOTICE_IO_RECORD_UUID
+            LEFT JOIN
+              AC_USER usr
+              ON record.DISPOSER_UUID = usr.USER_UUID
+            INNER JOIN
+          (
             SELECT * FROM ST_GATE gate
               INNER JOIN ST_ZONE zone
                 ON gate.OUT_ZONE_UUID = zone.ZONE_UUID
@@ -115,5 +133,6 @@
           ON hist.GATE_UUID = gate.GATE_UUID
         WHERE 1 = 1
           AND hist.WITHOUT_NOTICE_IO_RECORD_UUID = #{withoutNoticeIoRecordUuid}
+        ORDER BY hist.aggregation_uuid
     </select>
 </mapper>

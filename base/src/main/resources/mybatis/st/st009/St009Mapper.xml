@@ -137,7 +137,6 @@
     </select>
 
     <select id="getTakeoutRecordResult" resultType="St00902VO" parameterType="St00902VO" statementType="PREPARED">
-
         select
         TAKEOUT_RECORD_RESULT_UUID takeoutRecordResultUuid,
         TAKEOUT_REQUEST_UUID takeoutRequestUuid,
@@ -152,11 +151,12 @@
         B.descEdDate descEdDate,
         repository.REPOSITORY_NAME repositoryName, -- 서고
         shelf.SHELF_NAME shelfName, -- 서가
-        (location.ROW_NO || '행 ' || location.COLUMN_NO || '열') as locationName -- 행렬단
+        (location.ROW_NO || '행 ' || location.COLUMN_NO || '열') as locationName, -- 행렬단
+        container.CONTAINER_NAME as containerName
 
         FROM ST_TAKEOUT_RECORD_RESULT record_result
-        INNER JOIN
-         ST_ARRANGE_RECORDS_RESULT etc
+        LEFT JOIN
+        ST_ARRANGE_RECORDS_RESULT etc
         ON etc.AGGREGATION_UUID = record_result.AGGREGATION_UUID
         LEFT JOIN ST_ARRANGE_CONTAINERS_RESULT acr
         ON acr.CONTAINER_UUID = etc.CONTAINER_UUID
@@ -213,15 +213,10 @@
             1=1
             AND record_result.TAKEOUT_REQUEST_UUID = #{takeoutRequestUuid}
             <if test="code != null">
-                <![CDATA[
-                   AND B.code  LIKE '%' || #{code} || '%'
-                ]]>
+                AND B.code  LIKE '%' || #{code} || '%'
             </if>
             <if test="title != null">
-                <![CDATA[
-                   AND B.title  LIKE '%' || #{title} || '%'
-                ]]>
-
+                AND B.title  LIKE '%' || #{title} || '%'
             </if>
         </where>
     </select>
