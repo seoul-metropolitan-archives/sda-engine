@@ -55,7 +55,7 @@ var st00102 =
                 {
                     sortNo: 5,
                     name: "maxContainer",
-                    text: "Max Container",
+                    text: "Total Container",
                     width: 100,
                     editable: false,
                     dataType: "text",

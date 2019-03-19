@@ -79,7 +79,7 @@ public class St018Service extends BaseService {
         //        02	정수점검기
         //        03	PDA
         // TODO : 01, 02, 03 중 뭘넣어야 되는지 모르겠다. 일단 '정수점검기 ( 02 )' 를 넣자.
-        stRfidTag.setPublishSourceTypeUuid(CommonCodeUtils.getCodeDetailUuidByCode("CD221", "02"));
+        stRfidTag.setPublishSourceTypeUuid(CommonCodeUtils.getCodeDetailUuidByCode("CD221", "01"));
 
         // CD220
         //        01	미발행
