@@ -173,6 +173,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             alert('팝업 타입 없음:' + data);
         }
         var aSelected = fnObj.gridView01.getSelectedData();
+        console.log("aSelected.length",aSelected.length);
         if( aSelected.length == 0){
             axToast.push(axboot.getCommonMessage("ST012_01"));
             return;
@@ -534,7 +535,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
         this.initInstance();
         this.setColumnInfo(st01201.column_info);
         this.gridObj.setOption({
-            checkBar: {visible: false}
+            checkBar: {visible: true}
         })
         this.makeGrid();
         this.gridObj.itemClick(this.itemClick);
@@ -543,6 +544,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     },
     getSelectedData: function () {
         var checkedList = this.gridObj.getCheckedList();
+        console.log(checkedList);
         if( checkedList.length == 0){
             // checked된 애가 없음
             // array 형태로 return

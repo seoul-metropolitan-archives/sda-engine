@@ -5,77 +5,96 @@
 
 <mapper namespace="rmsoft.ams.seoul.st.st014.dao.St014Mapper">
     <select id="getStWithoutNoticeInoutRecord" resultType="St01401VO" parameterType="St01401VO" statementType="PREPARED">
-        SELECT
-               inout_record.AGGREGATION_UUID aggregationUuid,
-               inout_record.WITHOUT_NOTICE_IO_RECORD_UUID withoutNoticeIoRecordUuid,
-               B.code,
-               B.title,
-               B."level",
-               B."type",
-               B.publishedStatus,
-               B.author,
-               B.descStrDate,
-               B.descEdDate,
-               repository.REPOSITORY_NAME repositoryName,
-               shelf.SHELF_NAME shelfName,
-               (location.ROW_NO || '행 ' || location.COLUMN_NO || '열') as locationName,
-               inout_hist.INOUT_DATE_TIME inoutDateTime
-        FROM ST_WITHOUT_NOTICE_INOUT_RECORD inout_record
-        INNER JOIN ST_WITHOUT_NOTICE_INOUT_HIST inout_hist
-            ON inout_hist.WITHOUT_NOTICE_IO_RECORD_UUID = inout_record.WITHOUT_NOTICE_IO_RECORD_UUID
-        LEFT JOIN ST_ARRANGE_RECORDS_RESULT etc
-          ON etc.AGGREGATION_UUID = inout_record.AGGREGATION_UUID
-        LEFT JOIN ST_ARRANGE_CONTAINERS_RESULT acr
-            ON acr.CONTAINER_UUID = etc.CONTAINER_UUID
-        LEFT JOIN ST_LOCATION location
-            ON location.LOCATION_UUID = acr.LOCATION_UUID
-        LEFT JOIN ST_CONTAINER container
-            ON container.CONTAINER_UUID = etc.CONTAINER_UUID
-        LEFT JOIN ST_SHELF shelf
-            ON shelf.SHELF_UUID = location.SHELF_UUID
-        LEFT JOIN ST_REPOSITORY repository
-            ON repository.REPOSITORY_UUID = shelf.REPOSITORY_UUID
-        LEFT JOIN (SELECT AGGREGATION_UUID                                                                         as uuid,
-                             1                                                                                        as orderNo,
-                             (SELECT CODE_NAME
-                              FROM AD_CODE_DETAIL
-                              WHERE CODE_DETAIL_UUID = Z1.PUBLISHED_STATUS_UUID)                                      as publishedStatus,
-                             AGGREGATION_CODE                                                                         as code,
-                             TITLE                                                                                    as title,
-                             (SELECT CODE_NAME
-                              FROM AD_CODE_DETAIL
-                              WHERE CODE_DETAIL_UUID = Z1.TYPE_UUID)                                                  as "type",
-                             (SELECT LEVEL_NAME
-                              FROM RC_LEVEL
-                              WHERE LEVEL_UUID = Z1.LEVEL_UUID)                                                       as "level",
-                             AUTHOR                                                                                   as author,
-                             DESCRIPTION_START_DATE                                                                   as descStrDate,
-                             DESCRIPTION_END_DATE                                                                     as descEdDate,
-                             DESCRIPTION                                                                              as description,
-                             NOTES                                                                                    as notes,
-                             ((SELECT COUNT(*) FROM RC_AGGREGATION WHERE PARENT_AGGREGATION_UUID = Z1.AGGREGATION_UUID) +
-                              (SELECT COUNT(*)
-                               FROM RC_ITEM
-                               WHERE AGGREGATION_UUID = Z1.AGGREGATION_UUID))                                         as childCnt
-                      FROM RC_AGGREGATION Z1
-                      UNION ALL SELECT ITEM_UUID                                                                    as uuid,
-                                       2                                                                            as orderNo,
-                                       (SELECT CODE_NAME
-                                        FROM AD_CODE_DETAIL
-                                        WHERE CODE_DETAIL_UUID = Z1.PUBLISHED_STATUS_UUID)                          as publishedStatus,
-                                       ITEM_CODE                                                                    as code,
-                                       TITLE                                                                        as title,
-                                       (SELECT CODE_NAME
-                                        FROM AD_CODE_DETAIL
-                                        WHERE CODE_DETAIL_UUID = Z1.TYPE_UUID)                                      as "type",
-                                       ''                                                                           as "level",
-                                       AUTHOR                                                                       as author,
-                                       DESCRIPTION_START_DATE                                                       as descStrDate,
-                                       DESCRIPTION_END_DATE                                                         as descEdDate,
-                                       DESCRIPTION                                                                  as description,
-                                       NOTES                                                                        as notes,
-                                       0                                                                            as childCnt
-                                FROM RC_ITEM Z1) B on B.UUID = inout_record.AGGREGATION_UUID
+        SELECT tab.aggregationUuid, tab.withoutNoticeIoRecordUuid, tab.code, tab.title, tab."level", tab."type",
+        tab.publishedstatus, tab.author, tab."descstrdate", tab."desceddate", tab.repositoryName, tab.shelfName,
+        tab.locationName, COUNT(1) as "CNT"
+        FROM
+        (SELECT inout_record.aggregation_uuid              AS  aggregationUuid,
+        inout_record.without_notice_io_record_uuid  AS  withoutNoticeIoRecordUuid,
+        B.code,
+        B.title,
+        B."level",
+        B."type",
+        B.publishedstatus,
+        B.author,
+        rc.creation_start_date                     AS "descstrdate",
+        rc.creation_end_date                       AS "desceddate",
+        --B.descstrdate,
+        --B.desceddate,
+        repository.repository_name                 AS repositoryName,
+        shelf.shelf_name                           AS shelfName,
+        ( location.row_no
+        || '행 '
+        || location.column_no
+        || '열' )                               AS locationName,
+        inout_hist.inout_date_time                 inoutDateTime
+
+        FROM   st_without_notice_inout_record inout_record
+        INNER JOIN st_without_notice_inout_hist inout_hist ON inout_hist.without_notice_io_record_uuid = inout_record.without_notice_io_record_uuid
+        LEFT JOIN st_arrange_records_result etc            ON etc.aggregation_uuid = inout_record.aggregation_uuid
+        LEFT JOIN st_arrange_containers_result acr         ON acr.container_uuid = etc.container_uuid
+        LEFT JOIN st_location location                     ON location.location_uuid = acr.location_uuid
+        LEFT JOIN st_container container                   ON container.container_uuid = etc.container_uuid
+        LEFT JOIN st_shelf shelf                           ON shelf.shelf_uuid = location.shelf_uuid
+        LEFT JOIN st_repository repository                 ON repository.repository_uuid = shelf.repository_uuid
+        LEFT JOIN RC_AGGREGATION_con rc                    ON inout_record.aggregation_uuid=rc.aggregation_uuid
+        LEFT JOIN (SELECT  aggregation_uuid                                      AS  uuid,
+        1                                                     AS  orderNo,
+        (SELECT code_name
+        FROM   ad_code_detail
+        WHERE  code_detail_uuid = Z1.published_status_uuid)  AS  publishedStatus,
+        aggregation_code                                       AS  code,
+        title                                                  AS  title,
+        (SELECT code_name
+        FROM   ad_code_detail
+        WHERE  code_detail_uuid = Z1.type_uuid)              AS  "type",
+        (SELECT level_name
+        FROM   rc_level
+        WHERE  level_uuid = Z1.level_uuid)                   AS  "level",
+        author                                                 AS  author,
+        (SELECT con.creation_start_date
+        FROM  rc_aggregation_con con
+        WHERE con.aggregation_uuid = aggregation_uuid)      AS  descStrDate,
+        (SELECT con.creation_end_date
+        FROM  rc_aggregation_con con
+        WHERE con.aggregation_uuid = aggregation_uuid)      AS  descEdDate,
+        --description_start_date                                 AS  descStrDate,
+        --description_end_date                                   AS  descEdDate,
+        description                                            AS  description,
+        notes                                                  AS  notes,
+        ( (SELECT Count(*)
+        FROM   rc_aggregation
+        WHERE  parent_aggregation_uuid =
+        Z1.aggregation_uuid)
+        + (SELECT Count(*)
+        FROM   rc_item
+        WHERE  aggregation_uuid = Z1.aggregation_uuid) ) AS childCnt
+        FROM   rc_aggregation Z1
+        UNION ALL
+        SELECT item_uuid                                            AS  uuid,
+        2                                                    AS orderNo,
+        (SELECT code_name
+        FROM   ad_code_detail
+        WHERE  code_detail_uuid = Z1.published_status_uuid) AS publishedStatus,
+        item_code                                             AS code,
+        title                                                 AS title,
+        (SELECT code_name
+        FROM   ad_code_detail
+        WHERE  code_detail_uuid = Z1.type_uuid)            AS  "type",
+        ''                                                 AS "level",
+        author                                              AS  author,
+        (SELECT con.creation_start_date
+        FROM  rc_aggregation_con con
+        WHERE con.aggregation_uuid = item_uuid)      AS  descStrDate,
+        (SELECT con.creation_end_date
+        FROM  rc_aggregation_con con
+        WHERE con.aggregation_uuid = item_uuid)      AS  descEdDate,
+        --description_start_date                              AS descStrDate,
+        --description_end_date                                AS descEdDate,
+        description                                         AS description,
+        notes                                               AS notes,
+        0                                                   AS childCnt
+        FROM   rc_item Z1) B ON B.uuid = inout_record.aggregation_uuid
         <where>
             1=1
             AND inout_record.AGGREGATION_UUID is not null
@@ -103,7 +122,11 @@
                 AND inout_hist.INOUT_DATE_TIME <![CDATA[<]]> TO_DATE(#{inoutDateTimeTo},'yyyy-mm-dd')+1
             </if>
         </where>
-        ORDER BY inout_record.AGGREGATION_UUID
+        ORDER  BY inout_record.aggregation_uuid) tab
+
+        GROUP BY    tab.aggregationUuid, tab.withoutNoticeIoRecordUuid, tab.code, tab.title, tab."level", tab."type",
+                    tab.publishedstatus, tab.author, tab."descstrdate", tab."desceddate", tab.repositoryName, tab.shelfName,
+                    tab.locationName
     </select>
 
     <select id="getStWithoutNoticeInoutHist" resultType="St01402VO" parameterType="St01402VO" statementType="PREPARED">
