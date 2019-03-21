@@ -1,16 +1,18 @@
 package rmsoft.ams.seoul.st.st018.vo;
 
+import com.fasterxml.jackson.databind.deser.Deserializers;
 import io.onsemiro.core.vo.BaseVO;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class St01801VO extends BaseVO {
+public class St01801VO extends BaseVO implements Serializable {
 
     private String aggregationUuid;
     private String code;

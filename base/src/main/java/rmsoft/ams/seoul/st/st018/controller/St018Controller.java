@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import rmsoft.ams.seoul.st.st018.service.St018Service;
 import rmsoft.ams.seoul.st.st018.vo.St01801VO;
 import rmsoft.ams.seoul.st.st018.vo.St01802VO;
-
+import java.util.List;
 import javax.inject.Inject;
 
 @RestController
@@ -33,7 +33,7 @@ public class St018Controller extends BaseController {
 
     @PutMapping(value = "/01/saveTagPublish")
     @PostMapping
-    public void saveTagPublish(@RequestBody St01801VO requestParams) {
+    public void saveTagPublish(@RequestBody List<St01801VO> requestParams) {
         service.saveTagPublish(requestParams);
     }
 

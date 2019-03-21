@@ -12,6 +12,7 @@ import rmsoft.ams.seoul.st.st019.vo.St01901VO;
 
 
 import javax.inject.Inject;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/v1/st/st019")
@@ -29,7 +30,7 @@ public class St019Controller extends BaseController {
 
     @PutMapping(value = "/01/saveTagRepublish")
     @PostMapping
-    public void saveTagRepublish(@RequestBody St01901VO requestParams) {
+    public void saveTagRepublish(@RequestBody List<St01901VO> requestParams) {
         service.saveTagRepublish(requestParams);
     }
 

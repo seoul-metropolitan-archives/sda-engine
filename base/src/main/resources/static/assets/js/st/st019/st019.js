@@ -46,24 +46,37 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     },
     TAG_PUBLISH: function (caller, act, data) {
         // tag 발행
-        var selectedData = fnObj.gridView01.getSelectedData();
-        if (selectedData == null) {
+        //var selectedData = fnObj.gridView01.getSelectedData();
+        var selectedData = fnObj.gridView01.getCheckedList();
+        if (selectedData.length==0) {
+            //selectedData = fnObj.gridView01.getSelectedData();
+            selectedData = new Array(fnObj.gridView01.getSelectedData());
+            //selectedData = $.extend({},selectedData);
+        }
+        if (selectedData == null || selectedData.length==0) {
             axToast.push("먼저 태그발행 대상을 선택 해 주세요.");
             return;
         }
 
 
         var rfidMachineUuid = $(".machine-combo").val( );
-
+        console.log("rfidMachineUuid",rfidMachineUuid);
         if( rfidMachineUuid == undefined){
             axToast.push("먼저 프린터를 선택 해 주세요.");
             return;
         }
 
+        for(set in selectedData)
+        {
+            console.log("BEFORE",selectedData[set]);
+            selectedData[set].rfidMachineUuid =rfidMachineUuid;
+            console.log("AFTER",selectedData[set]);
+        }
+
         axboot.ajax({
             type: "PUT",
             url: "/api/v1/st/st019/01/saveTagRepublish",
-            data: JSON.stringify($.extend({rfidMachineUuid : rfidMachineUuid}, selectedData)),
+            data: JSON.stringify(selectedData),
             callback: function (res) {
                 ACTIONS.dispatch(ACTIONS.PAGE_SEARCH01);
                 ACTIONS.dispatch(ACTIONS.PAGE_SEARCH02);
@@ -488,12 +501,15 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
         this.initInstance();
         this.setColumnInfo(st01901.column_info);
         this.gridObj.setOption({
-            checkBar: {visible: false}
+            checkBar: {visible: true}
         })
         this.makeGrid();
         this.gridObj.itemClick(this.itemClick);
         //this.removeRowBeforeEvent(this.cancelDelete);
 
+    },
+    getCheckedList :function(){
+        return this.gridObj.getCheckedList();
     },
     getSelectedData: function () {
         return this.gridObj.getSelectedData()

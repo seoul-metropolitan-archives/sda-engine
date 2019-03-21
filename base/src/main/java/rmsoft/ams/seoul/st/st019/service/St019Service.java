@@ -69,8 +69,8 @@ public class St019Service extends BaseService {
 
 
     @Transactional
-    public ApiResponse saveTagRepublish(St01901VO requestParams) {
-        St01801VO st01801VO = ModelMapperUtils.map(requestParams, St01801VO.class);
+    public ApiResponse saveTagRepublish(List<St01901VO> requestParams) {
+        /*St01801VO st01801VO = ModelMapperUtils.map(requestParams, St01801VO.class);
         // 공통부분은 여기서 처리
         st018Service.saveTagPublish(st01801VO);
         // 나머지 ST_RFID_TAG_PUBLISH_REQUEST 관련 처리를 하자.
@@ -82,8 +82,25 @@ public class St019Service extends BaseService {
         oldStRfidTagRepublish.setRepublishDate(Timestamp.valueOf(DateUtils.convertToString(LocalDateTime.now(), DateUtils.DATE_TIME_PATTERN)));
         oldStRfidTagRepublish.setUpdateDate(new Timestamp(System.currentTimeMillis()));
         oldStRfidTagRepublish.setUpdateUuid(SessionUtils.getCurrentLoginUserUuid());
-        stRfidTagPublishRequestRepository.save(oldStRfidTagRepublish);
+        stRfidTagPublishRequestRepository.save(oldStRfidTagRepublish);*/
 
+        List<St01801VO> st01801VO = ModelMapperUtils.mapList(requestParams, St01801VO.class);
+        // 공통부분은 여기서 처리
+        st018Service.saveTagPublish(st01801VO);
+        // 나머지 ST_RFID_TAG_PUBLISH_REQUEST 관련 처리를 하자.
+        List<St01901VO> st01901VOList = ModelMapperUtils.mapList(requestParams, St01901VO.class);
+
+        for(St01901VO vo : st01901VOList)
+        {
+            StRfidTagPublishRequest stRfidTagPublishRequest = ModelMapperUtils.map(vo, StRfidTagPublishRequest.class);
+            StRfidTagPublishRequest oldStRfidTagRepublish = stRfidTagPublishRequestRepository.findOne(stRfidTagPublishRequest.getId());
+
+            oldStRfidTagRepublish.setRepublishYn("Y");
+            oldStRfidTagRepublish.setRepublishDate(Timestamp.valueOf(DateUtils.convertToString(LocalDateTime.now(), DateUtils.DATE_TIME_PATTERN)));
+            oldStRfidTagRepublish.setUpdateDate(new Timestamp(System.currentTimeMillis()));
+            oldStRfidTagRepublish.setUpdateUuid(SessionUtils.getCurrentLoginUserUuid());
+            stRfidTagPublishRequestRepository.save(oldStRfidTagRepublish);
+        }
 
         return ApiResponse.of(ApiStatus.SUCCESS, "SUCCESS");
     }
