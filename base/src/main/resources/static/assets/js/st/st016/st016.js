@@ -252,8 +252,8 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         });
     },
     SEARCH_SHELF_SCH_POP: function (caller, act, data) {
-        axboot.modal.open({
-            modalType: "COMMON_POPUP",
+        axboot.modal.open3({
+            modalType: "COMMON_POPUP3",
             preSearch: data["preSearch"],
             sendData: function () {
                 return data;
