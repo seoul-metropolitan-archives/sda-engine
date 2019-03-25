@@ -5,7 +5,7 @@
 
 <mapper namespace="rmsoft.ams.seoul.st.st014.dao.St014Mapper">
     <select id="getStWithoutNoticeInoutRecord" resultType="St01401VO" parameterType="St01401VO" statementType="PREPARED">
-        SELECT tab.aggregationUuid, tab.withoutNoticeIoRecordUuid, tab.code, tab.title, tab."level", tab."type",
+        SELECT tab.aggregationUuid, /*tab.withoutNoticeIoRecordUuid,*/ tab.code, tab.title, tab."level", tab."type",
         tab.publishedstatus, tab.author, tab."descstrdate", tab."desceddate", tab.repositoryName, tab.shelfName,
         tab.locationName, COUNT(1) as "CNT"
         FROM
@@ -124,7 +124,7 @@
         </where>
         ORDER  BY inout_record.aggregation_uuid) tab
 
-        GROUP BY    tab.aggregationUuid, tab.withoutNoticeIoRecordUuid, tab.code, tab.title, tab."level", tab."type",
+        GROUP BY    tab.aggregationUuid, tab.code, tab.title, tab."level", tab."type",
                     tab.publishedstatus, tab.author, tab."descstrdate", tab."desceddate", tab.repositoryName, tab.shelfName,
                     tab.locationName
     </select>
@@ -155,7 +155,7 @@
           ) gate
           ON hist.GATE_UUID = gate.GATE_UUID
         WHERE 1 = 1
-          AND hist.WITHOUT_NOTICE_IO_RECORD_UUID = #{withoutNoticeIoRecordUuid}
+          AND record.aggregation_uuid = #{aggregationUuid}
         ORDER BY hist.aggregation_uuid
     </select>
 </mapper>

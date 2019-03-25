@@ -18,4 +18,5 @@ public class St01402VO extends BaseVO {
     private String withoutNoticeYn;
     private String reason;
     private String disposerName;
+    private String aggregationUuid;
 }

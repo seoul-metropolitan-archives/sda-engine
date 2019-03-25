@@ -101,8 +101,8 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         });
     },
     SEARCH_SHELF_SCH: function (caller, act, data) {
-        axboot.modal.open2({
-            modalType: "COMMON_POPUP2",
+        axboot.modal.open3({
+            modalType: "COMMON_POPUP3",
             preSearch: data["preSearch"],
             sendData: function () {
                 return data;
@@ -123,8 +123,8 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     }
     ,SEARCH_LOCATION_SCH : function(caller, act, data)
     {
-        axboot.modal.open2({
-            modalType: "COMMON_POPUP2",
+        axboot.modal.open3({
+            modalType: "COMMON_POPUP3",
             preSearch : data["preSearch"],
             sendData: function () {
                 return data;

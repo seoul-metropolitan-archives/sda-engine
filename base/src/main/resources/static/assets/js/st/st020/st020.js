@@ -226,21 +226,24 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 return data;
             },
             callback: function (data) {
-                $("input[data-ax-path='repositoryName']").val(data["REPOSITORY_NAME"])
+                $("input[data-ax-path='repositoryName']").val(data["REPOSITORY_NAME"]);
+                $("input[data-ax-path='shelfName']").val("");
+                $("input[data-ax-path='locationName']").val("");
                 repositoryUuid = data['REPOSITORY_UUID'];
                 if (this.close) this.close();
             }
         });
     },
     SEARCH_SHELF_SCH: function (caller, act, data) {
-        axboot.modal.open({
-            modalType: "COMMON_POPUP",
+        axboot.modal.open3({
+            modalType: "COMMON_POPUP3",
             preSearch: data["preSearch"],
             sendData: function () {
                 return data;
             },
             callback: function (data) {
-                $("input[data-ax-path='shelfName']").val(data["SHELF_NAME"])
+                $("input[data-ax-path='shelfName']").val(data["SHELF_NAME"]);
+                $("input[data-ax-path='locationName']").val("");
                 shelfUuid = data['SHELF_UUID'];
                 statusUuid = data['STATUS_UUID'];
                 if (this.close) this.close();
@@ -249,8 +252,8 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     },
     SEARCH_LOCATION_SCH : function(caller, act, data)
     {
-        axboot.modal.open({
-            modalType: "COMMON_POPUP",
+        axboot.modal.open3({
+            modalType: "COMMON_POPUP3",
             preSearch : data["preSearch"],
             sendData: function () {
                 return data;
@@ -259,7 +262,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
 
                 var text = `${data["ROWNO"]}행 ${data["COLUMNNO"]}열`;
 
-                $("input[data-ax-path='locationName']").val(text)
+                $("input[data-ax-path='locationName']").val(text);
                 locationUuid = data['LOCATIONUUID'];
                 console.log('locationUuid', locationUuid);
                 if(this.close) this.close();

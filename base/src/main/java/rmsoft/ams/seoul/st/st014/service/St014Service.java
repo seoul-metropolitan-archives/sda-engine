@@ -44,7 +44,7 @@ public class St014Service extends BaseService {
     }
     public Page<St01402VO> getStWithoutNoticeInoutHist(Pageable pageable, RequestParams<St01402VO> requestParams) {
         St01402VO st01402VO = new St01402VO();
-        st01402VO.setWithoutNoticeIoRecordUuid(requestParams.getString("withoutNoticeIoRecordUuid"));
+        st01402VO.setAggregationUuid(requestParams.getString("aggregationUuid"));
         //검색조건 추가시
 
         return filter(st014Mapper.getStWithoutNoticeInoutHist(st01402VO), pageable, "", St01402VO.class);
