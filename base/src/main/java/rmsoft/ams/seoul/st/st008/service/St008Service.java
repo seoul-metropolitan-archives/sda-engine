@@ -133,7 +133,7 @@ public class St008Service extends BaseService {
 
         vo.setRequestorUuid(SessionUtils.getCurrentLoginUserUuid());
         // 투두 : return date 가 not null 이므로 duedate 를 일단 넣어주자. 나중에 물어볼것. return date 가 뭔지.
-        vo.setReturnDate(vo.getReturnDueDate());
+        //vo.setReturnDate(vo.getReturnDueDate());
         boolean isCreateOrModify = false;
         String uuid = vo.getTakeoutRequestUuid();
         if (uuid == null) {

@@ -76,7 +76,7 @@ var st01603 =
                 },
                 {
                     sortNo: 6,
-                    name: "intentoryDate",
+                    name: "inventoryDate",
                     text: "작업일",
                     width: 80,
                     editable: false,

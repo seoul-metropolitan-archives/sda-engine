@@ -145,15 +145,17 @@ public class St015Service extends BaseService {
         for(StInventoryPlan stInventoryPlan : stInventoryPlanList){
             changeStatus = list.get(index).getChangeStatus() == "" ? "Draft" : list.get(index).getChangeStatus();
             //바뀌는 값이 confirm일때
-            if(changeStatus.equals("Confirm")){
-
+            if(changeStatus.equals("Confirm"))
+            {
                 //서고 서가 행렬단에 있는 location이 없을수도 있다.
                 //location이 없으면 shelf로 검색해서 모든 location에 있는 애들을 전부 가져 와야 한다.
                 stInventoryPlan.setPlanResultUuid(CommonCodeUtils.getCodeDetailUuid("CD217", "Incomplete"));
                 String locationUuid = stInventoryPlan.getLocationUuid();
                 String shelfUuid = stInventoryPlan.getShelfUuid();
                 //stInventoryPlan.setPlanResultUuid(CommonCodeUtils.getCodeDetailUuid("CD217", "Incomplete"));
-                if(StringUtils.isEmpty(locationUuid)){
+
+                if(StringUtils.isEmpty(locationUuid))
+                {
                     //location값이 없는경우 서가 밑에 모든 container를 가져와야한다.
                     StringBuilder sb = new StringBuilder();
                     sb.append(" select LOCATION_UUID as locationUuid from ST_LOCATION ");
@@ -164,6 +166,10 @@ public class St015Service extends BaseService {
                     StringBuilder sb2 = new StringBuilder();
                     sb2.append(" select CONTAINER_UUID as containerUuid from ST_ARRANGE_CONTAINERS_RESULT ");
                     sb2.append(" where LOCATION_UUID IN ("+location+") ");
+                    sb2.append("AND                           \n" +
+                            "    CONTAINER_UUID NOT IN (SELECT   DISTINCT PARENT_CONTAINER_UUID\n" +
+                            "                           FROM     ST_CONTAINER\n" +
+                            "                           WHERE PARENT_CONTAINER_UUID IS NOT NULL)");
                     List<Map<String, Object>> containerList = jdbcTemplate.queryForList(sb2.toString());
                     for(int i = 0 ; i < containerList.size(); i++){
                         StInventoryContainerResult stInventoryContainerResult = new StInventoryContainerResult();
@@ -180,6 +186,10 @@ public class St015Service extends BaseService {
                         StringBuilder sb3 = new StringBuilder();
                         sb3.append(" select AGGREGATION_UUID as aggregationUuid from ST_ARRANGE_RECORDS_RESULT ");
                         sb3.append(" where CONTAINER_UUID = '"+String.valueOf(containerList.get(j).get("containerUuid"))+"' ");
+                        sb3.append("AND                           \n" +
+                                "    CONTAINER_UUID NOT IN (SELECT   DISTINCT PARENT_CONTAINER_UUID\n" +
+                                "                           FROM     ST_CONTAINER\n" +
+                                "                           WHERE PARENT_CONTAINER_UUID IS NOT NULL)");
                         List<Map<String, Object>> aggregationList = jdbcTemplate.queryForList(sb3.toString());
 
                         for(int k = 0 ; k < aggregationList.size();k++){
@@ -195,11 +205,17 @@ public class St015Service extends BaseService {
                     }
                     //모든 container 결과 처리 후
                     //stInventoryPlan.setPlanResultUuid(CommonCodeUtils.getCodeDetailUuid("CD217","Incomplete"));
-                }else{
+                }
+                else
+                {
                     //location값이 있는경우
                     StringBuilder sb = new StringBuilder();
                     sb.append(" select CONTAINER_UUID as containerUuid from ST_ARRANGE_CONTAINERS_RESULT ");
                     sb.append(" where LOCATION_UUID = '"+locationUuid+"' ");
+                    sb.append("AND                           \n" +
+                            "    CONTAINER_UUID NOT IN (SELECT   DISTINCT PARENT_CONTAINER_UUID\n" +
+                            "                           FROM     ST_CONTAINER\n" +
+                            "                           WHERE PARENT_CONTAINER_UUID IS NOT NULL)");
                     List<Map<String, Object>> containerList = jdbcTemplate.queryForList(sb.toString());
 
                     for(int i = 0 ; i < containerList.size(); i++){
@@ -217,6 +233,10 @@ public class St015Service extends BaseService {
                         StringBuilder sb2 = new StringBuilder();
                         sb2.append(" select AGGREGATION_UUID as aggregationUuid from ST_ARRANGE_RECORDS_RESULT ");
                         sb2.append(" where CONTAINER_UUID = '"+String.valueOf(containerList.get(j).get("containerUuid"))+"' ");
+                        sb2.append("AND                           \n" +
+                                "    CONTAINER_UUID NOT IN (SELECT   DISTINCT PARENT_CONTAINER_UUID\n" +
+                                "                           FROM     ST_CONTAINER\n" +
+                                "                           WHERE PARENT_CONTAINER_UUID IS NOT NULL)");
                         List<Map<String, Object>> aggregationList = jdbcTemplate.queryForList(sb2.toString());
 
                         for(int k = 0 ; k < aggregationList.size();k++){
@@ -232,7 +252,9 @@ public class St015Service extends BaseService {
                     }
                 }
 
-            }else{ // !changeStatus.equals("Confirm")
+            }
+            else
+            { // !changeStatus.equals("Confirm")
 
                 StringBuilder sb = new StringBuilder();
                 sb.append(" SELECT INVENTORY_CONT_RESULT_UUID as inventoryContResultUuid  FROM ST_INVENTORY_CONTAINER_RESULT ");
@@ -252,9 +274,9 @@ public class St015Service extends BaseService {
 
                 for(int j = 0 ; j < inventoryRecord.size(); j++){
                     StInventoryRecordResult stInventoryRecordResult = new StInventoryRecordResult();
-                stInventoryRecordResult.setInventoryRecordResultUuid(String.valueOf(inventoryRecord.get(j).get("inventoryRecordResultUuid")));
-                stInventoryRecordResultRepository.delete(stInventoryRecordResult);
-            }
+                    stInventoryRecordResult.setInventoryRecordResultUuid(String.valueOf(inventoryRecord.get(j).get("inventoryRecordResultUuid")));
+                    stInventoryRecordResultRepository.delete(stInventoryRecordResult);
+                }
 
             }
 

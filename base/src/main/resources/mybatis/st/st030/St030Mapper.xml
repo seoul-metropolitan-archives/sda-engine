@@ -20,7 +20,7 @@
                  SELECT CONTAINER_NAME
                  FROM ST_CONTAINER con
                  WHERE con.CONTAINER_UUID = record_req.CURRENT_CONTAINER_UUID
-               ) currentContainerName,
+               ) containerName,
                record_req.SOURCE_TYPE_UUID sourceTypeUuid,
                (
                  SELECT CODE_NAME
@@ -39,7 +39,7 @@
                                   FROM
                                        ST_CONTAINER con
                                   WHERE
-                                      con.CONTAINER_UUID = record_req.CONTAINER_UUID                ) containerName -- 실제 보존상자
+                                      con.CONTAINER_UUID = record_req.CONTAINER_UUID                ) currentContainerName -- 실제 보존상자
         FROM ST_MISS_ARRANGE_RECORD_REQ record_req
               LEFT JOIN ST_ARRANGE_RECORDS_RESULT etc
                  ON etc.AGGREGATION_UUID = record_req.AGGREGATION_UUID

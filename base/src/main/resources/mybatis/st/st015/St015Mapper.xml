@@ -130,7 +130,8 @@
        A.CONTAINER_UUID          as containerUuid,
        A.AGGREGATION_UUID as aggregationUuid,
        A.WORKER_UUID as workerUuid,
-       A.INVENTORY_DATE as inventoryDate,
+       usr.user_name                            AS workerName,
+       TO_CHAR(A.INVENTORY_DATE, 'yyyy-mm-dd') AS inventoryDate,
        A.INVENTORY_RESULT_UUID as inventoryResultUuid,
         FC_AD_CODE_NM(A.TAG_STATUS_UUID) as tagStatusUuid,
        A.RECORD_STATUS_UUID as recordStatusUuid,
@@ -199,6 +200,7 @@ FROM ST_INVENTORY_RECORD_RESULT A LEFT OUTER JOIN ST_ARRANGE_RECORDS_RESULT SARR
                                                        NOTES                                                                        as notes,
                                                        0                                                                            as childCnt
                                                 FROM RC_ITEM Z1) B on A.AGGREGATION_UUID = B.uuid
+                        LEFT JOIN AC_USER usr ON a.worker_uuid = usr.user_uuid
         <where>
             1=1
             <if test="inventoryPlanUuid != null">

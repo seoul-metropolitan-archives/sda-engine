@@ -20,7 +20,7 @@ public class St01503VO extends BaseVO {
     private String aggregationUuid;
 
     private String workerUuid;
-
+    private String workerName;
     private String inventoryDate;
 
     private String inventoryResultUuid;

@@ -75,8 +75,8 @@ var st01503 =
                     visible: true
                 },
                 {
-                    sortNo: 6,
-                    name: "intentoryDate",
+                    sortNo: 7,
+                    name: "inventoryDate",
                     text: "작업일",
                     width: 80,
                     editable: false,
@@ -85,7 +85,7 @@ var st01503 =
                     visible: true
                 },
                 {
-                    sortNo: 9,
+                    sortNo: 8,
                     width: 150,
                     name: "inventoryResultUuid",
                     text: "결과",
