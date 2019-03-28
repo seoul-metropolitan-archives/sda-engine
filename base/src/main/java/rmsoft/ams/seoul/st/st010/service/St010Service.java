@@ -66,7 +66,14 @@ public class St010Service extends BaseService {
             XSSFCell cell = null;
 
             sheet = workBook.cloneSheet(0);
-            workBook.setSheetName(workBook.getSheetIndex(sheet), "Sheet1");
+            //workBook.setSheetName(workBook.getSheetIndex(sheet), "Sheet1");
+            try{
+                workBook.setSheetName(workBook.getSheetIndex(sheet), "Sheet"+workBook.getSheetIndex(sheet));
+            }
+            catch(Exception ex){
+                ex.printStackTrace();
+                workBook.setSheetName(workBook.getSheetIndex(sheet), "Sheet"+workBook.getSheetIndex(sheet)+"_"+workBook.getSheetIndex(sheet));
+            }
 
             St010ExcelVO st010ExcelVO = new St010ExcelVO();
             st010ExcelVO.setRepositoryUuid(params.getString("repositoryUuid"));
@@ -159,7 +166,14 @@ public class St010Service extends BaseService {
             XSSFCell cell = null;
 
             sheet = workBook.cloneSheet(0);
-            workBook.setSheetName(workBook.getSheetIndex(sheet), "Sheet1");
+
+            try{
+                workBook.setSheetName(workBook.getSheetIndex(sheet), "Sheet"+workBook.getSheetIndex(sheet));
+            }
+            catch(Exception ex){
+                ex.printStackTrace();
+                workBook.setSheetName(workBook.getSheetIndex(sheet), "Sheet"+workBook.getSheetIndex(sheet)+"_"+workBook.getSheetIndex(sheet));
+            }
 
             St010ExcelVO st010ExcelVO = new St010ExcelVO();
             st010ExcelVO.setRepositoryUuid(params.getString("repositoryUuid"));
@@ -284,7 +298,13 @@ public class St010Service extends BaseService {
             XSSFCell cell = null;
 
             sheet = workBook.cloneSheet(0);
-            workBook.setSheetName(workBook.getSheetIndex(sheet), "Sheet1");
+            try{
+                workBook.setSheetName(workBook.getSheetIndex(sheet), "Sheet"+workBook.getSheetIndex(sheet));
+            }
+            catch(Exception ex){
+                ex.printStackTrace();
+                workBook.setSheetName(workBook.getSheetIndex(sheet), "Sheet"+workBook.getSheetIndex(sheet)+"_"+workBook.getSheetIndex(sheet));
+            }
 
             St010Excel03VO st010Excel03VO = new St010Excel03VO();
             st010Excel03VO.setRepositoryUuid(params.getString("repositoryUuid"));

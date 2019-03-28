@@ -74,6 +74,8 @@ public class St008Service extends BaseService {
         st00801VO.setRequestorUuid(requestParams.getString("requestorUuid")); // 반출자
         st00801VO.setCode(requestParams.getString("code"));
         st00801VO.setTitle(requestParams.getString("title"));
+        st00801VO.setCurrentLoginUserUuid(SessionUtils.getCurrentLoginUserUuid());
+        System.out.println("LOGIN USER UUID : "+SessionUtils.getCurrentLoginUserUuid());
         return filter(st008Mapper.getStTakeoutRequest(st00801VO), pageable, "", St00801VO.class);
     }
 

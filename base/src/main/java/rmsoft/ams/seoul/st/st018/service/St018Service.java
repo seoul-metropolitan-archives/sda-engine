@@ -82,7 +82,11 @@ public class St018Service extends BaseService {
             //        02	정수점검기
             //        03	PDA
             // TODO : 01, 02, 03 중 뭘넣어야 되는지 모르겠다. 일단 '정수점검기 ( 02 )' 를 넣자.
-            stRfidTag.setPublishSourceTypeUuid(CommonCodeUtils.getCodeDetailUuidByCode("CD221", "01"));
+            System.out.println("PUBLISH_SOURCE_TYPE_UUID:"+requestParam.getPublishSourceTypeUuid());
+            if(requestParam.getPublishSourceTypeUuid()==null )
+                stRfidTag.setPublishSourceTypeUuid(CommonCodeUtils.getCodeDetailUuidByCode("CD221", "01"));
+            else
+                stRfidTag.setPublishSourceTypeUuid(requestParam.getPublishSourceTypeUuid());
 
             // CD220
             //        01	미발행
@@ -132,7 +136,7 @@ public class St018Service extends BaseService {
             String rfidMachineUuid = requestParam.getRfidMachineUuid();
             St026VO tmpSt026VO = new St026VO();
             tmpSt026VO.setRfidMachineUuid(rfidMachineUuid);
-///*
+/*
             List<St026VO> aMachine = st026Mapper.getStRfidMachine(tmpSt026VO);
             if (aMachine.size() == 0) {
                 throw new ApiException(ApiStatus.SYSTEM_ERROR, "UUID( " + rfidMachineUuid + " )에 해당하는 프린터가 없습니다.");
@@ -144,7 +148,7 @@ public class St018Service extends BaseService {
             if (splittedIpAndPort.length == 1) {
                 throw new ApiException(ApiStatus.SYSTEM_ERROR, "ip:port 형태로 프린터설정이 되어 있어야 합니다. ex) 192.168.0.2:9000");
             }
-            PrinterUtils.startPrint(splittedIpAndPort[0], splittedIpAndPort[1], modelPrinter);//*/
+            PrinterUtils.startPrint(splittedIpAndPort[0], splittedIpAndPort[1], modelPrinter);*/
             stRfidTag.setTag(PrinterUtils.generateRfidNo(modelPrinter.rfidNo));
             stRfidTagRepository.save(stRfidTag);
         }

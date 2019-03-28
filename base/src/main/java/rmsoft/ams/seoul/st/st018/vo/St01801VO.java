@@ -39,6 +39,7 @@ public class St01801VO extends BaseVO implements Serializable {
     private String publishDate;
     private String publishDateFrom;
     private String publishDateTo;
+    private String PublishSourceTypeUuid;
 
     private String rfidMachineUuid;
 

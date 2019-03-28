@@ -67,7 +67,8 @@ public class St030Service extends BaseService {
         for( int i =0  ; i< aParameter.size(); i++) {
             St03001VO vo = aParameter.get(i);
             StMissArrangeRecordReq stMissArrangeRecordReq = ModelMapperUtils.map(vo, StMissArrangeRecordReq.class);
-            StMissArrangeRecordReq orgStMissArrangeRecordReq = stMissArrangeRecordReqRepository.findOne(stMissArrangeRecordReq.getId());
+            //StMissArrangeRecordReq orgStMissArrangeRecordReq = stMissArrangeRecordReqRepository.findOne(stMissArrangeRecordReq.getId());
+            StMissArrangeRecordReq orgStMissArrangeRecordReq = stMissArrangeRecordReqRepository.getOne(stMissArrangeRecordReq.getId());
             // - 실제 보존상자 기준으로 기록물을 재배치 합니다.
 
             // - [1]ST_MISS_ARRANGE_RECORD_REQ 에 Arrange yn, Arrange Date를 UPDATE합니다.
@@ -75,7 +76,8 @@ public class St030Service extends BaseService {
             orgStMissArrangeRecordReq.setRepublishDate(DateUtils.convertToString(LocalDateTime.now(), DateUtils.DATE_TIME_PATTERN));
             orgStMissArrangeRecordReq.setUpdateUuid(SessionUtils.getCurrentLoginUserUuid());
             orgStMissArrangeRecordReq.setUpdateDate(Timestamp.valueOf(DateUtils.convertToString(LocalDateTime.now(), DateUtils.DATE_TIME_PATTERN)));
-            orgStMissArrangeRecordReq.setCurrentContainerUuid(orgStMissArrangeRecordReq.getContainerUuid()); // 올바른 콘테이너로 재배치.
+            //orgStMissArrangeRecordReq.setCurrentContainerUuid(orgStMissArrangeRecordReq.getContainerUuid()); // 올바른 콘테이너로 재배치.
+            orgStMissArrangeRecordReq.setContainerUuid(orgStMissArrangeRecordReq.getCurrentContainerUuid()); // 올바른 콘테이너로 재배치.
             stMissArrangeRecordReqRepository.save(orgStMissArrangeRecordReq);
             // - [0]st_arrange_records_result 에 Container정보를 Update합니다.
             if( vo.getAggregationUuid() == null){

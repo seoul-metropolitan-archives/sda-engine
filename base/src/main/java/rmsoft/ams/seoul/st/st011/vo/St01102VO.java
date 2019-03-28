@@ -36,6 +36,9 @@ public class St01102VO  {
     private String requestorName;
     private String userGroupName;
 
-
+    private String inoutTypeUuid;
+    private String gateName;
+    private String gateUuid;
+    private String inoutDateTime;
 
 }

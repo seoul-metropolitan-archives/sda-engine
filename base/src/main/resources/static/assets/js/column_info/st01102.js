@@ -213,6 +213,38 @@ var st01102 =
                     disable: true,
                     dataType: "text",
                     required: false
+                },
+                {
+                    sortNo: 12,
+                    name: "inoutTypeUuid",
+                    text: "출입구분",
+                    width: 100,
+                    editable: false,
+                    disable: true,
+                    dataType: "text",
+                    required: false,
+                    values: axboot.commonCodeFilter("CD222").codeArr,
+                    labels: axboot.commonCodeFilter("CD222").nameArr
+                },
+                {
+                    sortNo: 13,
+                    name: "gateName",
+                    text: "게이트",
+                    width: 100,
+                    editable: false,
+                    disable: true,
+                    dataType: "text",
+                    required: false
+                },
+                {
+                    sortNo: 14,
+                    name: "inoutDateTime",
+                    text: "반출입일시",
+                    width: 100,
+                    editable: false,
+                    disable: true,
+                    dataType: "text",
+                    required: false
                 }
             ]
     }

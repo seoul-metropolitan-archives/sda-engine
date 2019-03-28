@@ -59,4 +59,5 @@ public class St00801VO extends BaseVO
     private String code ;
     private String title ;
 
+    private String currentLoginUserUuid;
 }

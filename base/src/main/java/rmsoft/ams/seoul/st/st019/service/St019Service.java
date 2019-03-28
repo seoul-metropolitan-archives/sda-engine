@@ -99,6 +99,7 @@ public class St019Service extends BaseService {
             oldStRfidTagRepublish.setRepublishDate(Timestamp.valueOf(DateUtils.convertToString(LocalDateTime.now(), DateUtils.DATE_TIME_PATTERN)));
             oldStRfidTagRepublish.setUpdateDate(new Timestamp(System.currentTimeMillis()));
             oldStRfidTagRepublish.setUpdateUuid(SessionUtils.getCurrentLoginUserUuid());
+
             stRfidTagPublishRequestRepository.save(oldStRfidTagRepublish);
         }
 

@@ -75,55 +75,64 @@
     </select>
 
     <select id="getTakeInOutList" resultType="St01102VO" parameterType="St01102VO" statementType="PREPARED">
-
         select
-        TAKEOUT_REQUEST_UUID takeoutRequestUuid,
-        REQUEST_NAME requestName,
-        REQUEST_TYPE_UUID requestTypeUuid,
-        REQUESTOR_UUID requestorUuid,
-        (CASE
-        WHEN REQUEST_TYPE_UUID = 'AF04136D-3508-4E1C-A85B-F1A1FEDDB607'
-        THEN ac_user.USER_NAME
-        ELSE OUTSOURCING_PERSON_NAME
-        END
-        )                                                                               AS requestorName,
-        (CASE
-        WHEN REQUEST_TYPE_UUID = 'AF04136D-3508-4E1C-A85B-F1A1FEDDB607'
-        THEN (SELECT CODE_NAME FROM AD_CODE_DETAIL WHERE CODE_DETAIL_UUID = ac_user.ORGANIZATION_UUID)
-        ELSE OUTSOURCING_DEPARTMENT
-        END
-        )                                                                               AS userGroupName,
-        /*user_group.USER_GROUP_NAME userGroupName,*/
-
-        TO_CHAR(TO_DATE(request.TAKEOUT_DATE),'YYYY-MM-DD') as  takeoutDate,
-        TO_CHAR(TO_DATE(request.RETURN_DATE),'YYYY-MM-DD') as returnDate,
-        TO_CHAR(TO_DATE(request.RETURN_DUE_DATE),'YYYY-MM-DD') as returnDueDate,
-        (SELECT CODE_NAME
-        FROM AD_CODE_DETAIL
-        WHERE CODE_DETAIL_UUID = request.STATUS_UUID) AS status,
-        request.STATUS_UUID statusUuid,
-        TAKEOUT_PROPOSE takeoutPropose,
-        OUTSOURCING_DEPARTMENT outsourcingDepartment,
-        OUTSOURCING_POSITION outsourcingPosition,
-        OUTSOURCING_PERSON_NAME outsourcingPersonName,
-        OUTSOURCING_PHONE outsourcingPhone,
-        request.APPROVER_UUID as approverUuid,
-        ac_user1.USER_NAME as approvalName,
-        TO_CHAR(TO_DATE(request.APPROVE_DATE),'YYYY-MM-DD')  as approveDate,
-        request.REJECTOR_UUID as rejectorUuid,
-        ac_user2.USER_NAME as rejectorName,
-        TO_CHAR(TO_DATE(request.REJECT_DATE),'YYYY-MM-DD')  as rejectDate
-        FROM ST_TAKEOUT_REQUEST request
-        INNER JOIN AC_USER_GROUP_USER group_user
-        ON USER_UUID = request.REQUESTOR_UUID
-        INNER JOIN AC_USER_GROUP user_group
-        ON user_group.USER_GROUP_UUID = group_user.USER_GROUP_UUID
-        INNER JOIN AC_USER ac_user
-        ON ac_user.USER_UUID = request.REQUESTOR_UUID
-        LEFT OUTER JOIN AC_USER ac_user1
-        ON ac_user1.USER_UUID = request.APPROVER_UUID
-        LEFT OUTER JOIN AC_USER ac_user2
-        ON ac_user2.USER_UUID = request.REJECTOR_UUID
+                request.TAKEOUT_REQUEST_UUID                                  AS takeoutRequestUuid,
+                REQUEST_NAME                                                  AS requestName,
+                REQUEST_TYPE_UUID                                             AS requestTypeUuid,
+                REQUESTOR_UUID                                                AS requestorUuid,
+                (CASE
+                  WHEN REQUEST_TYPE_UUID = 'AF04136D-3508-4E1C-A85B-F1A1FEDDB607'
+                        THEN ac_user.USER_NAME
+                  ELSE OUTSOURCING_PERSON_NAME
+                END)                                                          AS requestorName,
+                (CASE
+                  WHEN REQUEST_TYPE_UUID = 'AF04136D-3508-4E1C-A85B-F1A1FEDDB607'
+                  THEN (SELECT CODE_NAME
+                        FROM    AD_CODE_DETAIL
+                        WHERE CODE_DETAIL_UUID = ac_user.ORGANIZATION_UUID)
+                  ELSE OUTSOURCING_DEPARTMENT
+                END)                                                          AS userGroupName,
+                /*user_group.USER_GROUP_NAME userGroupName,*/
+                TO_CHAR(TO_DATE(request.TAKEOUT_DATE),'YYYY-MM-DD')          AS takeoutDate,
+                TO_CHAR(TO_DATE(request.RETURN_DATE),'YYYY-MM-DD')           AS returnDate,
+                TO_CHAR(TO_DATE(request.RETURN_DUE_DATE),'YYYY-MM-DD')       AS returnDueDate,
+                (SELECT CODE_NAME
+                 FROM   AD_CODE_DETAIL
+                 WHERE  CODE_DETAIL_UUID = request.STATUS_UUID)               AS status,
+                request.STATUS_UUID                                           AS statusUuid,
+                TAKEOUT_PROPOSE                                               AS takeoutPropose,
+                OUTSOURCING_DEPARTMENT                                        AS outsourcingDepartment,
+                OUTSOURCING_POSITION                                          AS outsourcingPosition,
+                OUTSOURCING_PERSON_NAME                                       AS outsourcingPersonName,
+                OUTSOURCING_PHONE                                             AS outsourcingPhone,
+                request.APPROVER_UUID                                         AS approverUuid,
+                ac_user1.USER_NAME                                            AS approvalName,
+                TO_CHAR(TO_DATE(request.APPROVE_DATE),'YYYY-MM-DD')         AS approveDate,
+                request.REJECTOR_UUID                                        AS rejectorUuid,
+                ac_user2.USER_NAME                                           AS rejectorName,
+                TO_CHAR(TO_DATE(request.REJECT_DATE),'YYYY-MM-DD')         AS rejectDate,
+                swni.INOUT_TYPE_UUID,
+                stg.GATE_NAME,
+                stg.GATE_UUID,
+                swni.INOUT_DATE_TIME
+        FROM
+              ST_TAKEOUT_REQUEST request  INNER JOIN  AC_USER_GROUP_USER group_user
+                                                        ON USER_UUID = request.REQUESTOR_UUID
+                                          INNER JOIN  AC_USER_GROUP user_group
+                                                        ON user_group.USER_GROUP_UUID = group_user.USER_GROUP_UUID
+                                          INNER JOIN  AC_USER ac_user
+                                                        ON ac_user.USER_UUID = request.REQUESTOR_UUID
+                                          LEFT OUTER JOIN AC_USER ac_user1
+                                                        ON ac_user1.USER_UUID = request.APPROVER_UUID
+                                          LEFT OUTER JOIN AC_USER ac_user2
+                                                        ON ac_user2.USER_UUID = request.REJECTOR_UUID
+                                          LEFT JOIN ST_TAKEOUT_RECORD_RESULT strr2
+                                                        ON request.takeout_request_uuid = strr2.takeout_request_uuid
+                                          LEFT JOIN ST_WITHOUT_NOTICE_INOUT_HIST swni
+                                                        ON strr2.TAKEOUT_RECORD_RESULT_UUID = swni.TAKEOUT_RECORD_RESULT_UUID
+                                                        AND strr2.AGGREGATION_UUID = swni.AGGREGATION_UUID
+                                          LEFT JOIN ST_GATE stg
+                                                        ON  swni.GATE_UUID = stg.GATE_UUID
         <where>
             1=1
             AND EXISTS (

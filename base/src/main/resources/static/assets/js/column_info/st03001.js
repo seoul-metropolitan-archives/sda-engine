@@ -83,7 +83,7 @@ var st03001 =
                 },
                 {
                     sortNo: 5,
-                    name: "currentContainerName",
+                    name: "containerName",
                     text: "보존상자(AMS)",
                     width: 150,
                     editable: false,
@@ -129,7 +129,7 @@ var st03001 =
 
                 {
                     sortNo: 9,
-                    name: "containerName",
+                    name: "currentContainerName",
                     text: "실제 보존상자",
                     width: 150,
                     editable: false,
