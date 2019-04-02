@@ -179,7 +179,8 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             return;
         }
 
-
+        //aSelected = $.extend({},aSelected);
+        console.log("aSelected:"+aSelected);
         axboot.commonModal.open({
             modalType: modalOption.modalType,
             header: {

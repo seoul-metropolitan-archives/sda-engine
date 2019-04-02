@@ -33,7 +33,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         axboot.ajax({
             type: "GET",
             url: "/api/v1/st/st014/01/list02",
-            data: $.extend({}, this.formView.getData(),{aggregationUuid : fnObj.gridView01.getSelectedData().aggregationUuid}, {repositoryUuid: repositoryUuid, shelfUuid: shelfUuid, locationUuid: locationUuid}),
+            data: $.extend({},{pageSize: 10000} ,this.formView.getData(),{aggregationUuid : fnObj.gridView01.getSelectedData().aggregationUuid}, {repositoryUuid: repositoryUuid, shelfUuid: shelfUuid, locationUuid: locationUuid}),
             callback: function (res) {
                 fnObj.gridView02.setData(res.list);
                 // fnObj.gridView02.disabledColumn();

@@ -345,6 +345,7 @@ fnObj.pageStart = function () {
     _this.gridView02.initView();
     _this.gridView03.initView();
     _this.gridView04.initView();
+    $("#inquiry").hide();
     ACTIONS.dispatch(ACTIONS.PAGE_SEARCH01, this.formView.getData());
 };
 
@@ -362,7 +363,9 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
     },
     initEvent: function () {
         var _this = this;
-
+        $('.btn_i').on('click',function(){
+            ACTIONS.dispatch(ACTIONS.PAGE_SEARCH01);
+        });
         $('.btn_excelDown01').on('click',function(){
             ACTIONS.dispatch(ACTIONS.EXCEL_DOWN01);
         });
@@ -373,8 +376,17 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
             ACTIONS.dispatch(ACTIONS.EXCEL_DOWN03);
         });
 
+        $("input[data-ax-path='repositoryCode']").change(function () {
+            $("input[data-ax-path='shelfCode']").val("");
+            $("input[data-ax-path='shelfName']").val("");
+            return;
+        });
 
-
+        $("input[data-ax-path='repositoryName']").change(function () {
+            $("input[data-ax-path='shelfCode']").val("");
+            $("input[data-ax-path='shelfName']").val("");
+            return;
+        });
 
     },
     getData: function () {

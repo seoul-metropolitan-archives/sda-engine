@@ -15,7 +15,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         axboot.ajax({
             type: "GET",
             url: "/api/v1/st/st009/01/list01",
-            data: $.extend({}, this.formView.getData(),{requestorUuid : requestorUuid}),
+            data: $.extend({}, {pageSize:1000},this.formView.getData(),{requestorUuid : requestorUuid}),
             callback: function (res) {
                 fnObj.gridView01.setData(res.list);
                 //fnObj.gridView01.disabledColumn();
@@ -34,7 +34,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         axboot.ajax({
             type: "GET",
             url: "/api/v1/st/st009/01/list02",
-            data: $.extend({}, this.formView.getData(),{takeoutRequestUuid : fnObj.gridView01.getSelectedData().takeoutRequestUuid}),
+            data: $.extend({},  {pageSize:1000},this.formView.getData(),{takeoutRequestUuid : fnObj.gridView01.getSelectedData().takeoutRequestUuid}),
             callback: function (res) {
                 fnObj.gridView02.setData(res.list);
 
@@ -355,12 +355,17 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     EXCEL_DOWN01 : function(caller, act, data){
 
 
-        var selectedRow = fnObj.gridView01.getSelectedData();
-        if (selectedRow == null) {
-            axToast.push("출력할 대상을 선택 해 주세요.");
+        var selectedRow = fnObj.gridView01.getCheckedList();
+        if (selectedRow.length<1) {
+            axToast.push(axboot.getCommonMessage("ST009_01"));
             return;
         }
-        var param = $.param( selectedRow );
+        else if(selectedRow.length > 1){
+            axToast.push(axboot.getCommonMessage("ST009_02"));
+            //axToast.push(axboot.getCommonMessage("ST003_01"));
+            return;
+        }
+        var param = $.param( selectedRow[0] );
         location.href = "/api/v1/st/st008/01/excelDown?"+param;
     }
 
@@ -537,14 +542,17 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
     getSelectedData: function () {
         return this.gridObj.getSelectedData()
     },
+    getCheckedList :function(){
+        return this.gridObj.getCheckedList();
+    },
     itemClick: function (data) {
 
         /*$('input[data-ax-path="outsourcingDepartment"]').val(data.outsourcingDepartment ? data.outsourcingDepartment : "");*/
         /*$('input[data-ax-path="outsourcingPersonName"]').val(data.outsourcingPersonName ? data.outsourcingPersonName : "");*/
         /*$('input[data-ax-path="outsourcingPhone"]').val(data.outsourcingPhone ? data.outsourcingPhone : "");*/
         /*$('input[data-ax-path="outsourcingPosition"]').val(data.outsourcingPosition ? data.outsourcingPosition : "");*/
-        $('input[data-ax-path="returnDate"]').val(data.returnDate ? formatDate(data.returnDate) : "");
-
+        //$('input[data-ax-path="returnDate"]').val(data.returnDate ? formatDate(data.returnDate) : "");
+        $('#takeoutPropose').val(data.takeoutPropose);
         //TODO : 아이템 클릭하면 반입 정보, 반입자, 소속, 직위, 반입일자가 들어 와야 하는데 모르겟다.
 
         ACTIONS.dispatch(ACTIONS.PAGE_SEARCH02);
