@@ -135,7 +135,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
 
         axboot.modal.open({
             modalType: "ARRANGE_CONTAINER_POPUP",
-            width: 1600,
+            width: 1000,
             height: 700,
             header: {
                 title: "ARRANGE"
