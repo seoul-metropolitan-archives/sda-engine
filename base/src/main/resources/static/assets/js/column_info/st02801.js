@@ -54,21 +54,9 @@ var st02801 =
                     labels: axboot.commonCodeFilter("CD223").nameArr,
                     dataType : "combo"
                 },
+
                 {
-                    sortNo: 6,
-                    width: 80,
-                    name: "sensorUseYn",
-                    text: "센서사용여부",
-                    editable: true,
-                    disable : false,
-                    required: true,
-                    visible: true,
-                    values: ['Y','N'],
-                    labels: ['Y','N'],
-                    dataType : "combo"
-                },
-                {
-                    sortNo: 7,
+                    sortNo: 5,
                     name: "inZoneName",
                     text: "In Zone",
                     width: 250,
@@ -80,7 +68,7 @@ var st02801 =
                     visible: true
                 },
                 {
-                    sortNo: 7,
+                    sortNo: 6,
                     name: "outZoneName",
                     text: "Out Zone",
                     width: 250,
@@ -92,7 +80,7 @@ var st02801 =
                     visible: true
                 },
                 {
-                    sortNo: 8,
+                    sortNo: 7,
                     width: 80,
                     name: "lightBarStatusUuid",
                     text: "경광등",
@@ -102,6 +90,19 @@ var st02801 =
                     visible: true,
                     values: axboot.commonCodeFilter("CD207").codeArr,
                     labels: axboot.commonCodeFilter("CD207").nameArr,
+                    dataType : "combo"
+                },
+                {
+                    sortNo: 8,
+                    width: 80,
+                    name: "sensorUseYn",
+                    text: "센서사용여부",
+                    editable: true,
+                    disable : false,
+                    required: true,
+                    visible: true,
+                    values: ['Y','N'],
+                    labels: ['Y','N'],
                     dataType : "combo"
                 },
                 {
