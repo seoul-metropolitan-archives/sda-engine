@@ -28,8 +28,8 @@ var st01501 =
                     width: 80,
                     editable: true,
                     dataType: "popup",
-                    popupCode : "PU107",
-                    sqlColumn : {USER_UUID : "plannerUuid", USER_NAME : "plannerName"},
+                    //popupCode : "PU107",
+                    //sqlColumn : {USER_UUID : "plannerUuid", USER_NAME : "plannerName"},
                     required: true,
                     visible: true
                 },

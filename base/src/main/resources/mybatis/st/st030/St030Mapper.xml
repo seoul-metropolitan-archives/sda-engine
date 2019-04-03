@@ -131,11 +131,11 @@
                 AND record_req.REQUEST_DATE <![CDATA[>=]]> TO_DATE(#{requestDateFrom},'yyyy-mm-dd')
             </if>
             <if test="requestDateTo != null">
-                AND record_req.REQUEST_DATE <![CDATA[<]]> TO_DATE(#{requestDateTo},'yyyy-mm-dd')+1
+                AND record_req.REQ/**/UEST_DATE <![CDATA[<]]> TO_DATE(#{requestDateTo},'yyyy-mm-dd')+1
             </if>
 
         </where>
-        ORDER BY record_req.REQUEST_DATE
+        ORDER BY record_req.REQUEST_DATE DESC
     </select>
     <select id="getStArrangeRecordsResult" resultType="St003VO" parameterType="St03001VO" statementType="PREPARED">
         SELECT

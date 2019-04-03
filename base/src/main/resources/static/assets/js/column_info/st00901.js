@@ -128,7 +128,7 @@ var st00901 =
                     sortNo: 4,
                     name: "takeoutDate",
                     text: "반출일자",
-                    width: 120,
+                    width: 90,
                     dataType: "date",
                     editable: false,
                     sortable: true,
@@ -138,7 +138,7 @@ var st00901 =
                     sortNo: 5,
                     name: "returnDueDate",
                     text: "반입예정일",
-                    width: 120,
+                    width: 90,
                     dataType: "date",
                     editable: false,
                     sortable: true,
@@ -146,6 +146,16 @@ var st00901 =
                 },
                 {
                     sortNo: 6,
+                    name: "returnDate",
+                    text: "반입일자",
+                    width: 90,
+                    dataType: "date",
+                    editable: false,
+                    sortable: true,
+                    disable:true
+                },
+                {
+                    sortNo: 7,
                     width: 80,
                     name: "statusUuid",
                     text: "상태",
@@ -157,7 +167,7 @@ var st00901 =
                     dataType : "combo"
                 },
                 {
-                    sortNo: 7,
+                    sortNo: 8,
                     name: "takeoutPropose",
                     text: "takeoutPropose",
                     width: 120,
@@ -166,19 +176,6 @@ var st00901 =
                     sortable: true,
                     disable:true,
                     visible: false
-                },
-                {
-                    sortNo: 8,
-                    name: "returnDate",
-                    text: "returnDate",
-                    width: 120,
-                    dataType: "timestamp",
-                    editable: false,
-                    sortable: true,
-                    disable:true,
-                    visible: false
-                },
-
-
+                }
             ]
     }

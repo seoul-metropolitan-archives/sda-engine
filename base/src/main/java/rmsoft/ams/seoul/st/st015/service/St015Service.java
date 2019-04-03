@@ -326,7 +326,7 @@ public class St015Service extends BaseService {
                 }
                 catch(Exception ex){
                     ex.printStackTrace();
-                    workBook.setSheetName(workBook.getSheetIndex(sheet), "Sheet2");
+                    workBook.setSheetName(workBook.getSheetIndex(sheet), "Sheet"+workBook.getSheetIndex(sheet)+"_"+workBook.getSheetIndex(sheet));
                 }
             //CELL STYLE 적용
             XSSFCellStyle cellStyle = workBook.createCellStyle();

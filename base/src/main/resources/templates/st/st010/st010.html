@@ -19,7 +19,7 @@
                 <div style=" height:30px; width:100%" class="bgf7 div_tablerow">
                     <ul class="bdb" style="border:none">
                         <th:block layout:insert="~{/fragments/page-buttons :: bookmark}"/>
-                        <th:block layout:insert="~{/fragments/page-buttons :: inquiry}"/>
+                        <th:block style="display:none;" layout:insert="~{/fragments/page-buttons :: inquiry}"/>
                     </ul>
                 </div>
                 <div style="height:100%; width:100%" class="div_tablerow">
@@ -28,6 +28,12 @@
 
                             <ul class="bdb bdt bgf7 div_tablerow" style="height:30px;">
                                 <th:block layout:insert="~{/fragments/page-buttons :: dot('Repository')}"/>
+                                <li style="text-align:right; width:83%;">
+                                    <button class="btn_i" id="inquiryRepository">
+                                        <span class="btn_icon">&nbsp;</span>
+                                        <span class="btn_main_txt">Inquiry(I)</span>
+                                    </button>
+                                </li>
                                 <!--<li style="text-align:right; width:83%;">
                                     <button class="btn_co pop_repository">
                                         <span class="btn_icon_co">&nbsp;</span>
@@ -114,6 +120,13 @@
                                         <span class="btn_main_txt">Delete</span>
                                     </button>
                                 </li>-->
+                                <li style="text-align:right; width:83%;">
+                                    <button class="btn_i" id="inquiryShelf">
+                                        <span class="btn_icon">&nbsp;</span>
+                                        <span class="btn_main_txt">Inquiry(I)</span>
+                                    </button>
+                                </li>
+                                </li>
                                 <li style="text-align:right; width:83%;">
                                     <button class="btn_co btn_excelDown01">
                                         <span class="btn_icon_co">&nbsp;</span>

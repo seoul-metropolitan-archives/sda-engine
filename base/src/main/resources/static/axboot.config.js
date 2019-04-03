@@ -252,7 +252,7 @@
 
             },
             "ARRANGE_CONTAINER_POPUP" :{
-                width: 1600,
+                width: 1000,
                 height: 700,
                 iframe: {
                     url: "/st/st004/st004-p01"

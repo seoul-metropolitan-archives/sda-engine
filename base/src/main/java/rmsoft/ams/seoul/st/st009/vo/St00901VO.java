@@ -28,7 +28,7 @@ public class St00901VO extends BaseVO {
     private String requestorName; // 반출자
     private String userGroupName; //  소속
     private String takeoutDate; //  반출일자
-    private Timestamp returnDate; //  반입일
+    private String returnDate; //  반입일
     private String returnDueDate; //  반입예정일
 
     public String getTakeoutDate(){

@@ -15,8 +15,8 @@ var st01202 =
                 },
                 {
                     sortNo: 1,
-                    name: "zoneName",
-                    text: "존",
+                    name: "gateName",
+                    text: "게이트",
                     width: 350,
                     editable: false,
                     visible: true,

@@ -192,7 +192,8 @@
             SELECT
               Z1.AGGREGATION_UUID as uuid
               , Z1.PARENT_AGGREGATION_UUID as parentUuid
-              , Z1.TITLE as name
+              -- , Z1.TITLE as name
+              ,Z1.TITLE  || '(' || Z1.AGGREGATION_CODE|| ')' as name
               , Z1.DESCRIPTION as description
               , Z1.NOTEs as notes
               , SUBSTR(SYS_CONNECT_BY_PATH(ROWNUM, '.'), 2 , length(SYS_CONNECT_BY_PATH(ROWNUM, '.'))) as orderKey1

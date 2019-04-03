@@ -127,6 +127,7 @@ FROM RC_AGGREGATION A
                 AND RFID_TAG.PUBLISH_DATE <![CDATA[<]]> TO_DATE(#{publishDateTo},'yyyy-mm-dd')+1
             </if>
         </where>
+        ORDER BY B.CODE DESC
     </select>
 
     <select id="getStRfidTag" resultType="St01802VO" parameterType="St01802VO" statementType="PREPARED">
@@ -143,7 +144,7 @@ FROM RC_AGGREGATION A
             1=1
             AND tag.AGGREGATION_UUID = #{aggregationUuid}
         </where>
-        ORDER BY PUBLISH_DATE asc
+        ORDER BY PUBLISH_DATE DESC
     </select>
 
 
