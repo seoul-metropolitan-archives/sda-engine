@@ -47,6 +47,7 @@ public class St003Service extends BaseService {
         st00301VO.setArrangedFromDate(requestParams.getString("arrangedFromDate01"));
         st00301VO.setArrangedToDate(requestParams.getString("arrangedToDate01"));
         st00301VO.setContainerUuid(requestParams.getString("containerUuid"));
+        st00301VO.setContainerName(requestParams.getString("containerName"));
         return filter(st003Mapper.getContainerAggregationList(st00301VO), pageable, "", St00301VO.class);
     }
 

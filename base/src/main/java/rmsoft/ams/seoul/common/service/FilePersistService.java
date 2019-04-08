@@ -41,6 +41,7 @@ public class FilePersistService implements InitializingBean {
 
     public void persist(AX5File ax5File) throws IOException {
         this.ax5File = ax5File;
+        System.out.println("PATH:"+path);
         fileSavePath = path + File.separator + ax5File.getFilePath();
         FileUtils.forceMkdir(new File(fileSavePath));
         File file = new File(fileSavePath + File.separator + ax5File.getSaveName());

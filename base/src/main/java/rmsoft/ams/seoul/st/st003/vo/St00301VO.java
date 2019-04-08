@@ -14,6 +14,8 @@ public class St00301VO extends BaseVO {
 	private String containerUuid;
 	private String aggregationCode;
 	private String title;
+	private String descStrDate;
+	private String descEdDate;
 	private String typeUuid;
 	private String aggregationTree;
 	private String aggregationUuid;
@@ -24,4 +26,5 @@ public class St00301VO extends BaseVO {
 	private String arrangedToDate;
 	private String itemCode;
 	private String changeStatus;
+	private String containerName;
 }

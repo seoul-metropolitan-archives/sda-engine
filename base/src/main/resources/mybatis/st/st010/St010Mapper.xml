@@ -19,12 +19,21 @@
            B."type",
            B."level",
            B.author,
-           B.descStrDate,
-           B.descEdDate,
+           -- B.descStrDate,
+           -- B.descEdDate,
+            (CASE   WHEN    LENGTH(c.creation_start_date) = 8
+                              THEN TO_CHAR(TO_DATE(c.creation_start_date,'YYYYMMDD'), 'YYYY-MM-DD')
+                    ELSE    c.creation_start_date
+            END)    as descStrDate,
+            (CASE   WHEN    LENGTH(c.creation_end_date) = 8
+                                THEN TO_CHAR(TO_DATE(c.creation_end_date,'YYYYMMDD'), 'YYYY-MM-DD')
+                    ELSE    c.creation_end_date
+            END)    as descEdDate,
            B.description,
            B.notes
     FROM ST_ARRANGE_CONTAINERS_RESULT A INNER JOIN ST_ARRANGE_RECORDS_RESULT SARR
-        ON A.CONTAINER_UUID = SARR.CONTAINER_UUID
+                                          ON          A.CONTAINER_UUID = SARR.CONTAINER_UUID
+                                         LEFT JOIN RC_AGGREGATION_CON c ON SARR.aggregation_uuid = c.aggregation_uuid
            INNER JOIN (SELECT AGGREGATION_UUID                                                                         as uuid,
                               1                                                                                        as orderNo,
                               (SELECT CODE_NAME

@@ -212,4 +212,96 @@ FROM ST_INVENTORY_RECORD_RESULT A LEFT OUTER JOIN ST_ARRANGE_RECORDS_RESULT SARR
 
         </where>
     </select>
+    <select id="getStInventoryPlanExl" resultType="St01501VO" parameterType="St01501VO" statementType="PREPARED">
+        select a.INVENTORY_PLAN_UUID as inventoryPlanUuid,
+        a.PLAN_NAME as planName,
+        a.PLANNER_UUID as plannerUuid,
+        <include refid="Common.UserName"><property name="userUuid" value="PLANNER_UUID"/></include> as plannerName,
+        TO_CHAR(a.EXCEPT_START_DATE,'YYYY-MM-DD') as exceptStartDate,
+        TO_CHAR(a.EXCEPT_END_DATE,'YYYY-MM-DD') as exceptEndDate,
+        a.REPOSITORY_UUID as repositoryUuid,
+        b.REPOSITORY_NAME as repositoryName,
+        a.SHELF_UUID as shelfUuid,
+        c.SHELF_NAME as shelfName,
+        a.LOCATION_UUID as locationUuid,
+        a.STATUS_UUID as statusUuid,
+        FC_AD_CODE_NM(a.STATUS_UUID) as statusName,
+        a.PLAN_RESULT_UUID as planResultUuid,
+        FC_AD_CODE_NM(a.PLAN_RESULT_UUID) as planResultName,
+        a.NOTES as notes,
+        a.EXCEPT_REASON as exceptReason,
+        NVL2(d.ROW_NO, d.ROW_NO || '행 ' || d.COLUMN_NO || '열' ,'') as locationName
+        from ST_INVENTORY_PLAN a left outer join ST_REPOSITORY b
+        ON a.REPOSITORY_UUID = b.REPOSITORY_UUID
+        left outer join ST_SHELF c
+        ON a.SHELF_UUID = C.SHELF_UUID
+        left outer join ST_LOCATION d
+        ON a.LOCATION_UUID = d.LOCATION_UUID
+        <where>
+            1=1
+            <if test="code != null">
+                AND EXISTS(
+                SELECT *
+                FROM ST_INVENTORY_RECORD_RESULT STIRR INNER JOIN RC_AGGREGATION RCA
+                ON STIRR.AGGREGATION_UUID = RCA.AGGREGATION_UUID
+                WHERE STIRR.INVENTORY_PLAN_UUID = a.INVENTORY_PLAN_UUID
+                AND RCA.AGGREGATION_CODE LIKE '%' || #{code} || '%'
+                )
+            </if>
+            <if test="title != null">
+                AND EXISTS(
+                SELECT *
+                FROM ST_INVENTORY_RECORD_RESULT STIRR INNER JOIN RC_AGGREGATION RCA
+                ON STIRR.AGGREGATION_UUID = RCA.AGGREGATION_UUID
+                WHERE STIRR.INVENTORY_PLAN_UUID = a.INVENTORY_PLAN_UUID
+                AND RCA.TITLE LIKE '%' || #{title} || '%'
+                )
+            </if>
+            <!-- <if test="code != null || title != null">
+                 AND EXISTS(
+                 SELECT *
+                 FROM ST_INVENTORY_RECORD_RESULT STIRR INNER JOIN RC_AGGREGATION RCA
+                 ON STIRR.AGGREGATION_UUID = RCA.AGGREGATION_UUID
+                 WHERE STIRR.INVENTORY_PLAN_UUID = a.INVENTORY_PLAN_UUID
+                 AND RCA.AGGREGATION_CODE LIKE '%' || #{code} || '%'
+                 AND RCA.TITLE LIKE '%' || #{title} || '%'
+                 )
+             </if>-->
+            <if test="planName != null">
+                AND PLAN_NAME = #{planName}
+            </if>
+            <if test="plannerUuid != null">
+                AND a.PLANNER_UUID  = #{plannerUuid}
+            </if>
+            <!--<if test="exceptStartDate != null">
+                AND a.EXCEPT_START_DATE <![CDATA[>=]]> TO_DATE(#{exceptStartDate},'yyyy-mm-dd')
+            </if>
+            <if test="exceptEndDate != null">
+                AND a.EXCEPT_END_DATE <![CDATA[<]]> TO_DATE(#{exceptEndDate},'yyyy-mm-dd')+1
+            </if>-->
+
+            <if test="exceptStartDateFrom != null">
+                AND TO_DATE(TO_CHAR(a.EXCEPT_START_DATE, 'yyyy-mm-dd'), 'yyyy-mm-dd') <![CDATA[>=]]> TO_DATE(#{exceptStartDateFrom},'yyyy-mm-dd')
+            </if>
+            <if test="exceptStartDateTo != null">
+                AND TO_DATE(TO_CHAR(a.EXCEPT_START_DATE, 'yyyy-mm-dd'), 'yyyy-mm-dd') <![CDATA[<]]> TO_DATE(#{exceptStartDateTo},'yyyy-mm-dd')+1
+            </if>
+            <if test="exceptEndDateFrom != null">
+                AND TO_DATE(TO_CHAR(a.EXCEPT_END_DATE, 'yyyy-mm-dd'), 'yyyy-mm-dd') <![CDATA[>=]]> TO_DATE(#{exceptEndDateFrom},'yyyy-mm-dd')
+            </if>
+            <if test="exceptEndDateTo != null">
+                AND TO_DATE(TO_CHAR(a.EXCEPT_END_DATE, 'yyyy-mm-dd'), 'yyyy-mm-dd') <![CDATA[<]]> TO_DATE(#{exceptEndDateTo},'yyyy-mm-dd')+1
+            </if>
+
+
+            <if test="repositoryUuid != null">
+                AND a.REPOSITORY_UUID  = #{repositoryUuid}
+            </if>
+            <if test="shelfUuid != null">
+                AND a.SHELF_UUID  = #{shelfUuid}
+            </if>
+        </where>
+        ORDER BY a.EXCEPT_START_DATE DESC
+
+    </select>
 </mapper>

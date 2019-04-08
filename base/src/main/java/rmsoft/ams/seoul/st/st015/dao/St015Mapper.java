@@ -13,6 +13,7 @@ public interface St015Mapper extends MyBatisMapper {
 
 
     List<St01501VO> getStInventoryPlan(St01501VO st01501VO);
+    List<St01501VO> getStInventoryPlanExl(St01501VO st01501VO);
 
     List<St01502VO> getStInventoryContainerResult(St01502VO st01502VO);
 

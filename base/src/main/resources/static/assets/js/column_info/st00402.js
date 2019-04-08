@@ -36,13 +36,13 @@ var st00402 =
                 },
                 {
                     sortNo: 3,
-                    name: "containerType",
+                    width: 160,
+                    name: "containerTypeUuid",
                     text: "Container Type",
-                    width: 170,
-                    editable: false,
-                    dataType: "text",
-                    required: true,
-                    disable: true
+                    values: axboot.commonCodeFilter("CD139").codeArr,
+                    labels: axboot.commonCodeFilter("CD139").nameArr,
+                    dataType : "combo",
+                    required : true
                 },
                 {
                     sortNo: 4,

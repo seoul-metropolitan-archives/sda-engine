@@ -69,8 +69,12 @@ public class St002Service extends BaseService {
                 if(isEmpty(stContainer.getParentContainerUuid())){stContainer.setParentContainerUuid(""); }
                 if(isEmpty(stContainer.getOrderNo())){stContainer.setOrderNo(""); }
 
-                stContainer.setCreationStartDate(stContainer.getCreationStartDate().replace("-","") );
-                stContainer.setCreationEndDate(stContainer.getCreationEndDate().replace("-","") );
+                String str = stContainer.getCreationStartDate().replace("-","");
+                str = str==null? "":str;
+                stContainer.setCreationStartDate(str);
+                str = stContainer.getCreationEndDate().replace("-","");
+                str = str==null? "" :str;
+                stContainer.setCreationEndDate(str);
 
                 if(stContainer.isCreated()){
                     stContainer.setStatusUuid(CommonCodeUtils.getCodeDetailUuid("CD138","Draft"));

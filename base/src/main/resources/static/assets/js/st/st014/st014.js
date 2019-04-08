@@ -12,7 +12,10 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             type: "GET",
             url: "/api/v1/st/st014/01/list01",
             data: $.extend({}, {pageSize: 1000}, this.formView.getData()
-                ,{repositoryUuid: repositoryUuid, shelfUuid: shelfUuid, locationUuid: locationUuid}
+                ,{repositoryUuid: repositoryUuid, shelfUuid: shelfUuid, locationUuid: locationUuid ,
+                    inoutDateTimeFrom: $("input[data-ax-path='inoutDateTimeFrom']").val(),
+                    inoutDateTimeTo:$("input[data-ax-path='inoutDateTimeTo']").val()
+                }
             ),
             callback: function (res) {
                 fnObj.gridView01.setData(res.list);

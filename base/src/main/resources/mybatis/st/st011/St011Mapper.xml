@@ -13,8 +13,10 @@
        (SELECT CODE_NAME FROM AD_CODE_DETAIL WHERE CODE_DETAIL_UUID = Z1.TYPE_UUID)             as "type",
        (SELECT LEVEL_NAME FROM RC_LEVEL WHERE LEVEL_UUID = Z1.LEVEL_UUID)                       as "level",
        Z1.AUTHOR                                                                                   as author,
-       Z1.DESCRIPTION_START_DATE                                                                   as descStrDate,
-       Z1.DESCRIPTION_END_DATE                                                                     as descEdDate,
+       --Z1.DESCRIPTION_START_DATE                                                                   as descStrDate,
+       --Z1.DESCRIPTION_END_DATE                                                                     as descEdDate,
+        TO_CHAR(TO_DATE(Z1.DESCRIPTION_START_DATE,'YYYYMMDD'),'YYYY-MM-DD')                   as descStrDate,
+        TO_CHAR(TO_DATE(Z1.DESCRIPTION_END_DATE,'YYYYMMDD'),'YYYY-MM-DD')                   as descEdDate,
        Z1.DESCRIPTION                                                                              as description,
        Z1.NOTES                                                                                    as notes,
        ((SELECT COUNT(*) FROM RC_AGGREGATION WHERE PARENT_AGGREGATION_UUID = Z1.AGGREGATION_UUID) +
@@ -22,18 +24,13 @@
         repository.REPOSITORY_NAME repositoryName,
        shelf.SHELF_NAME shelfName,
        (location.ROW_NO || '행 ' || location.COLUMN_NO || '열') as locationName
-        FROM RC_AGGREGATION Z1 LEFT OUTER JOIN ST_ARRANGE_RECORDS_RESULT etc
-         ON etc.AGGREGATION_UUID = Z1.AGGREGATION_UUID
-                       LEFT JOIN ST_ARRANGE_CONTAINERS_RESULT acr
-         ON acr.CONTAINER_UUID = etc.CONTAINER_UUID
-                       LEFT JOIN ST_LOCATION location
-         ON location.LOCATION_UUID = acr.LOCATION_UUID
-                       LEFT JOIN ST_CONTAINER container
-         ON container.CONTAINER_UUID = etc.CONTAINER_UUID
-                       LEFT JOIN ST_SHELF shelf
-         ON shelf.SHELF_UUID = location.SHELF_UUID
-                       LEFT JOIN ST_REPOSITORY repository
-         ON repository.REPOSITORY_UUID = shelf.REPOSITORY_UUID
+        FROM RC_AGGREGATION Z1 LEFT OUTER JOIN ST_ARRANGE_RECORDS_RESULT  etc          ON etc.AGGREGATION_UUID = Z1.AGGREGATION_UUID
+                               LEFT JOIN ST_ARRANGE_CONTAINERS_RESULT       acr         ON acr.CONTAINER_UUID = etc.CONTAINER_UUID
+                               LEFT JOIN ST_LOCATION                        location    ON location.LOCATION_UUID = acr.LOCATION_UUID
+                               LEFT JOIN ST_CONTAINER                       container   ON container.CONTAINER_UUID = etc.CONTAINER_UUID
+                               LEFT JOIN ST_SHELF                           shelf       ON shelf.SHELF_UUID = location.SHELF_UUID
+                               LEFT JOIN ST_REPOSITORY                      repository  ON repository.REPOSITORY_UUID = shelf.REPOSITORY_UUID
+                               LEFT JOIN RC_AGGREGATION_CON                 c           ON Z1.aggregation_uuid = c.aggregation_uuid
         WHERE EXISTS(
                 SELECT *
                 FROM ST_ARRANGE_RECORDS_RESULT A
@@ -75,7 +72,7 @@
     </select>
 
     <select id="getTakeInOutList" resultType="St01102VO" parameterType="St01102VO" statementType="PREPARED">
-        select
+        select DISTINCT
                 request.TAKEOUT_REQUEST_UUID                                  AS takeoutRequestUuid,
                 REQUEST_NAME                                                  AS requestName,
                 REQUEST_TYPE_UUID                                             AS requestTypeUuid,

@@ -9,10 +9,21 @@
             A.ARRANGE_RECORDS_RESULT_UUID as arrangeRecordsResultUuid,
             A.STATUS_UUID as statusUuid,
             A.CONTAINER_UUID as containerUuid,
+            container.container_name as containerName,
             B.AGGREGATION_CODE as aggregationCode,
             A.AGGREGATION_UUID as aggregationUuid,
             A.ITEM_UUID as itemUuid,
             B.TITLE as title,
+            --TO_CHAR(TO_DATE(B.DESCRIPTION_START_DATE,'YYYYMMDD'),'YYYY-MM-DD')                   as descStrDate,
+            --TO_CHAR(TO_DATE(B.DESCRIPTION_END_DATE,'YYYYMMDD'),'YYYY-MM-DD')                   as descEdDate,
+            (CASE   WHEN    LENGTH(c.creation_start_date) = 8
+                              THEN TO_CHAR(TO_DATE(c.creation_start_date,'YYYYMMDD'), 'YYYY-MM-DD')
+                    ELSE    c.creation_start_date
+            END)    as descStrDate,
+            (CASE   WHEN    LENGTH(c.creation_end_date) = 8
+                              THEN TO_CHAR(TO_DATE(c.creation_end_date,'YYYYMMDD'), 'YYYY-MM-DD')
+                    ELSE    c.creation_end_date
+            END)    as descEdDate,
             B.TYPE_UUID as typeUuid,
             to_char(A.ARRANGED_DATE, 'YYYY-MM-DD') as arrangedDate,
             A.DESCRIPTION as description,
@@ -28,9 +39,15 @@
             A.INSERT_DATE as insertDate,
             <include refid="Common.UserName"><property name="userUuid" value="A.UPDATE_UUID"/></include> as updateUuid,
             A.UPDATE_DATE as updateDate
-            FROM ST_ARRANGE_RECORDS_RESULT A, RC_AGGREGATION B
+            FROM ST_ARRANGE_RECORDS_RESULT A LEFT JOIN RC_AGGREGATION_CON C ON A.AGGREGATION_UUID = C.AGGREGATION_UUID
+                                              LEFT JOIN ST_CONTAINER container ON A.CONTAINER_UUID = container.CONTAINER_UUID
+                  , RC_AGGREGATION B
+
             <where>
                 A.AGGREGATION_UUID = B.AGGREGATION_UUID
+                <if test="containerName != null">
+                    AND container.container_name like '%'||#{containerName}||'%'
+                </if>
                 <if test="containerUuid != null">
                     AND  A.CONTAINER_UUID = #{containerUuid}
                 </if>
@@ -41,13 +58,13 @@
                     AND A.ARRANGED_DATE <![CDATA[<]]> TO_DATE(#{arrangedToDate},'yyyy-mm-dd')+1
                 </if>
                 <if test="aggregationCode != null">
-                    AND  B.AGGREGATION_CODE = #{aggregationCode}
+                    AND  B.AGGREGATION_CODE LIKE '%'|| #{aggregationCode}||'%'
                 </if>
                 <if test="statusUuid != null">
                     AND  A.STATUS_UUID = #{statusUuid}
                 </if>
                 <if test="title != null">
-                    AND  B.TITLE = #{title}
+                    AND  B.TITLE LIKE  '%'||#{title}||'%'
                 </if>
                 <if test="typeUuid != null">
                     AND  B.TYPE_UUID = #{typeUuid}
@@ -55,32 +72,32 @@
             </where>
     </select>
     <select id="getContainerItemList" resultType="St00301VO"  statementType="PREPARED">
-        SELECT
-        A.ARRANGE_RECORDS_RESULT_UUID as arrangeRecordsResultUuid,
-        A.STATUS_UUID as statusUuid,
-        A.CONTAINER_UUID as containerUuid,
-        B.ITEM_CODE as itemCode,
-        B.TITLE as title,
-        A.AGGREGATION_UUID as aggregationUuid,
-        A.ITEM_UUID as itemUuid,
-        B.TYPE_UUID as typeUuid,
-        to_char(A.ARRANGED_DATE, 'YYYY-MM-DD') as arrangedDate,
-        A.DESCRIPTION as description,
-        A.NOTES as notes,
-        (SELECT
-        SUBSTR(SYS_CONNECT_BY_PATH(TITLE,' >> '),4) path
-        FROM
-        RC_AGGREGATION C
-        WHERE B.AGGREGATION_UUID = C.AGGREGATION_UUID
-        START WITH PARENT_AGGREGATION_UUID IS NULL
-        CONNECT BY PRIOR AGGREGATION_UUID = PARENT_AGGREGATION_UUID) AS aggregationTree,
-        <include refid="Common.UserName"><property name="userUuid" value="A.INSERT_UUID"/></include> as insertUuid,
-        A.INSERT_DATE as insertDate,
-        <include refid="Common.UserName"><property name="userUuid" value="A.UPDATE_UUID"/></include> as updateUuid,
-        A.UPDATE_DATE as updateDate
+        SELECT  A.ARRANGE_RECORDS_RESULT_UUID as arrangeRecordsResultUuid,
+                A.STATUS_UUID as statusUuid,
+                A.CONTAINER_UUID as containerUuid,
+                B.ITEM_CODE as itemCode,
+                B.TITLE as title,
+                A.AGGREGATION_UUID as aggregationUuid,
+                A.ITEM_UUID as itemUuid,
+                B.TYPE_UUID as typeUuid,
+                to_char(A.ARRANGED_DATE, 'YYYY-MM-DD') as arrangedDate,
+                A.DESCRIPTION as description,
+                TO_CHAR(TO_DATE(A.descStrDate,'YYYYMMDD'),'YYYY-MM-DD')                   as descStrDate,
+                TO_CHAR(TO_DATE(A.descEdDate,'YYYYMMDD'),'YYYY-MM-DD')                   as descEdDate,
+                A.NOTES as notes,
+                (SELECT SUBSTR(SYS_CONNECT_BY_PATH(TITLE,' >> '),4) path
+                 FROM   RC_AGGREGATION C
+                 WHERE B.AGGREGATION_UUID = C.AGGREGATION_UUID
+                        START WITH PARENT_AGGREGATION_UUID IS NULL
+                        CONNECT BY PRIOR AGGREGATION_UUID = PARENT_AGGREGATION_UUID) AS aggregationTree,
+                <include refid="Common.UserName"><property name="userUuid" value="A.INSERT_UUID"/></include> as insertUuid,
+                A.INSERT_DATE as insertDate,
+                <include refid="Common.UserName"><property name="userUuid" value="A.UPDATE_UUID"/></include> as updateUuid,
+                A.UPDATE_DATE as updateDate
         FROM ST_ARRANGE_RECORDS_RESULT A, RC_ITEM B
         <where>
             A.ITEM_UUID = B.ITEM_UUID
+
             <if test="containerUuid != null">
                 AND  A.CONTAINER_UUID = #{containerUuid}
             </if>
@@ -97,7 +114,7 @@
                 AND  A.STATUS_UUID = #{statusUuid}
             </if>
             <if test="title != null">
-                AND  B.TITLE = #{title}
+                AND  B.TITLE LIKE '%'|| #{title}||'%'
             </if>
             <if test="typeUuid != null">
                 AND  B.TYPEUUID = #{typeUuid}
@@ -136,10 +153,12 @@
         A.PUBLISHED_STATUS_UUID as publishedStatusUuid,
         A.AGGREGATION_CODE as aggregationCode,
         A.TITLE as title,
+        TO_CHAR(TO_DATE(A.descStrDate,'YYYYMMDD'),'YYYY-MM-DD')                   as descStrDate,
+        TO_CHAR(TO_DATE(A.descEdDate,'YYYYMMDD'),'YYYY-MM-DD')                   as descEdDate,
         A.TYPE_UUID as typeUuid,
         B.TYPE_UUID AS itemTypeUuid,
         B.DESCRIPTION as description,
-        B.NOTES as notes,
+        B.NOTES as notes,A.AGGREGATION_UUID = B.AGGREGATION_UUID
         B.AGGREGATION_UUID as parentAggregationUuid,
         (
             SELECT SYS_CONNECT_BY_PATH((
@@ -193,8 +212,10 @@
               Z1.AGGREGATION_UUID as uuid
               , Z1.PARENT_AGGREGATION_UUID as parentUuid
               -- , Z1.TITLE as name
-              ,Z1.TITLE  || '(' || Z1.AGGREGATION_CODE|| ')' as name
+              , '[' || Z1.TITLE  ||'] ' ||  Z1.AGGREGATION_CODE as name
               , Z1.DESCRIPTION as description
+              ,TO_CHAR(TO_DATE(Z1.descStrDate,'YYYYMMDD'),'YYYY-MM-DD')                   as descStrDate
+              ,TO_CHAR(TO_DATE(Z1.descEdDate,'YYYYMMDD'),'YYYY-MM-DD')                   as descEdDate
               , Z1.NOTEs as notes
               , SUBSTR(SYS_CONNECT_BY_PATH(ROWNUM, '.'), 2 , length(SYS_CONNECT_BY_PATH(ROWNUM, '.'))) as orderKey1
               , LOWER (Z2.CODE_NAME) as nodeType
@@ -227,5 +248,6 @@
         </if>
         START WITH Z1.PARENT_AGGREGATION_UUID IS NULL
         CONNECT BY PRIOR Z1.AGGREGATION_UUID = Z1.PARENT_AGGREGATION_UUID
+        ORDER BY Z1.AGGREGATION_CODE
     </select>
 </mapper>

@@ -78,6 +78,15 @@ var st01801 =
                 },
                 {
                     sortNo: 11,
+                    name: "containerName",
+                    text: "컨테이너",
+                    width: 250,
+                    editable: false,
+                    dataType: "text",
+                    disable: true
+                },
+                {
+                    sortNo: 12,
                     name: "publishStatus",
                     text: "Publish Status",
                     width: 140,
@@ -87,7 +96,7 @@ var st01801 =
                 },
 
                 {
-                    sortNo: 12,
+                    sortNo: 13,
                     name: "publishDate",
                     text: "Publish Date",
                     width: 140,

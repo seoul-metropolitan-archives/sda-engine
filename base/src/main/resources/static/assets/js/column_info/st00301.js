@@ -67,6 +67,16 @@ var st00301 =
                 },
                 {
                     sortNo: 6,
+                    width: 200,
+                    name: "containerName",
+                    text: "Container Name",
+                    disable: true,
+                    editable: false,
+                    dataType: "text",
+                    required: false,
+                },
+                {
+                    sortNo: 7,
                     name: "description",
                     text: "Description",
                     width: 250,
@@ -75,7 +85,25 @@ var st00301 =
                     required: false
                 },
                 {
-                    sortNo: 7,
+                    sortNo: 8,
+                    name: "descStrDate",
+                    text: "Start Date",
+                    width: 100,
+                    editable: false,
+                    dataType: "text",
+                    disable: true
+                },
+                {
+                    sortNo: 9,
+                    name: "descEdDate",
+                    text: "End Date",
+                    width: 100,
+                    editable: false,
+                    dataType: "text",
+                    disable: true
+                },
+                {
+                    sortNo: 10,
                     name: "notes",
                     text: "Notes",
                     width: 250,
@@ -84,7 +112,7 @@ var st00301 =
                     required: false
                 },
                 {
-                    sortNo: 8,
+                    sortNo: 11,
                     name: "aggregationTree",
                     text: "Aggregation Tree",
                     width: 500,
@@ -93,7 +121,7 @@ var st00301 =
                     editable: false
                 },
                 {
-                    sortNo: 9,
+                    sortNo: 12,
                     name: "arrangedDate",
                     text: "Arranged Date",
                     width: 100,
@@ -102,7 +130,7 @@ var st00301 =
                     editable: false
                 },
                 {
-                    sortNo: 10,
+                    sortNo: 13,
                     name: "insertUuid",
                     text: "Created By",
                     width: 80,
@@ -112,7 +140,7 @@ var st00301 =
                     required: false
                 },
                 {
-                    sortNo: 11,
+                    sortNo: 14,
                     name: "insertDate",
                     text: "Date/Time Created",
                     width: 140,
@@ -122,7 +150,7 @@ var st00301 =
                     required: false
                 },
                 {
-                    sortNo: 12,
+                    sortNo: 15,
                     name: "updateUuid",
                     text: "Modified By",
                     width: 80,
@@ -132,7 +160,7 @@ var st00301 =
                     required: false
                 },
                 {
-                    sortNo: 13,
+                    sortNo: 16,
                     name: "updateDate",
                     text: "Date/Time Modified",
                     width: 140,
@@ -142,7 +170,7 @@ var st00301 =
                     required: false
                 },
                 {
-                    sortNo: 14,
+                    sortNo: 17,
                     width:30,
                     name: "containerUuid",
                     text: "Container UUID",
@@ -152,7 +180,7 @@ var st00301 =
                     visible: false
                 },
                 {
-                    sortNo: 15,
+                    sortNo: 18,
                     width:30,
                     name: "aggregationUuid",
                     text: "Aggregation UUID",
@@ -162,7 +190,7 @@ var st00301 =
                     visible: false
                 },
                 {
-                    sortNo: 16,
+                    sortNo: 19,
                     width:30,
                     name: "itemUuid",
                     text: "Item UUID",

@@ -79,7 +79,8 @@ var st01004 =
                     width: 70,
                     editable: false,
                     dataType: "text",
-                    disable: true
+                    disable: true,
+                    visible:false
                 },
                 {
                     sortNo: 9,

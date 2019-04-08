@@ -153,15 +153,16 @@ fnObj.pageStart = function () {
         },
         onuploadComplete: function () {
             $('[data-ax5uploader="upload1"]').hide();
-            axToast.push("File Upload Complete");
-            /*fnObj.gridView02.gridObj.setValue(fnObj.gridView02.gridObj.gridView.getSelectedItems()[0],'refUploadFilePath',UPLOAD.uploadedFiles[0].fileName);
-            fnObj.gridView03.gridObj.setValue(0,'uploadFilePath',UPLOAD.uploadedFiles[0].fileName);
+            axToast.push("File Upload Complete:"+UPLOAD.uploadedFiles[0].fileName);
+            console.log("UPLOAD.uploadedFiles[0].fileName",UPLOAD.uploadedFiles[0].fileName);
+            fnObj.gridView01.gridObj.setValue(fnObj.gridView01.gridObj.gridView.getSelectedItems()[0],'uploadFilePath',"TEST");//UPLOAD.uploadedFiles[0].fileName);
+            //fnObj.gridView03.gridObj.setValue(0,'uploadFilePath',UPLOAD.uploadedFiles[0].fileName);
             // 마지막으로 업로드 된 파일의 실제 경로를 저장한다.
-            var lastUploadFilePath = "/" + UPLOAD.uploadedFiles[0].filePath +"/" + UPLOAD.uploadedFiles[0].saveName;
-            fnObj.gridView02.gridObj.setValue(fnObj.gridView02.gridObj.gridView.getSelectedItems()[0],'lastUploadFilePath',lastUploadFilePath);
+            /*var lastUploadFilePath = "/" + UPLOAD.uploadedFiles[0].filePath +"/" + UPLOAD.uploadedFiles[0].saveName;
+            fnObj.gridView01.gridObj.setValue(fnObj.gridView01.gridObj.gridView.getSelectedItems()[0],'uploadFilePath',lastUploadFilePath);
             axToast.push("File Upload Complete");
             UPLOAD.removeFileAll();
-            saveCurrentParameter(fnObj.gridView02.gridObj.gridView.getSelectedItems()[0]);*/
+            saveCurrentParameter(fnObj.gridView01.gridObj.gridView.getSelectedItems()[0]);*/
         },
         abortCallback: function(){
             $('[data-ax5uploader="upload1"]').hide();

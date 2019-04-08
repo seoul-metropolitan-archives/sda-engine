@@ -15,8 +15,16 @@
                B."type",
                B.publishedStatus,
                B.author,
-               B.descStrDate,
-               B.descEdDate,
+                (CASE   WHEN    LENGTH(aggregation_con.creation_start_date) = 8
+                                  THEN TO_CHAR(TO_DATE(aggregation_con.creation_start_date,'YYYYMMDD'), 'YYYY-MM-DD')
+                        ELSE    aggregation_con.creation_start_date
+                END)                                                                                                            as descStrDate,
+                (CASE   WHEN  LENGTH(aggregation_con.creation_end_date) = 8
+                               THEN TO_CHAR(TO_DATE(aggregation_con.creation_end_date,'YYYYMMDD'), 'YYYY-MM-DD')
+                        ELSE   aggregation_con.creation_end_date
+                END)                                                                                                            as descEdDate,
+               -- B.descStrDate,
+               -- B.descEdDate,
                repository.REPOSITORY_NAME repositoryName,
                shelf.SHELF_NAME shelfName,
                (location.ROW_NO || '행 ' || location.COLUMN_NO || '열') as locationName,

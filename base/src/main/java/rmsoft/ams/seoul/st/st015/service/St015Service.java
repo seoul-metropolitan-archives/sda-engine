@@ -292,21 +292,21 @@ public class St015Service extends BaseService {
 
     }
 
-    public ByteArrayInputStream getExcelDown() throws IOException {
+    public ByteArrayInputStream getExcelDown(RequestParams<St01501VO> requestParams) throws IOException {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         InputStream is = null;
 
         St01501VO st01501VO = new St01501VO();
-        /*st01501VO.setPlanName(requestParams.getString("planName"));
+        st01501VO.setPlanName(requestParams.getString("planName"));
         st01501VO.setRepositoryUuid(requestParams.getString("repositoryUuid"));
         st01501VO.setShelfUuid(requestParams.getString("shelfUuid"));
         st01501VO.setCode(requestParams.getString("code"));
         st01501VO.setTitle(requestParams.getString("title"));
         st01501VO.setPlannerUuid(requestParams.getString("plannerUuid"));
         st01501VO.setExceptStartDate(requestParams.getString("exceptStartDate"));
-        st01501VO.setExceptEndDate(requestParams.getString("exceptEndDate"));*/
+        st01501VO.setExceptEndDate(requestParams.getString("exceptEndDate"));
 
-        List<St01501VO> list = st015Mapper.getStInventoryPlan(st01501VO);
+        List<St01501VO> list = st015Mapper.getStInventoryPlanExl(st01501VO);
 
 
         try {

@@ -117,6 +117,9 @@
             <if test="requestorUuid != null">
                 AND request.REQUESTOR_UUID  = #{requestorUuid}
             </if>
+            <if test="requestorName != null">
+                AND ( AC_USER.USER_NAME LIKE '%'||#{requestorName}||'%' OR OUTSOURCING_PERSON_NAME LIKE '%'||#{requestorName}||'%')
+            </if>
             <if test="takeoutDateFrom != null">
                 AND TO_DATE(TO_CHAR(request.TAKEOUT_DATE, 'yyyy-mm-dd'), 'yyyy-mm-dd') <![CDATA[>=]]> TO_DATE(#{takeoutDateFrom},'yyyy-mm-dd')
             </if>
@@ -146,14 +149,22 @@
         B."type",
         B.publishedStatus,
         B.author,
-        B.descStrDate descStrDate,
-        B.descEdDate descEdDate,
+        --B.descStrDate descStrDate,
+        --B.descEdDate descEdDate,
+        (CASE   WHEN    LENGTH(c.creation_start_date) = 8
+        THEN TO_CHAR(TO_DATE(c.creation_start_date,'YYYYMMDD'), 'YYYY-MM-DD')
+        ELSE    c.creation_start_date
+        END)    as descStrDate,
+        (CASE   WHEN    LENGTH(c.creation_end_date) = 8
+        THEN TO_CHAR(TO_DATE(c.creation_end_date,'YYYYMMDD'), 'YYYY-MM-DD')
+        ELSE    c.creation_end_date
+        END)    as descEdDate,
         repository.REPOSITORY_NAME repositoryName, -- 서고
         shelf.SHELF_NAME shelfName, -- 서가
         (location.ROW_NO || '행 ' || location.COLUMN_NO || '열') as locationName, -- 행렬단
         container.CONTAINER_NAME as containerName
 
-        FROM ST_TAKEOUT_RECORD_RESULT record_result
+        FROM ST_TAKEOUT_RECORD_RESULT record_result LEFT JOIN RC_AGGREGATION_CON c ON record_result.aggregation_uuid = c.aggregation_uuid
         LEFT JOIN
         ST_ARRANGE_RECORDS_RESULT etc
         ON etc.AGGREGATION_UUID = record_result.AGGREGATION_UUID

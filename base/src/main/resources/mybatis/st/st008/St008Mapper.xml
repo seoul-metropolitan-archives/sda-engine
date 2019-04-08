@@ -114,9 +114,6 @@
         </if>
                     <where>
                         1=1
-                        <if test="requestName != null">
-                            AND REQUEST_NAME LIKE '%' || #{requestName} || '%'
-                        </if>
                         <if test="requestorUuid != null">
                             AND request.REQUESTOR_UUID  = #{requestorUuid}
                         </if>
@@ -141,6 +138,9 @@
                                             ELSE '%'||'%' END
         AND requestorUuid = CASE WHEN AUTH_NAME = 'USER' THEN #{currentLoginUserUuid}
                                   ELSE requestorUuid  END
+        <if test="requestorName != null">
+            AND tab.requestorName LIKE '%'||#{requestorName}||'%'
+        </if>
     </select>
     <select id="getStTakeoutRecordResult" resultType="St00802VO" statementType="PREPARED">
         -- 여기는 위의 getStTakeoutRequest query 와 같으므로 아래 변경되면 똑같이 적용 해 줘야됨
@@ -155,14 +155,23 @@
                B."type",
                B.publishedStatus,
                B.author,
-               B.descStrDate descStrDate,
-               B.descEdDate descEdDate,
+               -- B.descStrDate descStrDate,
+               -- B.descEdDate descEdDate,
+                (CASE   WHEN    LENGTH(c.creation_start_date) = 8
+                THEN TO_CHAR(TO_DATE(c.creation_start_date,'YYYYMMDD'), 'YYYY-MM-DD')
+                ELSE    c.creation_start_date
+                END)    as descStrDate,
+                (CASE   WHEN    LENGTH(c.creation_end_date) = 8
+                THEN TO_CHAR(TO_DATE(c.creation_end_date,'YYYYMMDD'), 'YYYY-MM-DD')
+                ELSE    c.creation_end_date
+                END)    as descEdDate,
                repository.REPOSITORY_NAME repositoryName, -- 서고
                shelf.SHELF_NAME shelfName, -- 서가
                (location.ROW_NO || '행 ' || location.COLUMN_NO || '열') as locationName, -- 행렬단
                container.CONTAINER_NAME as containerName
 
         FROM ST_TAKEOUT_RECORD_RESULT record_result
+                  LEFT JOIN RC_AGGREGATION_CON c ON record_result.aggregation_uuid = c.aggregation_uuid
                   LEFT JOIN
                       ST_ARRANGE_RECORDS_RESULT etc
                   ON etc.AGGREGATION_UUID = record_result.AGGREGATION_UUID

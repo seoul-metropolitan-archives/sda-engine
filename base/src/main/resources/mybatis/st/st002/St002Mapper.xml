@@ -20,7 +20,8 @@
             ST_CONTAINER A
             START WITH PARENT_CONTAINER_UUID IS NULL
         CONNECT BY PRIOR CONTAINER_UUID = PARENT_CONTAINER_UUID
-        ORDER SIBLINGS BY ORDER_KEY
+        -- ORDER SIBLINGS BY ORDER_KEY
+        ORDER SIBLINGS BY CONTAINER_NAME
     </select>
     <select id="getContainerList" resultType="St00201VO" parameterType="St00201VO" statementType="PREPARED">
         SELECT
@@ -61,7 +62,7 @@
         ON STS.REPOSITORY_UUID = STR.REPOSITORY_UUID
         <where>
             <if test="provenance != null">
-                A.PROVENANCE = #{provenance}
+                A.PROVENANCE LIKE '%'|| #{provenance}||'%'
             </if>
             <if test="parentContainerUuid != null">
                 AND A.PARENT_CONTAINER_UUID = #{parentContainerUuid}
@@ -73,7 +74,7 @@
                 AND A.STATUS_UUID = #{statusUuid}
             </if>
             <if test="controlNumber != null">
-                AND A.CONTROL_NUMBER = #{controlNumber}
+                AND A.CONTROL_NUMBER LIKE '%' || #{controlNumber} || '%'
             </if>
             <if test="containerTypeUuid != null">
                 AND A.CONTAINER_TYPE_UUID = #{containerTypeUuid}

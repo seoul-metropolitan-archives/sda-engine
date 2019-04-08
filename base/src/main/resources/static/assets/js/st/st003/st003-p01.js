@@ -667,8 +667,22 @@ fnObj.gridView03 = axboot.viewExtend(axboot.gridView, {
         return newTree;
     },
     setData: function (list) {
+        console.log("origin:",list);
+        var convert = new Array();
+        for( var key in list){
+            var data = new Object();
+            var current = list[key];
+            var keySet = Object.keys(current);
+            for(var k in keySet)
+            {
+                var str = keySet[k];
+                data[str] = str!="name"? current[str] : current[str].replace(/(<([^>]+)>)/ig,"");
+            }
+            convert.push(data);
+        }
+        console.log("converted:", convert);
         var data = {
-            "children": list
+            "children": convert
         }
 
         //실제 여기에

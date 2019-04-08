@@ -57,7 +57,8 @@ var st00701 =
                     width: 140,
                     editable: false,
                     dataType: "text",
-                    disable: true
+                    disable: true,
+                    visible: false
                 },
 
                 {
@@ -66,7 +67,7 @@ var st00701 =
                     text: "Start Date",
                     width: 140,
                     editable: false,
-                    dataType: "date",
+                    dataType: "text",
                     disable: true
                 },
                 {
@@ -75,7 +76,7 @@ var st00701 =
                     text: "End Date",
                     width: 140,
                     editable: false,
-                    dataType: "date",
+                    dataType: "text",
                     disable: true
                 },
                 {

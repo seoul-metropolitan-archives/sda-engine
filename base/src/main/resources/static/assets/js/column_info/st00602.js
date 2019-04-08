@@ -67,14 +67,15 @@ var st00602 =
                     width: 100,
                     editable: false,
                     dataType: "text",
-                    disable:true
+                    disable:true,
+                    visible: false
                 },
                 {
                     sortNo: 8,
                     name: "startDate",
                     text: "Start Date",
                     width: 120,
-                    dataType: "timestamp",
+                    dataType: "text",
                     editable: false,
                     sortable: true,
                     disable:true
@@ -84,7 +85,7 @@ var st00602 =
                     name: "endDate",
                     text: "End Date",
                     width: 120,
-                    dataType: "timestamp",
+                    dataType: "text",
                     editable: false,
                     sortable: true,
                     disable:true

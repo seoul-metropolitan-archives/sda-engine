@@ -491,6 +491,13 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
             ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
         });
 
+        $("input[data-ax-path='requestorName']").keyup(function(e){
+            if($(this).val() == ""){
+                requestorUuid = "";
+                return;
+            }
+        });
+
     },
     getData: function () {
         var data = this.modelFormatter.getClearData(this.model.get()); // 모델의 값을 포멧팅 전 값으로 치환.

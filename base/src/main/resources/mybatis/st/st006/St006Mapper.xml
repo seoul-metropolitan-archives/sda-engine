@@ -56,7 +56,7 @@
                 AND statusUuid = #{statusUuid}
             </if>
             <if test="controlNumber != null">
-                AND controlNumber = #{controlNumber}
+                AND controlNumber LIKE '%'||#{controlNumber}||'%'
             </if>
             <if test="containerTypeUuid != null">
                 AND containerTypeUuid = #{containerTypeUuid}
@@ -86,8 +86,14 @@
                B.TYPE_UUID                                                   as typeUuid,
                (SELECT CODE_NAME FROM AD_CODE_DETAIL WHERE CODE_DETAIL_UUID = B.PUBLISHED_STATUS_UUID) as publishedStatus,
                AUTHOR                                                                                  as author,
-               DESCRIPTION_START_DATE                                                                  as startDate,
-               DESCRIPTION_END_DATE                                                                    as endDate,
+               (CASE   WHEN    LENGTH(c.creation_start_date) = 8
+                                THEN TO_CHAR(TO_DATE(c.creation_start_date,'YYYYMMDD'), 'YYYY-MM-DD')
+                        ELSE    c.creation_start_date
+                END)    as descStrDate,
+                (CASE   WHEN    LENGTH(c.creation_end_date) = 8
+                                THEN TO_CHAR(TO_DATE(c.creation_end_date,'YYYYMMDD'), 'YYYY-MM-DD')
+                        ELSE    c.creation_end_date
+                END)    as descEdDate,
                A.DESCRIPTION                                                 as description,
                A.NOTES                                                       as notes,
                (SELECT SUBSTR(SYS_CONNECT_BY_PATH(TITLE,
@@ -103,7 +109,7 @@
                (SELECT USER_NAME FROM AC_USER WHERE USER_UUID = A.UPDATE_UUID
                                                 AND ROWNUM = 1)              as updateUuid,
                A.UPDATE_DATE                                                 as updateDate
-        FROM ST_ARRANGE_RECORDS_RESULT A,
+        FROM ST_ARRANGE_RECORDS_RESULT A  LEFT JOIN RC_AGGREGATION_CON C ON A.aggregation_uuid = C.aggregation_uuid,
              RC_AGGREGATION B
         WHERE A.AGGREGATION_UUID = B.AGGREGATION_UUID
           AND A.CONTAINER_UUID = #{containerUuid}

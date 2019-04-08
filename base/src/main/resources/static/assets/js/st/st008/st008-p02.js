@@ -625,7 +625,7 @@ fnObj.gridView03 = axboot.viewExtend(axboot.gridView, {
                 lineVisible: false
             });
         this.gridObj.setColumnInfo(cl00301_p01_02.column_info).makeGrid();
-                this.gridObj.setDisplayOptions({
+        this.gridObj.setDisplayOptions({
             fitStyle:"evenFill"
         });
 
@@ -657,7 +657,8 @@ fnObj.gridView03 = axboot.viewExtend(axboot.gridView, {
             _tree.forEach(function (n, nidx) {
                 var item = {};
                 item = {
-                    title: n.name,
+                    /*title: n.name*/
+                    title: n.name.replace(/(<([^>]+)>)/ig,""),
                     aggregationUuid: n.uuid,
                     classifyRecordsUuid:n.classifyRecordsUuid == undefined ? '' : n.classifyRecordsUuid,
                     choiceYn : n.choiceYn == undefined ? 'N' : n.choiceYn

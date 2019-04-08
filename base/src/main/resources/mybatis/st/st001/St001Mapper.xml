@@ -68,10 +68,10 @@
                 STATUS_UUID = #{statusUuid}
             </if>
             <if test="shelfCode != null">
-                AND SHELF_CODE = #{shelfCode}
+                AND SHELF_CODE LIKE '%'||#{shelfCode}||'%'
             </if>
             <if test="shelfName != null">
-                AND SHELF_NAME = #{shelfName}
+                AND SHELF_NAME LIKE '%'||#{shelfName}||'%'
             </if>
             <if test="useYn != null">
                 AND USE_YN = #{useYn}

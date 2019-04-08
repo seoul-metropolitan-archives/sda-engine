@@ -94,7 +94,8 @@ var st00902 =
                     width: 140,
                     editable: false,
                     dataType: "text",
-                    disable: true
+                    disable: true,
+                    visible:false
                 },
                 {
                     sortNo: 7,
@@ -102,7 +103,7 @@ var st00902 =
                     text: "Start Date",
                     width: 140,
                     editable: false,
-                    dataType: "date",
+                    dataType: "text",
                     disable: true
                 },
                 {
@@ -111,7 +112,7 @@ var st00902 =
                     text: "End Date",
                     width: 140,
                     editable: false,
-                    dataType: "date",
+                    dataType: "text",
                     disable: true
                 },
                 {

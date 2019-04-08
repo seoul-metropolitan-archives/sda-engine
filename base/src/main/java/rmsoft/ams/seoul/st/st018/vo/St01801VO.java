@@ -21,6 +21,7 @@ public class St01801VO extends BaseVO implements Serializable {
     private String type;
     private String publishedStatus;
     private String publishedStatusUuid;
+    private String containerName;
 
     private String repositoryUuid;
     private String shelfUuid;

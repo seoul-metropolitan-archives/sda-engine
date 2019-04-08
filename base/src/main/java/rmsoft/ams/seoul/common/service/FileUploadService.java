@@ -55,8 +55,16 @@ public class FileUploadService {
     private Rc005Service rc005Service;
 
     public AX5File upload(MultipartFile multipartFile) throws IOException {
-        AX5File file = AX5File.of(multipartFile);
-        filePersistService.persist(file);
+        AX5File file =null;
+        try{
+            file = AX5File.of(multipartFile);
+            filePersistService.persist(file);
+        }
+        catch(Exception ex)
+        {
+            ex.printStackTrace();
+        }
+
         return file;
     }
 

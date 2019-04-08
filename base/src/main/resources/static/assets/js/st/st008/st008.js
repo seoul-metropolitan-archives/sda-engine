@@ -16,7 +16,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             type: "GET",
             url: "/api/v1/st/st008/01/list01",
             data: $.extend({}, {pageSize: 1000 }, this.formView.getData(),
-        {repositoryUuid: repositoryUuid, shelfUuid: shelfUuid, locationUuid: locationUuid, requestorUuid : requestorUuid}
+                                {repositoryUuid: repositoryUuid, shelfUuid: shelfUuid, locationUuid: locationUuid, requestorUuid : requestorUuid, requestorName: $('input[data-ax-path="requestorName"]').val()}
             ),
             callback: function (res) {
 

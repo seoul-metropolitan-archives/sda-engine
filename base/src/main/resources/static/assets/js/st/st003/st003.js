@@ -35,7 +35,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             type: "GET",
             url: "/api/v1/st/st003/01/list01",
             async : false,
-            data: $.extend({}, {pageSize: 1000},this.formView.getData(),{containerUuid: data.containerUuid},{aggregationCode : $("input[data-ax-path='aggregationCode']").val()}),
+            data: $.extend({}, {pageSize: 1000},this.formView.getData(),{containerName:$("input[data-ax-path='containerName']").val()},{containerUuid: data.containerUuid},{aggregationCode : $("input[data-ax-path='aggregationCode']").val()}),
             callback: function (res) {
                 fnObj.gridView02.resetCurrent();
                 fnObj.gridView02.setData(res.list);

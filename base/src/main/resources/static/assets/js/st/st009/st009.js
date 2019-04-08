@@ -15,7 +15,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         axboot.ajax({
             type: "GET",
             url: "/api/v1/st/st009/01/list01",
-            data: $.extend({}, {pageSize:1000},this.formView.getData(),{requestorUuid : requestorUuid}),
+            data: $.extend({}, {pageSize:100000},this.formView.getData(),{requestorName :  $("input[data-ax-path='requestorName']").val()},{requestorUuid : requestorUuid}),
             callback: function (res) {
                 fnObj.gridView01.setData(res.list);
                 //fnObj.gridView01.disabledColumn();

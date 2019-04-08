@@ -71,9 +71,11 @@ public class St015Controller extends BaseController {
 
     @GetMapping("/01/excelDown")
     public ResponseEntity<InputStreamResource> getExcelDown(RequestParams<St01501VO> requestParams) throws IOException {
+        for(String key : requestParams.getMap().keySet()){
+            System.out.println(key+":"+requestParams.getMap().get(key));
+        }
 
-
-        ByteArrayInputStream in = st015Service.getExcelDown();
+        ByteArrayInputStream in = st015Service.getExcelDown(requestParams);
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_OCTET_STREAM);

@@ -371,18 +371,20 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         });
     },
     EXCEL_DOWN01 : function(caller, act, data){
-        var list =  fnObj.gridView01.getSelectedData()
-
+        //var list =  fnObj.gridView01.getSelectedData();
+        var list =  fnObj.gridView01.getCheckedList();
+        console.log(list);
         if(list.length>1){
             //alert(list.length);
             axToast.push(axboot.getCommonMessage("ST015_02"));
         }
-        else if(list.length < 1){
+        else if(list.length == 0){
             //alert(list.length);
             axToast.push(axboot.getCommonMessage("ST015_03"));
         }
         else{
-            location.href = "/api/v1/st/st015/01/excelDown";
+            var param = $.param( list[0] );
+            location.href = "/api/v1/st/st015/01/excelDown?"+param;
         }
 
     },
@@ -713,11 +715,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
         return this.gridObj.getCheckedList();
     },
     getSelectedData: function () {
-        if(this.gridObj.getCheckedList().length > 0)
-            //gridView03 목록에 추가
-            return this.gridObj.getCheckedList();
-        else
-            return this.gridObj.getSelectedData();
+         return this.gridObj.getSelectedData();
     },
     disabledColumn: function () {
         var state = axboot.commonCodeValueByCodeName("CD216", CONFIRM_STATUS);

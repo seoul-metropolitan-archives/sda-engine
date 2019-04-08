@@ -24,4 +24,5 @@ public class St00401VO extends BaseVO {
 	private String orderKey1;
 	private String choiceYn;
 	private String parentContainerUuid;
+	private String containerTypeUuid;
 }

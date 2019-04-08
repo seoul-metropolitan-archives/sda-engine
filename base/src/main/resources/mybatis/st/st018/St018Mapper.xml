@@ -21,7 +21,8 @@ SELECT
        B.descEdDate,
        repository.REPOSITORY_NAME repositoryName,
        shelf.SHELF_NAME shelfName,
-       (location.ROW_NO || '행 ' || location.COLUMN_NO || '열') as locationName
+       (location.ROW_NO || '행 ' || location.COLUMN_NO || '열') as locationName,
+        container.container_name  as containerName
 FROM RC_AGGREGATION A
         INNER JOIN RC_AGGREGATION_CON A_CON
          ON A.AGGREGATION_UUID = A_CON.AGGREGATION_UUID
