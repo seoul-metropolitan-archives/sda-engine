@@ -79,7 +79,7 @@ var st02901 =
                     dataType: "file",
                     defaultValue: "",
                     editable: true,
-                    name: "uploadFilePath",
+                    name: "fileName",
                     required: true,
                     text: "파일",
                     textAlignment: "left",
@@ -105,6 +105,20 @@ var st02901 =
                     editable: false,
                     disable: true,
                     dataType: "timestamp"
+                },
+                {
+                    sortNo: 9,
+                    dataType: "text",
+                    defaultValue: "",
+                    editable: true,
+                    name: "filePath",
+                    required: true,
+                    text: "파일경로",
+                    textAlignment: "left",
+                    treeColumnYN: "N",
+                    treeRelationType: "",
+                    visible: false,
+                    width: 210,
                 }
             ]
     }

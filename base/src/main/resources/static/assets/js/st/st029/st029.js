@@ -153,16 +153,18 @@ fnObj.pageStart = function () {
         },
         onuploadComplete: function () {
             $('[data-ax5uploader="upload1"]').hide();
-            axToast.push("File Upload Complete:"+UPLOAD.uploadedFiles[0].fileName);
+
             console.log("UPLOAD.uploadedFiles[0].fileName",UPLOAD.uploadedFiles[0].fileName);
-            fnObj.gridView01.gridObj.setValue(fnObj.gridView01.gridObj.gridView.getSelectedItems()[0],'uploadFilePath',"TEST");//UPLOAD.uploadedFiles[0].fileName);
-            //fnObj.gridView03.gridObj.setValue(0,'uploadFilePath',UPLOAD.uploadedFiles[0].fileName);
+            fnObj.gridView01.gridObj.gridView.commit(true);
+            //fnObj.gridView02.gridObj.setValue(fnObj.gridView02.gridObj.gridView.getSelectedItems()[0],'refUploadFilePath',UPLOAD.uploadedFiles[0].fileName);
+            fnObj.gridView01.gridObj.setValue(fnObj.gridView01.gridObj.getCurrent().itemIndex,'fileName',UPLOAD.uploadedFiles[0].saveName);
             // 마지막으로 업로드 된 파일의 실제 경로를 저장한다.
-            /*var lastUploadFilePath = "/" + UPLOAD.uploadedFiles[0].filePath +"/" + UPLOAD.uploadedFiles[0].saveName;
-            fnObj.gridView01.gridObj.setValue(fnObj.gridView01.gridObj.gridView.getSelectedItems()[0],'uploadFilePath',lastUploadFilePath);
-            axToast.push("File Upload Complete");
+            var lastUploadFilePath =  UPLOAD.uploadedFiles[0].filePath; //+"/" + UPLOAD.uploadedFiles[0].saveName;
+
+            fnObj.gridView01.gridObj.setValue(fnObj.gridView01.gridObj.getCurrent().itemIndex,'filePath',lastUploadFilePath);
+            axToast.push("File Upload Complete:"+UPLOAD.uploadedFiles[0].fileName);
             UPLOAD.removeFileAll();
-            saveCurrentParameter(fnObj.gridView01.gridObj.gridView.getSelectedItems()[0]);*/
+            //saveCurrentParameter(fnObj.gridView01.gridObj.gridView.getSelectedItems());
         },
         abortCallback: function(){
             $('[data-ax5uploader="upload1"]').hide();
@@ -262,7 +264,7 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
         this.gridObj.itemClick(this.itemClick);
     },
     itemClick: function (data, index) {
-        if(index.fieldName == "uploadFilePath"){
+        if(index.fieldName == "fileName"){
             $('.btn-primary').trigger('click');
         }
     }

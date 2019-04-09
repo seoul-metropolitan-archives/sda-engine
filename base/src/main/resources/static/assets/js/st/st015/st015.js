@@ -255,7 +255,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 plannerUuid = data['USER_UUID'];
                 if (this.close) this.close();
 */
-                fnObj.gridView01.gridObj.gridView.commit(true)
+                fnObj.gridView01.gridObj.gridView.commit(true);
                 //fnObj.gridView01.gridObj.setValue(fnObj.gridView01.gridObj.gridView.getSelectedItems()[0],"repositoryName",data["REPOSITORY_NAME"])
 
                 fnObj.gridView01.gridObj.setValue(fnObj.gridView01.gridObj.getCurrent().itemIndex,"plannerName",data["USER_NAME"]);
