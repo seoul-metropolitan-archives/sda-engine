@@ -121,23 +121,26 @@ var st00902 =
                     text: "서고",
                     width: 250,
                     editable: false,
-                    dataType: "text"
+                    dataType: "text",
+                    disable: true
                 },
                 {
-                    sortNo: 9,
+                    sortNo: 10,
                     name: "shelfName",
                     text: "서가",
                     width: 250,
                     editable: false,
-                    dataType: "text"
+                    dataType: "text",
+                    disable: true
                 },
                 {
-                    sortNo: 9,
+                    sortNo: 11,
                     name: "locationName",
                     text: "행렬단",
                     width: 250,
                     editable: false,
-                    dataType: "text"
+                    dataType: "text",
+                    disable: true
                 },
             ]
     }

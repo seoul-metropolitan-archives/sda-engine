@@ -104,7 +104,7 @@ public class St004Service extends BaseService {
                     sb.append(" SELECT");
                     sb.append("       CONTAINER_UUID as containerUuid ");
                     sb.append(" FROM ST_CONTAINER A ");
-                    sb.append(" WHERE FC_AD_CODE_NM(STATUS_UUID) = 'Confirm' ");
+                    //sb.append(" WHERE FC_AD_CODE_NM(STATUS_UUID) = 'Confirm' ");
                     sb.append(" START WITH A.CONTAINER_UUID = '"+stArrangeContainersResult.getContainerUuid()+"' ");
                     sb.append(" CONNECT BY PRIOR CONTAINER_UUID = PARENT_CONTAINER_UUID ");
                     sb.append(" ORDER SIBLINGS BY ORDER_KEY ) main ");
@@ -115,11 +115,12 @@ public class St004Service extends BaseService {
 
 
                     List<Map<String, Object>> resultList = jdbcTemplate.queryForList(sb.toString());
-
+                    System.out.println("List<Map<String, Object>> resultList = jdbcTemplate.queryForList(sb.toString()).size()="+resultList.size());
 
                     for(int i = 0 ; i < resultList.size() ; i++){
                         stArrangeContainersResult.setArrangeContainersResultUuid(UUIDUtils.getUUID());
-                        stArrangeContainersResult.setStatusUuid(CommonCodeUtils.getCodeDetailUuid("CD138","Draft"));
+                        //stArrangeContainersResult.setStatusUuid(CommonCodeUtils.getCodeDetailUuid("CD138","Draft"));
+                        stArrangeContainersResult.setStatusUuid(CommonCodeUtils.getCodeDetailUuid("CD138","Confirm"));
                         stArrangeContainersResult.setArrangedDate(Timestamp.valueOf(DateUtils.convertToString(LocalDateTime.now(), DateUtils.DATE_TIME_PATTERN)));
                         //stArrangeContainersResult.setDescription("");
                         stArrangeContainersResult.setContainerUuid(String.valueOf(resultList.get(i).get("containerUuid")));

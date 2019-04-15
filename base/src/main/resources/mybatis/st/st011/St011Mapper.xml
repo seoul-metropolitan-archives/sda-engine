@@ -15,9 +15,16 @@
        Z1.AUTHOR                                                                                   as author,
        --Z1.DESCRIPTION_START_DATE                                                                   as descStrDate,
        --Z1.DESCRIPTION_END_DATE                                                                     as descEdDate,
-        c.creation_start_date                   as descStrDate,
-        c.creation_end_date                   as descEdDate,
-       Z1.DESCRIPTION                                                                              as description,
+        (CASE	WHEN	LENGTH(c.creation_start_date) = 8 THEN
+                        TO_CHAR(TO_DATE(c.creation_start_date ,'YYYYMMDD'),'YYYY-MM-DD')
+                ELSE	c.creation_start_date
+        END)                                                    as descStrDate,
+        (CASE	WHEN	LENGTH(c.creation_end_date) = 8 THEN
+                        TO_CHAR(TO_DATE(c.creation_end_date ,'YYYYMMDD'),'YYYY-MM-DD')
+                ELSE	c.creation_end_date
+        END)                                                    as descEdDate,
+
+        Z1.DESCRIPTION                                                                              as description,
        Z1.NOTES                                                                                    as notes,
        ((SELECT COUNT(*) FROM RC_AGGREGATION WHERE PARENT_AGGREGATION_UUID = Z1.AGGREGATION_UUID) +
         (SELECT COUNT(*) FROM RC_ITEM WHERE AGGREGATION_UUID = Z1.AGGREGATION_UUID))            as childCnt,

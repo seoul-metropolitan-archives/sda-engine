@@ -24,6 +24,7 @@ public class St01901VO extends BaseVO {
     private String shelfUuid;
     private String containerTypeUuid;
     private String locationUuid;
+    private String containerName;
 
     private String author;
     private String descStrDate;

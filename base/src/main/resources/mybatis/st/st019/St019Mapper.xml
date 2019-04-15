@@ -23,7 +23,8 @@
                PUBLISH_SOURCE_TYPE_UUID publishSourceTypeUuid,
                REQUEST_DATE requestDate,
                REPUBLISH_YN republishYn,
-               REPUBLISH_DATE republishDate
+               REPUBLISH_DATE republishDate,
+               container.container_name  as containerName
         FROM ST_RFID_TAG_PUBLISH_REQUEST A
         LEFT JOIN
          ST_ARRANGE_RECORDS_RESULT etc
