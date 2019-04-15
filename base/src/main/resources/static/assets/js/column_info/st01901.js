@@ -87,6 +87,15 @@ var st01901 =
                 },
                 {
                     sortNo: 12,
+                    name: "containerName",
+                    text: "컨테이너",
+                    width: 250,
+                    editable: false,
+                    dataType: "text",
+                    disable: true
+                },
+                {
+                    sortNo: 13,
                     width: 180,
                     name: "publishSourceTypeUuid",
                     text: "Publish Source Type",
@@ -98,7 +107,7 @@ var st01901 =
                     required : true
                 },
                 {
-                    sortNo: 13,
+                    sortNo: 14,
                     name: "requestDate",
                     text: "Request Date",
                     width: 140,
@@ -107,7 +116,7 @@ var st01901 =
                     disable: true
                 },
                 {
-                    sortNo: 14,
+                    sortNo: 15,
                     name: "republishYn",
                     text: "Republish YN",
                     width: 80,
@@ -116,7 +125,7 @@ var st01901 =
                     disable: true
                 },
                 {
-                    sortNo: 15,
+                    sortNo: 16,
                     name: "republishDate",
                     text: "Republish Date",
                     width: 140,

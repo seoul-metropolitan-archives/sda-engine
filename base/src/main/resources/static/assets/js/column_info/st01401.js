@@ -82,7 +82,7 @@ var st01401 =
                     text: "Start Date",
                     width: 140,
                     editable: false,
-                    dataType: "date",
+                    dataType: "text",
                     disable: true
                 },
                 {
@@ -91,7 +91,7 @@ var st01401 =
                     text: "End Date",
                     width: 140,
                     editable: false,
-                    dataType: "date",
+                    dataType: "text",
                     disable: true
                 },
                 {

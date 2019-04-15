@@ -12,8 +12,15 @@
                     tab."type",
                     tab.publishedstatus,
                     tab.author,
-                    TO_CHAR(TO_DATE(tab."descstrdate",'YYYYMMDD'),'YYYY-MM-DD')                   as descStrDate,
-                    TO_CHAR(TO_DATE(tab."desceddate",'YYYYMMDD'),'YYYY-MM-DD')                   as descEdDate,
+                    (CASE WHEN  LENGTH(tab."descstrdate") = 8 THEN
+                                 TO_CHAR(TO_DATE(tab."descstrdate" ,'YYYYMMDD'),'YYYY-MM-DD')
+                          ELSE   tab."descstrdate"
+                    END)                                                    as descStrDate,
+                    (CASE	WHEN	LENGTH(tab."desceddate") = 8 THEN
+                                    TO_CHAR(TO_DATE(tab."desceddate" ,'YYYYMMDD'),'YYYY-MM-DD')
+                            ELSE	tab."desceddate"
+                    END)                                                    as descEdDate,
+
                     tab.repositoryName,
                     tab.shelfName,
                     tab.locationName,

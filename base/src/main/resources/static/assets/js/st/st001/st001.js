@@ -16,7 +16,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             type: "GET",
             url: "/api/v1/st/st001/01/list01",
             //data: $.extend({}, this.formView.getData()),
-            data: $.extend({},{useYn : $('input[data-ax-path="useYn01"]:checked').val()},{statusUuid : $("select[data-ax-path='statusUuid01']").val()} , {repositoryCode : $("input[data-ax-path='repositoryCode']").val()},{ repositoryName : $("input[data-ax-path='repositoryName']").val()}),
+            data: $.extend({},{pageSize: 1000},{useYn : $('input[data-ax-path="useYn01"]:checked').val()},{statusUuid : $("select[data-ax-path='statusUuid01']").val()} , {repositoryCode : $("input[data-ax-path='repositoryCode']").val()},{ repositoryName : $("input[data-ax-path='repositoryName']").val()}),
             callback: function (res) {
                 fnObj.gridView01.setData(res.list);
                 fnObj.gridView01.disabledColumn();
@@ -36,7 +36,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             type: "GET",
             url: "/api/v1/st/st001/01/list02",
             //data: $.extend({}, this.formView.getData(),{repositoryUuid : fnObj.gridView01.getSelectedData().repositoryUuid}),
-            data: $.extend({},{useYn : $('input[data-ax-path="useYn02"]:checked').val()},{statusUuid : $("select[data-ax-path='statusUuid02']").val()}, {shelfCode : $("input[data-ax-path='shelfCode']").val()},{ shelfName : $("input[data-ax-path='shelfName']").val()},{repositoryUuid : fnObj.gridView01.getSelectedData().repositoryUuid}),
+            data: $.extend({},{pageSize: 1000},{useYn : $('input[data-ax-path="useYn02"]:checked').val()},{statusUuid : $("select[data-ax-path='statusUuid02']").val()}, {shelfCode : $("input[data-ax-path='shelfCode']").val()},{ shelfName : $("input[data-ax-path='shelfName']").val()},{repositoryUuid : fnObj.gridView01.getSelectedData().repositoryUuid}),
             callback: function (res) {
                 fnObj.gridView02.setData(res.list);
                 fnObj.gridView02.disabledColumn();
@@ -54,7 +54,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         axboot.ajax({
             type: "GET",
             url: "/api/v1/st/st001/01/list03",
-            data: $.extend({},{useYn : $('input[data-ax-path="useYn03"]:checked').val()} ,{statusUuid : $("select[data-ax-path='statusUuid03']").val()},{shelfUuid : fnObj.gridView02.getSelectedData().shelfUuid},{ rowNo : $("input[data-ax-path='row']").val() } , { columnNo : $("input[data-ax-path='columnNo']").val()}),
+            data: $.extend({},{pageSize: 1000},{useYn : $('input[data-ax-path="useYn03"]:checked').val()} ,{statusUuid : $("select[data-ax-path='statusUuid03']").val()},{shelfUuid : fnObj.gridView02.getSelectedData().shelfUuid},{ rowNo : $("input[data-ax-path='row']").val() } , { columnNo : $("input[data-ax-path='columnNo']").val()}),
             callback: function (res) {
                 fnObj.gridView03.setData(res.list);
                 fnObj.gridView03.disabledColumn();

@@ -157,15 +157,16 @@
                B.author,
                -- B.descStrDate descStrDate,
                -- B.descEdDate descEdDate,
-                (CASE   WHEN    LENGTH(c.creation_start_date) = 8
-                THEN TO_CHAR(TO_DATE(c.creation_start_date,'YYYYMMDD'), 'YYYY-MM-DD')
-                ELSE    c.creation_start_date
-                END)    as descStrDate,
-                (CASE   WHEN    LENGTH(c.creation_end_date) = 8
-                THEN TO_CHAR(TO_DATE(c.creation_end_date,'YYYYMMDD'), 'YYYY-MM-DD')
-                ELSE    c.creation_end_date
-                END)    as descEdDate,
-               repository.REPOSITORY_NAME repositoryName, -- 서고
+                (CASE	WHEN	LENGTH(c.creation_start_date) = 8 THEN
+                                TO_CHAR(TO_DATE(c.creation_start_date ,'YYYYMMDD'),'YYYY-MM-DD')
+                        ELSE	c.creation_start_date
+                END)                                                    as descStrDate,
+                (CASE	WHEN	LENGTH(c.creation_end_date) = 8 THEN
+                                TO_CHAR(TO_DATE(c.creation_end_date ,'YYYYMMDD'),'YYYY-MM-DD')
+                        ELSE	c.creation_end_date
+                END)                                                    as descEdDate,
+
+        repository.REPOSITORY_NAME repositoryName, -- 서고
                shelf.SHELF_NAME shelfName, -- 서가
                (location.ROW_NO || '행 ' || location.COLUMN_NO || '열') as locationName, -- 행렬단
                container.CONTAINER_NAME as containerName

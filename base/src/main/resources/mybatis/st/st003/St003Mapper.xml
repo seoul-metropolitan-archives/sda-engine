@@ -16,14 +16,16 @@
             B.TITLE as title,
             --TO_CHAR(TO_DATE(B.DESCRIPTION_START_DATE,'YYYYMMDD'),'YYYY-MM-DD')                   as descStrDate,
             --TO_CHAR(TO_DATE(B.DESCRIPTION_END_DATE,'YYYYMMDD'),'YYYY-MM-DD')                   as descEdDate,
-            (CASE   WHEN    LENGTH(c.creation_start_date) = 8
-                              THEN TO_CHAR(TO_DATE(c.creation_start_date,'YYYYMMDD'), 'YYYY-MM-DD')
-                    ELSE    c.creation_start_date
-            END)    as descStrDate,
-            (CASE   WHEN    LENGTH(c.creation_end_date) = 8
-                              THEN TO_CHAR(TO_DATE(c.creation_end_date,'YYYYMMDD'), 'YYYY-MM-DD')
-                    ELSE    c.creation_end_date
-            END)    as descEdDate,
+            --c.creation_start_date as descStrDate,
+            --c.creation_end_date   as descEdDate,
+            (CASE WHEN  LENGTH(c.creation_start_date) = 8 THEN
+                          TO_CHAR(TO_DATE(c.creation_start_date ,'YYYYMMDD'),'YYYY-MM-DD')
+                  ELSE  c.creation_start_date
+            END)                                                    as descStrDate,
+            (CASE   WHEN  LENGTH(c.creation_end_date) = 8 THEN
+                            TO_CHAR(TO_DATE(c.creation_end_date ,'YYYYMMDD'),'YYYY-MM-DD')
+                     ELSE    c.creation_end_date
+            END)                                                    as descEdDate,
             B.TYPE_UUID as typeUuid,
             to_char(A.ARRANGED_DATE, 'YYYY-MM-DD') as arrangedDate,
             A.DESCRIPTION as description,
@@ -153,8 +155,18 @@
         A.PUBLISHED_STATUS_UUID as publishedStatusUuid,
         A.AGGREGATION_CODE as aggregationCode,
         A.TITLE as title,
-        TO_CHAR(TO_DATE(A.descStrDate,'YYYYMMDD'),'YYYY-MM-DD')                   as descStrDate,
-        TO_CHAR(TO_DATE(A.descEdDate,'YYYYMMDD'),'YYYY-MM-DD')                   as descEdDate,
+        --TO_CHAR(TO_DATE(A.descStrDate,'YYYYMMDD'),'YYYY-MM-DD')                   as descStrDate,
+        --TO_CHAR(TO_DATE(A.descEdDate,'YYYYMMDD'),'YYYY-MM-DD')                   as descEdDate,
+        (CASE
+            WHEN    LENGTH(c.creation_start_date) = 8 THEN
+                    TO_CHAR(TO_DATE(c.creation_start_date ,'YYYYMMDD'),'YYYY-MM-DD')
+            ELSE
+                    c.creation_start_date
+        END)                                                    as descStrDate,
+        (CASE   WHEN    LENGTH(c.creation_end_date) = 8 THEN
+                        TO_CHAR(TO_DATE(c.creation_end_date ,'YYYYMMDD'),'YYYY-MM-DD')
+                ELSE    c.creation_end_date
+        END)                                                    as descEdDate,
         A.TYPE_UUID as typeUuid,
         B.TYPE_UUID AS itemTypeUuid,
         B.DESCRIPTION as description,
@@ -214,8 +226,8 @@
               -- , Z1.TITLE as name
               , '[' || Z1.TITLE  ||'] ' ||  Z1.AGGREGATION_CODE as name
               , Z1.DESCRIPTION as description
-              ,TO_CHAR(TO_DATE(Z1.descStrDate,'YYYYMMDD'),'YYYY-MM-DD')                   as descStrDate
-              ,TO_CHAR(TO_DATE(Z1.descEdDate,'YYYYMMDD'),'YYYY-MM-DD')                   as descEdDate
+              ,Z3.creation_start_date                   as descStrDate
+              ,Z3.creation_end_date                   as descEdDate
               , Z1.NOTEs as notes
               , SUBSTR(SYS_CONNECT_BY_PATH(ROWNUM, '.'), 2 , length(SYS_CONNECT_BY_PATH(ROWNUM, '.'))) as orderKey1
               , LOWER (Z2.CODE_NAME) as nodeType
