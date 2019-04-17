@@ -1,12 +1,12 @@
 var fnObj = {};
-
+var registerUuid="";
 var ACTIONS = axboot.actionExtend(fnObj, {
     // JOB 조회
     PAGE_SEARCH: function (caller, act, data) {
         axboot.ajax({
             type: "GET",
             url: "/api/v1/st/st029/01/list01",
-            data: $.extend({}, {pageSize: 1000}, this.formView.getData()),
+            data: $.extend({}, {pageSize: 10000}, this.formView.getData(),{registerUuid:registerUuid}),
             callback: function (res) {
                 fnObj.gridView01.setData(res.list);
                 fnObj.gridView01.resetCurrent();
@@ -20,7 +20,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
     PAGE_SAVE: function (caller, act, data) {
         if( !fnObj.gridView01.validate())
             return ;
-
+        console.log("JSON.stringify(this.gridView01.getData())",JSON.stringify(this.gridView01.getData()));
         var result = false;
         axboot.call({
             type: "PUT",
@@ -62,7 +62,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
                 };
             },
             callback: function (data) {
-                //$("#calleeEmpName").val(data.empName);
+                //$("#registerName").val(data.empName);
                 //$("#calleeEmpTelno").val(data.empPhoneNo);
 
                 this.close();
@@ -79,6 +79,21 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         } else {
             return false;
         }
+    },
+    SEARCH_USER_SCH: function (caller, act, data) {
+        axboot.modal.open({
+            modalType: "COMMON_POPUP",
+            preSearch: data["preSearch"],
+            sendData: function () {
+                return data;
+            },
+            callback: function (data) {
+
+                $("input[data-ax-path='registerName']").val(data['USER_NAME'])
+                registerUuid = data['USER_UUID'];
+                if (this.close) this.close();
+            }
+        });
     }
 });
 
@@ -205,7 +220,7 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
     initEvent: function () {
         var _this = this;
 
-        $("input[data-ax-path='arrangedFromDate01']").keyup(function () {
+        $("input[data-ax-path='startDate']").keyup(function () {
             var date = this.value;
             if (date.match(/^\d{4}$/) !== null) {
                 this.value = date + '-';
@@ -213,11 +228,25 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
                 this.value = date + '-';
             }
         });
-        $("input[data-ax-path='arrangedFromDate01']").keypress(function () {
+        $("input[data-ax-path='endDate']").keypress(function () {
             if ((event.keyCode < 48) || (event.keyCode > 57)) event.returnValue = false;
         });
 
+        $("input[data-ax-path='registerName']").keyup(function(e){
+            //if($(this).val() == ""){
+            registerUuid = "";
+            //}
+        });
+        $("input[data-ax-path='registerName']").parents().eq(1).find("a").click(function () {
 
+            var data = {
+                popupCode: "PU107",
+                searchData: null,
+                preSearch: false
+            };
+            ACTIONS.dispatch(ACTIONS.SEARCH_USER_SCH, data);
+
+        });
     },
     getData: function () {
         var data = this.modelFormatter.getClearData(this.model.get()); // 모델의 값을 포멧팅 전 값으로 치환.

@@ -23,8 +23,8 @@ public class St002Controller extends BaseController {
     private St002Service st002Service;
 
     @GetMapping("/01/list01")
-    public Responses.PageResponse getContainerHierarchyList(Pageable pageable) {
-        Page<St00201VO> pages  = st002Service.getContainerHierarchyList(pageable);
+    public Responses.PageResponse getContainerHierarchyList(Pageable pageable, RequestParams<St00201VO> requestParams) {
+        Page<St00201VO> pages  = st002Service.getContainerHierarchyList(pageable, requestParams);
         return Responses.PageResponse.of(pages.getContent(), pages);
     }
 

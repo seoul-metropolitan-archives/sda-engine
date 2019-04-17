@@ -30,6 +30,10 @@ public class St029Controller extends BaseController {
     @PutMapping(value = "/01/save01")
     @PostMapping
     public void saveProgram(@RequestBody List<St02901VO> requestParams){
+        for(St02901VO vo : requestParams)
+        {
+            System.out.println(vo.getProgramUuid());
+        }
         st029Service.saveProgram(requestParams);
     }
 

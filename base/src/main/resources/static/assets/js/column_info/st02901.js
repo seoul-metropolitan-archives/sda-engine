@@ -7,7 +7,7 @@ var st02901 =
                     name: "programUuid",
                     text: "PROGRAM_UUID",
                     editable: false,
-                    dataType: "code",
+                    dataType: "text",
                     required: false,
                     visible: false
                 },

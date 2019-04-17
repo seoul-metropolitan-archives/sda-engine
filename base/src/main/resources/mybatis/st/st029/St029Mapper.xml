@@ -6,22 +6,47 @@
 <mapper namespace="rmsoft.ams.seoul.st.st029.dao.St029Mapper">
 
     <select id="getStProgram" resultType="St02901VO" parameterType="St02901VO" statementType="PREPARED">
-        select PROGRAM_UUID as PROGRAM_UUID,
-               MACHINE_TYPE_UUID as machineTypeUuid,
-               MACHINE_NAME as machineName,
-               PROGRAM_NAME as programName,
-               VERSION as version,
-               FILE_PATH as filePath,
-               FILE_NAME as fileName,
-               <include refid="Common.UserName"><property name="userUuid" value="INSERT_UUID"/></include> as insertUuid,
-               INSERT_DATE as insertDate,
-               <include refid="Common.UserName"><property name="userUuid" value="UPDATE_UUID"/></include> as updateUuid,
-               UPDATE_DATE as updateDate,
-               DESCRIPTION as description
-          from ST_PROGRAM
+        select ST.PROGRAM_UUID as programUuid,
+                ST.MACHINE_TYPE_UUID as machineTypeUuid,
+                ST.MACHINE_NAME as machineName,
+                ST.PROGRAM_NAME as programName,
+                ST.VERSION as version,
+                ST.FILE_PATH as filePath,
+                ST.FILE_NAME as fileName,
+               <!--<include refid="Common.UserName"><property name="userUuid" value="INSERT_UUID"/></include> as insertUuid,-->
+                AU.USER_NAME  as insertUuid,
+               ST.INSERT_DATE as insertDate,
+               <!--include refid="Common.UserName"><property name="userUuid" value="UPDATE_UUID"/></include> as updateUuid,-->
+                AU2.USER_NAME  as updateUuid,
+               ST.UPDATE_DATE as updateDate,
+               ST.DESCRIPTION as description
+          from
+              ST_PROGRAM  ST  LEFT JOIN AC_USER AU  ON ST.INSERT_UUID = AU.user_uuid
+                              LEFT JOIN AC_USER AU2 ON ST.UPDATE_UUID = AU2.user_UUID
           <where>
               1=1
-
+              <if test="machineName !=null">
+                  AND ST.MACHINE_NAME LIKE '%'||#{machineName}||'%'
+              </if>
+              <if test="programName != null">
+                  AND ST.PROGRAM_NAME LIKE '%'||#{programName}||'%'
+              </if>
+              <if test="startDate != null"><![CDATA[
+                  AND ST.INSERT_DATE >= #{startDate}
+              ]]>
+              </if>
+              <if test="endDate !=null"><![CDATA[
+                  AND ST.INSERT_DATE <= #{endDate}
+              ]]>
+              </if>
+              <if test="registerUuid != null">
+                  AND (AU.user_uuid = #{registerUuid} OR AU2.user_uuid = #{registerUuid})
+              </if>
+              <if test="registerUuid==null">
+                <if test="registerName !=null">
+                  AND (AU.user_name LIKE '%'||#{registerName}||'%' OR AU2.user_name LIKE '%'||#{registerName}||'%')
+                </if>
+              </if>
           </where>
     </select>
 

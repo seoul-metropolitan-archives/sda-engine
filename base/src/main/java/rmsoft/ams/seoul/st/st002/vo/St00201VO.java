@@ -35,4 +35,6 @@ public class St00201VO extends BaseVO {
 	private String repositoryName;
 	private String shelfName;
 	private String locationName;
+
+	private String keyword;
 }

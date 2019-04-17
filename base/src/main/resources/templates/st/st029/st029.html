@@ -24,23 +24,28 @@
                 </div>
                 <div class="bdb div_tablerow searchFields">
                     <dl>
-                        <dt class="mgl_5">장비 유형</dt>
+                        <dt class="w120 mgl_5">장비 종류</dt>
                         <dd>
-                            <input type=text data-ax-path="test1" style="width:135px">
+                            <select data-ax-path="machineTypeUuid" style="width:135px;">
+                                <option value="" ></option>
+                                <option th:each="item : ${machineTypeUuid}"
+                                         th:value="${item.codeDetailUUID}"
+                                         th:text="${item.codeName}"/>
+                            </select>
                         </dd>
                         <dt class="mgl_5">프로그램 명</dt>
                         <dd>
-                            <input type=text data-ax-path="test1" style="width:135px">
+                            <input type=text data-ax-path="programName" style="width:135px">
                         </dd>
                     </dl>
                     <dl>
-                        <th:block layout:insert="~{/fragments/page-buttons :: searchInput ('등록자','InZoneName')}"/>
+                        <th:block layout:insert="~{/fragments/page-buttons :: searchInput ('등록자','registerName')}"/>
 
                         <dt>등록일자</dt>
                         <dd class="w_auto">
                             <div class="input-group" data-ax5picker="date">
                                 <div class="cld_box">
-                                    <input type="text" data-ax-path="arrangedFromDate01"
+                                    <input type="text" data-ax-path="startDate"
                                            style="ime-mode:disabled;"
                                            placeholder="YYYY-MM-DD" maxlength="10">
                                     <img title="calendar" class="ui-datepicker-trigger" alt="..."
@@ -48,7 +53,7 @@
                                 </div>
                                 ~
                                 <div class="cld_box">
-                                    <input type="text" data-ax-path="arrangedToDate01"
+                                    <input type="text" data-ax-path="endDate"
                                            style="ime-mode:disabled;"
                                            placeholder="YYYY-MM-DD" maxlength="10">
                                     <img title="calendar" class="ui-datepicker-trigger" alt="..."

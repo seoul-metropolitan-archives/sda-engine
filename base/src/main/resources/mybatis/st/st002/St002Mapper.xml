@@ -4,24 +4,31 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="rmsoft.ams.seoul.st.st002.dao.St002Mapper">
-    <select id="getContainerHierarchyList" resultType="St00201VO"  statementType="PREPARED">
+    <select id="getContainerHierarchyList" resultType="St00201VO" parameterType="St00201VO"  statementType="PREPARED">
         SELECT
-            CONTAINER_UUID as containerUuid,
-            CONTAINER_TYPE_UUID as containerTypeUuid,
-            STATUS_UUID as statusUuid,
-            PARENT_CONTAINER_UUID as parentContainerUuid,
-            CONTAINER_NAME as containerName,
-             '[' || FC_AD_CODE_NM(CONTAINER_TYPE_UUID) || '] ' || CONTAINER_NAME as containerTreeName,
-            ORDER_NO as orderNo,
-            ORDER_KEY as orderKey,
-            SUBSTR(SYS_CONNECT_BY_PATH(ROWNUM, '.'), 2 , length(SYS_CONNECT_BY_PATH(ROWNUM, '.'))) as orderKey1,
-            CONNECT_BY_ISLEAF LEAF
+                *
         FROM
-            ST_CONTAINER A
-            START WITH PARENT_CONTAINER_UUID IS NULL
-        CONNECT BY PRIOR CONTAINER_UUID = PARENT_CONTAINER_UUID
-        -- ORDER SIBLINGS BY ORDER_KEY
-        ORDER SIBLINGS BY CONTAINER_NAME
+                (SELECT
+                    CONTAINER_UUID as containerUuid,
+                    CONTAINER_TYPE_UUID as containerTypeUuid,
+                    STATUS_UUID as statusUuid,
+                    PARENT_CONTAINER_UUID as parentContainerUuid,
+                    CONTAINER_NAME as containerName,
+                     '[' || FC_AD_CODE_NM(CONTAINER_TYPE_UUID) || '] ' || CONTAINER_NAME as containerTreeName,
+                    ORDER_NO as orderNo,
+                    ORDER_KEY as orderKey,
+                    SUBSTR(SYS_CONNECT_BY_PATH(ROWNUM, '.'), 2 , length(SYS_CONNECT_BY_PATH(ROWNUM, '.'))) as orderKey1,
+                    CONNECT_BY_ISLEAF LEAF
+                FROM
+                    ST_CONTAINER A
+                    START WITH PARENT_CONTAINER_UUID IS NULL
+                CONNECT BY PRIOR CONTAINER_UUID = PARENT_CONTAINER_UUID
+                -- ORDER SIBLINGS BY ORDER_KEY
+                ORDER SIBLINGS BY CONTAINER_NAME) tab
+        WHERE 1=1
+        <if test="keyword !=null">
+            AND tab.containerTreeName LIKE '%'||#{keyword}||'%'
+        </if>
     </select>
     <select id="getContainerList" resultType="St00201VO" parameterType="St00201VO" statementType="PREPARED">
         SELECT

@@ -27,5 +27,10 @@ public class St02901VO extends BaseVO {
 
     private String description;
 
+    private String registerUuid;
+    private String registerName;
+
+    private String startDate;
+    private String endDate;
 
 }

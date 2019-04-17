@@ -1,4 +1,4 @@
-
+var keyword="";
 var fnObj = {};
 var parentContainerUuid = "";
 var selectedItem ; //선택된 그리드 아이템
@@ -19,10 +19,19 @@ var ACTIONS = axboot.actionExtend(fnObj, {
             type: "GET",
             url: "/api/v1/st/st002/01/list01",
             async : false,
-            data: $.extend({}, {pageSize: 1000}),
+            data: $.extend({}, {keyword:keyword},{pageSize: 1000}),
             callback: function (res) {
                 fnObj.gridView01.resetCurrent();
+                console.log("res",res);
+                if(keyword!="")
+                {
+                    var highlght = '<span style="color: whitesmoke;background-color: darkred;">'+keyword+'</span>';
+                    for(var i=0; i< res.list.length; i++){
+                        res.list[i]["containerTreeName"]= res.list[i]["containerTreeName"].replace("keyword", highlght);
+                    }
+                }
                 fnObj.gridView01.setData(res.list);
+                $("#rg_tree_allopen").click();
             },
             options: {
                 onError: axboot.viewError
@@ -384,6 +393,9 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
         this.gridObj.itemClick(this.itemClick);
         this.bindEvent();
     },
+    getData:function(){
+        return this.gridObj.getData();
+    },
     bindEvent : function()
     {
         var _this = this;
@@ -398,9 +410,13 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
                 $("#searchLeftTree").click();
         })
         $("#searchLeftTree").click(function(){
-            if("" != $("#leftMenuTreeParam").val())
+            //if("" != $("#leftMenuTreeParam").val())
             {
-                _this.gridObj.search(["containerName"],$("#leftMenuTreeParam").val())
+                //console.log("_this.gridObj.getData():",_this.gridObj.getData());
+                //_this.gridObj.search(["containerName"],$("#leftMenuTreeParam").val());
+                keyword = $("#leftMenuTreeParam").val();
+                console.log("keyword",keyword);
+                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH_TREE, keyword);
             }
         });
         $(".btn_arrange").click(function(){
@@ -429,9 +445,6 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
             currentContainerUuid = data.containerUuid;
         }
 
-    },
-    getData: function () {
-        return this.gridObj.getData();
     },
 
 });

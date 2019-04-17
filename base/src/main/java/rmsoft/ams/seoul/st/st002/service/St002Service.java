@@ -33,9 +33,13 @@ public class St002Service extends BaseService {
     @Autowired
     private StContainerRepository stContainerRepository;
 
-    public Page<St00201VO> getContainerHierarchyList(Pageable pageable) {
+    public Page<St00201VO> getContainerHierarchyList(Pageable pageable,  RequestParams<St00201VO> requestParams) {
+        for(String key : requestParams.getMap().keySet())
+            System.out.println("key:"+key+"\tvalue:"+requestParams.getMap().get(key));
 
-        return filter(st002Mapper.getContainerHierarchyList(),pageable,"",St00201VO.class);
+        St00201VO st00201VO = new St00201VO();
+        st00201VO.setKeyword(requestParams.getString("keyword"));
+        return filter(st002Mapper.getContainerHierarchyList(st00201VO),pageable,"",St00201VO.class);
 
     }
     public Page<St00201VO> getContainerList(Pageable pageable, RequestParams<St00201VO> requestParams) {

@@ -10,6 +10,7 @@
             S1.LOCATION_UUID as locationUuid,
             S1.CONTAINER_UUID as containerUuid,
             S2.CONTAINER_TYPE_UUID as containerTypeUuid,
+            (SELECT CODE_NAME FROM AD_CODE_DETAIL ACD WHERE ACD.CODE_DETAIL_UUID = S2.CONTAINER_TYPE_UUID) AS containerTypeName,
             S1.STATUS_UUID as statusUuid,
             S1.ARRANGED_DATE as arrangedDate,
             S2.CONTAINER_NAME as containerName,
