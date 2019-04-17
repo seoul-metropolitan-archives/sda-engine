@@ -27,6 +27,10 @@
     <!--<link rel="import" href="../../home/main.html">-->
 
     <script type="text/javascript">
+        history.pushState(null, null, location.href);
+        window.onpopstate = function () {
+            history.go(1);
+        };
         /* $(function() {
              var images = ['bg_login02.jpg', 'bg_login01.jpg', 'bg_login03.jpg'];
              $('.background').css({'background': 'url(assets/images/' + images[Math.floor(Math.random() * images.length)] + ')'});
