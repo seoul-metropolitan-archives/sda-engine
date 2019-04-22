@@ -33,8 +33,11 @@ public class St029Service extends BaseService {
 
     public Page<St02901VO> getStProgram(Pageable pageable, RequestParams<St02901VO> requestParams) {
         St02901VO st02901VO = new St02901VO();
+        for(String key : requestParams.getMap().keySet()){
+            System.out.println(key+":"+requestParams.getMap().get(key));
+        }
         //st02901VO.setGateId(requestParams.getString("gateId"));
-        st02901VO.setMachineName(requestParams.getString("machineName"));
+        st02901VO.setMachineTypeUuid(requestParams.getString("machineTypeUuid"));
         st02901VO.setProgramName(requestParams.getString("programName"));
         st02901VO.setRegisterUuid(requestParams.getString("registerUuid"));
         st02901VO.setRegisterName(requestParams.getString("registerName"));

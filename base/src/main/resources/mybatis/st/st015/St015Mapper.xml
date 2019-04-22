@@ -41,13 +41,14 @@
                 )
             </if>
             <if test="title != null">
-                AND EXISTS(
+                <!--AND EXISTS(
                 SELECT *
                 FROM ST_INVENTORY_RECORD_RESULT STIRR INNER JOIN RC_AGGREGATION RCA
                 ON STIRR.AGGREGATION_UUID = RCA.AGGREGATION_UUID
                 WHERE STIRR.INVENTORY_PLAN_UUID = a.INVENTORY_PLAN_UUID
                 AND RCA.TITLE LIKE '%' || #{title} || '%'
-                )
+                )-->
+                AND a.PLAN_NAME LIKE '%'||#{title}||'%'
             </if>
            <!-- <if test="code != null || title != null">
                 AND EXISTS(

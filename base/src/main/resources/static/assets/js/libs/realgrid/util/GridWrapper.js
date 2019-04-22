@@ -232,14 +232,27 @@ var GridWrapper = function(p_id,p_rootContext) {
                     }, function () {
                         if (this.key == "ok") {
                             _this.gridView.commit(true);
-                            _this.gridView.getDataProvider().removeRows(_this.gridView.getSelectedRows(), false);
+
+                            if(_this.gridView.getCheckedRows().length>0){
+                                _this.gridView.getDataProvider().removeRows(_this.gridView.getCheckedRows(), false);
+                            }
+                            else{
+                                _this.gridView.getDataProvider().removeRows(_this.gridView.getSelectedRows(), false);
+                            }
+
                             _this.dispatch("onRemoveRow");
                         }
                     });
 
                 }else{
                     _this.gridView.commit(true);
-                    _this.gridView.getDataProvider().removeRows(_this.gridView.getSelectedRows(), false);
+                    //_this.gridView.getDataProvider().removeRows(_this.gridView.getSelectedRows(), false);
+                    if(_this.gridView.getCheckedRows().length>0){
+                        _this.gridView.getDataProvider().removeRows(_this.gridView.getCheckedRows(), false);
+                    }
+                    else{
+                        _this.gridView.getDataProvider().removeRows(_this.gridView.getSelectedRows(), false);
+                    }
                     _this.dispatch("onRemoveRow");
                 }
 

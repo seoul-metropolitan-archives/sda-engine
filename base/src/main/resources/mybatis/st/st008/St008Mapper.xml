@@ -34,10 +34,8 @@
                     AUTH.AUTH_NAME
 
         FROM
-              ST_TAKEOUT_REQUEST request INNER JOIN AC_USER ac_user ON ac_user.USER_UUID = request.REQUESTOR_UUID,
-              (SELECT acd.CODE AS AUTH_NAME
-               FROM AC_USER au LEFT JOIN AD_CODE_DETAIL acd ON au.USER_TYPE_UUID = acd.CODE_DETAIL_UUID
-               WHERE au.USER_UUID = #{currentLoginUserUuid}) AUTH
+              ST_TAKEOUT_REQUEST request INNER JOIN AC_USER ac_user ON ac_user.USER_UUID = request.REQUESTOR_UUID
+
         -- 여기는 아래의 getStTakeoutRecordResult query 와 같으므로 아래 변경되면 똑같이 적용 해 줘야됨
         -- code, title 이 필터링 되어야해서 이렇게 됨
         <if test="code != null || title != null">
@@ -107,11 +105,11 @@
             -- group by 를 해줘야 같은데이터가 겹치지 않음
             group by record_result.TAKEOUT_REQUEST_UUID
             )
-            request_sub
-            ON request_sub.TAKEOUT_REQUEST_UUID =
-            request.
-            TAKEOUT_REQUEST_UUID
+            request_sub ON request_sub.TAKEOUT_REQUEST_UUID =request.TAKEOUT_REQUEST_UUID
         </if>
+        ,(SELECT acd.CODE AS AUTH_NAME
+        FROM AC_USER au LEFT JOIN AD_CODE_DETAIL acd ON au.USER_TYPE_UUID = acd.CODE_DETAIL_UUID
+        WHERE au.USER_UUID = #{currentLoginUserUuid}) AUTH
                     <where>
                         1=1
                         <if test="requestorUuid != null">

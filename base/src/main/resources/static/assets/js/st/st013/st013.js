@@ -535,6 +535,7 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
          $(".btn_confirm01").click(function(){
              ACTIONS.dispatch(ACTIONS.STATUS_UPDATE01,CONFIRM_STATUS);
          });
+
          $(".btn_cancel01").click(function(){
              ACTIONS.dispatch(ACTIONS.STATUS_UPDATE01,CANCEL_STATUS);
          });
@@ -544,12 +545,20 @@ fnObj.formView = axboot.viewExtend(axboot.formView, {
          $(".btn_cancel02").click(function(){
              ACTIONS.dispatch(ACTIONS.STATUS_UPDATE02,CANCEL_STATUS);
          });*/
-
+        /////수정중
+        /*
         $('#btn_deleteWithOutNoticeApproval').click(function () {
-            fnObj.gridView02.gridObj.getDataProvider().removeRows(fnObj.gridView02.gridObj.gridView.getCheckedRows(), false);
-            fnObj.gridView02.gridObj.dispatch("onRemoveRow");
+            //fnObj.gridView02.gridObj.getDataProvider().removeRows(fnObj.gridView02.gridObj.gridView.getCheckedRows(), false);
+            //fnObj.gridView02.gridObj.dispatch("onRemoveRow");
+            fnObj.gridView02.gridObj.dataProvider.removeRows(fnObj.gridView02.gridObj.gridView.getCheckedRows(true), false);
+            //fnObj.gridView02.gridObj.dispatch("onRemoveRow");
         });
-
+        $("#grid01_delete").click(function () {
+            //fnObj.gridView02.gridObj.getDataProvider().removeRows(fnObj.gridView02.gridObj.gridView.getCheckedRows(), false);
+            //fnObj.gridView02.gridObj.dispatch("onRemoveRow");
+            fnObj.gridView01.gridObj.dataProvider.removeRows(fnObj.gridView01.gridObj.gridView.getCheckedRows(true), false);
+            //fnObj.gridView02.gridObj.dispatch("onRemoveRow");
+        });*/
     },
 });
 
@@ -649,6 +658,9 @@ fnObj.gridView02 = axboot.viewExtend(axboot.gridView, {
     },
     getSelectedData: function () {
         return this.gridObj.getSelectedData()
+    },
+    getCheckedRows:function(){
+        return this.gridObj.getCheckedRows();
     },
     disabledColumn: function () {
         var state = axboot.commonCodeValueByCodeName("CD138", CONFIRM_STATUS);

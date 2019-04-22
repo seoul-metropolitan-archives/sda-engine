@@ -394,6 +394,7 @@ var ACTIONS = axboot.actionExtend(fnObj, {
         var result = false;
         axboot.call({
             type: "PUT",
+            type: "PUT",
             url: "/api/v1/st/st015/01/delete",
             data: JSON.stringify(data),
             callback: function (res) {
@@ -773,9 +774,20 @@ fnObj.gridView01 = axboot.viewExtend(axboot.gridView, {
         var names = axboot.commonCodeFilter("CD216").nameArr;
         var state = undefined;
         for (var i = 0; i < codes.length; i++) {
-            if (codes[i] == fnObj.gridView01.getSelectedData().statusUuid) {
-                state = names[i];
-                break;
+            if(fnObj.gridView01.getCheckedList().length >0)
+            {
+                var rows = fnObj.gridView01.getCheckedList();
+                for(var j=0; j<rows.length; j++)
+                if (codes[i] == rows[j].statusUuid) {
+                    state = names[i];
+                    break;
+                }
+            }
+            else{
+                if (codes[i] == fnObj.gridView01.getSelectedData().statusUuid) {
+                    state = names[i];
+                    break;
+                }
             }
         }
 

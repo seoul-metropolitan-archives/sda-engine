@@ -36,23 +36,26 @@
                    OUTSOURCING_PERSON_NAME                                               AS outsourcingPersonName,
                    OUTSOURCING_PHONE                                                     AS outsourcingPhone
         FROM
-                ST_TAKEOUT_REQUEST  request  INNER JOIN AC_USER  ac_user
-                                                       ON ac_user.USER_UUID = request.REQUESTOR_UUID
+                ST_TAKEOUT_REQUEST  request
+                  INNER JOIN AC_USER  ac_user ON ac_user.USER_UUID = request.REQUESTOR_UUID
         -- 여기는 아래의 getStTakeoutRecordResult query 와 같으므로 아래 변경되면 똑같이 적용 해 줘야됨
         -- code, title 이 필터링 되어야해서 이렇게 됨
         <if test="code != null || title != null">
-                                            INNER JOIN (SELECT  record_result.TAKEOUT_REQUEST_UUID
-                                                          FROM    ST_TAKEOUT_RECORD_RESULT record_result
-                                                                      LEFT JOIN ST_ARRANGE_RECORDS_RESULT etc
-                                                                        ON etc.AGGREGATION_UUID = record_result.AGGREGATION_UUID
-                                                                      LEFT JOIN ST_ARRANGE_CONTAINERS_RESULT acr
-                                                                        ON acr.CONTAINER_UUID = etc.CONTAINER_UUID
-                                                                      LEFT JOIN ST_LOCATION location
-                                                                        ON location.LOCATION_UUID = acr.LOCATION_UUID
-            LEFT JOIN ST_CONTAINER container ON container.CONTAINER_UUID = etc.CONTAINER_UUID
-            LEFT JOIN ST_SHELF shelf ON shelf.SHELF_UUID = location.SHELF_UUID
-            LEFT JOIN ST_REPOSITORY repository ON repository.REPOSITORY_UUID = shelf.REPOSITORY_UUID
-            INNER JOIN (SELECT AGGREGATION_UUID                                                                                         as uuid,
+                  INNER JOIN (  SELECT  record_result.TAKEOUT_REQUEST_UUID
+                                  FROM    ST_TAKEOUT_RECORD_RESULT record_result
+                                            LEFT JOIN ST_ARRANGE_RECORDS_RESULT etc
+                                                    ON etc.AGGREGATION_UUID = record_result.AGGREGATION_UUID
+                                            LEFT JOIN ST_ARRANGE_CONTAINERS_RESULT acr
+                                                    ON acr.CONTAINER_UUID = etc.CONTAINER_UUID
+                                            LEFT JOIN ST_LOCATION location
+                                                    ON location.LOCATION_UUID = acr.LOCATION_UUID
+                                            LEFT JOIN ST_CONTAINER container
+                                                    ON container.CONTAINER_UUID = etc.CONTAINER_UUID
+                                            LEFT JOIN ST_SHELF shelf
+                                                    ON shelf.SHELF_UUID = location.SHELF_UUID
+                                            LEFT JOIN ST_REPOSITORY repository
+                                                    ON repository.REPOSITORY_UUID = shelf.REPOSITORY_UUID
+                                            INNER JOIN (SELECT AGGREGATION_UUID                                                                                         as uuid,
             1                                                                                                        as orderNo,
             (SELECT CODE_NAME
             FROM AD_CODE_DETAIL

@@ -13,7 +13,7 @@ public class St029ViewRouter extends BaseController {
     public String view(ModelMap model) {
         //model.addAttribute("statusUuid01", CommonCodeUtils.get("CD202"));
         //model.addAttribute("statusUuid02", CommonCodeUtils.get("CD207"));
-
+        model.addAttribute("machineTypeUuid", CommonCodeUtils.get("CD200"));
         return "/st/st029/st029";
     }
 

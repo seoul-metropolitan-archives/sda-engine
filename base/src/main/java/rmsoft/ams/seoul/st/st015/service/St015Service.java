@@ -66,6 +66,8 @@ public class St015Service extends BaseService {
 
     public Page<St01501VO> getStInventoryPlan(Pageable pageable, RequestParams<St01501VO> requestParams) {
         St01501VO st01501VO = new St01501VO();
+        for(String key : requestParams.getMap().keySet())
+            System.out.println(key+":"+requestParams.getMap().get(key));
         st01501VO.setPlanName(requestParams.getString("planName"));
         st01501VO.setRepositoryUuid(requestParams.getString("repositoryUuid"));
         st01501VO.setShelfUuid(requestParams.getString("shelfUuid"));

@@ -25,8 +25,8 @@
                               LEFT JOIN AC_USER AU2 ON ST.UPDATE_UUID = AU2.user_UUID
           <where>
               1=1
-              <if test="machineName !=null">
-                  AND ST.MACHINE_NAME LIKE '%'||#{machineName}||'%'
+              <if test="machineTypeUuid !=null">
+                  AND ST.MACHINE_TYPE_UUID  = #{machineTypeUuid}
               </if>
               <if test="programName != null">
                   AND ST.PROGRAM_NAME LIKE '%'||#{programName}||'%'
