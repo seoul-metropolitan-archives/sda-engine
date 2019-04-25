@@ -129,6 +129,10 @@ public class DIPBatchExecutor {
         log.info("DIPBatchExecutor-execute DIP Process");
 
         try {
+            // json 파일 삭제
+            log.info("DIPBatchExecutor-cleaning tmp directory");
+            FileUtils.cleanDirectory(new File(jsonTmpDir));
+
             List<Map<String, Object>> entityList = dipMapper.findAllEntityType();
             List<Map<String, Object>> resultList = new ArrayList<>();
             List<Map<String, Object>> rcComponentFile = new ArrayList<>();
@@ -292,6 +296,8 @@ public class DIPBatchExecutor {
         Map<String, Object> rcComponenMap = null;
         File digitalFile = null;
 
+        int uploadFileCnt = 0;
+
         try {
             for (int i = 0; i < rcComponentFile.size(); i++) {
                 rcComponenMap = rcComponentFile.get(i);
@@ -315,11 +321,13 @@ public class DIPBatchExecutor {
                     sftpChannel.put(fis, digitalFile.getName());
 
                     fis.close();
+
+                    uploadFileCnt++;
                     log.info("Digital file is uploaded  : {}", digitalFile.getName());
                 }
             }
 
-            log.info("{} Digital file is uploaded.", rcComponentFile.size());
+            log.info("{} Digital file is uploaded.", uploadFileCnt);
 
             disconnect();
             sendDigitalFileSuccess = true;

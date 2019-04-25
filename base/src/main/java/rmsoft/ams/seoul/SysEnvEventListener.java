@@ -1,6 +1,7 @@
 package rmsoft.ams.seoul;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.event.ApplicationEnvironmentPreparedEvent;
 import org.springframework.context.ApplicationListener;
@@ -69,6 +70,10 @@ public class SysEnvEventListener implements ApplicationListener<ApplicationEnvir
             }
         }
 
-        return resultServicePath;
+        if(StringUtils.isNotEmpty(resultServicePath)){
+            return resultServicePath;
+        }else{
+            return "/app/www/WEB-INF/classes/service-modules/";
+        }
     }
 }

@@ -1,6 +1,6 @@
 jar {
     baseName = 'standard-rms-upload'
-    version = '0.0.2'
+    version = '0.0.9'
     destinationDir = file("${project.rootDir}/base/src/main/resources/workflow-modules")
 }
 

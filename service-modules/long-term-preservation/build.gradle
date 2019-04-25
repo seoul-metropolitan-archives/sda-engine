@@ -16,7 +16,7 @@ apply from: 'config-querydsl.gradle'
 
 jar {
     baseName = 'long-term-preservation'
-    version = '0.0.1'
+    version = '1.0.0'
     destinationDir = file("${project.rootDir}/base/src/main/resources/service-modules")
 }
 

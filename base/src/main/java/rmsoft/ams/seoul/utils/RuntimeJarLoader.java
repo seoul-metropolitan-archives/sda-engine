@@ -27,10 +27,9 @@ public class RuntimeJarLoader {
                         try {
                             // URLClassLoader.addURL(URL url) 메소드 호출
                             method.invoke(loader, new Object[]{jar.toURI().toURL()});
-                            //System.out.println(jar.getName() + " is loaded.");
+                            log.info(jar.getName() + " is loaded.");
                         } catch (Exception e) {
-                            log.error(jar.getName() + " can't load.");
-                            //System.out.println(jar.getName() + " can't load.");
+                            log.info(jar.getName() + " is loaded.");
                         }
                     }
                     return false;
@@ -54,7 +53,7 @@ public class RuntimeJarLoader {
             Field ucpField = urlClass.getDeclaredField("ucp");
             ucpField.setAccessible(true);
 
-            URL[] old = ((URLClassLoader)ClassLoader.getSystemClassLoader()).getURLs();
+            URL[] old = ((URLClassLoader) ClassLoader.getSystemClassLoader()).getURLs();
             List<URL> urlLists = new ArrayList<>();
 
             //URL[] newurls = new URL[old.length - 1];

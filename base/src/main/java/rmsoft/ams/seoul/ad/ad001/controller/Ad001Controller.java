@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import rmsoft.ams.seoul.ad.ad001.service.Ad001Service;
 import rmsoft.ams.seoul.ad.ad001.vo.Ad00101VO;
 import rmsoft.ams.seoul.common.controller.MessageBaseController;
+import rmsoft.ams.seoul.dip.DIPBatchExecutor;
 import rmsoft.ams.seoul.utils.RuntimeJarLoader;
 
 import java.util.List;
@@ -32,8 +33,8 @@ public class Ad001Controller extends MessageBaseController {
     @Qualifier("AD001ServiceImpl")
     private Ad001Service service;
 
-    //@Autowired
-    //private DIPBatchExecutor dipBatchExecutor;
+    @Autowired
+    private DIPBatchExecutor dipBatchExecutor;
 
     @Autowired
     private RestartEndpoint restartEndpoint;
@@ -114,7 +115,7 @@ public class Ad001Controller extends MessageBaseController {
     public Responses.ListResponse getEnviromentList1(@RequestBody Ad00101VO param) {
 
         // Batch 테스트
-        //dipBatchExecutor.runDipProcess();
+        dipBatchExecutor.runDipProcess();
 
 
         // Jar module unlading
